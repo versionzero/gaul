@@ -142,7 +142,7 @@ int main(int argc, char **argv)
   random_seed(42);
 
   popd = ga_genesis_char(
-     80,			/* const int              population_size */
+     150,			/* const int              population_size */
      1,				/* const int              num_chromo */
      strlen(target_text),	/* const int              len_chromo */
      NULL,		 	/* GAgeneration_hook      generation_hook */

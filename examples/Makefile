@@ -103,8 +103,8 @@ MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1837
-MPICC = mpicc
-MPIFLAGS = 
+MPICC = echo
+MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 4
@@ -196,7 +196,7 @@ nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake 
 
 # Parallel code:
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util_parallel -lmpi_util -lrandom -lstr_util -lm
-struggle5_mp_LINK = mpicc $(struggle5_mp_LDADD) -o struggle5_mp 
+struggle5_mp_LINK = echo $(struggle5_mp_LDADD) -o struggle5_mp > /dev/null
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

@@ -18,6 +18,7 @@ These milestone requirements are subject to change ;)
             |  User data in array, not list.
 ------------+--------------------------------------------------------
  0.1841     |  ga_evolution_mp() and associated example.
+            |  Use MemChunks in chromosome allocation.
 ------------+--------------------------------------------------------
  0.1843     |  Tverski similarity routines for bits/booleans/integers
 ------------+--------------------------------------------------------
