@@ -56,8 +56,9 @@
  */
 #if HAVE_PTHREADS == 1
 # include <pthread.h>
-#ifndef _REENTRANT
-# define _REENTRANT
+# ifndef _REENTRANT
+#  define _REENTRANT
+# endif
 #endif
 
 /*
