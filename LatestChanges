@@ -13,6 +13,7 @@ Changes since release 0.1846:
 - Rewritten MPI/thread checks and configuration.
 - Avoid stricmp()/strnicmp() kludges for Cygwin environment by using strcasecmp()/strncasesmp() instead.
 - Culled redundant comments in code, mostly "last updated" type of details.
+- Changed license/copyright details in util/gaul/gaul_util.h
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
