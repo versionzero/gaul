@@ -3,7 +3,7 @@
  **********************************************************************
 
   wildfire - Test/example program for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -298,11 +298,12 @@ double wildfire_simulation(int map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION], b
 
 /**********************************************************************
   wildfire_score()
-  synopsis:	Score solution.
+  synopsis:	Score solution.  (i.e. See how this arrangement of
+		cisterns does.)
   parameters:	population *pop
 		entity *entity
   return:	Always TRUE
-  updated:	11 Apr 2002
+  updated:	23 May 2002
  **********************************************************************/
 
 boolean wildfire_score(population *pop, entity *entity)
@@ -311,6 +312,7 @@ boolean wildfire_score(population *pop, entity *entity)
   int		s;		/* Loop over simulations. */
   int		map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION];	/* Map. */
   int		count=0;	/* Number of cisterns. */
+  double	fitness;	/* Solution's "fitness". */
 
   /* Decode chromsome, and count number of cisterns. */
   for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
@@ -320,15 +322,17 @@ boolean wildfire_score(population *pop, entity *entity)
     }
 
   /* Penalise an incorrect number of cisterns. */
-  entity->fitness = -0.01*SQU(WILDFIRE_CISTERNS-count);
+  fitness = -0.01*SQU(WILDFIRE_CISTERNS-count);
 
   for(s=0; s<WILDFIRE_NUM_SIMULATIONS; s++)
     {
-    entity->fitness -= wildfire_simulation(map, FALSE);
+    fitness -= wildfire_simulation(map, FALSE);
     }
 
   /* See how the arrangement of cisterns does. */
-  entity->fitness /= WILDFIRE_NUM_SIMULATIONS;
+  fitness /= WILDFIRE_NUM_SIMULATIONS;
+
+  ga_entity_set_fitness(entity, fitness);
 
   fprintf(stderr, "#");
   
@@ -537,27 +541,27 @@ void wildfire_crossover( population *pop,
 		lightning strikes.
   parameters:
   return:
-  updated:	11/05/01
+  updated:	23 May 2002
  **********************************************************************/
 
 boolean wildfire_ga_callback(int generation, population *pop)
   {
   double	average, stddev;	/* Statistics. */
 
-  fprintf(stderr, "%f\n", ga_get_entity_from_rank(pop,0)->fitness);
+  fprintf(stderr, "%f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)));
 
   if (generation > 0)
     {
     ga_population_score_and_sort(pop);
     ga_fitness_mean_stddev(pop, &average, &stddev);
     printf( "%d: Best %d Average %f Stddev %f\n",
-            generation, (int) ga_get_entity_from_rank(pop,0)->fitness,
+            generation, (int) ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)),
             average, stddev );
     }
   else
     {
     printf( "Best random solution has score %d\n",
-            (int) ga_get_entity_from_rank(pop,0)->fitness );
+            (int) ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
     }
 
   return TRUE;	/* Always TRUE, so search doesn't finish. */
@@ -566,10 +570,10 @@ boolean wildfire_ga_callback(int generation, population *pop)
 
 /**********************************************************************
   main()
-  synopsis:	Erm?
+  synopsis:	A GAUL example.
   parameters:
   return:
-  updated:	11/05/01
+  updated:	23 May 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -621,7 +625,7 @@ int main(int argc, char **argv)
               );
 
     printf( "Solution %d, with score %d, was:\n",
-            i, (int) ga_get_entity_from_rank(pop,0)->fitness );
+            i, (int) ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
   /* Decode chromsome, and count number of cisterns. */
     for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
       {
