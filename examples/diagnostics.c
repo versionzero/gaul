@@ -52,7 +52,11 @@ int main(int argc, char **argv)
  * What machine type is this?
  */
   printf("Execution machine characteristics:\n");
+#if W32_CRIPPLED != 1
   system("uname -a");
+#else
+  printf("Native MS Windows support.");
+#endif
 
 /*
  * Usual initilisations.
