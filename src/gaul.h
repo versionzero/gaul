@@ -158,7 +158,7 @@ typedef boolean	(*GAto_double)(population *pop, entity *entity, double *darray);
 typedef boolean	(*GAfrom_double)(population *pop, entity *entity, double *darray);
 typedef double	(*GAgradient)(population *pop, entity *entity, double *darray, double *varray);
 typedef boolean	(*GAscan_chromosome)(population *pop, entity *entity, int enumeration_num);
-typedef int	(*GAcompare)(population *pop, entity *alpha, entity *beta);
+typedef double	(*GAcompare)(population *pop, entity *alpha, entity *beta);
 
 /**********************************************************************
  * Public prototypes.
