@@ -334,11 +334,7 @@ void btree_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
   printf("BTree             %lu\n", (unsigned long int) sizeof(BTree));
-#else
-  printf("BTree             %Zd\n", sizeof(BTree));
-#endif
   printf("==============================================================\n");
 
   return;
