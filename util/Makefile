@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /home/stewart
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1843/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1843/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1843/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1843/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,23 +97,23 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1843/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1843
-GA_PATCH_VERSION = 1
-GA_VERSION = 0.1843-1
+GA_PATCH_VERSION = 2
+GA_VERSION = 0.1843-2
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1843
-LT_REVISION = 1
+LT_REVISION = 2
 MAINT = #
 MPIFLAGS = 
 MPILIBS = 
@@ -121,10 +121,10 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1843-1
+VERSION = 0.1843-2
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1843/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1843/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -195,7 +195,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
@@ -215,7 +215,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
