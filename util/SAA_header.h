@@ -213,10 +213,10 @@ typedef short _Bool;
 # define bool _Bool
 #endif
 
-#if !defined(_Bool)
-#warning Broken stdbool.h?
-typedef short _Bool;
-#endif
+/*#if !defined(_Bool)*/
+/*#warning Broken stdbool.h?*/
+/*typedef short _Bool;*/
+/*#endif*/
 
 #define boolean _Bool
 

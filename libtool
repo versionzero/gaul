@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by  (GNU gaul-devel 0.1841-6)
@@ -35,10 +35,10 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host usf-cf-sparc-solaris-1:
+# Libtool was configured on host dhcp-506-475:
 
 # Shell to use when invoking shell scripts.
-SHELL="/bin/bash"
+SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
 build_libtool_libs=yes
@@ -47,14 +47,14 @@ build_libtool_libs=yes
 build_old_libs=yes
 
 # Whether or not to add -lc for building shared libraries.
-build_libtool_need_lc=yes
+build_libtool_need_lc=no
 
 # Whether or not to optimize for fast installation.
-fast_install=needless
+fast_install=yes
 
 # The host system.
 host_alias=
-host=sparc-sun-solaris2.8
+host=i686-pc-linux-gnu
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -70,13 +70,13 @@ CC="gcc"
 with_gcc=yes
 
 # The linker used to build libraries.
-LD="/usr/ccs/bin/ld"
+LD="/usr/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/usr/ccs/bin/nm -p"
+NM="/usr/bin/nm -B"
 
 # A symbol stripping program
 STRIP=strip
@@ -147,10 +147,10 @@ link_static_flag="-static"
 no_builtin_flag=" -fno-builtin -fno-rtti -fno-exceptions"
 
 # Compiler flag to allow reflexive dlopens.
-export_dynamic_flag_spec=""
+export_dynamic_flag_spec="\${wl}--export-dynamic"
 
 # Compiler flag to generate shared objects directly from archives.
-whole_archive_flag_spec="-z allextract\$convenience -z defaultextract"
+whole_archive_flag_spec="\${wl}--whole-archive\$convenience \${wl}--no-whole-archive"
 
 # Compiler flag to generate thread-safe objects.
 thread_safe_flag_spec=""
@@ -181,15 +181,14 @@ old_archive_from_new_cmds=""
 old_archive_from_expsyms_cmds=""
 
 # Commands used to build and install a shared archive.
-archive_cmds="\$LD -G\${allow_undefined_flag} -h \$soname -o \$lib \$libobjs \$deplibs \$linker_flags"
-archive_expsym_cmds="\$echo \\\"{ global:\\\" > \$lib.exp~cat \$export_symbols | sed -e \\\"s/\\\\(.*\\\\)/\\\\1;/\\\" >> \$lib.exp~\$echo \\\"local: *; };\\\" >> \$lib.exp~
-		\$LD -G\${allow_undefined_flag} -M \$lib.exp -h \$soname -o \$lib \$libobjs \$deplibs \$linker_flags~\$rm \$lib.exp"
-postinstall_cmds="chmod +x \$lib"
+archive_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
+archive_expsym_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-retain-symbols-file \$wl\$export_symbols -o \$lib"
+postinstall_cmds=""
 postuninstall_cmds=""
 
 # Commands to strip libraries.
-old_striplib=""
-striplib=""
+old_striplib="strip --strip-debug"
+striplib="strip --strip-unneeded"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -204,13 +203,13 @@ allow_undefined_flag=""
 no_undefined_flag=""
 
 # Commands used to finish a libtool library installation in a directory.
-finish_cmds=""
+finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
 
 # Same as above, but a single script fragment to be evaled but not shown.
 finish_eval=""
 
 # Take the output of nm and produce a listing of raw symbols and C names.
-global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([BDT][BDT]*\\)[ 	][ 	]*\\(\\)\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2\\3 \\3/p'"
+global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([ABCDGISTW][ABCDGISTW]*\\)[ 	][ 	]*\\(\\)\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2\\3 \\3/p'"
 
 # Transform the output of nm in a proper C declaration
 global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern char \\1;/p'"
@@ -219,13 +218,13 @@ global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern char \\1;/p'"
 global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p' -e 's/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'"
 
 # This is the shared library runtime path variable.
-runpath_var=
+runpath_var=LD_RUN_PATH
 
 # This is the shared library path variable.
 shlibpath_var=LD_LIBRARY_PATH
 
 # Is shlibpath searched before the hard-coded library search path?
-shlibpath_overrides_runpath=yes
+shlibpath_overrides_runpath=no
 
 # How to hardcode a shared library path into an executable.
 hardcode_action=immediate
@@ -235,7 +234,7 @@ hardcode_into_libs=yes
 
 # Flag to hardcode $libdir into a binary during linking.
 # This must work even if $libdir does not exist.
-hardcode_libdir_flag_spec="-R\$libdir"
+hardcode_libdir_flag_spec="\${wl}--rpath \${wl}\$libdir"
 
 # Whether we need a single -rpath flag with a separated argument.
 hardcode_libdir_separator=""
@@ -250,14 +249,14 @@ hardcode_minus_L=no
 
 # Set to yes if using SHLIBPATH_VAR=DIR during linking hardcodes DIR into
 # the resulting binary.
-hardcode_shlibpath_var=no
+hardcode_shlibpath_var=unsupported
 
 # Variables whose values should be saved in libtool wrapper scripts and
 # restored at relink time.
-variables_saved_for_relink="PATH LD_LIBRARY_PATH  GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
+variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
-link_all_deplibs=yes
+link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
 sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
@@ -463,6 +462,8 @@ do
 
   --mode) prevopt="--mode" prev=mode ;;
   --mode=*) mode="$optarg" ;;
+
+  --preserve-dup-deps) duplicate_deps="yes" ;;
 
   --quiet | --silent)
     show=:
@@ -1044,6 +1045,7 @@ compiler."
     linker_flags=
     dllsearchpath=
     lib_search_path=`pwd`
+    inst_prefix_dir=
 
     avoid_version=no
     dlfiles=
@@ -1174,6 +1176,11 @@ compiler."
 	  prev=
 	  continue
 	  ;;
+        inst_prefix)
+	  inst_prefix_dir="$arg"
+	  prev=
+	  continue
+	  ;;
 	release)
 	  release="-$arg"
 	  prev=
@@ -1272,6 +1279,11 @@ compiler."
 	else
 	  prev=expsyms_regex
 	fi
+	continue
+	;;
+
+      -inst-prefix-dir)
+	prev=inst_prefix
 	continue
 	;;
 
@@ -1617,11 +1629,32 @@ compiler."
     # Find all interdependent deplibs by searching for libraries
     # that are linked more than once (e.g. -la -lb -la)
     for deplib in $deplibs; do
-      case "$libs " in
-      *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
-      esac
+      if test "X$duplicate_deps" = "Xyes" ; then
+	case "$libs " in
+	*" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
+	esac
+      fi
       libs="$libs $deplib"
     done
+
+    if test "$linkmode" = lib; then
+      libs="$predeps $libs $compiler_lib_search_path $postdeps"
+
+      # Compute libraries that are listed more than once in $predeps
+      # $postdeps and mark them as special (i.e., whose duplicates are
+      # not to be eliminated).
+      pre_post_deps=
+      if test "X$duplicate_deps" = "Xyes" ; then
+	for pre_post_dep in $predeps $postdeps; do
+	  case "$pre_post_deps " in
+	  *" $pre_post_dep "*) specialdeplibs="$specialdeplibs $pre_post_deps" ;;
+	  esac
+	  pre_post_deps="$pre_post_deps $pre_post_dep"
+	done
+      fi
+      pre_post_deps=
+    fi
+
     deplibs=
     newdependency_libs=
     newlib_search_path=
@@ -1842,9 +1875,11 @@ compiler."
 	    tmp_libs=
 	    for deplib in $dependency_libs; do
 	      deplibs="$deplib $deplibs"
-	      case "$tmp_libs " in
-	      *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
-	      esac
+              if test "X$duplicate_deps" = "Xyes" ; then
+	        case "$tmp_libs " in
+	        *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
+	        esac
+              fi
 	      tmp_libs="$tmp_libs $deplib"
 	    done
 	  elif test "$linkmode" != prog && test "$linkmode" != lib; then
@@ -1967,9 +2002,11 @@ compiler."
 	      # or/and link against static libraries
 	      newdependency_libs="$deplib $newdependency_libs"
 	    fi
-	    case "$tmp_libs " in
-	    *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
-	    esac
+	    if test "X$duplicate_deps" = "Xyes" ; then
+	      case "$tmp_libs " in
+	      *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
+	      esac
+	    fi
 	    tmp_libs="$tmp_libs $deplib"
 	  done # for deplib
 	  continue
@@ -2161,7 +2198,16 @@ compiler."
 	    if test "$hardcode_direct" = yes; then
 	      add="$libdir/$linklib"
 	    elif test "$hardcode_minus_L" = yes; then
-	      add_dir="-L$libdir"
+	      # Try looking first in the location we're being installed to.
+	      add_dir=
+	      if test -n "$inst_prefix_dir"; then
+		case "$libdir" in
+		[\\/]*)
+		  add_dir="-L$inst_prefix_dir$libdir"
+		  ;;
+		esac
+	      fi
+	      add_dir="$add_dir -L$libdir"
 	      add="-l$name"
 	    elif test "$hardcode_shlibpath_var" = yes; then
 	      case :$finalize_shlibpath: in
@@ -2171,7 +2217,16 @@ compiler."
 	      add="-l$name"
 	    else
 	      # We cannot seem to hardcode it, guess we'll fake it.
-	      add_dir="-L$libdir"
+	      # Try looking first in the location we're being installed to.
+	      add_dir=
+	      if test -n "$inst_prefix_dir"; then
+		case "$libdir" in
+		[\\/]*)
+		  add_dir="-L$inst_prefix_dir$libdir"
+		  ;;
+		esac
+	      fi
+	      add_dir="$add_dir -L$libdir"
 	      add="-l$name"
 	    fi
 
@@ -2268,9 +2323,11 @@ compiler."
 	  tmp_libs=
 	  for deplib in $dependency_libs; do
 	    newdependency_libs="$deplib $newdependency_libs"
-	    case "$tmp_libs " in
-	    *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
-	    esac
+	    if test "X$duplicate_deps" = "Xyes" ; then
+	      case "$tmp_libs " in
+	      *" $deplib "*) specialdeplibs="$specialdeplibs $deplib" ;;
+	      esac
+	    fi
 	    tmp_libs="$tmp_libs $deplib"
 	  done
 
@@ -4145,7 +4202,7 @@ fi\
 	fi
       done
       # Quote the link command for shipping.
-      relink_command="(cd `pwd`; $SHELL $0 --mode=relink $libtool_args)"
+      relink_command="(cd `pwd`; $SHELL $0 --mode=relink $libtool_args @inst_prefix_dir@)"
       relink_command=`$echo "X$relink_command" | $Xsed -e "$sed_quote_subst"`
 
       # Only create the output if not a dry run.
@@ -4446,12 +4503,30 @@ relink_command=\"$relink_command\""
 	dir="$dir$objdir"
 
 	if test -n "$relink_command"; then
+	  # Determine the prefix the user has applied to our future dir.
+	  inst_prefix_dir=`$echo "$destdir" | sed "s%$libdir\$%%"`
+
+	  # Don't allow the user to place us outside of our expected
+	  # location b/c this prevents finding dependent libraries that
+	  # are installed to the same prefix.
+	  if test "$inst_prefix_dir" = "$destdir"; then
+	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
+	    exit 1
+	  fi
+
+	  if test -n "$inst_prefix_dir"; then
+	    # Stick the inst_prefix_dir data into the link command.
+	    relink_command=`$echo "$relink_command" | sed "s%@inst_prefix_dir@%-inst-prefix-dir $inst_prefix_dir%"`
+	  else
+	    relink_command=`$echo "$relink_command" | sed "s%@inst_prefix_dir@%%"`
+	  fi
+
 	  $echo "$modename: warning: relinking \`$file'" 1>&2
 	  $show "$relink_command"
 	  if $run eval "$relink_command"; then :
 	  else
 	    $echo "$modename: error: relink \`$file' with the above command before installing it" 1>&2
-	    continue
+	    exit 1
 	  fi
 	fi
 

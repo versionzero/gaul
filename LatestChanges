@@ -8,6 +8,7 @@ Changes since release 0.1841:
 - Added random search algorithm, and an example.
 - Added systematic search algorithm, and an example.
 - Added missing ga_crossover_double_singlepoints() and ga_crossover_double_doublepoints() functions.
+- Some minor fixes for clean compilation on Solaris 8.
 
 Changes since release 0.1840:
 - Added a few missing intrinsic functions.
