@@ -126,25 +126,8 @@ install_sh = @install_sh@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-
-#lib_LIBRARIES = libgaul.a
 lib_LTLIBRARIES = libgaul.la
 
-
-#libgaul_a_SOURCES = \
-#    ga_bitstring.c \
-#    ga_chromo.c \
-#    ga_core.c \
-#    ga_crossover.c \
-#    ga_intrinsics.c \
-#    ga_mutate.c \
-#    ga_optim.c \
-#    ga_qsort.c \
-#    ga_replace.c \
-#    ga_seed.c \
-#    ga_select.c \
-#    ga_similarity.c \
-#    ga_utility.c
 libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
@@ -157,7 +140,9 @@ libgaul_la_SOURCES = \
     ga_replace.c \
     ga_seed.c \
     ga_select.c \
+    ga_sa.c \
     ga_similarity.c \
+    ga_tabu.c \
     ga_utility.c
 
 
@@ -168,7 +153,9 @@ include_HEADERS = \
     ga_intrinsics.h \
     ga_optim.h \
     ga_qsort.h \
+    ga_sa.h \
     ga_similarity.h \
+    ga_tabu.h \
     ga_utility.h \
     gaul.h
 
@@ -184,8 +171,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_core.lo \
 	ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo \
-	ga_qsort.lo ga_replace.lo ga_seed.lo ga_select.lo \
-	ga_similarity.lo ga_utility.lo
+	ga_qsort.lo ga_replace.lo ga_seed.lo ga_select.lo ga_sa.lo \
+	ga_similarity.lo ga_tabu.lo ga_utility.lo
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -201,9 +188,10 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/ga_intrinsics.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ga_mutate.Plo ./$(DEPDIR)/ga_optim.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ga_qsort.Plo ./$(DEPDIR)/ga_replace.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ga_seed.Plo ./$(DEPDIR)/ga_select.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/ga_sa.Plo ./$(DEPDIR)/ga_seed.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/ga_select.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ga_similarity.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ga_utility.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/ga_tabu.Plo ./$(DEPDIR)/ga_utility.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -273,9 +261,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_optim.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_qsort.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_replace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_sa.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_seed.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_select.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_similarity.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_tabu.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_utility.Plo@am__quote@
 
 distclean-depend:

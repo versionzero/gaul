@@ -508,6 +508,28 @@ int ga_evolution_slang(	int	*pop,
 
 
 /**********************************************************************
+  ga_tabu_slang()
+  synopsis:	Wrapper around the tabu-search routine.
+  parameters:
+  return:
+  last updated:	10 Oct 2002
+ **********************************************************************/
+
+int ga_tabu_slang(	int	*pop_id,
+			int	*entity_id,
+			int	*max_iterations )
+  {
+  population	*pop;			/* Active population structure. */
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  ga_tabu( pop, ga_get_entity_from_id(pop, *entity_id), *max_iterations );
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_evolution_forked_slang()
   synopsis:	Wrapper around the main genetic algorithm routine.
 		It performs a GA-based optimisation on the specified
@@ -1239,6 +1261,9 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_evolution_forked",
             (FVOID_STAR) ga_evolution_forked_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_tabu",
+            (FVOID_STAR) ga_tabu_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_get_size",
             (FVOID_STAR) ga_population_get_size_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)

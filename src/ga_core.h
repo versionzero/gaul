@@ -101,7 +101,9 @@
 #include "ga_chromo.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
+#include "ga_sa.h"
 #include "ga_similarity.h"
+#include "ga_tabu.h"
 
 /*
  * Compilation constants.
@@ -153,9 +155,12 @@ typedef struct
  */
 typedef struct
   {
-  int		initial_temp;	/* Initial temperature. */
-  int		final_temp;	/* Final temperature. */
-  int		temp_freq;	/* Frequency for temperature updates. */
+  double	initial_temp;	/* Initial temperature. */
+  double	final_temp;	/* Final temperature. */
+  double	temp_step;	/* Increment of temperature updates. */
+  int		temp_freq;	/* Frequency for temperature updates.
+				 * (Or, -1 for smooth transition between Ti and Tf) */
+  double	temperature;	/* Current temperature. */
   GAsa_accept	sa_accept;	/* Acceptance criterion function. */
   } ga_sa_t;
 
@@ -260,7 +265,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname);
 entity *ga_entity_read(population *pop, char *fname);
 double	ga_entity_evaluate(population *pop, entity *entity);
 boolean	ga_population_score_and_sort(population *pop);
-boolean ga_population_sort(population *pop);
+boolean	ga_population_sort(population *pop);
 double	ga_population_convergence_genotypes( population *pop );
 double	ga_population_convergence_chromsomes( population *pop );
 double	ga_population_convergence_alleles( population *pop );

@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u1
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -98,7 +98,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -107,7 +107,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1840
-LT_REVISION = 2
+LT_REVISION = 4
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1840
@@ -115,10 +115,10 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 2
+PATCH_VERSION = 4
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1840-2
+VERSION = 0.1840-4
 am__include = include
 am__quote = 
 install_sh = /u1/gaul-devel/install-sh
@@ -126,25 +126,8 @@ install_sh = /u1/gaul-devel/install-sh
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-
-#lib_LIBRARIES = libgaul.a
 lib_LTLIBRARIES = libgaul.la
 
-
-#libgaul_a_SOURCES = \
-#    ga_bitstring.c \
-#    ga_chromo.c \
-#    ga_core.c \
-#    ga_crossover.c \
-#    ga_intrinsics.c \
-#    ga_mutate.c \
-#    ga_optim.c \
-#    ga_qsort.c \
-#    ga_replace.c \
-#    ga_seed.c \
-#    ga_select.c \
-#    ga_similarity.c \
-#    ga_utility.c
 libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
@@ -157,7 +140,9 @@ libgaul_la_SOURCES = \
     ga_replace.c \
     ga_seed.c \
     ga_select.c \
+    ga_sa.c \
     ga_similarity.c \
+    ga_tabu.c \
     ga_utility.c
 
 
@@ -168,7 +153,9 @@ include_HEADERS = \
     ga_intrinsics.h \
     ga_optim.h \
     ga_qsort.h \
+    ga_sa.h \
     ga_similarity.h \
+    ga_tabu.h \
     ga_utility.h \
     gaul.h
 
@@ -184,8 +171,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_core.lo \
 	ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo \
-	ga_qsort.lo ga_replace.lo ga_seed.lo ga_select.lo \
-	ga_similarity.lo ga_utility.lo
+	ga_qsort.lo ga_replace.lo ga_seed.lo ga_select.lo ga_sa.lo \
+	ga_similarity.lo ga_tabu.lo ga_utility.lo
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
@@ -201,9 +188,10 @@ DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
 	./$(DEPDIR)/ga_intrinsics.Plo \
 	./$(DEPDIR)/ga_mutate.Plo ./$(DEPDIR)/ga_optim.Plo \
 	./$(DEPDIR)/ga_qsort.Plo ./$(DEPDIR)/ga_replace.Plo \
-	./$(DEPDIR)/ga_seed.Plo ./$(DEPDIR)/ga_select.Plo \
+	./$(DEPDIR)/ga_sa.Plo ./$(DEPDIR)/ga_seed.Plo \
+	./$(DEPDIR)/ga_select.Plo \
 	./$(DEPDIR)/ga_similarity.Plo \
-	./$(DEPDIR)/ga_utility.Plo
+	./$(DEPDIR)/ga_tabu.Plo ./$(DEPDIR)/ga_utility.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -211,7 +199,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w1 -O2 -I../util/ -I../src/ -tpp7 -axW -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -march=pentiumpro -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
@@ -273,9 +261,11 @@ include ./$(DEPDIR)/ga_mutate.Plo
 include ./$(DEPDIR)/ga_optim.Plo
 include ./$(DEPDIR)/ga_qsort.Plo
 include ./$(DEPDIR)/ga_replace.Plo
+include ./$(DEPDIR)/ga_sa.Plo
 include ./$(DEPDIR)/ga_seed.Plo
 include ./$(DEPDIR)/ga_select.Plo
 include ./$(DEPDIR)/ga_similarity.Plo
+include ./$(DEPDIR)/ga_tabu.Plo
 include ./$(DEPDIR)/ga_utility.Plo
 
 distclean-depend:
@@ -298,7 +288,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u1
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -99,7 +99,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,7 +108,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1840
-LT_REVISION = 2
+LT_REVISION = 4
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1840
@@ -116,10 +116,10 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 2
+PATCH_VERSION = 4
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1840-2
+VERSION = 0.1840-4
 am__include = include
 am__quote = 
 install_sh = /u1/gaul-devel/install-sh
@@ -305,7 +305,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w1 -O2 -I../util/ -I../src/ -tpp7 -axW -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -march=pentiumpro -I/usr/include/slang/
 DIST_SOURCES = $(liblog_util_la_SOURCES) \
 	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
 	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \
@@ -440,7 +440,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "09/10/02"
+#define BUILD_DATE_STRING "14/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -56,7 +56,7 @@
 #define HAVE_INDEX 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-/* #undef HAVE_INTTYPES_H */
+#define HAVE_INTTYPES_H 1
 
 /* Whether itoa() is available */
 /* #undef HAVE_ITOA */
@@ -83,7 +83,7 @@
 #define HAVE_MEMMOVE 1
 
 /* Define to 1 if you have the <memory.h> header file. */
-/* #undef HAVE_MEMORY_H */
+#define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `memrev' function. */
 /* #undef HAVE_MEMREV */
@@ -119,7 +119,7 @@
 #define HAVE_SELECT 1
 
 /* Whether sincos() is available */
-#define HAVE_SINCOS 1
+/* #undef HAVE_SINCOS */
 
 /* Whether S-Lang is installed. */
 #define HAVE_SLANG 1
@@ -131,10 +131,10 @@
 #define HAVE_SNPRINTF 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-/* #undef HAVE_STDINT_H */
+#define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-/* #undef HAVE_STDLIB_H */
+#define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the `strcasecmp' function. */
 #define HAVE_STRCASECMP 1
@@ -167,10 +167,10 @@
 /* #undef HAVE_STRICMP */
 
 /* Define to 1 if you have the <strings.h> header file. */
-/* #undef HAVE_STRINGS_H */
+#define HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
-/* #undef HAVE_STRING_H */
+#define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcat' function. */
 /* #undef HAVE_STRLCAT */
@@ -239,7 +239,7 @@
 #define HAVE_SYS_SOCKET_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-/* #undef HAVE_SYS_STAT_H */
+#define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/termio.h> header file. */
 /* #undef HAVE_SYS_TERMIO_H */
@@ -248,7 +248,7 @@
 #define HAVE_SYS_TIME_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-/* #undef HAVE_SYS_TYPES_H */
+#define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <sys/uio.h> header file. */
 #define HAVE_SYS_UIO_H 1
@@ -257,7 +257,7 @@
 #define HAVE_TERMIOS_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-/* #undef HAVE_UNISTD_H */
+#define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `usleep' function. */
 #define HAVE_USLEEP 1
@@ -317,34 +317,34 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 2
+#define PATCH_VERSION 4
 
 /* The size of a `char', as computed by sizeof. */
-#define SIZEOF_CHAR 0
+#define SIZEOF_CHAR 1
 
 /* The size of a `double', as computed by sizeof. */
-#define SIZEOF_DOUBLE 0
+#define SIZEOF_DOUBLE 8
 
 /* The size of a `int', as computed by sizeof. */
-#define SIZEOF_INT 0
+#define SIZEOF_INT 4
 
 /* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 0
+#define SIZEOF_LONG 4
 
 /* The size of a `void *', as computed by sizeof. */
-#define SIZEOF_VOID_P 0
+#define SIZEOF_VOID_P 4
 
 /* Define to 1 if you have the ANSI C header files. */
-/* #undef STDC_HEADERS */
+#define STDC_HEADERS 1
 
 /* Define if using Sun's Forte C Compiler */
 /* #undef SUN_FORTE_C */
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-/* #undef TIME_WITH_SYS_TIME */
+#define TIME_WITH_SYS_TIME 1
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
-#define TM_IN_SYS_TIME 1
+/* #undef TM_IN_SYS_TIME */
 
 /* record compilation platform information. */
 #define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"
@@ -356,7 +356,7 @@
 /* #undef VERSION */
 
 /* Version string. */
-#define VERSION_STRING "0.1840-2"
+#define VERSION_STRING "0.1840-4"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

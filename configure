@@ -1492,7 +1492,7 @@ test -n "$target_alias" &&
 #AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1840
-PATCH_VERSION=2
+PATCH_VERSION=4
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 #AC_DIVERT_POP()
 
@@ -7923,10 +7923,6 @@ case $CC in
       esac
 
     else
-      case " $CFLAGS " in
-        *[\ \	]-ipo[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -ipo -wp_ipo" ;;
-      esac
 
       case " $CFLAGS " in
         *[\ \	]-O3[\ \	]*) ;;
@@ -7934,6 +7930,11 @@ case $CC in
       esac
 
     fi
+
+    case " $CFLAGS " in
+      *[\ \	]-ipo[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+    esac
 
     if test "x$enable_prof" = "xyes"; then
       case " $CFLAGS " in
@@ -11185,7 +11186,8 @@ echo "${ECHO_T}yes - i586" >&6
       icc)
         case " $CFLAGS " in
           *\ \	-tpp1-9\ \	*) ;;
-          *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+	  # -axK
+          *) CFLAGS="$CFLAGS -tpp6" ;;
         esac
         ;;
       gcc)
@@ -11203,7 +11205,8 @@ echo "${ECHO_T}yes - i686" >&6
       icc)
         case " $CFLAGS " in
           *\ \	-tpp1-9\ \	*) ;;
-          *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+	  # -axW
+          *) CFLAGS="$CFLAGS -tpp7" ;;
         esac
         ;;
       gcc)

@@ -28,24 +28,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#lib_LIBRARIES = libgaul.a
-
 lib_LTLIBRARIES = libgaul.la
-
-#libgaul_a_SOURCES = \
-#    ga_bitstring.c \
-#    ga_chromo.c \
-#    ga_core.c \
-#    ga_crossover.c \
-#    ga_intrinsics.c \
-#    ga_mutate.c \
-#    ga_optim.c \
-#    ga_qsort.c \
-#    ga_replace.c \
-#    ga_seed.c \
-#    ga_select.c \
-#    ga_similarity.c \
-#    ga_utility.c
 
 libgaul_la_SOURCES = \
     ga_bitstring.c \
@@ -59,7 +42,9 @@ libgaul_la_SOURCES = \
     ga_replace.c \
     ga_seed.c \
     ga_select.c \
+    ga_sa.c \
     ga_similarity.c \
+    ga_tabu.c \
     ga_utility.c
 
 include_HEADERS = \
@@ -69,7 +54,9 @@ include_HEADERS = \
     ga_intrinsics.h \
     ga_optim.h \
     ga_qsort.h \
+    ga_sa.h \
     ga_similarity.h \
+    ga_tabu.h \
     ga_utility.h \
     gaul.h
 

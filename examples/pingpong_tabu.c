@@ -1,9 +1,9 @@
 /**********************************************************************
-  pingpong.c
+  pingpong_tabu.c
  **********************************************************************
 
-  pingpong - Test/example program for GAUL.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  pingpong_tabu - Test/example program for GAUL.
+  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -30,13 +30,8 @@
 		Dennis E. Shasha, "Dr Ecco's Omniheurist Corner: Foxy",
 		Dr Dobb's Journal, 323:148-149 (2001).
 
-		Note that this probably isn't the method of choice
-		for solving this problem - it is just used as an
-		illustration.
-
-		This example uses custom crossover and mutation
-		operators since a given team member is unable to
-		play twice.
+		This example uses the tabu-search algorithm instead of
+		a GA.
 
  **********************************************************************/
 
@@ -120,62 +115,6 @@ boolean pingpong_seed(population *pop, entity *adam)
     }
 
   return TRUE;
-  }
-
-
-/**********************************************************************
-  pingpong_crossover()
-  synopsis:	Crossover.
-  parameters:
-  return:
-  updated:	23/04/01
- **********************************************************************/
-
-void pingpong_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
-  {
-  int		i, j;	/* Team members. */
-
-  for (i=0; i<25; i++)
-    {
-    if (random_boolean())
-      {
-      ((int *)son->chromosome[0])[i] = ((int *)father->chromosome[0])[i];
-      ((int *)daughter->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
-      }
-   else
-      {
-      ((int *)son->chromosome[0])[i] = ((int *)father->chromosome[0])[i];
-      ((int *)daughter->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
-      }
-    }
-
-  for (i=1; i<25; i++)
-    {
-    for (j=0; j<i; j++)
-      {
-      if (((int *)son->chromosome[0])[j] == ((int *)son->chromosome[0])[i])
-        {
-        if (((int *)son->chromosome[0])[i]==24)
-          ((int *)son->chromosome[0])[i]=0;
-        else
-          ((int *)son->chromosome[0])[i]++;
-        j=0;
-        }
-      }
-    for (j=0; j<i; j++)
-      {
-      if (((int *)daughter->chromosome[0])[j] == ((int *)daughter->chromosome[0])[i])
-        {
-        if (((int *)daughter->chromosome[0])[i]==24)
-          ((int *)daughter->chromosome[0])[i]=0;
-        else
-          ((int *)daughter->chromosome[0])[i]++;
-        j=0;
-        }
-      }
-    }
-
-  return;
   }
 
 
@@ -269,7 +208,7 @@ void pingpong_mutate_shift(population *pop, entity *mother, entity *son)
   synopsis:	Mutation.
   parameters:
   return:
-  updated:	23/04/01
+  updated:	09 Oct 2002
  **********************************************************************/
 
 void pingpong_mutate(population *pop, entity *mother, entity *son)
@@ -278,7 +217,7 @@ void pingpong_mutate(population *pop, entity *mother, entity *son)
   /* Checks. */
   if (!mother || !son) die("Null pointer to entity structure passed");
 
-  if (random_boolean_prob(0.2))
+  if (random_boolean_prob(0.5))
     pingpong_mutate_swap(pop, mother, son);
   else
     pingpong_mutate_shift(pop, mother, son);
@@ -288,26 +227,23 @@ void pingpong_mutate(population *pop, entity *mother, entity *son)
 
 
 /**********************************************************************
-  pingpong_ga_callback()
+  pingpong_iteration_callback()
   synopsis:	Analysis callback.
   parameters:
   return:
-  updated:	23/04/01
+  updated:	09 Oct 2002
  **********************************************************************/
 
-boolean pingpong_ga_callback(int generation, population *pop)
+boolean pingpong_iteration_callback(int iteration, entity *this)
   {
   int		i;		/* Team member. */
   int		score[25];	/* Scores. */
   int		loss=0;		/* Number of matches lost. */
   double	lossscore=0;	/* Average score in lost matches. */
-  entity	*best;		/* Top ranked solution. */
-
-  best = ga_get_entity_from_rank(pop, 0);
 
   for (i=0; i<25; i++)
     {
-    score[i] = (((int *)best->chromosome[0])[i] - i)*4 + 2;
+    score[i] = (((int *)this->chromosome[0])[i] - i)*4 + 2;
     if (score[i] > 0)
       {
       loss++;
@@ -317,17 +253,17 @@ boolean pingpong_ga_callback(int generation, population *pop)
     lossscore /= loss;
 
     printf( "%d: %f %d %d %d %d %d %d %d %d %d\n",
-            generation,
-            best->fitness,
-            ((int *)best->chromosome[0])[0],
-            ((int *)best->chromosome[0])[1],
-            ((int *)best->chromosome[0])[2],
-            ((int *)best->chromosome[0])[3],
-            ((int *)best->chromosome[0])[4],
-            ((int *)best->chromosome[0])[5],
-            ((int *)best->chromosome[0])[6],
-            ((int *)best->chromosome[0])[7],
-            ((int *)best->chromosome[0])[8] );
+            iteration,
+            this->fitness,
+            ((int *)this->chromosome[0])[0],
+            ((int *)this->chromosome[0])[1],
+            ((int *)this->chromosome[0])[2],
+            ((int *)this->chromosome[0])[3],
+            ((int *)this->chromosome[0])[4],
+            ((int *)this->chromosome[0])[5],
+            ((int *)this->chromosome[0])[6],
+            ((int *)this->chromosome[0])[7],
+            ((int *)this->chromosome[0])[8] );
 
   printf( "     %d %d %d %d %d %d %d %d %d   Ave. loss = %f    wins = %d\n",
           score[0], score[1], score[2],
@@ -335,16 +271,16 @@ boolean pingpong_ga_callback(int generation, population *pop)
           score[6], score[7], score[8],
           lossscore, 25-loss );
 
-  return TRUE;	/* If this was to return FALSE, then the GA would terminate. */
+  return TRUE;	/* If this was to return FALSE, then the search would terminate. */
   }
 
 
 /**********************************************************************
   main()
-  synopsis:	Erm?
+  synopsis:	main function.
   parameters:
   return:
-  updated:	19 Aug 2002
+  updated:	09 Oct 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -356,50 +292,65 @@ int main(int argc, char **argv)
 
   for (i=0; i<50; i++)
     {
-    if (pop) ga_extinction(pop);
 
-    random_seed(424242*i);
+    random_seed(230975*i);
 
+    /* Note that most of the population data is not required for a tabu-search. */
     pop = ga_genesis(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        25,			/* const int              len_chromo */
-NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
+       NULL,			/* GAgeneration_hook      generation_hook */
+#if 0
+       pingpong_iteration_callback,	/* GAiteration_hook       iteration_hook */
+#endif
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
        NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
        pingpong_score,		/* GAevaluate             evaluate */
        pingpong_seed,		/* GAseed                 seed */
        NULL,			/* GAadapt                adapt */
-       ga_select_one_randomrank,	/* GAselect_one           select_one */
-       ga_select_two_randomrank,	/* GAselect_two           select_two */
+       NULL,			/* GAselect_one           select_one */
+       NULL,			/* GAselect_two           select_two */
        pingpong_mutate,		/* GAmutate               mutate */
-       pingpong_crossover,	/* GAcrossover            crossover */
+       NULL,			/* GAcrossover            crossover */
        NULL			/* GAreplace              replace */
             );
 
-    ga_population_set_parameters(
-       pop,			/* population      *pop */
-       GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       0.5,			/* double  crossover */
-       0.5,			/* double  mutation */
-       0.0              	/* double  migration */
+    /* ga_population_set_tabu_parameters() is required instead of
+     * the usual ga_population_set_parameters().
+     */
+    ga_population_set_tabu_parameters(
+       pop,			/* population		*pop */
+       ga_tabu_check_integer,	/* GAtabu_accept	tabu acceptance criterion */
+       50,			/* const int		tabu list length */
+       20			/* const int		tabu neighbourhood search count */
                               );
 
-    ga_evolution(
-       pop,			/* population              *pop */
-       200			/* const int               max_generations */
-              );
+    /* ga_tabu() is called instead of ga_evolution().  The NULL parameter indicates
+     * that a random (as generated by the GAseed callback) should be used.
+     * Alternatively, a specific starting solution may be passed.
+     */
+    ga_tabu(
+       pop,			/* population		*pop */
+       NULL,			/* entity		*initial */
+       100			/* const int		max_iterations */
+           );
 
-    pingpong_ga_callback(i, pop);
+    /* ga_tabu() doesn't sort the population.  Using ga_population_score_and_sort() is
+     * therefore required so that we know which entity was optimised, but this process
+     * is fairly inefficient.  This is not needed if a specific entity is passed to
+     * ga_tabu() for optimisation.
+     */
+    ga_population_score_and_sort(pop);
+
+    printf("The best solution found on attempt %d with fitness %f was:\n", i, ga_get_entity_from_rank(pop,0)->fitness);
+    beststring = ga_chromosome_integer_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+    printf("%s\n", beststring);
+    pingpong_iteration_callback(i, ga_get_entity_from_rank(pop,0));
+
+    ga_extinction(pop);
     }
-
-  printf("The final solution found was:\n");
-  beststring = ga_chromosome_integer_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
-  printf("%s\n", beststring);
-
-  ga_extinction(pop);
 
   s_free(beststring);
 

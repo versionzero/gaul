@@ -278,6 +278,12 @@ population *ga_population_new(	const int stable_size,
     newpop->entity_array[i] = NULL;
     newpop->entity_iarray[i] = NULL;
     }
+
+/*
+ * Wipe optional parameter data.
+ */
+  newpop->tabu_params = NULL;
+  newpop->sa_params = NULL;
   
 /*
  * Clean the callback functions.
@@ -402,6 +408,12 @@ population *ga_population_clone_empty(population *pop)
     newpop->entity_array[i] = NULL;
     newpop->entity_iarray[i] = NULL;
     }
+
+/*
+ * Wipe optional parameter data.
+ */
+  newpop->tabu_params = NULL;
+  newpop->sa_params = NULL;
 
 /*
  * Add this new population into the population table.
@@ -2701,6 +2713,8 @@ boolean ga_extinction(population *extinct)
     s_free(extinct->entity_array);
     s_free(extinct->entity_iarray);
     mem_chunk_destroy(extinct->entity_chunk);
+    if (extinct->tabu_params) s_free(extinct->tabu_params);
+    if (extinct->sa_params) s_free(extinct->sa_params);
     s_free(extinct);
     }
 

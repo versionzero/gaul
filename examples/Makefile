@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u1
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -98,7 +98,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -107,7 +107,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1840
-LT_REVISION = 2
+LT_REVISION = 4
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1840
@@ -115,10 +115,10 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 2
+PATCH_VERSION = 4
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1840-2
+VERSION = 0.1840-4
 am__include = include
 am__quote = 
 install_sh = /u1/gaul-devel/install-sh
@@ -129,7 +129,8 @@ AUTOMAKE_OPTIONS = 1.4
 
 #EXTRA_PROGRAMS = 
 bin_PROGRAMS = diagnostics \
-	pingpong wildfire wildfire_forked \
+	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
+	wildfire wildfire_forked \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
@@ -139,6 +140,9 @@ bin_PROGRAMS = diagnostics \
 
 diagnostics_SOURCES = diagnostics.c
 pingpong_SOURCES = pingpong.c
+pingpong_tabu_SOURCES = pingpong_tabu.c
+pingpong_tabu2_SOURCES = pingpong_tabu2.c
+pingpong_sa_SOURCES = pingpong_sa.c
 wildfire_SOURCES = wildfire.c
 wildfire_forked_SOURCES = wildfire_forked.c
 goldberg1_SOURCES = goldberg1.c
@@ -168,13 +172,6 @@ noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 
-
-#DEPENDENCIES = \
-#	../util/liblog_util.a \
-#	../util/libstuff.a \
-#	../util/libmpi_util_fake.a \
-#	../util/libnn_util.a \
-#	../src/libgaul.la
 EXTRA_DIST = \
 	chromostubs.c \
 	chromostubs.h \
@@ -183,6 +180,9 @@ EXTRA_DIST = \
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_forked_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
@@ -204,6 +204,9 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 # Serial code:
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
@@ -234,9 +237,11 @@ libbtree_la_LDFLAGS =
 libbtree_la_LIBADD =
 am_libbtree_la_OBJECTS = btree.lo
 libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
-bin_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) wildfire$(EXEEXT) \
-	wildfire_forked$(EXEEXT) goldberg1$(EXEEXT) goldberg2$(EXEEXT) \
-	royalroad$(EXEEXT) royalroad_ss$(EXEEXT) struggle$(EXEEXT) \
+bin_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) \
+	pingpong_tabu$(EXEEXT) pingpong_tabu2$(EXEEXT) \
+	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
+	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
+	royalroad_ss$(EXEEXT) struggle$(EXEEXT) \
 	struggle_forked$(EXEEXT) struggle2$(EXEEXT) struggle3$(EXEEXT) \
 	struggle4$(EXEEXT) struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
 	struggle5_forked$(EXEEXT) struggle_ss$(EXEEXT) \
@@ -258,6 +263,15 @@ nnevolve_LDFLAGS =
 am_pingpong_OBJECTS = pingpong.$(OBJEXT)
 pingpong_OBJECTS = $(am_pingpong_OBJECTS)
 pingpong_LDFLAGS =
+am_pingpong_sa_OBJECTS = pingpong_sa.$(OBJEXT)
+pingpong_sa_OBJECTS = $(am_pingpong_sa_OBJECTS)
+pingpong_sa_LDFLAGS =
+am_pingpong_tabu_OBJECTS = pingpong_tabu.$(OBJEXT)
+pingpong_tabu_OBJECTS = $(am_pingpong_tabu_OBJECTS)
+pingpong_tabu_LDFLAGS =
+am_pingpong_tabu2_OBJECTS = pingpong_tabu2.$(OBJEXT)
+pingpong_tabu2_OBJECTS = $(am_pingpong_tabu2_OBJECTS)
+pingpong_tabu2_LDFLAGS =
 am_royalroad_OBJECTS = royalroad.$(OBJEXT)
 royalroad_OBJECTS = $(am_royalroad_OBJECTS)
 royalroad_LDFLAGS =
@@ -311,6 +325,9 @@ am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
 	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/pingpong.Po \
+	./$(DEPDIR)/pingpong_sa.Po \
+	./$(DEPDIR)/pingpong_tabu.Po \
+	./$(DEPDIR)/pingpong_tabu2.Po \
 	./$(DEPDIR)/royalroad.Po \
 	./$(DEPDIR)/royalroad_ss.Po ./$(DEPDIR)/saveload.Po \
 	./$(DEPDIR)/struggle.Po ./$(DEPDIR)/struggle2.Po \
@@ -328,20 +345,21 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w1 -O2 -I../util/ -I../src/ -tpp7 -axW -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -march=pentiumpro -I/usr/include/slang/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
-	$(pingpong_SOURCES) $(royalroad_SOURCES) \
-	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
-	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
-	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
-	$(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_ss_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES)
+	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
+	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
+	$(royalroad_SOURCES) $(royalroad_ss_SOURCES) \
+	$(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) \
+	$(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) \
+	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
+	$(struggle_forked_SOURCES) $(struggle_ss_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES)
 
 all: all-am
 
@@ -407,6 +425,15 @@ nnevolve$(EXEEXT): $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
 pingpong$(EXEEXT): $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES) 
 	@rm -f pingpong$(EXEEXT)
 	$(LINK) $(pingpong_LDFLAGS) $(pingpong_OBJECTS) $(pingpong_LDADD) $(LIBS)
+pingpong_sa$(EXEEXT): $(pingpong_sa_OBJECTS) $(pingpong_sa_DEPENDENCIES) 
+	@rm -f pingpong_sa$(EXEEXT)
+	$(LINK) $(pingpong_sa_LDFLAGS) $(pingpong_sa_OBJECTS) $(pingpong_sa_LDADD) $(LIBS)
+pingpong_tabu$(EXEEXT): $(pingpong_tabu_OBJECTS) $(pingpong_tabu_DEPENDENCIES) 
+	@rm -f pingpong_tabu$(EXEEXT)
+	$(LINK) $(pingpong_tabu_LDFLAGS) $(pingpong_tabu_OBJECTS) $(pingpong_tabu_LDADD) $(LIBS)
+pingpong_tabu2$(EXEEXT): $(pingpong_tabu2_OBJECTS) $(pingpong_tabu2_DEPENDENCIES) 
+	@rm -f pingpong_tabu2$(EXEEXT)
+	$(LINK) $(pingpong_tabu2_LDFLAGS) $(pingpong_tabu2_OBJECTS) $(pingpong_tabu2_LDADD) $(LIBS)
 royalroad$(EXEEXT): $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES) 
 	@rm -f royalroad$(EXEEXT)
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
@@ -462,6 +489,9 @@ include ./$(DEPDIR)/goldberg1.Po
 include ./$(DEPDIR)/goldberg2.Po
 include ./$(DEPDIR)/nnevolve.Po
 include ./$(DEPDIR)/pingpong.Po
+include ./$(DEPDIR)/pingpong_sa.Po
+include ./$(DEPDIR)/pingpong_tabu.Po
+include ./$(DEPDIR)/pingpong_tabu2.Po
 include ./$(DEPDIR)/royalroad.Po
 include ./$(DEPDIR)/royalroad_ss.Po
 include ./$(DEPDIR)/saveload.Po
@@ -497,7 +527,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo

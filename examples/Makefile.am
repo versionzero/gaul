@@ -31,7 +31,8 @@ AUTOMAKE_OPTIONS = 1.4
 #EXTRA_PROGRAMS = 
 
 bin_PROGRAMS = diagnostics \
-	pingpong wildfire wildfire_forked \
+	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
+	wildfire wildfire_forked \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
@@ -40,6 +41,9 @@ bin_PROGRAMS = diagnostics \
 
 diagnostics_SOURCES = diagnostics.c
 pingpong_SOURCES = pingpong.c
+pingpong_tabu_SOURCES = pingpong_tabu.c
+pingpong_tabu2_SOURCES = pingpong_tabu2.c
+pingpong_sa_SOURCES = pingpong_sa.c
 wildfire_SOURCES = wildfire.c
 wildfire_forked_SOURCES = wildfire_forked.c
 goldberg1_SOURCES = goldberg1.c
@@ -68,13 +72,6 @@ libbtree_la_DEPENDENCIES = ${EXTRA_PROGRAMS}
 noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
-#DEPENDENCIES = \
-#	../util/liblog_util.a \
-#	../util/libstuff.a \
-#	../util/libmpi_util_fake.a \
-#	../util/libnn_util.a \
-#	../src/libgaul.la
-
 EXTRA_DIST = \
 	chromostubs.c \
 	chromostubs.h \
@@ -82,6 +79,9 @@ EXTRA_DIST = \
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
+pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_forked_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
@@ -103,6 +103,9 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 # Serial code:
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 

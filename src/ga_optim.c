@@ -2288,6 +2288,8 @@ entity *ga_metropolis_mutation(	population		*pop,
   char		stats_fname[80];		/* Filename for stats log. */
 #endif
 
+  plog(LOG_NORMAL, "This function is deprecated!");
+
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
   if ( !pop->evaluate ) die("Population's evaluation callback is undefined.");
@@ -2432,6 +2434,8 @@ entity *ga_simulated_annealling_mutation(population	*pop,
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
   char		stats_fname[80];		/* Filename for stats log. */
 #endif
+
+  plog(LOG_NORMAL, "This function is deprecated!");
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");

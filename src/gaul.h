@@ -39,9 +39,20 @@
 #define GAUL_H_INCLUDED
 
 /*
- * Includes
+ * Includes.
  */
-#include "SAA_header.h"
+#include "SAA_header.h"		/* General header. */
+
+/*
+ * Programming utilities.
+ */
+#include "compatibility.h"      /* For portability stuff. */
+#include "linkedlist.h"         /* For linked lists. */
+#include "log_util.h"           /* For logging facilities. */
+#include "memory_util.h"        /* Memory handling. */
+#include "mpi_util.h"           /* For multiprocessing facilities. */
+#include "random_util.h"        /* For PRNGs. */
+#include "table_util.h"         /* Handling unique integer ids. */
 
 /*
  * Forward declarations.
@@ -116,6 +127,12 @@ typedef boolean (*GAselect_two)(population *pop, entity **mother, entity **fathe
 typedef void    (*GAmutate)(population *pop, entity *mother, entity *daughter);
 typedef void    (*GAcrossover)(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
 typedef void    (*GAreplace)(population *pop, entity *child);
+
+/*
+ * Alternative heuristic search function operations.
+ */
+typedef boolean	(*GAtabu_accept)(population *pop, entity *putative, entity *tabu);
+typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
 
 /*
  * Include remainder of this library's headers.
