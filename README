@@ -1,6 +1,6 @@
 GAUL: The Genetic Algorithm Utility Library
 ===========================================
-Copyright © 2000-2003 "Stewart A. Adcock" <stewart@linux-domain.com>
+Copyright © 2000-2004 "Stewart A. Adcock" <stewart@linux-domain.com>
 All rights reserved.
 
 This is the "gaul-devel" package, which currently provides the
@@ -13,7 +13,7 @@ Homepage:              http://gaul.souceforge.net/
 Documentation:         http://gaul.souceforge.net/documentation.html
 Development homepage:  http://souceforge.net/projects/gaul/
 
-Proper documentation, including a tutorial and a FAQ, is still being written. In the mean-time you are welcome to join the mailing list, GAUL-devel@sourceforge.net, hosted by SourceForge.
+All existing documentation, including a tutorial and a FAQ, is available at the website.  Note that reference documentation is still being written. In the mean-time you are welcome to join the mailing list, GAUL-devel@sourceforge.net, where all of your questions can be answered.
 
 Introduction
 ------------
@@ -33,15 +33,34 @@ Current features include:
     * Availability of multiple chromosome genomes.
     * Full support for multiple, simultaneously evolved, populations.
     * Choice of high-level or low-level interface functions.
-    * Additional, non-GA, optimisation algorithms are built-in for local optimisation or comparative purposes.
+    * Additional optimisation algorithms for local optimisation or comparative purposes:
+          o Hill climbing.
+          o Tabu Search.
+          o Simulated annealling.
+          o Simplex Search.
+          o Steepest Ascents.
+          o Deterministic Crowding.
     * Trivial to extend using external code via the built-in code hooks.
-    * May be driven by, or extended by, powerful S-Lang scripts.
-    * Support for multiprocessor calculations.
+    * May be driven by, or extended by, simple yet powerful S-Lang scripts.
+    * Support for multiprocessor calculations on various architectures:
+          o MPI
+          o OpenMP 2.0
+          o pthreads
+          o forked-process model
     * Written using highly portable C code.
 
-The current primary aims for the GAUL development project are to produce documentation, examples and test cases for this open-source release of GAUL. Several new features are also planned for GAUL including wrappers to enable its use with programming languages other than C. The open-source release of GAUL is currently not parallelised, however this will become a priority development target.
+The current primary aims for the GAUL development project are to produce
+documentation, examples and test cases for this open-source release of
+GAUL. Several new features are also planned for GAUL including wrappers
+to enable its use with programming languages other than C.
 
-The main development platform for GAUL is Linux with the gcc compiler, but in the past GAUL or its non open-source predecessor have compiled successfully on Linux using Compaq's ccc compiler, on Solaris 7 with gcc, on SGI's IRIX 6.5 using the MIPSPro C compiler and on FreeBSD with gcc. It should be fairly trivial to use GAUL on any truly POSIX compliant systems. Full use is made of the GNU maketools to aid portability issues.  A compatibility table is located at http://gaul.souceforge.net/platforms.html
+The main development platform for GAUL is Linux with the gcc compiler,
+but it should be fairly trivial to use GAUL on any POSIX compliant
+systems.  Recent versions of GAUL have been successfully used a variety
+of operating systems, including RedHat Linux, FreeBSD, Sun's Solaris and
+SGI's IRIX.  Full use is made of the GNU maketools to aid portability
+issues.  A table of fully compatible platforms is located at
+http://gaul.souceforge.net/platforms.html
 
 This version of GAUL is distributed under the terms of the GNU General
 Public License.  See the file ./COPYING for full details.
@@ -68,5 +87,5 @@ miniature GAUL logo to your web page:
 
 The 'gaul_button.png' graphic may be downloaded from the GAUL web page.
 
-Stewart Adcock, 06 Apr 2003.
+Stewart Adcock, 12 May 2004.
 
