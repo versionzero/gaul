@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle4 - Test/example program for GAUL.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -355,7 +355,7 @@ int main(int argc, char **argv)
  *
  * There are functions for setting these individually too.
  */
-  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_CHILDREN, GA_ELITISM_PARENTS_SURVIVE, 0.9, 0.1, 0.0 );
+  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_CHILDREN, GA_ELITISM_PARENTS_DIE, 0.9, 0.1, 0.0 );
 
   ga_evolution( pop, 500 );
 

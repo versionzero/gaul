@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle5_mp - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
        NULL			/* vpointer		User data */
             );
 
-    ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
+    ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_DIE, 0.75, 0.25, 0.001 );
     }
 
 /*

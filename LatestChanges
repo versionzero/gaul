@@ -18,6 +18,7 @@ Changes since release 0.1842:
 - Added ga_population_get_generation() function to access the generation number from within the callbacks used during evolution, e.g. the fitness evaluation function.
 - Added new elitism option, GA_ELITISM_RESCORE_PARENTS.  This re-evaluates the parents' fitness and maintains them in the population if they still have a sufficiently high fitness.
 - Added ga_population_get_generation() intrinsic for S-Lang scripting.
+- The struggle examples all use GA_ELITISM_PARENTS_DIE now.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle - Test/example program for GAUL.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     ga_population_set_parameters(
        pop,			/* population      *pop */
        GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
+       GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
        0.9,			/* double  crossover */
        0.2,			/* double  mutation */
        0.0              	/* double  migration */
