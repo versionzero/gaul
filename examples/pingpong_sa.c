@@ -1,8 +1,8 @@
 /**********************************************************************
-  pingpong_tabu2.c
+  pingpong_sa.c
  **********************************************************************
 
-  pingpong_tabu2 - Test/example program for GAUL.
+  pingpong_sa - Test/example program for GAUL.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -30,8 +30,8 @@
 		Dennis E. Shasha, "Dr Ecco's Omniheurist Corner: Foxy",
 		Dr Dobb's Journal, 323:148-149 (2001).
 
-		This example uses the tabu-search algorithm instead of
-		a GA.
+		This example uses a simulated annealling algorithm
+	       	instead of a GA.
 
  **********************************************************************/
 
@@ -296,7 +296,9 @@ int main(int argc, char **argv)
 
     random_seed(230975*i);
 
-    /* Note that most of the population data is not required for a tabu-search. */
+/* Note that most of the population data is not required for
+ * simulated annealling.
+ */
     pop = ga_genesis(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
@@ -327,7 +329,7 @@ int main(int argc, char **argv)
        100.0,				/* const double		Initial temperature */
        0.0,				/* const double		Final temperature */
        10.0,				/* const double		Temperature step size */
-       10				/* const int		Temperature update frequency */
+       50				/* const int		Temperature update frequency */
                               );
 
     /* ga_sa() is called instead of ga_evolution().  We use the best of the
