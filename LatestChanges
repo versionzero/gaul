@@ -13,6 +13,7 @@ Changes since release 0.1839:
 - Changed the 'struggle' examples so that they use Stochastic Universal Sampling instead of Roulette Wheel Sampling.
 - Fixes for compilation on the MacOS X platform.
 - Fixes for compilation on the QNX V6 platform.
+- Reduced number of dynamic libraries created.
 
 Changes since release 0.1838:
 - Added Stochastic Universal Sampling selection functions ga_select_one_sus() and ga_select_two_sus().
