@@ -399,7 +399,7 @@ char *strpbrk(const char *s, const char *accept)
 #endif /* HAVE_STRPBRK */
 
 
-#ifndef HAVE_STRCASECMP
+#ifndef HAVE_STRSEP
 /*
  * If *str is NULL, return NULL.  Otherwise, this find the first token in the string *str, where tokens
  * are delimited by symbols in the string delim.  This token is terminated with a `\0' character (by
