@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -27,7 +27,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
+  Updated:	25 Feb 2003 SAA	Tweaked strndup() prototype.
+  		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
  		20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
 		09 Oct 2002 SAA	A #if should have been a #ifdef.
   		16 Aug 2002 SAA	Don't include config.h here (It is done in SAA_header.h).
@@ -237,7 +238,7 @@ void *memdup(const void *mem, int byte_size);
 #endif
 
 #ifndef HAVE_STRNDUP
-char *strndup(const char *str, int n);
+char *strndup(const char *str, size_t n);
 #endif
 
 #ifndef HAVE_STRNFILL

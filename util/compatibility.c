@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -103,7 +103,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
+  Updated:	25 Feb 2003 SAA	Tweaked strndup() prototype.
+		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
 		20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
 		25 Oct 2002 SAA	Added gethostname() stub.
 		02 Oct 2002 SAA A #ifndef HAVE_STRCASECMP should have been #ifndef HAVE_STRSEP
@@ -1019,7 +1020,7 @@ void *memdup(const void *mem, int byte_size)
 
 
 #ifndef HAVE_STRNDUP
-char *strndup(const char *str, int n)
+char *strndup(const char *str, size_t n)
   {
   char *new_str=NULL;
 
