@@ -320,6 +320,8 @@ boolean	ga_select_one_aggressive( population *pop, entity **mother );
 boolean	ga_select_two_aggressive( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_best( population *pop, entity **mother );
 boolean	ga_select_two_best( population *pop, entity **mother, entity **father );
+boolean ga_select_one_linearrank( population *pop, entity **mother );
+boolean ga_select_two_linearrank( population *pop, entity **mother, entity **father );
 
 /*
  * Functions located in ga_crossover.c:

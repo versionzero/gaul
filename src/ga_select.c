@@ -902,3 +902,51 @@ boolean ga_select_two_best(population *pop, entity **mother, entity **father)
   }
 
 
+/**********************************************************************
+  ga_select_one_linearrank()
+  synopsis:	Select an entity based on linear probability
+		distribution with respect to rank.
+  parameters:
+  return:	
+  last updated: 20 Oct 2003
+ **********************************************************************/
+
+boolean ga_select_one_linearrank(population *pop, entity **mother)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *mother = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_two_linearrank()
+  synopsis:	Select two entities based on linear probability
+		distribution with respect to rank.
+  parameters:
+  return:	
+  last updated: 20 Oct 2003
+ **********************************************************************/
+
+boolean ga_select_two_linearrank(population *pop, entity **mother, entity **father)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *mother = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+  do
+    {
+    *father = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+    } while (*mother == *father);
+
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
+  }
+
+
