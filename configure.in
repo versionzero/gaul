@@ -1035,8 +1035,6 @@ _EOF_
       echo '#define MEMORY_CHUNKS_MIMIC 0' >> $tmpfile
     fi
 
-_EOF_
-
     cat >> $tmpfile << _EOF_
 
 /*
