@@ -309,6 +309,7 @@ void	ga_crossover_bitstring_allele_mixing( population *pop,
 void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
 void	ga_mutate_integer_singlepoint_randomize(population *pop, entity *father, entity *son);
 void	ga_mutate_integer_multipoint(population *pop, entity *father, entity *son);
+void	ga_mutate_integer_allpoint(population *pop, entity *father, entity *son);
 void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son);
 void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_char_singlepoint_drift(population *pop, entity *father, entity *son);
