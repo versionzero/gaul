@@ -150,8 +150,8 @@ NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     goldberg1_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:\n", i);
-    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, pop->entity_iarray[0]));
-    printf("With score = %f\n", pop->entity_iarray[0]->fitness);
+    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
+    printf("With score = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
     }
 
   ga_extinction(pop);

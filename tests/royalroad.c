@@ -167,7 +167,7 @@ boolean royalroad_ga_callback(int generation, population *pop)
 
   printf( "generation = %d best score = %f highestlevel = %d\n",
           generation,
-          pop->entity_iarray[0]->fitness,
+          ga_get_entity_from_rank(pop,0)->fitness,
           highestlevel );
 
   return TRUE;
@@ -237,8 +237,8 @@ int main(int argc, char **argv)
               );
 
   printf("The final solution with seed = %d was: \n", seed);
-  for (i=0; i<NBITS; i++) printf("%d", ((boolean *)pop->entity_iarray[0]->chromosome[0])[i]?1:0);
-  printf(" score = %f highestlevel = %d\n", pop->entity_iarray[0]->fitness, highestlevel);
+  for (i=0; i<NBITS; i++) printf("%d", ((boolean *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i]?1:0);
+  printf(" score = %f highestlevel = %d\n", ga_get_entity_from_rank(pop,0)->fitness, highestlevel);
 
   ga_extinction(pop);
 

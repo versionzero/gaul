@@ -36,8 +36,6 @@
 		randomness, so this example shows how we rescore every
 		entity at every generation.
 
-  Last Updated:	11/05/01 SAA	First version.
-
   To do:	Different chromosome encoding (i.e. coordinate pairs)
 
  **********************************************************************/
@@ -548,20 +546,20 @@ boolean wildfire_ga_callback(int generation, population *pop)
   {
   double	average, stddev;	/* Statistics. */
 
-  fprintf(stderr, "%f\n", pop->entity_iarray[0]->fitness);
+  fprintf(stderr, "%f\n", ga_get_entity_from_rank(pop,0)->fitness);
 
   if (generation > 0)
     {
     ga_population_score_and_sort(pop);
     ga_population_stats(pop, &average, &stddev);
     printf( "%d: Best %d Average %f Stddev %f\n",
-            generation, (int) pop->entity_iarray[0]->fitness,
+            generation, (int) ga_get_entity_from_rank(pop,0)->fitness,
             average, stddev );
     }
   else
     {
     printf( "Best random solution has score %d\n",
-            (int) pop->entity_iarray[0]->fitness );
+            (int) ga_get_entity_from_rank(pop,0)->fitness );
     }
 
   return TRUE;	/* Always TRUE, so search doesn't finish. */
@@ -625,11 +623,11 @@ int main(int argc, char **argv)
               );
 
     printf( "Solution %d, with score %d, was:\n",
-            i, (int) pop->entity_iarray[0]->fitness );
+            i, (int) ga_get_entity_from_rank(pop,0)->fitness );
   /* Decode chromsome, and count number of cisterns. */
     for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
       {
-      map[i] = ((int *)pop->entity_iarray[0]->chromosome[0])[i];
+      map[i] = ((int *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i];
       if (map[i]) count++;
       }
     printf("%d cisterns\n", count);
@@ -638,7 +636,7 @@ int main(int argc, char **argv)
       {
       for (j=0; j<WILDFIRE_X_DIMENSION; j++)
         {
-        printf("%s ", ((int *)pop->entity_iarray[0]->chromosome[0])[i*WILDFIRE_X_DIMENSION+j]?"X":"-");
+        printf("%s ", ((int *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i*WILDFIRE_X_DIMENSION+j]?"X":"-");
         }
       printf("\n");
       }

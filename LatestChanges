@@ -5,7 +5,8 @@ Changes since release 0.1833:
 - Added bitstring chromosomes (incl. the necessary handling routines).
 - Some more documentation.
 - examples/chromostubs.c added.
-- .cvsignore updated, thn renamed to cvsignore.
+- .cvsignore updated, then renamed to cvsignore.
+- In many of the examples, ga_get_entity_from_rank(pop,0) is now used.
 
 Changes since release 0.1832:
 

@@ -144,8 +144,8 @@ NULL, /*dejong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     dejong_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:", i);
-    for (j=0; j<30; j++) printf(" %d", pop->entity_iarray[0]->chromosome[0][j]);
-    printf(" score = %f", pop->entity_iarray[0]->fitness);
+    for (j=0; j<30; j++) printf(" %d", ga_get_entity_from_rank(pop,0)->chromosome[0][j]);
+    printf(" score = %f", ga_get_entity_from_rank(pop,0)->fitness);
     printf("\n");
     }
 
