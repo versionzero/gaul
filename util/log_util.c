@@ -54,7 +54,7 @@ static boolean		log_date=TRUE;			/* Whether to display date in logs */
 
 THREAD_LOCK_DEFINE_STATIC(gaul_log_callback_lock);
 THREAD_LOCK_DEFINE_STATIC(gaul_log_global_lock);
-THREAD_LOCK_DEFINE_STATIC(gaul_log_verbose_lock);
+THREAD_LOCK_DEFINE_STATIC(gaul_log_level_lock);
 
 #if HAVE_MPI == 1
 static int mpi_get_rank(void)
@@ -123,10 +123,10 @@ void log_init(	enum log_level_type	level,
 
 void log_set_level(const enum log_level_type level)
   {
-  THREAD_LOCK(gaul_log_verbose_lock);
+  THREAD_LOCK(gaul_log_level_lock);
   log_level = level;
   plog(LOG_VERBOSE, "Log level adjusted to %d.", level);
-  THREAD_UNLOCK(gaul_log_verbose_lock);
+  THREAD_UNLOCK(gaul_log_level_lock);
 
   return;
   }
@@ -223,9 +223,7 @@ void log_output(	const enum	log_level_type level,
   THREAD_UNLOCK(gaul_log_callback_lock);
 
 /* Write to file? */
-  printf("DEBUG: Locking\n");
   THREAD_LOCK(gaul_log_global_lock);
-  printf("DEBUG: Continuing\n");
   if (log_filename)
     {
     if ( !(fh=fopen(log_filename, "a+")) )
@@ -252,9 +250,7 @@ void log_output(	const enum	log_level_type level,
 /*    fflush(fh);*/
     fclose(fh);
     }
-  printf("DEBUG: Unlocking\n");
   THREAD_UNLOCK(gaul_log_global_lock);
-  printf("DEBUG: Unlocked\n");
 
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
