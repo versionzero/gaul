@@ -191,15 +191,8 @@ struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
-noinst_LTLIBRARIES = libbtree.la
-
-libbtree_la_SOURCES = btree.c
-
-# Kludge to force compilation of the binaries.
-libbtree_la_DEPENDENCIES = ${EXTRA_PROGRAMS}
-
 noinst_HEADERS = \
-	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+	goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 
 EXTRA_DIST = \
@@ -281,12 +274,6 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-
-libbtree_la_LDFLAGS =
-libbtree_la_LIBADD =
-am_libbtree_la_OBJECTS = btree.lo
-libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
 bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	fitting$(EXEEXT) fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) \
 	pingpong$(EXEEXT) pingpong_tabu$(EXEEXT) \
@@ -411,8 +398,7 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/fitting.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/fitting_sd.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/fitting_simplex.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/onemax.Po \
@@ -444,10 +430,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
-DIST_SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) \
-	$(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) \
-	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
-	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
+DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
+	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
+	$(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) \
+	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
 	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
 	$(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) \
 	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
@@ -461,8 +447,8 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) \
 	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
-DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in
-SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -473,17 +459,6 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	  $(AUTOMAKE) --gnu  examples/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
-
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test -z "$dir" && dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-libbtree.la: $(libbtree_la_OBJECTS) $(libbtree_la_DEPENDENCIES) 
-	$(LINK)  $(libbtree_la_LDFLAGS) $(libbtree_la_OBJECTS) $(libbtree_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -619,7 +594,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/btree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_sd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_simplex.Po@am__quote@
@@ -749,7 +723,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -780,8 +754,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool \
-	clean-noinstLTLIBRARIES mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 
@@ -818,16 +791,16 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
 .PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool clean-noinstLTLIBRARIES distclean \
-	distclean-compile distclean-depend distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am info \
-	info-am install install-am install-binPROGRAMS install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-info-am
+	clean-generic clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-binPROGRAMS install-data install-data-am \
+	install-exec install-exec-am install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool tags uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -191,15 +191,8 @@ struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
-noinst_LTLIBRARIES = libbtree.la
-
-libbtree_la_SOURCES = btree.c
-
-# Kludge to force compilation of the binaries.
-libbtree_la_DEPENDENCIES = ${EXTRA_PROGRAMS}
-
 noinst_HEADERS = \
-	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+	goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 
 EXTRA_DIST = \
@@ -281,12 +274,6 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-
-libbtree_la_LDFLAGS =
-libbtree_la_LIBADD =
-am_libbtree_la_OBJECTS = btree.lo
-libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
 bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	fitting$(EXEEXT) fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) \
 	pingpong$(EXEEXT) pingpong_tabu$(EXEEXT) \
@@ -411,8 +398,7 @@ LDFLAGS =
 LIBS = -L/home/stewart/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/fitting.Po \
-	./$(DEPDIR)/fitting_sd.Po \
+DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 	./$(DEPDIR)/fitting_simplex.Po \
 	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/onemax.Po \
@@ -473,17 +459,6 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	  $(AUTOMAKE) --gnu  examples/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
-
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test -z "$dir" && dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-libbtree.la: $(libbtree_la_OBJECTS) $(libbtree_la_DEPENDENCIES) 
-	$(LINK)  $(libbtree_la_LDFLAGS) $(libbtree_la_OBJECTS) $(libbtree_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -619,7 +594,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/btree.Plo
 include ./$(DEPDIR)/fitting.Po
 include ./$(DEPDIR)/fitting_sd.Po
 include ./$(DEPDIR)/fitting_simplex.Po
@@ -749,7 +723,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -780,8 +754,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool \
-	clean-noinstLTLIBRARIES mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 
@@ -818,16 +791,16 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
 .PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool clean-noinstLTLIBRARIES distclean \
-	distclean-compile distclean-depend distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am info \
-	info-am install install-am install-binPROGRAMS install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-info-am
+	clean-generic clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-binPROGRAMS install-data install-data-am \
+	install-exec install-exec-am install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool tags uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

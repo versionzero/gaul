@@ -82,15 +82,8 @@ struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
-noinst_LTLIBRARIES = libbtree.la
-
-libbtree_la_SOURCES = btree.c
-
-# Kludge to force compilation of the binaries.
-libbtree_la_DEPENDENCIES = ${EXTRA_PROGRAMS}
-
 noinst_HEADERS = \
-	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+	goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 EXTRA_DIST = \
 	chromostubs.c \

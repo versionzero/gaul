@@ -7,6 +7,7 @@ Changes since release 0.1845:
 - Added the common "onemax" GA test as an example program.
 - Prepended "GA_" to some constants' names to reduce occurrance of clashes with external code.
 - Removed unused dynamic string handling code.
+- Removed unused binary tree code.
 - Applied the minor changes required for compilation with Dev-C++ on MS Windows.
 
 Changes since release 0.1844:
