@@ -256,8 +256,14 @@ else
   AC_MSG_RESULT(skip)
 fi
 
-dnl Electric Fence has to be last library linked.
+dnl Whether we need to cripple GAUL so that it works with windows.
+dnl This is always the case if MingW is being used.
 AC_MSG_CHECKING(whether to cripple GAUL for windows)
+
+if test "x$target" = "x*-*-mingw*"; then
+  enable_w32_subset = "yes"
+fi
+
 if test "x$enable_w32_subset" = "xyes"; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(W32_CRIPPLED, 1, [Whether to cripple GAUL so it works on windows.])
@@ -517,8 +523,10 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                strerror strlcat strlcpy strstr vsnprintf)
 
 dnl Some dodgy work-arounds.
-if test "x$enable_mpi" = "xyes"; then
-  AC_DEFINE(HAVE_ITOA,1,[Whether itoa() is available])	# Avoid symbol conflict with LAM-MPI
+dnl Most of this is a bit kludgy.  Proper fixes would be desirable...
+if test "x$enable_mpi" = "xyes" || test "x$target" = "x*-*-mingw*"; then
+  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
+  AC_DEFINE(HAVE_ITOA,1,[Whether itoa() is available])
 else
   AC_CHECK_FUNC(itoa)
 fi

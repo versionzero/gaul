@@ -7839,6 +7839,11 @@ fi
 
 echo "$as_me:$LINENO: checking whether to cripple GAUL for windows" >&5
 echo $ECHO_N "checking whether to cripple GAUL for windows... $ECHO_C" >&6
+
+if test "x$target" = "x*-*-mingw*"; then
+  enable_w32_subset = "yes"
+fi
+
 if test "x$enable_w32_subset" = "xyes"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -10874,12 +10879,13 @@ fi
 done
 
 
-if test "x$enable_mpi" = "xyes"; then
+if test "x$enable_mpi" = "xyes" || test "x$target" = "x*-*-mingw*"; then
+  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_ITOA 1
 _ACEOF
-	# Avoid symbol conflict with LAM-MPI
+
 else
   echo "$as_me:$LINENO: checking for itoa" >&5
 echo $ECHO_N "checking for itoa... $ECHO_C" >&6
