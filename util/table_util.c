@@ -1,8 +1,8 @@
 /**********************************************************************
-  table.c
+  table_util.c
  **********************************************************************
 
-  table - Table data structure.
+  table_util - Data table routines.
   Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -28,7 +28,8 @@
 
   Thread-safe.
  
-  Updated:	29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
+  Updated:	07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
+		29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
 		28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
 		18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
 		07/08/01 SAA	Added table_remove_data_all().
@@ -47,7 +48,7 @@
 
  **********************************************************************/
 
-#include "table.h"
+#include "table_util.h"
 
 THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_lock);
 static MemChunk *table_mem_chunk = NULL;

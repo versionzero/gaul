@@ -29,7 +29,8 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a libmpi_util.a
+lib_LIBRARIES = libmethods.a \
+	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
 libmethods_a_SOURCES = \
 	avltree.c \
@@ -37,10 +38,13 @@ libmethods_a_SOURCES = \
 	log_util.c \
 	linkedlist.c \
 	memory_util.c \
-	table.c
+	table_util.c
 
 libmpi_util_a_SOURCES = \
 	mpi_util.c 
+
+libnn_util_a_SOURCES = \
+	nn_util.c
 
 librandom_a_SOURCES = \
 	random_util.c
@@ -50,8 +54,8 @@ libstr_util_a_SOURCES = \
 	dstr_util.c \
 	str_match.c
 
-libnn_util_a_SOURCES = \
-	nn_util.c
+libtimer_util_a_SOURCES = \
+	timer_util.c
 
 include_HEADERS = \
      SAA_header.h \
@@ -69,13 +73,16 @@ include_HEADERS = \
      str_match.h \
      str_perl.h \
      str_util.h \
-     table.h \
+     table_util.h \
      memory_chunks.c \
      str_atof.c \
      str_hash.c \
-     str_pcre_tab.c
+     str_pcre_tab.c \
+     timer_util.h
 
 libmethods_a_LIBFLAGS = -lm @MPIFLAGS@
+
+libnn_util_a_LIBFLAGS = @MPIFLAGS@
 
 libmpi_util_a_LIBFLAGS = @MPIFLAGS@
 
@@ -83,5 +90,5 @@ librandom_a_LIBFLAGS = -lm @MPIFLAGS@
 
 libstr_util_a_LIBFLAGS = @MPIFLAGS@
 
-libnn_util_a_LIBFLAGS = @MPIFLAGS@
+libtimer_util_a_LIBFLAGS = @MPIFLAGS@
 

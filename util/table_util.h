@@ -1,8 +1,8 @@
 /**********************************************************************
-  table.h
+  table_util.h
  **********************************************************************
 
-  table - Table Data Structure.
+  table_util - Data table routines.
   Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -28,8 +28,8 @@
 
  **********************************************************************/
 
-#ifndef TABLE_H_INCLUDED
-#define TABLE_H_INCLUDED
+#ifndef TABLE_UTIL_H_INCLUDED
+#define TABLE_UTIL_H_INCLUDED
 
 #include "SAA_header.h"
 
@@ -76,5 +76,5 @@ void		table_diagnostics(void);
 boolean	table_test(void);
 #endif
 
-#endif
+#endif /* TABLE_UTIL_H_INCLUDED */
 
