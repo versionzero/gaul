@@ -928,6 +928,33 @@ int ga_tabu_slang(	int	*pop_id,
 
 
 /**********************************************************************
+  ga_randomsearch_slang()
+  synopsis:	Wrapper around ga_randomsearch()
+		for the scripted API.
+  parameters:
+  return:	Index of best solution found (A new entity).
+  last updated:	06 Nov 2002
+ **********************************************************************/
+
+int ga_random_search_slang(	int	*pop_id,
+			int	*entity_id,
+			int	*max_iterations )
+  {
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  initial = ga_get_entity_from_id(pop, *entity_id);
+
+  num_iter = ga_random_search( pop, initial, *max_iterations );
+
+  return num_iter;
+  }
+
+
+/**********************************************************************
   ga_nahc_slang()
   synopsis:	Wrapper around ga_next_ascent_hillclimbing() for
 		scripted API.
@@ -1345,6 +1372,9 @@ boolean ga_intrinsic_sladd(void)
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_rahc",
             (FVOID_STAR) ga_rahc_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_random_search",
+            (FVOID_STAR) ga_random_search_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_sort",
             (FVOID_STAR) ga_population_sort_slang, SLANG_INT_TYPE, 1,

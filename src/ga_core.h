@@ -103,6 +103,7 @@
 #include "ga_climbing.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
+#include "ga_randomsearch.h"
 #include "ga_sa.h"
 #include "ga_similarity.h"
 #include "ga_tabu.h"

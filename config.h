@@ -266,13 +266,13 @@
 #define MINOR_VERSION 1841
 
 /* Patch level. */
-#define PATCH_VERSION 4
+#define PATCH_VERSION 5
 
 /* Record compilation platform information. */
 #define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-10 #1 Wed Aug 7 10:26:48 EDT 2002 i686 unknown"
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "06/11/02"
+#define BUILD_DATE_STRING "07/11/02"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
@@ -281,7 +281,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Version string. */
-#define VERSION_STRING "0.1841-4"
+#define VERSION_STRING "0.1841-5"
 
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"

@@ -100,7 +100,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1841
-LT_REVISION = 4
+LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = makeinfo
@@ -110,10 +110,10 @@ MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = gaul-devel
-PATCH_VERSION = 4
+PATCH_VERSION = 5
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1841-4
+VERSION = 0.1841-5
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -130,6 +130,7 @@ libgaul_la_SOURCES = \
     ga_optim.c \
     ga_qsort.c \
     ga_replace.c \
+    ga_randomsearch.c \
     ga_seed.c \
     ga_select.c \
     ga_sa.c \
@@ -147,6 +148,7 @@ include_HEADERS = \
     ga_intrinsics.h \
     ga_optim.h \
     ga_qsort.h \
+    ga_randomsearch.h \
     ga_sa.h \
     ga_similarity.h \
     ga_simplex.h \
@@ -170,8 +172,8 @@ LIBS =  -lslang -lslang
 libgaul_la_LIBADD = 
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 ga_core.lo ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo \
-ga_qsort.lo ga_replace.lo ga_seed.lo ga_select.lo ga_sa.lo \
-ga_similarity.lo ga_simplex.lo ga_tabu.lo ga_utility.lo
+ga_qsort.lo ga_replace.lo ga_randomsearch.lo ga_seed.lo ga_select.lo \
+ga_sa.lo ga_similarity.lo ga_simplex.lo ga_tabu.lo ga_utility.lo
 CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -188,8 +190,9 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/ga_bitstring.P .deps/ga_chromo.P .deps/ga_climbing.P \
 .deps/ga_core.P .deps/ga_crossover.P .deps/ga_intrinsics.P \
-.deps/ga_mutate.P .deps/ga_optim.P .deps/ga_qsort.P .deps/ga_replace.P \
-.deps/ga_sa.P .deps/ga_seed.P .deps/ga_select.P .deps/ga_similarity.P \
+.deps/ga_mutate.P .deps/ga_optim.P .deps/ga_qsort.P \
+.deps/ga_randomsearch.P .deps/ga_replace.P .deps/ga_sa.P \
+.deps/ga_seed.P .deps/ga_select.P .deps/ga_similarity.P \
 .deps/ga_simplex.P .deps/ga_tabu.P .deps/ga_utility.P
 SOURCES = $(libgaul_la_SOURCES)
 OBJECTS = $(libgaul_la_OBJECTS)

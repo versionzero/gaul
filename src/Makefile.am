@@ -41,6 +41,7 @@ libgaul_la_SOURCES = \
     ga_optim.c \
     ga_qsort.c \
     ga_replace.c \
+    ga_randomsearch.c \
     ga_seed.c \
     ga_select.c \
     ga_sa.c \
@@ -57,6 +58,7 @@ include_HEADERS = \
     ga_intrinsics.h \
     ga_optim.h \
     ga_qsort.h \
+    ga_randomsearch.h \
     ga_sa.h \
     ga_similarity.h \
     ga_simplex.h \

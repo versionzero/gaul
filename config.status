@@ -80,13 +80,13 @@ s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@MAJOR_VERSION@%0%g
 s%@MINOR_VERSION@%1841%g
-s%@PATCH_VERSION@%4%g
-s%@VERSION@%0.1841-4%g
+s%@PATCH_VERSION@%5%g
+s%@VERSION@%0.1841-5%g
 s%@MPICC@%echo%g
 s%@MPIFLAGS@%> /dev/null%g
 s%@LT_RELEASE@%0.1841%g
 s%@LT_CURRENT@%0%g
-s%@LT_REVISION@%4%g
+s%@LT_REVISION@%5%g
 s%@INSTALL_PROGRAM@%${INSTALL}%g
 s%@INSTALL_SCRIPT@%${INSTALL_PROGRAM}%g
 s%@INSTALL_DATA@%${INSTALL} -m 644%g
@@ -249,9 +249,9 @@ ${ac_eA}MAJOR_VERSION${ac_eB}MAJOR_VERSION${ac_eC}0${ac_eD}
 ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1841${ac_dD}
 ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1841${ac_uD}
 ${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1841${ac_eD}
-${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}4${ac_dD}
-${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}4${ac_uD}
-${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}4${ac_eD}
+${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}5${ac_dD}
+${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}5${ac_uD}
+${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}5${ac_eD}
 ${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux desktop.stewart-adcock.co.uk 2.4.18-10 #1 Wed Aug 7 10:26:48 EDT 2002 i686 unknown"${ac_dD}
 ${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux desktop.stewart-adcock.co.uk 2.4.18-10 #1 Wed Aug 7 10:26:48 EDT 2002 i686 unknown"${ac_uD}
 ${ac_eA}UNAME_STRING${ac_eB}UNAME_STRING${ac_eC}"Linux desktop.stewart-adcock.co.uk 2.4.18-10 #1 Wed Aug 7 10:26:48 EDT 2002 i686 unknown"${ac_eD}
@@ -261,18 +261,18 @@ CEOF
   mv conftest.out conftest.in
 
   cat > conftest.frag <<CEOF
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"06/11/02"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"06/11/02"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"06/11/02"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"07/11/02"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"07/11/02"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"07/11/02"${ac_eD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_eA}V3_QUICK${ac_eB}V3_QUICK${ac_eC}1${ac_eD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1841-4"${ac_dD}
-${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1841-4"${ac_uD}
-${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1841-4"${ac_eD}
+${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1841-5"${ac_dD}
+${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1841-5"${ac_uD}
+${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1841-5"${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in
