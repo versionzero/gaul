@@ -44,21 +44,23 @@
 
  **********************************************************************/
 
-#include "ga_core.h"
+#include "ga_optim.h"
 
 /*
  * Here is a kludge.
  *
- * This constant, if defined, causes a 5 microsecond delay to be
+ * This constant, if defined, causes a 10 microsecond delay to be
  * inserted after each fork() call.  It shouldn't be needed, but
- * aparrently on OpenMOSIX lots of processes started at the same
+ * apparently on OpenMOSIX lots of processes started at the same
  * time cause all sorts of problems (mostly bus errors).  This
  * delay gives OpenMOSIX a chance to migrate some processes to
  * other nodes before this becomes a problem (hopefully).
  *
  * A long-term fix fix will be to check the return value from the
- * forked processes and repeat them if they died.  This will be
+ * forked processes and repeat them if they died.  This may be
  * added... eventually.
+ *
+ * I don't think this is needed anymore.
  */
 #define NEED_MOSIX_FORK_HACK 1
 
@@ -221,30 +223,90 @@ static void gaul_mutation(population *pop)
 
 
 /**********************************************************************
-  gaul_evaluations()
-  synopsis:	Fitness evaluations.
-		Evaluate a consequtive set of entities.
-		No adaptation.
+  gaul_evaluation_slave_mp()
+  synopsis:	Fitness evaluations and adaptations are performed here.
   parameters:	population *pop
-		const int start
-		const int stop
   return:	none
-  last updated:	11 Jun 2002
+  last updated:	03 Feb 2003
  **********************************************************************/
 
-#if 0
-static void gaul_evaluations(population *pop, const int start, const int stop)
+static void gaul_evaluation_slave_mp(population *pop)
   {
+#ifdef HAVE_MPI
   int		i;			/* Loop variable over entity ranks. */
+  MPI_Status	status;			/* MPI status structure. */
+  int		int_single;		/* Receive buffer. */
+  byte		*buffer;		/* Receive buffer. */
+  boolean	finished=FALSE;		/* Whether this slave is done. */
+  entity	*entity, *adult;	/* Received entity, adapted entity. */
+  int		len=0;			/* Length of buffer to receive. */
 
-  for (i = start; i < stop; i++)
+/*
+ * Allocate receive buffer.
+ * FIXME: This length data shouldn't be needed!
+ */
+  MPI_Recv(&len, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+  buffer = s_malloc(len*sizeof(byte));
+
+/*
+ * Instruction packet.
+ */
+  do
     {
-    pop->evaluate(pop, pop->entity_iarray[i]);
-    }
+    MPI_Recv(&int_single, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
+    switch (int_single)
+      {
+      case 0:
+        /* Evaluation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(&buffer, len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        pop->evaluate(pop, entity);
+        MPI_Send(&(entity->fitness), 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        break;
+      case 1:
+        /* Baldwinian adaptation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(&buffer, len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        adult = pop->adapt(pop, entity);
+        MPI_Send(&(adult->fitness), 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        break;
+      case 2:
+        /* Lamarkian adaptation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(&buffer, len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        adult = pop->adapt(pop, entity);
+        MPI_Send(&(adult->fitness), 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        pop->chromosome_to_bytes(pop, adult, &buffer, &len);
+        MPI_Send(&buffer, len, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+        break;
+      case 3:
+        /* No more jobs. */
+        finished=TRUE;
+        break;
+      default:
+        die("Unknown instruction packet recieved");
+      }
+
+    } while (finished==FALSE);
+
+/*
+ * Synchronise population on this process with that on the master process.
+ */
+  ga_genocide(pop,0);
+  ga_population_append_receive(pop, 0);
+
+  s_free(buffer);
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
 
   return;
   }
-#endif
 
 
 /**********************************************************************
@@ -266,6 +328,37 @@ static void gaul_ensure_evaluations(population *pop)
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
       pop->evaluate(pop, pop->entity_iarray[i]);
     }
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_ensure_evaluations_mp()
+  synopsis:	Fitness evaluations.
+		Evaluate all previously unevaluated entities.
+		No adaptation.
+  parameters:	population *pop
+  return:	none
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static void gaul_ensure_evaluations_mp(population *pop)
+  {
+#ifdef HAVE_MPI
+  int		i;			/* Loop variable over entity ranks. */
+
+  plog(LOG_FIXME, "Need to parallelise this!");
+
+  for (i=0; i<pop->size; i++)
+    {
+    if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
+      pop->evaluate(pop, pop->entity_iarray[i]);
+    }
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
 
   return;
   }
@@ -329,7 +422,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
     /* Skip to the next entity which needs evaluating. */
     while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
 #ifdef NEED_MOSIX_FORK_HACK
-    usleep(5);
+    usleep(10);
 #endif
     }
   num_forks = fork_num;
@@ -578,6 +671,92 @@ static void gaul_adapt_and_evaluate(population *pop)
 
 
 /**********************************************************************
+  gaul_adapt_and_evaluate_mp()
+  synopsis:	Fitness evaluations.
+		Evaluate the new entities produced in the current
+		generation, whilst performing any necessary adaptation.
+		MPI version.
+  parameters:	population *pop
+  return:	none
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static void gaul_adapt_and_evaluate_mp(population *pop)
+  {
+#ifdef HAVE_MPI
+  int		i;			/* Loop variable over entity ranks. */
+  entity	*adult=NULL;		/* Adapted entity. */
+  int		adultrank;		/* Rank of adapted entity. */
+
+  plog(LOG_FIXME, "Need to parallelise this!");
+
+  if (pop->scheme == GA_SCHEME_DARWIN)
+    {	/* This is pure Darwinian evolution.  Simply assess fitness of all children.  */
+
+    plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
+
+    for (i=pop->orig_size; i<pop->size; i++)
+      {
+      pop->evaluate(pop, pop->entity_iarray[i]);
+      }
+
+    return;
+    }
+  else
+    {	/* Some kind of adaptation is required.  First reevaluate parents, as needed, then children. */
+
+    plog(LOG_VERBOSE, "*** Adaptation and Fitness Evaluations ***");
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
+      { 
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
+      {
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+    }
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
   gaul_adapt_and_evaluate_forked()
   synopsis:	Fitness evaluations.
 		Evaluate the new entities produced in the current
@@ -639,7 +818,7 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
       fork_num++;
       eval_num++;
 #ifdef NEED_MOSIX_FORK_HACK
-      usleep(5);
+      usleep(10);
 #endif
       }
     num_forks = fork_num;
@@ -3143,6 +3322,121 @@ int ga_evolution_archipelago_mp( const int num_pops,
 
   /* Free the send_mask array. */
   s_free(send_mask);
+
+  return generation;
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+
+  return 0;
+#endif
+  }
+
+
+/**********************************************************************
+  ga_evolution_mp()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given population.
+		This is a generation-based GA.
+		ga_genesis(), or equivalent, must be called prior to
+		this function.
+  parameters:
+  return:
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+int ga_evolution_mp(	population		*pop,
+			const int		max_generations )
+  {
+#if HAVE_MPI
+  int		generation=0;		/* Current generation number. */
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+
+  plog(LOG_VERBOSE, "The evolution has begun!");
+
+/*
+ * Rank zero process is master.  This handles evolution.  Other processes are slaves
+ * which simply evaluate entities.
+ */
+  if (mpi_ismaster())
+    {
+
+/*
+ * Score and sort the initial population members.
+ */
+    gaul_ensure_evaluations_mp(pop);
+    sort_population(pop);
+
+    plog( LOG_VERBOSE,
+          "Prior to the first generation, population has fitness scores between %f and %f",
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Do all the generations:
+ *
+ * Stop when (a) max_generations reached, or
+ *           (b) "pop->generation_hook" returns FALSE.
+ */
+    while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
+             generation<max_generations )
+      {
+      generation++;
+      pop->orig_size = pop->size;
+
+      plog(LOG_DEBUG,
+              "Population size is %d at start of generation %d",
+              pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+      gaul_crossover(pop);
+
+/*
+ * Mutation step.
+ */
+      gaul_mutation(pop);
+
+/*
+ * Apply environmental adaptations, score entities, sort entities, etc.
+ */
+      gaul_adapt_and_evaluate_mp(pop);
+
+/*
+ * Survival of the fittest.
+ */
+      gaul_survival(pop);
+
+/*
+ * Use callback.
+ */
+      plog(LOG_VERBOSE,
+           "After generation %d, population has fitness scores between %f and %f",
+           generation,
+           pop->entity_iarray[0]->fitness,
+           pop->entity_iarray[pop->size-1]->fitness );
+
+      }	/* Generation loop. */
+
+/*
+ * Synchronise the population structures held across the processors.
+ */
+    /*gaul_broadcast_population_mp(pop);*/
+    ga_population_send_every(pop, -1);
+    }
+  else
+    {
+    gaul_evaluation_slave_mp(pop);
+    }
 
   return generation;
 #else

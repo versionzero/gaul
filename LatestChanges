@@ -14,6 +14,7 @@ Changes since release 0.1842:
 - Fixed bug in configure.in _Bool tests.
 - Code linking to GAUL now only needs "-lgaul -lgaul_util -lm".
 - Extensive rewrite of portions of parallel code.
+- Changed strdup() prototype in compatibility routines.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

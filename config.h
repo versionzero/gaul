@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "03/02/03"
+#define BUILD_DATE_STRING "25/02/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -71,7 +71,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Whether itoa() is available */
-#define HAVE_ITOA 1
+/* #undef HAVE_ITOA */
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -110,7 +110,7 @@
 /* #undef HAVE_MIN */
 
 /* Define to use MPI for parallel code. */
-#define HAVE_MPI 1
+/* #undef HAVE_MPI */
 
 /* Define to 1 if you have the <netdb.h> header file. */
 #define HAVE_NETDB_H 1
@@ -374,7 +374,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-19.8.0smp #1 SMP Thu Dec 12 04:36:25 EST 2002 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-24.8.0smp #1 SMP Fri Jan 31 06:03:47 EST 2003 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
