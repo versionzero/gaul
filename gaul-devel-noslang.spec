@@ -20,7 +20,7 @@ BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroo
 # All rights reserved.
 #
 # The latest version of this program should be available at:
-# http://www.stewart-adcock.co.uk/
+# http://gaul.sourceforge.net/
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

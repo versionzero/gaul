@@ -21,7 +21,7 @@
 ## All rights reserved.
 ##
 ## The latest version of this program should be available at:
-## http://www.stewart-adcock.co.uk/
+## http://gaul.sourceforge.net/
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ extern int errno;
 #define GA_PATCH_VERSION 6
 #define VERSION_STRING "0.1844-6"
 #define UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
-#define BUILD_DATE_STRING "09/07/03"
+#define BUILD_DATE_STRING "16/07/03"
 
 #define V3_QUICK 1
 #define W32_CRIPPLED 0

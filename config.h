@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "09/07/03"
+#define BUILD_DATE_STRING "16/07/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
