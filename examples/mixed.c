@@ -342,7 +342,7 @@ int main(int argc, char **argv)
   int		i;		/* Loop over alleles. */
 
   printf("This is a GAUL example program to demonstrate mixing of chromosome types.\n");
-  printf("A pair of chromosomes each contain %d bits.\n", NBITS);
+  printf("One chromosome contains %d bits and another contains %d doubles.\n", NBITS, NBITS);
   printf("\n");
   printf("Random number seed is %d\n", seed);
   printf("\n");
