@@ -30,12 +30,10 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LTLIBRARIES = libstuff.la \
-	libnn_util.la \
-	liblog_util.la liblog_util_parallel.la \
-	libmpi_util.la libmpi_util_fake.la
+lib_LTLIBRARIES = libgaul_util.la \
+	libnn_util.la
 
-libstuff_la_SOURCES = \
+libgaul_util_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
@@ -45,18 +43,8 @@ libstuff_la_SOURCES = \
 	str_util.c \
 	dstr_util.c \
 	str_match.c \
-	timer_util.c
-
-liblog_util_parallel_la_SOURCES = \
-	log_util_parallel.c
-
-liblog_util_la_SOURCES = \
-	log_util.c
-
-libmpi_util_fake_la_SOURCES = \
-	mpi_util_fake.c 
-
-libmpi_util_la_SOURCES = \
+	timer_util.c \
+	log_util.c \
 	mpi_util.c 
 
 libnn_util_la_SOURCES = \
@@ -80,20 +68,8 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-libstuff_a_LIBFLAGS =
-libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-liblog_util_a_LIBFLAGS =
-liblog_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-liblog_util_parallel_a_LIBFLAGS =
-liblog_util_parallel_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libmpi_util_a_LIBFLAGS =
-libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libmpi_util_fake_a_LIBFLAGS =
-libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libgaul_util_a_LIBFLAGS =
+libgaul_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS =
 libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
