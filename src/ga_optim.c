@@ -157,11 +157,11 @@ static void gaul_mutation(population *pop)
 
 static void gaul_evaluations(population *pop, const int start, const int stop)
   {
-  int		eval_num=start;		/* Index of current entity. */
+  int		i;			/* Loop variable over entity ranks. */
 
-  while (eval_num < stop)
+  for (i = start; i < stop; i++)
     {
-    pop->evaluate(pop, pop->entity_iarray[eval_num]);
+    pop->evaluate(pop, pop->entity_iarray[i]);
     }
 
   return;
@@ -180,12 +180,12 @@ static void gaul_evaluations(population *pop, const int start, const int stop)
 
 static void gaul_ensure_evaluations(population *pop)
   {
-  int		eval_num=0;		/* Index of current entity. */
+  int		i;			/* Loop variable over entity ranks. */
 
-  while (eval_num < pop->size)
+  for (i=pop->orig_size; i<pop->size; i++)
     {
-    if (pop->entity_iarray[eval_num]->fitness == GA_MIN_FITNESS)
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+    if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
+      pop->evaluate(pop, pop->entity_iarray[i]);
     }
 
   return;
@@ -205,7 +205,6 @@ static void gaul_ensure_evaluations(population *pop)
 
 static void gaul_adapt_and_evaluate(population *pop)
   {
-  int		eval_num=0;		/* Index of current entity. */
   int		i;			/* Loop variable over entity ranks. */
   entity	*adult=NULL;		/* Adapted entity. */
   int		adultrank;		/* Rank of adapted entity. */
@@ -215,11 +214,9 @@ static void gaul_adapt_and_evaluate(population *pop)
 
     plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
 
-    eval_num=pop->orig_size;
-
-    while (eval_num < pop->size)
+    for (i=pop->orig_size; i<pop->size; i++)
       {
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+      pop->evaluate(pop, pop->entity_iarray[i]);
       }
 
     return;
