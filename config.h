@@ -374,7 +374,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-24.8.0smp #1 SMP Fri Jan 31 06:03:47 EST 2003 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-27.8.0 #1 Fri Mar 14 07:36:43 EST 2003 i686 athlon i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

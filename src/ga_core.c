@@ -778,7 +778,8 @@ int ga_funclookup_ptr_to_id(void *func)
 
   if ( !func ) return 0;
 
-  while (lookup[id].func_ptr != NULL && func != lookup[id].func_ptr)
+  while (lookup[id].func_ptr != NULL &&
+         func != lookup[id].func_ptr)
     id++;
 
 #if GAUL_DEBUG>2
@@ -804,7 +805,8 @@ int ga_funclookup_label_to_id(char *funcname)
 
   if ( !funcname ) return 0;
 
-  while (lookup[id].funcname != NULL && strcmp(funcname, lookup[id].funcname) != 0)
+  while (lookup[id].funcname != NULL &&
+         strcmp(funcname, lookup[id].funcname) != 0)
     id++;
 
 #if GAUL_DEBUG>2
@@ -812,6 +814,33 @@ int ga_funclookup_label_to_id(char *funcname)
 #endif
 
   return lookup[id].func_ptr!=NULL?id:-1;
+  }
+
+
+/**********************************************************************
+  ga_funclookup_label_to_ptr()
+  synopsis:     Return the pointer to a callback function
+		from its label.
+  parameters:
+  return:
+  last updated: 10 Apr 2003
+ **********************************************************************/
+
+void *ga_funclookup_label_to_ptr(char *funcname)
+  {
+  int	id=1;	/* Index into lookup table. */
+
+  if ( !funcname ) return 0;
+
+  while (lookup[id].funcname != NULL &&
+         strcmp(funcname, lookup[id].funcname) != 0)
+    id++;
+
+#if GAUL_DEBUG>2
+  printf("Function id is %d\n", id);
+#endif
+
+  return lookup[id].func_ptr;
   }
 
 

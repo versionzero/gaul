@@ -252,6 +252,7 @@ boolean	ga_population_set_stablesize(population *pop, int stable_size);
 
 int	ga_funclookup_ptr_to_id(void *func);
 int	ga_funclookup_label_to_id(char *funcname);
+void	*ga_funclookup_label_to_ptr(char *funcname);
 void	*ga_funclookup_id_to_ptr(int id);
 char	*ga_funclookup_id_to_label(int id);
 
