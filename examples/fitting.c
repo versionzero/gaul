@@ -95,7 +95,7 @@ boolean fitting_score(population *pop, entity *entity)
 boolean fitting_generation_callback(int generation, population *pop)
   {
 
-  printf( "%d: y = %f exp(%fx + %f) + %f (fitness = %f)\n",
+  printf( "%d: y = %fx exp(%fx + %f) + %f (fitness = %f)\n",
             generation,
             ((double *)pop->entity_iarray[0]->chromosome[0])[0],
             ((double *)pop->entity_iarray[0]->chromosome[0])[1],
@@ -124,10 +124,10 @@ boolean fitting_seed(population *pop, entity *adam)
   if (!adam) die("Null pointer to entity structure passed.");
 
 /* Seeding. */
-  ((double *)adam->chromosome[0])[0] = random_double(5.0);
+  ((double *)adam->chromosome[0])[0] = random_double(2.0);
   ((double *)adam->chromosome[0])[1] = random_double(2.0);
   ((double *)adam->chromosome[0])[2] = random_double(2.0);
-  ((double *)adam->chromosome[0])[3] = random_double(10.0)+10.0;
+  ((double *)adam->chromosome[0])[3] = random_double(10.0)-5.0;
 
   return TRUE;
   }
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
   random_seed(23091975);
 
   pop = ga_genesis_double(
-       200,				/* const int              population_size */
+       250,				/* const int              population_size */
        1,				/* const int              num_chromo */
        4,				/* const int              len_chromo */
        fitting_generation_callback,	/* GAgeneration_hook      generation_hook */
@@ -215,10 +215,10 @@ int main(int argc, char **argv)
        fitting_score,			/* GAevaluate             evaluate */
        fitting_seed,			/* GAseed                 seed */
        NULL,				/* GAadapt                adapt */
-       ga_select_one_bestof2,		/* GAselect_one           select_one */
-       ga_select_two_bestof2,		/* GAselect_two           select_two */
+       ga_select_one_linearrank,	/* GAselect_one           select_one */
+       ga_select_two_linearrank,	/* GAselect_two           select_two */
        ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
-       ga_crossover_double_doublepoints,	/* GAcrossover            crossover */
+       ga_crossover_double_allele_mixing,	/* GAcrossover            crossover */
        NULL,				/* GAreplace              replace */
        NULL				/* vpointer	User data */
             );
@@ -226,9 +226,9 @@ int main(int argc, char **argv)
   ga_population_set_parameters(
        pop,				/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       0.8,				/* double  crossover */
-       0.2,				/* double  mutation */
+       GA_ELITISM_PARENTS_DIE,		/* const ga_elitism_type   elitism */
+       0.7,				/* double  crossover */
+       0.7,				/* double  mutation */
        0.0      		        /* double  migration */
                               );
 

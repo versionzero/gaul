@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2/adcock
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,7 +96,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -107,9 +107,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1846
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 2
+GA_PATCH_VERSION = 3
 GA_UNAME_STRING = 
-GA_VERSION = 0.1846-2
+GA_VERSION = 0.1846-3
 GA_VERSION_STRING = 
 HAVE_MPI = 0
 HAVE_PTHREADS = 1
@@ -119,7 +119,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1846
-LT_REVISION = 2
+LT_REVISION = 3
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -130,11 +130,11 @@ PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
 V3_QUICK = 1
-VERSION = 0.1846-2
+VERSION = 0.1846-3
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1846/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1846-3/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
