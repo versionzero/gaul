@@ -245,6 +245,9 @@ static void gaul_migration(const int num_pops, population **pops)
  * Need this to ensure that new immigrants are ranked correctly.
  * FIXME: It would be more efficient to insert the immigrants correctly.
  */
+#pragma omp parallel for \
+   shared(pops,num_pops) private(current_island) \
+   schedule(static)
   for(current_island=0; current_island<num_pops; current_island++)
     {
     sort_population(pops[current_island]);
@@ -274,20 +277,25 @@ static void gaul_crossover(population *pop)
   pop->select_state = 0;
 
   /* Select pairs of entities to mate via crossover. */
+#pragma intel omp parallel taskq
   while ( !(pop->select_two(pop, &mother, &father)) )
     {
 
     if (mother && father)
       {
-      plog(LOG_VERBOSE, "Crossover between %d (rank %d fitness %f) and %d (rank %d fitness %f)",
-           ga_get_entity_id(pop, mother),
-           ga_get_entity_rank(pop, mother), mother->fitness,
-           ga_get_entity_id(pop, father),
-           ga_get_entity_rank(pop, father), father->fitness);
+#pragma intel omp task \
+  private(son,daughter) captureprivate(mother,father)
+        {
+        plog(LOG_VERBOSE, "Crossover between %d (rank %d fitness %f) and %d (rank %d fitness %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness,
+             ga_get_entity_id(pop, father),
+             ga_get_entity_rank(pop, father), father->fitness);
 
-      son = ga_get_free_entity(pop);
-      daughter = ga_get_free_entity(pop);
-      pop->crossover(pop, mother, father, daughter, son);
+        son = ga_get_free_entity(pop);
+        daughter = ga_get_free_entity(pop);
+        pop->crossover(pop, mother, father, daughter, son);
+        }
       }
     else
       {
@@ -322,17 +330,22 @@ static void gaul_mutation(population *pop)
    * Select entities to undergo asexual reproduction, in each case the child will
    * have a genetic mutation of some type.
    */
+#pragma intel omp parallel taskq
   while ( !(pop->select_one(pop, &mother)) )
     {
 
     if (mother)
       {
-      plog(LOG_VERBOSE, "Mutation of %d (rank %d fitness %f)",
-           ga_get_entity_id(pop, mother),
-           ga_get_entity_rank(pop, mother), mother->fitness );
+#pragma intel omp task \
+  private(daughter) captureprivate(mother)
+        {
+        plog(LOG_VERBOSE, "Mutation of %d (rank %d fitness %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness );
 
-      daughter = ga_get_free_entity(pop);
-      pop->mutate(pop, mother, daughter);
+        daughter = ga_get_free_entity(pop);
+        pop->mutate(pop, mother, daughter);
+        }
       }
     else
       {
