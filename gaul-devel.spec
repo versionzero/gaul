@@ -25,17 +25,16 @@
 #######################################################################
 
 %define PACKAGE_VERSION 	0
-%define RELEASE			1840
-%define PATCH			4
+%define RELEASE			1841
+%define PATCH			0
 %define prefix			/usr/local/
 
 Name:		gaul-devel
 Summary:	Genetic Algorithm Utility Library
 Version:	%{PACKAGE_VERSION}
 Release:	%{RELEASE}
-Copyright:	(c) 2000-2002 Stewart Adcock.  Licensed under the terms of the GPL.
+License:	(c) 2000-2002 Stewart Adcock.  Licensed under the terms of the GPL.
 Vendor:		"Stewart Adcock" <gaul@linux-domain.com>
-# License:	GPL
 Group:		Scientific/Engineering
 Source:		gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}.tar.gz
 URL:		http://gaul.sourceforge.net/
@@ -43,7 +42,7 @@ Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}-buildroot
 
 %description
-The Genetic Algorithm Utility Library (GAUL) is an open source programming library designed to assist in the development of code using genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Much of the functionality is also available through a simple S-Lang interface.
+The Genetic Algorithm Utility Library (GAUL) is an open source programming library designed to assist in the development of code using genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are provided for comparison and local search purposes.  Much of the functionality is also available through a simple S-Lang interface.
 
 %prep
 %setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
@@ -68,6 +67,11 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Tue Oct 15 2002 Stewart Adcock <stewart@linux-domain.com>
+- 0.1841-0
+- Added some extra info to the description.
+- Copyright -> License field.
+
 * Thu Oct 03 2002 Stewart Adcock <stewart@linux-domain.com>
 - 0.1840-1
 - Tidied spec file.

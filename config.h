@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "14/10/02"
+#define BUILD_DATE_STRING "15/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -296,7 +296,7 @@
 #define MEMORY_PADDING 0
 
 /* Minor version number. */
-#define MINOR_VERSION 1840
+#define MINOR_VERSION 1841
 
 /* Environment variable used to request threads. */
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
@@ -320,7 +320,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 4
+#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -356,7 +356,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1840-4"
+#define VERSION_STRING "0.1841-0"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

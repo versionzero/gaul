@@ -9,27 +9,25 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1841     |  ga_evolution_mpi() and associated example.
-            |  ga_evolution_threaded() and associated example.
+ 0.1842     |  ga_evolution_threaded() and associated example.
             |  Use MemChunks in chromosome allocation, where appropriate.
+            |  Updated tutorial documentation.
             |  Intro to GAs finished.
-            |  Optimise the evolution functions with respect to fitness evaluations during Lamarckian/Baldwinian schemes.
-            |  Fix elitism options.
-            |  Document elitism options.
 ------------+--------------------------------------------------------
- 0.1842     |  Linked-list chromosome.
+ 0.1843     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Fully document chromosomes.
-            |  Re-write simulated annealling and monte carlo code.
+            |  Document elitism options.
+            |  ga_evolution_{mpi,pvm}() and associated example.
 ------------+--------------------------------------------------------
- 0.1843     |  De Jong - working examples.
+ 0.1844     |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h
-------------+--------------------------------------------------------
- 0.1844     |  More replacement operators.
+            |  More replacement operators.
             |  Replacement operators documentation
 ------------+--------------------------------------------------------
  0.1845     |  Save/Load genomic soup.
             |  User data in array, not list.
+            |  Parallel search heuristics (Tabu-search etc.)
 ------------+--------------------------------------------------------
  0.1846     |  More on-line/off-line statistics options.
             |  Built-in evaluation profiling.
@@ -58,19 +56,16 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1856     |  RPM/.deb binary (i386,alpha) and source packages.
             |  Windows DLLs with installer.
+            |  Complete reference documentation.
 ------------+--------------------------------------------------------
 
 Additional features needed for version 1.0:
 
-* Full tutorial.
-* Full reference guide.
 * Brief guide to S-Lang.
-* GAUL FAQ.
 * S-Lang extension example.
 * S-Lang embedding example.
 * Run-time control of statistic collection.
 * More run-time checking.
-* Multi-threaded, Hyper-threaded support.
 
 Optional Features for version 1.0, or (more likely) later:
 
@@ -84,8 +79,7 @@ Optional Features for version 1.0, or (more likely) later:
 Features to be added if enough interest is demonstrated:
 * DEE algorithm.
 * PVM support.
-* Tabu-search.
 * Replica-exchange SA search.
 
-Stewart Adcock, 09 Oct 2002.
+Stewart Adcock, 15 Oct 2002.
 
