@@ -48,17 +48,6 @@
 #include <unistd.h>
 
 /*
- * Programming utilities.
- */
-#include "compatibility.h"	/* For portability stuff. */
-#include "linkedlist.h"		/* For linked lists. */
-#include "log_util.h"		/* For logging facilities. */
-#include "memory_util.h"	/* Memory handling. */
-#include "mpi_util.h"		/* For multiprocessing facilities. */
-#include "random_util.h"	/* For PRNGs. */
-#include "table_util.h"		/* Handling unique integer ids. */
-
-/*
  * Debugging
  */
 #ifndef GA_DEBUG
@@ -271,6 +260,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname);
 entity *ga_entity_read(population *pop, char *fname);
 double	ga_entity_evaluate(population *pop, entity *entity);
 boolean	ga_population_score_and_sort(population *pop);
+boolean ga_population_sort(population *pop);
 double	ga_population_convergence_genotypes( population *pop );
 double	ga_population_convergence_chromsomes( population *pop );
 double	ga_population_convergence_alleles( population *pop );
