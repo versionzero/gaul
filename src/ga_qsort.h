@@ -38,7 +38,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "ga_util.h"
+#include "ga_core.h"
 
 /* Activate the timing code with this constant */
 /*#define GA_QSORT_TIME*/

@@ -32,6 +32,7 @@ trap 'rm -fr Makefile
            util/Makefile
            src/Makefile
            tests/Makefile
+           docs/Makefile
           config.h conftest*; exit 1' 1 2 15
 
 # Protect against being on the right side of a sed subst in config.status.
@@ -79,11 +80,11 @@ s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@MAJOR_VERSION@%0%g
 s%@MINOR_VERSION@%1%g
-s%@PATCH_VERSION@%010613%g
-s%@VERSION@%0.1-010613%g
+s%@PATCH_VERSION@%010614%g
+s%@VERSION@%0.1-010614%g
 s%@LT_RELEASE@%0.1%g
 s%@LT_CURRENT@%0%g
-s%@LT_REVISION@%010613%g
+s%@LT_REVISION@%010614%g
 s%@INSTALL_PROGRAM@%${INSTALL}%g
 s%@INSTALL_SCRIPT@%${INSTALL_PROGRAM}%g
 s%@INSTALL_DATA@%${INSTALL} -m 644%g
@@ -141,6 +142,7 @@ CONFIG_FILES=${CONFIG_FILES-"Makefile
            util/Makefile
            src/Makefile
            tests/Makefile
+           docs/Makefile
          "}
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
@@ -241,9 +243,9 @@ ${ac_eA}MAJOR_VERSION${ac_eB}MAJOR_VERSION${ac_eC}0${ac_eD}
 ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1${ac_dD}
 ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1${ac_uD}
 ${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1${ac_eD}
-${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}010613${ac_dD}
-${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}010613${ac_uD}
-${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}010613${ac_eD}
+${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}010614${ac_dD}
+${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}010614${ac_uD}
+${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}010614${ac_eD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_eA}V3_QUICK${ac_eB}V3_QUICK${ac_eC}1${ac_eD}
@@ -259,12 +261,12 @@ ${ac_eA}PARALLEL${ac_eB}PARALLEL${ac_eC}0${ac_eD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"13/06/01"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"13/06/01"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"13/06/01"${ac_eD}
-${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1-010613"${ac_dD}
-${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1-010613"${ac_uD}
-${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1-010613"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"14/06/01"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"14/06/01"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"14/06/01"${ac_eD}
+${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1-010614"${ac_dD}
+${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1-010614"${ac_uD}
+${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1-010614"${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in

@@ -26,7 +26,8 @@
 
   Synopsis:	Test/example program for GAUL.
 
-		The scoring function was adapted from GAlib 2.45, which states:
+		The scoring function was adapted from GAlib 2.45,
+		which states:
 
 		This is the objective function for computing Holland's 1993 ICGA version
 		of the Royal Road problem.  It has been corrected per GAList volume 7
@@ -63,7 +64,7 @@
  */
 #include "SAA_header.h"
 
-#include "ga_util.h"
+#include "gaul.h"
 
 /*
  * Hard-coded parameter settings.
@@ -93,18 +94,18 @@ int highestlevel=0;
 
 boolean royalroad_score(population *pop, entity *entity)
   {
-  float score = 0.0;
-  int total, i, j, index, n;
-  int blockarray[NBLOCKS];
-  int proceed, level;
+  double	score = 0.0;
+  int		total, i, j, index, n;
+  int		blockarray[NBLOCKS];
+  int		proceed, level;
 
-// do the lowest level blocks first
+/* do the lowest level blocks first. */
 
   n = 0;
   for(i=0; i<NBLOCKS; i++) {
     total = 0;
     for(j=i*(BLOCKSIZE + GAPSIZE); j<i*(BLOCKSIZE+GAPSIZE)+BLOCKSIZE; j++)
-      if(entity->chromosome[0][j] == 1) total++;  // count the bits in the block
+      if(((boolean *)entity->chromosome[0])[j] == 1) total++;  // count the bits in the block
     if(total > MSTAR && total < BLOCKSIZE)
       score -= (total-MSTAR)*RR_V;
     else if(total <= MSTAR)
@@ -118,11 +119,11 @@ boolean royalroad_score(population *pop, entity *entity)
     }
   }
 
-// bonus for filled low-level blocks
+/* bonus for filled low-level blocks. */
 
   if(n > 0) score += USTAR + (n-1)*RR_U;
 
-// now do the higher-level blocks
+/* now do the higher-level blocks. */
 
   n = NBLOCKS;		// n is now number of filled low level blocks
   proceed = 1;		// should we look at the next higher level?
@@ -210,7 +211,6 @@ int main(int argc, char **argv)
      512,			/* const int              population_size */
      1,				/* const int              num_chromo */
      NBITS,			/* const int              len_chromo */
-     NULL, 			/* const char             *fname */
      royalroad_ga_callback,	/* GAgeneration_hook      generation_hook */
      NULL,			/* GAiteration_hook       iteration_hook */
      NULL,			/* GAdata_destructor      data_destructor */
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
      ga_select_two_bestof2,	/* GAselect_two           select_two */
      /*ga_mutate_boolean_singlepoint,*/	/* GAmutate               mutate */
      ga_mutate_boolean_multipoint,	/* GAmutate               mutate */
-     ga_crossover_chromosome_doublepoints,	/* GAcrossover            crossover */
+     ga_crossover_boolean_doublepoints,	/* GAcrossover            crossover */
      NULL			/* GAreplace              replace */
             );
 
@@ -241,7 +241,7 @@ int main(int argc, char **argv)
               );
 
   printf("The final solution with seed = %d was: \n", seed);
-  for (i=0; i<NBITS; i++) printf("%d", pop->entity_iarray[0]->chromosome[0][i]);
+  for (i=0; i<NBITS; i++) printf("%d", ((boolean *)pop->entity_iarray[0]->chromosome[0])[i]?1:0);
   printf(" score = %f highestlevel = %d\n", pop->entity_iarray[0]->fitness, highestlevel);
 
   ga_extinction(pop);

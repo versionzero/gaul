@@ -496,7 +496,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=src/ga_util.c
+ac_unique_file=src/gaul.h
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -1888,7 +1888,7 @@ if test "x$enable_slang" = "xyes"; then
 EOF
 
   LIBS="$LIBS -lslang"
-  INCLUDES="$INCLUDES -I/usr/include/slang/"],
+  INCLUDES="$INCLUDES -I/usr/include/slang/"
   echo $ac_n "checking for SLang_init_slang in -lslang""... $ac_c" 1>&6
 echo "configure:1894: checking for SLang_init_slang in -lslang" >&5
 ac_lib_var=`echo slang'_'SLang_init_slang | sed 'y%./+-%__p_%'`
@@ -3276,6 +3276,7 @@ trap 'rm -fr `echo "Makefile
            util/Makefile
            src/Makefile
            tests/Makefile
+           docs/Makefile
           config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -3393,6 +3394,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
            util/Makefile
            src/Makefile
            tests/Makefile
+           docs/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

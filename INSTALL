@@ -8,7 +8,7 @@ The only non-trivial pre-requisite for GAUL is slang.  This may be obtained from
 
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
 
-You should be able to work it out, but for any real dumbies out there follow the standard GNU make procedure:
+You should be able to work it out, but for any real dummies out there follow the standard GNU make procedure:
 ./configure ; make
 
 Or if you don't have SLang installed:
@@ -20,7 +20,7 @@ Email me if:
 - You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))
 - You would like pre-compiled binaries.  Note: I can guarentee to provide Linux binaries only.  I may possibly be able to aquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
 
-Potentially supported Platforms:
+Potentially supported platforms:
 - Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
 - Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
 

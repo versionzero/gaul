@@ -316,7 +316,7 @@ boolean wildfire_score(population *pop, entity *entity)
   /* Decode chromsome, and count number of cisterns. */
   for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
     {
-    map[i] = entity->chromosome[0][i];
+    map[i] = ((int *)entity->chromosome[0])[i];
     if (map[i]) count++;
     }
 
@@ -358,7 +358,7 @@ void wildfire_seed(population *pop, entity *adam)
     {
     for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
       {
-      adam->chromosome[0][i] = random_boolean_prob((double)WILDFIRE_CISTERNS/
+      ((int *)adam->chromosome[0])[i] = random_boolean_prob((double)WILDFIRE_CISTERNS/
                  ((double)WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION));
       }
     }
@@ -371,13 +371,13 @@ void wildfire_seed(population *pop, entity *adam)
     while (k>0)
       {
       i = (i+j)%(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
-      if (adam->chromosome[0][i] == 1)
+      if (((int *)adam->chromosome[0])[i] == 1)
         {
         j = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
         }
       else
         {
-        adam->chromosome[0][i] = 1;
+        ((int *)adam->chromosome[0])[i] = 1;
         }
       k--;
       }
@@ -402,11 +402,11 @@ void wildfire_mutate_move(population *pop, entity *mother, entity *son)
 
   /* Copy chromosome. */
   for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
-    son->chromosome[0][i] = mother->chromosome[0][i];
+    ((int *)son->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
 
   /* Mutation. */
   i = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
-  son->chromosome[0][i] = !son->chromosome[0][i];
+  ((int *)son->chromosome[0])[i] = !((int *)son->chromosome[0])[i];
 
   return;
   }
@@ -427,11 +427,11 @@ void wildfire_mutate_flip(population *pop, entity *mother, entity *son)
 
   /* Copy chromosome. */
   for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
-    son->chromosome[0][i] = mother->chromosome[0][i];
+    ((int *)son->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
 
   /* Mutation. */
   i = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
-  son->chromosome[0][i] = !son->chromosome[0][i];
+  ((int *)son->chromosome[0])[i] = !((int *)son->chromosome[0])[i];
 
   return;
   }
@@ -488,20 +488,20 @@ void wildfire_crossover( population *pop,
       {
       for (j=0; j<WILDFIRE_Y_DIMENSION; j++)
         {
-        son->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           mother->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
-        daughter->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           father->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
+        ((int *)son->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)mother->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
+        ((int *)daughter->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)father->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
         }
       }
     for (; i<WILDFIRE_X_DIMENSION; i++)
       {
       for (j=0; j<WILDFIRE_Y_DIMENSION; j++)
         {
-        daughter->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           mother->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
-        son->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           father->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
+        ((int *)daughter->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)mother->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
+        ((int *)son->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)father->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
         }
       }
     }
@@ -512,20 +512,20 @@ void wildfire_crossover( population *pop,
       {
       for (i=0; i<WILDFIRE_X_DIMENSION; i++)
         {
-        son->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           mother->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
-        daughter->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           father->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
+        ((int *)son->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)mother->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
+        ((int *)daughter->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)father->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
         }
       }
     for (; j<WILDFIRE_Y_DIMENSION; j++)
       {
       for (i=0; i<WILDFIRE_X_DIMENSION; i++)
         {
-        daughter->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           mother->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
-        son->chromosome[0][j*WILDFIRE_X_DIMENSION+i] =
-           father->chromosome[0][j*WILDFIRE_X_DIMENSION+i];
+        ((int *)daughter->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)mother->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
+        ((int *)son->chromosome[0])[j*WILDFIRE_X_DIMENSION+i] =
+           ((int *)father->chromosome[0])[j*WILDFIRE_X_DIMENSION+i];
         }
       }
     }
@@ -596,7 +596,6 @@ int main(int argc, char **argv)
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION,/* const int      len_chromo */
-       NULL, 			/* const char             *fname */
        wildfire_ga_callback,	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
@@ -630,7 +629,7 @@ int main(int argc, char **argv)
   /* Decode chromsome, and count number of cisterns. */
     for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
       {
-      map[i] = pop->entity_iarray[0]->chromosome[0][i];
+      map[i] = ((int *)pop->entity_iarray[0]->chromosome[0])[i];
       if (map[i]) count++;
       }
     printf("%d cisterns\n", count);
@@ -639,7 +638,7 @@ int main(int argc, char **argv)
       {
       for (j=0; j<WILDFIRE_X_DIMENSION; j++)
         {
-        printf("%s ", pop->entity_iarray[0]->chromosome[0][i*WILDFIRE_X_DIMENSION+j]?"X":"-");
+        printf("%s ", ((int *)pop->entity_iarray[0]->chromosome[0])[i*WILDFIRE_X_DIMENSION+j]?"X":"-");
         }
       printf("\n");
       }

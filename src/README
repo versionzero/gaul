@@ -4,7 +4,11 @@ This directory contains the core GAUL source-code.
 
 gaul.h: The public header file to be included in source code which will link against the GAUL library.
 
-ga_util.c, ga_util.h: Population and entity handling routines.
+ga_core.c, ga_core.h: Population and entity handling routines.
+
+ga_chromo.c: Built-in chromosome handling routines.
+
+ga_utility.c, ga_utility.h: High level GA and convenience routines.
 
 ga_similarity.c, ga_similarity.h: Entity and chromosome similarity measures.
 

@@ -37,7 +37,8 @@
  */
 #include "SAA_header.h"
 
-#include "ga_util.h"
+#include "ga_core.h"
+#include "ga_utility.h"
 
 #if HAVE_SLANG == 1
 #include "slang.h"

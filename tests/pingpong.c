@@ -62,7 +62,7 @@ boolean pingpong_score(population *pop, entity *entity)
 
   for (i=0; i<25; i++)
     {
-    score = (entity->chromosome[0][i] - i)*4 + 2;
+    score = (((int *)entity->chromosome[0])[i] - i)*4 + 2;
     if (score > 0)
       {
       loss++;
@@ -103,7 +103,7 @@ void pingpong_seed(population *pop, entity *adam)
   int		i, j;	/* Team members. */
   int		*data;	/* Chromosome. */
 
-  data = adam->chromosome[0];
+  data = (int *)adam->chromosome[0];
 
   for (i=0; i<25; i++) data[i] = -1;
 
@@ -141,13 +141,13 @@ void pingpong_crossover(population *pop, entity *mother, entity *father, entity 
     {
     if (random_boolean())
       {
-      son->chromosome[0][i] = father->chromosome[0][i];
-      daughter->chromosome[0][i] = mother->chromosome[0][i];
+      ((int *)son->chromosome[0])[i] = ((int *)father->chromosome[0])[i];
+      ((int *)daughter->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
       }
    else
       {
-      son->chromosome[0][i] = father->chromosome[0][i];
-      daughter->chromosome[0][i] = mother->chromosome[0][i];
+      ((int *)son->chromosome[0])[i] = ((int *)father->chromosome[0])[i];
+      ((int *)daughter->chromosome[0])[i] = ((int *)mother->chromosome[0])[i];
       }
     }
 
@@ -155,23 +155,23 @@ void pingpong_crossover(population *pop, entity *mother, entity *father, entity 
     {
     for (j=0; j<i; j++)
       {
-      if (son->chromosome[0][j] == son->chromosome[0][i])
+      if (((int *)son->chromosome[0])[j] == ((int *)son->chromosome[0])[i])
         {
-        if (son->chromosome[0][i]==24)
-          son->chromosome[0][i]=0;
+        if (((int *)son->chromosome[0])[i]==24)
+          ((int *)son->chromosome[0])[i]=0;
         else
-          son->chromosome[0][i]++;
+          ((int *)son->chromosome[0])[i]++;
         j=0;
         }
       }
     for (j=0; j<i; j++)
       {
-      if (daughter->chromosome[0][j] == daughter->chromosome[0][i])
+      if (((int *)daughter->chromosome[0])[j] == ((int *)daughter->chromosome[0])[i])
         {
-        if (daughter->chromosome[0][i]==24)
-          daughter->chromosome[0][i]=0;
+        if (((int *)daughter->chromosome[0])[i]==24)
+          ((int *)daughter->chromosome[0])[i]=0;
         else
-          daughter->chromosome[0][i]++;
+          ((int *)daughter->chromosome[0])[i]++;
         j=0;
         }
       }
@@ -210,9 +210,9 @@ void pingpong_mutate_swap(population *pop, entity *mother, entity *son)
       j++;
     }
 
-  tmp = son->chromosome[0][i];
-  son->chromosome[0][i] = son->chromosome[0][j];
-  son->chromosome[0][j] = tmp;
+  tmp = ((int *)son->chromosome[0])[i];
+  ((int *)son->chromosome[0])[i] = ((int *)son->chromosome[0])[j];
+  ((int *)son->chromosome[0])[j] = tmp;
 
   return;
   }
@@ -245,21 +245,21 @@ void pingpong_mutate_shift(population *pop, entity *mother, entity *son)
 
   if (i>j)
     {
-    tmp = son->chromosome[0][j];
+    tmp = ((int *)son->chromosome[0])[j];
     for (k=j; k<i; k++)
       {
-      son->chromosome[0][k] = son->chromosome[0][k+1];
+      ((int *)son->chromosome[0])[k] = ((int *)son->chromosome[0])[k+1];
       }
-    son->chromosome[0][i] = tmp;
+    ((int *)son->chromosome[0])[i] = tmp;
     }
   else
     {
-    tmp = son->chromosome[0][j];
+    tmp = ((int *)son->chromosome[0])[j];
     for (k=j; k>i; k--)
       {
-      son->chromosome[0][k] = son->chromosome[0][k-1];
+      ((int *)son->chromosome[0])[k] = ((int *)son->chromosome[0])[k-1];
       }
-    son->chromosome[0][i] = tmp;
+    ((int *)son->chromosome[0])[i] = tmp;
     }
 
   return;
@@ -306,7 +306,7 @@ boolean pingpong_ga_callback(int generation, population *pop)
 
   for (i=0; i<25; i++)
     {
-    score[i] = (pop->entity_iarray[0]->chromosome[0][i] - i)*4 + 2;
+    score[i] = (((int *)pop->entity_iarray[0]->chromosome[0])[i] - i)*4 + 2;
     if (score[i] > 0)
       {
       loss++;
@@ -318,15 +318,15 @@ boolean pingpong_ga_callback(int generation, population *pop)
     printf( "%d: %f %d %d %d %d %d %d %d %d %d\n",
             generation,
             pop->entity_iarray[0]->fitness,
-            pop->entity_iarray[0]->chromosome[0][0],
-            pop->entity_iarray[0]->chromosome[0][1],
-            pop->entity_iarray[0]->chromosome[0][2],
-            pop->entity_iarray[0]->chromosome[0][3],
-            pop->entity_iarray[0]->chromosome[0][4],
-            pop->entity_iarray[0]->chromosome[0][5],
-            pop->entity_iarray[0]->chromosome[0][6],
-            pop->entity_iarray[0]->chromosome[0][7],
-            pop->entity_iarray[0]->chromosome[0][8] );
+            ((int *)pop->entity_iarray[0]->chromosome[0])[0],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[1],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[2],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[3],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[4],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[5],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[6],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[7],
+            ((int *)pop->entity_iarray[0]->chromosome[0])[8] );
 
   printf( "     %d %d %d %d %d %d %d %d %d   Ave. loss = %f    wins = %d\n",
           score[0], score[1], score[2],
@@ -363,7 +363,6 @@ int main(int argc, char **argv)
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        25,			/* const int              len_chromo */
-       NULL, 			/* const char             *fname */
 NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
@@ -396,7 +395,7 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     }
 
   printf("The final solution found was:\n");
-  for (i=0; i<25; i++) printf("%d ", pop->entity_iarray[0]->chromosome[0][i]);
+  ga_chromosome_integer_to_staticstring(pop, pop->entity_iarray[0]);
   printf("\n");
 
   ga_extinction(pop);

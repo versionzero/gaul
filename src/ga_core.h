@@ -1,8 +1,8 @@
 /**********************************************************************
-  ga_util.h
+  ga_core.h
  **********************************************************************
 
-  ga_util - Genetic algorithm routines.
+  ga_core - Genetic algorithm routines.
   Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -29,8 +29,8 @@
 
  **********************************************************************/
 
-#ifndef GA_UTIL_H_INCLUDED
-#define GA_UTIL_H_INCLUDED
+#ifndef GA_CORE_H_INCLUDED
+#define GA_CORE_H_INCLUDED
 
 /*
  * Includes
@@ -87,6 +87,7 @@ typedef enum ga_elitism_type_t
 /*
  * Include remainder of this libraries headers.
  */
+#include "ga_chromo.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
 #include "ga_similarity.h"
@@ -95,31 +96,6 @@ typedef enum ga_elitism_type_t
  * Compilation constants.
  */
 #define GA_BOLTZMANN_FACTOR	1.38066e-23
-
-/* 
- * OLD
- * Callback function typedefs.
- */
-#if 0
-typedef boolean	(*GAscore_entity)(population *pop, entity *entity);
-typedef void	(*GAseed_random)(int chromosome, int *dataptr);
-typedef void	(*GAseed_user)(int chromosome, int *dataptr);
-typedef void	(*GAgeneration_hook)(const int generation, population *pop);
-typedef void	(*GAiteration_hook)(const int iteration, entity *entity);
-typedef void	(*GAdata_destructor)(vpointer data);
-typedef void	(*GAdata_ref_incrementor)(vpointer data);
-typedef boolean	(*GAdrift_nucleotide)(int chromo, int point, int *dataptr);
-typedef boolean	(*GArandomize_nucleotide)(int chromo, int point, int *dataptr);
-typedef boolean	(*GAmonte_carlo_move)(population *pop, entity *entity);
-typedef entity *(*GAadaptation)(population *pop, entity *entity);
-typedef boolean	(*GAselect_one)(population *pop, entity **mother);
-typedef boolean	(*GAselect_two)(population *pop, entity **mother, entity **father);
-
-/*
- * Add GAselection, GAmutation, GAcrossover, GAadaptation?
- * (And rename the above GAadaptation to GAoptimisation.)
- */
-#endif
 
 /* 
  * Callback function typedefs.
@@ -131,10 +107,20 @@ typedef boolean	(*GAgeneration_hook)(const int generation, population *pop);
 typedef boolean	(*GAiteration_hook)(const int iteration, entity *entity);
 
 /*
- * Data cache handling.
+ * Phenome (A general purpose data cache) handling.
  */
 typedef void	(*GAdata_destructor)(vpointer data);
 typedef void	(*GAdata_ref_incrementor)(vpointer data);
+
+/*
+ * Genome handling.
+ */
+typedef void	(*GAchromosome_constructor)(population *pop, entity *entity);
+typedef void	(*GAchromosome_destructor)(population *pop, entity *entity);
+typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
+typedef unsigned int	(*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+typedef void	(*GAchromosome_from_bytes)(population *pop, entity *joe, byte *bytes);
+typedef char	*(*GAchromosome_to_string)(population *pop, entity *joe);
 
 /*
  * GA operations.
@@ -144,7 +130,6 @@ typedef void	(*GAdata_ref_incrementor)(vpointer data);
  * operators.
  */
 typedef boolean	(*GAevaluate)(population *pop, entity *entity);
-/*typedef void	(*GAseed)(int chromosome, int *data);*/
 typedef void	(*GAseed)(population *pop, entity *adam);
 typedef entity *(*GAadapt)(population *pop, entity *child);
 typedef boolean	(*GAselect_one)(population *pop, entity **mother);
@@ -156,7 +141,7 @@ typedef void	(*GAreplace)(population *pop, entity *child);
 /*
  * Entity Structure.
  *
- * FIXME: Make opaque i.e. move definition into ga_util.c
+ * FIXME: Make opaque i.e. move definition into ga_core.c
  * Should encourage the use of accessor functions rather than directly tweaking
  * the values in this structure manually.
  *
@@ -165,7 +150,7 @@ typedef void	(*GAreplace)(population *pop, entity *child);
 struct entity_t
   {
   double	fitness;	/* Fitness score. */
-  int		**chromosome;	/* Array of integer array chromosomes (the genotye). */
+  vpointer	*chromosome;	/* The chromosomes (the genotype). */
   vpointer	data;		/* User data containing physical properties. (the phenotype) */
   boolean	allocated;	/* Whether this structure in the buffer is used. */
   };
@@ -199,24 +184,19 @@ struct population_t
 
 /*
  * Scoring function and the other callbacks are defined here.
- * OLD:
-  GAscore_entity		score_entity;
-  GAseed_random			seed_random;
-  GAseed_user			seed_user;
-  GAgeneration_hook		generation_hook;
-  GAiteration_hook		iteration_hook;
-  GAdata_destructor		data_destructor;
-  GAdata_ref_incrementor	data_ref_incrementor;
-  GAdrift_nucleotide		drift_nucleotide;
-  GArandomize_nucleotide	randomize_nucleotide;
-  GAmonte_carlo_move		monte_carlo_move;
-  GAadaptation			adaptation;
  */
   GAgeneration_hook		generation_hook;
   GAiteration_hook		iteration_hook;
 
   GAdata_destructor		data_destructor;
   GAdata_ref_incrementor	data_ref_incrementor;
+
+  GAchromosome_constructor	chromosome_constructor;
+  GAchromosome_destructor	chromosome_destructor;
+  GAchromosome_replicate	chromosome_replicate;
+  GAchromosome_to_bytes		chromosome_to_bytes;
+  GAchromosome_from_bytes	chromosome_from_bytes;
+  GAchromosome_to_string	chromosome_to_string;
 
   GAevaluate			evaluate;
   GAseed			seed;
@@ -245,6 +225,7 @@ population *ga_population_new(	const int max_size,
 				const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome);
+int	ga_get_num_populations(void);
 population *ga_get_population_from_id(unsigned int id);
 unsigned int ga_get_population_id(population *pop);
 boolean	ga_entity_seed(population *pop, entity *e);
@@ -279,22 +260,6 @@ boolean ga_copy_entity(population *pop, entity *dest, entity *src);
 entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
 boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
 entity *ga_optimise_entity(population *pop, entity *unopt);
-population *ga_genesis( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        const char              *fname,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
 void	ga_population_set_parameters(      population      *pop,
                                         double  crossover,
                                         double  mutation,
@@ -303,14 +268,6 @@ population *ga_transcend(unsigned int id);
 unsigned int ga_resurect(population *pop);
 boolean ga_extinction(population *extinct);
 boolean ga_genocide(population *pop, int target_size);
-void	ga_diagnostics( void );
-entity	*ga_allele_search(      population      *pop,
-                                const int       chromosomeid,
-                                const int       point,
-                                const int       min_val,
-                                const int       max_val,
-                                entity          *initial );
-
 
 
 boolean ga_select_one_random(population *pop, entity **mother);
@@ -330,13 +287,20 @@ boolean	ga_select_one_roulette_rebased( population *pop,
 boolean	ga_select_two_roulette_rebased( population *pop,
                                 entity **mother, entity **father );
 
-void	ga_singlepoint_crossover_chromosome(population *pop, int *father, int *mother, int *son, int *daughter);
-void	ga_crossover_chromosome_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_chromosome_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_allele_mixing( population *pop,
+void	ga_singlepoint_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter);
+void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_integer_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_integer_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter );
-void	ga_crossover_chromosome_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_singlepoint_boolean_chromosome(population *pop, int *father, int *mother, int *son, int *daughter);
+void	ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_boolean_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_boolean_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter );
 
 void	ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son);
 void	ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *son);
@@ -350,4 +314,7 @@ void	ga_seed_integer_zero(population *pop, entity *adam);
 
 void	ga_replace_by_fitness(population *pop, entity *child);
 
-#endif	/* GA_UTIL_H */
+#include "ga_utility.h"	/* Hmm. */
+
+#endif	/* GA_CORE_H_INCLUDED */
+

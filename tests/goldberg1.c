@@ -52,7 +52,7 @@
 
 boolean goldberg1_score(population *pop, entity *entity)
   {
-  unsigned int	allele;
+  boolean	allele;
   double	coef;
   int		k;
 
@@ -64,7 +64,7 @@ boolean goldberg1_score(population *pop, entity *entity)
   for (k = 0; k < pop->len_chromosomes; k++)
     {
     /* Loop over bits in current byte. */
-    allele = entity->chromosome[0][k];
+    allele = ((boolean *)entity->chromosome[0])[k];
     if (allele == 1)
       {	/* Bit is set. */
       entity->fitness += pow(2.0, (double) k);
@@ -122,7 +122,6 @@ int main(int argc, char **argv)
        20,			/* const int              population_size */
        1,			/* const int              num_chromo */
        10,			/* const int              len_chromo */
-       NULL, 			/* const char             *fname */
 NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
@@ -133,7 +132,7 @@ NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        ga_select_one_bestof2,	/* GAselect_one           select_one */
        ga_select_two_bestof2,	/* GAselect_two           select_two */
        ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
-       ga_crossover_chromosome_singlepoints,	/* GAcrossover            crossover */
+       ga_crossover_boolean_singlepoints,	/* GAcrossover            crossover */
        NULL			/* GAreplace replace */
             );
 
@@ -154,7 +153,7 @@ NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     goldberg1_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:", i);
-    for (j=0; j<10; j++) printf(" %d", pop->entity_iarray[0]->chromosome[0][j]);
+    for (j=0; j<10; j++) printf(" %d", ((boolean *)pop->entity_iarray[0]->chromosome[0])[j]?1:0);
     printf(" score = %f", pop->entity_iarray[0]->fitness);
     printf("\n");
     }

@@ -36,7 +36,7 @@
  */
 #include "SAA_header.h"
 
-#include "ga_util.h"
+#include "ga_core.h"
 
 /*
  * Prototypes

@@ -39,6 +39,8 @@
 
 #include "ga_intrinsics.h"
 
+#if HAVE_SLANG==1
+
 /**********************************************************************
   ga_population_new_wrapper()
   synopsis:	Allocates and initialises a new population structure,
@@ -1090,6 +1092,7 @@ void ga_slang_replace(population *pop, entity *child)
 
   return;
   }
+#endif
 
 
 /**********************************************************************
@@ -1103,7 +1106,7 @@ void ga_slang_replace(population *pop, entity *child)
 #if HAVE_SLANG==0
 boolean ga_intrinsic_sladd(void)
   {
-  plog(LOG_WARNING, "No SLang support compiled.");
+  plog(LOG_WARNING, "No SLang support compiled into GAUL.");
   return TRUE;
   }
 #else

@@ -281,7 +281,7 @@ void quicksort_population(population *pop)
 
 
 /* To test+time these functions, compile with something like:
-   gcc ga_qsort.c -DGA_QSORT_TIME -DGA_QSORT_COMPILE_MAIN ga_util.o \
+   gcc ga_qsort.c -DGA_QSORT_TIME -DGA_QSORT_COMPILE_MAIN ga_core.o \
      -o qsort `gtk-config --cflags` \
      -DNO_TRACE -DMEMORY_ALLOC_DEBUG \
      -DQSORT_DEBUG=3

@@ -38,7 +38,7 @@
  */
 #include "SAA_header.h"
 
-#include "ga_util.h"
+#include "gaul.h"
 
 /*
  * Constants.

@@ -31,152 +31,7 @@
 
  **********************************************************************/
 
-#include "ga_util.h"
-
-#if 0
-/**********************************************************************
-  ga_helixswap_mutation()
-  synopsis:	Cause a pair of helices to exchange locations.
-		FIXME: Should be user specified specialist callback
-		function instead.
-  parameters:
-  return:
-  last updated: 09/07/00
- **********************************************************************/
-
-boolean ga_helixswap_mutation(population *pop, entity *father, entity *son)
-  {
-  int		i;			/* Loop over all chromosomes */
-  int		chromo1, chromo2;	/* Indices of chromosomes to swap */
-
-  /* Checks */
-  if (!father || !son) die("Null pointer to entity structure passed");
-
-  for (i=0; i<pop->num_chromosomes; i++)
-    {
-    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
-    }
-
-  /* More checks. */
-  if (pop->num_chromosomes < 2)
-    {
-    plog(LOG_WARNING, "ga_helixswap_mutation() requires more than 1 chromosome.");
-    return FALSE;
-    }
-
-  chromo1 = random_int(pop->num_chromosomes);
-  do
-    {
-    chromo2 = random_int(pop->num_chromosomes);
-    } while (chromo1 == chromo2);
-
-/*
- * Mutate by swaping regions of chromosomes which
- * encode the helix position and orientation.
- */
-  for(i=0; i<7; i++)
-    {
-    son->chromosome[chromo1][i] = father->chromosome[chromo2][i];
-    son->chromosome[chromo2][i] = father->chromosome[chromo1][i];
-    }
-
-  for (i=0; i<pop->num_chromosomes; i++)
-    {
-    if (i!=chromo1 && i!=chromo2)
-      {
-      ga_copy_data(pop, son, father, i);
-      }
-    else
-      {
-      ga_copy_data(pop, son, NULL, i);
-      }
-    }
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
-  ga_helixthread_mutation()
-  synopsis:	Cause a helix threading mutation event.  i.e. a helix
-		twists by one residue in either direction.
-		FIXME: Should be user function specified by a callback
-		instead.
-  parameters:
-  return:
-  last updated: 27/07/00
- **********************************************************************/
-
-boolean ga_helixthread_mutation(entity *father, entity *son)
-  {
-  int		i;		/* Loop variable over all chromosomes */
-  int		chromo;		/* Index of chromosome to mutate */
-  vector_d3	com, axis, shift;	/* Helical parameters */
-  double	angle;		/* Rotation angle around helix axis */
-  vector_d3	orig_com;	/* Original center of mass */
-  quaternion	orig_q;		/* Original orientation */
-  quaternion	q;		/* Helix axis */
-  int		*chromoptr;	/* Pointer into current chromosome */
-/* DEBUG STUFF */
-  int		num_coords, max_coords;
-  vector_d3	*coords=NULL;
-
-  /* Checks */
-  if (!father || !son) die("Null pointer to entity structure passed");
-
-  for (i=0; i<pop->num_chromosomes; i++)
-    {
-    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
-    }
-
-  chromo = random_int(pop->num_chromosomes);
-
-/*
- * Mutate.  This has the effect of twisting a helix by one residue.
- */
-
-/*
- * Twist around helix axis:
- * (a) Find Helix axis and COM.
- * (b) Twist around axial vector. ?? degrees.
- * (c) Translate along axial vector. ?? Ang.
- * (d) Write encode and store new helix axis and COM.
- */
-/* DEBUG START */
-  coords = mol_molstruct_get_coords_by_label(
-                        global_mol, "CA", coords,
-                        &num_coords, &max_coords);
-/*
-  helix_kearsleyfit( helga_get_sequence_size(chromo),
-                coords,
-                &com, &axis, &shift, &angle);
-*/
-  helix_kearsleyfit( helga_get_sequence_size(chromo),
-                     coords, &com, &axis );
-
-/* Update center of mass, axis */
-  v3_axis_to_quaternion(&q, angle, axis);
-/* DEBUG END */
-
-  chromoptr = son->chromosome[chromo].data[son->chromosome[chromo]);
-
-  *chromoptr++ = helga_coord_to_int(shift.x+helga_int_to_coord(*chromoptr));
-  *chromoptr++ = helga_coord_to_int(shift.y+helga_int_to_coord(*chromoptr));
-  *chromoptr++ = helga_coord_to_int(shift.z+helga_int_to_coord(*chromoptr));
-  orig_q.w = helga_int_to_quaternion( chromoptr[0] );
-  orig_q.x = helga_int_to_quaternion( chromoptr[1] );
-  orig_q.y = helga_int_to_quaternion( chromoptr[2] );
-  orig_q.z = helga_int_to_quaternion( chromoptr[3] );
-  quaternion_multiply(&q, &orig_q, &q);
-  *chromoptr++ = helga_quaternion_to_int( q.w );
-  *chromoptr++ = helga_quaternion_to_int( q.x );
-  *chromoptr++ = helga_quaternion_to_int( q.y );
-  *chromoptr++ = helga_quaternion_to_int( q.z );
-
-  return TRUE;
-  }
-#endif
-
+#include "ga_core.h"
 
 /**********************************************************************
   ga_singlepoint_drift_mutation()
@@ -220,46 +75,13 @@ void ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son)
 /*
  * Mutate by tweaking a single nucleotide.
  */
-/*
-  pop->drift_nucleotide(chromo, point, son->chromosome[chromo]);
-*/
-  son->chromosome[chromo][point] += dir;
+  ((int *)son->chromosome[chromo])[point] += dir;
 
-  if (son->chromosome[chromo][point]==RAND_MAX) son->chromosome[chromo][point]=0;
-  if (son->chromosome[chromo][point]==-1) son->chromosome[chromo][point]=RAND_MAX-1;
+  if (((int *)son->chromosome[chromo])[point]==RAND_MAX) ((int *)son->chromosome[chromo])[point]=0;
+  if (((int *)son->chromosome[chromo])[point]==-1) ((int *)son->chromosome[chromo])[point]=RAND_MAX-1;
 
   return;
   }
-
-
-#if 0
-/**********************************************************************
-  ga_monte_carlo_mutation()
-  synopsis:	Cause a mutation event based on a Monte Carlo move.
-  parameters:
-  return:
-  last updated: 23/02/01
- **********************************************************************/
-
-boolean ga_monte_carlo_mutation(population *pop, entity *father, entity *son)
-  {
-  int		i;		/* Loop variable over chromosomes. */
-
-/*
- * Duplicate the initial data.
- */
-  for (i=0; i<pop->num_chromosomes; i++)
-    {
-    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
-    ga_copy_data(pop, son, father, i);
-    }
-
-/*
- * Mutate by applying a Monte Carlo move.
- */
-  return pop->monte_carlo_move(pop, son);
-  }
-#endif
 
 
 /**********************************************************************
@@ -298,10 +120,7 @@ void ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *
       }
     }
 
-/*
-  pop->randomize_nucleotide(chromo, point, son->chromosome[chromo]);
- */
-  son->chromosome[chromo][point] = random_int(RAND_MAX);
+  ((int *)son->chromosome[chromo])[point] = random_int(RAND_MAX);
 
   return;
   }
@@ -341,14 +160,12 @@ void ga_multipoint_mutation(population *pop, entity *father, entity *son)
       {
       if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
         {
-/*
-        pop->drift_nucleotide(chromo, point, son->chromosome[chromo]);
-*/
+        ((int *)son->chromosome[chromo])[point] += dir;
 
-        son->chromosome[chromo][point] += dir;
-
-        if (son->chromosome[chromo][point]==RAND_MAX) son->chromosome[chromo][point]=0;
-        if (son->chromosome[chromo][point]==-1) son->chromosome[chromo][point]=RAND_MAX-1;
+        if (((int *)son->chromosome[chromo])[point]==RAND_MAX)
+          ((int *)son->chromosome[chromo])[point]=0;
+        if (((int *)son->chromosome[chromo])[point]==-1)
+          ((int *)son->chromosome[chromo])[point]=RAND_MAX-1;
         }
       }
     }
@@ -382,7 +199,7 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(boolean));
     if (i!=chromo)
       {
       ga_copy_data(pop, son, father, i);
@@ -393,7 +210,7 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
       }
     }
 
-  son->chromosome[chromo][point] = !son->chromosome[chromo][point];
+  ((boolean *)son->chromosome[chromo])[point] = !((boolean *)son->chromosome[chromo])[point];
 
   return;
   }
@@ -419,7 +236,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
 /* Copy chromosomes of parent to offspring. */
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(boolean));
     }
 
 /*
@@ -431,7 +248,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
       {
       if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
         {
-        son->chromosome[chromo][point] = !son->chromosome[chromo][point];
+        ((boolean *)son->chromosome[chromo])[point] = !((boolean *)son->chromosome[chromo])[point];
         }
       }
     }

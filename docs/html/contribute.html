@@ -1,0 +1,879 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+<TITLE>How to contribute</TITLE>
+</HEAD>
+<BODY>
+
+<TABLE BORDER="0" WIDTH="95%" ALIGN="center">
+ <TR>
+  <TD>
+   <P ALIGN="center"><IMG SRC="pics/headers/howtocontribute.gif" BORDER="0" ALT="How to contribute"></P>
+
+   <OL type=I>
+    <LI><A HREF="#diff">How to create patches using "diff".</A><BR>
+    <LI><A HREF="#Submit">How to submit patches to freeciv-dev.</A><BR>
+    <LI><A HREF="#patch">How to use the patch command.</A><BR>
+    <LI><A HREF="#SetupCVS">How to setup CVS.</A><BR>
+    <LI><A HREF="#MoreCVS">More things you can do with CVS.</A><BR>
+    <LI><A HREF="#Policy">Freeciv policy.</A><BR>
+    <LI><A HREF="#Style">Mini Style Guide.</A><BR>
+    <LI><A HREF="#Authors">Authors</A>
+   </OL>
+
+   <A NAME="diff"></A>
+   <P><HR noshade>
+   I) How to create patches using "diff".
+   <HR noshade>
+
+   <P>This section describes how to create patches using the GNU version of "diff".
+   <I>It is also possible to create patches using CVS; see section 
+   V.</I>  Following these instruction will make incorporating your patch into the main CVS tree easy, so please read them even if you consider yourself an expert diff user.
+
+   <OL>
+    <LI>Make sure your patch is made against the latest version of the 
+        source code you can possibly get <I>preferably from CVS or a CVS 
+	snapshot</I>.<P>
+
+    <LI>Be sure to indicate exactly which version of the source code your 
+        patch should be applied to <I>e.g., "CVS snapshot from 
+        September 1"</I>.<P>
+
+    <LI>There are several different "diff" formats but for contributing to GAUL, please choose
+        the unified diff format <I>"diff -u"</I>
+
+    <LI>You need a copy of the original file(s) as well as your modified
+        file(s).  If you've forgotten to make a copy of the original 
+        source code file(s) you've modified, before you modified them, 
+	then you'll need to re-extract them or re-download them.  <I>See 
+	also the sections on CVS.</I><P>
+
+    <LI>Be sure to specify the original file(s) first, and the modified 
+        file(s) second.  Otherwise your diffs will be "backwards".<P>
+
+    <LI>If you've only modified 1 file, or a small number of files <I>all
+        in the same directory</I>, then you can run diff against the file(s)
+	individually, concatenating them if necessary:
+
+	<PRE>
+    % diff -u original_file modified_file &gt;&gt; my_patch</PRE>
+
+	In this case, the "modified_file" should be the normal name of 
+	the file in question -- for example,
+
+	<PRE>
+    % diff -u unithand.c.orig unithand.c &gt;&gt; my_patch       # RIGHT</PRE>
+
+	Don't do this:
+
+	<PRE>
+    % diff -u unithand.c unithand.c.modified &gt;&gt; my_patch   # WRONG!</PRE>
+
+	because that will confuse the program/person applying the 
+	patch.
+
+	<P>Please use concatenation only when all the files are in a
+	single directory, otherwise the person applying the patch will
+	have to break the patch into single-directory pieces.<P>
+
+    <LI>If you've modified several files, it's probably best to let diff 
+        find them all for you.  In this case, you'll want to completely 
+	separate directory trees -- one with the original code, and one 
+	with your modified version.  Then you can use the "recursive" 
+	option to diff:
+
+	<PRE>
+    % diff -r -u original_directory modified_directory &gt; my_patch</PRE>
+
+	When you do this, you'll want to make sure there aren't any 
+	object files or programs in these directories -- if there are, 
+	then diff will include references to them in the patch it 
+	creates. In that  case, either remove those files and rerun the 
+	diff, or edit the  references out of the patch file 
+	<I>see below</I>.
+
+	<P>It is also best to specify only short, relative paths to the
+	"diff -r" command.  Using long and/or absolute paths just makes
+	it harder to apply the patch.  For example, do this:
+
+	<PRE>
+    % diff -r -u orig_dir mod_dir &gt; my_patch                  # RIGHT</PRE>
+
+	Instead of this:
+
+	<PRE>
+    % diff -r -u prj/orig/fc prj/mods/fc &gt; my_patch           # WRONG!</PRE>
+
+	Especially, don't do this:
+
+	<PRE>
+    % diff -r -u /home/me/orig_fc /home/me/mod_fc &gt; my_patch  # WRONG!</PRE>
+
+    <LI>If you've created new files, or deleted or renamed files, then 
+        there are some special options you may have to feed to diff -- 
+	check the docs.  If a file <CODE>foo</CODE> exists in your
+	original_directory and you want it to be copied in your modified
+	directory do:
+
+	<PRE>
+    % diff -Nur original_directory modified_directory &gt; my_patch</PRE>
+
+	If you use the -N flag you must be especially careful that the 
+	patch does not include more new files than you intend; see the
+	next point.<P>
+
+    <LI>Often you want files to be ignored in both directories. Binary 
+        files or output files or whatever files can be ignored.  Use the 
+	command:
+
+	<PRE>
+    % diff -Nur -Xdiff.ignore original_directory modified_directory &gt; my_patch</PRE>
+
+	<P>All the files matching the names specified in the diff.ignore file will be skipped.
+
+    <LI>After generating the patch file, *read it*.  Make sure it looks
+        sane.  You can use a text editor to correct filenames, or to 
+	remove "Binary files differ" and "Only in" lines.  And, please 
+	apply it and rebuild freeciv to check if all goes smoothly.  
+	<I>See section III for how to apply the patch.</I><P>
+
+    <LI>Small patches are much easier to integrate than big ones. If you 
+        have a big patch try to split it into several little ones.<P>
+
+    <LI>See the next section for how to submit patches.
+   </OL>
+
+   <P>As an example, suppose you have two directories: <CODE>gaul-devel</CODE>,
+   which contains a snapshot of the CVS repository, and <CODE>gaul-devel-modified</CODE>,
+   which contains your working copy. And, you have made a small change
+   to your copy. From the directory that
+   contains <CODE>gaul-devel</CODE> and <CODE>gaul-devel-modified</CODE>
+   , you could use the following to create a
+   patch:
+
+   <PRE>
+   % diff -Nur -Xgaul-devel/diff.ignore gaul-devel gaul-devel-modified &gt; bad_bug_fixed.diff
+   </PRE>
+
+   The resultant patch would look something like:
+
+   <PRE>
+   diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   --- freeciv-cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   +++ freeciv-mod/common/game.h	Fri Jan 14 12:32:52 2000
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   See <I>section V</I> for a way to create this patch using CVS.
+
+   <A NAME="Submit"></A>
+   <P><HR noshade>
+   II) How to submit patches to freeciv-dev.
+   <HR noshade>
+
+   <P>This section describes how to submit patches to the Freeciv developers
+   mailing list (<A HREF="mailto:freeciv-dev@freeciv.org">freeciv-dev@freeciv.org</A>).
+
+   <UL>
+    <LI>You should send email to
+	<A HREF="mailto:freeciv-dev@freeciv.org">freeciv-dev@freeciv.org</A>
+	describing the purpose of your patch.<P>
+
+    <LI>All files submitted to freeciv-dev in email messages should be
+	included as MIME attachments.  (Alternatively you may include
+	them "uuencoded".) Otherwise there may be changes to spaces,
+	newlines, tabs, etc., which may cause problems for anyone trying
+	to apply your patch.<P>
+
+    <LI>If your patch is smaller than about 15-20k, then you should
+	simply include it in your email as a text attachment, leaving
+	it uncompressed so that people can read it more easily.
+	<BR><I>E.g., GW writes: I'm far more likely to take the time
+	to look at a patch if it's small, easy to understand, and not
+	compressed. If I have to save it in a file and gunzip it, it's
+	more likely I'll just wait for someone else to put it in CVS,
+	though I might respond to plain-text comments describing the
+	patch if I find them interesting.</I>
+	<BR><B>Note:</B> Though uncompressed text attachments may
+	be more easily read, they are susceptible to being corrupted
+	in transit. If this happens, some people may to ask you to
+	re-send the patch to them as a gzipped, binary attachment.<P>
+
+    <LI>If your patch is larger than about 15-20k, then you should 
+	compress it using "gzip", and include it in your email as a
+	binary attachment.<P>
+
+    <LI>If, when gzipped your patch is larger than about 40-50k, then
+	you should not include it in your email. Rather, you should use
+	anonymous FTP to upload it to the incoming directory on the
+	Freeciv FTP server:
+	<BR>&nbsp;&nbsp;
+	<A HREF="ftp://ftp.freeciv.org/pub/freeciv/incoming/">
+	ftp://ftp.freeciv.org/pub/freeciv/incoming/</A><BR>
+	and reference the uploaded file in your email.
+   </UL>
+
+   <A NAME="patch"></A>
+   <HR noshade>
+   III) How to use the patch command.
+   <HR noshade>
+
+   <P>Once you start creating patches you should also learn to use 
+   "patch", which applies patches.  There is a GNU version of "patch", 
+   and there are some commercial-Unix versions of varying quality.  
+   <BR>The GNU version is the best, of course.  This will help to test 
+   and manage your own patches, and also let you apply patches from 
+   other people.
+
+   <P>For more detailed or definitive information, see the patch man page.
+
+   <P>Here is the example patch we presented in <I>section I</I>:
+
+   <PRE>
+   diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   --- freeciv-cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   +++ freeciv-mod/common/game.h	Fri Jan 14 12:32:52 2000
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   <P>Recall that we saved this patch in a file called
+   <CODE>/tmp/barb_comment.diff</CODE>.
+
+   <P>Now, take a look at the line that begins with "+++".  This indicates
+   from where the modified file came. It is also the preferred file to be
+   patched on your machine. Notice that the path includes the "root" Freeciv
+   directory (in this case, "freeciv-mod"). This is common (though, not
+   universal) for recursive diffs.
+
+   <P>Anyway, you may not keep your working copy of the Freeciv source in
+   "freeciv-mod". Suppose it is in "freeciv". To apply this patch to your
+   working copy, "cd" into your "freeciv" directory, and type:
+
+   <PRE>
+   % patch -p1 &lt; /tmp/barb_comment.diff
+   </PRE>
+
+   The "-p1" tells patch to skip the initial directory in the path to the
+   file being patched (in this case "freeciv-mod/").
+
+   <P>Patch will respond with something like:
+
+   <PRE>
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   |--- freeciv-cvs/common/game.h  Sat Jan  1 14:30:12 2000
+   |+++ freeciv-mod/common/game.h  Fri Jan 14 12:32:52 2000
+   --------------------------
+   Patching file common/game.h using Plan A...
+   Hunk #1 <B>succeeded</B> at 62.
+   done
+   </PRE>
+
+   Patch has  <B>succeeded</B> in doing its thing, modified common/game.h, and
+   saved the original in common/game.h.orig.
+
+   <P>Suppose now you want to restore the file to its previous state. You
+   want to apply the patch "in <I>reverse</I>". To do this, use the "-R"
+   argument to patch:
+
+   <PRE>
+   % patch -p1 -R &lt; /tmp/barb_comment.diff
+   </PRE>
+
+   Patch will respond with something very much like before:
+
+   <PRE>
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   |--- freeciv-cvs/common/game.h  Sat Jan  1 14:30:12 2000
+   |+++ freeciv-mod/common/game.h  Fri Jan 14 12:32:52 2000
+   --------------------------
+   Patching file common/game.h using Plan A...
+   Hunk #1 succeeded at 62.
+   done
+   </PRE>
+
+   And, patch will have restored your file.
+
+   <P>Another common kind of patch to receive is one generated using the
+   CVS command <BR>"cvs diff -u" (see <I>section V</I>, below).
+
+   <P>Here is the example patch from <I>section V</I>:
+
+   <PRE>
+   Index: common/game.h
+   ===================================================================
+   RCS file: /home/freeciv/CVS/freeciv/common/game.h,v
+   retrieving revision 1.46
+   diff -u -r1.46 game.h
+   --- game.h      2000/01/01 19:29:46     1.46
+   +++ game.h      2000/01/14 18:07:56
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   Here, the "+++" line specifies only the file name. The directory
+   information is communicated by the "Index: " line. Notice that this
+   time, there is no "root" directory specified. Therefore, we don't
+   need to skip one by using "-p1". So, to apply this patch to your
+   working copy, "cd" into your "freeciv" directory, and type:
+
+   <PRE>
+   % patch &lt; /tmp/barb_comment_cvs.diff
+   </PRE>
+
+   <P>Patch will respond with something like:
+
+   <PRE>
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |Index: common/game.h
+   |===================================================================
+   |RCS file: /home/freeciv/CVS/freeciv/common/game.h,v
+   |retrieving revision 1.46
+   |diff -u -r1.46 game.h
+   |--- game.h     2000/01/01 19:29:46     1.46
+   |+++ game.h     2000/01/14 18:07:56
+   --------------------------
+   Patching file common/game.h using Plan A...
+   Hunk #1 succeeded at 62.
+   done
+   </PRE>
+
+   (Applying the patch in reverse works just like before, by adding "-R".)
+
+   <P>Sometimes, you'll get a patch of just a single file, which might
+   look something like:
+
+   <PRE>
+   --- ../../freeciv-cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   +++ game.h	Fri Jan 14 12:32:52 2000
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   <P>Again, the "+++" line includes only the file name ("game.h"), but
+   there is nothing like the "Index: " line to give the directory. So, in
+   this case, you can just "cd" to where you know the file to be (i.e.,
+   "common"), and run patch as follows:
+
+   <PRE>
+   % patch &lt; /tmp/barb_comment_game.h.diff
+   </PRE>
+
+   <P>Patch will respond with something like:
+
+   <PRE>
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |--- ../../freeciv-cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   |+++ game.h	Fri Jan 14 12:32:52 2000
+   --------------------------
+   Patching file game.h using Plan A...
+   Hunk #1 succeeded at 62.
+   done
+   </PRE>
+
+   <P>You may also get a patch (from someone who hasn't read this :)
+   which uses a long relative or absolute path to specify the file(s)
+   to be patched. An example of a long relative path is:
+
+   <PRE>
+   diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   --- prj/freeciv/cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   +++ prj/freeciv/mod/common/game.h	Fri Jan 14 12:32:52 2000
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   <P>In this case, you will need to use a different value for the "-p"
+   argument to "diff". Just "cd" into your "freeciv" directory, and type:
+
+   <PRE>
+   % patch -p3 &lt; /tmp/barb_comment.diff
+   </PRE>
+
+   The "-p3" tells patch to skip the first three directories in the path
+   to the file being patched (in this case "prj/freeciv/mod/").
+
+   <P>In the case of an absolute path, for example:
+
+   <PRE>
+   diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   --- /home/me/cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   +++ /home/me/mod/common/game.h	Fri Jan 14 12:32:52 2000
+   @@ -62,6 +62,8 @@
+      int player_idx;
+      struct player *player_ptr;
+      struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +         /* barbarians are ai players;
+   +            use is_barbarian() to test for a player being a barbarian */
+      int global_advances[A_LAST];             /* a counter */
+      int global_wonders[B_LAST];              /* contains city id's */
+             /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   <P>you will need to use a value for the "-p" argument to "diff" that
+   is one greater than the number of leading directories (to account for
+   the root directory). So, in this case "cd" into your "freeciv" directory,
+   and type:
+
+   <PRE>
+   % patch -p4 &lt; /tmp/barb_comment.diff
+   </PRE>
+
+   The "-p4" tells patch to skip the root directory and the first three
+   named directories in the path to the file being patched (in this case
+   "/home/me/mod/").
+
+   <P>If patch ever can't determine what file to patch, it will prompt you
+   for the file to be patched:
+
+   <PRE>
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |--- ../../freeciv-cvs/common/game.h	Sat Jan  1 14:30:12 2000
+   |+++ game.h	Fri Jan 14 12:32:52 2000
+   --------------------------
+   <B>File to patch:</B>
+   </PRE>
+
+   Just enter the path to the file to be patched.
+
+   <P>Everything doesn't always go so smoothly. For eaxmple, if your working
+   file has been modified, and patch can't figure out how to apply the patch,
+   you may see something like:
+
+   <PRE>
+   % patch -p1 &lt; /tmp/barb_comment.diff
+
+   Hmm...  Looks like a unified diff to me...
+   The text leading up to this was:
+   --------------------------
+   |diff -Nur -Xno.freeciv freeciv-cvs/common/game.h freeciv-mod/common/game.h
+   |--- freeciv-cvs/common/game.h  Sat Jan  1 14:30:12 2000
+   |+++ freeciv-mod/common/game.h  Fri Jan 14 12:32:52 2000
+   --------------------------
+   Patching file common/game.h using Plan A...
+   Hunk #1 <B>failed</B> at 62.
+   1 out of 1 hunks failed--saving rejects to common/game.h.rej
+   done
+   </PRE>
+
+   In this case patch didn't succeed in applying the patch: notice it reported
+   that Hunk #1 <B>failed</B> at line 62. Your files are now in the following
+   states:
+
+   <UL>
+      <LI><CODE>common/game.h</CODE> is the file modified by the hunks which
+	were applied with success.
+      <LI><CODE>common/game.h.orig</CODE> is the same file before any change
+	to it.
+      <LI><CODE>common/game.h.rej</CODE> is composed of the hunks which have
+	failed.
+   </UL>
+
+   (A hunk is a block of text from line number x to line number y to be
+   substituted by a new block of text that will go from line number x' to
+   line number y'.)
+
+   <P>In our case, <CODE>common/game.h.rej</CODE> looks like:
+
+   <PRE>
+   ***************
+   *** 62,67 ****
+       int player_idx;
+       struct player *player_ptr;
+       struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+       int global_advances[A_LAST];             /* a counter */
+       int global_wonders[B_LAST];              /* contains city id's */
+              /* global_wonders[] may also be (-1), or the id of a city
+   --- 62,69 ----
+       int player_idx;
+       struct player *player_ptr;
+       struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+   +          /* barbarians are ai players;
+   +             use is_barbarian() to test for a player being a barbarian */
+       int global_advances[A_LAST];             /* a counter */
+       int global_wonders[B_LAST];              /* contains city id's */
+              /* global_wonders[] may also be (-1), or the id of a city
+   </PRE>
+
+   Here, there is one problematic hunk. The original code runs from line
+   62 through line 67, and is displayed after the "*** 62,67 ****". The new
+   code was to run from line 62 through 69, and these new lines are displayed
+   after the "--- 62,69 ----".
+
+   <P>Unfortunately, now you need to edit common/game.h somewhere near line
+   62, and manually make the rejected changes.
+
+   <A NAME="SetupCVS"></A>
+   <P><HR noshade>
+   IV) How to setup CVS.
+   <HR noshade>
+
+   <OL>
+    <LI>Obtain, compile and install cvs on your Unix machine. You can 
+        get cvs from Cyclic Software at
+	<A HREF="http://www.cyclic.com/">http://www.cyclic.com/</A>.<P>
+
+    <LI>Set your CVSROOT environment variable: 
+
+        <P>If you're using Bourne shell, do it like this: 
+
+	<PRE>
+    % CVSROOT=:pserver:freecvs@cvs.freeciv.org:/home/freeciv/CVS
+    % export CVSROOT</PRE>
+
+	Your shell might allow you to combine these two lines like this:
+    
+        <PRE>
+    % export CVSROOT=:pserver:freecvs@cvs.freeciv.org:/home/freeciv/CVS</PRE>
+
+	If you're using C shell, do it like this: 
+
+	<PRE>
+    % setenv CVSROOT :pserver:freecvs@cvs.freeciv.org:/home/freeciv/CVS</PRE>
+
+    <LI>Tell the cvs server who you are: 
+
+        <PRE>
+    % cvs login     <I>the password is:</I> <B>freecvs</B></PRE>
+
+    <LI>Grab yourself the source! <I>Note, do this once only</I>:
+
+        <PRE>
+    % cvs co freeciv</PRE>
+
+	If you want to receive further updates, cd into the freeciv 
+	directory, then use cvs update -d.<P>
+
+    <LI>Also, to speed things up over a network, add a -z3 flag 
+        immediately after the cvs command. This causes all network 
+	traffic to be compressed. 
+   </OL>
+
+   <A NAME="MoreCVS"></A>
+   <HR noshade>
+   V) More things you can do with CVS.
+   <HR noshade> 
+
+   <OL>
+    <LI>If you want to see what differs between your version and the 
+        cvs version, use <BR>"cvs diff -u" in your freeciv directory.
+	<P>For example, to create the same patch we did as an example
+	in <I>section I</I>, change the current working directory to
+	freeciv-mod (where your modified source lives), and do:
+
+	<PRE>
+    % cvs diff -u &gt; /tmp/barb_comment_cvs.diff
+	</PRE>
+
+	The resultant patch would look something like:
+
+	<PRE>
+    Index: common/game.h
+    ===================================================================
+    RCS file: /home/freeciv/CVS/freeciv/common/game.h,v
+    retrieving revision 1.46
+    diff -u -r1.46 game.h
+    --- game.h      2000/01/01 19:29:46     1.46
+    +++ game.h      2000/01/14 18:07:56
+    @@ -62,6 +62,8 @@
+       int player_idx;
+       struct player *player_ptr;
+       struct player players[MAX_NUM_PLAYERS + MAX_NUM_BARBARIANS];   
+    +         /* barbarians are ai players;
+    +            use is_barbarian() to test for a player being a barbarian */
+       int global_advances[A_LAST];             /* a counter */
+       int global_wonders[B_LAST];              /* contains city id's */
+              /* global_wonders[] may also be (-1), or the id of a city
+	</PRE>
+
+    <LI>To get the list of comments which has been added for each 
+        revision of the file foo.c use <BR>"cvs log foo.c".<P>
+
+    <LI>To get the status of file foo.c use <BR>"cvs status foo.c".
+        Here you can read the revision number of the file on your hard 
+	disk and the revision number of the file in the repository <I>(the 
+	freeciv files on cvs.freeciv.org)</I>. For example:
+
+	<PRE>
+    % cvs status civserver.c
+
+    File: civserver.c       Status: Up-to-date
+
+    Working revision:    1.86
+    Repository revision: 1.86    /home/freeciv/CVS/freeciv/server/civserver.c,v
+    Sticky Tag:          (none)
+    Sticky Date:         (none)
+    Sticky Options:      (none)
+	</PRE>
+
+    <LI>If you want to see what changes has been made in foo.c, use
+        <BR>"cvs diff -rr1 -rr2 foo.c" where r1 and r2 are two revision 
+	numbers. For example:
+
+	<PRE>
+    % cvs diff -r1.85 -r1.86 civserver.c
+
+    Index: civserver.c
+    RCS file: /home/freeciv/CVS/freeciv/server/civserver.c,v
+    retrieving revision 1.85
+    retrieving revision 1.86
+    diff -r1.85 -r1.86
+    132a133,139
+    >   if (!getuid() || !geteuid()) {
+    >     fprintf(stderr, "%s: Fatal error: you're trying to run me as superuser!\n",
+    > 	    (argv[0] ? argv[0] : "freeciv_server"));
+    >     fprintf(stderr,"Use a non-privileged account instead.\n");
+    >     exit(1);
+    >   }
+    > 
+	</PRE>
+
+    <LI>If you want to use a previous revision of the file foo.c do
+        <BR>"cvs up -rr1 foo.c". For example:
+
+	<PRE>
+    % cvs up -r1.85 civserver.c</PRE>
+
+	<P>Now, "cvs status civserver.c" gives :
+
+	<PRE>
+    % cvs status civserver.c
+
+    File: civserver.c       Status: Up-to-date
+
+    Working revision:    1.85
+    Repository revision: 1.85    /home/freeciv/CVS/freeciv/server/civserver.c,v
+    Sticky Tag:          1.85
+    Sticky Date:         (none)
+    Sticky Options:      (none)
+	</PRE>
+
+	Notice that civserver.c now has a sticky tag.  Now "cvs up" will
+	refuse to update it, which is logical since in this case you have 
+	specifically choosen to work on an old version of civserver.c.
+	<BR>After you have finished with civserver.c, use "cvs up -A" to 
+	get rid of all sticky Tags and get the latest version of all 
+	files.<P>
+
+    <LI>If you don't want to have your CVS copy of freeciv in a dir 
+        called freeciv, use <BR>"cvs co -d my_dir freeciv".<P>
+
+    <LI>If you have used "cvs log", you may have observed a list of 
+        symbolic names:
+
+	<PRE>
+    R1_8_0a: 1.3
+    R1_7_2: 1.3
+    R1_7_1: 1.2
+    R1_7_0a: 1.2
+    R1_6_6: 1.2
+    R1_6_5: 1.2
+    R1_6_4: 1.2
+    GTK1_6mergepoint: 1.1
+    GTK1_6: 1.1.0.2
+    R1_6_3: 1.1
+    R1_6_2: 1.1
+    R1_6_1: 1.1
+	</PRE>
+
+     They are called tags. It can be used to know which revision 
+     of a file belongs to given version.
+     <BR>So, "cvs co -d freeciv_1_7_2 -r R1_7_2 freeciv" will create 
+     a directory names freeciv_1_7_2 with the version of freeciv1.7.2 
+     in it.
+
+     <P>If you are interested by the CVS version of the third of march 
+     at 12:00, use: <BR>"cvs co -d freeciv0320 -D '1999-03-20 12:00' freeciv".
+   </OL>
+
+   <A NAME="Policy"></A>
+   <HR noshade>
+   VI) Freeciv policy.
+   <HR noshade>
+
+   <P>Some efforts has been made to make freeciv development easier.
+   We advise you to use the tools which are described here and
+   located in the Freeciv sources.
+
+   <OL>
+    <LI>(common/mem.c) fc_malloc, fc_realloc, fc_calloc and my_strdup 
+        can be used instead of classic C malloc, realloc, calloc and 
+	strdup functions.
+	<BR>These functions test the return value, and if the allocation 
+	failed, the file and line number where the function was called 
+	is displayed.<P>
+
+    <LI>(common/capability.c) The capability string is a list of options 
+        which are supported.  When a client connects to a server, we 
+	compare the two capability strings.  Any capabilities which are 
+	missing are deactivated.  This allows compability between 
+	differents versions.
+
+	<P>For example, if we have a client with a capabilty string 
+	"+1.8 nuke" and a server with a capability string "+1.8", the 
+	client won't be able to use the "nuke" option 
+	<I>whatever that is</I>.
+
+	<P>Some capabilities are mandatory.  They begin by a '+'.  In 
+	the example, the client can't connect to a "+1.8pre2" server.
+
+	<P>In the server, tests look like this:
+        <PRE>
+	if(has_capability("autoattack1", pc->capability))</PRE>
+	The server checks if the client knows about autoattack1.
+	<BR>If the client knows about autoattack1, the server will 
+	send data needed by autoattack1.
+
+	<P>In the client,
+	<PRE>
+	if(!has_capability("nuke", aconnection.capability))
+	return;</PRE>	
+
+	The client will ignore the nuke command if the server 
+	doesn't know about nuke.<P>
+
+    <LI>(common/log.c)  freelog(int level,char *message,...) is our 
+        freeciv log function.  There are 4 levels :
+
+	<P>
+	<TABLE BORDER="0" CELLSPACING="0" WIDTH="100%" ALIGN="left">
+	<TR><TD>#define LOG_FATAL 0</TD><TD>Something went wrong.</TD></TR>
+	<TR><TD>#define LOG_NORMAL 1</TD><TD>Freeciv did something usual.</TD></TR>
+	<TR><TD>#define LOG_VERBOSE 2</TD><TD>More information.
+		<I>Not shown by default.</I></TD></TR>
+	<TR><TD>#define LOG_DEBUG 3</TD><TD>Debugging information.
+		<I>Suppressed unless </I>DEBUG<I> defined.</I></TD></TR>
+	</TABLE>
+	<BR CLEAR="left"><BR>
+
+	<P>For example, in game.c:
+	<BR>&nbsp;&nbsp;freelog(LOG_DEBUG, "game_remove_city %d", pcity->id);
+	<BR>Except for the level, you use it as a printf.
+
+	<P>The server and client have a default log level which is used
+	to filter the freelog output.  You can set it via the function
+	log_set_level(int level).
+
+	<P>log_set_level(LOG_FATAL) will output only LOG_FATAL freelog
+		messages.
+	<BR>log_set_level(LOG_NORMAL) will output LOG_FATAL and
+		LOG_NORMAL freelog messages.
+	<BR>log_set_level(LOG_VERBOSE) will output LOG_FATAL,
+		LOG_NORMAL and LOG_VERBOSE freelog messages.
+	<BR>log_set_level(LOG_DEBUG) will output all freelog messages.
+		<I>Same as </I>LOG_VERBOSE<I> if </I>DEBUG<I> is not defined.</I>
+
+	<P>If you are debugging a function, you can put 
+	log_set_level(LOG_DEBUG) at the beginning of the function and 
+	log_set_level(LOG_NORMAL) at the end.
+
+	<P>You can use command line options to specify a file to write log
+	messages to, and the log level.  For example:
+        <BR>&nbsp;&nbsp;civclient --log cli_log.log --debug 2
+        <BR>&nbsp;&nbsp;civserver --log ser_log.log --debug 2
+	<BR>In this example, all the freelog output will be written to the
+	files "cli_log.log" and "ser_log.log".
+   </OL>
+
+   <A NAME="Style"></A>
+   <HR noshade>
+   VII) Mini Style Guide.
+   <HR noshade>
+
+   <P>If you want to hack Freeciv, and want your patches to be accepted,
+   it helps to follow some simple style rules:
+
+   <OL>
+    <LI>Use K&R indentation style with indentation 2 (when in doubt, use
+	"indent -kr -i2"). However, do not re-indent areas of code you are
+	not modifying or creating.<P>
+
+    <LI>Order include files consistently: First state all system include
+	files with <CODE>&lt;&gt;</CODE> in alphabetic order, then all
+	Freeciv include files with <CODE>""</CODE>, sorted by directory
+	(common, server, ...) and then by alphabetic order, with a blank
+	line between the sections. This helps to avoid adding unnecessary
+	or duplicated include files.<P>
+
+    <LI>If you use a system specific feature, don't add
+	<CODE>#ifdef __CRAY__</CODE> or something like that. Rather write a
+	check for that feature for <CODE>configure.in</CODE>, and use a
+	meaningful macro name in the source.<P>
+
+    <LI>Always prototype global functions in the appropriate header file.
+	Local functions should always be declared as <CODE>static</CODE>.<P>
+
+    <LI>Don't use C++-style comments (i.e., <CODE>//</CODE> comments).
+   </OL>
+
+   <A NAME="Authors"></A>
+   <HR noshade>
+   VIII) Authors.
+   <HR noshade>
+
+   <p>This document was based on the equivalent freeciv file, with GAUL specifics added by Stewart Adcock.
+
+   <P>Contributions to that original document were made by:
+
+   <P>Mitch Davis <A HREF="mailto:mjd@aus.hp.com">mjd@aus.hp.com</A>
+   <BR>Greg Wooledge <A HREF="mailto:wooledge@kellnet.com">wooledge@kellnet.com</A>
+   <BR>Nicolas Brunel <A HREF="mailto:brunel@ham.esil.univ-mrs.fr">brunel@ham.esil.univ-mrs.fr</A>
+   <BR>David Pfitzner <A HREF="mailto:dwp@mso.anu.edu.au">dwp@mso.anu.edu.au</A>
+   <BR>Jeff Mallatt <A HREF="mailto:jjm@codewell.com">jjm@codewell.com</A>
+   <BR>Martin Willemoes Hansen <A HREF="mailto:mwh@stampede.org">mwh@stampede.org</A> <I>HTML converting</I>
+   
+  </TD>
+ </TR>
+</TABLE>
+
+</BODY>
+</HTML>

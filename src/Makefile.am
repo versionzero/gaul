@@ -39,18 +39,20 @@ lib_LIBRARIES = libga.a
 INCLUDES = -I../util/
 
 libga_a_SOURCES = \
+	ga_core.c \
 	ga_intrinsics.c \
 	ga_optim.c \
 	ga_qsort.c \
 	ga_similarity.c \
-	ga_util.c
+	ga_utility.c
 
 include_HEADERS = \
+	ga_core.h \
 	ga_intrinsics.h \
 	ga_optim.h \
 	ga_qsort.h \
 	ga_similarity.h \
-	ga_util.h
+	ga_utility.h
 
 libga_a_DEPENDENCIES = \
 	../util/libmethods.a \

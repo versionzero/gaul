@@ -1,8 +1,8 @@
 /**********************************************************************
-  ga_util.c
+  ga_core.c
  **********************************************************************
 
-  ga_util - Genetic algorithm routines.
+  ga_core - Genetic algorithm routines.
   Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -62,14 +62,17 @@
 		More "if (!pop) die("Null pointer to population structure passed.");" checks are needed.
 		Use a list of structures containing info about user defined crossover and mutation functions.
 		Genome distance measures (tanimoto, euclidean, tverski etc.)
-		Rename this as ga_core or ga_base?
 
 		Population/entity iterator functions.
 
  **********************************************************************/
 
-#include "ga_util.h"
+#include "ga_core.h"
 
+/*
+ * FIXME: These shouldn't really be included like this!
+ */
+#include "ga_chromo.c"
 #include "ga_crossover.c"
 #include "ga_mutate.c"
 #include "ga_replace.c"
@@ -206,6 +209,13 @@ population *ga_population_new(	const int max_size,
   newpop->data_destructor = NULL;
   newpop->data_ref_incrementor = NULL;
 
+  newpop->chromosome_constructor = NULL;
+  newpop->chromosome_destructor = NULL;
+  newpop->chromosome_replicate = NULL;
+  newpop->chromosome_to_bytes = NULL;
+  newpop->chromosome_from_bytes = NULL;
+  newpop->chromosome_to_string = NULL;
+
   newpop->evaluate = NULL;
   newpop->seed = NULL;
   newpop->adapt = NULL;
@@ -219,8 +229,6 @@ population *ga_population_new(	const int max_size,
  * Seed the population.
  */
 
-/* FIXME: I should allocate the chromosomes here too. */
-
 /*
  * Add this new population into the population table.
  */
@@ -233,6 +241,33 @@ population *ga_population_new(	const int max_size,
   plog( LOG_DEBUG, "New pop = %p id = %d", newpop, pop_id);
 
   return newpop;
+  }
+
+
+/**********************************************************************
+  ga_get_num_populations()
+  synopsis:	Gets the number of populations.
+  parameters:	none
+  return:	int	number of populations, -1 for undefined table.
+  last updated: 13/06/01
+ **********************************************************************/
+
+int ga_get_num_populations(void)
+  {
+  int	num;
+
+  THREAD_LOCK(pop_table);
+  if (!pop_table)
+    {
+    num=-1;
+    }
+  else
+    {
+    num = table_count_items(pop_table);
+    }
+  THREAD_UNLOCK(pop_table);
+
+  return num;
   }
 
 
@@ -288,30 +323,6 @@ unsigned int ga_get_population_id(population *pop)
   }
 
 
-#if 0
-/**********************************************************************
-  ga_entity_seed_random()
-  synopsis:	Fills a population structure with vaguely reasonable,
-		random, starting genes.  Most 'real' work is done in
-		a user-specified function.
-  parameters:	population *	The entity's population.
-		entity *	The entity.
-  return:	boolean success.
-  last updated: 19/12/00
- **********************************************************************/
-
-boolean ga_entity_seed_random(population *pop, entity *e)
-  {
-  int		j;		/* Loop variable. */
-
-  for (j=0; j<pop->num_chromosomes; j++)
-    pop->seed_random(j, e->chromosome[j]);
-
-  return TRUE;
-  }
-#endif
-
-
 /**********************************************************************
   ga_entity_seed()
   synopsis:	Fills a population structure with genes.  Defined in
@@ -363,147 +374,6 @@ boolean ga_population_seed(population *pop)
   }
 
 
-#if 0
-/**********************************************************************
-  ga_population_seed_random()
-  synopsis:	Fills a population structure with vaguely reasonable,
-		random, starting genes.  Most 'real' work is done in
-		a user-specified function.
-  parameters:	none
-  return:	boolean success.
-  last updated: 18/12/00
- **********************************************************************/
-
-boolean ga_population_seed_random(population *pop)
-  {
-  int		i;		/* Loop variables. */
-  entity	*adam;		/* New population member. */
-
-  plog(LOG_DEBUG, "Population seeding by random genesis.");
-
-  if (!pop) die("Null pointer to population structure passed.");
-
-  for (i=0; i<pop->stable_size; i++)
-    {
-    adam = ga_get_free_entity(pop);
-    ga_entity_seed_random(pop, adam);
-    }
-
-  return TRUE;
-  }
-#endif
-
-
-#if 0
-/**********************************************************************
-  ga_population_seed_pdb()
-  synopsis:	Seed population structure with starting genes based
-		on structures from a set of PDB files.
-		NOTE: Should do this through the function defined
-		above instead.
-  parameters:
-  return:
-  last updated: 06/07/00
- **********************************************************************/
-
-boolean ga_population_seed_pdb( population *pop, const char *fname )
-  {
-  FILE          *fp;		/* File ptr */
-  char          *line=NULL;	/* Line buffer */
-  int           line_len;	/* Current buffer size */
-  molstruct     *mol;		/* Current molstruct structure */
-  int		pdb_count=0;	/* Number of pdb files read */
-  entity	*entity=NULL;	/* Entity being defined */
-
-  plog(LOG_DEBUG, "Population seeding by reading set of PDB structures.");
-  plog(LOG_FIXME, "BROKEN!");
-
-  if (!fname) die("Null pointer to filename passed.");
-  if (!pop) die("Null pointer to population structure passed.");
-
-  while (pdb_count < pop->stable_size)
-    {
-    /* Open file */
-    if( !(fp=fopen(fname,"r")) )
-      dief("Cannot open file of PDB filenames \"%s\".", fname);
-
-/*
- * Read lines.  Each specifies one filename except those starting with '#'
- * which are comment lines and are ignored
- */
-    while (!feof(fp) && pdb_count < pop->stable_size)
-      {
-      /* read line */
-      line=str_getline(fp, &line_len);
-
-      if (line_len<3)
-        { /* This is an ugly hack */
-        plog(LOG_DEBUG, "A line of garbage has been read.");
-        }
-      else
-        {
-        if (line[0] != '#')
-          {
-          plog(LOG_DEBUG, "Reading PDB file \"%s\"", line);
-
-          if ( !(mol = mol_read_pdb(line)) ) dief("Problem with PDB file \"%s\".", line);
-
-/* Get new entity structure, if needed */
-          if ( entity == NULL )
-            {
-            entity = ga_get_free_entity(pop);
-            }
-
-/* Find TM helices. */
-          if ( helga_split_mol_into_helices(entity, mol, pop->num_chromosomes, pop->len_chromosomes) )
-            {
-            pdb_count++;
-            entity = NULL;
-            }
-
-#if 0
-/* Encode TM helices into genes. */
-          helga_encode(entity, pop->num_chromosomes);
-#endif
-
-/* Deallocate the read structure */
-          mol_molstruct_free_all(mol);
-          }
-        else
-          {
-          plog(LOG_VERBOSE, "Comment read: \"%s\"", line);
-          }
-        }
-
-      plog(LOG_DEBUG, "%d PDB structures read.", pdb_count);
-
-      s_free(line);
-      }
-
-    plog(LOG_DEBUG, "After pass of input data we have %d structures (Want %d).\n", pdb_count, pop->stable_size);
-
-/* Remember to close the file. */
-    fclose(fp);
-    }
-
-/* Check */
-  if (pdb_count != pop->size)
-    {
-    dief("Population size is %d, but should be %d.", pop->size, pdb_count);
-    }
-
-/* Dereference entity structure -- no, no, no, never needed. */
-/*
-  if ( entity ) ga_entity_dereference(entity);
-*/
-
-  plog(LOG_DEBUG, "Population now contains %d members.", pop->size);
-
-  return TRUE;
-  }
-#endif
-
-
 /**********************************************************************
   ga_population_seed_soup()
   synopsis:	Seed a population structure with starting genes from
@@ -533,7 +403,7 @@ boolean ga_population_seed_soup(population *pop, const char *fname)
 
 #if 0
 /*
- * Open CRD format file
+ * Open soup file
  */
   FILE          *fp;		/* File ptr */
   if((fp=fopen(fname,"r"))==NULL)
@@ -568,6 +438,7 @@ boolean ga_write_soup(population *pop)
   synopsis:	Writes entire population and it's genetic data to disk.
 		Note: Currently does not store any of the userdata --
 		just stores the genes and fitness.
+		FIXME: Broken by chromosome datatype abstraction.
   parameters:
   return:
   last updated: 12/01/01
@@ -575,9 +446,8 @@ boolean ga_write_soup(population *pop)
 
 boolean ga_population_save(population *pop, char *fname)
   {
-  int		i, j, k;	/* Loop variables. */
-  FILE          *fp;		/* File handle. */
-  int		*chromosome;	/* Current chromosome. */
+  int		i;	/* Loop variables. */
+  FILE          *fp;	/* File handle. */
 
   plog(LOG_DEBUG, "Saving population to disk.");
   if (!fname) die("Null pointer to filename passed.");
@@ -592,7 +462,7 @@ boolean ga_population_save(population *pop, char *fname)
 /*
  * Program info.
  */
-  fprintf(fp, "ga_util.c ga_population_save(\"%s\")\n", fname);
+  fprintf(fp, "ga_core.c ga_population_save(\"%s\")\n", fname);
   fprintf(fp, "%s %s\n", VERSION_STRING, BUILD_DATE_STRING);
 
 /*
@@ -607,15 +477,12 @@ boolean ga_population_save(population *pop, char *fname)
   for (i=0; i<pop->size; i++)
     {
     fprintf(fp, "%f\n", pop->entity_iarray[i]->fitness);
+/*
     for (j=0; j<pop->num_chromosomes; j++)
       {
-      chromosome = pop->entity_iarray[i]->chromosome[j];
-
-      for (k=0; k<pop->len_chromosomes; k++)
-        fprintf(fp, "%d ", chromosome[k]);
-
-      fprintf(fp, "\n");
       }
+*/
+    fprintf(fp, "%s\n", pop->chromosome_to_string(pop, pop->entity_iarray[i]));
     plog(LOG_DEBUG, "Entity %d has fitness %f", i, pop->entity_iarray[i]->fitness);
     }
 
@@ -637,6 +504,7 @@ boolean ga_population_save(population *pop, char *fname)
   ga_population_read()
   synopsis:	Reads entire population and it's genetic data back
 		from disk.
+		FIXME: Broken by chromosome datatype abstraction.
   parameters:
   return:
   last updated: 06/07/00
@@ -644,6 +512,8 @@ boolean ga_population_save(population *pop, char *fname)
 
 population *ga_population_read(char *fname)
   {
+  population	*pop=NULL;		/* New population structure. */
+#if 0
   int		i, j, k;		/* Loop variables. */
   FILE          *fp;			/* File handle. */
   int		*chromosome;		/* Current chromosome. */
@@ -651,7 +521,6 @@ population *ga_population_read(char *fname)
   char		version_str[MAX_LINE_LEN], build_str[MAX_LINE_LEN];	/* Version details. */
   char  	test_str[MAX_LINE_LEN];	/* Test string. */
   int		max_size, size, stable_size, num_chromosomes, len_chromosomes;
-  population	*pop=NULL;		/* New population structure. */
   entity	*newentity;		/* New entity in new population. */
 
   plog(LOG_DEBUG, "Reading population from disk.");
@@ -667,7 +536,7 @@ population *ga_population_read(char *fname)
  * Program info.
  * FIXME: Potential buffer overflow.
  */
-  fscanf(fp, "ga_util.c ga_population_save(\"%[^\"]\")\n", origfname);
+  fscanf(fp, "ga_core.c ga_population_save(\"%[^\"]\")\n", origfname);
   fscanf(fp, "%s %s\n", version_str, build_str);
 
   plog(LOG_DEBUG, "Reading \"%s\", \"%s\", \"%s\"",
@@ -721,6 +590,7 @@ population *ga_population_read(char *fname)
   fclose(fp);
 
   plog(LOG_DEBUG, "Have read %d entities.", pop->size);
+#endif
 
   return pop;
   }
@@ -768,6 +638,8 @@ boolean ga_population_score_and_sort(population *pop)
   }
 
 
+#if 0
+FIXME: The following 3 functions need to be fixed for the new absracted chromosome types.
 /**********************************************************************
   ga_population_convergence_genotypes()
   synopsis:	Determine ratio of converged genotypes in population.
@@ -868,6 +740,7 @@ double ga_population_convergence_alleles( population *pop )
 
   return (double) converged/total;
   }
+#endif
 
 
 /**********************************************************************
@@ -1045,24 +918,15 @@ entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
 
 boolean ga_entity_setup(population *pop, entity *joe)
   {
-  int	i;	/* Loop over chromosomes. */
 
   if (!joe) die("Null pointer to entity structure passed.");
 
+/* Allocate chromosome structures. */
   if (joe->chromosome==NULL)
     {
-/*
- * This would be more efficient, in terms of memory usage, if
- * I used the individual length for each chromosome.
- */
-    joe->chromosome = s_malloc(pop->num_chromosomes*sizeof(int *));
-    joe->chromosome[0] = s_calloc(pop->num_chromosomes,
-                 pop->len_chromosomes*sizeof(int));
+    if (!pop->chromosome_constructor) die("Chromosome constructor not defined.");
 
-    for (i=1; i<pop->num_chromosomes; i++)
-      {
-      joe->chromosome[i] = &(joe->chromosome[i-1][pop->len_chromosomes]);
-      }
+    pop->chromosome_constructor(pop, joe);
     }
 
 /* Physical characteristics currently undefined. */
@@ -1254,11 +1118,14 @@ entity *ga_get_free_entity(population *pop)
 /**********************************************************************
   ga_copy_data()
   synopsis:	Copy one chromosome's portion of the data field of an
-		entity structure.  'Copies' NULL data safely.
+		entity structure to another entity structure.  (Copies
+		the portion of the phenome relating to that chromosome)
+		'Copies' NULL data safely.
 		The destination chromosomes must be filled in order.
 		If these entities are in differing populations, no
 		problems will occur provided that the
-		data_ref_incrementor callbacks are identical.
+		data_ref_incrementor callbacks are identical or at least
+		compatiable.
   parameters:
   return:
   last updated: 18/12/00
@@ -1277,6 +1144,27 @@ boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chrom
     dest->data = slink_append(dest->data, tmpdata);
     pop->data_ref_incrementor(tmpdata);
     }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_copy_chromosome()
+  synopsis:	Copy one chromosome between entities.
+		If these entities are in differing populations, no
+		problems will occur provided that the chromosome
+		datatypes match up.
+  parameters:
+  return:
+  last updated: 18/12/00
+ **********************************************************************/
+
+boolean ga_copy_chromosome( population *pop, entity *dest, entity *src,
+                            const int chromosome )
+  {
+
+  pop->chromosome_replicate(pop, dest, src, chromosome);
 
   return TRUE;
   }
@@ -1310,10 +1198,13 @@ boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *sr
  */
   for (i=0; i<pop->num_chromosomes; i++)
     {
+/*
     memcpy(dest->chromosome[i], src->chromosome[i],
            pop->len_chromosomes*sizeof(int));
+*/
 
     ga_copy_data(pop, dest, src, i);
+    ga_copy_chromosome(pop, dest, src, i);
     }
 
   return TRUE;
@@ -1344,9 +1235,12 @@ boolean ga_copy_entity_chromosome(population *pop, entity *dest, entity *src, in
 /*
  * Copy genetic and associated structural data.
  */
+/*
   memcpy(dest->chromosome[chromo], src->chromosome[chromo],
            pop->len_chromosomes*sizeof(int));
+*/
   ga_copy_data(pop, dest, src, chromo);
+  ga_copy_chromosome(pop, dest, src, chromo);
 
   return TRUE;
   }
@@ -1650,86 +1544,6 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
  **********************************************************************/
 
 /**********************************************************************
-  ga_genesis()
-  synopsis:	High-level function to create a new population and
-		perform the basic setup (i.e. initial seeding) required
-		for further optimisation and manipulation.
-  parameters:
-  return:	population, or NULL on failure.
-  last updated:	23/04/01
- **********************************************************************/
-
-population *ga_genesis(	const int		population_size,
-			const int		num_chromo,
-			const int		len_chromo,
-			const char		*fname,
-			GAgeneration_hook	generation_hook,
-			GAiteration_hook	iteration_hook,
-			GAdata_destructor	data_destructor,
-			GAdata_ref_incrementor	data_ref_incrementor,
-			GAevaluate		evaluate,
-			GAseed			seed,
-			GAadapt			adapt,
-			GAselect_one		select_one,
-			GAselect_two		select_two,
-			GAmutate		mutate,
-			GAcrossover		crossover,
-			GAreplace		replace )
-  {
-  population	*pop;	/* The new population structure. */
-
-  plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
-
-/*
- * Allocate and initialise a new population.
- * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
- */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
-
-/*
- * Define some callback functions.
- */
-  pop->generation_hook = generation_hook;
-  pop->iteration_hook = iteration_hook;
-
-  pop->data_destructor = data_destructor;
-  pop->data_ref_incrementor = data_ref_incrementor;
-
-  pop->evaluate = evaluate;
-  pop->seed = seed;
-  pop->adapt = adapt;
-  pop->select_one = select_one;
-  pop->select_two = select_two;
-  pop->mutate = mutate;
-  pop->crossover = crossover;
-  pop->replace = replace;
-
-/*
- * Seed the population.
- */
-  if (!seed)
-    {
-    plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
-    }
-  else
-    {
-    ga_population_seed(pop);
-    plog(LOG_VERBOSE, "Genesis has occured!");
-    }
-
-  return pop;
-  }
-
-
-/**********************************************************************
   ga_population_set_parameters()
   synopsis:	Sets the GA parameters for a population.
   parameters:
@@ -1841,8 +1655,7 @@ boolean ga_extinction(population *extinct)
       {
       if (extinct->entity_array[i].chromosome)
         {
-        s_free(extinct->entity_array[i].chromosome[0]);
-        s_free(extinct->entity_array[i].chromosome);
+        extinct->chromosome_destructor(extinct, &(extinct->entity_array[i]));
         }
       }
 
@@ -1882,137 +1695,6 @@ boolean ga_genocide(population *pop, int target_size)
     }
 
   return TRUE;
-  }
-
-
-/**********************************************************************
-  ga_diagnostics()
-  synopsis:	Diagnostics.
-  parameters:
-  return:	none
-  last updated:	02/02/01
- **********************************************************************/
-
-void ga_diagnostics(void)
-  {
-
-  printf("=== GA utility library =======================================\n");
-  printf("Build date:                %s\n", BUILD_DATE_STRING);
-  printf("GA_DEBUG:                  %d\n", GA_DEBUG);
-  printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);
-  printf("GA_UTIL_MIN_FITNESS:       %f\n", GA_UTIL_MIN_FITNESS);
-  printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
-  printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
-  printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
-  printf("--------------------------------------------------------------\n");
-  printf("structure                  sizeof\n");
-  printf("population                 %Zd\n", sizeof(population));
-  printf("entity                     %Zd\n", sizeof(entity));
-  printf("--------------------------------------------------------------\n");
-  if (pop_table)
-    {
-    printf("Population table:          defined\n");
-    printf("Size:                      %ud\n", table_count_items(pop_table));
-    }
-  else
-    {
-    printf("Population table:          undefined\n");
-    }
-  printf("--------------------------------------------------------------\n");
-
-  return;
-  }
-
-
-/**********************************************************************
-  ga_allele_search()
-  synopsis:	Perform complete systematic search on a given allele
-		in a given entity.  If initial solution is NULL, then
-		a random solution is generated (but use of that feature
-		is unlikely to be useful!).
-		The original entity will not be munged.
-                NOTE: max_val is the maximum value _+_ 1!
-  parameters:
-  return:	Best solution found.
-  last updated:	24/03/01
- **********************************************************************/
-
-entity *ga_allele_search(	population	*pop,
-				const int	chromosomeid,
-				const int	point,
-				const int 	min_val,
-				const int 	max_val,
-				entity		*initial )
-  {
-  int		val;			/* Current value for point. */
-  entity	*current, *best;	/* The solutions. */
-
-/* Checks. */
-/* FIXME: More checks needed. */
-  if ( !pop ) die("Null pointer to population structure passed.");
-
-  current = ga_get_free_entity(pop);	/* The 'working' solution. */
-  best = ga_get_free_entity(pop);	/* The best solution so far. */
-
-  plog(LOG_FIXME, "Systematic allele search algorithm is not parallelised.");
-
-/* Do we need to generate a random solution? */
-  if (!initial)
-    {
-    plog(LOG_VERBOSE, "Will perform systematic allele search with random starting solution.");
-
-    pop->seed(pop, best);
-    }
-  else
-    {
-    plog(LOG_VERBOSE, "Will perform systematic allele search.");
-
-    ga_copy_entity(pop, best, initial);
-    }
-
-/*
- * Copy best solution over current solution.
- */
-  ga_copy_entity(pop, current, best);
-  best->fitness=GA_UTIL_MIN_FITNESS;
-
-/*
- * Loop over the range of legal values.
- */
-  for (val = min_val; val < max_val; val++)
-    {
-    current->chromosome[chromosomeid][point] = val;
-    ga_entity_clear_data(pop, current, chromosomeid);
-
-    pop->evaluate(pop, current);
-
-/*
- * Should we keep this solution?
- */
-    if ( best->fitness < current->fitness )
-      { /* Copy this solution best solution. */
-      ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
-      }
-    else
-      { /* Copy best solution over current solution. */
-      ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
-      }
-
-    }
-
-  plog(LOG_VERBOSE,
-            "After complete search the best solution has fitness score of %f",
-            best->fitness );
-
-/*
- * Current no longer needed.  It is upto the caller to dereference the
- * optimum solution found.
- */
-  ga_entity_dereference(pop, current);
-
-  return best;
   }
 
 

@@ -42,7 +42,10 @@
 /*
  * Include remainder of this libraries headers.
  */
-#include "ga_util.h"
+#include "ga_core.h"
+
+#if HAVE_SLANG==1
 #include "ga_intrinsics.h"
+#endif
 
 #endif	/* GAUL_H_INCLUDED */

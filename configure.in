@@ -32,8 +32,8 @@ dnl ***************************************************************
 # require autoconf 2.13
 AC_PREREQ(2.13)
 
-# init autoconf (and check for presence of helga.c)
-AC_INIT(src/ga_util.c)
+# init autoconf (and check for presence of gaul.h - the public header file)
+AC_INIT(src/gaul.h)
 
 PACKAGE=gaul
 
@@ -229,7 +229,7 @@ if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(HAVE_SLANG,1)
   LIBS="$LIBS -lslang"
-  INCLUDES="$INCLUDES -I/usr/include/slang/"],
+  INCLUDES="$INCLUDES -I/usr/include/slang/"
   AC_CHECK_LIB(slang, SLang_init_slang,
     [LIBS="$LIBS -lslang"
      INCLUDES="$INCLUDES -I/usr/include/slang/"],

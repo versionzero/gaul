@@ -28,7 +28,7 @@
 
  **********************************************************************/
 
-#include "ga_util.h"
+#include "ga_core.h"
 
 /**********************************************************************
   ga_seed_boolean_random()
@@ -52,7 +52,7 @@ void ga_seed_boolean_random(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      adam->chromosome[chromo][point] = random_boolean();
+      ((boolean *)adam->chromosome[chromo])[point] = random_boolean();
       }
     }
 
@@ -82,7 +82,7 @@ void ga_seed_integer_random(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      adam->chromosome[chromo][point] = random_rand();
+      ((int *)adam->chromosome[chromo])[point] = random_rand();
       }
     }
 
@@ -112,7 +112,7 @@ void ga_seed_integer_zero(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      adam->chromosome[chromo][point] = 0;
+      ((int *)adam->chromosome[chromo])[point] = 0;
       }
     }
 
