@@ -4,6 +4,7 @@
 
   nnevolve - GAUL example: Evolve a fixed topology neural network.
   Copyright ©2002, The Regents of the University of California.
+  All rights reserved.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
   The latest version of this program should be available at:

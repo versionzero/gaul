@@ -4,6 +4,7 @@
 
   pingpong_tabu2 - Test/example program for GAUL.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

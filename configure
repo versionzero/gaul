@@ -10770,6 +10770,7 @@ done
 
 
 
+
 for ac_func in fdopen gethostname getpwuid gettimeofday select \
                atexit on_exit \
                waitpid snooze \
@@ -10780,6 +10781,7 @@ for ac_func in fdopen gethostname getpwuid gettimeofday select \
                min max \
                index rindex \
                setlocale \
+	       sincos \
                snprintf \
                strchr strrchr strcat \
                strcmp strcpy strpbrk strsep \
@@ -10871,7 +10873,7 @@ case "$target" in
     is_mingw="no" ;;
 esac
 if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qnx" = "xyes" ); then
-  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
+  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW/QNX Neutrino.
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_ITOA 1
@@ -10945,79 +10947,11 @@ echo "${ECHO_T}$ac_cv_func_itoa" >&6
 
 fi
 
-if test "x$CC" = "xicc"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_SINCOS 1
-_ACEOF
-	# I have some problems with implicit definition of sincos() with the Intel C++.
-else
-  echo "$as_me:$LINENO: checking for sincos " >&5
-echo $ECHO_N "checking for sincos ... $ECHO_C" >&6
-if test "${ac_cv_func_sincos_+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-#include "confdefs.h"
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char sincos  (); below.  */
-#include <assert.h>
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char sincos  ();
-char (*f) ();
-
-#ifdef F77_DUMMY_MAIN
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-#endif
-int
-main ()
-{
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_sincos ) || defined (__stub___sincos )
-choke me
+#if test "x$CC" = "xicc"; then
+#  AC_DEFINE(HAVE_SINCOS,1,[Whether sincos() is available])	# I have some problems with implicit definition of sincos() with the Intel C++.
 #else
-f = sincos ;
-#endif
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_sincos_=yes
-else
-  echo "$as_me: failed program was:" >&5
-cat conftest.$ac_ext >&5
-ac_cv_func_sincos_=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_sincos_" >&5
-echo "${ECHO_T}$ac_cv_func_sincos_" >&6
-
-fi
+#  AC_CHECK_FUNC( sincos )
+#fi
 
 # Fix defines for case that the Sun Forte C compiler is being used on Solaris.
 if test "x$CC" = "xcc"; then

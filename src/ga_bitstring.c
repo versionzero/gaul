@@ -4,6 +4,7 @@
 
   ga_bitstring - GAUL's low-level bitstring routines.
   Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

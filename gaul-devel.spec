@@ -9,6 +9,7 @@
 #
 # GAUL - Genetic Algorithm Utility Library
 # Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+# All rights reserved.
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -33,7 +34,7 @@ Name:		gaul-devel
 Summary:	Genetic Algorithm Utility Library
 Version:	%{PACKAGE_VERSION}
 Release:	%{RELEASE}
-License:	(c) 2000-2003 Stewart Adcock.  Licensed under the terms of the GPL.
+License:	Copyright (c) 2000-2003 Stewart Adcock.  Licensed under terms of the GNU GPL.
 Vendor:		Stewart Adcock
 Packager:	"Stewart Adcock" <gaul@linux-domain.com>
 Group:		Scientific/Engineering

@@ -4,6 +4,7 @@
 
   str_util - Portable string handling, analysis and manipulation library.
   Copyright ©1999-2003, Stewart Adcock <stewart@linux-doamin.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

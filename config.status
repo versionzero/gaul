@@ -782,7 +782,7 @@ ${ac_dA}MAJOR_VERSION${ac_dB}MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1842${ac_dD}
 ${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}3${ac_dD}
 ${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0.ucsd.edu 2.4.18-19.8.0smp #1 SMP Thu Dec 12 04:36:25 EST 2002 i686 i686 i386 GNU/Linux"${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"13/01/03"${ac_dD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"17/01/03"${ac_dD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1842-3"${ac_dD}
@@ -870,6 +870,7 @@ t clr
 ${ac_dA}HAVE_INDEX${ac_dB}HAVE_INDEX${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_RINDEX${ac_dB}HAVE_RINDEX${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SETLOCALE${ac_dB}HAVE_SETLOCALE${ac_dC}1${ac_dD}
+${ac_dA}HAVE_SINCOS${ac_dB}HAVE_SINCOS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SNPRINTF${ac_dB}HAVE_SNPRINTF${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCHR${ac_dB}HAVE_STRCHR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRRCHR${ac_dB}HAVE_STRRCHR${ac_dC}1${ac_dD}
@@ -888,7 +889,6 @@ ${ac_dA}HAVE_STRCSPN${ac_dB}HAVE_STRCSPN${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRERROR${ac_dB}HAVE_STRERROR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRSTR${ac_dB}HAVE_STRSTR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_VSNPRINTF${ac_dB}HAVE_VSNPRINTF${ac_dC}1${ac_dD}
-${ac_dA}HAVE_SINCOS${ac_dB}HAVE_SINCOS${ac_dC}1${ac_dD}
 ${ac_dA}SUN_FORTE_C${ac_dB}SUN_FORTE_C${ac_dC}0${ac_dD}
 ${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_BCMP${ac_dB}HAVE_BCMP${ac_dC}1${ac_dD}
@@ -923,7 +923,7 @@ ${ac_uA}MAJOR_VERSION${ac_uB}MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1842${ac_uD}
 ${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}3${ac_uD}
 ${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0.ucsd.edu 2.4.18-19.8.0smp #1 SMP Thu Dec 12 04:36:25 EST 2002 i686 i686 i386 GNU/Linux"${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"13/01/03"${ac_uD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"17/01/03"${ac_uD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1842-3"${ac_uD}
@@ -1011,6 +1011,7 @@ t clr
 ${ac_uA}HAVE_INDEX${ac_uB}HAVE_INDEX${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_RINDEX${ac_uB}HAVE_RINDEX${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SETLOCALE${ac_uB}HAVE_SETLOCALE${ac_uC}1${ac_uD}
+${ac_uA}HAVE_SINCOS${ac_uB}HAVE_SINCOS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SNPRINTF${ac_uB}HAVE_SNPRINTF${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCHR${ac_uB}HAVE_STRCHR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRRCHR${ac_uB}HAVE_STRRCHR${ac_uC}1${ac_uD}
@@ -1029,7 +1030,6 @@ ${ac_uA}HAVE_STRCSPN${ac_uB}HAVE_STRCSPN${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRERROR${ac_uB}HAVE_STRERROR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRSTR${ac_uB}HAVE_STRSTR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_VSNPRINTF${ac_uB}HAVE_VSNPRINTF${ac_uC}1${ac_uD}
-${ac_uA}HAVE_SINCOS${ac_uB}HAVE_SINCOS${ac_uC}1${ac_uD}
 ${ac_uA}SUN_FORTE_C${ac_uB}SUN_FORTE_C${ac_uC}0${ac_uD}
 ${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_BCMP${ac_uB}HAVE_BCMP${ac_uC}1${ac_uD}

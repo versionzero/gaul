@@ -4,6 +4,7 @@
 
   gaul - Genetic Algorithm Utility Library.
   Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

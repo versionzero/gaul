@@ -132,7 +132,7 @@
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
 
-/* Whether sincos() is available */
+/* Define to 1 if you have the `sincos' function. */
 #undef HAVE_SINCOS
 
 /* Whether S-Lang is installed. */

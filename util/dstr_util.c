@@ -4,6 +4,7 @@
 
   dstr_util - Dynamic string library.
   Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
