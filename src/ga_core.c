@@ -681,7 +681,7 @@ boolean ga_population_seed_soup(population *pop, const char *fname)
  */
   FILE          *fp;		/* File ptr */
   if((fp=fopen(fname,"r"))==NULL)
-    dief("Cannot open SOUP file \"%s\".", fname);
+    dief("Unable to open SOUP file \"%s\".", fname);
 #endif
 
 
@@ -912,7 +912,7 @@ boolean ga_population_write(population *pop, char *fname)
  * Open output file.
  */
   if( !(fp=fopen(fname,"w")) )
-    dief("Cannot open population file \"%s\" for output.", fname);
+    dief("Unable to open population file \"%s\" for output.", fname);
 
 /*
  * Program info.
@@ -1043,7 +1043,7 @@ static population *ga_population_read_001(char *fname)
  * Open output file.
  */
   if( !(fp=fopen(fname,"r")) )
-    dief("Cannot open population file \"%s\" for input.", fname);
+    dief("Unable to open population file \"%s\" for input.", fname);
 
 /*
  * Program info.
@@ -1175,7 +1175,7 @@ population *ga_population_read(char *fname)
  * Open output file.
  */
   if( !(fp=fopen(fname,"r")) )
-    dief("Cannot open population file \"%s\" for input.", fname);
+    dief("Unable to open population file \"%s\" for input.", fname);
 
 /*
  * Program info.
@@ -1311,7 +1311,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
  * Open output file.
  */
   if( !(fp=fopen(fname,"w")) )
-    dief("Cannot open entity file \"%s\" for output.", fname);
+    dief("Unable to open entity file \"%s\" for output.", fname);
 
 /*
  * Write stuff.
@@ -1359,7 +1359,7 @@ entity *ga_entity_read(population *pop, char *fname)
  * Open output file.
  */
   if( !(fp=fopen(fname,"w")) )
-    dief("Cannot open entity file \"%s\" for output.", fname);
+    dief("Unable to open entity file \"%s\" for output.", fname);
 
 /*
  * Read stuff.

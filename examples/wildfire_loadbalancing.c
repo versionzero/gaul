@@ -330,7 +330,7 @@ boolean wildfire_score(population *pop, entity *entity)
  * Load-balancing code!
  */
 
-  while (load1>1.05*NUM_PROC || load15>1.5*NUM_PROC)
+  while (load1>0.99*NUM_PROC || load15>1.5*NUM_PROC)
     {
     if (str!=NULL)usleep(2500000/NUM_PROC);
 
