@@ -30,7 +30,11 @@
 
 		These functions are thread-safe.
 
-  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		Note that the user time will be incorrect after about
+		72 minutes.
+
+  Updated:	06 Jun 2003 SAA	Reduced number of calls to the clock() function.
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA timer_diagnostics() added.
 		07 Feb 2002 SAA	Rewrote S-Lang stuff.
 		06 Feb 2002 SAA	First version.
@@ -76,7 +80,7 @@ void timer_start(chrono_t *t)
   t->begin_clock = t->save_clock = clock();
   t->begin_time = t->save_time = time(NULL);
 
-  plog(LOG_NORMAL, "Timer started: %d", clock());
+  plog(LOG_NORMAL, "Timer started: %d", t->begin_clock);
 
   return;
   }
@@ -87,19 +91,21 @@ void timer_start(chrono_t *t)
   synopsis:	Read timer.
   parameters:	chrono_t	t	The timer
   return:	user time in seconds.
-  last updated:	06 Feb 2002
+  last updated:	06 Jun 2003
  **********************************************************************/
 
 double timer_check(chrono_t *t)
   {
   double        user_time, real_time;
+  clock_t	clock = clock();
+  time_t	time = time();
 
-  plog(LOG_NORMAL, "Timer checked: %d", clock());
+  plog(LOG_NORMAL, "Timer checked: %d", clock);
 
-  user_time = (clock() - t->save_clock) / (double) CLOCKS_PER_SEC;
-  real_time = difftime(time(NULL), t->save_time);
-  t->save_clock = clock();
-  t->save_time = time(NULL);
+  user_time = (clock - t->save_clock) / (double) CLOCKS_PER_SEC;
+  real_time = difftime(time, t->save_time);
+  t->save_clock = clock;
+  t->save_time = time;
 
   plog(LOG_NORMAL, "User time: %f seconds.", user_time);
   plog(LOG_NORMAL, "Real time: %f seconds.", real_time);
