@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "02/07/03"
+#define BUILD_DATE_STRING "06/07/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -344,7 +344,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.20-18.8 #1 Thu May 29 07:20:39 EDT 2003 i686 athlon i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

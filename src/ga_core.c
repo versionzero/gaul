@@ -382,6 +382,9 @@ population *ga_population_clone_empty(population *pop)
   newpop->mutation_ratio = pop->mutation_ratio;
   newpop->migration_ratio = pop->migration_ratio;
 
+  newpop->scheme = pop->scheme;
+  newpop->elitism = pop->elitism;
+
 /*
  * Clone the callback functions.
  */
@@ -408,6 +411,101 @@ population *ga_population_clone_empty(population *pop)
   newpop->replace = pop->replace;
 
 /*
+ * Copy optional parameter data.
+ */
+  if (newpop->tabu_params == NULL)
+    {
+    newpop->tabu_params = NULL;
+    }
+  else
+    {
+    newpop->tabu_params = s_malloc(sizeof(ga_tabu_t));
+
+    newpop->tabu_params->tabu_accept = pop->tabu_params->tabu_accept;
+    newpop->tabu_params->list_length = pop->tabu_params->list_length;
+    newpop->tabu_params->search_count = pop->tabu_params->search_count;
+    }
+
+  if (newpop->sa_params == NULL)
+    {
+    newpop->sa_params = NULL;
+    }
+  else
+    {
+    newpop->sa_params = s_malloc(sizeof(ga_sa_t));
+    newpop->sa_params->sa_accept = pop->sa_params->sa_accept;
+    newpop->sa_params->initial_temp = pop->sa_params->initial_temp;
+    newpop->sa_params->final_temp = pop->sa_params->final_temp;
+    newpop->sa_params->temp_step = pop->sa_params->temp_step;
+    newpop->sa_params->temp_freq = pop->sa_params->temp_freq;
+    newpop->sa_params->temperature = pop->sa_params->temperature;
+    }
+
+  if (newpop->climbing_params == NULL)
+    {
+    newpop->climbing_params = NULL;
+    }
+  else
+    {
+    newpop->climbing_params = s_malloc(sizeof(ga_climbing_t));
+
+    newpop->climbing_params->mutate_allele = pop->climbing_params->mutate_allele;
+    }
+
+  if (newpop->simplex_params == NULL)
+    {
+    newpop->simplex_params = NULL;
+    }
+  else
+    {
+    newpop->simplex_params = s_malloc(sizeof(ga_simplex_t));
+
+    newpop->climbing_params->mutate_allele = pop->climbing_params->mutate_allele;
+    newpop->simplex_params->to_double = pop->simplex_params->to_double;
+    newpop->simplex_params->from_double = pop->simplex_params->from_double;
+    newpop->simplex_params->dimensions = pop->simplex_params->dimensions;
+    }
+
+  if (newpop->dc_params == NULL)
+    {
+    newpop->dc_params = NULL;
+    }
+  else
+    {
+    newpop->dc_params = s_malloc(sizeof(ga_dc_t));
+
+    newpop->dc_params->compare = pop->dc_params->compare;
+    }
+
+  if (newpop->gradient_params == NULL)
+    {
+    newpop->gradient_params = NULL;
+    }
+  else
+    {
+    newpop->gradient_params = s_malloc(sizeof(ga_gradient_t));
+
+    newpop->gradient_params->to_double = newpop->gradient_params->to_double;
+    newpop->gradient_params->from_double = newpop->gradient_params->from_double;
+    newpop->gradient_params->gradient = newpop->gradient_params->gradient;
+    newpop->gradient_params->step_size = newpop->gradient_params->step_size;
+    newpop->gradient_params->dimensions = newpop->gradient_params->dimensions;
+    }
+
+  if (newpop->search_params == NULL)
+    {
+    newpop->search_params = NULL;
+    }
+  else
+    {
+    newpop->search_params = s_malloc(sizeof(ga_search_t));
+
+    newpop->search_params->scan_chromosome = pop->search_params->scan_chromosome;
+    newpop->search_params->chromosome_state = 0;
+    newpop->search_params->allele_state = 0;
+    }
+
+/*
  * Allocate arrays etc.
  */
   newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*));
@@ -422,12 +520,6 @@ population *ga_population_clone_empty(population *pop)
     newpop->entity_array[i] = NULL;
     newpop->entity_iarray[i] = NULL;
     }
-
-/*
- * Wipe optional parameter data.
- */
-  newpop->tabu_params = NULL;
-  newpop->sa_params = NULL;
 
 /*
  * Add this new population into the population table.
