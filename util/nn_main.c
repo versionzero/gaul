@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  Added some new options.
+  Last Updated:	04 Apr 2002 SAA write_usage() tweaked slightly.
+		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  Added some new options.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
   		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
 		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
@@ -173,11 +174,11 @@ void write_usage(void)
          "Copyright ©2001-2002, Regents of the Universtity of California.\n"
          "primary Author: \"Stewart Adcock\" <stewart@linux-domain.com>\n"
          "\n"
-         "nn switches...\n"
+         "Usage: nn [switches...]\n"
          "\n"
          "Available switches are:\n"
          "    --version              Version information.\n"
-         "    --[help|usage]         This stuff.\n"
+         "    --{help,usage}         This stuff.\n"
          "    --diagnostics          Display diagnostic information.\n"
          "    --seed INTEGER         PRNG seed value.\n"
          "    --epochs INTEGER       Maximum number of 'stopped-training' epochs.\n"
