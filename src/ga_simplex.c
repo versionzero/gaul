@@ -116,13 +116,13 @@ int ga_simplex(	population		*pop,
   int		iteration=0;		/* Current iteration number. */
   int		i, j;			/* Index into putative solution array. */
   entity	**putative;		/* Current working solutions. */
-  entity	*new, *new2;		/* New putative solutions. */
+  entity	*new1, *new2;		/* New putative solutions. */
   entity	*tmpentity;		/* Used to swap working solutions. */
   double	*tmpdoubleptr;		/* Used to swap working solutions. */
   int		num_points;		/* Number of search points. */
   double	**putative_d, *putative_d_buffer;	/* Storage for double arrays. */
   double	*average;		/* Vector average of solutions. */
-  double	*new_d, *new2_d;	/* New putative solutions. */
+  double	*new1_d, *new2_d;	/* New putative solutions. */
   int           first=0, last;		/* Indices into solution arrays. */
   boolean       done=FALSE;		/* Whether the shuffle sort is complete. */
   boolean	did_replace;		/* Whether worst solution was replaced. */
@@ -149,7 +149,7 @@ int ga_simplex(	population		*pop,
 
   putative_d[0] = putative_d_buffer;
   average = &(putative_d_buffer[num_points*pop->simplex_params->dimensions]);
-  new_d = &(putative_d_buffer[(num_points+1)*pop->simplex_params->dimensions]);
+  new1_d = &(putative_d_buffer[(num_points+1)*pop->simplex_params->dimensions]);
   new2_d = &(putative_d_buffer[(num_points+2)*pop->simplex_params->dimensions]);
 
   for (i=1; i<num_points; i++)
@@ -158,7 +158,7 @@ int ga_simplex(	population		*pop,
     putative_d[i] = &(putative_d_buffer[i*pop->simplex_params->dimensions]);
     }
 
-  new = ga_get_free_entity(pop);
+  new1 = ga_get_free_entity(pop);
   new2 = ga_get_free_entity(pop);
 
 /* Do we need to generate a random starting solution? */
@@ -330,19 +330,19 @@ printf("DEBUG: restarting search.\n");
 /*
  * Evaluate the function at this reflected point.  
  */
-    pop->simplex_params->from_double(pop, new, new_d);
-    pop->evaluate(pop, new);
+    pop->simplex_params->from_double(pop, new1, new1_d);
+    pop->evaluate(pop, new1);
 
-    if (new->fitness > putative[0]->fitness)
+    if (new1->fitness > putative[0]->fitness)
       {
 /*
  * The new solution is fitter than the previously fittest solution, so attempt an 
  * additional extrapolation by a factor alpha.
  */
-printf("DEBUG: new (%f) is fitter than p0 ( %f )\n", new->fitness, putative[0]->fitness);
+printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);
 
       for (j = 0; j < pop->simplex_params->dimensions; j++)
-        new2_d[j] = (1.0 + pop->simplex_params->alpha) * new_d[j] -
+        new2_d[j] = (1.0 + pop->simplex_params->alpha) * new1_d[j] -
                     pop->simplex_params->alpha * putative_d[num_points-1][j];
 
       pop->simplex_params->from_double(pop, new2, new2_d);
@@ -386,23 +386,23 @@ printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]
           putative_d[j]=putative_d[j-1];
           }
 
-        putative[0] = new;
+        putative[0] = new1;
         putative_d[0] = new_d;
 
-        new = tmpentity;
+        new1 = tmpentity;
         new_d = tmpdoubleptr;
         }
       }
-    else if (new->fitness < putative[pop->simplex_params->dimensions-1]->fitness)
+    else if (new1->fitness < putative[pop->simplex_params->dimensions-1]->fitness)
       {
 /*
  * The reflected point is worse than the second-least fit.  
  */
-printf("DEBUG: new (%f) is less fit than p(n-1) ( %f )\n", new->fitness, putative[pop->simplex_params->dimensions-1]->fitness);
+printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions-1]->fitness);
 
       did_replace = FALSE;
 
-      if (new->fitness > putative[pop->simplex_params->dimensions]->fitness)
+      if (new1->fitness > putative[pop->simplex_params->dimensions]->fitness)
         {
 /*
  * It is better than the least fit, so use it to replace the
@@ -414,23 +414,23 @@ printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dim
         tmpentity = putative[pop->simplex_params->dimensions];
         tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
 
-        putative[pop->simplex_params->dimensions] = new;
-        putative_d[pop->simplex_params->dimensions] = new_d;
+        putative[pop->simplex_params->dimensions] = new1;
+        putative_d[pop->simplex_params->dimensions] = new1_d;
 
-        new = tmpentity;
-        new_d = tmpdoubleptr;
+        new1 = tmpentity;
+        new1_d = tmpdoubleptr;
         }
 /*
  * Perform a contraction of the simplex along one dimension, away from worst point.
  */
       for (j = 0; j < num_points; j++)
-        new_d[j] = (1.0 - pop->simplex_params->beta) * average[j] +
+        new1_d[j] = (1.0 - pop->simplex_params->beta) * average[j] +
                    pop->simplex_params->beta * putative_d[num_points-1][j];
 
-      pop->simplex_params->from_double(pop, new, new_d);
-      pop->evaluate(pop, new);
+      pop->simplex_params->from_double(pop, new1, new1_d);
+      pop->evaluate(pop, new1);
 
-      if (new->fitness > putative[pop->simplex_params->dimensions]->fitness)
+      if (new1->fitness > putative[pop->simplex_params->dimensions]->fitness)
         {
 /*
  * The contraction gave an improvement, so accept it by
@@ -438,9 +438,9 @@ printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dim
  */
         did_replace = TRUE;
 
-printf("DEBUG: contracted new (%f) is fitter than p(n) ( %f )\n", new->fitness, putative[pop->simplex_params->dimensions]->fitness);
+printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions]->fitness);
         i = 0;
-        while (putative[i]->fitness > new->fitness) i++;
+        while (putative[i]->fitness > new1->fitness) i++;
 
         tmpentity = putative[pop->simplex_params->dimensions];
         tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
@@ -451,11 +451,11 @@ printf("DEBUG: contracted new (%f) is fitter than p(n) ( %f )\n", new->fitness, 
           putative_d[j]=putative_d[j-1];
           }
 
-        putative[i] = new;
-        putative_d[i] = new_d;
+        putative[i] = new1;
+        putative_d[i] = new1_d;
 
-        new = tmpentity;
-        new_d = tmpdoubleptr;
+        new1 = tmpentity;
+        new1_d = tmpdoubleptr;
         }
 
       if (did_replace == FALSE)
@@ -464,7 +464,7 @@ printf("DEBUG: contracted new (%f) is fitter than p(n) ( %f )\n", new->fitness, 
  * The new solution is worse than the previous worse.  So, contract
  * toward the average point.
  */
-printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
+printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);
 
         for (i = 1; i < num_points; i++)
           {
@@ -499,14 +499,14 @@ printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
  * Replace the old worst solution by inserting the new solution at the
  * correct position.
  */
-printf("DEBUG: new (%f) is fitter than worst 2\n", new->fitness);
+printf("DEBUG: new1 (%f) is fitter than worst 2\n", new1->fitness);
       for (j=0; j < pop->simplex_params->dimensions; j++)
         printf("%d fitness = %f\n", j, putative[j]->fitness);
 
       i = 0;
-      while (putative[i]->fitness > new->fitness) i++;
+      while (putative[i]->fitness > new1->fitness) i++;
 
-printf("DEBUG: new inserted at position %d\n", i);
+printf("DEBUG: new1 inserted at position %d\n", i);
 
       tmpentity = putative[pop->simplex_params->dimensions];
       tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
@@ -517,11 +517,11 @@ printf("DEBUG: new inserted at position %d\n", i);
         putative_d[j]=putative_d[j-1];
         }
 
-      putative[i] = new;
-      putative_d[i] = new_d;
+      putative[i] = new1;
+      putative_d[i] = new1_d;
 
-      new = tmpentity;
-      new_d = tmpdoubleptr;
+      new1 = tmpentity;
+      new1_d = tmpdoubleptr;
       }
 
 /*
@@ -542,7 +542,7 @@ printf("DEBUG: new inserted at position %d\n", i);
 /*
  * Cleanup.
  */
-  ga_entity_dereference(pop, new);
+  ga_entity_dereference(pop, new1);
   ga_entity_dereference(pop, new2);
 
   for (i=0; i<num_points; i++)

@@ -107,8 +107,8 @@ int ga_steepestascent(	population	*pop,
   int		i;			/* Index into arrays. */
   double	*current_d;		/* Current iteration solution array. */
   double	*current_g;		/* Current iteration gradient array. */
-  entity	*new;			/* New putative solution. */
-  double	*new_d;			/* New putative solution array. */
+  entity	*putative;		/* New solution. */
+  double	*putative_d;		/* New solution array. */
   entity	*tmpentity;		/* Used to swap working solutions. */
   double	*tmpdoubleptr;		/* Used to swap working solutions. */
   double	*buffer;		/* Storage for double arrays. */
@@ -133,10 +133,10 @@ int ga_steepestascent(	population	*pop,
   buffer = s_malloc(sizeof(double)*pop->gradient_params->dimensions*3);
 
   current_d = buffer;
-  new_d = &(buffer[pop->gradient_params->dimensions]);
+  putative_d = &(buffer[pop->gradient_params->dimensions]);
   current_g = &(buffer[pop->gradient_params->dimensions*2]);
 
-  new = ga_get_free_entity(pop);
+  putative = ga_get_free_entity(pop);
 
 /* Do we need to generate a random starting solution? */
   if (current==NULL)
@@ -186,18 +186,18 @@ int ga_steepestascent(	population	*pop,
     iteration++;
 
     for( i=0; i<pop->gradient_params->dimensions; i++ )
-      new_d[i]=current_d[i]+step_size*current_g[i];
+      putative_d[i]=current_d[i]+step_size*current_g[i];
 
-    pop->gradient_params->from_double(pop, new, new_d);
-    pop->evaluate(pop, new);
+    pop->gradient_params->from_double(pop, putative, putative_d);
+    pop->evaluate(pop, putative);
 
 #if GAUL_DEBUG>2
     printf("DEBUG: current_d = %f %f %f %f\n", current_d[0], current_d[1], current_d[2], current_d[3]);
     printf("DEBUG: current_g = %f %f %f %f grms = %f\n", current_g[0], current_g[1], current_g[2], current_g[3], grms);
-    printf("DEBUG: new_d = %f %f %f %f fitness = %f\n", new_d[0], new_d[1], new_d[2], new_d[3], new->fitness);
+    printf("DEBUG: putative_d = %f %f %f %f fitness = %f\n", putative_d[0], putative_d[1], putative_d[2], putative_d[3], putative->fitness);
 #endif
 
-    if ( current->fitness > new->fitness )
+    if ( current->fitness > putative->fitness )
       {	/* New solution is worse. */
 
       do
@@ -206,15 +206,15 @@ int ga_steepestascent(	population	*pop,
         printf("DEBUG: step_size = %e\n", step_size);
 
         for( i=0; i<pop->gradient_params->dimensions; i++ )
-          new_d[i]=current_d[i]+step_size*current_g[i];
+          putative_d[i]=current_d[i]+step_size*current_g[i];
 
-        pop->gradient_params->from_double(pop, new, new_d);
-        pop->evaluate(pop, new);
+        pop->gradient_params->from_double(pop, putative, putative_d);
+        pop->evaluate(pop, putative);
 
 #if GAUL_DEBUG>2
-        printf("DEBUG: new_d = %f %f %f %f fitness = %f\n", new_d[0], new_d[1], new_d[2], new_d[3], new->fitness);
+        printf("DEBUG: putative_d = %f %f %f %f fitness = %f\n", putative_d[0], putative_d[1], putative_d[2], putative_d[3], putative->fitness);
 #endif
-        } while( current->fitness > new->fitness && step_size > ApproxZero);
+        } while( current->fitness > putative->fitness && step_size > ApproxZero);
 
       if (step_size <= ApproxZero && grms <= ApproxZero) force_terminate=TRUE;
       }
@@ -228,12 +228,12 @@ int ga_steepestascent(	population	*pop,
 
 /* Store improved solution. */
     tmpentity = current;
-    current = new;
-    new = tmpentity;
+    current = putative;
+    putative = tmpentity;
 
     tmpdoubleptr = current_d;
-    current_d = new_d;
-    new_d = tmpdoubleptr;
+    current_d = putative_d;
+    putative_d = tmpdoubleptr;
 
     grms = pop->gradient_params->gradient(pop, current, current_d, current_g);
 
@@ -249,7 +249,7 @@ int ga_steepestascent(	population	*pop,
 /*
  * Cleanup.
  */
-  ga_entity_dereference(pop, new);
+  ga_entity_dereference(pop, putative);
 
   s_free(buffer);
 

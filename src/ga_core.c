@@ -191,7 +191,7 @@ static struct func_lookup lookup[]={
 
 static void destruct_list(population *pop, SLList *list)
   {
-  SLList        *this;		/* Current list element */
+  SLList        *present;	/* Current list element */
   int		num_destroyed;	/* Count number of things destroyed. */
   vpointer	data;		/* Data in item. */
 
@@ -205,16 +205,16 @@ static void destruct_list(population *pop, SLList *list)
   if ( pop->data_destructor )
     {
     num_destroyed = 0;
-    this=list;
+    present=list;
 
-    while(this!=NULL)
+    while(present!=NULL)
       {
-      if ((data = slink_data(this)))
+      if ((data = slink_data(present)))
         {
         pop->data_destructor(data);
         num_destroyed++;
         }
-      this=slink_next(this);
+      present=slink_next(present);
       }
 
 #if GA_DEBUG>2
@@ -1441,7 +1441,7 @@ entity *ga_get_free_entity(population *pop)
   {
   int		new_max_size;	/* Increased maximum number of entities. */
   int		i;
-  entity	*new;		/* Unused entity structure. */
+  entity	*fresh;		/* Unused entity structure. */
 
 /*
   plog(LOG_DEBUG, "Locating free entity structure.");
@@ -1476,20 +1476,20 @@ entity *ga_get_free_entity(population *pop)
     }
 
 /* Prepare it. */
-  new = mem_chunk_alloc(pop->entity_chunk);
+  fresh = mem_chunk_alloc(pop->entity_chunk);
 
-  pop->entity_array[pop->free_index] = new;
-  ga_entity_setup(pop, new);
+  pop->entity_array[pop->free_index] = fresh;
+  ga_entity_setup(pop, fresh);
 
 /* Store in lowest free slot in entity_iarray */
-  pop->entity_iarray[pop->size] = new;
+  pop->entity_iarray[pop->size] = fresh;
 
 /* Population is bigger now! */
   pop->size++;
 
 /*  printf("ENTITY %d ALLOCATED.\n", pop->free_index);*/
 
-  return new;
+  return fresh;
   }
 
 
@@ -2678,7 +2678,7 @@ vpointer ga_population_get_data(population *pop)
 
 boolean ga_entity_set_data(population *pop, entity *e, SLList *data)
   {
-  SLList	*this;		/* Current list element. */
+  SLList	*present;		/* Current list element. */
 
   if ( !pop ) return FALSE;
   if ( !e ) return FALSE;
@@ -2687,11 +2687,11 @@ boolean ga_entity_set_data(population *pop, entity *e, SLList *data)
     {
     if (pop->data_destructor)
       {
-      this = data;
-      while (this!=NULL)
+      present = data;
+      while (present!=NULL)
         {
-        pop->data_destructor(slink_data(this));
-        this = slink_next(this);
+        pop->data_destructor(slink_data(present));
+        present = slink_next(present);
         }
       }
     slink_free_all(e->data);

@@ -3344,7 +3344,7 @@ entity *ga_metropolis_mutation(	population		*pop,
 				const int 		temperature)
   {
   int		iteration=0;			/* Current iteration number. */
-  entity	*current, *best, *new;		/* The solutions. */
+  entity	*current, *best, *fresh;	/* The solutions. */
   entity	*temp=NULL;			/* Used for swapping current and new. */
 #if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
@@ -3397,7 +3397,7 @@ entity *ga_metropolis_mutation(	population		*pop,
  * Copy best solution found over current solution.
  */
   ga_entity_copy(pop, current, best);
-  new = ga_get_free_entity(pop);
+  fresh = ga_get_free_entity(pop);
 
 /* Do all the iterations: */
   while ( (pop->iteration_hook?pop->iteration_hook(iteration, current):TRUE) &&
@@ -3416,11 +3416,11 @@ entity *ga_metropolis_mutation(	population		*pop,
          ga_get_entity_id(pop, current),
          ga_get_entity_rank(pop, current), current->fitness );
 
-    pop->mutate(pop, current, new);
+    pop->mutate(pop, current, fresh);
 
     temp = current;
-    current = new;
-    new = temp;
+    current = fresh;
+    fresh = temp;
 
     pop->evaluate(pop, current);
 
@@ -3431,18 +3431,18 @@ entity *ga_metropolis_mutation(	population		*pop,
          random_boolean_prob(exp((current->fitness-best->fitness)
                                    /(GA_BOLTZMANN_FACTOR*temperature))) )
       {
-/*        plog(LOG_DEBUG, "Selecting new solution."); */
+/*        plog(LOG_DEBUG, "Selecting fresh solution."); */
       ga_entity_blank(pop, best);
       ga_entity_copy(pop, best, current);
       }
     else
       {
-/*        plog(LOG_DEBUG, "Rejecting new solution."); */
+/*        plog(LOG_DEBUG, "Rejecting fresh solution."); */
       ga_entity_blank(pop, current);
       ga_entity_copy(pop, current, best);
       }  
 
-    ga_entity_blank(pop, new);
+    ga_entity_blank(pop, fresh);
 
 /*
  * Write statistics.
@@ -3493,8 +3493,8 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 					const int 	final_temperature)
   {
   int		iteration=0;			/* Current iteration number. */
-  entity	*current, *best, *new;		/* The solutions. */
-  entity	*temp=NULL;			/* Used for swapping current and new. */
+  entity	*current, *best, *fresh;	/* The solutions. */
+  entity	*temp=NULL;			/* Used for swapping current and new solutions. */
   int		temperature;			/* Current temperature. */
 #if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
@@ -3549,7 +3549,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
  * Copy best solution over current solution.
  */
   ga_entity_copy(pop, current, best);
-  new = ga_get_free_entity(pop);
+  fresh = ga_get_free_entity(pop);
 
 /* Do all the iterations: */
   while ( (pop->iteration_hook?pop->iteration_hook(iteration, current):TRUE) &&
@@ -3569,11 +3569,11 @@ entity *ga_simulated_annealling_mutation(population	*pop,
        ga_get_entity_id(pop, current),
        ga_get_entity_rank(pop, current), current->fitness );
 
-    pop->mutate(pop, current, new);
+    pop->mutate(pop, current, fresh);
 
     temp = current;
-    current = new;
-    new = temp;
+    current = fresh;
+    fresh = temp;
 
     pop->evaluate(pop, current);
 
@@ -3585,18 +3585,18 @@ entity *ga_simulated_annealling_mutation(population	*pop,
  */
     if ( best->fitness < current->fitness+temperature )
       { /* Copy this solution best solution. */
-/*        plog(LOG_DEBUG, "Selecting new solution.");*/
+/*        plog(LOG_DEBUG, "Selecting fresh solution.");*/
       ga_entity_blank(pop, best);
       ga_entity_copy(pop, best, current);
       }
     else
       { /* Copy best solution over current solution. */
-/*        plog(LOG_DEBUG, "Rejecting new solution.");*/
+/*        plog(LOG_DEBUG, "Rejecting fresh solution.");*/
       ga_entity_blank(pop, current);
       ga_entity_copy(pop, current, best);
       }
 
-    ga_entity_blank(pop, new);
+    ga_entity_blank(pop, fresh);
 
 /*
  * Write statistics.
