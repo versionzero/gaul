@@ -12,6 +12,7 @@ Changes since release 0.1846:
 - Only use pthread library for thread support.
 - Rewritten MPI/thread checks and configuration.
 - Avoid stricmp()/strnicmp() kludges for Cygwin environment by using strcasecmp()/strncasesmp() instead.
+- Culled redundant comments in code, mostly "last updated" type of details.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

@@ -78,30 +78,6 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	05 Jun 2003 SAA	Added some checks to avoid trying to calculate modulus of zero.
-		30 May 2002 SAA	random_init() no longer needs to be called so long as random_seed() is called before any of the other functions are called.
-		28 May 2002 SAA	Added extra check into random_seed().
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) with more portable printf("%lu", (unsigned long)).
-		14 Mar 2002 SAA	Added random_int_permutation().
-		29 Jan 2002 SAA Fixed some dodgy typecasting.
-		25 Jan 2002 SAA Removed residual comment about HelGA.
-		07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
-		04 Dec 2001 SAA	Added routines for 'float's.
-		19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
-		16/06/01 SAA	Added random_double_full().
-		12/06/01 SAA	Added chi squared test to random_test().
-		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
-		21/02/01 SAA	Added double random_double_1() for convenience.
-		02/02/01 SAA	Converted from helga_random to random_util.
-		28/01/01 SAA	Added helga_random_tseed().  Added access to the state structure as a char array for access through SLang etc.
-		22/01/01 SAA	Use constant HELGA_RAND_NUM_STATE_VALS instead of magic numbers.  random_double() added, equivalent to random_double_range(0.0, something), but for consistency with random_int.  I suppose it is slightly more optimal too.  SLang utility wrappers.
-		12/01/01 SAA	Added random_unit_gaussian() and extended helga_random_test().
-		11/01/01 SAA	Added random_unit_uniform() and random_gaussian().  Added proper helga_random_test().
-		29/12/00 SAA	No longer just convenient wrappers around the standard libc functions.  Plan for the state to be implemented as a simple stack for future expansion.
-		04/07/00 SAA	helga_random_seed() added.
-		07/06/00 SAA	Added random_double_range().
-		16/05/00 SAA	First version.
-
   To do:	Gaussian/Boltzmann distributions.
 		Need a proper test of randomness.
 		Properly implement stack of states.

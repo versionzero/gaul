@@ -53,18 +53,6 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	07 Jan 2003 SAA	Some explicit pointer==NULL checks to keep splint happy.
-  		24 Aug 2002 SAA No longer requires memory_util/memory_chunk routines.  This eases many dependency problems.
-  		16 Aug 2002 SAA	Free the node memory chunks when no avltrees remain.
-		24 Apr 2002 SAA	Some renaming for consistency.
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
-		13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
-		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
- 		18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
- 		03/01/00 SAA	The type of the key may now be changed at compile time.
- 		02/01/00 SAA	avltree_search() added.
- 		30/01/00 SAA	Tidying.  Test function written.  API made more consistent.
-
   To do:	rebuilding tree after changing key/hashing function.
  		remove function return success flag.
  		convert some recursive functions into iterative functions where sensible (e.g. avltree_node_count)

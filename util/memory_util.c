@@ -62,37 +62,6 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
-  Updated:	05 Jun 2003 SAA	All debug and safe replacements for the system functions are compiled now, irrespective of the defined constants.  exit(1) replaced by exit(EXIT_FAILURE).  Some counts now long ints.
-		03 Oct 2002 SAA	Tweaks for clean compilation using the Compaq C compiler.
-		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
-		09/05/01 SAA	Reimplemented memory_check_bounds_all().
-		03/05/01 SAA	Some occurances of printf(); perror(); exit(1); replaced with a dief() call.
-		01/03/01 SAA	A strndup() function added.
-		27/02/01 SAA	gpointer replaced with vpointer and THREAD_LOCK etc. replaced with THREAD_LOCK etc.
-		18/01/01 SAA	memory_display_table() is always defined now - it just gives a short message if MEMORY_ALLOC_DEBUG isn't defined.
-		12/01/01 SAA	s_free_safe() wrapper function around free() added, which just checks for NULL pointers.
-		04/01/01 SAA	Hmmm.  Debugging.  Problems in memory_chunks.c when debugging memory functions are used.  That works now.
-		03/01/01 SAA	Continued implementation of memory chunk code.  Made a lot of private functions 'static'.  Shortened the to do list.  mem_record.mem and mem_record.rmem are now size_t types.
-		01/01/01 SAA	Started work on an integrated "memory chunk" implementation (similar to glib's GMemChunks) for efficient allocation of multiple pieces of memory.  Memory chunks are used to allocate the mem_record structures.
-		30/12/00 SAA	Use an AVL tree implementation for the table.  Initial changes for thread safety.
-		21/11/00 SAA	IRIX fixes.
-		15/11/00 SAA	s_strdup_safe() no longer uses the real strdup() function, which avoids hassle with compatiability functions on some systems.
-		14/08/00 SAA	Renamed _s_alloc() to s_alloc_debug().  Renamed _s_free() to s_free_debug().  Added s_malloc_safe()m s_calloc_safe(), s_realloc_safe() and s_strdup_safe(), which are simple wrappers around the standard system calls.  Rationalised exit() calls and added calls to perror() where appropriate.  Changed %d to %Zd where appropriate.  Changes for memory_alloc_type enumeration.  'Temporarily' disabled use of rand() since it interferes with the calling programs' random number sequences.
-		13/08/00 SAA	renamed to memory_util.c  Began code changes necessary for variable padding sizes.  Trusted allocation methods added (no need for calling routine to test success of allocation).
-		28/07/00 SAA	Added modifications/additions necessary for the new s_strdup() macro.  Special case for realloc(mptr,0) now handled properly - it correctly behaves like free(mptr).
-		17/07/00 SAA	Optimised _s_free() by removing need to shuffle a huge number of table entires by just one place.
-		21/06/99 SAA	No code changes, but added GPL message and updated the TODO list a bit.  Function call counters added to memory_display_status().
-		05/01/99 SAA	Removed deprecated functions.  Added some simple logging functions.
-		19/08/99 SAA	Changed %u -> %p, removed some unused variables.
-		03/03/99 SAA	Messages tidied slightly.
-		19/01/99 SAA	Started preparations for first 'non-prebeta' version.
-		13/01/99 SAA	match_mptr() simplified.
-		07/12/98 SAA	Global variable memory_count_if used to keep track of number of unsuccessful 'frees'.  _saa_free() now passed a string to identify calling statement.
-		04/12/98 SAA	global variable most_mem stores the maximum memory usage acheived so far.  display_memory_status() added.  Counts total number of bounds violations.
-		03/12/98 SAA	Added many functions, changed many call parameters.  Minor changes to effects of memory_verbose.  memory_set_verbose() now accepts values of 1,2 or 3.  memory_check_bounds() now able to reset padding if bounds violation detected.
-		01/12/98 SAA	Initial code.
-
   To do:	A lot!
 
 		Record mem_chunk allocations in the same way as xalloc allocations.

@@ -26,13 +26,6 @@
  **********************************************************************
 
   Synopsis:	Header file for my general logging functions.
-  Last updated:	03 Sep 2003 SAA	Removed dependence on str_util.
-  		03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
-  		29 Jul 2002 SAA	Avoid a warning from the Intel C/C++ compiler.
-		02/02/01 SAA	Converted from helga_log.  Use mpi_util stuff instead of helga_mpi stuff.
-		19/09/00 SAA	Put a 'do{}while(0)' loop around contents of the helga_log() macro to avoid some tricky problems.
-		28/05/00 SAA	'enum helga_log_type' used properly now.  Renaming stuff so that helga_log() is now a macro.
-		07/05/00 SAA	First code.
 
  **********************************************************************/
 

@@ -33,27 +33,6 @@
 
 		These functions are thread-safe.
 
-  Updated:	03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
-		03 Feb 2003 SAA	Tweaks relating to changes in mpi_util.c
-		03 Oct 2002 SAA	Increased dimensions of log_text arrays to avoid warnings on the Compaq C compiler.
-		01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
-		28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
-		26 Feb 2002 SAA Removed s_strdup() warning from log_init().
-		04 Feb 2002 SAA	All global variables are now decleared static.
-		31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
-		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
-		07/02/01 SAA	Added warning-level messages.  LOG_WARNING is intended for non-fatal errors and so on.
-		02/02.01 SAA	Converted from helga_log.c to log_util.c
-		03/01/01 SAA	non-GNU reduced version of helga_log() now will call the callback function if defined.  Made thread-safe.
-		15/11/00 SAA	Minor tweaks for IRIX systems.  Slight improvements to the namespace.
-		11/10/00 SAA	Optional, time/date output facility added.
-		21/06/00 SAA	If helga_get_rank() returns -1, don't write rank to log.
-		28/05/00 SAA	'enum helga_log_type' used instead of 'int' for log level specification.  helga_log() is now a macro which means that (a) line number and so on can be passed to the real output function, and (b) don't need function call overhead just to decide not to do logging.  Added helga_log_get_level().
-		23/05/00 SAA	Now use stdout by default instead of stderr.
-		16/05/00 SAA	Added helga_log_set_file().
-		08/05/00 SAA	Ability to define a callback function at run-time added.
-		07/05/00 SAA	First code.
-
   To do:	Seperate levels for callback, file, stderr outputs.
 		Validate the logging level when set.
 		Seperate levels/files/whatever possible for seperate files.

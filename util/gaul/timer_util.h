@@ -28,9 +28,6 @@
   Synopsis:     Timer routines with S-Lang intrinsics which are
                 helpful for code analysis.
 
-  Updated:      13 Mar 2002 SAA	timer_diagnostics() added.
-		06 Feb 2002 SAA First version.
-
  **********************************************************************/
 
 #ifndef TIMER_UTIL_H_INCLUDED

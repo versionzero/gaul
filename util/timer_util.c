@@ -30,14 +30,8 @@
 
 		These functions are thread-safe.
 
-		Note that the user time will be incorrect after about
+  Bugs:		Note that the user time will be incorrect after about
 		72 minutes.
-
-  Updated:	06 Jun 2003 SAA	Reduced number of calls to the clock() function.
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
-		13 Mar 2002 SAA timer_diagnostics() added.
-		07 Feb 2002 SAA	Rewrote S-Lang stuff.
-		06 Feb 2002 SAA	First version.
 
  **********************************************************************/
 

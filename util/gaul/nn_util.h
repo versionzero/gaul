@@ -29,13 +29,6 @@
   Synopsis:	Multi-layer NN trained using backpropagation with
 		momentum.
 
-  Last Updated:	03 Sep 2003 SAA	Removed dependence upon str_util.
-		12 Mar 2002 SAA	Stuff for built-in standalone program code removed.
-		01 Mar 2002 SAA	Added stuff for weight decay.
-  		05 Feb 2002 SAA	Added NN_IS_ON() and NN_IS_OFF() macros.
-		28 Jan 2002 SAA changes for distribution with GAUL.
-  		25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
-
  **********************************************************************/
 
 #ifndef NN_UTIL_H_INCLUDED

@@ -27,8 +27,6 @@
 
   Synopsis:	Public header for avltree.c
 
-  Last Updated:	22 Aug 2002 SAA	No longer requires memory_util/memory_chunk routines.  This eases many dependency problems.
-
  **********************************************************************/
 
 #ifndef AVLTREE_H_INCLUDED

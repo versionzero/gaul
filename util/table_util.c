@@ -31,20 +31,6 @@
 
 		Thread-safe.
  
-  Updated:	24 Dec 2002 SAA Use standard exit value.
-  		15 Aug 2002 SAA	No longer use MemChunks.  All locks removed too.
-  		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
-		13 Mar 2002 SAA	table_diagnostics() modified.
-		07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
-		29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
-		28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
-		18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
-		07/08/01 SAA	Added table_remove_data_all().
-		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
- 		21/02/01 SAA	Added table_count_items().
- 		22/01/01 SAA	Added table_lookup_index().
- 		18/01/01 SAA	Frist tidy version.
- 
   To do:	Add table_compress().
 		Need to add more safety checks and create 'fast' versions.
 		Document and comment!

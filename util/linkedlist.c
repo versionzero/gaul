@@ -34,14 +34,6 @@
 
 		MP-safe.
 
-  Last Updated:	06 Jan 2003 SAA	Don't bother using unsigned ints for indices anymore.  Some parameters now declared as const.
-  		24 Dec 2002 SAA Use standard exit value.  Added so explicit typecasts.
-  		15 Oct 2002 SAA Avoid some unsigned comparison warnings when using Compaq's ccc.
-		22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
-  		16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
-  		14 Jun 2002 SAA	GList emulation not relied upon in this file now.
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
- 
   To do:        Add sorting functions.
                 Functions for inserting/appending lists etc. (i.e. slink_append_list() )
                 Converting slists to dlists, and visa versa.

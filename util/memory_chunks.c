@@ -41,18 +41,6 @@
 	       	deallocate all memory atoms (which would normally be
 		a valid thing to do).
  
-  Last updated:	05 Jun 2003 SAA	Memory chunks disabled via header.  Some more functions are now declared static.
-		20 Dec 2002 SAA	Added debug mode, intended for use with valgrind/purify/electric fence etc.
-  		21 Nov 2002 SAA Added cut-down and local version of my tree routines.
-		16 Aug 2002 SAA	Added mem_chunk_isempty().
-  		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
-		13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
-		27/02/01 SAA	gpointer replaced with vpointer.
- 		18/01/01 SAA	Default compiler constant definition moved out to header file.
- 		17/01/01 SAA	Fixed the severe bug causing corruption of data when other data is freed - but I don't know how ;(
-		16/01/01 SAA	Some simple padding support added.  Must be configured at compile-time.
- 		04/01/01 SAA	MemChunks with unreleasable atoms available, which doesn't use my AVL implementation added.
- 
   To do:	Padding for array under/overflow checking.
  		Observe contents of atoms in the FreeAtom list.
  

@@ -35,28 +35,6 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	03 Sep 2003 SAA	Removed dependence upon str_util.
-		03 Oct 2002 SAA	Changed fread()>0 check to fread()!=0 to avoid warning on Compaq C compiler.
-		22 Jul 2002 SAA	Renamed NN_randomize_weights() to NN_randomize_weights_11() and added a new NN_randomize_weights() which takes a range for the random values.
-  		18 Jul 2002 SAA	Modified NN_read_prop().
-		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
-		13 Mar 2002 SAA Added version info to NN_diagnostics.
-		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
-		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
-  		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
-		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
-		04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
-		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
-  		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
-		24 Dec 2002 SAA Removed stupid error calculation from NN_predict().
-		12 Dec 2001 SAA Fixed read_prop() bug.
-		10 Dec 2001 SAA read_prop() now reads data with variable number of fields.  Default behaviour is to initialize weights within the range 0.0-1.0.  Comma delimited data is now usable.
-  		05 Dec 2001 SAA	Read any size fingerprint.
-		04 Dec 2001 SAA Completed usage message.  Defining layers on command-line.  NN_display_summary() added.
-		03 Dec 2001 SAA Substantial generalisations.  More comments.  New I/O functions.  Initial support for labelled data.
-		30 Nov 2001 SAA	Changes for improved clarity.
-		29 Nov 2001 SAA Renamed and some comments added.  Some code generalised.  Introduced use of memory_util library.  All this is in preparation of optimisation using GAUL.
-
   To do:	Need to define data from external sources.
 		Alternative switching functions.
 		Automated functions for "leave-one-out" validation.

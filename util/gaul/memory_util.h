@@ -25,22 +25,7 @@
 
  **********************************************************************
 
-  Header file for memory_methods
-
-  Updated:	05 Jun 2003 SAA	All debug and safe replacements for the system functions are compiled now, irrespective of the defined constants.
-  		01 May 2003 SAA	Fixed s_strndup() macros.
-  		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
-  		11 Jun 2002 SAA	No longer link the malloc.h header.
-  		01/03/01 SAA	Added non-standard strndup() stuff.
-		12/01/01 SAA	Tidied.
-		03/01/01 SAA	Changes for integrated memory chunk implementation.  Labels changed from "malloc()" etc. to "malloc" etc.
-		14/08/00 SAA	Overhaul for memory_util.h rename.
-		28/07/00 SAA	Added s_strdup() macro.
-		18/01/00 SAA	Updated prototypes.
-		05/01/99 SAA	Tidied a bit.
-		21/01/99 SAA	Corrected minor bug in s_realloc() macro.
-		19/01/99 SAA	new set of macros.
-		01/12/98 SAA    First prototype version.
+  Synopsis:	Header file for memory_methods
 
  ********************************************************************/
 

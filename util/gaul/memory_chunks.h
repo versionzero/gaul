@@ -25,9 +25,7 @@
 
  **********************************************************************
 
-  Last updated:	05 Jun 2003 SAA	Memory chunks disabled via header.
- 		21 Nov 2002 SAA	Use void * instead of vpointer.
- 		15 Aug 2002 SAA	Rearranged order of include directives for clarity and consistency.  Also some tidying.
+  Synopsis:	Header file for memory_chunks.c
 
  **********************************************************************/
 

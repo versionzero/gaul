@@ -27,15 +27,6 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	12 Jun 2002 SAA	Minor fix for clean compilation on QNX V6.
-		31 May 2002 SAA	Fixed empty parameter declaration.
-		16 Mar 2002 SAA	Check whether we have limits.h on this system.
-		25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
-		4 Dec 2001 SAA	New 'float' functions.
-		20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
-		02/02/01 SAA	Converted from helga_random to random_util.
-		16/05/00 SAA	First code.
-
  **********************************************************************/
 
 #ifndef RANDOM_UTIL_H_INCLUDED

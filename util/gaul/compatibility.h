@@ -27,21 +27,6 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
-  		25 Feb 2003 SAA	Tweaked strndup() prototype.
-  		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
- 		20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
-		09 Oct 2002 SAA	A #if should have been a #ifdef.
-  		16 Aug 2002 SAA	Don't include config.h here (It is done in SAA_header.h).
-  		10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
-		13 Mar 2002 SAA	Use index() for strchr(), when available.
-		10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
-	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
-		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
-		19/03/01 SAA	Removed GNU specific stuff.
-		16/11/00 SAA	I liked the helga_compat.c version, so used it to replace methods/compatibility.c
-		15/11/00 SAA	new version for helga_compat.c
-
  **********************************************************************/
 
 #ifndef COMPATIBILITY_H_INCLUDED

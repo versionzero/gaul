@@ -27,13 +27,7 @@
 
   Synopsis:	Header file for linked list implementation.
 
-  Last Updated:	06 Jan 2003 SAA	Don't bother using unsigned ints for indices anymore.  Some parameters now declared as const.
-  		14 Jun 2002 SAA	GList emulation is now optional.
-		17 Apr 2002 SAA	Several prototypes had 'remove' instead of 'delete'.
-		25/04/01 SAA	Added convenience macros slink_data() and dlink_data().
-
  **********************************************************************/
-
 
 #ifndef LINKEDLIST_H_INCLUDED
 #define LINKEDLIST_H_INCLUDED
