@@ -41,6 +41,15 @@
 		The required array of numbers is populated by a
 		using single seed value by using a linear
 		congruential pseudo random number generator.
+
+		This routines have been tested and provide the same
+		output (within the limits of computational precision)
+		on (at least) the following platforms:
+
+		o Intel x86 (Linux, OpenBSD)
+		o IBM Power3 (AIX)
+		o MIPS R4K, R10K (IRIX)
+		o Alpha EV7 (Linux)
 		
   References:	Standard additive number generator and the linear
 		congruential algorithm:
