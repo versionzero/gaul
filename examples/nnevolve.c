@@ -3,7 +3,7 @@
  **********************************************************************
 
   nnevolve - GAUL example: Evolve a fixed topology neural network.
-  Copyright �2002, The Regents of the University of California.
+  Copyright ©2002, The Regents of the University of California.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -799,11 +799,34 @@ void nnevolve_setup_data(void)
 
 
 /**********************************************************************
+  nnevolve_show_message()
+  synopsis:	Display an introductory message.
+  parameters:	none
+  return:	none
+  updated:	09 Aug 2002
+ **********************************************************************/
+
+void nnevolve_show_message(void)
+  {
+
+  printf("nnevolve - GAUL example: Evolve a fixed topology neural network.\n");
+  printf("Copyright ©2002, The Regents of the University of California.\n");
+  printf("Primary author: \"Stewart Adcock\" <stewart@linux-domain.com>\n");
+  printf("\n");
+  printf("This program is distributed under the terms of the GNU General\n");
+  printf("Public License.  See documentation for further details.\n");
+  printf("\n");
+
+  return;
+  }
+
+
+/**********************************************************************
   main()
   synopsis:	Evolve a fixed topology neural network.
   parameters:
   return:	2, on success.
-  updated:	11 Jun 2002
+  updated:	09 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -812,7 +835,15 @@ int main(int argc, char **argv)
   entity	*entity=NULL;	/* Used to test standard back-prop. */
   chrono_t	lga_timer, bp_timer;	/* Timers. */
 
+/*
+ * Initialise logging.
+ */
   log_set_level(LOG_NORMAL);
+
+/*
+ * Display an introductory message.
+ */
+  nnevolve_display_message();
 
 /*
  * Initialize random number generator.
