@@ -2,8 +2,8 @@
   ga_similarity.c
  **********************************************************************
 
-  ga_util - Genetic algorithm genome/chromosome comparison routines.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  ga_similarity - Genetic algorithm genome/chromosome comparison routines.
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -24,40 +24,25 @@
 
  **********************************************************************
 
-  **************************************************************
-  *** These functions should now be rewritten to fit in with ***
-  *** the current version of GAUL.                           ***
-  **************************************************************
-
   Synopsis:     Routines for comparing genomes/chromosomes.
 
 		Definitions:
 
 		I define a pair of alleles to be matching if they are
 		identical and not matching if the are different - even
-		if the differing values are equivalent (i.e. if the
+		if the differing values are equivalent (e.g. if the
 		modulus is significant rather than the actual value.)
-		There is no concept of distance between alleles, they
-		either match or they don't.
 
-		Distance is obviously, somehow, related to negative
-		similarity.
-
-		'thing' is a chromosome or entity.
-		n = total number of alleles in thing.
-		M = total number of matching alleles in two things.
-
-		Hamming coefficient = M/n
-		Euclidean coefficient = sqrt(M/n)
-
-  Warning:	MOST OF THESE ARE CURRENTLY ONLY VALID FOR INTEGER ARRAY
-		CHROMOSOMES.
+		Interested parties are directed the documentation.
+		http://gaul.sourceforge.net/similarity.pdf
 
   References:	A general reference that I've found useful in the past
 		but maybe is tricky to obtain, but is:
 		Bradshaw J., "Introduction to Tversky similarity
 		measure", MUG '97 - 11th annual Daylight user group
 		meeting.
+
+  To do:	Equivalent functions for the other chromosome types.
 
  **********************************************************************/
 
