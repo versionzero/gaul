@@ -4,7 +4,7 @@
 #######################################################################
 #
 # util - General collection of C-programming utility routines.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -38,11 +38,6 @@ lib_LTLIBRARIES = libstuff.la \
 	libnn_util.la \
         liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
-
-bin_PROGRAMS = nn
-
-nn_SOURCES = \
-	nn_main.c
 
 #libstuff_a_SOURCES = \
 #	avltree.c \
