@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "compatibility.h"
 #include "log_util.h"
 
 /*
@@ -107,19 +108,19 @@ boolean mpi_send_population_all();
 boolean mpi_send_population_next();
 boolean mpi_synchronous_send(const void *buf, const int count,
                                const enum mpi_datatype type, const int node,
-                               const enum mpi_message_tag tag);
+                               int tag);
 boolean mpi_standard_send(const void *buf, const int count,
                             const enum mpi_datatype type, const int node,
-                            const enum mpi_message_tag tag);
+                            int tag);
 boolean mpi_standard_broadcast(const void *buf, const int count,
                             const enum mpi_datatype type,
-                            const enum mpi_message_tag tag);
+                            int tag);
 boolean mpi_standard_distribute(const void *buf, const int count,
                             const enum mpi_datatype type, const int root,
-                            const enum mpi_message_tag tag);
+                            int tag);
 boolean mpi_receive(const void *buf, const int count,
                                const enum mpi_datatype type, const int node,
-                               const enum mpi_message_tag tag);
+                               int tag);
 #ifndef HELGA_MPI_COMPILE_MAIN
 boolean	mpi_test(void);
 #endif

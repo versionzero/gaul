@@ -28,13 +28,13 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libgaul.a
+lib_LTLIBRARIES = libgaul.la
 
 # CFLAGS = -g -Wall -O
 
 # INCLUDES = -I../util/
 
-libgaul_a_SOURCES = \
+libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
     ga_core.c \
@@ -60,10 +60,11 @@ include_HEADERS = \
     ga_utility.h \
     gaul.h
 
-libgaul_a_DEPENDENCIES = \
+libgaul_la_DEPENDENCIES = \
 	../util/libmethods.a \
 	../util/librandom.a \
 	../util/libstr_util.a
 
-libgaul_a_LIBFLAGS = -lm
+libgaul_la_LIBFLAGS = -lm
+libgaul_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 

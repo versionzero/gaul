@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -1347,8 +1347,134 @@ entity *ga_entity_clone(population *pop, entity *parent)
 
 
 /**********************************************************************
-  Network communication (population migration) functions.
+  Network communication (population/entity migration) functions.
  **********************************************************************/
+
+/**********************************************************************
+  ga_population_send_by_mark()
+  synopsis:	Send selected entities from a population to another
+		processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask )
+  {
+  plog(LOG_FIXME, "Function not implemented");
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_send_every()
+  synopsis:	Send all entities from a population to another
+		processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+void ga_population_send_every( population *pop, int dest_node )
+  {
+  plog(LOG_FIXME, "Function not implemented");
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_append_recieve()
+  synopsis:	Recieve a set of entities from a population on another
+		processor and append them to a current population.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+void ga_population_append_recieve( population *pop, int src_node )
+  {
+  plog(LOG_FIXME, "Function not implemented");
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_new_recieve()
+  synopsis:	Recieve a population structure (excluding actual
+  		entities) from another processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+population *ga_population_new_recieve( int src_node )
+  {
+  population *pop=NULL;
+
+  plog(LOG_FIXME, "Function not implemented");
+
+  return pop;
+  }
+
+
+/**********************************************************************
+  ga_population_recieve()
+  synopsis:	Recieve a population structure (including actual
+  		entities) from another processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+population *ga_population_recieve( int src_node )
+  {
+  population *pop;
+
+  pop = ga_population_new_recieve( src_node );
+  ga_population_append_recieve( pop, src_node );
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_send()
+  synopsis:	Send population structure (excluding actual entities)
+ 		to another processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+void ga_population_send( population *pop, int dest_node )
+  {
+  plog(LOG_FIXME, "Function not implemented");
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_send_all()
+  synopsis:	Send population structure (including all entities)
+ 		to another processor.
+  parameters:
+  return:
+  last updated: 24 Jan 2002
+ **********************************************************************/
+
+void ga_population_send_all( population *pop, int dest_node )
+  {
+
+  ga_population_send(pop, dest_node);
+  ga_population_send_every(pop, dest_node);
+
+  return;
+  }
+
 
 #if 0
 /**********************************************************************

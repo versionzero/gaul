@@ -41,6 +41,7 @@
 #include <math.h>
 #include <unistd.h>
 
+#include "compatibility.h"	/* For portability stuff. */
 #include "linkedlist.h"		/* For linked lists. */
 #include "log_util.h"		/* For logging facilities. */
 #include "memory_util.h"	/* Memory handling. */
@@ -208,8 +209,20 @@ boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *sr
 boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, int chromo);
 boolean ga_entity_copy(population *pop, entity *dest, entity *src);
 entity	*ga_entity_clone(population *pop, entity *parent);
+
+void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask );
+void ga_population_send_every( population *pop, int dest_node );
+void ga_population_append_recieve( population *pop, int src_node );
+population *ga_population_new_recieve( int src_node );
+population *ga_population_recieve( int src_node );
+void ga_population_send( population *pop, int dest_node );
+void ga_population_send_all( population *pop, int dest_node );
+
+#if 0
 entity	*ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
 boolean	ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
+#endif
+
 entity	*ga_optimise_entity(population *pop, entity *unopt);
 void	ga_population_set_parameters(      population      *pop,
                                         double  crossover,

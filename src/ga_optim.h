@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Gene-based optimisation routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -71,6 +71,11 @@ entity	*ga_simulated_annealling_mutation(population      *pop,
                                 const int       initial_temperature,
                                 const int       final_temperature);
 boolean	ga_evolution_archipelago( const int num_pops,
+                        population              **pops,
+                        const ga_class_type     class,
+                        const ga_elitism_type   elitism,
+                        const int               max_generations );
+boolean	ga_evolution_archipelago_mp( const int num_pops,
                         population              **pops,
                         const ga_class_type     class,
                         const ga_elitism_type   elitism,
