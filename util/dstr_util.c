@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      11 Apr 2002 SAA	Added dstr_fromstr() convenience function.
+  Updated:      13 Aug 2002 SAA	Improved dstr_scmp_str().
+  		11 Apr 2002 SAA	Added dstr_fromstr() convenience function.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Changes for clean compilation under AIX.
 		13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
@@ -496,6 +497,47 @@ int dstr_cmp_str(const dstring *dstr, const char *str)
 
 /**********************************************************************
   int dstr_scmp_str()
+  synopsis:	Like strcmp() except for dstrings vs. char[].
+		Additionally ignores trailing white space.
+  parameters:   dstring	*dstr	The dynamic string.
+		char	*str	The char[].
+  return:	int
+  last updated: 13 Aug 2002
+ **********************************************************************/
+
+int dstr_scmp_str(const dstring *dstr, const char *str)
+  {
+  char	c1, c2;         /* Temp chars */
+  char	*s1;		/* Temp pointers to chars */
+
+  if (!dstr_isvalid(dstr)) die("Invalid dstring passed.");
+  if (!str) die("Null pointer to char[] passed.");
+
+/* Reduce lookup overhead */
+  s1 = dstr->string;
+
+  if (s1 == str) return 0;
+
+  c1 = *s1++;
+  c2 = *str++;
+
+/* Compare upto first non-match, or null char */
+  while (c1 != '\0' && c2 != '\0')
+    {
+    if (c1 != c2) return (int) c1-c2;
+    c1 = *s1++;
+    c2 = *str++;
+    }
+
+  while (c1 == ' ') c1 = *s1++;
+  while (c2 == ' ') c2 = *str++;
+
+  return (int) c1-c2;;
+  }
+
+
+/**********************************************************************
+  int orig_dstr_scmp_str()
   synopsis:	Wrapper around strcmp() for dstrings vs. char[].
 		Ignores trailing white space.
   parameters:   dstring	*dstr	The dynamic string.
@@ -504,7 +546,7 @@ int dstr_cmp_str(const dstring *dstr, const char *str)
   last updated: 13/03/00
  **********************************************************************/
 
-int dstr_scmp_str(const dstring *dstr, const char *str)
+int orig_dstr_scmp_str(const dstring *dstr, const char *str)
   {
   char	c1, c2;         /* Temp chars */
   char	*s1;		/* Temp pointers to chars */

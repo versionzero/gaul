@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Updated:	25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
+  Updated:	13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
+  		25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
   		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
 		20/06/01 SAA	Added a few casts for clean compilation on Solaris.
 		23/03/01 SAA	Added str_scmp().
@@ -1184,7 +1185,7 @@ int str_safecopy(char *src, char *dest, const int len)
   synopsis:	Compare strings upto first white-space.
   parameters:	char	*src	The original string.
   return:	int	ret	Number of characters copied.
-  last updated: 19/05/00
+  last updated: 13 Aug 2002
  **********************************************************************/
 
 int str_scmp(const char *s1, const char *s2)
@@ -1195,6 +1196,9 @@ int str_scmp(const char *s1, const char *s2)
     s1++;
     s2++;
     }
+
+  if ( (*s1 == ' ' || *s1 == '\0') && 
+       (*s2 == ' ' || *s2 == '\0') ) return 0;
 
   return *s1 - *s2;
   }

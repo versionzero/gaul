@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
+  Updated:	16 Aug 2002 SAA	Don't include config.h here (It is done in SAA_header.h).
+  		10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
 		13 Mar 2002 SAA	Use index() for strchr(), when available.
 		10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
 	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
@@ -41,8 +42,6 @@
 #define COMPATIBILITY_H_INCLUDED
 
 #include "SAA_header.h"
-
-#include "config.h"				/* for HAVE_WHATEVER */
 
 /* Includes */
 #include <assert.h>
