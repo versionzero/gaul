@@ -38,11 +38,7 @@
  */
 #include "SAA_header.h"
 
-#include "methods/memory_util.h"	/* Memory handling. */
-#include "methods/log_util.h"		/* For logging facilities. */
-#include "methods/mpi_util.h"		/* For multiprocessing facilities. */
-
-#include "ga_util.h"			/* For PRNGs. */
+#include "ga_util.h"
 
 /*
  * Prototypes

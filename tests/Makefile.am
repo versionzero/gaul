@@ -36,7 +36,7 @@ bin_PROGRAMS = pingpong wildfire
 
 CFLAGS = -g -Wall -O
 
-INCLUDES = -I../.. -I.. -I /usr/include/slang/
+INCLUDES = -I../util/ -I../src/ -I /usr/include/slang/
 
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c
@@ -44,13 +44,15 @@ wildfire_SOURCES = wildfire.c
 include_HEADERS = pingpong.h wildfire.h
 
 pingpong_DEPENDENCIES = \
-	../../methods/libmethods.a \
-	../../methods/libstr_util.a
+	../util/libmethods.a \
+	../util/librandom.a \
+	../util/libstr_util.a
 
 wildfire_DEPENDENCIES = \
-	../../methods/libmethods.a \
-	../../methods/libstr_util.a
+	../util/libmethods.a \
+	../util/librandom.a \
+	../util/libstr_util.a
 
-pingpong_LDADD = -L.. -L../../methods/ -lm -lga -lmethods -lrandom -lstr_util
-wildfire_LDADD = -L.. -L../../methods/ -lm -lga -lmethods -lrandom -lstr_util
+pingpong_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
+wildfire_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
 

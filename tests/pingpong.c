@@ -98,9 +98,12 @@ boolean pingpong_score(population *pop, entity *entity)
   updated:	23/04/01
  **********************************************************************/
 
-void pingpong_seed(int chromosome, int *data)
+void pingpong_seed(population *pop, entity *adam)
   {
   int		i, j;	/* Team members. */
+  int		*data;	/* Chromosome. */
+
+  data = adam->chromosome[0];
 
   for (i=0; i<25; i++) data[i] = -1;
 

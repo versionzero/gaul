@@ -246,14 +246,11 @@ else
   AC_MSG_RESULT(no)
 fi
 
-# Check for SASA data.
-AC_CHECK_FILE(tests/sasadata, sasadata_exists=1, sasadata_exists=0)
-
 # Check for SLang.
 AC_CHECK_LIB(slang, SLang_init_slang,
   [LIBS="$LIBS -lslang"
    INCLUDES="$INCLUDES -I/usr/include/slang/"],
-  [AC_MSG_ERROR(HelGA requires the SLang library.  see http://space.mit.edu/pub/davis/slang/)])
+  [AC_MSG_ERROR(GAUL requires the SLang library.  see http://space.mit.edu/pub/davis/slang/)])
 
 # Checks for programs.
 AC_PROG_CC
@@ -343,6 +340,5 @@ AC_OUTPUT(
            util/Makefile
            src/Makefile
            tests/Makefile
-           docs/Makefile
          )
 

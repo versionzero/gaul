@@ -48,7 +48,7 @@
  * Prototypes.
  */
 boolean pingpong_score(population *pop, entity *entity);
-void pingpong_seed(int chromosome, int *data);
+void pingpong_seed(population *pop, entity *adam);
 void pingpong_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
 void pingpong_mutate(population *pop, entity *mother, entity *son);
 

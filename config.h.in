@@ -30,7 +30,8 @@
 #undef MEMORY_PADDING
 
 #undef DEBUG
-#undef GA_DEBUG
+#undef HELGA_DEBUG
+#undef MOLSTRUCT_DEBUG
 
 #undef VERSION
 #undef VERSION_STRING

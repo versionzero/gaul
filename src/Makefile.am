@@ -36,7 +36,7 @@ lib_LIBRARIES = libga.a
 
 CFLAGS = -g -Wall -O
 
-INCLUDES = -I/usr/include/slang/
+INCLUDES = -I../util/ -I/usr/include/slang/
 
 libga_a_SOURCES = \
 	ga_intrinsics.c \
@@ -53,8 +53,9 @@ include_HEADERS = \
 	ga_util.h
 
 libga_a_DEPENDENCIES = \
-	../methods/libmethods.a \
-	../methods/libstr_util.a
+	../util/libmethods.a \
+	../util/librandom.a \
+	../util/libstr_util.a
 
 libga_a_LIBFLAGS = -lm
 

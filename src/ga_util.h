@@ -47,12 +47,12 @@
 
 #include <unistd.h>
 
-#include "methods/linkedlist.h"		/* For linked lists. */
-#include "methods/log_util.h"		/* For logging facilities. */
-#include "methods/memory_util.h"	/* Memory handling. */
-#include "methods/mpi_util.h"		/* For multiprocessing facilities. */
-#include "methods/random_util.h"	/* For PRNGs. */
-#include "methods/table.h"		/* Handling unique integer ids. */
+#include "linkedlist.h"		/* For linked lists. */
+#include "log_util.h"		/* For logging facilities. */
+#include "memory_util.h"	/* Memory handling. */
+#include "mpi_util.h"		/* For multiprocessing facilities. */
+#include "random_util.h"	/* For PRNGs. */
+#include "table.h"		/* Handling unique integer ids. */
 
 /*
  * Debugging

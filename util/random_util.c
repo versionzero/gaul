@@ -464,7 +464,7 @@ double random_gaussian(const double mean, const double stddev)
     } while ((q >= 0.27597) && ((q > 0.27846) || (v * v > -4.0 * log(u) * u * u)));
 
 /* Return ratio of P's coordinates as the normal deviate. */
-  return (mean + stddev * v / u);
+  return (mean + 2.0 * stddev * v / u);	/* I'm not entirely sure why this *2.0 factor is needed! */
   }
 
 

@@ -62,8 +62,7 @@ include_HEADERS = \
 	memory_util.h \
 	mpi_util.h \
 	random_util.h \
-	table.h \
-	vector3.h
+	table.h
 
 libmethods_a_LIBFLAGS = -lm
 

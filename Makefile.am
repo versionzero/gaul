@@ -32,7 +32,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = src util docs tests .
+SUBDIRS = util src tests .
 
 EXTRA_DIST = gaul.spec.in
 

@@ -104,92 +104,91 @@ configure:1816: checking whether to enable molstruct library debugging
 configure:1841: checking whether to enable run-time profiling
 configure:1850: checking whether to pad memory to detect overflows
 configure:1866: checking whether to link Electric Fence for memory debugging
-configure:1917: checking for tests/sasadata
-configure:1942: checking for SLang_init_slang in -lslang
-configure:1988: checking for gcc
-configure:2101: checking whether the C compiler (gcc -g -O2 -g -pg ) works
-configure:2117: gcc -o conftest -g -O2 -g -pg   conftest.c  -lslang 1>&5
-configure:2143: checking whether the C compiler (gcc -g -O2 -g -pg ) is a cross-compiler
-configure:2148: checking whether we are using GNU C
-configure:2176: checking whether gcc accepts -g
-configure:2211: checking for gcc option to accept ANSI C
-configure:2299: checking for a BSD compatible install
-configure:2373: checking for vprintf
-configure:2481: checking for atexit
-configure:2481: checking for on_exit
-configure:2535: checking size of double
-configure:2574: checking size of char
-configure:2613: checking size of long
-configure:2652: checking size of int
-configure:2691: checking size of void *
-configure:2731: checking for working const
-configure:2806: checking whether struct tm is in sys/time.h or time.h
-configure:2842: checking memory alignment
-configure:2864: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
-configure:2888: checking how to run the C preprocessor
-configure:2968: checking for ANSI C header files
-configure:3072: checking whether time.h and sys/time.h may both be included
-configure:3112: checking for arpa/inet.h
-configure:3112: checking for netdb.h
-configure:3112: checking for netinet/in.h
-configure:3112: checking for pwd.h
-configure:3112: checking for sys/ioctl.h
-configure:3112: checking for sys/select.h
-configure:3112: checking for sys/signal.h
-configure:3112: checking for sys/socket.h
-configure:3112: checking for sys/termio.h
-configure:3112: checking for sys/time.h
-configure:3112: checking for sys/types.h
-configure:3112: checking for sys/uio.h
-configure:3112: checking for termios.h
-configure:3112: checking for unistd.h
-configure:3112: checking for fcntl.h
-configure:3164: checking for fdopen
-configure:3164: checking for gethostname
-configure:3164: checking for getpwuid
-configure:3164: checking for gettimeofday
-configure:3164: checking for select
-configure:3164: checking for memcpy
-configure:3164: checking for ipow
-configure:3164: checking for strchr
-configure:3164: checking for strrchr
-configure:3164: checking for rindex
-configure:3164: checking for strcat
-configure:3164: checking for strlen
-configure:3164: checking for strcmp
-configure:3164: checking for strncmp
-configure:3164: checking for strcpy
-configure:3164: checking for strncpy
-configure:3164: checking for strtok
-configure:3164: checking for strcasecmp
-configure:3164: checking for strncasecmp
-configure:3164: checking for snprintf
-configure:3164: checking for memset
-configure:3164: checking for memmove
-configure:3164: checking for bcopy
-configure:3164: checking for memrev
-configure:3164: checking for memchr
-configure:3164: checking for memmem
-configure:3164: checking for memcmp
-configure:3164: checking for strdup
-configure:3164: checking for memdup
-configure:3164: checking for sincos
-configure:3164: checking for strndup
-configure:3164: checking for strnfill
-configure:3164: checking for strcatv
-configure:3164: checking for strtod
-configure:3164: checking for strsignal
-configure:3164: checking for strrev
-configure:3164: checking for basename
-configure:3164: checking for readline
-configure:3164: checking for strcspn
-configure:3164: checking for waitpid
-configure:3164: checking for min
-configure:3164: checking for max
-configure:3164: checking for snooze
-configure:3164: checking for strerror
-configure:3164: checking for strlcat
-configure:3164: checking for strlcpy
-configure:3164: checking for strstr
-configure:3164: checking for usleep
-configure:3164: checking for vsnprintf
+configure:1915: checking for SLang_init_slang in -lslang
+configure:1961: checking for gcc
+configure:2074: checking whether the C compiler (gcc -g -O2 -g -pg ) works
+configure:2090: gcc -o conftest -g -O2 -g -pg   conftest.c  -lslang 1>&5
+configure:2116: checking whether the C compiler (gcc -g -O2 -g -pg ) is a cross-compiler
+configure:2121: checking whether we are using GNU C
+configure:2149: checking whether gcc accepts -g
+configure:2184: checking for gcc option to accept ANSI C
+configure:2272: checking for a BSD compatible install
+configure:2346: checking for vprintf
+configure:2454: checking for atexit
+configure:2454: checking for on_exit
+configure:2508: checking size of double
+configure:2547: checking size of char
+configure:2586: checking size of long
+configure:2625: checking size of int
+configure:2664: checking size of void *
+configure:2704: checking for working const
+configure:2779: checking whether struct tm is in sys/time.h or time.h
+configure:2815: checking memory alignment
+configure:2837: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2861: checking how to run the C preprocessor
+configure:2941: checking for ANSI C header files
+configure:3045: checking whether time.h and sys/time.h may both be included
+configure:3085: checking for arpa/inet.h
+configure:3085: checking for netdb.h
+configure:3085: checking for netinet/in.h
+configure:3085: checking for pwd.h
+configure:3085: checking for sys/ioctl.h
+configure:3085: checking for sys/select.h
+configure:3085: checking for sys/signal.h
+configure:3085: checking for sys/socket.h
+configure:3085: checking for sys/termio.h
+configure:3085: checking for sys/time.h
+configure:3085: checking for sys/types.h
+configure:3085: checking for sys/uio.h
+configure:3085: checking for termios.h
+configure:3085: checking for unistd.h
+configure:3085: checking for fcntl.h
+configure:3137: checking for fdopen
+configure:3137: checking for gethostname
+configure:3137: checking for getpwuid
+configure:3137: checking for gettimeofday
+configure:3137: checking for select
+configure:3137: checking for memcpy
+configure:3137: checking for ipow
+configure:3137: checking for strchr
+configure:3137: checking for strrchr
+configure:3137: checking for rindex
+configure:3137: checking for strcat
+configure:3137: checking for strlen
+configure:3137: checking for strcmp
+configure:3137: checking for strncmp
+configure:3137: checking for strcpy
+configure:3137: checking for strncpy
+configure:3137: checking for strtok
+configure:3137: checking for strcasecmp
+configure:3137: checking for strncasecmp
+configure:3137: checking for snprintf
+configure:3137: checking for memset
+configure:3137: checking for memmove
+configure:3137: checking for bcopy
+configure:3137: checking for memrev
+configure:3137: checking for memchr
+configure:3137: checking for memmem
+configure:3137: checking for memcmp
+configure:3137: checking for strdup
+configure:3137: checking for memdup
+configure:3137: checking for sincos
+configure:3137: checking for strndup
+configure:3137: checking for strnfill
+configure:3137: checking for strcatv
+configure:3137: checking for strtod
+configure:3137: checking for strsignal
+configure:3137: checking for strrev
+configure:3137: checking for basename
+configure:3137: checking for readline
+configure:3137: checking for strcspn
+configure:3137: checking for waitpid
+configure:3137: checking for min
+configure:3137: checking for max
+configure:3137: checking for snooze
+configure:3137: checking for strerror
+configure:3137: checking for strlcat
+configure:3137: checking for strlcpy
+configure:3137: checking for strstr
+configure:3137: checking for usleep
+configure:3137: checking for vsnprintf
