@@ -1,4 +1,3 @@
-# Generated automatically from Makefile.in by configure.
 # Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
@@ -44,6 +43,7 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
+
 prefix = /usr/local
 exec_prefix = ${prefix}
 
@@ -76,7 +76,7 @@ AUTOHEADER = autoheader
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+INSTALL_SCRIPT = ${INSTALL}
 transform = s,x,x,
 
 NORMAL_INSTALL = :
@@ -85,11 +85,11 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = i686-pc-linux
+build_alias = 
 build_triplet = i686-pc-linux-gnu
-host_alias = i686-pc-linux
+host_alias = 
 host_triplet = i686-pc-linux-gnu
-target_alias = i686-pc-linux
+target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
 CC = gcc
@@ -101,7 +101,7 @@ LT_RELEASE = 0.1839
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = makeinfo
+MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null
@@ -178,7 +178,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS = 
 libgaul_a_LIBADD = 
 libgaul_a_OBJECTS =  ga_bitstring.o ga_chromo.o ga_core.o ga_crossover.o \
 ga_intrinsics.o ga_mutate.o ga_optim.o ga_qsort.o ga_replace.o \
@@ -190,7 +190,7 @@ libgaul_la_LIBADD =
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_core.lo \
 ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
 ga_replace.lo ga_seed.lo ga_select.lo ga_similarity.lo ga_utility.lo
-CFLAGS =  -I/usr/include/slang/ -Wall -g -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

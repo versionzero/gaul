@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
+  Updated:	12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
+		09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
 		14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
 		13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
 		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
@@ -1379,7 +1380,7 @@ int printf_string_upper_bound(const char* format,
 #endif
 
 
-#ifdef HAVE_STRREV
+#ifndef HAVE_STRREV
 void strrev(char *string)
   {
   if (!string) return;

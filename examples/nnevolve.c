@@ -286,7 +286,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
   {
   entity	*adult;		/* Adapted solution. */
   network_t	*nn=(network_t *)child->chromosome[0];
-  int		n, item;
+/*  int		n, item; */
 
 /*
  * We must generate a new solution by copying the original solution.

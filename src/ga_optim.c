@@ -2115,12 +2115,15 @@ int ga_evolution_archipelago( const int num_pops,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-#if 0
 int ga_evolution_archipelago_forked( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
+
+  plog(LOG_FIXME, "Code incomplete.");
+
+#if 0
   int		island;			/* Current island number. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
@@ -2279,10 +2282,10 @@ int ga_evolution_archipelago_forked( const int num_pops,
   s_free(pid);
   s_free(eid);
   s_free(evalpipe);
+#endif
 
   return generation;
   }
-#endif
 
 
 /**********************************************************************

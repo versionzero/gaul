@@ -2579,12 +2579,12 @@ unsigned int ga_resurect(population *pop)
 		it from the population table.
   parameters:
   return:
-  last updated:	18 Mar 2002
+  last updated:	12 Jun 2002
  **********************************************************************/
 
 boolean ga_extinction(population *extinct)
   {
-  int		id;		/* Internal index for this extinct population. */
+  unsigned int		id;		/* Internal index for this extinct population. */
 
   if (!extinct) die("Null pointer to population structure passed.");
 

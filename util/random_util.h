@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	31 May 2002 SAA	Fixed empty parameter declaration.
+  Updated:	12 Jun 2002 SAA	Minor fix for clean compilation on QNX V6.
+		31 May 2002 SAA	Fixed empty parameter declaration.
 		16 Mar 2002 SAA	Check whether we have limits.h on this system.
 		25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
 		4 Dec 2001 SAA	New 'float' functions.
@@ -69,7 +70,7 @@
  */
 #ifdef UINT_MAX
 /* UINT_MAX comes from limits.h */
-#define RANDOM_RAND_MAX		UINT_MAX
+#define RANDOM_RAND_MAX		(unsigned int) UINT_MAX
 #else
 #define RANDOM_RAND_MAX         (unsigned int) 0xFFFFFFFF      /* Maximum 32-bit unsigned int */
 #endif

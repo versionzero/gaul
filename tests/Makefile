@@ -1,4 +1,3 @@
-# Generated automatically from Makefile.in by configure.
 # Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
@@ -44,6 +43,7 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
+
 prefix = /usr/local
 exec_prefix = ${prefix}
 
@@ -76,7 +76,7 @@ AUTOHEADER = autoheader
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+INSTALL_SCRIPT = ${INSTALL}
 transform = s,x,x,
 
 NORMAL_INSTALL = :
@@ -85,11 +85,11 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = i686-pc-linux
+build_alias = 
 build_triplet = i686-pc-linux-gnu
-host_alias = i686-pc-linux
+host_alias = 
 host_triplet = i686-pc-linux-gnu
-target_alias = i686-pc-linux
+target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
 CC = gcc
@@ -101,7 +101,7 @@ LT_RELEASE = 0.1839
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = makeinfo
+MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null

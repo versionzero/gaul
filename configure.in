@@ -456,6 +456,7 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 memcpy memset memmove bcopy memscan \
                 memrev memchr memmem memcmp bcmp \
                 min max \
+                itoa \
                 index rindex \
                 strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok strpbrk strsep \
