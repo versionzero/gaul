@@ -114,6 +114,8 @@
 
 		alloca() like function.
 
+		s_malloc0() etc. would be useful.
+
   Bugs:		Padding causes data to become unaligned on alpha processors.
 
  **********************************************************************/
@@ -1587,7 +1589,7 @@ void *s_realloc_safe(	void *oldptr, size_t size,
   last updated:	15/11/00
  **********************************************************************/
 
-char *s_strdup_safe(	char *src,
+char *s_strdup_safe(	const char *src,
 			char *funcname, char *filename, int linenum)
   {
   void		*dest;	/* Pointer to new string */
@@ -1602,7 +1604,7 @@ char *s_strdup_safe(	char *src,
     return NULL;
     }
 
-  len = strlen(src);
+  len = strlen(src)+1;
    
 /*
   if ( !(dest = strdup(src)) )
@@ -1635,7 +1637,7 @@ char *s_strdup_safe(	char *src,
   last updated:	01/03/01
  **********************************************************************/
 
-char *s_strndup_safe(	char *src, size_t length,
+char *s_strndup_safe(	const char *src, size_t length,
 			char *funcname, char *filename, int linenum )
   {
   void		*dest;	/* Pointer to new string */
@@ -1657,7 +1659,7 @@ char *s_strndup_safe(	char *src, size_t length,
     return NULL;
     }
 
-  len = strlen(src);
+  len = strlen(src)+1;
 
   if (length < len) len = length;
    

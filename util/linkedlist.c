@@ -1072,6 +1072,10 @@ boolean linkedlist_test(void)
 
   printf("ok\n");
 
-  return 2;
+#ifdef LINKEDLIST_COMPILE_MAIN
+  exit(2);
+#else
+  return TRUE;
+#endif
   }
 

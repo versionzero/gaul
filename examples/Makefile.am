@@ -28,7 +28,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-INCLUDES = -I../util/ -I../src/ 
+# INCLUDES = -I../util/ -I../src/ 
 
 bin_PROGRAMS = pingpong wildfire \
 	goldberg1 goldberg2 \

@@ -24,7 +24,10 @@
 
  **********************************************************************
 
-  Updated:	11/06/01 SAA	Added 'byte' type definition for more readable code.  I Assume that the sizeof of a char is always 1 byte, but reading the ANSI definitions, that seems perfectly reasonable.
+  Updated:	29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
+		07 Nov 2001 SAA	Added MINMAX macro.
+		26/08/01 SAA	boolean is now short instead of int.  Bool and Boolean are now define'd to that instead of int too.  SWAP_BOOLEAN() macro added.
+		11/06/01 SAA	Added 'byte' type definition for more readable code.  I Assume that the sizeof of a char is always 1 byte, but reading the ANSI definitions, that seems perfectly reasonable.
 		30/04/01 SAA	Added ISTINY() macro.
 		11/03/01 SAA	Added maybeinline definition.
 		27/02/01 SAA	Added vpointer and constvpointer because I was, on occassion, including glib just for gpointer and gconstpointer!
@@ -78,9 +81,6 @@
 #define _GNU_SOURCE
 #endif
 
-/*
- * Ensure that we always include the configuration header, if appropriate.
- */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -93,7 +93,7 @@
  * PARALLEL==1			Pthreads.
  * PARALLEL==2			MPI 1.2.x
  * PARALLEL==3			PVM
- * PARALLEL==4			BSPlib
+ * PARALLEL==4			BSP
  * PARALLEL==5			OpenMP
  *
  * Transparently include MPI/whatever header in all files if this is parallel
@@ -122,11 +122,7 @@
 #endif
 
 #if PARALLEL!=1
-/*
- * If threads are used, these must be properly defined somewhere.  But
- * otherwise, they are just set to nothing so they same code can be readily
- * used in serial innovocations.
- */
+/* If threads are used, these must be properly defined somewhere. */
 #define THREAD_LOCK_DEFINE_STATIC(name)
 #define THREAD_LOCK_DEFINE(name)
 #define THREAD_LOCK_EXTERN(name)
@@ -168,15 +164,15 @@
  * Types
  * Boolean and bool should both be deprecated.
  */
-#define Boolean         int
-#define bool		int
-/* am I getting lazier? */
-
 #if _USE_C99_SOURCE
 typedef _Bool boolean;
 #else
-typedef int boolean;
+typedef short boolean;
 #endif
+
+#define Boolean         boolean
+#define bool		boolean
+/* am I getting lazier? */
 
 #ifndef FALSE
 #if 0
@@ -195,8 +191,17 @@ static const boolean true  = (0==0);	/* 1 */
 
 typedef void* vpointer;
 typedef const void *constvpointer;
-typedef unsigned char	byte;
-#define BYTEBITS	CHARBITS
+typedef unsigned char byte;
+#ifdef BITSPERBYTE
+# define BYTEBITS	BITSPERBYTE
+#else
+# ifdef CHARBITS
+#  define BYTEBITS	CHARBITS
+# else
+/* Guess! */
+#  define BYTEBITS	8
+# endif
+#endif
 
 /*
  * Useful constants
@@ -251,12 +256,14 @@ typedef unsigned char	byte;
 #endif
 #define MIN3(x,y,z)	(((x)<(y))?(((x)<(z))?(x):(z)):(((z)<(y))?(z):(y)))	/* Return smallest */
 #define MAX3(x,y,z)	(((x)>(y))?(((x)>(z))?(x):(z)):(((z)>(y))?(z):(y)))	/* Return largest */
+#define MINMAX(a,z,x,y) {if((x)<(y)){a=x;z=y;}else{z=x;a=y;}}
 
 /* Swap primitives */
 #define SWAP_INT(x,y)		{int t; t = x; x = y; y = t; }
 #define SWAP_CHAR(x,y)		{char t; t = x; x = y; y = t; }
 #define SWAP_FLOAT(x,y)		{float t; t = x; x = y; y = t; }
 #define SWAP_DOUBLE(x,y)	{double t; t = x; x = y; y = t; }
+#define SWAP_BOOLEAN(x,y)	{boolean t; t = x; x = y; y = t; }
 
 /* Working with bitvectors. c is the vector, n is the bit index */
 #define	GET_BIT(c,n)		(*((c)+((n)>>3)) >> (7-((n)&7))&1)
@@ -290,10 +297,9 @@ typedef unsigned char	byte;
  */
 #define LERP(x,l,h)	((l)+(((h)-(l))*(x)))
 
-/*
- * Is this a GNU system? If not, __PRETTY_FUNCTION__ will not be defined.
- */
-#ifndef __PRETTY_FUNCTION__
+/* Is this a GNU system? */
+#ifndef __GNUC__
+/* No. */
 #define __PRETTY_FUNCTION__ "<unavailable>"
 #endif
 

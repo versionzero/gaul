@@ -83,7 +83,7 @@ SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
 int	slink_index_link(SLList *list, SLList *link);
 int	slink_index_data(SLList *list, vpointer data);
 SLList	*slink_last(SLList *list);
-unsigned	int slink_size(SLList *list);
+unsigned int	slink_size(SLList *list);
 boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
 SLList	*slink_sort_merge (SLList      *l1, 
 		     SLList      *l2,
@@ -115,7 +115,7 @@ int	dlink_index_link(DLList *list, DLList *link);
 int	dlink_index_data(DLList *list, vpointer data);
 DLList	*dlink_last(DLList *list);
 DLList	*dlink_first(DLList *list);
-unsigned	int dlink_size(DLList *list);
+unsigned int	dlink_size(DLList *list);
 boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
 boolean	dlink_foreach_reverse(DLList *list,
                        LLForeachFunc func, vpointer userdata);

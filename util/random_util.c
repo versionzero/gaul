@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	16/06/01 SAA	Added random_double_full().
+  Updated:	19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
+		16/06/01 SAA	Added random_double_full().
 		12/06/01 SAA	Added chi squared test to random_test().
 		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
 		21/02/01 SAA	Added double random_double_1() for convenience.
@@ -785,12 +786,17 @@ boolean random_test(void)
       }
     }
 
-  printf("Creating file (\"randtest.dat\") of 10000 random integer numbers for external analysis.\n");
+  printf("Creating file (\"randtest.dat\") of 5000 random integer numbers for external analysis.\n");
 
   rfile = fopen("randtest.dat", "w");
 
-  for (i=0; i<10000; i++)
-    fprintf(rfile, "%d %d\n", i, random_rand());
+  for (i=0; i<5000; i++)
+    {
+    r = random_rand();
+    fprintf(rfile, "%f %f\n",
+            /*i, r,*/
+            (double)i/(double)5000, (double)r/(double)RANDOM_RAND_MAX);
+    }
 
   fclose(rfile);
 

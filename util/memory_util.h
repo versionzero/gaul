@@ -190,8 +190,8 @@ void	memory_set_verbose(int i);
 void	*s_malloc_safe(size_t, char*, char*, int);
 void	*s_calloc_safe(size_t, size_t, char*, char*, int);
 void	*s_realloc_safe(void*, size_t, char*, char*, int);
-char	*s_strdup_safe(char*, char*, char*, int);
-char	*s_strndup_safe(char*, size_t, char*, char*, int);
+char	*s_strdup_safe(const char*, char*, char*, int);
+char	*s_strndup_safe(const char*, size_t, char*, char*, int);
 void	s_free_safe(void*, char*, char*, int);
 #endif /* MEMORY_ALLOC_SAFE */
 
