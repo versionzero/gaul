@@ -139,7 +139,11 @@ boolean linkedlist_test(void);
 
 /*
  * glib list emulation stuff.
+ * Asumming that the gtk/glib headers have been included already,
+ * GSList will be defined and these definitions are not required.
  */
+#ifndef GSList
+
 #define GSList	SLList
 #define GList	DLList
 
@@ -169,6 +173,8 @@ boolean linkedlist_test(void);
 #define g_slist_sort(X, Y)		slink_sort((X), (Y))
 #define g_slist_length(X)		slink_size((X))
 #define g_slist_next(X)			((X)?(((SLList *)(X))->next):NULL)
+
+#endif
 
 #endif /* LINKEDLIST_H_INCLUDED */
 

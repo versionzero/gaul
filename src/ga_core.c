@@ -403,13 +403,13 @@ unsigned int *ga_get_all_population_ids(void)
   synopsis:	Get array of all currently allocated populations.  The
 		returned array needs to be deallocated by the caller.
   parameters:	none
-  return:	population*	array of populations
+  return:	population**	array of population pointers
   last updated: 18 Dec 2001
  **********************************************************************/
 
-population *ga_get_all_populations(void)
+population **ga_get_all_populations(void)
   {
-  return (population *) table_get_data_all(pop_table);
+  return (population **) table_get_data_all(pop_table);
   }
 
 

@@ -164,7 +164,7 @@ int	ga_get_num_populations(void);
 population *ga_get_population_from_id(unsigned int id);
 unsigned int ga_get_population_id(population *pop);
 unsigned int *ga_get_all_population_ids(void);
-population *ga_get_all_populations(void);
+population **ga_get_all_populations(void);
 boolean	ga_entity_seed(population *pop, entity *e);
 boolean ga_population_seed(population *pop);
 boolean ga_population_seed_soup(population *pop, const char *fname);

@@ -113,7 +113,6 @@ population *ga_genesis_int(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "Use of ga_genesis() should be deprecated.");
 
 /*
  * Allocate and initialise a new population.
@@ -200,6 +199,8 @@ population *ga_genesis(	const int		population_size,
 			GAcrossover		crossover,
 			GAreplace		replace )
   {
+  plog(LOG_FIXME, "Use of ga_genesis() should be deprecated.");
+
   return ga_genesis_int( population_size, num_chromo, len_chromo, generation_hook, iteration_hook,
                          data_destructor, data_ref_incrementor, evaluate,
                          seed, adapt, select_one, select_two, mutate, crossover, replace );
