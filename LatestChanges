@@ -34,6 +34,7 @@ Changes since release 0.1846:
 - ga_compare_genome(), ga_count_match_alleles(), ga_genome_hamming_similarity() and ga_genome_euclidian_similarity() functions deprecated.
 - Some OpenMP-based parallelisation added as an alternative to pthreads.
 - New ga_evolution_mpi() function for simple MPI use.  Associated example, examples/struggle_mpi.c, added.
+- Added new selection operators: ga_select_one_bestof3() and ga_select_two_bestof3().  Fixed potential bug in and ga_select_two_bestof2().
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

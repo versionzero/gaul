@@ -335,6 +335,99 @@ boolean ga_select_two_randomrank(population *pop, entity **mother, entity **fath
 
 
 /**********************************************************************
+  ga_select_one_bestof3()
+  synopsis:	Kind of tournament selection.  Choose three random
+		entities, return the best as the selection.  Selection
+		stops when
+		(population size)*(mutation ratio)=(number selected)
+  parameters:
+  return:	
+  last updated: 25 May 2004
+ **********************************************************************/
+
+boolean ga_select_one_bestof3(population *pop, entity **mother)
+  {
+  entity	*mother2, *mother3;	/* Random competitors. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  if (pop->orig_size < 1)
+    {
+    *mother = NULL;
+    return TRUE;
+    }
+
+  *mother = pop->entity_iarray[random_int(pop->orig_size)];
+  mother2 = pop->entity_iarray[random_int(pop->orig_size)];
+  mother3 = pop->entity_iarray[random_int(pop->orig_size)];
+
+  if (mother2->fitness > (*mother)->fitness)
+    *mother = mother2;
+  if (mother3->fitness > (*mother)->fitness)
+    *mother = mother3;
+
+  pop->select_state++;
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_two_bestof2()
+  synopsis:	Kind of tournament selection.  For each parent, choose
+		three random entities, return the best as the
+		selection.
+		The two parents will be different.  Selection
+		stops when
+		(population size)*(crossover ratio)=(number selected)
+  parameters:
+  return:	
+  last updated: 25 May 2004
+ **********************************************************************/
+
+boolean ga_select_two_bestof3(population *pop, entity **mother, entity **father)
+  {
+  entity	*challenger1, challenger2;	/* Random competitors. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  if (pop->orig_size < 2)
+    {
+    *mother = NULL;
+    *father = NULL;
+    return TRUE;
+    }
+
+  *mother = pop->entity_iarray[random_int(pop->orig_size)];
+  challenger1 = pop->entity_iarray[random_int(pop->orig_size)];
+  challenger2 = pop->entity_iarray[random_int(pop->orig_size)];
+
+  if (challenger1->fitness > (*mother)->fitness)
+    *mother = challenger1;
+  if (challenger2->fitness > (*mother)->fitness)
+    *mother = challenger2;
+
+  do 
+    {
+    *father = pop->entity_iarray[random_int(pop->orig_size)];
+    } while (*mother == *father);
+
+  challenger1 = pop->entity_iarray[random_int(pop->orig_size)];
+  challenger2 = pop->entity_iarray[random_int(pop->orig_size)];
+
+  if (challenger1 != *mother && challenger1->fitness > (*father)->fitness)
+    *father = challenger1;
+
+  if (challenger2 != *mother && challenger2->fitness > (*father)->fitness)
+    *father = challenger2;
+
+  pop->select_state++;
+
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
+  }
+
+
+/**********************************************************************
   ga_select_one_bestof2()
   synopsis:	Kind of tournament selection.  Choose two random
 		entities, return the best as the selection.  Selection
@@ -378,7 +471,7 @@ boolean ga_select_one_bestof2(population *pop, entity **mother)
 		(population size)*(crossover ratio)=(number selected)
   parameters:
   return:	
-  last updated: 30/04/01
+  last updated: 25 May 2004
  **********************************************************************/
 
 boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
@@ -403,11 +496,12 @@ boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
   do 
     {
     *father = pop->entity_iarray[random_int(pop->orig_size)];
-    challenger = pop->entity_iarray[random_int(pop->orig_size)];
-
-    if (challenger->fitness > (*father)->fitness)
-      *father = challenger;
     } while (*mother == *father);
+
+  challenger = pop->entity_iarray[random_int(pop->orig_size)];
+
+  if (challenger != *mother && challenger->fitness > (*father)->fitness)
+    *father = challenger;
 
   pop->select_state++;
 

@@ -297,6 +297,8 @@ boolean	ga_select_one_randomrank(population *pop, entity **mother);
 boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father);
 boolean ga_select_one_bestof2(population *pop, entity **mother);
 boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father);
+boolean ga_select_one_bestof3(population *pop, entity **mother);
+boolean ga_select_two_bestof3(population *pop, entity **mother, entity **father);
 boolean	ga_select_one_roulette( population *pop, entity **mother );
 boolean	ga_select_two_roulette( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
