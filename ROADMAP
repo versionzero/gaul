@@ -11,6 +11,7 @@ These milestone requirements are subject to change ;)
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
  0.1846     |  Comprehensive test suite.
+            |  Native windows distribution.
 ------------+--------------------------------------------------------
  0.1847     |  ga_evolution_mpi() and associated examples.
             |  ga_evolution_threaded() and associated example.

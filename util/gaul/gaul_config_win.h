@@ -60,8 +60,8 @@ extern int errno;
  */
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1845
-#define GA_PATCH_VERSION 2
-#define GA_VERSION_STRING "0.1845-2"
+#define GA_PATCH_VERSION 3
+#define GA_VERSION_STRING "0.1845-3"
 #define GA_UNAME_STRING "<Unknown windows machine>"
 #define GA_BUILD_DATE_STRING "13/08/03"
 
