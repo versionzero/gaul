@@ -245,10 +245,118 @@ static void gaul_ensure_evaluations(population *pop)
 
 
 /**********************************************************************
+  gaul_ensure_evaluations_forked()
+  synopsis:	Fitness evaluations.
+		Evaluate all previously unevaluated entities.
+		No adaptation.
+  parameters:	population *pop
+  return:	none
+  last updated:	30 Jun 2002
+ **********************************************************************/
+
+static void gaul_ensure_evaluations_forked(population *pop, const int num_processes,
+			int *eid, pid_t *pid, const int *evalpipe)
+  {
+  int		fork_num;		/* Index of current forked process. */
+  int		num_forks;		/* Number of forked processes. */
+  int		eval_num;		/* Index of current entity. */
+  pid_t		fpid;			/* PID of completed child process. */
+
+/*
+ * A forked process is started for each fitness evaluation upto
+ * a maximum of max_processes at which point we wait for
+ * results before forking more.
+ *
+ * Skip evaluations for entities that have been previously evaluated.
+ */
+  fork_num = 0;
+  eval_num = 0;
+
+  /* Fork initial processes. */
+  /* Skip to the next entity which needs evaluating. */
+  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+
+  while (fork_num < num_processes && eval_num < pop->size)
+    {
+    eid[fork_num] = eval_num;
+    pid[fork_num] = fork();
+
+    if (pid[fork_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[fork_num] == 0)
+      {       /* This is the child process. */
+      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+      write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+      _exit(1);
+      }
+
+    fork_num++;
+    eval_num++;
+
+    /* Skip to the next entity which needs evaluating. */
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+    }
+  num_forks = fork_num;
+
+  /* Wait for a forked process to finish and, if needed, fork another. */
+  while (num_forks > 0)
+    {
+    fpid = wait(NULL);
+
+    if (fpid == -1) die("Error in wait().");
+
+    /* Find which entity this forked process was evaluating. */
+    fork_num = 0;
+    while (fpid != pid[fork_num]) fork_num++;
+
+    if (eid[fork_num] == -1) die("Internal error.  eid is -1");
+
+    read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
+
+    if (eval_num < pop->size)
+      {       /* New fork. */
+      eid[fork_num] = eval_num;
+      pid[fork_num] = fork();
+
+      if (pid[fork_num] < 0)
+        {       /* Error in fork. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+      else if (pid[fork_num] == 0)
+        {       /* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        _exit(1);
+        }
+
+      eval_num++;
+
+      /* Skip to the next entity which needs evaluating. */
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+      }
+    else
+      {
+      pid[fork_num] = -1;
+      eid[fork_num] = -1;
+      num_forks--;
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
   gaul_adapt_and_evaluate()
   synopsis:	Fitness evaluations.
-		Evaluate a consequtive set of entities, whilst
-		performing any necessary adaptation.
+		Evaluate the new entities produced in the current
+		generation, whilst performing any necessary adaptation.
 		Simple sequential version.
   parameters:	population *pop
   return:	none
@@ -269,6 +377,163 @@ static void gaul_adapt_and_evaluate(population *pop)
     for (i=pop->orig_size; i<pop->size; i++)
       {
       pop->evaluate(pop, pop->entity_iarray[i]);
+      }
+
+    return;
+    }
+  else
+    {	/* Some kind of adaptation is required.  First reevaluate parents, as needed, then children. */
+
+    plog(LOG_VERBOSE, "*** Adaptation and Fitness Evaluations ***");
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
+      { 
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
+      {
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_adapt_and_evaluate_forked()
+  synopsis:	Fitness evaluations.
+		Evaluate the new entities produced in the current
+		generation, whilst performing any necessary adaptation.
+		Forked processing version.
+  parameters:	population *pop
+  return:	none
+  last updated:	11 Jun 2002
+ **********************************************************************/
+
+static void gaul_adapt_and_evaluate_forked(population *pop,
+	       		const int num_processes,
+			int *eid, pid_t *pid, const int *evalpipe)
+  {
+  int		i;			/* Loop variable over entity ranks. */
+  entity	*adult=NULL;		/* Adapted entity. */
+  int		adultrank;		/* Rank of adapted entity. */
+  int		fork_num;		/* Index of current forked process. */
+  int		num_forks;		/* Number of forked processes. */
+  int		eval_num;		/* Index of current entity. */
+  pid_t		fpid;			/* PID of completed child process. */
+
+  if (pop->scheme == GA_SCHEME_DARWIN)
+    {	/* This is pure Darwinian evolution.  Simply assess fitness of all children.  */
+
+    plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
+
+/* 
+ * A forked process is started for each fitness evaluation upto
+ * a maximum of max_processes at which point we wait for 
+ * results before forking more.
+ *
+ * FIXME: This lump of code is almost identical to that in
+ * gaul_ensure_evaluations_forked() and shouldn't really be duplicated.
+ */
+    fork_num = 0;
+    eval_num = pop->orig_size;
+
+    /* Fork initial processes. */
+    while (fork_num < num_processes && eval_num < pop->size)
+      {
+      eid[fork_num] = eval_num;
+      pid[fork_num] = fork();
+
+      if (pid[fork_num] < 0)
+        {	/* Error in fork. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+      else if (pid[fork_num] == 0)
+        {	/* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        _exit(1);
+        }
+      fork_num++;
+      eval_num++;
+      }
+    num_forks = fork_num;
+
+    /* Wait for a forked process to finish and, if needed, fork another. */
+    while (num_forks > 0)
+      {
+      fpid = wait(NULL);
+
+      if (fpid == -1) die("Error in wait().");
+
+      /* Find which entity this forked process was evaluating. */
+      fork_num = 0;
+      while (fpid != pid[fork_num]) fork_num++;
+
+      if (eid[fork_num] == -1) die("Internal error.  eid is -1");
+
+      read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
+
+      if (eval_num < pop->size)
+        {	/* New fork. */
+        eid[fork_num] = eval_num;
+        pid[fork_num] = fork();
+
+        if (pid[fork_num] < 0)
+          {       /* Error in fork. */
+          dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+          }
+        else if (pid[fork_num] == 0)
+          {       /* This is the child process. */
+          pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+          write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+          _exit(1);
+          }
+
+        eval_num++;
+        }
+      else
+        {
+        pid[fork_num] = -1;
+        eid[fork_num] = -1;
+        num_forks--;
+        }
       }
 
     return;
@@ -541,10 +806,6 @@ int ga_evolution_forked(	population		*pop,
   int		*evalpipe;		/* Pipes for returning fitnesses. */
   pid_t		*pid;			/* Child PIDs. */
   int		*eid;			/* Entity which forked process is evaluating. */
-  int		fork_num;		/* Index of current forked process. */
-  int		num_forks;		/* Number of forked processes. */
-  int		eval_num;		/* Index of current entity. */
-  pid_t		fpid;			/* PID of completed child process. */
   int		max_processes=0;	/* Maximum number of processes to fork at one time. */
   char		*max_proc_str;		/* Value of enviroment variable. */
 
@@ -568,7 +829,7 @@ int ga_evolution_forked(	population		*pop,
   if (max_processes == 0) max_processes = GA_DEFAULT_NUM_PROCESSES;
 
 /*
- * Allocate memory.
+ * Allocate memory required for handling the forked processes.
  * Open pipes for reporting fitnesses.
  * Clear pid and eid arrays.
  */
@@ -584,92 +845,8 @@ int ga_evolution_forked(	population		*pop,
 
 /*
  * Score and sort the initial population members.
- *
- * A forked process is started for each fitness evaluation upto
- * a maximum of max_processes at which point we wait for
- * results before forking more.
- *
- * Skip evaluations for entities that have been previously evaluated.
  */
-  fork_num = 0;
-  eval_num = 0;
-
-  /* Fork initial processes. */
-  /* Skip to the next entity which needs evaluating. */
-  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
-
-  while (fork_num < max_processes && eval_num < pop->size)
-    {
-    eid[fork_num] = eval_num;
-    pid[fork_num] = fork();
-
-    if (pid[fork_num] < 0)
-      {       /* Error in fork. */
-      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-      }
-    else if (pid[fork_num] == 0)
-      {       /* This is the child process. */
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-      write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-      _exit(1);
-      }
-
-    fork_num++;
-    eval_num++;
-
-    /* Skip to the next entity which needs evaluating. */
-    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
-    }
-  num_forks = fork_num;
-
-  /* Wait for a forked process to finish and, if needed, fork another. */
-  while (num_forks > 0)
-    {
-    fpid = wait(NULL);
-
-    if (fpid == -1) die("Error in wait().");
-
-    /* Find which entity this forked process was evaluating. */
-    fork_num = 0;
-    while (fpid != pid[fork_num]) fork_num++;
-
-    if (eid[fork_num] == -1) die("Internal error.  eid is -1");
-
-    read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
-
-    if (eval_num < pop->size)
-      {       /* New fork. */
-      eid[fork_num] = eval_num;
-      pid[fork_num] = fork();
-
-      if (pid[fork_num] < 0)
-        {       /* Error in fork. */
-        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-        }
-      else if (pid[fork_num] == 0)
-        {       /* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-        _exit(1);
-        }
-
-      eval_num++;
-
-      /* Skip to the next entity which needs evaluating. */
-      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
-      }
-    else
-      {
-      pid[fork_num] = -1;
-      eid[fork_num] = -1;
-      num_forks--;
-      }
-    }
-
+  gaul_ensure_evaluations_forked(pop, max_processes, eid, pid, evalpipe);
   sort_population(pop);
 
   plog( LOG_VERBOSE,
@@ -705,85 +882,11 @@ int ga_evolution_forked(	population		*pop,
 
 /*
  * Score all child entities from this generation.
- *
- * A forked process is started for each fitness evaluation upto
- * a maximum of max_processes at which point we wait for 
- * results before forking more.
- *
- * FIXME: This lump of code is almost identical to that above and
- * shouldn't really be duplicated.
  */
-    fork_num = 0;
-    eval_num = pop->orig_size;
-
-    /* Fork initial processes. */
-    while (fork_num < max_processes && eval_num < pop->size)
-      {
-      eid[fork_num] = eval_num;
-      pid[fork_num] = fork();
-
-      if (pid[fork_num] < 0)
-        {	/* Error in fork. */
-        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-        }
-      else if (pid[fork_num] == 0)
-        {	/* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-        _exit(1);
-        }
-      fork_num++;
-      eval_num++;
-      }
-    num_forks = fork_num;
-
-    /* Wait for a forked process to finish and, if needed, fork another. */
-    while (num_forks > 0)
-      {
-      fpid = wait(NULL);
-
-      if (fpid == -1) die("Error in wait().");
-
-      /* Find which entity this forked process was evaluating. */
-      fork_num = 0;
-      while (fpid != pid[fork_num]) fork_num++;
-
-      if (eid[fork_num] == -1) die("Internal error.  eid is -1");
-
-      read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
-
-      if (eval_num < pop->size)
-        {	/* New fork. */
-        eid[fork_num] = eval_num;
-        pid[fork_num] = fork();
-
-        if (pid[fork_num] < 0)
-          {       /* Error in fork. */
-          dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-          }
-        else if (pid[fork_num] == 0)
-          {       /* This is the child process. */
-          pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-          write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-          _exit(1);
-          }
-
-        eval_num++;
-        }
-      else
-        {
-        pid[fork_num] = -1;
-        eid[fork_num] = -1;
-        num_forks--;
-        }
-      }
+    gaul_adapt_and_evaluate_forked(pop, max_processes, eid, pid, evalpipe);
 
 /*
- * Apply survival pressures.
+ * Apply survival pressure.
  */
     gaul_survival(pop);
 
@@ -1120,13 +1223,224 @@ int ga_evolution_steady_state(	population		*pop,
   entity	*son, *daughter, *child;	/* Child entities. */
   entity	*adult;			/* Temporary copy for gene optimisation. */
   int		new_pop_size;		/* Population size prior to adaptation. */
-#if GA_WRITE_STATS==TRUE
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->replace) die("Population's replacement callback is undefined.");
+  if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+
+  plog(LOG_VERBOSE, "The evolution has begun!");
+
+/*
+ * Score and sort the initial population members.
+ */
+  gaul_ensure_evaluations(pop);
+  sort_population(pop);
+
+  plog( LOG_VERBOSE,
+        "Prior to the first iteration, population has fitness scores between %f and %f",
+        pop->entity_iarray[0]->fitness,
+        pop->entity_iarray[pop->size-1]->fitness );
+
+/* Do all the iterations: */
+  while ( (pop->generation_hook?pop->generation_hook(iteration, pop):TRUE) &&
+           iteration<max_iterations )
+    {
+    iteration++;
+    pop->orig_size = pop->size;
+
+    son = NULL;
+    daughter = NULL;
+    child = NULL;
+
+    plog(LOG_DEBUG,
+              "Population size is %d at start of iteration %d",
+              pop->orig_size, iteration );
+
+/*
+ * Mating cycle.
+ *
+ * Select pairs of entities to mate via crossover. (Sexual reproduction).
+ *
+ * Score the new entities as we go.
+ */
+    plog(LOG_VERBOSE, "*** Mating ***");
+
+    pop->select_state = 0;
+
+    pop->select_two(pop, &mother, &father);
+
+    if (mother && father)
+      {
+      plog(LOG_VERBOSE, "Crossover between %d (%d = %f) and %d (%d = %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness,
+             ga_get_entity_id(pop, father),
+             ga_get_entity_rank(pop, father), father->fitness);
+
+      son = ga_get_free_entity(pop);
+      daughter = ga_get_free_entity(pop);
+      pop->crossover(pop, mother, father, daughter, son);
+      pop->evaluate(pop, daughter);
+      pop->evaluate(pop, son);
+      }
+    else
+      {
+      plog( LOG_VERBOSE, "Crossover not performed." );
+      }
+
+/*
+ * Mutation cycle.
+ *
+ * Select entities to undergo asexual reproduction, in which case the child will
+ * have a genetic mutation of some type.
+ *
+ * Score the new entities as we go.
+ */
+    plog(LOG_VERBOSE, "*** Mutation ***");
+
+    pop->select_state = 0;
+
+    pop->select_one(pop, &mother);
+
+    if (mother)
+      {
+      plog(LOG_VERBOSE, "Mutation of %d (%d = %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness );
+
+      child = ga_get_free_entity(pop);
+      pop->mutate(pop, mother, child);
+      pop->evaluate(pop, child);
+
+      }
+    else
+      {
+      plog( LOG_VERBOSE, "Mutation not performed." );
+      }
+
+/*
+ * Environmental adaptation.
+ *
+ * Skipped in the case of Darwinian evolution.
+ * Performed in the case of Baldwinian evolution.
+ * Performed, and genes are modified, in the case of Lamarckian evolution.
+ *
+ * Maybe, could reoptimise all solutions at each generation.  This would allow
+ * a reduced optimisation protocol and only those solutions which are
+ * reasonable would survive for further optimisation.
+ *
+ * FIXME: This is wrong for GA_SCHEME_BALDWIN, GA_SCHEME_LAMARCK and may be
+ * optimised for GA_SCHEME_BALDWIN_ALL, GA_SCHEME_LAMARCK_ALL. 
+ */
+  if (pop->scheme != GA_SCHEME_DARWIN)
+    {
+    plog(LOG_VERBOSE, "*** Adaptation ***");
+
+    new_pop_size = pop->size;
+
+    switch (pop->scheme)
+      {
+      case (GA_SCHEME_BALDWIN_CHILDREN):
+        /* Baldwinian evolution for children only. */
+        for (i=pop->orig_size; i<new_pop_size; i++)
+          {
+          adult = pop->adapt(pop, pop->entity_iarray[i]);
+          pop->entity_iarray[i]->fitness=adult->fitness;
+/* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_SCHEME_BALDWIN_ALL):
+        /* Baldwinian evolution for entire population. */
+        /* I don't recommend this, but it is here for completeness. */
+        for (i=0; i<new_pop_size; i++)
+          {
+          adult = pop->adapt(pop, pop->entity_iarray[i]);
+          pop->entity_iarray[i]->fitness=adult->fitness;
+/* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_SCHEME_LAMARCK_CHILDREN):
+        /* Lamarckian evolution for children only. */
+        while (new_pop_size>pop->orig_size)
+          {
+          new_pop_size--;
+          adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_SCHEME_LAMARCK_ALL):
+        /* Lamarckian evolution for entire population. */
+        while (new_pop_size>0)
+          {
+          new_pop_size--;
+          adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      default:
+        dief("Unknown evolutionary scheme %d.\n", pop->scheme);
+      }
+    }
+
+/*
+ * Insert new entities into population.
+ */
+    if (son) pop->replace(pop, son);
+    if (daughter) pop->replace(pop, daughter);
+    if (child) pop->replace(pop, child);
+
+/*
+ * Use callback.
+ */
+    plog(LOG_VERBOSE, "*** Analysis ***");
+
+    plog(LOG_VERBOSE,
+          "After iteration %d, population has fitness scores between %f and %f",
+          iteration,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+    }	/* Iteration loop. */
+
+  return (iteration<max_iterations);
+  }
+
+
+/**********************************************************************
+  ga_evolution_steady_state_with_stats()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given population.
+		This is a steady-state GA.
+		ga_genesis(), or equivalent, must be called prior to
+		this function.
+  parameters:
+  return:
+  last updated:	11 Jun 2002
+ **********************************************************************/
+
+int ga_evolution_steady_state_with_stats(	population	*pop,
+						const int	max_iterations )
+  {
+  int		iteration=0;		/* Current iteration count. */
+  int		i;			/* Loop over members of population. */
+  entity	*mother, *father;	/* Parent entities. */
+  entity	*son, *daughter, *child;	/* Child entities. */
+  entity	*adult;			/* Temporary copy for gene optimisation. */
+  int		new_pop_size;		/* Population size prior to adaptation. */
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
   int		crossover_good, crossover_poor;	/* Fornication statistics. */
   int		mutation_good, mutation_poor;	/*  - " -  */
   double	crossover_gain, mutation_gain;	/*  - " -  */
-#endif
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -1145,12 +1459,10 @@ int ga_evolution_steady_state(	population		*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
-#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "gen crossover mutation\n");
   fclose(STATS_OUT);
-#endif
 
 /*
  * Score and sort the initial population members.
@@ -1181,7 +1493,6 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Zero statistics.
  */
-#if GA_WRITE_STATS==TRUE
     crossover_good=0;
     crossover_poor=0;
     mutation_good=0;
@@ -1189,7 +1500,6 @@ int ga_evolution_steady_state(	population		*pop,
 
     crossover_gain=0.0;
     mutation_gain=0.0;
-#endif
 
 /*
  * Mating cycle.
@@ -1221,7 +1531,6 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Collate stats.
  */
-#if GA_WRITE_STATS==TRUE
       if (son->fitness > father->fitness)
         crossover_good++;
       else
@@ -1243,7 +1552,7 @@ int ga_evolution_steady_state(	population		*pop,
         crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
       if (daughter->fitness > MAX(mother->fitness,father->fitness))
         crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
-#endif
+
       }
     else
       {
@@ -1277,7 +1586,6 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Collate stats.
  */
-#if GA_WRITE_STATS==TRUE
       if (child->fitness > mother->fitness)
         {
         mutation_good++;
@@ -1287,7 +1595,6 @@ int ga_evolution_steady_state(	population		*pop,
         {
         mutation_poor++;
         }
-#endif
 
       }
     else
@@ -1382,13 +1689,12 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Write statistics.
  */
-#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", iteration,
             crossover_good, crossover_poor, crossover_gain,
             mutation_good, mutation_poor, mutation_gain);
     fclose(STATS_OUT);
-#endif
+
     }	/* Iteration loop. */
 
   return (iteration<max_iterations);
@@ -1400,8 +1706,6 @@ int ga_evolution_steady_state(	population		*pop,
   synopsis:	Perform equivalent to zero temperature metropolis
 		optimisation.  If initial solution is NULL, then a
 		random initial solution is generated.
-		Optionally syncronises with the other processors every
-		iteration and grabs the overall best solution.
 		The original entity will not be munged.
   parameters:
   return:	Best solution found.
@@ -1531,12 +1835,10 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /**********************************************************************
   ga_next_ascent_hill_climbing()
   synopsis:	Perform systematic ascent hill climbing optimisation.
-		(Needn't nessecarily use next bit each time, but this
-		was the simplist to implement)
+		(Needn't nessecarily use next allele each time, but
+	       	this was the simplist to implement.)
 		If initial solution is NULL, then a randomly generated
 		initial solution is generated.
-		Optionally syncronises with the other processors every
-		iteration and grabs the overall best solution.
 		The original entity will not be munged.
 		NOTE: Needs to be passed an 'extended' mutation
 		function.
