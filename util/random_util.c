@@ -808,6 +808,7 @@ double random_exponential(void)
 void random_int_permutation(const int size, int *iarray, int *oarray)
   {
   int		i,j=0;		/* Loop variables over arrays. */
+  int		pos;		/* Randomly selected index. */
   
   if (!iarray || !oarray) die("NULL pointer of int array passed.");
 
