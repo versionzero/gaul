@@ -58,6 +58,8 @@
 #undef SIZEOF_INT
 #undef SIZEOF_VOID_P
 
+#undef SUN_FORTE_C
+
 /* #undef PACKAGE */
 
 
@@ -75,6 +77,9 @@
 
 /* Define if you have the `basename' function. */
 #undef HAVE_BASENAME
+
+/* Define if you have the `bcmp' function. */
+#undef HAVE_BCMP
 
 /* Define if you have the `bcopy' function. */
 #undef HAVE_BCOPY
@@ -366,8 +371,6 @@
 
 /* Version string */
 #undef VERSION_STRING
-
-#undef SUN_FORTE_C
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

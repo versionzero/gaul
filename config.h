@@ -20,11 +20,11 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1838-2"
+#define VERSION_STRING "0.1839-0"
 #define BUILD_DATE_STRING "30/05/02"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1838
-#define PATCH_VERSION 2
+#define MINOR_VERSION 1839
+#define PATCH_VERSION 0
 #define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
@@ -59,6 +59,8 @@
 #define SIZEOF_INT 4
 #define SIZEOF_VOID_P 4
 
+/* #undef SUN_FORTE_C */
+
 /* #undef PACKAGE */
 
 
@@ -76,6 +78,9 @@
 
 /* Define if you have the `basename' function. */
 #define HAVE_BASENAME 1
+
+/* Define if you have the `bcmp' function. */
+#define HAVE_BCMP 1
 
 /* Define if you have the `bcopy' function. */
 #define HAVE_BCOPY 1
@@ -318,7 +323,7 @@
 #define MAJOR_VERSION 0
 
 /* Minor version number */
-#define MINOR_VERSION 1838
+#define MINOR_VERSION 1839
 
 /* Environment variable used to request threads */
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
@@ -330,7 +335,7 @@
 #define PARALLEL 0
 
 /* Patch count */
-#define PATCH_VERSION 2
+#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -366,9 +371,7 @@
 /* #undef VERSION */
 
 /* Version string */
-#define VERSION_STRING "0.1838-2"
-
-/* #undef SUN_FORTE_C */
+#define VERSION_STRING "0.1839-0"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

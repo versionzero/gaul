@@ -25,8 +25,8 @@
 #######################################################################
 
 %define PACKAGE_VERSION 0
-%define RELEASE 1838
-%define PATCH	2
+%define RELEASE 1839
+%define PATCH	0
 
 Summary: Genetic Algorithm Utility Library
 Name: gaul-devel
