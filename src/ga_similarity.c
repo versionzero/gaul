@@ -507,7 +507,7 @@ int ga_similarity_double_count_match_alleles( const population *pop,
   {
   int		i;		/* Loop variable over all alleles. */
   int		count=0;	/* Number of matching alleles. */
-  double	*a, *b;		/* Comparison bitstrings. */
+  double	*a, *b;		/* Comparison chromosomes. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
@@ -542,6 +542,7 @@ double ga_similarity_double_tanimoto(const population *pop,
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
   int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	*a, *b;		/* Comparison chromosomes. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
@@ -549,12 +550,96 @@ double ga_similarity_double_tanimoto(const population *pop,
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
+    a = (double*)(alpha->chromosome[i]);
+    b = (double*)(beta->chromosome[i]);
+
     for (j=0; j<pop->len_chromosomes; j++)
        {
+       aa = a[j]*a[j];
+       ab = a[j]*b[j];
+       bb = b[j]*b[j];
        }
     }
 
   return ab/(aa+bb-ab);
+  }
+
+
+/**********************************************************************
+  ga_similarity_double_dice()
+  synopsis:	Compares the chromosomes of two entities.
+  parameters:	const population *pop	The population.
+		const entity *alpha	Alpha chromosome.
+		const entity *beta	Beta chromosome.
+  return:	Returns Tanimoto similarity coefficient.
+		Range: -1 to +1
+  last updated:	23 May 2002
+ **********************************************************************/
+
+double ga_similarity_double_dice(const population *pop,
+                                      const entity *alpha, const entity *beta)
+  {
+  int           i, j;			/* Loop variable over all chromosomes, alleles. */
+  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	*a, *b;			/* Comparison chromosomes. */
+
+  /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
+  if (!alpha || !beta) die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    a = (double*)(alpha->chromosome[i]);
+    b = (double*)(beta->chromosome[i]);
+
+    for (j=0; j<pop->len_chromosomes; j++)
+       {
+       aa = a[j]*a[j];
+       ab = a[j]*b[j];
+       bb = b[j]*b[j];
+       }
+    }
+
+  return (2*ab)/(aa+bb);
+  }
+
+
+/**********************************************************************
+  ga_similarity_double_cosine()
+  synopsis:	Compares the chromosomes of two entities.
+  parameters:	const population *pop	The population.
+		const entity *alpha	Alpha chromosome.
+		const entity *beta	Beta chromosome.
+  return:	Returns Tanimoto similarity coefficient.
+		Range: -1 to +1
+  last updated:	23 May 2002
+ **********************************************************************/
+
+double ga_similarity_double_cosine(const population *pop,
+                                      const entity *alpha, const entity *beta)
+  {
+  int           i, j;			/* Loop variable over all chromosomes, alleles. */
+  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	*a, *b;			/* Comparison chromosomes. */
+
+  /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
+  if (!alpha || !beta) die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    a = (double*)(alpha->chromosome[i]);
+    b = (double*)(beta->chromosome[i]);
+
+    for (j=0; j<pop->len_chromosomes; j++)
+       {
+       aa = a[j]*a[j];
+       ab = a[j]*b[j];
+       bb = b[j]*b[j];
+       }
+    }
+
+  return ab/sqrt(aa+bb);
   }
 
 
