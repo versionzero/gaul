@@ -60,7 +60,7 @@ DEPENDENCIES = \
 	../util/librandom.a \
 	../util/libmethods.a \
 	../util/libstr_util.a \
-	../src/libgaul.a
+	../src/libgaul.la
 
 EXTRA_DIST = \
 	chromostubs.c \

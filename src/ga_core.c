@@ -1436,7 +1436,7 @@ population *ga_population_recieve( int src_node )
   pop = ga_population_new_recieve( src_node );
   ga_population_append_recieve( pop, src_node );
 
-  return;
+  return pop;
   }
 
 

@@ -30,9 +30,22 @@ AUTOMAKE_OPTIONS = 1.4
 
 lib_LTLIBRARIES = libgaul.la
 
-# CFLAGS = -g -Wall -O
+lib_LIBRARIES = libgaul.a
 
-# INCLUDES = -I../util/
+libgaul_a_SOURCES = \
+    ga_bitstring.c \
+    ga_chromo.c \
+    ga_core.c \
+    ga_crossover.c \
+    ga_intrinsics.c \
+    ga_mutate.c \
+    ga_optim.c \
+    ga_qsort.c \
+    ga_replace.c \
+    ga_seed.c \
+    ga_select.c \
+    ga_similarity.c \
+    ga_utility.c
 
 libgaul_la_SOURCES = \
     ga_bitstring.c \

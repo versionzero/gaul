@@ -91,15 +91,17 @@ AC_PROG_LIBTOOL
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
 
-dnl figure debugging default, prior to $ac_help setup
-dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
-if test `expr $MINOR_VERSION \% 2` = 1 ; then
-	debug_default=yes
-else
-	debug_default=minimum
-fi
-AC_DIVERT_POP()
+#dnl figure debugging default, prior to $ac_help setup
+#dnl
+#AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
+#if test `expr $MINOR_VERSION \% 2` = 1 ; then
+#	debug_default=yes
+#else
+#	debug_default=partial
+#fi
+#AC_DIVERT_POP()
+dnl Debugging default.
+debug_default=no
 
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(debug,
@@ -182,8 +184,6 @@ fi
 
 AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
-#  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  CFLAGS="$CFLAGS -g"
   AC_DEFINE(GA_DEBUG,2)
   AC_DEFINE(DEBUG,2)
   AC_MSG_RESULT(yes)
@@ -252,7 +252,7 @@ changequote(,)dnl
 if test "x$GCC" = "xyes"; then
   case " $CFLAGS " in
   *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall -O2" ;;
+  *) CFLAGS="$CFLAGS -Wall -O2 -g" ;;
   esac
 
   if test "x$enable_missing_prototypes" = "xyes"; then
@@ -333,7 +333,8 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                strdup memdup \
                sincos \
                strndup strnfill strcatv strtod strsignal strrev \
-               basename readline strcspn waitpid \
+               strspn strcspn \
+               basename readline waitpid \
                min max \
                snooze strerror strlcat strlcpy strstr usleep vsnprintf)
 

@@ -42,7 +42,7 @@ sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\&%]/\\&/g;
 /^[ 	]*VPATH[ 	]*=[^:]*$/d
 
 s%@SHELL@%/bin/sh%g
-s%@CFLAGS@%-g -O2 -g -Wall -O2  -I/usr/include/slang/ -I/usr/include/slang/ -I../util/ -I../src/%g
+s%@CFLAGS@%-g -O2 -Wall -O2 -g  -I/usr/include/slang/ -I/usr/include/slang/ -I../util/ -I../src/%g
 s%@CPPFLAGS@%%g
 s%@CXXFLAGS@%%g
 s%@FFLAGS@%%g
@@ -81,11 +81,11 @@ s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@MAJOR_VERSION@%0%g
 s%@MINOR_VERSION@%1835%g
-s%@PATCH_VERSION@%011122%g
+s%@PATCH_VERSION@%020127%g
 s%@VERSION@%0.1835%g
 s%@LT_RELEASE@%0.1835%g
 s%@LT_CURRENT@%0%g
-s%@LT_REVISION@%011122%g
+s%@LT_REVISION@%020127%g
 s%@INSTALL_PROGRAM@%${INSTALL}%g
 s%@INSTALL_SCRIPT@%${INSTALL_PROGRAM}%g
 s%@INSTALL_DATA@%${INSTALL} -m 644%g
@@ -245,9 +245,9 @@ ${ac_eA}MAJOR_VERSION${ac_eB}MAJOR_VERSION${ac_eC}0${ac_eD}
 ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1835${ac_dD}
 ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1835${ac_uD}
 ${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1835${ac_eD}
-${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}011122${ac_dD}
-${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}011122${ac_uD}
-${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}011122${ac_eD}
+${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}020127${ac_dD}
+${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}020127${ac_uD}
+${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}020127${ac_eD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_eA}V3_QUICK${ac_eB}V3_QUICK${ac_eC}1${ac_eD}
@@ -263,9 +263,9 @@ ${ac_eA}PARALLEL${ac_eB}PARALLEL${ac_eC}0${ac_eD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"22/11/01"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"22/11/01"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"22/11/01"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"27/01/02"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"27/01/02"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"27/01/02"${ac_eD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1835"${ac_dD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1835"${ac_uD}
 ${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1835"${ac_eD}
@@ -293,12 +293,12 @@ CEOF
   mv conftest.out conftest.in
 
   cat > conftest.frag <<CEOF
-${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}2${ac_dD}
-${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}2${ac_uD}
-${ac_eA}GA_DEBUG${ac_eB}GA_DEBUG${ac_eC}2${ac_eD}
-${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}2${ac_dD}
-${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}2${ac_uD}
-${ac_eA}DEBUG${ac_eB}DEBUG${ac_eC}2${ac_eD}
+${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}0${ac_dD}
+${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}0${ac_uD}
+${ac_eA}GA_DEBUG${ac_eB}GA_DEBUG${ac_eC}0${ac_eD}
+${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}0${ac_dD}
+${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}0${ac_uD}
+${ac_eA}DEBUG${ac_eB}DEBUG${ac_eC}0${ac_eD}
 ${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
 ${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
 ${ac_eA}MEMORY_PADDING${ac_eB}MEMORY_PADDING${ac_eC}0${ac_eD}
@@ -554,9 +554,9 @@ ${ac_eA}HAVE_STRTOD${ac_eB}HAVE_STRTOD${ac_eC}1${ac_eD}
 ${ac_dA}HAVE_STRSIGNAL${ac_dB}HAVE_STRSIGNAL${ac_dC}1${ac_dD}
 ${ac_uA}HAVE_STRSIGNAL${ac_uB}HAVE_STRSIGNAL${ac_uC}1${ac_uD}
 ${ac_eA}HAVE_STRSIGNAL${ac_eB}HAVE_STRSIGNAL${ac_eC}1${ac_eD}
-${ac_dA}HAVE_BASENAME${ac_dB}HAVE_BASENAME${ac_dC}1${ac_dD}
-${ac_uA}HAVE_BASENAME${ac_uB}HAVE_BASENAME${ac_uC}1${ac_uD}
-${ac_eA}HAVE_BASENAME${ac_eB}HAVE_BASENAME${ac_eC}1${ac_eD}
+${ac_dA}HAVE_STRSPN${ac_dB}HAVE_STRSPN${ac_dC}1${ac_dD}
+${ac_uA}HAVE_STRSPN${ac_uB}HAVE_STRSPN${ac_uC}1${ac_uD}
+${ac_eA}HAVE_STRSPN${ac_eB}HAVE_STRSPN${ac_eC}1${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in
@@ -566,21 +566,24 @@ CEOF
 ${ac_dA}HAVE_STRCSPN${ac_dB}HAVE_STRCSPN${ac_dC}1${ac_dD}
 ${ac_uA}HAVE_STRCSPN${ac_uB}HAVE_STRCSPN${ac_uC}1${ac_uD}
 ${ac_eA}HAVE_STRCSPN${ac_eB}HAVE_STRCSPN${ac_eC}1${ac_eD}
+${ac_dA}HAVE_BASENAME${ac_dB}HAVE_BASENAME${ac_dC}1${ac_dD}
+${ac_uA}HAVE_BASENAME${ac_uB}HAVE_BASENAME${ac_uC}1${ac_uD}
+${ac_eA}HAVE_BASENAME${ac_eB}HAVE_BASENAME${ac_eC}1${ac_eD}
 ${ac_dA}HAVE_WAITPID${ac_dB}HAVE_WAITPID${ac_dC}1${ac_dD}
 ${ac_uA}HAVE_WAITPID${ac_uB}HAVE_WAITPID${ac_uC}1${ac_uD}
 ${ac_eA}HAVE_WAITPID${ac_eB}HAVE_WAITPID${ac_eC}1${ac_eD}
 ${ac_dA}HAVE_STRERROR${ac_dB}HAVE_STRERROR${ac_dC}1${ac_dD}
 ${ac_uA}HAVE_STRERROR${ac_uB}HAVE_STRERROR${ac_uC}1${ac_uD}
 ${ac_eA}HAVE_STRERROR${ac_eB}HAVE_STRERROR${ac_eC}1${ac_eD}
-${ac_dA}HAVE_STRSTR${ac_dB}HAVE_STRSTR${ac_dC}1${ac_dD}
-${ac_uA}HAVE_STRSTR${ac_uB}HAVE_STRSTR${ac_uC}1${ac_uD}
-${ac_eA}HAVE_STRSTR${ac_eB}HAVE_STRSTR${ac_eC}1${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in
   mv conftest.out conftest.in
 
   cat > conftest.frag <<CEOF
+${ac_dA}HAVE_STRSTR${ac_dB}HAVE_STRSTR${ac_dC}1${ac_dD}
+${ac_uA}HAVE_STRSTR${ac_uB}HAVE_STRSTR${ac_uC}1${ac_uD}
+${ac_eA}HAVE_STRSTR${ac_eB}HAVE_STRSTR${ac_eC}1${ac_eD}
 ${ac_dA}HAVE_USLEEP${ac_dB}HAVE_USLEEP${ac_dC}1${ac_dD}
 ${ac_uA}HAVE_USLEEP${ac_uB}HAVE_USLEEP${ac_uC}1${ac_uD}
 ${ac_eA}HAVE_USLEEP${ac_eB}HAVE_USLEEP${ac_eC}1${ac_eD}

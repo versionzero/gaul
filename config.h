@@ -30,16 +30,16 @@
 #define MEMORY_ALIGN_SIZE 4
 #define MEMORY_PADDING 0
 
-#define DEBUG 2
+#define DEBUG 0
 /* #undef HELGA_DEBUG */
 /* #undef MOLSTRUCT_DEBUG */
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1835"
-#define BUILD_DATE_STRING "22/11/01"
+#define BUILD_DATE_STRING "27/01/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1835
-#define PATCH_VERSION 011122
+#define PATCH_VERSION 020127
 #define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.9-13 #1 Tue Oct 30 19:32:27 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
@@ -197,6 +197,9 @@
 
 /* Define if you have the strsignal function.  */
 #define HAVE_STRSIGNAL 1
+
+/* Define if you have the strspn function.  */
+#define HAVE_STRSPN 1
 
 /* Define if you have the strstr function.  */
 #define HAVE_STRSTR 1
