@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="GAUL Introduction to Genetic Algorithms">
+   <meta name="keywords" content="genetic algorithm, GA, tutorial, examples, AI, Neural Nets, neural network, EP, Evolution, Evolutionary Computation, Evolutionary Programming, artificial intelligence, GAUL">
+   <meta name="author" content="Stewart Adcock">
+   <meta name="copyright" content="© Stewart Adcock">
+   <meta name="generator" content="vi">
+   <meta http-equiv="Content-Language" content="en">
+   <title>GAUL: Genetic Algorithm Utility Library</title>
+</head>
+<body text="#000000" bgcolor="#AAAADD" link="#222288" vlink="#222288" alink="#9999FF">
+
+<a NAME="top"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr>
+    <td COLSPAN=3 ALIGN=CENTER BGCOLOR="#000000"><font face="Arial,Helvetica" color="#FFFFFF"> [ <a href="index.html#introduction"><font face="Arial,Helvetica" color="#FFFFFF">Intro</font></a> | <a href="index.html#resources"><font face="Arial,Helvetica" color="#FFFFFF">Resources</font></a> | <a href="index.html#bugs"><font face="Arial,Helvetica" color="#FFFFFF">Bugs</font></a> | <a href="index.html#distribution"><font face="Arial,Helvetica" color="#FFFFFF">Download</font></a>] </font></td>
+  </tr>
+</table>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr>
+    <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Introduction to Genetic Algorithms and GAUL</font></b></td>
+  </tr>
+</table>
+
+<p><a NAME="EC"></a></p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+<tr>
+<td ALIGN=CENTER>
+<p><font face="Arial,Helvetica" color="#FF0000"><i>Please be aware that this web page is incomplete.  It will be updated as soon as more of GAUL's documentation has been written.</i></font></p>
+</td>
+</tr>
+  <tr>
+  <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Evolutionary Computation</font></b></td>
+  </tr>
+<tr>
+<td>
+<p>It is an appealling idea that the natural concepts of evolution may be borrowed for use as a computational optimisation tool.  A family of algorithms have been developed around this idea:</p>
+<ul>
+ <li>evolution strategies</li>
+ <li>evolutionary programming (EP)</li>
+ <li>genetic algorithms (GA)</li>
+</ul>
+<p>The fundamentals of genetic algorithms will be introduced in this document.  For an in depth discussion of Genetic Algorithms and the other related algorithms the interested reader is directed to the GAUL <a href="index.html#resources">resources list</a>.</p>
+</td>
+</tr>
+
+<tr>
+  <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Genetic Algorithms for search and optimisation</font></b></td>
+</tr>
+
+<tr>
+<td>
+<p>Genetic algorithms are now widely applied in science and engineering as adaptive algorithms for solving practical problems.  Certian classes of problem are particularly suited to being tackled using a GA based approach.</p>
+
+<p>The general acceptance is that GAs are particularly suited to multidimensional global search problems where the search space potentially contains multiple local minima.  Unlike other search methods, correlation between the search variables is not generally a problem.  The basic GA does not require extensive knowledge of the search space, such as likely solution bounds or functional derivatives.  A task for which simple GAs are not suited is rapid local optimisation, however, coupling the GA with other search techniques to overcome this problem is trivial.  Whenever multidimensional systematic searching would be technique of choice, except that the large number of comparisons make that approach intractable, a GA should be considered for the reasons outlined in the sections below.</p>
+
+<p>GAs were first introduced by John Holland for the formal investigation of the mechanisms of natural adaptation[<a href="#holland1975">Holland 1975</a>], but the algorithms have been since modified to solve computational search problems.  Modern GAs deviate greatly from the original form proposed by Holland, but their linage is clear.  There is no single firm definition for a genetic algorithm, and the computational system is highly simplified compared to the actual situation in nature.  Therefore, we must first define a few terms and show how they relate between modern GAs and more traditional evolutionary theory.</p>
+
+</td>
+</tr>
+
+<tr>
+  <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">GA Fundamentals and terminology</font></b></td>
+</tr>
+
+<tr>
+<td>
+
+<p>In nature all living organisms contain a set of genetic data, termed a "genome".  Somehow, this genetic data encodes all of the physical characteristics of the organism, known as the "phenome".  A particular set of genetic information is a "genotype", and likewise a particular set of physical characteristics, or "traits", is a "phenotype".  There may, or may not, be a direct one-to-one mapping of genotypes to phenotypes.  These physical characteristics determine how well suited to its environment a particular organism is.  The suitability of a given organism to its environment is usually measured as its "fitness".</p>
+
+<p>The idea of "Survival of the fittest", as introduced by Darwin, is well known.  Computationally, it is usual to evaluate the "fitness" of an organism directly, without considering any kind of phenome.  In nature the "fitness" relates to the ability of the organism to survive and to reproduce, whereas in genetic algorithms the "fitness" is the evaluated result of some "objective function".  This objective function is the measure of how well the target problem has been solved.  Organisms with a better "fitness" score are more likely to be selected for reproduction either through some mechanism of competition to mate, or as a result of least fit organisms dying.</p>
+
+<p>A genome typically consists of many chromosomes, although in GAs there is often only one chromosome.</p>
+
+<p>The genome is stored in the form of DNA in nature.  On computers there is more flexibility, but it is common that the main factor controlling whether a particular search problem is successfully resolved or not depends upon how the problem was encoded into the genome.  In John Holland's original work, a single binary "bitstring" was used.  This had computational advantages in terms of efficiency, but with modern computer hardware the balance between raw efficiency and applicability to a given task has swung towards the latter.  Many different methods for encoding the genetic information are in common use today.</p>
+
+<pre>
+These topics have not yet been written about:
+
+Alleles, loci, genes.  diploid/haploid.
+
+Tree encoding, real-valued arrays, permatations, Gray encoding etc.
+
+Fitness functions.  Objective functions.
+
+Generations.
+There are two distinct variations of GA:
+- Those which have no concept of a generation, known as steady-state GAs
+- and those which do, known as generational GAs.  
+
+Selection
+Crossover
+Mutation
+Inversion
+
+How Genetic Algorithms Work.
+
+
+The Baldwin Effect and the Lamarckian Hypothesis
+
+Problems:
+Deceptive functions
+Royal Road functions
+
+Meta-Optimisation.
+
+
+
+Implementation details.
+
+Encodings
+
+Selection Operations.
+
+Mutation Operations.
+
+Crossover Operations.
+
+Adaptation Operations.
+
+Encoding and Decoding chromosomes.
+
+Objective functions.
+</pre>
+
+  </td>
+</tr>
+<tr>
+  <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">References</font></b></td>
+</tr>
+<tr>
+  <td>
+<a name="holland1975">Holland, J.H. (1975) Adaptation in Natural and Artificial Systems. University of Michigan Press.</a>
+
+</td></tr></table>
+
+<p><a NAME="footer"></a></p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+  <tr>
+  <td ALIGN=CENTER BGCOLOR="#000000"><font face="Arial,Helvetica" color="#FFFFFF"> [ <a href="index.html#introduction"><font face="Arial,Helvetica" color="#FFFFFF">Intro</font></a> | <a href="index.html#resources"><font face="Arial,Helvetica" color="#FFFFFF">Resources</font></a> | <a href="index.html#bugs"><font face="Arial,Helvetica" color="#FFFFFF">Bugs</font></a> | <a href="index.html#distribution"><font face="Arial,Helvetica" color="#FFFFFF">Download</font></a>] </font></td>
+  </tr>
+</table>
+
+<!--   Footer, Links etc.  -->
+<table BORDER=0 CELLSPACING=2 CELLPADDING=5 WIDTH="95%">
+  <tr>
+    <td width="25%" ALIGN=CENTER></td>
+    <td width="25%" ALIGN=CENTER>Hosted by:<br><A href="http://sourceforge.net"><IMG src="http://sourceforge.net/sflogo.php?group_id=25766" width="88" height="31" border="0" alt="SourceForge Logo"></A></td>
+    <td width="25%" ALIGN=CENTER><a href="http://validator.w3.org/check/referer"><img border="0" src="./images/valid-html401.png" alt="Valid HTML 4.01!" height="31" width="88"></a></td>
+    <td width="25%" ALIGN=CENTER></td>
+  </tr>
+</table>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr><td><hr noshade width="100%"></td></tr>
+  <tr>
+    <td ALIGN=CENTER><font face="Arial,Helvetica" size=-1>&copy; 2001, &quot;Stewart Adcock" &lt;<a href="MAILTO:stewart_DOESNOTLIKESPAM@linux-domain.com">stewart@linux-domain.com</a>&gt; All rights reserved.</font></td>
+  </tr>
+  <tr>
+    <td ALIGN=CENTER><font face="Arial,Helvetica" size=-1>All trademarks on this page are probably owned by their respective companies.  You can insert you own favourite disclaimer here.</font></td>
+  </tr>
+</table>
+
+</body>
+</html>
+
