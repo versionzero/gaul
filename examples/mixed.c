@@ -297,7 +297,6 @@ population *mixed_genesis( void )
 
 /*
  * Allocate and initialise a new population.
- * This call also sets this as the active population.
  */
   if ( !(pop = ga_population_new( 100, 2, NBITS )) )
     return NULL;
