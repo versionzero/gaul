@@ -11,6 +11,8 @@ Changes since release 0.1836:
 - Updated utility routines to sync with other projects.
 - GNU Libtool is now used for library handling.
 - Minor alterations required for clean compilation using Intel C/C++.
+- A neural network evolution example added.
+- A multi-processor island-model example added.
 
 Changes since release 0.1835:
 - Lots of little bugfixes.

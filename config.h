@@ -36,7 +36,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1836"
-#define BUILD_DATE_STRING "29/01/02"
+#define BUILD_DATE_STRING "30/01/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1836
 #define PATCH_VERSION 1
@@ -152,6 +152,9 @@
 
 /* Define if you have the strcspn function.  */
 #define HAVE_STRCSPN 1
+
+/* Define if you have the strdup function.  */
+#define HAVE_STRDUP 1
 
 /* Define if you have the strerror function.  */
 #define HAVE_STRERROR 1

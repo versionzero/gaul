@@ -152,6 +152,9 @@
 /* Define if you have the strcspn function.  */
 #undef HAVE_STRCSPN
 
+/* Define if you have the strdup function.  */
+#undef HAVE_STRDUP
+
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
 
