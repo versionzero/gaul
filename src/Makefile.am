@@ -24,10 +24,6 @@
 # http://www.gnu.org/
 #
 #######################################################################
-#
-# Last Updated:	17/05/01 SAA	Split entirely from HelGA for new life on sourceforge.
-#		02/02/01 SAA	Seperated from the main helga directory.
-#
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -39,6 +35,7 @@ lib_LIBRARIES = libgaul.a
 INCLUDES = -I../util/
 
 libgaul_a_SOURCES = \
+    ga_bitstring.c \
     ga_chromo.c \
     ga_core.c \
     ga_crossover.c \
@@ -53,6 +50,7 @@ libgaul_a_SOURCES = \
     ga_utility.c
 
 include_HEADERS = \
+    ga_bitstring.h \
     ga_chromo.h \
     ga_core.h \
     ga_intrinsics.h \

@@ -1,8 +1,8 @@
 /**********************************************************************
-  goldberg2.c
+  g_dejong.c
  **********************************************************************
 
-  goldberg2 - Test/example program for GAUL.
+  dejong - Test/example program for GAUL.
   Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -26,31 +26,23 @@
 
   Synopsis:	Test/example program for GAUL.
 
-		This program aims to solve the first example problem
-		from Goldberg's book.
-
-		Here a 30-bit chromosome is used to find the maximum
-		of function f(x)=x^30, normalized to the range [0,1].
-
-		FIXME: This code is derived from the description
-		of the problem in Gallops, I need to aquire the
-		goldberg book and check this.
+		This program runs the De Jong test suite.
 
  **********************************************************************/
 
 #include "goldberg1.h"
 
 /**********************************************************************
-  goldberg2_score()
+  dejong_score()
   synopsis:	Score solution.
   parameters:
   return:
   updated:	31/05/01
  **********************************************************************/
 
-boolean goldberg2_score(population *pop, entity *entity)
+boolean dejong_score(population *pop, entity *entity)
   {
-  boolean	allele;
+  unsigned int	allele;
   double	coef;
   int		k;
 
@@ -62,7 +54,7 @@ boolean goldberg2_score(population *pop, entity *entity)
   for (k = 0; k < pop->len_chromosomes; k++)
     {
     /* Loop over bits in current byte. */
-    allele = ((boolean *)entity->chromosome[0])[k];
+    allele = entity->chromosome[0][k];
     if (allele == 1)
       {	/* Bit is set. */
       entity->fitness += pow(2.0, (double) k);
@@ -80,14 +72,14 @@ boolean goldberg2_score(population *pop, entity *entity)
 
 
 /**********************************************************************
-  goldberg2_ga_callback()
+  dejong_ga_callback()
   synopsis:	Callback.
   parameters:
   return:
   updated:	31/05/01
  **********************************************************************/
 
-boolean goldberg2_ga_callback(int generation, population *pop)
+boolean dejong_ga_callback(int generation, population *pop)
   {
 
   return TRUE;
@@ -105,6 +97,7 @@ boolean goldberg2_ga_callback(int generation, population *pop)
 int main(int argc, char **argv)
   {
   int		i;		/* Runs. */
+  int		j;		/* Loop over alleles. */
   population	*pop=NULL;	/* Population of solutions. */
 
   random_init();
@@ -118,25 +111,26 @@ int main(int argc, char **argv)
     pop = ga_genesis(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
-       30,			/* const int              len_chromo */
-NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
+       10,			/* const int              len_chromo */
+       NULL, 			/* const char             *fname */
+NULL, /*dejong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
        NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-       goldberg2_score,		/* GAevaluate             evaluate */
+       dejong_score,		/* GAevaluate             evaluate */
        ga_seed_boolean_random,	/* GAseed                 seed */
        NULL,			/* GAadapt                adapt */
        ga_select_one_bestof2,	/* GAselect_one           select_one */
        ga_select_two_bestof2,	/* GAselect_two           select_two */
        ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
-       ga_crossover_boolean_singlepoints,	/* GAcrossover            crossover */
+       ga_crossover_chromosome_singlepoints,	/* GAcrossover            crossover */
        NULL			/* GAreplace  replace */
             );
 
     ga_population_set_parameters(
        pop,		/* population      *pop */
-       0.5,		/* double  crossover */
-       0.01,		/* double  mutation */
+       0.3,		/* double  crossover */
+       0.005,		/* double  mutation */
        0.0              /* double  migration */
                               );
 
@@ -147,11 +141,12 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        20		/* const int               max_generations */
               );
 
-    goldberg2_ga_callback(i, pop);
+    dejong_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:", i);
-    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, pop->entity_iarray[0]));
-    printf("With score = %f\n", pop->entity_iarray[0]->fitness);
+    for (j=0; j<30; j++) printf(" %d", pop->entity_iarray[0]->chromosome[0][j]);
+    printf(" score = %f", pop->entity_iarray[0]->fitness);
+    printf("\n");
     }
 
   ga_extinction(pop);

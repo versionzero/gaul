@@ -27,7 +27,7 @@
   Synopsis:	Test/example program for GAUL.
 
 		This program aims to solve the first example problem
-		for Goldberg's book.
+		from Goldberg's book.
 
 		Here a 10-bit chromosome is used to find the maximum
 		of function f(x)=x^10, normalized to the range [0,1].
@@ -35,8 +35,6 @@
 		FIXME: This code is derived from the description
 		of the problem in Gallops, I need to aquire the
 		goldberg book and check this.
-
-  Last Updated:	31/05/01 SAA	First version.
 
  **********************************************************************/
 

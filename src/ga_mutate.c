@@ -553,3 +553,48 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
   }
 
 
+/**********************************************************************
+  ga_mutate_bitstring_singlepoint()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is flipped.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_mutate_bitstring_singlepoint( population *pop,
+                                    entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/* Copy unchanging data. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_bit_clone(son->chromosome[i], father->chromosome[i], pop->len_chromosomes);
+
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+/* The singlepoint mutation. */
+  ga_bit_invert(son->chromosome[chromo],point);
+
+  return;
+  }
+
+

@@ -45,9 +45,10 @@
 		Hamming coefficient = M/n
 		Euclidean coefficient = sqrt(M/n)
 
+  Warning:	THESE ARE CURRENTLY ONLY VALID FOR INTEGER CHROMOSOMES.
+
   References:	A general reference that I've found useful in the past
-		(although about binary measures, which are not quite
-		the same) but maybe is tricky to obtain, but is:
+		but maybe is tricky to obtain, but is:
 		Bradshaw J., "Introduction to Tversky similarity
 		measure", MUG '97 - 11th annual Daylight user group
 		meeting.

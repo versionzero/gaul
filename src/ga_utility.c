@@ -2,7 +2,7 @@
   ga_utility.c
  **********************************************************************
 
-  ga_utility - Genetic algorithm routines.
+  ga_utility - High-level genetic algorithm routines.
   Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -24,7 +24,7 @@
 
  **********************************************************************
 
-  Synopsis:     High-level GA functions and convenience functions
+  Synopsis:     High-level GA functions and convenience functions.
 
   To do:	Population/entity iterator functions.
 		On-line and off-line performance summaries.
@@ -49,16 +49,19 @@ void ga_diagnostics(void)
   printf("=== GA utility library =======================================\n");
   printf("Version:                   %s\n", VERSION_STRING);
   printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("--------------------------------------------------------------\n");
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
   printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);
   printf("GA_UTIL_MIN_FITNESS:       %f\n", GA_UTIL_MIN_FITNESS);
   printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
   printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
   printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
+  printf("BYTEBITS:                  %d\n", BYTEBITS);
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");
   printf("population                 %Zd\n", sizeof(population));
   printf("entity                     %Zd\n", sizeof(entity));
+  printf("byte                       %Zd\n", sizeof(byte));
   printf("--------------------------------------------------------------\n");
   num_pops = ga_get_num_populations();
   if (num_pops==-1)
@@ -409,6 +412,96 @@ population *ga_genesis_double(	const int		population_size,
   pop->chromosome_to_bytes = ga_chromosome_double_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_double_from_bytes;
   pop->chromosome_to_string = ga_chromosome_double_to_staticstring;
+
+  pop->evaluate = evaluate;
+  pop->seed = seed;
+  pop->adapt = adapt;
+  pop->select_one = select_one;
+  pop->select_two = select_two;
+  pop->mutate = mutate;
+  pop->crossover = crossover;
+  pop->replace = replace;
+
+/*
+ * Seed the population.
+ */
+  if (!seed)
+    {
+    plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
+    }
+  else
+    {
+    ga_population_seed(pop);
+    plog(LOG_VERBOSE, "Genesis has occured!");
+    }
+
+  return pop;
+  }
+
+
+/**********************************************************************
+  ga_genesis_bitstring()
+  synopsis:	High-level function to create a new population and
+		perform the basic setup (i.e. initial seeding) required
+		for further optimisation and manipulation.
+		Assumes the use of integer chromosomes is desired.
+		This currently only exists for compatibility with
+		older versions of GAUL.
+		Bitstring-valued chromosomes.
+  parameters:
+  return:	population, or NULL on failure.
+  last updated:	30/06/01
+ **********************************************************************/
+
+population *ga_genesis_bitstring(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace )
+  {
+  population	*pop;	/* The new population structure. */
+
+  plog(LOG_VERBOSE, "Genesis is beginning!");
+  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
+
+/*
+ * Allocate and initialise a new population.
+ * This call also sets this as the active population.
+ *
+ * FIXME:
+ * The hard-coded value below "4(N+2)" should be determined based on the
+ * actual mutation and crossover rates to be used.
+ */
+  if ( !(pop = ga_population_new( 4*(population_size+2),
+                              population_size,
+                              num_chromo,
+                              len_chromo )) ) return NULL;
+
+/*
+ * Define some callback functions.
+ */
+  pop->generation_hook = generation_hook;
+  pop->iteration_hook = iteration_hook;
+
+  pop->data_destructor = data_destructor;
+  pop->data_ref_incrementor = data_ref_incrementor;
+
+  pop->chromosome_constructor = ga_chromosome_bitstring_allocate;
+  pop->chromosome_destructor = ga_chromosome_bitstring_deallocate;
+  pop->chromosome_replicate = ga_chromosome_bitstring_replicate;
+  pop->chromosome_to_bytes = ga_chromosome_bitstring_to_bytes;
+  pop->chromosome_from_bytes = ga_chromosome_bitstring_from_bytes;
+  pop->chromosome_to_string = ga_chromosome_bitstring_to_staticstring;
 
   pop->evaluate = evaluate;
   pop->seed = seed;

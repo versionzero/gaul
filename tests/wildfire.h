@@ -26,8 +26,6 @@
 
   Synopsis:	Test/example program for GAUL.
 
-  Last Updated:	11/05/01 SAA	First version.
-
  **********************************************************************/
 
 #ifndef WILDFIRE_H_INCLUDED
@@ -36,8 +34,6 @@
 /*
  * Includes
  */
-#include "SAA_header.h"
-
 #include "gaul.h"
 
 /*

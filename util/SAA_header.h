@@ -188,7 +188,7 @@ static const boolean true  = (0==0);	/* 1 */
 
 typedef void* vpointer;
 typedef const void *constvpointer;
-typedef unsigned char byte;
+typedef unsigned char	byte;
 #define BYTEBITS	CHARBITS
 
 /*

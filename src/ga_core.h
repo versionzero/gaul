@@ -88,6 +88,7 @@ typedef enum ga_elitism_type_t
 /*
  * Include remainder of this libraries headers.
  */
+#include "ga_bitstring.h"
 #include "ga_chromo.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
@@ -315,6 +316,12 @@ void	ga_crossover_char_singlepoints( population *pop,
 void	ga_crossover_char_doublepoints( population *pop,
                                      entity *father, entity *mother,
                                      entity *son, entity *daughter );
+void	ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter );
 
 
 void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
@@ -328,6 +335,7 @@ void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_multipoint(population *pop, entity *father, entity *son);
+void	ga_mutate_bitstring_singlepoint(population *pop, entity *father, entity *son);
 
 
 void	ga_seed_boolean_random(population *pop, entity *adam);

@@ -1,8 +1,8 @@
 /**********************************************************************
-  pingpong.c
+  dejong.h
  **********************************************************************
 
-  pingpong - Test/example program for GAUL.
+  dejong - The De Jong test suite's functions.
   Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -24,29 +24,31 @@
 
  **********************************************************************
 
-  Synopsis:	Test/example program for GAUL.
+  Synopsis:	Collection of De Jong's 5 functions for use in GAUL's
+		test/example programs.
 
-		This program aims to solve a problem proposed in:
-		Dennis E. Shasha, "Dr Ecco's Omniheurist Corner: Foxy",
-		Dr Dobb's Journal, 323:148-149 (2001).
+  Last Updated:	04/06/01 SAA	Collected together for distribution.
 
  **********************************************************************/
 
-#ifndef PINGPONG_H_INCLUDED
-#define PINGPONG_H_INCLUDED
+#ifndef DEJONG_H_INCLUDED
+#define DEJONG_H_INCLUDED
 
 /*
- * Includes
+ * Includes.
  */
+#include "SAA_header.h"
 #include "gaul.h"
 
 /*
  * Prototypes.
  */
-boolean pingpong_score(population *pop, entity *entity);
-void pingpong_seed(population *pop, entity *adam);
-void pingpong_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
-void pingpong_mutate(population *pop, entity *mother, entity *son);
+double	dejong_function_one(double x1, double x2, double x3);
+double	dejong_function_two(double x1, double x2);
+double	dejong_function_three(double x1, double x2, double x3, double x4, double x5);
+double	dejong_function_four(double x[30]);
+double	dejong_function_five(double x1, double x2);
 
 #endif
+
 

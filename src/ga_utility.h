@@ -2,7 +2,7 @@
   ga_utility.h
  **********************************************************************
 
-  ga_utility - Genetic algorithm routines.
+  ga_utility - High-level genetic algorithm routines.
   Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -32,7 +32,7 @@
 #define GA_UTILITY_H_INCLUDED
 
 /*
- * Includes
+ * Includes.
  */
 #include "SAA_header.h"
 

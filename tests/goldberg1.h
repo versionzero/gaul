@@ -39,8 +39,6 @@
 /*
  * Includes
  */
-#include "SAA_header.h"
-
 #include "gaul.h"
 
 /*

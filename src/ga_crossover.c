@@ -675,3 +675,194 @@ void ga_crossover_char_doublepoints( population *pop,
   }
 
 
+/**********************************************************************
+  ga_crossover_bitstring_singlepoints()
+  synopsis:	`Mates' two genotypes by single-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+  {
+  int		i;	/* Loop variable over all chromosomes. */
+  int		location;	/* Point of crossover. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    /* Choose crossover point and perform operation */
+    location=random_int(pop->len_chromosomes);
+
+    ga_bit_copy(son->chromosome[i], mother->chromosome[i],
+                  0, 0, location);
+    ga_bit_copy(daughter->chromosome[i], father->chromosome[i],
+                  0, 0, location);
+
+    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
+                  location, location, pop->len_chromosomes-location);
+    ga_bit_copy(son->chromosome[i], father->chromosome[i],
+                  location, location, pop->len_chromosomes-location);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_bitstring_doublepoints()
+  synopsis:	`Mates' two genotypes by double-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_crossover_bitstring_doublepoints( population *pop,
+                                        entity *father, entity *mother,
+                                        entity *son, entity *daughter )
+  {
+  int	i;		/* Loop variable over all chromosomes. */
+  int	location1, location2;	/* Points of crossover. */
+  int	tmp;			/* For swapping crossover loci. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    /* Choose crossover point and perform operation */
+    location1=random_int(pop->len_chromosomes);
+    do
+      {
+      location2=random_int(pop->len_chromosomes);
+      } while (location2==location1);
+
+    if (location1 > location2)
+      {
+      tmp = location1;
+      location1 = location2;
+      location2 = tmp;
+      }
+
+    ga_bit_copy(son->chromosome[i], mother->chromosome[i],
+                  0, 0, location1);
+    ga_bit_copy(daughter->chromosome[i], father->chromosome[i],
+                  0, 0, location1);
+
+    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
+                  location1, location1, location2-location1);
+    ga_bit_copy(son->chromosome[i], father->chromosome[i],
+                  location1, location1, location2-location1);
+
+    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
+                  location2, location2, pop->len_chromosomes-location2);
+    ga_bit_copy(son->chromosome[i], father->chromosome[i],
+                  location2, location2, pop->len_chromosomes-location2);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_bitstring_mixing()
+  synopsis:	`Mates' two genotypes by mixing parents chromsomes.
+		Keeps all chromosomes intact, and therefore do not
+		need to recreate structural data.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    if (random_boolean())
+      {
+      ga_bit_clone(son->chromosome[i], father->chromosome[i], pop->len_chromosomes);
+      ga_bit_clone(daughter->chromosome[i], mother->chromosome[i], pop->len_chromosomes);
+      ga_copy_data(pop, son, father, i);
+      ga_copy_data(pop, daughter, mother, i);
+      }
+    else
+      {
+      ga_bit_clone(daughter->chromosome[i], father->chromosome[i], pop->len_chromosomes);
+      ga_bit_clone(son->chromosome[i], mother->chromosome[i], pop->len_chromosomes);
+      ga_copy_data(pop, daughter, father, i);
+      ga_copy_data(pop, son, mother, i);
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_bitstring_allele_mixing()
+  synopsis:	`Mates' two genotypes by randomizing the parents
+		alleles.
+		Keeps no chromosomes intact, and therefore will
+		need to recreate all structural data.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_crossover_bitstring_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter )
+  {
+  int		i, j;		/* Loop over all chromosomes, alleles. */
+
+  /* Checks. */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    for (j=0; j<pop->len_chromosomes; j++)
+      {
+      if (random_boolean())
+        {
+        if (ga_bit_get(father->chromosome[i],j))
+          ga_bit_set(son->chromosome[i],j);
+        else
+          ga_bit_clear(son->chromosome[i],j);
+
+        if (ga_bit_get(mother->chromosome[i],j))
+          ga_bit_set(daughter->chromosome[i],j);
+        else
+          ga_bit_clear(daughter->chromosome[i],j);
+        }
+      else
+        {
+        if (ga_bit_get(father->chromosome[i],j))
+          ga_bit_set(daughter->chromosome[i],j);
+        else
+          ga_bit_clear(daughter->chromosome[i],j);
+
+        if (ga_bit_get(mother->chromosome[i],j))
+          ga_bit_set(son->chromosome[i],j);
+        else
+          ga_bit_clear(son->chromosome[i],j);
+        }
+      }
+    }
+
+  return;
+  }
+
+

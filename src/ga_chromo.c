@@ -790,7 +790,7 @@ void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  ga_chromosome_boolean_to_staticstring()
+  ga_chromosome_char_to_staticstring()
   synopsis:	Convert to human readable form.
   parameters:
   return:
@@ -831,5 +831,202 @@ char *ga_chromosome_char_to_staticstring(
 
   return text;
   }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_allocate()
+  synopsis:	Allocate the chromosomes for an entity.  Initial
+		contents are garbage (there is no need to zero them).
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!embryo) die("Null pointer to entity structure passed.");
+
+  if (embryo->chromosome!=NULL)
+    die("This entity already contains chromosomes.");
+
+  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(byte *));
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    embryo->chromosome[i] = ga_bit_new(pop->len_chromosomes);
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_deallocate()
+  synopsis:	Dellocate the chromosomes for an entity.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!corpse) die("Null pointer to entity structure passed.");
+
+  if (corpse->chromosome==NULL)
+    die("This entity already contains no chromosomes.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    ga_bit_free(corpse->chromosome[i]);
+
+  s_free(corpse->chromosome);
+  corpse->chromosome=NULL;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_replicate()
+  synopsis:	Duplicate a chromosome exactly.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+void ga_chromosome_bitstring_replicate( population *pop,
+                                      entity *parent, entity *child,
+                                      const int chromosomeid )
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!parent || !child) die("Null pointer to entity structure passed.");
+  if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
+
+  ga_bit_clone( child->chromosome[chromosomeid],
+                parent->chromosome[chromosomeid],
+                pop->len_chromosomes );
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_to_bytes()
+  synopsis:	Convert to contiguous form.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+unsigned int ga_chromosome_bitstring_to_bytes(population *pop, entity *joe,
+                                     byte **bytes, unsigned int *max_bytes)
+  {
+  int		num_bytes;	/* Actual size of genes. */
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  num_bytes = ga_bit_sizeof(pop->len_chromosomes) * pop->num_chromosomes;
+
+  if (num_bytes>*max_bytes)
+    {
+    *max_bytes = num_bytes;
+    *bytes = s_realloc(*bytes, *max_bytes*sizeof(byte));
+    /* sizeof(byte) should always be 1 */
+    }
+
+  if (!joe->chromosome)
+    {
+    *bytes = (byte *)0;
+    return 0;
+    }
+
+  for(i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_bit_copy( *bytes, joe->chromosome[i],
+                 i*pop->len_chromosomes, 0,
+                 pop->len_chromosomes );
+    }
+
+  return num_bytes;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_from_bytes()
+  synopsis:	Convert from contiguous form.  In this case, a trivial
+		process.
+  parameters:
+  return:
+  last updated: 13/06/01
+ **********************************************************************/
+
+void ga_chromosome_bitstring_from_bytes(population *pop, entity *joe, byte *bytes)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (!joe->chromosome) die("Entity has no chromsomes.");
+
+  for(i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_bit_copy( joe->chromosome[i], bytes,
+                 0, i*pop->len_chromosomes,
+                 pop->len_chromosomes );
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_bitstring_to_staticstring()
+  synopsis:	Convert to human readable form.
+  parameters:
+  return:
+  last updated: 30/06/01
+ **********************************************************************/
+
+char *ga_chromosome_bitstring_to_staticstring(population *pop, entity *joe)
+  {
+  int		i, j;		/* Loop over chromosome, alleles. */
+  int		k=0;		/* Pointer into 'text'. */
+  static char	*text=NULL;	/* String for display. */
+  static int	textlen=0;	/* Length of string. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+    {
+    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * textlen);
+    }
+
+  if (!joe->chromosome)
+    {
+    text[0] = '\0';
+    }
+  else
+    {
+    for(i=0; i<pop->num_chromosomes; i++)
+      {
+      for(j=0; j<pop->len_chromosomes; j++)
+        {
+        text[k++] = ga_bit_get(joe->chromosome[i],j)?'1':'0';
+        }
+      }
+    }
+
+  return text;
+  }
+
 
 
