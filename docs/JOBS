@@ -1,0 +1,31 @@
+A list of jobs for which I would like help:
+===========================================
+
+* Portability
+  - Compiling code on alternative systems, to check and improve portability.
+
+* Example/test programs
+  - Ports of the example programs from Goldberg's book.
+  - Examples using the steady-state GA.
+  - An automated test script for the GAUL algorithms/features.
+  - An automated test script for the utility functions
+    (most notably the random number generator)
+  - Quite simply, more test programs are required.
+
+* Feedback
+  - Reports of bugs that need fixing.
+  - Requests for features that should be added.
+
+* Benchmarking
+  - I would like to see benchmarks for GAUL vs SGA-C, gallops, galib, sugal etc.
+    (I found in a totally unscientific and unfair test that GAUL completed
+    Goldberg's examples 1 and 2 in approximately 10% of the time required by
+    galib)
+
+* Modification of build script.
+  - Modify configure.in/Makefile.am for production of source and binary packages
+  (RPMs and Debian packages)
+
+* Translation.
+  - Translation of the documentation. (And encouragement for me to write more of the stuff.)
+
