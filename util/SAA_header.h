@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	30 Nov 2001 SAA	The constant DEBUG will always be defined now.
+  Updated:	17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
+		30 Nov 2001 SAA	The constant DEBUG will always be defined now.
 		29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
 		07 Nov 2001 SAA	Added MINMAX macro.
 		26/08/01 SAA	boolean is now short instead of int.  Bool and Boolean are now define'd to that instead of int too.  SWAP_BOOLEAN() macro added.
@@ -169,34 +170,46 @@
 #endif
 
 /*
- * Types
- * Boolean and bool should both be deprecated.
+ * Define boolean type sensibly.
  */
-#if _USE_C99_SOURCE
-typedef _Bool boolean;
+#ifdef HAVE_STDBOOL_H
+# include <stdbool.h>
 #else
-typedef short boolean;
-#endif
 
-#define Boolean         boolean
-#define bool		boolean
-/* am I getting lazier? */
-
-#ifndef FALSE
-#if 0
-static const boolean FALSE = (0!=0);	/* 0 */
-static const boolean TRUE  = (0==0);	/* 1 */
-#endif
-#define FALSE	(0)
-#define TRUE	(1)
-#endif
-#ifndef LINUX_KAI_SOURCE
-# ifndef true
-static const boolean false = (0!=0);	/* 0 */
-static const boolean true  = (0==0);	/* 1 */
+/* Some platforms already define true and false.  To the
+ * best of my knowledge, it is always safe to zap these.
+ */
+# ifdef false
+#  undef false
+#  undef true
 # endif
-#endif
 
+# ifndef __cplusplus
+/* By defining _Bool as an enum type we get to see symbolic
+ * names in gdb.
+ */
+typedef enum { false, true } _Bool;
+# else
+typedef bool _Bool;
+# endif
+# define bool _Bool
+
+/* According to ISO C99, the boolean stuff must be available
+ * in preprocessor directives and __bool_true_false_are_defined
+ * should be true.
+ */
+# define false 0
+# define true 1
+# define __bool_true_false_are_defined 1
+
+#endif
+#define boolean _Bool
+#define TRUE true
+#define FALSE false
+
+/*
+ * Additional types.
+ */
 typedef void* vpointer;
 typedef const void *constvpointer;
 typedef unsigned char byte;
@@ -234,8 +247,8 @@ typedef unsigned char byte;
 #define ERROR           (-5)
 #define OKAY		2
 #define TINY            (1.0e-8)
-#define MAX_LINE_LENGTH 255
-#define MAX_LINE_LEN	255
+#define MAX_LINE_LENGTH 1024
+#define MAX_LINE_LEN	1024
 #define LARGE_AMOUNT	(1.0e38)
 #define ApproxZero      (1e-18)
 #define IsApproxZero(x) (fabs(x)<=ApproxZero)
