@@ -28,7 +28,7 @@
 %define RELEASE 1837
 
 Summary: Genetic Algorithm Utility Library
-Name: GAUL
+Name: gaul-devel
 Version: %{PACKAGE_VERSION}
 Release: %{RELEASE}
 Copyright: Copyright: (c) 2000-2002 Stewart Adcock, released under GPL.  See COPYING.
@@ -40,7 +40,8 @@ URL: http://gaul.sourceforge.net/
 GAUL: Genetic Algorithm Utility Library.  GAUL is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms.   It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm. Additional stochastic algorithms are provided for comparison to the genetic algorithms. Much of the functionality is also available through a simple SLang interface.
 
 %prep
-%setup
+
+%setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}
 
 %build
 ./configure
@@ -53,5 +54,4 @@ make install
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README
-%{prefix}/gaul
 
