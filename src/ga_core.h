@@ -217,7 +217,7 @@ struct population_t
 #define GA_ELITISM_MULTIPLIER	0.05
 #define GA_ELITISM_CONSTANT	2.0
 
-#define GA_UTIL_MIN_FITNESS	-999999999.0
+#define GA_MIN_FITNESS		-999999999.0
 
 /*
  * Prototypes
@@ -227,6 +227,7 @@ population *ga_population_new(	const int max_size,
 				const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome);
+population *ga_population_clone( population *pop );
 int	ga_get_num_populations(void);
 population *ga_get_population_from_id(unsigned int id);
 unsigned int ga_get_population_id(population *pop);
@@ -258,10 +259,11 @@ entity *ga_get_free_entity(population *pop);
 boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chromosome);
 boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *src);
 boolean ga_copy_entity_chromosome(population *pop, entity *dest, entity *src, int chromo);
-boolean ga_copy_entity(population *pop, entity *dest, entity *src);
-entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
-boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
-entity *ga_optimise_entity(population *pop, entity *unopt);
+boolean ga_entity_copy(population *pop, entity *dest, entity *src);
+entity	*ga_entity_clone(population *pop, entity *parent);
+entity	*ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
+boolean	ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
+entity	*ga_optimise_entity(population *pop, entity *unopt);
 void	ga_population_set_parameters(      population      *pop,
                                         double  crossover,
                                         double  mutation,

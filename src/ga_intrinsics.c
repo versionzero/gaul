@@ -267,7 +267,7 @@ int ga_entity_new(int *popid)
 
 
 /**********************************************************************
-  ga_entity_clone()
+  ga_entity_clone_wrapper()
   synopsis:	Returns to a new entity structure with the genes and
 		structural data copied from the parent.
 		Increments population size also.
@@ -276,13 +276,13 @@ int ga_entity_new(int *popid)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_clone(int *popid, int *parent)
+int ga_entity_clone_wrapper(int *popid, int *parent)
   {
   entity	*child;						/* Destination entity. */
   population	*pop = ga_get_population_from_id(*popid);	/* Population. */
 
   child = ga_get_free_entity(pop);
-  ga_copy_entity(pop, child, ga_get_entity_from_id(pop, *parent));
+  ga_entity_copy(pop, child, ga_get_entity_from_id(pop, *parent));
 
   return ga_get_entity_id(pop, child);
   }
@@ -302,7 +302,7 @@ int ga_entity_copy_chromosome(int *popid, int *parent, int *child, int *chromoso
 
   pop = ga_get_population_from_id(*popid);
 
-  return ga_copy_entity_chromosome(pop,
+  return ga_entity_copy_chromosome(pop,
                                    ga_get_entity_from_id(pop, *child),
                                    ga_get_entity_from_id(pop, *parent),
                                    *chromosome);
@@ -323,7 +323,7 @@ int ga_entity_copy_all_chromosomes(int *popid, int *parent, int *child)
 
   pop = ga_get_population_from_id(*popid);
 
-  return ga_copy_entity_all_chromosomes(pop,
+  return ga_entity_copy_all_chromosomes(pop,
                                         ga_get_entity_from_id(pop, *child),
                                         ga_get_entity_from_id(pop, *parent));
   }
@@ -351,7 +351,7 @@ int ga_entity_migrate(int *srcpopid, int *destpopid, int *jacques)
   destpop = ga_get_population_from_id(*destpopid);
 
   jack = ga_get_free_entity(destpop);
-  ga_copy_entity(srcpop, jack, ga_get_entity_from_id(srcpop, *jacques));
+  ga_entity_copy(srcpop, jack, ga_get_entity_from_id(srcpop, *jacques));
 
   return ga_get_entity_id(destpop, jack);
   }
@@ -1148,7 +1148,7 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_entity_new, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_clone",
-            (FVOID_STAR) ga_entity_clone, SLANG_INT_TYPE, 2,
+            (FVOID_STAR) ga_entity_clone_wrapper, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_copy_chromosome",
             (FVOID_STAR) ga_entity_copy_chromosome, SLANG_INT_TYPE, 4,

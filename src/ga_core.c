@@ -182,7 +182,7 @@ population *ga_population_new(	const int max_size,
     {
     newpop->entity_array[i].allocated=FALSE;
     newpop->entity_array[i].data=NULL;
-    newpop->entity_array[i].fitness=-99999.0;	/* Lower bound on fitness */
+    newpop->entity_array[i].fitness=GA_MIN_FITNESS;	/* Lower bound on fitness */
 
     newpop->entity_array[i].chromosome=NULL;
 
@@ -216,8 +216,101 @@ population *ga_population_new(	const int max_size,
   newpop->replace = NULL;
 
 /*
- * Seed the population.
+ * Add this new population into the population table.
  */
+  THREAD_LOCK(pop_table);
+  if (!pop_table) pop_table=table_new();
+
+  pop_id = table_add(pop_table, (vpointer) newpop);
+  THREAD_UNLOCK(pop_table);
+
+  plog( LOG_DEBUG, "New pop = %p id = %d", newpop, pop_id);
+
+  return newpop;
+  }
+
+
+/**********************************************************************
+  ga_population_clone()
+  synopsis:	Allocates and initialises a new population structure,
+		and fills it with an exact copy of the data from an
+		existing population.  The population's user data
+		field is referenced.
+		Entity id's between the popultions will _NOT_
+		correspond.
+  parameters:	population *	original population structure.
+  return:	population *	new population structure.
+  last updated: 07/07/01
+ **********************************************************************/
+
+population *ga_population_clone(population *pop)
+  {
+  int		i;		/* Loop variable. */
+  population	*newpop=NULL;	/* New population structure. */
+  entity	*newentity;	/* Used for cloning entities. */
+  unsigned int	pop_id;		/* Handle for new population structure. */
+
+  newpop = s_malloc(sizeof(population));
+
+/*
+ * Clone parameters.
+ */
+  newpop->size = 0;
+  newpop->stable_size = pop->stable_size;
+  newpop->max_size = pop->max_size;
+  newpop->orig_size = 0;
+  newpop->num_chromosomes = pop->num_chromosomes;
+  newpop->len_chromosomes = pop->len_chromosomes;
+  newpop->data = pop->data;
+
+  newpop->crossover_ratio = pop->crossover_ratio;
+  newpop->mutation_ratio = pop->mutation_ratio;
+  newpop->migration_ratio = pop->migration_ratio;
+
+/*
+ * Clone the callback functions.
+ */
+  newpop->generation_hook = pop->generation_hook;
+  newpop->iteration_hook = pop->iteration_hook;
+
+  newpop->data_destructor = pop->data_destructor;
+  newpop->data_ref_incrementor = pop->data_ref_incrementor;
+
+  newpop->chromosome_constructor = pop->chromosome_constructor;
+  newpop->chromosome_destructor = pop->chromosome_destructor;
+  newpop->chromosome_replicate = pop->chromosome_replicate;
+  newpop->chromosome_to_bytes = pop->chromosome_to_bytes;
+  newpop->chromosome_from_bytes = pop->chromosome_from_bytes;
+  newpop->chromosome_to_string = pop->chromosome_to_string;
+
+  newpop->evaluate = pop->evaluate;
+  newpop->seed = pop->seed;
+  newpop->adapt = pop->adapt;
+  newpop->select_one = pop->select_one;
+  newpop->select_two = pop->select_two;
+  newpop->mutate = pop->mutate;
+  newpop->crossover = pop->crossover;
+  newpop->replace = pop->replace;
+
+/*
+ * Clone each of the constituent entities.
+ */
+  newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity));
+  newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*));
+  
+  for (i=0; i<newpop->max_size; i++)
+    {
+    newpop->entity_array[i].allocated=FALSE;
+    newpop->entity_array[i].data=NULL;
+    newpop->entity_array[i].fitness=GA_MIN_FITNESS;
+    newpop->entity_array[i].chromosome=NULL;
+    }
+
+  for (i=0; i<pop->size; i++)
+    {
+    newentity = ga_get_free_entity(newpop);
+    ga_entity_copy(newpop, newentity, pop->entity_iarray[i]);
+    }
 
 /*
  * Add this new population into the population table.
@@ -228,7 +321,8 @@ population *ga_population_new(	const int max_size,
   pop_id = table_add(pop_table, (vpointer) newpop);
   THREAD_UNLOCK(pop_table);
 
-  plog( LOG_DEBUG, "New pop = %p id = %d", newpop, pop_id);
+  plog( LOG_DEBUG, "New pop = %p id = %d (cloned from %p)",
+        newpop, pop_id, pop );
 
   return newpop;
   }
@@ -922,7 +1016,7 @@ boolean ga_entity_setup(population *pop, entity *joe)
 /* Physical characteristics currently undefined. */
   joe->data=NULL;
 
-  joe->fitness=GA_UTIL_MIN_FITNESS;	/* Lower bound on fitness */
+  joe->fitness=GA_MIN_FITNESS;	/* Lower bound on fitness */
 
 /* Mark it as used. */
   joe->allocated=TRUE;
@@ -1044,7 +1138,7 @@ void ga_entity_blank(population *p, entity *entity)
     entity->data=NULL;
     }
 
-  entity->fitness=GA_UTIL_MIN_FITNESS;
+  entity->fitness=GA_MIN_FITNESS;
 
 /*
   printf("ENTITY %d CLEARED.\n", ga_get_entity_id(entity));
@@ -1154,14 +1248,14 @@ boolean ga_copy_chromosome( population *pop, entity *dest, entity *src,
                             const int chromosome )
   {
 
-  pop->chromosome_replicate(pop, dest, src, chromosome);
+  pop->chromosome_replicate(pop, src, dest, chromosome);
 
   return TRUE;
   }
 
 
 /**********************************************************************
-  ga_copy_entity_all_chromosomes()
+  ga_entity_copy_all_chromosomes()
   synopsis:	Copy genetic data between entity structures.
 		If these entities are in differing populations, no
 		problems will occur provided that the chromosome
@@ -1171,7 +1265,7 @@ boolean ga_copy_chromosome( population *pop, entity *dest, entity *src,
   last updated: 20/12/00
  **********************************************************************/
 
-boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *src)
+boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *src)
   {
   int		i;		/* Loop variable over all chromosomes. */
 
@@ -1188,13 +1282,8 @@ boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *sr
  */
   for (i=0; i<pop->num_chromosomes; i++)
     {
-/*
-    memcpy(dest->chromosome[i], src->chromosome[i],
-           pop->len_chromosomes*sizeof(int));
-*/
-
-    ga_copy_data(pop, dest, src, i);
-    ga_copy_chromosome(pop, dest, src, i);
+    ga_copy_data(pop, dest, src, i);		/* Phenome. */
+    ga_copy_chromosome(pop, dest, src, i);	/* Genome. */
     }
 
   return TRUE;
@@ -1202,7 +1291,7 @@ boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *sr
 
 
 /**********************************************************************
-  ga_copy_entity_chromosome()
+  ga_entity_copy_chromosome()
   synopsis:	Copy chromosome and structural data between entity
 		structures.
   parameters:
@@ -1210,7 +1299,7 @@ boolean ga_copy_entity_all_chromosomes(population *pop, entity *dest, entity *sr
   last updated: 22/01/01
  **********************************************************************/
 
-boolean ga_copy_entity_chromosome(population *pop, entity *dest, entity *src, int chromo)
+boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, int chromo)
   {
 
 /* Checks. */
@@ -1223,7 +1312,7 @@ boolean ga_copy_entity_chromosome(population *pop, entity *dest, entity *src, in
   if (dest->data) die("Why does this entity already contain data?");
 
 /*
- * Copy genetic and associated structural data.
+ * Copy genetic and associated structural data (phenomic data).
  */
 /*
   memcpy(dest->chromosome[chromo], src->chromosome[chromo],
@@ -1237,21 +1326,44 @@ boolean ga_copy_entity_chromosome(population *pop, entity *dest, entity *src, in
 
 
 /**********************************************************************
-  ga_copy_entity()
-  synopsis:	Er..., copy entire entity structure.
+  ga_entity_copy()
+  synopsis:	Er..., copy entire entity structure.  This is safe
+		for copying between popultions provided that they
+		are compatiable.
   parameters:
   return:
   last updated:	22/01/01
  **********************************************************************/
 
-boolean ga_copy_entity(population *pop, entity *dest, entity *src)
+boolean ga_entity_copy(population *pop, entity *dest, entity *src)
   {
 
-  ga_copy_entity_all_chromosomes(pop, dest, src);
-
+  ga_entity_copy_all_chromosomes(pop, dest, src);
   dest->fitness = src->fitness;
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_entity_clone()
+  synopsis:	Clone an entity structure.
+  parameters:	population	*pop	Population.
+		entity	*parent		The original entity.
+  return:	entity	*dolly		The new entity.
+  last updated:	07/07/01
+ **********************************************************************/
+
+entity *ga_entity_clone(population *pop, entity *parent)
+  {
+  entity	*dolly;		/* The clone. */
+
+  dolly = ga_get_free_entity(pop);
+
+  ga_entity_copy_all_chromosomes(pop, dolly, parent);
+  dolly->fitness = parent->fitness;
+
+  return dolly;
   }
 
 

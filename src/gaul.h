@@ -29,6 +29,10 @@
 		This file should be included by any code that will
 		be linking to libga.
 
+		This file is a bit empty at the moment, but prototypes
+		for all of the public functions will be moved into here
+		at some point.
+
  **********************************************************************/
 
 #ifndef GAUL_H_INCLUDED
@@ -40,7 +44,7 @@
 #include "SAA_header.h"
 
 /*
- * Include remainder of this libraries headers.
+ * Include remainder of this library's headers.
  */
 #include "ga_core.h"
 

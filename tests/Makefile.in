@@ -111,7 +111,7 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = pingpong wildfire 		goldberg1 goldberg2 		royalroad_ss royalroad 		struggle struggle_ss
+bin_PROGRAMS = pingpong wildfire 		goldberg1 goldberg2 		royalroad royalroad_ss 		struggle struggle2 struggle_ss
 
 
 #CFLAGS = -g -Wall -O
@@ -127,6 +127,9 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle2_SOURCES = struggle2.c
+struggle3_SOURCES = struggle3.c
+struggle4_SOURCES = struggle4.c
 struggle_ss_SOURCES = struggle_ss.c
 
 libbtree_a_SOURCES = btree.c
@@ -143,6 +146,9 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle2_DEPENDENCIES = ${DEPENDENCIES}
+struggle3_DEPENDENCIES = ${DEPENDENCIES}
+struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
@@ -152,6 +158,9 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
@@ -176,12 +185,14 @@ goldberg1_OBJECTS =  goldberg1.o
 goldberg1_LDFLAGS = 
 goldberg2_OBJECTS =  goldberg2.o
 goldberg2_LDFLAGS = 
-royalroad_ss_OBJECTS =  royalroad_ss.o
-royalroad_ss_LDFLAGS = 
 royalroad_OBJECTS =  royalroad.o
 royalroad_LDFLAGS = 
+royalroad_ss_OBJECTS =  royalroad_ss.o
+royalroad_ss_LDFLAGS = 
 struggle_OBJECTS =  struggle.o
 struggle_LDFLAGS = 
+struggle2_OBJECTS =  struggle2.o
+struggle2_LDFLAGS = 
 struggle_ss_OBJECTS =  struggle_ss.o
 struggle_ss_LDFLAGS = 
 CFLAGS = @CFLAGS@
@@ -199,9 +210,9 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/btree.P .deps/goldberg1.P .deps/goldberg2.P \
 .deps/pingpong.P .deps/royalroad.P .deps/royalroad_ss.P \
-.deps/struggle.P .deps/struggle_ss.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_ss_SOURCES) $(royalroad_SOURCES) $(struggle_SOURCES) $(struggle_ss_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_ss_OBJECTS) $(royalroad_OBJECTS) $(struggle_OBJECTS) $(struggle_ss_OBJECTS)
+.deps/struggle.P .deps/struggle2.P .deps/struggle_ss.P .deps/wildfire.P
+SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle_ss_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle_ss_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -308,17 +319,21 @@ goldberg2: $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
 	@rm -f goldberg2
 	$(LINK) $(goldberg2_LDFLAGS) $(goldberg2_OBJECTS) $(goldberg2_LDADD) $(LIBS)
 
-royalroad_ss: $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
-	@rm -f royalroad_ss
-	$(LINK) $(royalroad_ss_LDFLAGS) $(royalroad_ss_OBJECTS) $(royalroad_ss_LDADD) $(LIBS)
-
 royalroad: $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
 	@rm -f royalroad
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
 
+royalroad_ss: $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
+	@rm -f royalroad_ss
+	$(LINK) $(royalroad_ss_LDFLAGS) $(royalroad_ss_OBJECTS) $(royalroad_ss_LDADD) $(LIBS)
+
 struggle: $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
 	@rm -f struggle
 	$(LINK) $(struggle_LDFLAGS) $(struggle_OBJECTS) $(struggle_LDADD) $(LIBS)
+
+struggle2: $(struggle2_OBJECTS) $(struggle2_DEPENDENCIES)
+	@rm -f struggle2
+	$(LINK) $(struggle2_LDFLAGS) $(struggle2_OBJECTS) $(struggle2_LDADD) $(LIBS)
 
 struggle_ss: $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
 	@rm -f struggle_ss

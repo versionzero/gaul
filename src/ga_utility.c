@@ -52,7 +52,7 @@ void ga_diagnostics(void)
   printf("--------------------------------------------------------------\n");
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
   printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);
-  printf("GA_UTIL_MIN_FITNESS:       %f\n", GA_UTIL_MIN_FITNESS);
+  printf("GA_MIN_FITNESS:            %f\n", GA_MIN_FITNESS);
   printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
   printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
   printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
@@ -574,14 +574,14 @@ entity *ga_allele_search(	population	*pop,
     {
     plog(LOG_VERBOSE, "Will perform systematic allele search.");
 
-    ga_copy_entity(pop, best, initial);
+    ga_entity_copy(pop, best, initial);
     }
 
 /*
  * Copy best solution over current solution.
  */
-  ga_copy_entity(pop, current, best);
-  best->fitness=GA_UTIL_MIN_FITNESS;
+  ga_entity_copy(pop, current, best);
+  best->fitness=GA_MIN_FITNESS;
 
 /*
  * Loop over the range of legal values.
@@ -599,12 +599,12 @@ entity *ga_allele_search(	population	*pop,
     if ( best->fitness < current->fitness )
       { /* Copy this solution best solution. */
       ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
+      ga_entity_copy(pop, best, current);
       }
     else
       { /* Copy best solution over current solution. */
       ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
+      ga_entity_copy(pop, current, best);
       }
 
     }

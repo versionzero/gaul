@@ -30,6 +30,8 @@
 		for efficiency reasons.  Parameter safety should be
 		confirmed in the wrapper functions.
 
+  To do:	Mappings.
+
  **********************************************************************/
 
 #include "ga_bitstring.h"

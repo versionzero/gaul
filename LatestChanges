@@ -2,6 +2,16 @@ Changes since release 0.1834:
 - Tidied pingpong.c
 - Added missing ga_evolution_steady_state() prototype.
 - Added version of the royalroad example which uses a steady state GA instead: tests/royalroad_ss.c
+- Added version of the struggle example which uses a steady state GA instead: tests/struggle_ss.c
+- Added version of the struggle example for comparison of the alternative evolutionary schemes: tests/struggle2.c
+- Added version of the struggle example to show custom termination criteria and some simple statistics: tests/struggle3.c
+- Added version of the struggle example to show usage of custom operators: tests/struggle4.c
+- Renamed the SLang intrinsic ga_entity_clone() to ga_entity_clone_wrapper(), and added new, C-callable ga_entity_clone().
+- Renamed all ga_copy_entity[_XXX]() functions to ga_entity_copy[_XXX]() for consistency.
+- For convenience, added ga_population_clone().
+- GA_UTIL_MIN_FITNESS renamed to GA_MIN_FITNESS, and is correctly used everywhere now.
+- Fixed chromosome replication bug (I was copying destination to source, doh!).
+- Some tutorial-style documentation about the "struggle" examples added.
 
 Changes since release 0.1833:
 - Changes for docs/html/books.html to validate.

@@ -67,7 +67,7 @@ int	ga_entity_cross_compare_genome_wrapper(int *jackpopid, int *jack,
 int	ga_entity_kill(int *pop, int *id);
 int	ga_entity_erase(int *pop, int *id);
 int	ga_entity_new(int *pop);
-int	ga_entity_clone(int *pop, int *parent);
+int	ga_entity_clone_wrapper(int *pop, int *parent);
 int	ga_entity_copy_chromosome(int *pop, int *parent, int *child, int *chromosome);
 int	ga_entity_copy_all_chromosomes(int *pop, int *parent, int *child);
 int	ga_entity_migrate(int *srcpopid, int *destpopid, int *jacques);

@@ -380,7 +380,7 @@ boolean ga_evolution(	population		*pop,
     fclose(STATS_OUT);
     }	/* Generation loop. */
 
-  return TRUE;
+  return (generation<max_generations);
   }
 
 
@@ -655,7 +655,7 @@ boolean ga_evolution_steady_state(	population		*pop,
     fclose(STATS_OUT);
     }	/* Iteration loop. */
 
-  return TRUE;
+  return (iteration<max_iterations);
   }
 
 
@@ -699,7 +699,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   else
     {
     plog(LOG_VERBOSE, "Will perform RMHC optimisation with specified starting solution.");
-    ga_copy_entity(pop, best, initial);
+    ga_entity_copy(pop, best, initial);
     }
 
 /*
@@ -714,7 +714,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /*
  * Score the initial solution.
  */
-  if (best->fitness==GA_UTIL_MIN_FITNESS) pop->evaluate(pop, best);
+  if (best->fitness==GA_MIN_FITNESS) pop->evaluate(pop, best);
   plog(LOG_DEBUG,
        "Prior to the scoring, the solution has fitness score of %f",
        best->fitness );
@@ -722,7 +722,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /*
  * Copy best solution found over current solution.
  */
-  ga_copy_entity(pop, current, best);
+  ga_entity_copy(pop, current, best);
   new = ga_get_free_entity(pop);
 
 /* Do all the iterations: */
@@ -754,12 +754,12 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
       {
 /*        plog(LOG_DEBUG, "Selecting new solution.");*/
       ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
+      ga_entity_copy(pop, best, current);
       }
     else
       {
       ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
+      ga_entity_copy(pop, current, best);
       }
 
     ga_entity_blank(pop, new);
@@ -836,7 +836,7 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
   else
     {
     plog(LOG_VERBOSE, "Will perform NAHC optimisation with specified starting solution.");
-    ga_copy_entity(pop, best, initial);
+    ga_entity_copy(pop, best, initial);
     }
 
 /*
@@ -851,13 +851,13 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
 /*
  * Score the initial solution.
  */
-  if (best->fitness==GA_UTIL_MIN_FITNESS) pop->evaluate(pop, best);
+  if (best->fitness==GA_MIN_FITNESS) pop->evaluate(pop, best);
   plog(LOG_DEBUG, "Prior to the scoring, the solution has fitness score of %f", best->fitness );
 
 /*
  * Copy best solution found over current solution.
  */
-  ga_copy_entity(pop, current, best);
+  ga_entity_copy(pop, current, best);
 
 /* Do all the iterations: */
   while ( (pop->iteration_hook?pop->iteration_hook(iteration, current):TRUE) &&
@@ -881,12 +881,12 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
       {
 /*        plog(LOG_DEBUG, "Selecting new solution.");*/
       ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
+      ga_entity_copy(pop, best, current);
       }
     else
       {
       ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
+      ga_entity_copy(pop, current, best);
       }
 
 /*
@@ -971,7 +971,7 @@ entity *ga_metropolis_mutation(	population		*pop,
   else
     {
     plog(LOG_VERBOSE, "Will perform metropolis optimisation at %d degrees.");
-    ga_copy_entity(pop, best, initial);
+    ga_entity_copy(pop, best, initial);
     }
 
 /*
@@ -986,13 +986,13 @@ entity *ga_metropolis_mutation(	population		*pop,
 /*
  * Score the initial solution.
  */
-  if (best->fitness==GA_UTIL_MIN_FITNESS) pop->evaluate(pop, best);
+  if (best->fitness==GA_MIN_FITNESS) pop->evaluate(pop, best);
   plog(LOG_DEBUG, "Prior to the scoring, the solution has fitness score of %f", best->fitness );
 
 /*
  * Copy best solution found over current solution.
  */
-  ga_copy_entity(pop, current, best);
+  ga_entity_copy(pop, current, best);
   new = ga_get_free_entity(pop);
 
 /* Do all the iterations: */
@@ -1029,13 +1029,13 @@ entity *ga_metropolis_mutation(	population		*pop,
       {
 /*        plog(LOG_DEBUG, "Selecting new solution."); */
       ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
+      ga_entity_copy(pop, best, current);
       }
     else
       {
 /*        plog(LOG_DEBUG, "Rejecting new solution."); */
       ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
+      ga_entity_copy(pop, current, best);
       }  
 
     ga_entity_blank(pop, new);
@@ -1111,7 +1111,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
     {
     plog(LOG_VERBOSE, "Will perform %d steps of MC/SA optimisation between %d and %d degrees.", max_iterations, initial_temperature, final_temperature);
 
-    ga_copy_entity(pop, best, initial);
+    ga_entity_copy(pop, best, initial);
     }
 
 /*
@@ -1127,13 +1127,13 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 /*
  * Score the initial solution.
  */
-  if (best->fitness==GA_UTIL_MIN_FITNESS) pop->evaluate(pop, best);
+  if (best->fitness==GA_MIN_FITNESS) pop->evaluate(pop, best);
   plog(LOG_DEBUG, "Prior to the scoring, the solution has fitness score of %f", best->fitness );
 
 /*
  * Copy best solution over current solution.
  */
-  ga_copy_entity(pop, current, best);
+  ga_entity_copy(pop, current, best);
   new = ga_get_free_entity(pop);
 
 /* Do all the iterations: */
@@ -1172,13 +1172,13 @@ entity *ga_simulated_annealling_mutation(population	*pop,
       { /* Copy this solution best solution. */
 /*        plog(LOG_DEBUG, "Selecting new solution.");*/
       ga_entity_blank(pop, best);
-      ga_copy_entity(pop, best, current);
+      ga_entity_copy(pop, best, current);
       }
     else
       { /* Copy best solution over current solution. */
 /*        plog(LOG_DEBUG, "Rejecting new solution.");*/
       ga_entity_blank(pop, current);
-      ga_copy_entity(pop, current, best);
+      ga_entity_copy(pop, current, best);
       }
 
     ga_entity_blank(pop, new);
