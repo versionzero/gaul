@@ -26,7 +26,7 @@
 
   Synopsis:     Routines for optimisation and evolution.
 
-  To do:	Rewrite parallel versions, ga_evolution_mp() in particular.
+  To do:	Finish rewriting parallel versions, ga_evolution_mp() in particular.
 		Temperatures should be double-precision floats?
 		Need to fix elitism/crowding stuff.
 		Remove much duplicated code.
@@ -291,6 +291,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
 
       write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
+      fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
       _exit(1);
       }
 
@@ -332,6 +333,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
 
         write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
+        fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
         _exit(1);
         }
 
@@ -486,6 +488,7 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 
         write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
+        fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
         _exit(1);
         }
       fork_num++;
@@ -523,6 +526,7 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 
           write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
+          fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
           _exit(1);
           }
 

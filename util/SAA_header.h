@@ -191,13 +191,14 @@
  * Some platforms already define true and false.  To the
  * best of my knowledge, it is always safe to zap these.
  */
-# ifdef false
+# if defined(false)
 #  undef false
 #  undef true
 # endif
 
 # if !defined(__bool_true_false_are_defined)
-#  if defined(__cplusplus) || defined(__DECC) || defined(_ISOC99_SOURCE)
+/*#  if defined(__cplusplus) || defined(__DECC) || defined(_ISOC99_SOURCE)*/
+#  if defined(_Bool)
 typedef _Bool bool;
 typedef _Bool boolean;
 #  else
@@ -215,8 +216,10 @@ typedef enum { false, true } _Bool;
  * in preprocessor directives and __bool_true_false_are_defined
  * should be true.
  */
-# define false (_Bool) 0
-# define true  (_Bool) 1
+# if !defined(false) 
+#   define false (_Bool) 0
+#   define true  (_Bool) 1
+# endif
 # define __bool_true_false_are_defined 1
 #endif
 

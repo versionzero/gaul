@@ -293,7 +293,7 @@ static AVLNode *avltree_node_insert(AVLNode *node,
 /*
     *inserted = FALSE;
  */
-    printf(" -- Replaced node -- (Key clash?)\n");
+    printf("WARNING: -- Replaced node -- (Key clash?)\n");
 
     node->data = data;
     return node;
