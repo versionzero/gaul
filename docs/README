@@ -5,6 +5,8 @@ For the time-being, all documentation will be placed on the GAUL website.  Event
 
 http://gaul.sourceforge.net/
 
+The most upto date documentation will always be found in the CVS archive (in directory gaul-devel/docs/)
+
 For your (and my) convenience, a poorly synchronised version of the website will be kept in the /docs/html/ directory.
 
 

@@ -12,7 +12,7 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.  Alternatively, if your project
-  in incompatiable with the GPL, I will probably agree to requests
+  is incompatible with the GPL, I will probably agree to requests
   for permission to use the terms of any other license.
 
   This program is distributed in the hope that it will be useful, but
@@ -37,7 +37,8 @@
 	#	matches any string of digits (including none),
 	+	matches any single digit.
 
-  Last Updated:	10/03/00 SAA	Added version which uses CHARMM's atom selection wildcards.
+  Last Updated:	20/06/01 SAA	Added a few casts for clean compilation on Solaris.
+		10/03/00 SAA	Added version which uses CHARMM's atom selection wildcards.
 		20/10/99 SAA	Tidied from some of my old Amiga code!!!
 
   To do:	Make "[blah]" stuff more sophisticated.
@@ -180,7 +181,7 @@ boolean recursive_str_match_charmm(char *str_start, char *str_end, char *pat_sta
     
     if (*pat_start != '%' && *pat_start != *str_start)
       {
-      if (*pat_start == '+' && !isdigit(*str_start)) return FALSE;
+      if (*pat_start == '+' && !isdigit((int)*str_start)) return FALSE;
       }
 
     str_start++;
@@ -196,7 +197,7 @@ boolean recursive_str_match_charmm(char *str_start, char *str_end, char *pat_sta
     
     if (*pat_end != '%' && *pat_end != *str_end)
       {
-      if (*pat_end == '+' && !isdigit(*str_end)) return FALSE;
+      if (*pat_end == '+' && !isdigit((int)*str_end)) return FALSE;
       }
 
     str_end--;
@@ -211,7 +212,7 @@ boolean recursive_str_match_charmm(char *str_start, char *str_end, char *pat_sta
 /* Pattern is a single '#', and the string contains only digits? */
     while (str_start <= str_end)
       {
-      if (!isdigit(*str_start)) return(FALSE);
+      if (!isdigit((int)*str_start)) return(FALSE);
       str_start++;
       }
     return(TRUE);

@@ -1,5 +1,13 @@
 Changes since release 0.1832:
 - Added 'GPL'd header' to source files which were missing it.
+- Changes for compilation under FreeBSD. (There are still lots of warnings about the use of the deprecated header file "malloc.h")
+- Changes for compilation under Solaris.
+- Fixed some spelling mistakes/typos in the headers and on the web-pages.
+- Slightly updated the INSTALL file.
+- Rationalised use of population_extinction() in tests/struggle.c
+- Sorted out stuff required by 'make dist' and friends.
+- The documentation will now be distributed seperately to the source code, at least until the stable release.
+- Supported platform info added to web-pages.
 
 Changes since release 0.1831:
 

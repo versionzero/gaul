@@ -83,7 +83,7 @@ boolean struggle_score(population *pop, entity *entity)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	16/06/01
+  updated:	20/06/01
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -95,8 +95,6 @@ int main(int argc, char **argv)
 
   for (i=0; i<50; i++)
     {
-    if (pop) ga_extinction(pop);
-
     random_seed(i);
 
     pop = ga_genesis_char(
@@ -135,9 +133,9 @@ int main(int argc, char **argv)
     printf("%s\n", ga_chromosome_char_to_staticstring(pop, pop->entity_iarray[0]));
     printf("With score = %f", pop->entity_iarray[0]->fitness);
     printf("\n");
-    }
 
-  ga_extinction(pop);
+    ga_extinction(pop);
+    }
 
   exit(2);
   }

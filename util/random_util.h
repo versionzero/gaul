@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	02/02/01 SAA	Converted from helga_random to random_util.
+  Updated:	20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
+		02/02/01 SAA	Converted from helga_random to random_util.
 		16/05/00 SAA	First code.
 
  **********************************************************************/
@@ -36,6 +37,7 @@
 
 #include "SAA_header.h"
 
+#include <float.h>
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>

@@ -70,16 +70,6 @@
 #include "ga_core.h"
 
 /*
- * FIXME: These shouldn't really be included like this!
- */
-#include "ga_chromo.c"
-#include "ga_crossover.c"
-#include "ga_mutate.c"
-#include "ga_replace.c"
-#include "ga_seed.c"
-#include "ga_select.c"
-
-/*
  * Global variables.
  */
 #if 0

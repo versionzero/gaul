@@ -41,7 +41,7 @@ sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\&%]/\\&/g;
 /^[ 	]*VPATH[ 	]*=[^:]*$/d
 
 s%@SHELL@%/bin/sh%g
-s%@CFLAGS@%-g -O2 -g -Wall%g
+s%@CFLAGS@%-g -O2 -Wall%g
 s%@CPPFLAGS@%%g
 s%@CXXFLAGS@%%g
 s%@FFLAGS@%%g
@@ -79,12 +79,12 @@ s%@build_cpu@%i586%g
 s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@MAJOR_VERSION@%0%g
-s%@MINOR_VERSION@%1831%g
-s%@PATCH_VERSION@%010617%g
-s%@VERSION@%0.1831-010617%g
-s%@LT_RELEASE@%0.1831%g
+s%@MINOR_VERSION@%1832%g
+s%@PATCH_VERSION@%010620%g
+s%@VERSION@%0.1832%g
+s%@LT_RELEASE@%0.1832%g
 s%@LT_CURRENT@%0%g
-s%@LT_REVISION@%010617%g
+s%@LT_REVISION@%010620%g
 s%@INSTALL_PROGRAM@%${INSTALL}%g
 s%@INSTALL_SCRIPT@%${INSTALL_PROGRAM}%g
 s%@INSTALL_DATA@%${INSTALL} -m 644%g
@@ -240,12 +240,12 @@ for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
 ${ac_dA}MAJOR_VERSION${ac_dB}MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_uA}MAJOR_VERSION${ac_uB}MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_eA}MAJOR_VERSION${ac_eB}MAJOR_VERSION${ac_eC}0${ac_eD}
-${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1831${ac_dD}
-${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1831${ac_uD}
-${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1831${ac_eD}
-${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}010617${ac_dD}
-${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}010617${ac_uD}
-${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}010617${ac_eD}
+${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1832${ac_dD}
+${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1832${ac_uD}
+${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1832${ac_eD}
+${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}010620${ac_dD}
+${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}010620${ac_uD}
+${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}010620${ac_eD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_eA}V3_QUICK${ac_eB}V3_QUICK${ac_eC}1${ac_eD}
@@ -261,12 +261,12 @@ ${ac_eA}PARALLEL${ac_eB}PARALLEL${ac_eC}0${ac_eD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"17/06/01"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"17/06/01"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"17/06/01"${ac_eD}
-${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1831-010617"${ac_dD}
-${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1831-010617"${ac_uD}
-${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1831-010617"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"20/06/01"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"20/06/01"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"20/06/01"${ac_eD}
+${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1832"${ac_dD}
+${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1832"${ac_uD}
+${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1832"${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in
@@ -282,18 +282,18 @@ ${ac_eA}PARALLEL${ac_eB}PARALLEL${ac_eC}0${ac_eD}
 ${ac_dA}MEMORY_ALLOC_SAFE${ac_dB}MEMORY_ALLOC_SAFE${ac_dC}1${ac_dD}
 ${ac_uA}MEMORY_ALLOC_SAFE${ac_uB}MEMORY_ALLOC_SAFE${ac_uC}1${ac_uD}
 ${ac_eA}MEMORY_ALLOC_SAFE${ac_eB}MEMORY_ALLOC_SAFE${ac_eC}1${ac_eD}
-${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}2${ac_dD}
-${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}2${ac_uD}
-${ac_eA}GA_DEBUG${ac_eB}GA_DEBUG${ac_eC}2${ac_eD}
+${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}1${ac_dD}
+${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}1${ac_uD}
+${ac_eA}GA_DEBUG${ac_eB}GA_DEBUG${ac_eC}1${ac_eD}
 CEOF
   sed -f conftest.frag conftest.in > conftest.out
   rm -f conftest.in
   mv conftest.out conftest.in
 
   cat > conftest.frag <<CEOF
-${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}2${ac_dD}
-${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}2${ac_uD}
-${ac_eA}DEBUG${ac_eB}DEBUG${ac_eC}2${ac_eD}
+${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}1${ac_dD}
+${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}1${ac_uD}
+${ac_eA}DEBUG${ac_eB}DEBUG${ac_eC}1${ac_eD}
 ${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
 ${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
 ${ac_eA}MEMORY_PADDING${ac_eB}MEMORY_PADDING${ac_eC}0${ac_eD}

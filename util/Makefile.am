@@ -55,15 +55,25 @@ librandom_a_SOURCES = \
 	random_util.c
 
 include_HEADERS = \
-	SAA_header.h \
-	avltree.h \
-	compatibility.h \
-	log_util.h \
-	linkedlist.h \
-	memory_util.h \
-	mpi_util.h \
-	random_util.h \
-	table.h
+     SAA_header.h \
+     avltree.h \
+     compatibility.h \
+     dstr_util.h \
+     linkedlist.h \
+     log_util.h \
+     memory_chunks.h \
+     memory_util.h \
+     mpi_util.h \
+     random_util.h \
+     str_hash.h \
+     str_match.h \
+     str_perl.h \
+     str_util.h \
+     table.h \
+     memory_chunks.c \
+     str_atof.c \
+     str_hash.c \
+     str_pcre_tab.c
 
 libmethods_a_LIBFLAGS = -lm
 

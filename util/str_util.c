@@ -12,7 +12,7 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.  Alternatively, if your project
-  in incompatiable with the GPL, I will probably agree to requests
+  is incompatible with the GPL, I will probably agree to requests
   for permission to use the terms of any other license.
 
   This program is distributed in the hope that it will be useful, but
@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Updated:	23/03/01 SAA	Added str_scmp().
+  Updated:	20/06/01 SAA	Added a few casts for clean compilation on Solaris.
+		23/03/01 SAA	Added str_scmp().
 		09/01/01 SAA	str_stripnewline() now returns the length of the string returned.
 		24/09/00 SAA	Added str_tr().
 		18/09/00 SAA	Renamed str_hash() to str_qhash() to avoid name collision with the much much superior function in str_hash.c
@@ -352,7 +353,7 @@ void str_remove_whitespace(char *str)
 
   if (!str) die("Null pointer to string passed.");
 
-  for (p = str; *p; p++) if (!isspace(*p)) *str++ = *p;
+  for (p = str; *p; p++) if (!isspace((int)*p)) *str++ = *p;
   *str = '\0';
   }
 
@@ -692,7 +693,7 @@ char *str_stripspace(const char *str)
   if (!str) die("Null string pointer passed.");
   if (str[0] == '\0') die("Empty string pointer passed.");
 
-  while (*str && isspace(*str)) str++;
+  while (*str && isspace((int)*str)) str++;
 
   len = strlen(str)+1;
 
@@ -941,7 +942,7 @@ void str_left_adjust(char *str)
   if (str) die("null string pointer passed");
 
   nb = str;
-  while (*nb && isspace (*nb)) nb++;
+  while (*nb && isspace((int)*nb)) nb++;
   memmove (str, nb, strlen (str) - (str-nb) + 1);
   }
 
@@ -963,7 +964,7 @@ void str_right_adjust(char *str)
   len = strlen (str);
   while (len--)
     {
-    if (!isspace(str[len]))
+    if (!isspace((int)str[len]))
       {
       str[len+1] = '\0';
       return;

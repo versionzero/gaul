@@ -2,8 +2,8 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="description" content="GAUL Documentation: Installation">
-   <meta name="keywords" content="installation, genetic algorithm, GA, tutorial, examples, documentation, GAUL">
+   <meta name="description" content="GAUL Documentation: Compatible Platforms">
+   <meta name="keywords" content="Linux, FreeBSD, Solaris, IRIX, installation, GAUL">
    <meta name="author" content="Stewart Adcock">
    <meta name="copyright" content="© Stewart Adcock">
    <meta name="generator" content="vi">
@@ -20,7 +20,7 @@
 </table>
 <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%">
   <tr>
-    <td ALIGN=CENTER BGCOLOR="#2222AA"><b><font face="Arial,Helvetica" color="#FFFFFF">GAUL Documentation: Installation</font></b></td>
+    <td ALIGN=CENTER BGCOLOR="#2222AA"><b><font face="Arial,Helvetica" color="#FFFFFF">GAUL Documentation: Platforms</font></b></td>
   </tr>
 </table>
 
@@ -29,34 +29,105 @@
 <tr>
 <td>
 
-<p><b>Instructions for installation from source code</b></p>
-
-<p>The only non-trivial pre-requisite for a fully functional installation of GAUL is S-Lang.  This may be obtained from <a href="http://www.s-lang.org/">http://www.s-lang.org/</a></p>
-
-<p>Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.</p>
-
-<p>You should be able to work it out, but for any real dummies out there follow the standard GNU make procedure - which means type:</p>
-<pre>
-./configure ; make
-</pre>
-
-<p>Or, if you don't have SLang installed - type:</p>
-<pre>
-./configure --enable-slang=no ; make
-</pre>
-
-<p>Note that if you are using Solaris, you should instead use:</p>
-<pre>
-./configure ; gmake
-</pre>
-
-<p>If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.  Email me if:</p>
+<p><b>Potentially Supported Platforms:</b></p>
 <ul>
-<li>You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))</li>
-<li>You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").</li>
+<li>Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.</li>
+<li>Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.</li>
 </ul>
 
-<p><a href="platforms.html">Here</a> is a list of platforms that are known to work.</p>
+<p><b>Table of Supported Platforms:</b></p>
+<p>The release numbers indicate the latest tested version.  A &quot;*&quot; means a version prior to release on SourceForge was tested.  If you have attempted to compile GAUL on any alternative platform, I would be extremely happy to hear whether you were successful or not.</p>
+
+<table border=1 cellspacing=0 cellpadding=1 width="100%">
+  <tr>
+    <td>OS</td>
+    <td>OS Version</td>
+    <td>Compiler</td>
+    <td>Processor Type</td>
+    <td>GAUL Release</td>
+    <td>Result</td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>RedHat 6.2</td>
+    <td>gcc</td>
+    <td>x86</td>
+    <td>0.1833</td>
+    <td><font color="#00CC00">Success</font></td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>RedHat 7.0</td>
+    <td>gcc</td>
+    <td>x86</td>
+    <td>0.1833</td>
+    <td><font color="#00CC00">Success</font></td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>RedHat 6.2</td>
+    <td>gcc</td>
+    <td>Alpha EV56</td>
+    <td>0.1831</td>
+    <td><font color="#00CC00">Success</font></td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>RedHat 6.2</td>
+    <td>Compaq's ccc</td>
+    <td>Alpha EV56</td>
+    <td>*</td>
+    <td><font color="#FF3333">Does not compile</font></td>
+  </tr>
+  <tr>
+    <td>FreeBSD</td>
+    <td>4.3</td>
+    <td>gcc</td>
+    <td>x86</td>
+    <td>0.1833</td>
+    <td><font color="#00CC00">Success</font></td>
+  </tr>
+  <tr>
+    <td>Solaris</td>
+    <td>7.0</td>
+    <td>?</td>
+    <td>x86</td>
+    <td>*</td>
+    <td><font color="#00CC00">Success</font> (Need to use &quot;gmake&quot;)</td>
+  </tr>
+  <tr>
+    <td>Solaris</td>
+    <td>8.0</td>
+    <td>?</td>
+    <td>Sparc</td>
+    <td>0.1833</td>
+    <td><font color="#00CC00">Success</font> (Need to use &quot;gmake&quot;)</td>
+  </tr>
+  <tr>
+    <td>IRIX</td>
+    <td>5.3</td>
+    <td>gcc</td>
+    <td>MIPS R4K</td>
+    <td>*</td>
+    <td><font color="#00CC00">Success</font> (Before automake/autoconf was used.)</td>
+  </tr>
+  <tr>
+    <td>IRIX</td>
+    <td>6.2.2</td>
+    <td>gcc</td>
+    <td>MIPS R10K</td>
+    <td>*</td>
+    <td><font color="#00CC00">Success</font> (Before automake/autoconf was used.)</td>
+  </tr>
+  <tr>
+    <td>IRIX</td>
+    <td>6.2.2</td>
+    <td>MIPSPro cc</td>
+    <td>MIPS R10K</td>
+    <td>0.1833</td>
+    <td><font color="#FF3333">Does not configure.</font></td>
+  </tr>
+</table>
 
 </td></tr></table>
 

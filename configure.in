@@ -43,14 +43,14 @@ AC_CANONICAL_SYSTEM
 cflags_set=${CFLAGS+set}
 
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
-dnl are available for $ac_help expansion (don't we all *love* autoconf?)
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+dnl are available for $ac_help expansion.
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
-MINOR_VERSION=1832
+MINOR_VERSION=1833
 PATCH_VERSION=`date +%y%m%d`
-VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
-dnl
-AC_DIVERT_POP()dnl
+#VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
+VERSION=$MAJOR_VERSION.$MINOR_VERSION
+AC_DIVERT_POP()
 
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
@@ -94,13 +94,13 @@ CFLAGS = -Wall -O
 
 dnl figure debugging default, prior to $ac_help setup
 dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 if test `expr $MINOR_VERSION \% 2` = 1 ; then
 	debug_default=yes
 else
 	debug_default=minimum
 fi
-AC_DIVERT_POP()dnl
+AC_DIVERT_POP()
 
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(debug,

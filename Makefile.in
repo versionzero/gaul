@@ -115,18 +115,11 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = util src tests .
-
-EXTRA_DIST = gaul.spec.in
-
-m4datadir = $(datadir)/aclocal
-m4data_DATA = gaul.m4
+SUBDIRS = util src tests docs .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = 
-DATA =  $(m4data_DATA)
-
 DIST_COMMON =  README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
 Makefile.am Makefile.in NEWS acconfig.h aclocal.m4 config.guess \
 config.h.in config.sub configure configure.in install-sh ltconfig \
@@ -181,25 +174,6 @@ distclean-hdr:
 	-rm -f config.h
 
 maintainer-clean-hdr:
-
-install-m4dataDATA: $(m4data_DATA)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(m4datadir)
-	@list='$(m4data_DATA)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4datadir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4datadir)/$$p; \
-	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(m4datadir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(m4datadir)/$$p; \
-	  fi; fi; \
-	done
-
-uninstall-m4dataDATA:
-	@$(NORMAL_UNINSTALL)
-	list='$(m4data_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(m4datadir)/$$p; \
-	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -353,7 +327,6 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
 info-am:
 info: info-recursive
 dvi-am:
@@ -368,21 +341,20 @@ all-recursive-am: config.h
 install-exec-am:
 install-exec: install-exec-recursive
 
-install-data-am: install-m4dataDATA
+install-data-am:
 install-data: install-data-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am: uninstall-m4dataDATA
+uninstall-am:
 uninstall: uninstall-recursive
-all-am: Makefile $(DATA) config.h
+all-am: Makefile config.h
 all-redirect: all-recursive-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs)  $(DESTDIR)$(m4datadir)
 
 
 mostlyclean-generic:
@@ -416,8 +388,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f config.status
 
 .PHONY: mostlyclean-hdr distclean-hdr clean-hdr maintainer-clean-hdr \
-uninstall-m4dataDATA install-m4dataDATA install-data-recursive \
-uninstall-data-recursive install-exec-recursive \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
@@ -430,14 +401,19 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-dist-hook: gaul.spec
-	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
-	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
-	     CONFIG_HEADERS= \
-	     $(SHELL) config.status \
-	     && cp INSTALL README $(distdir) ; \
-	fi \
-	&& cp gaul.spec $(distdir)
+#EXTRA_DIST = gaul.spec.in
+
+#m4datadir = $(datadir)/aclocal
+#m4data_DATA = gaul.m4
+
+#dist-hook: gaul.spec
+#	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
+#	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
+#	     CONFIG_HEADERS= \
+#	     $(SHELL) config.status \
+#	     && cp INSTALL README $(distdir) ; \
+#	fi \
+#	&& cp gaul.spec $(distdir)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

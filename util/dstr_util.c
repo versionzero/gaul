@@ -12,7 +12,7 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.  Alternatively, if your project
-  in incompatiable with the GPL, I will probably agree to requests
+  is incompatible with the GPL, I will probably agree to requests
   for permission to use the terms of any other license.
 
   This program is distributed in the hope that it will be useful, but
@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      27/02/01 SAA	G_LOCK etc. replaced with THREAD_LOCK etc..
+  Updated:      20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
+		27/02/01 SAA	G_LOCK etc. replaced with THREAD_LOCK etc..
 		16/01/01 SAA	Defining the constant DSTR_NO_CHUNKS will disable the use of chunks for memory handling.
 		03/01/01 SAA	Adapated to use my efficient memory chunk memory allocation routines.
 		21/11/00 SAA	IRIX fixes.
@@ -515,7 +516,7 @@ printf("1. c1 = %d c2 = %d\n", (int)c1, (int)c2);
 /*
 printf("2. c1 = %d c2 = %d\n", (int)c1, (int)c2);
 */
-      if (!isspace(c2)) return(-1);
+      if (!isspace((int)c2)) return(-1);
       c2 = *str++;
       }
     }
@@ -526,7 +527,7 @@ printf("2. c1 = %d c2 = %d\n", (int)c1, (int)c2);
 /*
 printf("3. c1 = %d c2 = %d\n", (int)c1, (int)c2);
 */
-      if (!isspace(c1)) return(1);
+      if (!isspace((int)c1)) return(1);
       c1 = *s1++;
       }
     }
@@ -1036,7 +1037,7 @@ int dstr_right_adjust(dstring *ds)
   pos = ds->string + ds->size - 1;
   while (pos >= ds->string)
     {
-    if (isspace(*pos))
+    if (isspace((int)*pos))
       {
       pos--;
       count++;

@@ -39,20 +39,28 @@ lib_LIBRARIES = libgaul.a
 INCLUDES = -I../util/
 
 libgaul_a_SOURCES = \
-	ga_core.c \
-	ga_intrinsics.c \
-	ga_optim.c \
-	ga_qsort.c \
-	ga_similarity.c \
-	ga_utility.c
+    ga_chromo.c \
+    ga_core.c \
+    ga_crossover.c \
+    ga_intrinsics.c \
+    ga_mutate.c \
+    ga_optim.c \
+    ga_qsort.c \
+    ga_replace.c \
+    ga_seed.c \
+    ga_select.c \
+    ga_similarity.c \
+    ga_utility.c
 
 include_HEADERS = \
-	ga_core.h \
-	ga_intrinsics.h \
-	ga_optim.h \
-	ga_qsort.h \
-	ga_similarity.h \
-	ga_utility.h
+    ga_chromo.h \
+    ga_core.h \
+    ga_intrinsics.h \
+    ga_optim.h \
+    ga_qsort.h \
+    ga_similarity.h \
+    ga_utility.h \
+    gaul.h
 
 libgaul_a_DEPENDENCIES = \
 	../util/libmethods.a \

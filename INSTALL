@@ -3,7 +3,7 @@ Brief GAUL Installation Instructions
 
 Full (and maybe more up-to-date) instructions are available on the GAUL website.  This file should have just enough detail to help you.
 
-Dependancies:
+Dependencies:
 The only non-trivial pre-requisite for GAUL is slang.  This may be obtained from http://www.s-lang.org/
 
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
@@ -16,12 +16,30 @@ Or if you don't have SLang installed:
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
 
+On Solaris, you should use 'gmake' instead of 'make'.
+
+If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
+automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake
+
 Email me if:
 - You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))
-- You would like pre-compiled binaries.  Note: I can guarentee to provide Linux binaries only.  I may possibly be able to aquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
+- You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
 
 Potentially supported platforms:
 - Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
 - Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
 
-Stewart 13/06/2001.
+Platforms on which compilation is confirmed as successful:
+Operating System: Linux   Linux   FreeBSD Solaris Solaris IRIX  IRIX
+Version:          (RH6.2) (RH7.0) (4.3)   (7)     (8)     (5.3) (6.2.2)
+Cpu:
+x86               0.1833  0.1833  0.1833          [*]
+Sparc                                     0.1833
+Alpha EV56        [*]
+MIPS R4K                                                  [*]
+MIPS R10K                                                       [*]
+MIPS R12K                                                       [*]
+
+[*] = A very old version prior to GPL'ing.
+
+Stewart 20/06/2001.
