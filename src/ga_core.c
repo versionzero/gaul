@@ -260,6 +260,8 @@ population *ga_population_new(	const int stable_size,
   newpop->crossover_ratio = 1.0;
   newpop->mutation_ratio = 1.0;
   newpop->migration_ratio = 1.0;
+  newpop->scheme = GA_SCHEME_DARWIN;
+  newpop->elitism = GA_ELITISM_UNKNOWN;
 
   if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
@@ -828,9 +830,14 @@ boolean ga_population_write(population *pop, char *fname)
   fwrite(&(pop->num_chromosomes), sizeof(int), 1, fp);
   fwrite(&(pop->len_chromosomes), sizeof(int), 1, fp);
 
+/*
+ * GA parameters.
+ */
   fwrite(&(pop->crossover_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->migration_ratio), sizeof(double), 1, fp);
+  fwrite(&(pop->scheme), sizeof(int), 1, fp);
+  fwrite(&(pop->elitism), sizeof(int), 1, fp);
 
 /*
  * Callback handling.  Note that user-implemented functions currently
@@ -923,7 +930,7 @@ population *ga_population_read(char *fname)
   int		id[18];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
   char		*format_str="FORMAT: GAUL POPULATION 001";	/* Format tag. */
-  char		format_str_in[32];	/* Input format tag. */
+  char		format_str_in[32]="";	/* Input format tag. (Empty initialiser to avoid valgrind warning...) */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
 
 /* Checks. */
@@ -939,7 +946,9 @@ population *ga_population_read(char *fname)
  * Program info.
  */
   fread(format_str_in, sizeof(char), strlen(format_str), fp);
-  if (strcmp(format_str, format_str_in)!=0) die("Incorrect format for population file.");
+  if (strcmp(format_str, format_str_in)!=0)
+    die("Incorrect format for population file.");
+
   fread(buffer, sizeof(char), 64, fp);	/* Ignored. */
 
 /*
@@ -960,9 +969,14 @@ population *ga_population_read(char *fname)
  */
   if (!pop) die("Unable to allocate population structure.");
 
+/*
+ * GA parameters.
+ */
   fread(&(pop->crossover_ratio), sizeof(double), 1, fp);
   fread(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fread(&(pop->migration_ratio), sizeof(double), 1, fp);
+  fread(&(pop->scheme), sizeof(int), 1, fp);
+  fread(&(pop->elitism), sizeof(int), 1, fp);
 
 /*
  * Callback handling.  Note that user-implemented functions currently

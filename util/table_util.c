@@ -30,7 +30,8 @@
 
 		Thread-safe.
  
-  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Updated:	15 Aug 2002 SAA	No longer use MemChunks.  All locks removed too.
+  		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	table_diagnostics() modified.
 		07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
 		29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
@@ -53,9 +54,6 @@
  **********************************************************************/
 
 #include "table_util.h"
-
-THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_lock);
-static MemChunk *table_mem_chunk = NULL;
 
 static unsigned int _next_pow2(unsigned int num)
   {
@@ -97,12 +95,7 @@ TableStruct *table_new(void)
   {
   TableStruct *table;
 
-  THREAD_LOCK(table_mem_chunk_lock);
-  if(!table_mem_chunk)
-    table_mem_chunk = mem_chunk_new(sizeof(TableStruct), 64);
-
-  table = mem_chunk_alloc(table_mem_chunk);
-  THREAD_UNLOCK(table_mem_chunk_lock);
+  table = s_malloc(sizeof(TableStruct));
 
   table->data = NULL;
   table->unused = NULL;
@@ -126,9 +119,7 @@ void table_destroy(TableStruct *table)
   if (table->data) s_free(table->data);
   if (table->unused) s_free(table->unused);
 
-  THREAD_LOCK(table_mem_chunk_lock);
-  mem_chunk_free(table_mem_chunk, table);
-  THREAD_UNLOCK(table_mem_chunk_lock);
+  s_free(table);
 
   return;
   }
