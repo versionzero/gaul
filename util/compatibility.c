@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
+  Updated:	14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
+		13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
 		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
   		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
@@ -1380,9 +1381,9 @@ char *readline (char *prompt)
   int isdone = 0;
   char *buf;
 
-  printf (prompt);
+  printf("%s", prompt);
 
-  buf = (char *) malloc (lim);
+  buf = (char *) s_malloc(lim);
 
   while (!isdone)
     {
@@ -1402,7 +1403,7 @@ char *readline (char *prompt)
           if (i == lim)
             {
               lim *= 2;
-              buf = (char *) realloc (buf, lim);
+              buf = (char *) s_realloc(buf, lim);
             }
           buf[i++] = (char) c;
           break;
