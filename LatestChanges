@@ -12,7 +12,10 @@ Changes since release 0.1836:
 - GNU Libtool is now used for library handling.
 - Minor alterations required for clean compilation using Intel C/C++.
 - A neural network evolution example added.
-- A multi-processor island-model example added.
+- A multi-processor (using MPI) island-model example added.
+- Many millions of minor and bugfixes.
+- Many millions of major and bugfixes.
+- Many millions of new bugs.
 
 Changes since release 0.1835:
 - Lots of little bugfixes.
