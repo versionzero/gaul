@@ -61,7 +61,8 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
-  Updated:	09/05/01 SAA	Reimplemented memory_check_bounds_all().
+  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
+		09/05/01 SAA	Reimplemented memory_check_bounds_all().
 		03/05/01 SAA	Some occurances of printf(); perror(); exit(1); replaced with a dief() call.
 		01/03/01 SAA	A strndup() function added.
 		27/02/01 SAA	gpointer replaced with vpointer and THREAD_LOCK etc. replaced with THREAD_LOCK etc.
@@ -368,7 +369,8 @@ static boolean table_traverse(AVLKey key, vpointer data, vpointer userdata)
     printf("key failure (%p %p) ", (vpointer) key, (vpointer) ((AVLKey)mr->mptr));
 */
 
-  printf(" %s\t %s\t %s\t %d\t %Zd\t %Zd\t (%p)\n",mr->label,mr->func,mr->file,mr->line,mr->mem,mr->rmem,mr->mptr);
+/*  printf(" %s\t %s\t %s\t %d\t %Zd\t %Zd\t (%p)\n",mr->label,mr->func,mr->file,mr->line,mr->mem,mr->rmem,mr->mptr);*/
+  printf(" %s\t %s\t %s\t %d\t %lu\t %lu\t (%p)\n",mr->label,mr->func,mr->file,mr->line,(unsigned long)mr->mem,(unsigned long)mr->rmem,mr->mptr);
 
   return FALSE;
   }
@@ -387,7 +389,9 @@ static boolean bounds_traverse(AVLKey key, vpointer data, vpointer userdata)
 */
 
   if (memory_check_bounds(mr->mptr)!=0)
-    printf("violation! %s\t %s\t %s\t %d\t %Zd\t %Zd\t (%p)\n",mr->label,mr->func,mr->file,mr->line,mr->mem,mr->rmem,mr->mptr);
+    printf("violation! %s\t %s\t %s\t %d\t %lu\t %lu\t (%p)\n",mr->label,mr->func,mr->file,mr->line,(unsigned long)mr->mem,(unsigned long)mr->rmem,mr->mptr);
+
+/*    printf("violation! %s\t %s\t %s\t %d\t %Zd\t %Zd\t (%p)\n",mr->label,mr->func,mr->file,mr->line,mr->mem,mr->rmem,mr->mptr);*/
 
   return FALSE;
   }
@@ -701,8 +705,8 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
 #endif
         if ( !(mtemp=malloc(memsize+size_low+size_high)) )
           {
-          dief("Memory allocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-                 memsize, name, file, line);
+          dief("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
+                 (unsigned long) memsize, name, file, line);
           }
         break;
       case (MEMORY_CALLOC):
@@ -710,8 +714,8 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
          * we use malloc instead of calloc */
         if ( !(mtemp=malloc(memsize*numvars+size_low+size_high)) )
           {
-          dief("Memory allocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-                 numvars*memsize, name, file, line);
+          dief("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
+                 (unsigned long) numvars*memsize, name, file, line);
           }
         memset(mtemp,0,memsize*numvars+size_low+size_high);
         break;
@@ -719,16 +723,16 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
         /* We also use malloc instead of realloc */
         if ( !(mtemp=malloc(memsize+size_low+size_high)) )
           {
-          dief("Memory allocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-                 memsize, name, file, line);
+          dief("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
+                 (unsigned long) memsize, name, file, line);
           }
         break;
       case (MEMORY_STRDUP):
         /* And guess what... We also use malloc for strdup.  Wow. */
         if ( !(mtemp=malloc(memsize+size_low+size_high)) )
           {
-          dief("Strdup of %Zd bytes failed at func=%s file=%s line=%d\n",
-                 memsize, name, file, line);
+          dief("Strdup of %lu bytes failed at func=%s file=%s line=%d\n",
+                 (unsigned long) memsize, name, file, line);
           }
         memcpy(mtemp+size_low,mptr,memsize);
         break;
@@ -738,8 +742,8 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
         if (memsize > len) memsize=len;
         if ( !(mtemp=malloc(memsize+size_low+size_high)) )
           {
-          dief("Strdup of %Zd bytes failed at func=%s file=%s line=%d\n",
-                 memsize, name, file, line);
+          dief("Strdup of %lu bytes failed at func=%s file=%s line=%d\n",
+                 (unsigned long) memsize, name, file, line);
           }
         memcpy(mtemp+size_low,mptr,memsize);
         ((char *)mtemp)[memsize-1] = '\0';
@@ -821,8 +825,8 @@ printf("mtemp = %p, j = %p, j->mptr = %p\n", mtemp, j, j->mptr);
           mtemp=realloc(mtemp,memsize+size_low+size_high);
           if (!mtemp)
             {
-            printf("Memory reallocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-                   memsize, name, file, line);
+            printf("Memory reallocation of %lu bytes failed at func=%s file=%s line=%d\n",
+                   (unsigned long) memsize, name, file, line);
             perror("realloc");
             exit(1);
             }
@@ -911,8 +915,8 @@ printf("INSERT (2) mtemp = %p j = %p j->mptr = %p\n", mtemp, j, j->mptr);
       {
       printf("%s allocation call from %s, file \"%s\", line %d\n", label, name, file, line);
       }
-    printf("s_alloc_debug(): %s has %Zd used, %Zd allocated, total memory allocated = %d\n",
-                label, j->rmem, j->mem, total_mem);
+    printf("s_alloc_debug(): %s has %lu used, %lu allocated, total memory allocated = %d\n",
+                label, (unsigned long) j->rmem, (unsigned long) j->mem, total_mem);
     }
 
 /*
@@ -1055,7 +1059,7 @@ void memory_print_alloc_to(void* mptr)
     return;
     }
 
-  printf("Total memory in %s is %Zd, used = %Zd\n", j->label, j->mem, j->rmem);
+  printf("Total memory in %s is %lu, used = %lu\n", j->label, (unsigned long) j->mem, (unsigned long) j->rmem);
 
   return;
   }
@@ -1152,7 +1156,7 @@ void memory_display_status()
   printf("Report level:                       %d\n", memory_verbose);
   printf("Strictness level:                   %d\n", memory_strict);
   printf("Padding flag:                       %d\n", memory_padding);
-  printf("Size of padding:                    %Zd\n", memory_size_pad);
+  printf("Size of padding:                    %d\n", memory_size_pad);
   printf("Bounds check level:                 %d\n", memory_bounds);
   printf("Bounds violation reset flag:        %d\n", memory_reset_bv);
 #endif
@@ -1489,13 +1493,8 @@ void *s_malloc_safe(	size_t size,
 
   if ( !(ptr = malloc(size)) )
     {
-#ifdef IRIX_MIPSPRO_SOURCE
     printf("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
-           (unsigned long int) size, funcname, filename, linenum);
-#else
-    printf("Memory allocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-           size, funcname, filename, linenum);
-#endif
+           (unsigned long) size, funcname, filename, linenum);
     perror("malloc");
     exit(1);
     }
@@ -1530,13 +1529,8 @@ void *s_calloc_safe(	size_t num, size_t size,
 
   if ( !(ptr = calloc(num, size)) )
     {
-#ifdef IRIX_MIPSPRO_SOURCE
     printf("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
-           (unsigned long int) num*size, funcname, filename, linenum);
-#else
-    printf("Memory allocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-           num*size, funcname, filename, linenum);
-#endif
+           (unsigned long) num*size, funcname, filename, linenum);
     perror("calloc");
     exit(1);
     }
@@ -1564,13 +1558,8 @@ void *s_realloc_safe(	void *oldptr, size_t size,
 
   if ( !(ptr = realloc(oldptr, size)) )
     {
-#ifdef IRIX_MIPSPRO_SOURCE
     printf("Memory reallocation of %lu bytes failed at func=%s file=%s line=%d\n",
-           (unsigned long int) size, funcname, filename, linenum);
-#else
-    printf("Memory reallocation of %Zd bytes failed at func=%s file=%s line=%d\n",
-           size, funcname, filename, linenum);
-#endif
+           (unsigned long) size, funcname, filename, linenum);
     perror("realloc");
     exit(1);
     }
@@ -1617,8 +1606,8 @@ char *s_strdup_safe(	const char *src,
 */
   if ( !(dest = malloc(len*sizeof(char))) )
     {
-    printf("String duplication of %Zd chars failed at func=%s file=%s line=%d\n",
-           len, funcname, filename, linenum);
+    printf("String duplication of %lu chars failed at func=%s file=%s line=%d\n",
+           (unsigned long) len, funcname, filename, linenum);
     perror("strdup");
     exit(1);
     }
@@ -1665,8 +1654,8 @@ char *s_strndup_safe(	const char *src, size_t length,
    
   if ( !(dest = malloc(len*sizeof(char))) )
     {
-    printf("String duplication of %Zd chars failed at func=%s file=%s line=%d\n",
-           len, funcname, filename, linenum);
+    printf("String duplication of %lu chars failed at func=%s file=%s line=%d\n",
+           (unsigned long) len, funcname, filename, linenum);
     perror("strdup");
     exit(1);
     }

@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	14 Mar 2002 SAA	Added random_int_permutation().
+  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		14 Mar 2002 SAA	Added random_int_permutation().
 		29 Jan 2002 SAA Fixed some dodgy typecasting.
 		25 Jan 2002 SAA Removed residual comment about HelGA.
 		07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
@@ -852,7 +853,7 @@ void random_diagnostics(void)
 #endif
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");
-  printf("random_state:              %Zd\n", sizeof(random_state));
+  printf("random_state:              %lu\n", (unsigned long) sizeof(random_state));
   printf("--------------------------------------------------------------\n");
 
   if (is_initialised)

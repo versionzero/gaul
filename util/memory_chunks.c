@@ -33,7 +33,8 @@
 
 		This is thread safe.
  
-  Last updated:	13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
+  Last updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
 		27/02/01 SAA	gpointer replaced with vpointer.
  		18/01/01 SAA	Default compiler constant definition moved out to header file.
  		17/01/01 SAA	Fixed the severe bug causing corruption of data when other data is freed - but I don't know how ;(
@@ -407,7 +408,7 @@ printf("Current mem_area out of space.\n");
       mem_chunk->mem_areas = mem_chunk->mem_area;
 	  
 /*
-printf("Inserting new memory area %p size=%Zd (%Zd)\n", mem_chunk->mem_area, mem_chunk->area_size, (sizeof(MemArea)-MEMORY_AREA_SIZE+mem_chunk->area_size));
+printf("Inserting new memory area %p size=%lu (%lu)\n", mem_chunk->mem_area, (unsigned long) mem_chunk->area_size, (unsigned long) (sizeof(MemArea)-MEMORY_AREA_SIZE+mem_chunk->area_size));
 */
       avltree_insert(mem_chunk->mem_tree, mem_chunk->mem_area);
       }
@@ -924,15 +925,9 @@ void mem_chunk_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
-  printf("FreeAtom           %lu\n", (unsigned long int) sizeof(FreeAtom));
-  printf("MemArea            %lu\n", (unsigned long int) sizeof(MemArea));
-  printf("MemChunk           %lu\n", (unsigned long int) sizeof(MemChunk));
-#else
-  printf("FreeAtom           %Zd\n", sizeof(FreeAtom));
-  printf("MemArea            %Zd\n", sizeof(MemArea));
-  printf("MemChunk           %Zd\n", sizeof(MemChunk));
-#endif
+  printf("FreeAtom           %lu\n", (unsigned long) sizeof(FreeAtom));
+  printf("MemArea            %lu\n", (unsigned long) sizeof(MemArea));
+  printf("MemChunk           %lu\n", (unsigned long) sizeof(MemChunk));
   printf("==============================================================\n");
 
   return;

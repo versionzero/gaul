@@ -29,7 +29,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	13 Mar 2002 timer_diagnostics() added.
+  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		13 Mar 2002 SAA timer_diagnostics() added.
 		07 Feb 2002 SAA	Rewrote S-Lang stuff.
 		06 Feb 2002 SAA	First version.
 
@@ -54,7 +55,7 @@ void timer_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");
-  printf("chrono_t                   %Zd\n", sizeof(chrono_t));
+  printf("chrono_t                   %lu\n", (unsigned long) sizeof(chrono_t));
   printf("==============================================================\n");
 
   return;

@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      14 Mar 2002 SAA	Changes for clean compilation under AIX.
+  Updated:      20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		14 Mar 2002 SAA	Changes for clean compilation under AIX.
 		13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
 		20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
 		27/02/01 SAA	G_LOCK etc. replaced with THREAD_LOCK etc..
@@ -98,11 +99,7 @@ void dstr_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
-  printf("dstring            %lu\n", (unsigned long int) sizeof(dstring));
-#else
-  printf("dstring            %Zd\n", sizeof(dstring));
-#endif
+  printf("dstring            %lu\n", (unsigned long) sizeof(dstring));
 
   printf("==============================================================\n");
 

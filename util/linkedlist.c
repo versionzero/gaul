@@ -32,6 +32,8 @@
 		choice ;)
 
 		MP-safe.
+
+  Last Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
  
   To do:        Add sorting functions.
                 Functions for inserting/appending lists etc. (i.e. slink_append_list() )
@@ -922,13 +924,8 @@ void linkedlist_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
-  printf("SLList             %lu\n", (unsigned long int) sizeof(SLList));
-  printf("DLList             %lu\n", (unsigned long int) sizeof(DLList));
-#else
-  printf("SLList             %Zd\n", sizeof(SLList));
-  printf("DLList             %Zd\n", sizeof(DLList));
-#endif
+  printf("SLList             %lu\n", (unsigned long) sizeof(SLList));
+  printf("DLList             %lu\n", (unsigned long) sizeof(DLList));
   printf("==============================================================\n");
 
   return;

@@ -52,12 +52,13 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
+  Last Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
- 			18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
- 			03/01/00 SAA	The type of the key may now be changed at compile time.
- 			02/01/00 SAA	avltree_search() added.
- 			30/01/00 SAA	Tidying.  Test function written.  API made more consistent.
+ 		18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
+ 		03/01/00 SAA	The type of the key may now be changed at compile time.
+ 		02/01/00 SAA	avltree_search() added.
+ 		30/01/00 SAA	Tidying.  Test function written.  API made more consistent.
 
   To do:	rebuilding tree after changing key/hashing function.
  		remove function return success flag.
@@ -830,13 +831,8 @@ void avltree_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
-  printf("AVLTree            %lu\n", (unsigned long int) sizeof(AVLTree));
-  printf("AVLTreeNode        %lu\n", (unsigned long int) sizeof(AVLTreeNode));
-#else
-  printf("AVLTree            %Zd\n", sizeof(AVLTree));
-  printf("AVLTreeNode        %Zd\n", sizeof(AVLTreeNode));
-#endif
+  printf("AVLTree            %lu\n", (unsigned long) sizeof(AVLTree));
+  printf("AVLTreeNode        %lu\n", (unsigned long) sizeof(AVLTreeNode));
   printf("==============================================================\n");
 
   return;

@@ -60,9 +60,9 @@ void ga_diagnostics(void)
   printf("BYTEBITS:                  %d\n", BYTEBITS);
   printf("--- Data structures ------------------------------------------\n");
   printf("structure                  sizeof\n");
-  printf("population                 %Zd\n", sizeof(population));
-  printf("entity                     %Zd\n", sizeof(entity));
-  printf("byte                       %Zd\n", sizeof(byte));
+  printf("population                 %lu\n", (unsigned long) sizeof(population));
+  printf("entity                     %lu\n", (unsigned long) sizeof(entity));
+  printf("byte                       %lu\n", (unsigned long) sizeof(byte));
   printf("--- Current variables ----------------------------------------\n");
   num_pops = ga_get_num_populations();
   if (num_pops==-1)

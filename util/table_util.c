@@ -28,7 +28,8 @@
 
   Thread-safe.
  
-  Updated:	13 Mar 2002 SAA	table_diagnostics() modified.
+  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+		13 Mar 2002 SAA	table_diagnostics() modified.
 		07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
 		29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
 		28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
@@ -347,11 +348,7 @@ void table_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");
-#ifdef IRIX_MIPSPRO_SOURCE
-  printf("TableStruct                %lu\n", (unsigned long int) sizeof(TableStruct));
-#else
-  printf("TableStruct                %Zd\n", sizeof(TableStruct));
-#endif
+  printf("TableStruct                %lu\n", (unsigned long) sizeof(TableStruct));
   printf("==============================================================\n");
 
   return;
