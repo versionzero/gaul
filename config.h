@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1838-2"
-#define BUILD_DATE_STRING "29/04/02"
+#define BUILD_DATE_STRING "02/05/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1838
 #define PATCH_VERSION 2
@@ -48,7 +48,7 @@
 #define HAVE_VALUES_H 1
 
 /* Kludge required for linking to LAM-MPI */
-#define HAVE_ITOA 1
+/* #undef HAVE_ITOA */
 
 /* #undef NO_SYS_ERRLIST */
 
@@ -66,7 +66,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "29/04/02"
+#define BUILD_DATE_STRING "02/05/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1

@@ -303,7 +303,7 @@ int strnicmp( char *s1, char *s2, int n );
 #endif
 
 #ifndef HAVE_SINCOS
-maybeinline void sincos( double radians, double *s, double *c );
+void sincos( double radians, double *s, double *c );
 #endif
 
 #ifndef HAVE_ITOA

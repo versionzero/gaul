@@ -47,7 +47,7 @@ GAUL: Genetic Algorithm Utility Library.  GAUL is a flexible programming library
 %setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
 
 %build
-./configure
+./configure --includedir=%{prefix}/include/gaul --libdir=%{prefix}/lib/gaul
 make
 
 %install
@@ -55,56 +55,56 @@ make install
 
 %files
 %defattr(-, root, root)
-/usr/local/lib/libstuff.a
-/usr/local/lib/libnn_util.a
-/usr/local/lib/librandom.a
-/usr/local/lib/libstr_util.a
-/usr/local/lib/libtimer_util.a
-/usr/local/lib/liblog_util.a
-/usr/local/lib/liblog_util_parallel.a
-/usr/local/lib/libmpi_util.a
-/usr/local/lib/libmpi_util_fake.a
-/usr/local/lib/libbtree.a
-/usr/local/include/ga_bitstring.h
-/usr/local/include/ga_chromo.h
-/usr/local/include/ga_core.h
-/usr/local/include/ga_intrinsics.h
-/usr/local/include/ga_optim.h
-/usr/local/include/ga_qsort.h
-/usr/local/include/ga_similarity.h
-/usr/local/include/ga_utility.h
-/usr/local/include/gaul.h
-/usr/local/include/SAA_header.h
-/usr/local/include/avltree.h
-/usr/local/include/compatibility.h
-/usr/local/include/dstr_util.h
-/usr/local/include/linkedlist.h
-/usr/local/include/log_util.h
-/usr/local/include/memory_chunks.h
-/usr/local/include/memory_util.h
-/usr/local/include/mpi_util.h
-/usr/local/include/nn_util.h
-/usr/local/include/random_util.h
-/usr/local/include/str_match.h
-/usr/local/include/str_util.h
-/usr/local/include/table_util.h
-/usr/local/include/memory_chunks.c
-/usr/local/include/timer_util.h
-/usr/local/bin/diagnostics
-/usr/local/bin/pingpong
-/usr/local/bin/wildfire
-/usr/local/bin/goldberg1
-/usr/local/bin/goldberg2
-/usr/local/bin/royalroad
-/usr/local/bin/royalroad_ss
-/usr/local/bin/struggle
-/usr/local/bin/struggle2
-/usr/local/bin/struggle3
-/usr/local/bin/struggle4
-/usr/local/bin/struggle5
-/usr/local/bin/struggle5_mp
-/usr/local/bin/struggle_ss
-/usr/local/bin/nnevolve
+%{prefix}/lib/gaul/libstuff.a
+%{prefix}/lib/gaul/libnn_util.a
+%{prefix}/lib/gaul/librandom.a
+%{prefix}/lib/gaul/libstr_util.a
+%{prefix}/lib/gaul/libtimer_util.a
+%{prefix}/lib/gaul/liblog_util.a
+%{prefix}/lib/gaul/liblog_util_parallel.a
+%{prefix}/lib/gaul/libmpi_util.a
+%{prefix}/lib/gaul/libmpi_util_fake.a
+%{prefix}/lib/gaul/libbtree.a
+%{prefix}/include/gaul/ga_bitstring.h
+%{prefix}/include/gaul/ga_chromo.h
+%{prefix}/include/gaul/ga_core.h
+%{prefix}/include/gaul/ga_intrinsics.h
+%{prefix}/include/gaul/ga_optim.h
+%{prefix}/include/gaul/ga_qsort.h
+%{prefix}/include/gaul/ga_similarity.h
+%{prefix}/include/gaul/ga_utility.h
+%{prefix}/include/gaul/gaul.h
+%{prefix}/include/gaul/SAA_header.h
+%{prefix}/include/gaul/avltree.h
+%{prefix}/include/gaul/compatibility.h
+%{prefix}/include/gaul/dstr_util.h
+%{prefix}/include/gaul/linkedlist.h
+%{prefix}/include/gaul/log_util.h
+%{prefix}/include/gaul/memory_chunks.h
+%{prefix}/include/gaul/memory_util.h
+%{prefix}/include/gaul/mpi_util.h
+%{prefix}/include/gaul/nn_util.h
+%{prefix}/include/gaul/random_util.h
+%{prefix}/include/gaul/str_match.h
+%{prefix}/include/gaul/str_util.h
+%{prefix}/include/gaul/table_util.h
+%{prefix}/include/gaul/memory_chunks.c
+%{prefix}/include/gaul/timer_util.h
+%{prefix}/bin/diagnostics
+%{prefix}/bin/pingpong
+%{prefix}/bin/wildfire
+%{prefix}/bin/goldberg1
+%{prefix}/bin/goldberg2
+%{prefix}/bin/royalroad
+%{prefix}/bin/royalroad_ss
+%{prefix}/bin/struggle
+%{prefix}/bin/struggle2
+%{prefix}/bin/struggle3
+%{prefix}/bin/struggle4
+%{prefix}/bin/struggle5
+%{prefix}/bin/struggle5_mp
+%{prefix}/bin/struggle_ss
+%{prefix}/bin/nnevolve
 
 %doc AUTHORS COPYING ChangeLog NEWS README
 

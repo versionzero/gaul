@@ -931,11 +931,8 @@ int main(int argc, char **argv)
   nnevolve_setup_data();
 
 /*
- * Perform Lamarckian evolution for 200 generations.
+ * Perform Lamarckian evolution for 500 generations.
  */
-/*
-  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 200 );
-*/
   timer_start(&lga_timer);
   ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 500 );
   timer_check(&lga_timer);

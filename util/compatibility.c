@@ -1624,7 +1624,7 @@ int strnicmp( char *s1, char *s2, int n )
 /*
  * This is an undocumented GNU extension, which is actually fairly useful.
  */
-maybeinline void sincos( double radians, double *s, double *c )
+void sincos( double radians, double *s, double *c )
   {
 
 #if __i368__

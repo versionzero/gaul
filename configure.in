@@ -224,16 +224,6 @@ else
   AC_MSG_RESULT(no)
 fi
 
-#dnl Check for MPI versions.
-#dnl FIXME: Need to think about how to handle MPI sensibly.  This
-#dnl is currently nothing more than a kludge!
-## For LAM on chemcca0 / desktop.
-#MPIFLAGS="-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
-## For MPICH on chemcca40.
-##MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -L/usr/share/mpi/lib -lmpich"
-## For non-MPI machines.
-##MPIFLAGS=""
-
 dnl Setup MPI compilation
 AC_MSG_CHECKING(how to compile MPI code)
 if test "x$enable_mpi" = "xyes"; then
@@ -274,6 +264,7 @@ else
   WILL_USE_SLANG="no"
 fi
 
+dnl Compiler specific switches.
 changequote(,)dnl
 # Optimisations etc. for the GNU gcc compiler.
 if test "x$GCC" = "xyes"; then
@@ -414,7 +405,7 @@ AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
                  sys/time.h sys/types.h sys/uio.h \
                  limits.h values.h termios.h unistd.h fcntl.h)
 
-dnl Check for some ilibrary functions, many of which GAUL doesn't use, but I
+dnl Check for some library functions, many of which GAUL doesn't use, but I
 dnl haven't gone though checking yet.
 AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 waitpid usleep snooze \
@@ -423,7 +414,6 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 memcpy memset memmove bcopy memscan \
                 memrev memchr memmem memcmp \
                 min max \
-                sincos \
                 index rindex \
                 strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok strpbrk strsep \
@@ -433,7 +423,14 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
 		strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
                 strerror strlcat strlcpy strstr vsnprintf )
-AC_DEFINE(HAVE_ITOA,1)	# Kludge to avoid symbol conflict with LAM-MPI
+
+dnl Some dodgy work-arounds.
+if test "x$enable_mpi" = "xyes"; then
+  AC_DEFINE(HAVE_ITOA,1)	# Avoid symbol conflict with LAM-MPI
+fi
+if test "x$CC" != "xicc"; then
+  AC_CHECK_FUNCS( sincos )	# I have some problems with implicit definition of sincos() with the Intel C++.
+fi
 
 dnl Give warning if GNU Make is not being used.
 dnl This message is at the bottom so it may be easily spotted!

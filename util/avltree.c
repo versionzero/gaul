@@ -200,7 +200,7 @@ static void avltree_node_destroy(AVLNode *node, AVLDestructorFunc free_func)
 static vpointer avltree_node_ordered_search(AVLNode *node,
                      AVLSearchFunc search_func, vpointer userdata)
   {
-  int dir = 1;
+  int dir;
 
   while (node)
     {

@@ -244,8 +244,8 @@ boolean ga_evolution(	population		*pop,
  * Performed in the case of Lamarckian evolution.
  * Performed, and genes are modified, in the case of Baldwinian evolution.
  *
- * Maybe, could reoptimise all structures at each generation.  This would allow
- * a reduced optimisation protocol and only those structures which are
+ * Maybe, could reoptimise all solutions at each generation.  This would allow
+ * a reduced optimisation protocol and only those solutions which are
  * reasonable would survive for further optimisation.
  */
   if (class != GA_CLASS_DARWIN)
@@ -605,8 +605,8 @@ boolean ga_evolution_steady_state(	population		*pop,
  * Performed in the case of Lamarckian evolution.
  * Performed, and genes are modified, in the case of Baldwinian evolution.
  *
- * Maybe, could reoptimise all structures at each generation.  This would allow
- * a reduced optimisation protocol and only those structures which are
+ * Maybe, could reoptimise all solutions at each generation.  This would allow
+ * a reduced optimisation protocol and only those solutions which are
  * reasonable would survive for further optimisation.
  *
  * FIXME: This is wrong for GA_CLASS_BALDWIN, GA_CLASS_LAMARCK and may be
@@ -1543,8 +1543,8 @@ boolean ga_evolution_archipelago( const int num_pops,
  * Performed in the case of Lamarckian evolution.
  * Performed, and genes are modified, in the case of Baldwinian evolution.
  *
- * Maybe, could reoptimise all structures at each generation.  This would allow
- * a reduced optimisation protocol and only those structures which are
+ * Maybe, could reoptimise all solutions at each generation.  This would allow
+ * a reduced optimisation protocol and only those solutions which are
  * reasonable would survive for further optimisation.
  */
       if (class != GA_CLASS_DARWIN)
@@ -2037,8 +2037,8 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
  * Performed in the case of Lamarckian evolution.
  * Performed, and genes are modified, in the case of Baldwinian evolution.
  *
- * Maybe, could reoptimise all structures at each generation.  This would allow
- * a reduced optimisation protocol and only those structures which are
+ * Maybe, could reoptimise all solutions at each generation.  This would allow
+ * a reduced optimisation protocol and only those solutions which are
  * reasonable would survive for further optimisation.
  */
       if (class != GA_CLASS_DARWIN)
