@@ -2,8 +2,8 @@ Roadmap upto version 1.0
 ========================
 
 GAUL may be considered to have a stable API (i.e. code written to use
-the current routines should also work with version 1.0 beside possible
-small changes in the API that may be deemed important by the
+the current routines should also work with the future version 1.0 beside
+possible small changes in the API that may be deemed important by the
 developers).
 
 These milestone requirements are subject to change ;)
@@ -15,8 +15,8 @@ These milestone requirements are subject to change ;)
             |  Use MemChunks in chromosome allocation, where appropriate.
             |  Move prototypes for all public functions into src/gaul.h
             |  Fully document chromosomes.
-            |  Replace roulette wheel and SUS selection operators with thread-safe alternatives.
             |  Checkpoint files.
+            |  Mersenne twister for PRNG.
 ------------+--------------------------------------------------------
  0.1849     |  More on-line/off-line statistics options.
             |  More replacement operators.
