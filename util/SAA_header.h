@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
+  Updated:	14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
+		31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
 		14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
 		10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
 		20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
@@ -215,8 +216,10 @@ typedef enum { false, true } _Bool;
 
 #endif
 
+#ifndef TRUE
 #define TRUE  1
 #define FALSE 0
+#endif
 
 /*
  * Additional types.
