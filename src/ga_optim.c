@@ -306,6 +306,9 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
 
     /* Skip to the next entity which needs evaluating. */
     while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+#ifdef NEED_MOSIX_FORK_HACK
+    usleep(5);
+#endif
     }
   num_forks = fork_num;
 
@@ -611,6 +614,9 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
         }
       fork_num++;
       eval_num++;
+#ifdef NEED_MOSIX_FORK_HACK
+      usleep(5);
+#endif
       }
     num_forks = fork_num;
 
@@ -2134,7 +2140,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   last updated:	21/12/00
  **********************************************************************/
 
-entity *ga_next_ascent_hill_climbing(	population		*pop,
+entity *old_ga_next_ascent_hill_climbing(	population		*pop,
 					entity			*initial,
 					const int		max_iterations,
 					GAspecificmutate	mutationfunc)
@@ -2146,6 +2152,8 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
 #endif
+
+  plog(LOG_WARNING, "This is a deprecated function!");
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
