@@ -13,41 +13,50 @@ Homepage:              http://gaul.souceforge.net/
 Documentation:         http://gaul.souceforge.net/documentation.html
 Development homepage:  http://souceforge.net/projects/gaul/
 
-All existing documentation, including a tutorial and a FAQ, is available at the website.  Note that reference documentation is still being written. In the mean-time you are welcome to join the mailing list, GAUL-devel@sourceforge.net, where all of your questions can be answered.
+All existing documentation, including a tutorial and a FAQ, is available
+at the website.  Note that reference documentation is still being written.
+In the mean-time you are welcome to join the mailing list,
+GAUL-devel@sourceforge.net, where all of your questions can be answered.
 
-Introduction
-------------
+Introduction to GAUL
+--------------------
 
-The Genetic Algorithm Utility Library (or, GAUL for short) is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms. It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm. Additional stochastic algorithms are provided for comparison to the genetic algorithms. Much of the functionality is also available through a simple S-Lang interface.
+The Genetic Algorithm Utility Library (or, GAUL for short) is a flexible
+programming library designed to aid in the development of applications
+that require the use of genetic algorithms. It provides data structures
+and functions for handling and manipulation of the data required for a
+genetic algorithm. Additional stochastic algorithms are provided for
+comparison to the genetic algorithms. Much of the functionality is also
+available through a simple S-Lang interface.
 
 GAUL is OSI Certified Open Source Software.
 
 Current features include:
 
-    * Darwinian, Lamarckian or Baldwinian evolutionary schemes.
-    * Both steady-state and generation-based GAs included.
-    * The island model of evolution is available.
-    * Chromosome datatype agnostic. A selection of common chromosome types are built-in.
-    * Includes most of the usual crossover, mutation and selection operators.
-    * Allows user-defined crossover, mutation, selection, adaptation and replacement operators.
-    * Availability of multiple chromosome genomes.
-    * Full support for multiple, simultaneously evolved, populations.
-    * Choice of high-level or low-level interface functions.
-    * Additional optimisation algorithms for local optimisation or comparative purposes:
-          o Hill climbing.
-          o Tabu Search.
-          o Simulated annealling.
-          o Simplex Search.
-          o Steepest Ascents.
-          o Deterministic Crowding.
-    * Trivial to extend using external code via the built-in code hooks.
-    * May be driven by, or extended by, simple yet powerful S-Lang scripts.
-    * Support for multiprocessor calculations on various architectures:
-          o MPI
-          o OpenMP 2.0
-          o pthreads
-          o forked-process model
-    * Written using highly portable C code.
+ * Darwinian, Lamarckian or Baldwinian evolutionary schemes.
+ * Both steady-state and generation-based GAs included.
+ * The island model of evolution is available.
+ * Chromosome datatype agnostic. A selection of common chromosome types are built-in.
+ * Includes most of the usual crossover, mutation and selection operators.
+ * Allows user-defined crossover, mutation, selection, adaptation and replacement operators.
+ * Availability of multiple chromosome genomes.
+ * Full support for multiple, simultaneously evolved, populations.
+ * Choice of high-level or low-level interface functions.
+ * Additional optimisation algorithms for local optimisation or comparative purposes:
+     o Hill climbing.
+     o Tabu Search.
+     o Simulated annealling.
+     o Simplex Search.
+     o Steepest Ascents.
+     o Deterministic Crowding.
+ * Trivial to extend using external code via the built-in code hooks.
+ * May be driven by, or extended by, simple yet powerful S-Lang scripts.
+ * Support for multiprocessor calculations on various architectures:
+     o MPI
+     o OpenMP 2.0
+     o pthreads
+     o forked-process model
+ * Written using highly portable C code.
 
 The current primary aims for the GAUL development project are to produce
 documentation, examples and test cases for this open-source release of
