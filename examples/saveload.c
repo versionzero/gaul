@@ -3,7 +3,7 @@
  **********************************************************************
 
   saveload - Test/example program for GAUL.
-  Copyright Â©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -42,7 +42,7 @@
 /*
  * The solution string.
  */
-char *target_text="When we reflect on this struggle, we may console ourselves with the full belief, that the war of nature is not incessant, that no fear is felt, that death is generally prompt, and that the vigorous, the healthy, and the happy survive and multiply.";
+static char *target_text="When we reflect on this struggle, we may console ourselves with the full belief, that the war of nature is not incessant, that no fear is felt, that death is generally prompt, and that the vigorous, the healthy, and the happy survive and multiply.";
 
 
 /**********************************************************************
@@ -87,7 +87,7 @@ void write_usage(void)
   {
   
   printf("\n"
-         "saveload ©2002, \"Stewart Adcock\" <stewart@linux-domain.com>\n"
+         "saveload ©2002-2004, \"Stewart Adcock\" <stewart@linux-domain.com>\n"
          "\n");
 
   printf("Usage: saveload [-n INTEGER] [-i FILENAME] -o FILENAME\n"
