@@ -150,7 +150,7 @@ typedef boolean	(*GAseed)(population *pop, entity *adam);
 typedef entity *(*GAadapt)(population *pop, entity *child);
 /* GAselect_one selects a single entity from the population. */
 typedef boolean (*GAselect_one)(population *pop, entity **mother);
-/* GAselect_one selects a pair of entities from the population. */
+/* GAselect_two selects a pair of entities from the population. */
 typedef boolean (*GAselect_two)(population *pop, entity **mother, entity **father);
 /* GAmutate introduces a mutation into an entity. */
 typedef void    (*GAmutate)(population *pop, entity *mother, entity *daughter);
