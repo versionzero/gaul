@@ -379,17 +379,10 @@ static void gaul_survival(population *pop)
   last updated:	11 Jun 2002
  **********************************************************************/
 
-boolean ga_evolution(	population		*pop,
+int ga_evolution(	population		*pop,
 			const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
-  int		i;			/* Loop over members of population. */
-  entity	*mother, *father;	/* Parent entities. */
-  entity	*son, *daughter;	/* Child entities. */
-  entity	*adult;			/* Temporary copy for gene optimisation. */
-  boolean	finished;		/* Whether crossover/mutation rounds are complete. */
-  int		new_pop_size;		/* Population size prior to adaptation. */
-  double	elitism_penalty;	/* Penalty for maintaining diversity. */
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -493,9 +486,6 @@ int ga_evolution_forked(	population		*pop,
   {
   int		generation=0;		/* Current generation number. */
   int		i;			/* Loop over members of population or pipes. */
-  entity	*mother, *father;	/* Parent entities. */
-  entity	*son, *daughter;	/* Child entities. */
-  boolean	finished;		/* Whether crossover/mutation rounds are complete. */
   int		*evalpipe;		/* Pipes for returning fitnesses. */
   pid_t		*pid;			/* Child PIDs. */
   int		*eid;			/* Entity which forked process is evaluating. */
@@ -787,7 +777,7 @@ int ga_evolution_forked(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-boolean ga_evolution_with_stats(	population		*pop,
+int ga_evolution_with_stats(	population		*pop,
 					const ga_elitism_type	elitism,
 					const int		max_generations )
   {
@@ -798,7 +788,6 @@ boolean ga_evolution_with_stats(	population		*pop,
   entity	*adult;			/* Temporary copy for gene optimisation. */
   boolean	finished;		/* Whether crossover/mutation rounds are complete. */
   int		new_pop_size;		/* Population size prior to adaptation. */
-  double	elitism_penalty;	/* Penalty for maintaining diversity. */
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
   int		crossover_good, crossover_poor;	/* Fornication statistics. */
@@ -1069,7 +1058,7 @@ boolean ga_evolution_with_stats(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-boolean ga_evolution_steady_state(	population		*pop,
+int ga_evolution_steady_state(	population		*pop,
 					const int		max_iterations )
   {
   int		iteration=0;		/* Current iteration count. */
@@ -1938,19 +1927,14 @@ entity *ga_simulated_annealling_mutation(population	*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-boolean ga_evolution_archipelago( const int num_pops,
+int ga_evolution_archipelago( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
   int		island;			/* Current island number. */
   int		i;			/* Loop over members of population. */
-  entity	*mother, *father;	/* Parent entities. */
-  entity	*son, *daughter;	/* Child entities. */
   entity	*adult;			/* Temporary copy for gene optimisation. */
-  boolean	finished;		/* Whether crossover/mutation rounds are complete. */
-  int		new_pop_size;		/* Population size prior to adaptation. */
-  double	elitism_penalty;	/* Penalty for maintaining diversity. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		pop0_osize;		/* Required for correct migration. */
@@ -2105,7 +2089,7 @@ boolean ga_evolution_archipelago( const int num_pops,
   last updated:	24 Jan 2002
  **********************************************************************/
 
-boolean ga_evolution_archipelago_mp( const int num_pops,
+int ga_evolution_archipelago_mp( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
@@ -2117,7 +2101,6 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
   entity	*adult;			/* Temporary copy for gene optimisation. */
   boolean	finished;		/* Whether crossover/mutation rounds are complete. */
   int		new_pop_size;		/* Population size prior to adaptation. */
-  double	elitism_penalty;	/* Penalty for maintaining diversity. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		pop0_osize;		/* Required for correct migration. */

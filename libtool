@@ -34,13 +34,13 @@ Xsed="sed -e s/^X//"
 if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 
 ### BEGIN LIBTOOL CONFIG
-# Libtool was configured as follows, on host chemcca0:
+# Libtool was configured as follows, on host desktop.stewart-adcock.co.uk:
 #
-# CC="icc" CFLAGS="-g" CPPFLAGS="" \
+# CC="gcc" CFLAGS="-g -O2" CPPFLAGS="" \
 # LD="/usr/bin/ld" LDFLAGS="" LIBS="" \
 # NM="/usr/bin/nm -B" RANLIB="ranlib" LN_S="ln -s" \
 # DLLTOOL="" OBJDUMP="" AS="" \
-#   ./ltconfig --with-gnu-ld --enable-dlopen --no-verify ./ltmain.sh i686-pc-linux-gnu
+#   ./ltconfig --with-gcc --with-gnu-ld --enable-dlopen --no-verify ./ltmain.sh i686-pc-linux-gnu
 #
 # Compiler and other test output produced by ltconfig, useful for
 # debugging ltconfig, is in ./config.log if it exists.
@@ -52,13 +52,13 @@ LTCONFIG_VERSION="1.3.5"
 SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
-build_libtool_libs=no
+build_libtool_libs=yes
 
 # Whether or not to build static libraries.
 build_old_libs=yes
 
 # Whether or not to optimize for fast installation.
-fast_install=needless
+fast_install=yes
 
 # The host system.
 host_alias=i686-pc-linux-gnu
@@ -71,7 +71,7 @@ echo="echo"
 AR="ar"
 
 # The default C compiler.
-CC="icc"
+CC="gcc"
 
 # The linker used to build libraries.
 LD="/usr/bin/ld"
@@ -99,7 +99,7 @@ reload_flag=" -r"
 reload_cmds="\$LD\$reload_flag -o \$output\$reload_objs"
 
 # How to pass a linker flag through the compiler.
-wl=""
+wl="-Wl,"
 
 # Object file suffix (normally "o").
 objext="o"
@@ -111,16 +111,16 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=""
+pic_flag=" -fPIC"
 
 # Does compiler simultaneously support -c and -o options?
-compiler_c_o="no"
+compiler_c_o="yes"
 
 # Can we write directly to a .lo ?
-compiler_o_lo="no"
+compiler_o_lo="yes"
 
 # Must we lock files when doing compilation ?
-need_locks="yes"
+need_locks="no"
 
 # Do we need the lib prefix for modules?
 need_lib_prefix=no
@@ -132,16 +132,16 @@ need_version=no
 dlopen=yes
 
 # Whether dlopen of programs is supported.
-dlopen_self=no
+dlopen_self=yes
 
 # Whether dlopen of statically linked programs is supported.
-dlopen_self_static=unknown
+dlopen_self_static=no
 
 # Compiler flag to prevent dynamic linking.
-link_static_flag=""
+link_static_flag="-static"
 
 # Compiler flag to turn off builtin functions.
-no_builtin_flag=""
+no_builtin_flag=" -fno-builtin -fno-rtti -fno-exceptions"
 
 # Compiler flag to allow reflexive dlopens.
 export_dynamic_flag_spec="\${wl}--export-dynamic"

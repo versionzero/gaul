@@ -1,3 +1,4 @@
+# Generated automatically from Makefile.in by configure.
 # Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
@@ -44,7 +45,6 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
-
 prefix = /usr/local
 exec_prefix = ${prefix}
 
@@ -77,7 +77,7 @@ AUTOHEADER = autoheader
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL}
+INSTALL_SCRIPT = ${INSTALL_PROGRAM}
 transform = s,x,x,
 
 NORMAL_INSTALL = :
@@ -86,14 +86,14 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = 
+build_alias = i686-pc-linux
 build_triplet = i686-pc-linux-gnu
-host_alias = 
+host_alias = i686-pc-linux
 host_triplet = i686-pc-linux-gnu
-target_alias = 
+target_alias = i686-pc-linux
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = icc
+CC = gcc
 DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
@@ -102,7 +102,7 @@ LT_RELEASE = 0.1839
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = /u1/gaul-devel/missing makeinfo
+MAKEINFO = makeinfo
 MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null
@@ -319,7 +319,7 @@ PROGRAMS =  $(bin_PROGRAMS)
 nn_OBJECTS =  nn_main.o
 nn_DEPENDENCIES = 
 nn_LDFLAGS = 
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

@@ -25,7 +25,7 @@
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
 #define PATCH_VERSION 1
-#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-4 #1 Thu May 2 18:06:25 EDT 2002 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
@@ -107,7 +107,7 @@
 #define HAVE_INDEX 1
 
 /* Define if you have the <inttypes.h> header file. */
-#define HAVE_INTTYPES_H 1
+/* #undef HAVE_INTTYPES_H */
 
 /* Define if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -131,7 +131,7 @@
 #define HAVE_MEMMOVE 1
 
 /* Define if you have the <memory.h> header file. */
-#define HAVE_MEMORY_H 1
+/* #undef HAVE_MEMORY_H */
 
 /* Define if you have the `memrev' function. */
 /* #undef HAVE_MEMREV */
@@ -167,7 +167,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -176,10 +176,10 @@
 #define HAVE_SNPRINTF 1
 
 /* Define if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
+/* #undef HAVE_STDINT_H */
 
 /* Define if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H 1
+/* #undef HAVE_STDLIB_H */
 
 /* Define if you have the `strcasecmp' function. */
 #define HAVE_STRCASECMP 1
@@ -212,10 +212,10 @@
 /* #undef HAVE_STRICMP */
 
 /* Define if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+/* #undef HAVE_STRINGS_H */
 
 /* Define if you have the <string.h> header file. */
-#define HAVE_STRING_H 1
+/* #undef HAVE_STRING_H */
 
 /* Define if you have the `strlcat' function. */
 /* #undef HAVE_STRLCAT */
@@ -284,7 +284,7 @@
 #define HAVE_SYS_SOCKET_H 1
 
 /* Define if you have the <sys/stat.h> header file. */
-#define HAVE_SYS_STAT_H 1
+/* #undef HAVE_SYS_STAT_H */
 
 /* Define if you have the <sys/termio.h> header file. */
 /* #undef HAVE_SYS_TERMIO_H */
@@ -362,7 +362,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* System information */
-#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-4 #1 Thu May 2 18:06:25 EDT 2002 i686 unknown"
 
 /* Define to skip error checking in vector routines */
 #define V3_QUICK 1
