@@ -1,6 +1,8 @@
 GAUL: The Genetic Algorithm Utility Library
 ===========================================
-Copyright © 2000-2001 "Stewart Adcock" <stewart@linux-domain.com>
+Copyright © 2000-2002 "Stewart Adcock" <stewart@linux-domain.com>
+
+This is the "gaul-devel" package, which currently provides the developmental version of GAUL.
 
 Further Information
 -------------------
@@ -54,5 +56,4 @@ If you use GAUL in your application, please consider adding the miniature GAUL l
 
 The 'gaul_button.png' graphic may be downloaded from the GAUL web page.
 
-Stewart Adcock, 05 Dec 2001
-
+Stewart Adcock, 12 Feb 2002
