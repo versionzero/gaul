@@ -16,7 +16,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -111,15 +111,15 @@ VERSION = 0.1836
 
 AUTOMAKE_OPTIONS = 1.4
 
-# INCLUDES = -I../util/ -I../src/ 
-
-bin_PROGRAMS = pingpong wildfire \
+bin_PROGRAMS = diagnostics \
+	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle2 struggle3 struggle4 struggle5 struggle_ss \
-	diagnostics
+	nnevolve
 
 
+diagnostics_SOURCES = diagnostics.c
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c
 goldberg1_SOURCES = goldberg1.c
@@ -132,7 +132,7 @@ struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle_ss_SOURCES = struggle_ss.c
-diagnostics_SOURCES = diagnostics.c
+nnevolve_SOURCES = diagnostics.c
 
 lib_LIBRARIES = libbtree.a
 
@@ -152,6 +152,7 @@ EXTRA_DIST = \
 	chromostubs.h
 
 
+diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
@@ -164,8 +165,9 @@ struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
-diagnostics_DEPENDENCIES = ${DEPENDENCIES}
+nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm 
@@ -178,7 +180,7 @@ struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -194,6 +196,8 @@ libbtree_a_OBJECTS =  btree.o
 AR = ar
 PROGRAMS =  $(bin_PROGRAMS)
 
+diagnostics_OBJECTS =  diagnostics.o
+diagnostics_LDFLAGS = 
 pingpong_OBJECTS =  pingpong.o
 pingpong_LDFLAGS = 
 wildfire_OBJECTS =  wildfire.o
@@ -218,8 +222,8 @@ struggle5_OBJECTS =  struggle5.o
 struggle5_LDFLAGS = 
 struggle_ss_OBJECTS =  struggle_ss.o
 struggle_ss_LDFLAGS = 
-diagnostics_OBJECTS =  diagnostics.o
-diagnostics_LDFLAGS = 
+nnevolve_OBJECTS =  diagnostics.o
+nnevolve_LDFLAGS = 
 CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -239,8 +243,8 @@ DEP_FILES =  .deps/btree.P .deps/diagnostics.P .deps/goldberg1.P \
 .deps/royalroad_ss.P .deps/struggle.P .deps/struggle2.P \
 .deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
 .deps/struggle_ss.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle_ss_SOURCES) $(diagnostics_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle_ss_OBJECTS) $(diagnostics_OBJECTS)
+SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle_ss_SOURCES) $(nnevolve_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle_ss_OBJECTS) $(nnevolve_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -347,6 +351,10 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
+diagnostics: $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES)
+	@rm -f diagnostics
+	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
+
 pingpong: $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES)
 	@rm -f pingpong
 	$(LINK) $(pingpong_LDFLAGS) $(pingpong_OBJECTS) $(pingpong_LDADD) $(LIBS)
@@ -395,9 +403,9 @@ struggle_ss: $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
 	@rm -f struggle_ss
 	$(LINK) $(struggle_ss_LDFLAGS) $(struggle_ss_OBJECTS) $(struggle_ss_LDADD) $(LIBS)
 
-diagnostics: $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES)
-	@rm -f diagnostics
-	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
+nnevolve: $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
+	@rm -f nnevolve
+	$(LINK) $(nnevolve_LDFLAGS) $(nnevolve_OBJECTS) $(nnevolve_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

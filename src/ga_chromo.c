@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -40,18 +40,6 @@
 		of soup files and for inter-process communication.
 		Neither of which is currently supported in this
 		version of GAUL -- but they will be soon.
-
-		Available types (so far) are:
-		int array
-		boolean array
-
-		Additional planned types include:
-		bitstrings
-		char array
-		float array
-		avltree
-		lists
-		many more.
 
   Bugs:		The staticstring stuff will be really bad for
 		multi-threaded applications!

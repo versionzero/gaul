@@ -32,7 +32,8 @@ bin_PROGRAMS = diagnostics \
 	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle2 struggle3 struggle4 struggle5 struggle_ss
+	struggle struggle2 struggle3 struggle4 struggle5 struggle_ss \
+	nnevolve
 
 diagnostics_SOURCES = diagnostics.c
 pingpong_SOURCES = pingpong.c
