@@ -99,7 +99,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1837
-LT_REVISION = 1
+LT_REVISION = 2
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
@@ -107,7 +107,7 @@ MINOR_VERSION = 1837
 MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 1
+PATCH_VERSION = 2
 RANLIB = ranlib
 VERSION = 0.1837
 
@@ -116,7 +116,7 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
-EXTRA_DIST = gaul.spec
+EXTRA_DIST = gaul-devel.spec
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h

@@ -28,7 +28,8 @@
   Synopsis:	Multi-layer NN trained using backpropagation with
 		momentum.
 
-  Last Updated:	05 Feb 2002 SAA	Added NN_IS_ON() and NN_IS_OFF() macros.
+  Last Updated:	01 Mar 2002 SAA	Added stuff for weight decay.
+  		05 Feb 2002 SAA	Added NN_IS_ON() and NN_IS_OFF() macros.
 		28 Jan 2002 SAA changes for distribution with GAUL.
   		25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
 
@@ -83,6 +84,7 @@ typedef struct
   float      rate;            /* Learning rate. */
   float      gain;            /* Gain of sigmoidal function. */
   float      bias;            /* Network bias. */
+  float      decay;           /* Weight decay factor. */
   float      error;           /* Total network error. */
   layer_t    *layer;          /* Layers of neurons. */
   int        num_layers;      /* Number of layers of neurons (incl. input_output). */
@@ -106,6 +108,7 @@ typedef struct
 #define NN_DEFAULT_MOMENTUM	0.75
 #define NN_DEFAULT_RATE		0.1
 #define NN_DEFAULT_GAIN		1.0
+#define NN_DEFAULT_DECAY	0.005
 
 #define NN_DEFAULT_MAX_EPOCHS	10000
 #define NN_DEFAULT_TEST_STEP	20
@@ -131,12 +134,16 @@ network_t	*NN_new(int num_layers, int *neurons);
 network_t	*NN_clone(network_t *src);
 void	NN_copy(network_t *src, network_t *dest);
 void	NN_set_bias(network_t *network, const float bias);
+void	NN_set_layer_bias(network_t *network, const int layer, const float bias);
 void	NN_set_gain(network_t *network, const float gain);
 void	NN_set_rate(network_t *network, const float rate);
 void	NN_set_momentum(network_t *network, const float momentum);
-void	NN_write(network_t *network, char *fname);
-network_t	*NN_read(char *fname);
+void	NN_set_decay(network_t *network, const float decay);
+void	NN_write(network_t *network, const char *fname);
+network_t	*NN_read_compat(const char *fname);
+network_t	*NN_read(const char *fname);
 void	NN_destroy(network_t *network);
+void	NN_set_all_weights(network_t *network, const float weight);
 void	NN_randomize_weights(network_t *network);
 void	NN_randomize_weights_01(network_t *network);
 void	NN_input(network_t *network, float *input);
@@ -146,7 +153,10 @@ void	NN_restore_weights(network_t *network);
 void	NN_propagate(network_t *network);
 void	NN_output_error(network_t *network, float *target);
 void	NN_backpropagate(network_t *network);
+void	NN_decay_weights(network_t *network);
 void	NN_adjust_weights(network_t *network);
+void	NN_adjust_weights_decay(network_t *network);
+void	NN_adjust_weights_momentum(network_t *network);
 void	NN_simulate(network_t *network, float *input, float *target);
 void	NN_simulate_with_output(network_t *network, float *input, float *target, float *output);
 void	NN_run(network_t *network, float *input, float *output);

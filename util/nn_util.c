@@ -40,7 +40,8 @@
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
+  Last Updated:	01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
+  		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
 		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
 		04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
 		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
@@ -57,6 +58,7 @@
   To do:	Need to define data from external sources.
 		Alternative switching functions.
 		Automated functions for "leave-one-out" validation.
+		Full support for weight decay method starting at a given epoch.
 
  **********************************************************************/
 
@@ -97,7 +99,7 @@ static char       **predict_labels=NULL;   /* Labels for prediction data. */
   synopsis:     Display diagnostic information. 
   parameters:   none
   return:       none
-  last updated: 25 Jan 2002
+  last updated: 01 Mar 2002
  **********************************************************************/
 
 void NN_diagnostics(void)
@@ -115,6 +117,7 @@ void NN_diagnostics(void)
   printf("NN_DEFAULT_MOMENTUM:       %f\n", NN_DEFAULT_MOMENTUM);
   printf("NN_DEFAULT_RATE:           %f\n", NN_DEFAULT_RATE);
   printf("NN_DEFAULT_GAIN:           %f\n", NN_DEFAULT_GAIN);
+  printf("NN_DEFAULT_DECAY:          %f\n", NN_DEFAULT_DECAY);
   printf("NN_DEFAULT_MAX_EPOCHS:     %d\n", NN_DEFAULT_MAX_EPOCHS);
   printf("NN_DEFAULT_TEST_STEP:      %d\n", NN_DEFAULT_TEST_STEP);
   printf("NN_DEFAULT_STOP_RATIO:     %f\n", NN_DEFAULT_STOP_RATIO);
@@ -145,8 +148,12 @@ void NN_display_summary(network_t *network)
   for (l=0; l<network->num_layers; l++)
     printf(" %d", network->layer[l].neurons);
 
-  printf("\nmomentum = %f rate = %f gain = %f bias = %f\n",
-             network->momentum, network->rate, network->gain, network->bias);
+  printf("\nmomentum = %f rate = %f gain = %f bias = %f decay = %f\n",
+             network->momentum,
+	     network->rate,
+	     network->gain,
+	     network->bias,
+	     network->decay);
 
   return;
   }
@@ -158,7 +165,7 @@ void NN_display_summary(network_t *network)
   parameters:   int num_layers	Number of layers (incl. input+output)
 		int *neurons	Array containing number of nodes per layer.
   return:       network_t *network
-  last updated: 29 Nov 2001
+  last updated: 01 Mar 2002
  **********************************************************************/
 
 network_t *NN_new(int num_layers, int *neurons)
@@ -202,6 +209,7 @@ network_t *NN_new(int num_layers, int *neurons)
   network->rate = NN_DEFAULT_RATE;
   network->gain = NN_DEFAULT_GAIN;
   network->bias = NN_DEFAULT_BIAS;
+  network->decay = NN_DEFAULT_DECAY;
 
   return network;
   }
@@ -213,7 +221,7 @@ network_t *NN_new(int num_layers, int *neurons)
   		using the contents of an existing datastructure.
   parameters:   network_t *network
   return:       network_t *network
-  last updated: 29 Jan 2002
+  last updated: 01 Mar 2002
  **********************************************************************/
 
 network_t *NN_clone(network_t *src)
@@ -262,6 +270,7 @@ network_t *NN_clone(network_t *src)
   network->rate = src->rate;
   network->gain = src->gain;
   network->bias = src->bias;
+  network->decay = src->decay;
 
   return network;
   }
@@ -274,7 +283,7 @@ network_t *NN_clone(network_t *src)
   parameters:   network_t *src
                 network_t *dest
   return:       none
-  last updated: 29 Jan 2002
+  last updated: 01 Mar 2002
  **********************************************************************/
 
 void NN_copy(network_t *src, network_t *dest)
@@ -310,6 +319,30 @@ void NN_copy(network_t *src, network_t *dest)
   dest->rate = src->rate;
   dest->gain = src->gain;
   dest->bias = src->bias;
+  dest->decay = src->decay;
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_set_layer_bias()
+  synopsis:     Change the bias of a single layer of a network to a
+ 		given value.
+  parameters:   network_t	*network
+  		const int	layer
+		const float	bias
+  return:       none
+  last updated: 01 Mar 2002
+ **********************************************************************/
+
+void NN_set_layer_bias(network_t *network, const int layer, const float bias)
+  {
+
+  if (layer<0 || layer>=network->num_layers)
+    dief("Invalid layer %d (0-%d)", layer, network->num_layers);
+  
+  network->layer[layer].output[0] = bias;
 
   return;
   }
@@ -317,11 +350,12 @@ void NN_copy(network_t *src, network_t *dest)
 
 /**********************************************************************
   NN_set_bias()
-  synopsis:     Change the bias of a network to a given value.
-  parameters:   network_t *network
-		float    bias
+  synopsis:     Change the bias of all layers in a network to a given
+ 		value.
+  parameters:   network_t	*network
+		const float	bias
   return:       none
-  last updated: 3 Dec 2001
+  last updated: 03 Dec 2001
  **********************************************************************/
 
 void NN_set_bias(network_t *network, const float bias)
@@ -395,18 +429,37 @@ void NN_set_momentum(network_t *network, const float momentum)
 
 
 /**********************************************************************
+  NN_set_decay()
+  synopsis:     Change the weight decay of a network to a given value.
+  parameters:   network_t	*network
+		const float	decay
+  return:       none
+  last updated: 01 Mar 2002
+ **********************************************************************/
+
+void NN_set_decay(network_t *network, const float decay)
+  {
+
+  network->decay = decay;
+
+  return;
+  }
+
+
+/**********************************************************************
   NN_write()
   synopsis:     Write a network_t structure and its contents to disk
 		in a binary format.
   parameters:   network_t *network
+  		const char *fname
   return:       none
-  last updated: 30 Nov 2001
+  last updated: 01 Mar 2002
  **********************************************************************/
 
-void NN_write(network_t *network, char *fname)
+void NN_write(network_t *network, const char *fname)
   {
   FILE		*fp;				/* File handle. */
-  char		*fmt_str="FORMAT NN: 001\n";	/* File identifier tag. */
+  char		*fmt_str="FORMAT NN: 002\n";	/* File identifier tag. */
   int		l;				/* Layer index. */
   int		i;				/* Neuron index. */
 
@@ -428,7 +481,7 @@ void NN_write(network_t *network, char *fname)
 
   for (l=1; l<network->num_layers; l++)
     {
-    for (i=1; i<=network->layer[l].neurons; i++)
+    for (i=0; i<=network->layer[l].neurons; i++)
       {
       fwrite(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons, fp);
       }
@@ -441,15 +494,16 @@ void NN_write(network_t *network, char *fname)
 
 
 /**********************************************************************
-  NN_read()
+  NN_read_compat()
   synopsis:     Read (and allocate) a network_t structure and its
 		contents from a binary format file on disk.
-  parameters:   network_t *network
-  return:       none
+		Version for backwards compatiability.
+  parameters:   const char *fname
+  return:	network_t *network
   last updated: 30 Nov 2001
  **********************************************************************/
 
-network_t *NN_read(char *fname)
+network_t *NN_read_compat(const char *fname)
   {
   FILE		*fp;				/* File handle. */
   char		*fmt_str="FORMAT NN: 001\n";	/* File identifier tag. */
@@ -509,6 +563,76 @@ network_t *NN_read(char *fname)
 
 
 /**********************************************************************
+  NN_read()
+  synopsis:     Read (and allocate) a network_t structure and its
+		contents from a binary format file on disk.
+  parameters:   const char *fname
+  return:	network_t *network
+  last updated: 01 Mar 2002
+ **********************************************************************/
+
+network_t *NN_read(const char *fname)
+  {
+  FILE		*fp;				/* File handle. */
+  char		*fmt_str="FORMAT NN: 002\n";	/* File identifier tag. */
+  char		*fmt_str_in="                ";	/* File identifier tag. */
+  network_t	*network;			/* The new network. */
+  int		l;				/* Layer index. */
+  int		i;				/* Neuron index. */
+
+  if ( !(fp = fopen(fname, "r")) ) dief("Unable to open file \"%s\" for input.\n", fname);
+
+  fread(fmt_str_in, sizeof(char), strlen(fmt_str), fp);
+  
+  if (strncmp(fmt_str, fmt_str_in, strlen(fmt_str)))
+    {
+    return NN_read_compat(fname);
+    }
+
+  network = (network_t*) s_malloc(sizeof(network_t));
+
+  fread(&(network->momentum), sizeof(float), 1, fp);
+  fread(&(network->gain), sizeof(float), 1, fp);
+  fread(&(network->rate), sizeof(float), 1, fp);
+  fread(&(network->bias), sizeof(float), 1, fp);
+  fread(&(network->decay), sizeof(float), 1, fp);
+
+  fread(&(network->num_layers), sizeof(int), 1, fp);
+  network->layer = (layer_t*) s_malloc(network->num_layers*sizeof(layer_t));
+
+  fread(&(network->layer[0].neurons), sizeof(int), 1, fp);
+  network->layer[0].output      = (float*) s_calloc(network->layer[0].neurons+1, sizeof(float));
+  network->layer[0].error       = (float*) s_calloc(network->layer[0].neurons+1, sizeof(float));
+  network->layer[0].weight      = NULL;
+  network->layer[0].weight_save  = NULL;
+  network->layer[0].weight_change = NULL;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    fread(&(network->layer[l].neurons), sizeof(float), 1, fp);
+    network->layer[l].output      = (float*)  s_calloc(network->layer[l].neurons+1, sizeof(float));
+    network->layer[l].error       = (float*)  s_calloc(network->layer[l].neurons+1, sizeof(float));
+    network->layer[l].weight      = (float**) s_calloc(network->layer[l].neurons+1, sizeof(float*));
+    network->layer[l].weight_save  = (float**) s_calloc(network->layer[l].neurons+1, sizeof(float*));
+    network->layer[l].weight_change = (float**) s_calloc(network->layer[l].neurons+1, sizeof(float*));
+    network->layer[l].output[0]   = network->bias;
+      
+    for (i=0; i<=network->layer[l].neurons; i++)
+      {
+      network->layer[l].weight[i]      = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
+      fread(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons, fp);
+      network->layer[l].weight_save[i]  = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
+      network->layer[l].weight_change[i] = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
+      }
+    }
+
+  fclose(fp);
+
+  return network;
+  }
+
+
+/**********************************************************************
   NN_destroy()
   synopsis:     Deallocate a network_t structure and its contents.
   parameters:   network_t *network
@@ -541,6 +665,35 @@ void NN_destroy(network_t *network)
 
   s_free(network->layer);
   s_free(network);
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_set_all_weights()
+  synopsis:     Sets of of the weights of all neurons in a network to
+  		a given value.
+  parameters:   network_t *network
+  		const float	weight
+  return:       none
+  last updated: 29 Nov 2001
+ **********************************************************************/
+
+void NN_set_all_weights(network_t *network, const float weight)
+  {
+  int l,i,j;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    for (i=1; i<=network->layer[l].neurons; i++)
+      {
+      for (j=0; j<=network->layer[l-1].neurons; j++)
+        {
+        network->layer[l].weight[i][j] = weight;
+        }
+      }
+    }
 
   return;
   }
@@ -822,15 +975,105 @@ void NN_backpropagate(network_t *network)
 
 
 /**********************************************************************
+  NN_decay_weights()
+  synopsis:     Apply weight decay.
+  parameters:   network_t *network
+  return:       none
+  last updated:	01 Mar 2002
+ **********************************************************************/
+
+void NN_decay_weights(network_t *network)
+  {
+  int  l,i,j;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    for (i=1; i<=network->layer[l].neurons; i++)
+      {
+      for (j=0; j<=network->layer[l-1].neurons; j++)
+        {
+        network->layer[l].weight[i][j] -= network->layer[l].weight[i][j]*network->decay;
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
   NN_adjust_weights()
+  synopsis:     Modify network weights according to classic
+  		back-propagated error.
+  parameters:   network_t *network
+  return:       none
+  last updated: 01 Mar 2002
+ **********************************************************************/
+
+void NN_adjust_weights(network_t *network)
+  {
+  int  l,i,j;
+  float out, err;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    for (i=1; i<=network->layer[l].neurons; i++)
+      {
+      for (j=0; j<=network->layer[l-1].neurons; j++)
+        {
+        out = network->layer[l-1].output[j];
+        err = network->layer[l].error[i];
+        network->layer[l].weight[i][j] += network->rate * err * out;
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_adjust_weights_decay()
   synopsis:     Modify network weights according to back-propagated
-		error.
+		error with weight decay.
+  parameters:   network_t *network
+  return:       none
+  last updated:	01 Mar 2002
+ **********************************************************************/
+
+void NN_adjust_weights_decay(network_t *network)
+  {
+  int  l,i,j;
+  float out, err;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    for (i=1; i<=network->layer[l].neurons; i++)
+      {
+      for (j=0; j<=network->layer[l-1].neurons; j++)
+        {
+        out = network->layer[l-1].output[j];
+        err = network->layer[l].error[i];
+        network->layer[l].weight[i][j] += network->rate * err * out
+                                       - network->decay * network->layer[l].weight[i][j];
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_adjust_weights_momentum()
+  synopsis:     Modify network weights according to back-propagated
+		error with momentum.
   parameters:   network_t *network
   return:       none
   last updated:
  **********************************************************************/
 
-void NN_adjust_weights(network_t *network)
+void NN_adjust_weights_momentum(network_t *network)
   {
   int  l,i,j;
   float out, err;
@@ -970,7 +1213,7 @@ void NN_train_random(network_t *network, const int num_epochs)
     NN_simulate(network, train_data[item], train_property[item]);
 
     NN_backpropagate(network);
-    NN_adjust_weights(network);
+    NN_adjust_weights_momentum(network);
     }
  
   return;
@@ -997,7 +1240,7 @@ void NN_train_systematic(network_t *network, const int num_epochs)
       NN_simulate(network, train_data[n], train_property[n]);
 
       NN_backpropagate(network);
-      NN_adjust_weights(network);
+      NN_adjust_weights_momentum(network);
       }
     }
 
@@ -1028,7 +1271,7 @@ void NN_train_batch_random(network_t *network, const int num_epochs)
       }
 
     NN_backpropagate(network);
-    NN_adjust_weights(network);
+    NN_adjust_weights_momentum(network);
     }
  
   return;
@@ -1056,7 +1299,7 @@ void NN_train_batch_systematic(network_t *network, const int num_epochs)
       }
 
     NN_backpropagate(network);
-    NN_adjust_weights(network);
+    NN_adjust_weights_momentum(network);
     }
  
   return;
@@ -1508,6 +1751,7 @@ void write_usage(void)
          "    --momentum REAL      Learning momentum.\n"
          "    --bias REAL          Network bias.\n"
          "    --gain REAL          Neuronal gain.\n"
+         "    --decay REAL         Weight decay factor.\n"
          "    --readnn FILENAME    Read NN from file.\n"
          "    --writenn FILENAME   Write NN to file.\n"
          "    --nowritenn          Do not write NN to file.\n"
@@ -1516,6 +1760,7 @@ void write_usage(void)
          "    --predict            Perform prediction with NN.\n"
          "    --random01           NN weights initialized between 0.0 and 1.0. [default]\n"
          "    --random11           NN weights initialized between -1.0 and 1.0.\n"
+         "    --fixed REAL         NN weights initialized to fixed value.\n"
          "    --trainrandom        Train with randomly ordered data. [default]\n"
          "    --trainordered       Train with data ordered as input.\n"
          "    --layers INTEGER     Number of layers (incl. input+output).\n"
@@ -1542,6 +1787,8 @@ void write_usage(void)
   last updated: 28 Jan 2002
  **********************************************************************/
 
+typedef enum initmode_enum = {fixed, randomize01, randomize11};
+
 int main(int argc, char **argv)
   {
   network_t  *network;				/* NN structure. */
@@ -1553,8 +1800,9 @@ int main(int argc, char **argv)
   boolean    do_readnn=FALSE, do_writenn=TRUE;	/* Whether to read/write NN. */
   boolean    do_train=TRUE, do_evaluate=TRUE;	/* Whether to train/evaluate NN. */
   boolean    do_predict=FALSE;			/* Whether to use NN for prediction. */
-  boolean    do_randomize01=TRUE;		/* Initialize weights within range 0.0->1.0. */
   boolean    do_randomtrain=TRUE;		/* Whether to train using random data selection. */
+  initmode_enum	init_mode=do_randomize01;	/* How to initialize weights */
+  float      initval=0.5;			/* Value for weight initialization. */
   int        num_layers=0;			/* Number of layers in NN. */
   int        *neurons=NULL;			/* Number of neurons in each layer. */
   float      stop_ratio=NN_DEFAULT_STOP_RATIO;	/* Stopping criterion. */
@@ -1563,6 +1811,7 @@ int main(int argc, char **argv)
   float      momentum=NN_DEFAULT_MOMENTUM;	/* Network learning momentum. */
   float      gain=NN_DEFAULT_GAIN;		/* Neuronal gain (sigmodial function gain). */
   float      bias=NN_DEFAULT_BIAS;		/* Network bias. */
+  float      decay=NN_DEFAULT_DECAY;		/* Weight decay. */
   char       nn_outfname[NN_MAX_FNAME_LEN] = "out.nn";		/* Neural Network output file. */
   char       nn_infname[NN_MAX_FNAME_LEN] = "in.nn";		/* Neural Network input file. */
   char       train_prop_infname[NN_MAX_FNAME_LEN] = "train.prop";	/* Training data properties. */
@@ -1653,6 +1902,12 @@ int main(int argc, char **argv)
       gain = atof(argv[i]);
       printf("The neuronal gain will be: %f\n", gain);
       }
+    else if (!strcmp(argv[i],"--decay"))
+      {
+      i++;
+      gain = atof(argv[i]);
+      printf("The neuronal weight decay will be: %f\n", decay);
+      }
     else if (!strcmp(argv[i],"--readnn"))
       {
       i++;
@@ -1690,12 +1945,19 @@ int main(int argc, char **argv)
     else if (!strcmp(argv[i],"--random01"))
       {
       printf("NN weights will be initialized between 0.0 and 1.0.\n");
-      do_randomize01 = TRUE;
+      initmode = randomize01;
       }
     else if (!strcmp(argv[i],"--random11"))
       {
       printf("NN weights will be initialized between -1.0 and +1.0.\n");
-      do_randomize01 = FALSE;
+      initmode = randomize11;
+      }
+    else if (!strcmp(argv[i],"--fixed"))
+      {
+      i++;
+      initval = atof(argv[i]);
+      printf("NN weights will be initialized to %f.\n", initval);
+      initmode = fixed;
       }
     else if (!strcmp(argv[i],"--trainrandom"))
       {
@@ -1802,11 +2064,22 @@ int main(int argc, char **argv)
     NN_set_momentum(network, momentum);
     NN_set_gain(network, gain);
     NN_set_bias(network, bias);
+    NN_set_decay(network, decay);
 
-    if (do_randomize01)
-      NN_randomize_weights(network);
-    else
-      NN_randomize_weights(network);
+    switch (initmode)
+      {
+      case randomize:
+        NN_randomize_weights(network);
+	break;
+      case randomize01:
+        NN_randomize_weights01(network);
+	break;
+      case fixed:
+	NN_set_all_weights(initval);
+	break;
+      default:
+	die("Unknown weight initialization mode.");
+      }
     }
 
   NN_display_summary(network);
