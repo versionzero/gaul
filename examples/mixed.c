@@ -57,7 +57,7 @@
   updated:	20 Aug 2003
  **********************************************************************/
 
-boolean mixed_score(population *pop, entity *entity)
+static boolean mixed_score(population *pop, entity *entity)
   {
   int		i;
   double	score = 0.0;
@@ -85,7 +85,7 @@ boolean mixed_score(population *pop, entity *entity)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-boolean mixed_chromosome_allocate(const population *pop, entity *embryo)
+static boolean mixed_chromosome_allocate(const population *pop, entity *embryo)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -110,7 +110,7 @@ boolean mixed_chromosome_allocate(const population *pop, entity *embryo)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-void mixed_chromosome_deallocate(const population *pop, entity *corpse)
+static void mixed_chromosome_deallocate(const population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -136,7 +136,7 @@ void mixed_chromosome_deallocate(const population *pop, entity *corpse)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-void mixed_chromosome_replicate( const population *pop,
+static void mixed_chromosome_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -168,7 +168,7 @@ void mixed_chromosome_replicate( const population *pop,
   last updated: 20 Aug 2003
  **********************************************************************/
 
-boolean mixed_seed(population *pop, entity *adam)
+static boolean mixed_seed(population *pop, entity *adam)
   {
   int           point;          /* Index of 'nucleotide' to seed */
 
@@ -196,7 +196,7 @@ boolean mixed_seed(population *pop, entity *adam)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-void mixed_crossover( population *pop,
+static void mixed_crossover( population *pop,
                       entity *father, entity *mother,
                       entity *son, entity *daughter )
   {
@@ -252,7 +252,7 @@ void mixed_crossover( population *pop,
   last updated: 20 Aug 2003
  **********************************************************************/
 
-void mixed_mutation( population *pop,
+static void mixed_mutation( population *pop,
                      entity *father, entity *son )
   {
   int           point;          /* Index of allele to mutate */
@@ -291,7 +291,7 @@ void mixed_mutation( population *pop,
   last updated: 20 Aug 2003
  **********************************************************************/
 
-population *mixed_genesis( void )
+static population *mixed_genesis( void )
   {
   population    *pop;   /* The new population structure. */
 
@@ -365,8 +365,8 @@ int main(int argc, char **argv)
        1000		/* const int               max_generations */
               );
 
-  printf("The final solution with seed = %d had score %d\n",
-         seed, (int) ga_get_entity_from_rank(pop,0)->fitness);
+  printf("The final solution with seed = %d had score %8.0\n",
+         seed, ga_get_entity_from_rank(pop,0)->fitness);
   for (i=0; i<NBITS; i++)
     printf("%d", ga_bit_get((byte *)ga_get_entity_from_rank(pop,0)->chromosome[0],i)?1:0);
   printf("\n");
