@@ -34,18 +34,39 @@
 #ifndef GAUL_CONFIG_WIN_H_INCLUDED
 #define GAUL_CONFIG_WIN_H_INCLUDED 1
 
-#define USE_WINDOWS_H 1
+#  if defined __CYGWIN32__ && !defined __CYGWIN__
+#    define __CYGWIN__ __CYGWIN32__
+#  endif
 
-#if defined __CYGWIN32__ && !defined __CYGWIN__
-#  define __CYGWIN__ __CYGWIN32__
-#endif
+#define USE_WINDOWS_H 1
 
 #include <sys/time.h>
 #include <sys/types.h>
 #include <limits.h>
-#include <unistd.h>
 #include <string.h>
 #include <io.h>
+
+#ifdef _MSC_VER
+
+/*
+ * This section should be used for MS VC++.
+ */
+#  include <time.h>
+#  define vsnprintf _vsnprintf
+#  define snprintf _snprintf
+#  include <crtdbg.h>
+
+#else
+
+/*
+ * This section should be used for DevC++, and possibly others.
+ */
+#  include <values.h>
+#  include <unistd.h>
+#  define HAVE_STDBOOL_H 1
+#  define HAVE__BOOL 1
+
+#endif
 
 #if USE_WINDOWS_H == 1
 #include <windows.h>
@@ -56,18 +77,15 @@
 extern int errno;
 #endif
 
-#define HAVE_STDBOOL_H 1
-#define HAVE__BOOL 1
-
 /*
  * These need to be modified for each release:
  */
 #define GA_MAJOR_VERSION 0
-#define GA_MINOR_VERSION 1847
-#define GA_PATCH_VERSION 0
-#define GA_VERSION_STRING "0.1847-0"
+#define GA_MINOR_VERSION 1848
+#define GA_PATCH_VERSION 1
+#define GA_VERSION_STRING "0.1848-1"
 #define GA_UNAME_STRING "<Unknown windows machine>"
-#define GA_BUILD_DATE_STRING "27/06/04"
+#define GA_BUILD_DATE_STRING "22/02/05"
 
 /*
  * Functions available on this platform:
@@ -117,17 +135,28 @@ extern int errno;
 
 /*
  * Default constants:
+ * These ones probably shouldn't be changed:
  */
 
 #define W32_CRIPPLED 1
-#define HAVE_SLANG 0
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 #define USE_CHROMO_CHUNKS 0
+#define USE_OPTIMISED_MEMSET 1
 
 #define MEMORY_ALLOC_SAFE 1
 #define MEMORY_ALLOC_DEBUG 0
+
+/*
+ * These might need to be changed:
+ */
+
+#define HAVE_SLANG 0
+#define HAVE_MPI 0
+#define HAVE_PTHREADS 0
+#define USE_OPENMP 0
+#define GAUL_DETERMINISTIC_OPENMP 1
 
 #endif /* GAUL_CONFIG_WIN_H_INCLUDED */
 

@@ -2,8 +2,11 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1849:
+Al Cripps - Suggested fixes and compilation instructions for MS VC++.
+
 Prior to release 0.1848:
-Al Cripps - Suggested fix in memory_chunks.c for MSVC++.
+Al Cripps - Suggested fix in memory_chunks.c for MS VC++.
 
 Prior to release 0.1847:
 Dave Wilkinson - Compilation reports for IRIX and Solaris.

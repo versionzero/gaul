@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "21/02/05"
+#define GA_BUILD_DATE_STRING "22/02/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 0
+#define GA_PATCH_VERSION 1
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1848-0"
+#define GA_VERSION_STRING "0.1848-1"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -62,7 +62,7 @@
 /* #undef HAVE_LIBM */
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
-#define HAVE_LIBMPI 1
+/* #undef HAVE_LIBMPI */
 
 /* Define to 1 if you have the `mpich' library (-lmpich). */
 /* #undef HAVE_LIBMPICH */
@@ -89,7 +89,7 @@
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 1
+#define HAVE_MPI 0
 
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1

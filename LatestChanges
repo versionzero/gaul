@@ -1,4 +1,7 @@
 Changes since release 0.1847:
+- Changes required for compilation with MS VC++ - thanks to Al Cripps.
+
+Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.
 - Minor changes to avoid some compiler warnings with various compilers, particularly the Compaq C/C++ compiler and gcc 3.4.2.
 - Minor changes for successful building of RPM for x86_64 architecture.
@@ -8,7 +11,7 @@ Changes since release 0.1847:
 - Fixed bug that assumed fitness mean was always zero in some statistics functions.
 - Added a round-robin selection operator - ga_select_one_roundrobin().
 - Fixed CFLAG clearing bug and added option for disabling addition of compiler optimisation switches.
-- Added ga_seed_bitstring_zero() selection function.
+- Added ga_seed_bitstring_zero() seed function.
 - Updated function lookup tables.
 - Fixed bug in ga_select_one_roundrobin() for case that mutation rate is greater than one.
 - *** API CHANGE *** ga_entity_setup() removed from public API.

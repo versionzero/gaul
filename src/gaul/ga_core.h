@@ -42,12 +42,10 @@
 #include <limits.h>
 #endif
 #include <math.h>
-#include <unistd.h>
 #include <sys/types.h>
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
-#include <unistd.h>
 
 /*
  * Debugging
