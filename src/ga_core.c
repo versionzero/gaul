@@ -1636,7 +1636,7 @@ boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *sr
 
 /**********************************************************************
   ga_entity_copy_chromosome()
-  synopsis:	Copy chromosome and structural data between entity
+  synopsis:	Copy chromosome and user data between entity
 		structures.
   parameters:
   return:

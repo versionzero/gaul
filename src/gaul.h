@@ -558,6 +558,15 @@ boolean ga_fitness_stats( population *pop,
  * (Genome comparison functions)
  */
 double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
+double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta);
+double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta);
+double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta);
+double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta);
+double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta);
+double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta);
+double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta);
+double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta);
+double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta);
 
 /**********************************************************************
  * Include remainder of this library's headers.
