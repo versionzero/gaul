@@ -154,7 +154,8 @@ bin_PROGRAMS = \
         struggle2 struggle3 struggle4 \
 	struggle5 struggle5_mp struggle5_forked \
 	saveload \
-	nnevolve
+	nnevolve \
+	mixed
 
 
 test_ga_SOURCES = test_ga.c
@@ -190,6 +191,7 @@ struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
+mixed_SOURCES = mixed.c
 
 noinst_HEADERS = \
 	goldberg1.h goldberg2.h pingpong.h wildfire.h
@@ -234,6 +236,7 @@ struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
+mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -268,6 +271,7 @@ struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -286,7 +290,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
+	struggle5_forked$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT) \
+	mixed$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
 am_fitting_OBJECTS = fitting.$(OBJEXT)
@@ -304,6 +309,9 @@ goldberg1_LDFLAGS =
 am_goldberg2_OBJECTS = goldberg2.$(OBJEXT)
 goldberg2_OBJECTS = $(am_goldberg2_OBJECTS)
 goldberg2_LDFLAGS =
+am_mixed_OBJECTS = mixed.$(OBJEXT)
+mixed_OBJECTS = $(am_mixed_OBJECTS)
+mixed_LDFLAGS =
 am_nnevolve_OBJECTS = nnevolve.$(OBJEXT)
 nnevolve_OBJECTS = $(am_nnevolve_OBJECTS)
 nnevolve_LDFLAGS =
@@ -401,8 +409,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/fitting_simplex.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/onemax.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/pingpong.Po ./$(DEPDIR)/pingpong_sa.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/mixed.Po ./$(DEPDIR)/nnevolve.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/onemax.Po ./$(DEPDIR)/pingpong.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/pingpong_sa.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pingpong_tabu.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pingpong_tabu2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/royalroad.Po \
@@ -432,8 +441,8 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 CFLAGS = @CFLAGS@
 DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
-	$(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) \
-	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
+	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
+	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
 	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
 	$(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) \
 	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
@@ -448,7 +457,7 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -503,6 +512,9 @@ goldberg1$(EXEEXT): $(goldberg1_OBJECTS) $(goldberg1_DEPENDENCIES)
 goldberg2$(EXEEXT): $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES) 
 	@rm -f goldberg2$(EXEEXT)
 	$(LINK) $(goldberg2_LDFLAGS) $(goldberg2_OBJECTS) $(goldberg2_LDADD) $(LIBS)
+mixed$(EXEEXT): $(mixed_OBJECTS) $(mixed_DEPENDENCIES) 
+	@rm -f mixed$(EXEEXT)
+	$(LINK) $(mixed_LDFLAGS) $(mixed_OBJECTS) $(mixed_LDADD) $(LIBS)
 nnevolve$(EXEEXT): $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES) 
 	@rm -f nnevolve$(EXEEXT)
 	$(LINK) $(nnevolve_LDFLAGS) $(nnevolve_OBJECTS) $(nnevolve_LDADD) $(LIBS)
@@ -599,6 +611,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_simplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg2.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mixed.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nnevolve.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/onemax.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong.Po@am__quote@

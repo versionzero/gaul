@@ -46,7 +46,8 @@ bin_PROGRAMS = \
         struggle2 struggle3 struggle4 \
 	struggle5 struggle5_mp struggle5_forked \
 	saveload \
-	nnevolve
+	nnevolve \
+	mixed
 
 test_ga_SOURCES = test_ga.c
 test_simplex_SOURCES = test_simplex.c
@@ -81,6 +82,7 @@ struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
+mixed_SOURCES = mixed.c
 
 noinst_HEADERS = \
 	goldberg1.h goldberg2.h pingpong.h wildfire.h
@@ -123,6 +125,7 @@ struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
+mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -157,5 +160,6 @@ struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 
