@@ -3,6 +3,7 @@ Changes since release 0.1837:
 - Added slang-devel requirement to spec file and renamed it from gaul.spec to gaul-devel.spec
 - Removed fixed upper size limit on populations, and adjusted some prototypes accordingly.  This breaks backwards compatibility for ga_population_new() and the associated S-Lang intrinsic.  The nnevolve and struggle4 examples required modification.
 - Fixed memory corruption in ga_chromosome_double_to_staticstring() and ga_chromosome_int_to_staticstring().
+- Numerous enhancements to the neural network utility library which is used by examples/nnevolve.
 
 Changes since release 0.1836:
 - Added ga_get_all_populations() which returns array of all currently allocated populations.
