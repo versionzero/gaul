@@ -34,9 +34,10 @@
 		used instead.
 
   To do: 	More error checking.
+		Needs some tidying.
 		Add any missing wrappers.
 		In particular, need facility for mating/mutating entities.
-		Needs some tidying.
+		Functions for defining heuristic search algorithm parameters.
 
  **********************************************************************/
 
@@ -508,28 +509,6 @@ int ga_evolution_slang(	int	*pop,
 
 
 /**********************************************************************
-  ga_tabu_slang()
-  synopsis:	Wrapper around the tabu-search routine.
-  parameters:
-  return:
-  last updated:	10 Oct 2002
- **********************************************************************/
-
-int ga_tabu_slang(	int	*pop_id,
-			int	*entity_id,
-			int	*max_iterations )
-  {
-  population	*pop;			/* Active population structure. */
-
-  pop = ga_get_population_from_id(*pop_id);
-
-  ga_tabu( pop, ga_get_entity_from_id(pop, *entity_id), *max_iterations );
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
   ga_evolution_forked_slang()
   synopsis:	Wrapper around the main genetic algorithm routine.
 		It performs a GA-based optimisation on the specified
@@ -837,6 +816,7 @@ int ga_allele_search_slang(	int	*pop_id,
   }
 
 
+#if 0
 /**********************************************************************
   ga_metropolis_slang()
   synopsis:	Wrapper around ga_metropolis_mutation() for the
@@ -863,34 +843,87 @@ int ga_metropolis_slang(	int	*pop_id,
 
   return ga_get_entity_id(pop, final);
   }
+#endif
 
 
 /**********************************************************************
   ga_sa_slang()
-  synopsis:	Wrapper around ga_simulated_annealling_mutation()
+  synopsis:	Wrapper around ga_sa()
 		for the scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	18 Mar 2002
+  last updated:	06 Nov 2002
  **********************************************************************/
 
 int ga_sa_slang(	int	*pop_id,
 			int	*entity_id,
-			int	*num_iterations,
-			int 	*initial_temperature,
-			int 	*final_temperature )
+			int	*max_iterations )
   {
-  entity	*initial, *final;	/* Initial and final solutions. */
-  population	*pop;			/* Active population structure. */
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
 
   pop = ga_get_population_from_id(*pop_id);
 
   initial = ga_get_entity_from_id(pop, *entity_id);
 
-  final = ga_simulated_annealling_mutation( pop, initial,
-                         *num_iterations, *initial_temperature, *final_temperature );
+  num_iter = ga_sa( pop, initial, *max_iterations );
 
-  return ga_get_entity_id(pop, final);
+  return num_iter;
+  }
+
+
+/**********************************************************************
+  ga_simpex_slang()
+  synopsis:	Wrapper around ga_simplex()
+		for the scripted API.
+  parameters:
+  return:	Index of best solution found (A new entity).
+  last updated:	06 Nov 2002
+ **********************************************************************/
+
+int ga_simplex_slang(	int	*pop_id,
+			int	*entity_id,
+			int	*max_iterations )
+  {
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  initial = ga_get_entity_from_id(pop, *entity_id);
+
+  num_iter = ga_simplex( pop, initial, *max_iterations );
+
+  return num_iter;
+  }
+
+
+/**********************************************************************
+  ga_tabu_slang()
+  synopsis:	Wrapper around ga_tabu()
+		for the scripted API.
+  parameters:
+  return:	Index of best solution found (A new entity).
+  last updated:	06 Nov 2002
+ **********************************************************************/
+
+int ga_tabu_slang(	int	*pop_id,
+			int	*entity_id,
+			int	*max_iterations )
+  {
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  initial = ga_get_entity_from_id(pop, *entity_id);
+
+  num_iter = ga_tabu( pop, initial, *max_iterations );
+
+  return num_iter;
   }
 
 
@@ -900,27 +933,24 @@ int ga_sa_slang(	int	*pop_id,
 		scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	24 Oct 2002
+  last updated:	06 Nov 2002
  **********************************************************************/
 
 int ga_nahc_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
-  entity	*initial, *final;	/* Initial and final solutions. */
-  population	*pop;			/* Active population structure. */
-
-  plog( LOG_FIXME,
-        "Selection of optimisation function is currently unavailable from the script interface." );
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
 
   pop = ga_get_population_from_id(*pop_id);
 
   initial = ga_get_entity_from_id(pop, *entity_id);
 
-  final = ga_next_ascent_hillclimbing( pop, initial,
-                                        *num_iterations);
+  num_iter = ga_next_ascent_hillclimbing( pop, initial, *num_iterations);
 
-  return ga_get_entity_id(pop, final);
+  return num_iter;
   }
 
 
@@ -930,24 +960,24 @@ int ga_nahc_slang(	int	*pop_id,
 		scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	24 Oct 2002
+  last updated:	06 Nov 2002
  **********************************************************************/
 
 int ga_rahc_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
-  entity	*initial, *final;	/* Initial and final solutions. */
-  population	*pop;			/* Active population structure. */
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
 
   pop = ga_get_population_from_id(*pop_id);
 
   initial = ga_get_entity_from_id(pop, *entity_id);
 
-  final = ga_random_ascent_hillclimbing( pop, initial,
-                                         *num_iterations );
+  num_iter = ga_random_ascent_hillclimbing( pop, initial, *num_iterations );
 
-  return ga_get_entity_id(pop, final);
+  return num_iter;
   }
 
 
@@ -1244,9 +1274,6 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_evolution_forked",
             (FVOID_STAR) ga_evolution_forked_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
-      || SLadd_intrinsic_function("ga_tabu",
-            (FVOID_STAR) ga_tabu_slang, SLANG_INT_TYPE, 3,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_get_size",
             (FVOID_STAR) ga_population_get_size_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
@@ -1305,8 +1332,14 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_allele_search_slang, SLANG_INT_TYPE, 6,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_sa",
-            (FVOID_STAR) ga_sa_slang, SLANG_INT_TYPE, 5,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+            (FVOID_STAR) ga_sa_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_tabu",
+            (FVOID_STAR) ga_tabu_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_simplex",
+            (FVOID_STAR) ga_simplex_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_nahc",
             (FVOID_STAR) ga_nahc_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)

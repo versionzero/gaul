@@ -97,21 +97,21 @@ int	ga_allele_search_slang(   int     *popid,
                                 int     *min_val,
                                 int     *max_val,
                                 int     *entity_id );
-int	ga_metropolis_slang(	int	*pop,
-				int	*entity_id,
-				int	*num_iterations,
-				int 	*temperature);
 int	ga_sa_slang(int	*popid,
 			int	*entity_id,
-			int	*num_iterations,
-			int	*initial_temperature,
-			int	*final_temperature);
+			int	*max_iterations );
+int	ga_tabu_slang(int	*popid,
+			int	*entity_id,
+			int	*max_iterations );
+int	ga_simplex_slang(int	*popid,
+			int	*entity_id,
+			int	*max_iterations );
 int	ga_nahc_slang(	int	*pop,
-				int	*entity_id,
-				int	*num_iterations);
+			int	*entity_id,
+			int	*num_iterations);
 int	ga_rmhc_slang(	int	*pop,
-				int	*entity_id,
-				int	*num_iterations);
+			int	*entity_id,
+			int	*num_iterations);
 int	ga_population_score_and_sort_slang(int *popid);
 int	ga_population_sort_slang(int *popid);
 
