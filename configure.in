@@ -273,7 +273,7 @@ else
       LIBS="$old_LIBS $MPILIBS"
       CFLAGS="$old_CFLAGS $MPIFLAGS"
     
-      AC_CHECK_LIB(mpi, MPI_Init,, [result=0])
+      AC_CHECK_LIB(mpich, MPI_Init,, [result=0])
 
       if test result = 0; then
         AC_MSG_RESULT(no)
