@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_replace - Genetic algorithm replacement operators.
-  Copyright ©2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -27,7 +27,7 @@
 
   Synopsis:     Routines for performing GA replacement operations.
 
-		These functions should duplicate user data were
+		These functions should duplicate user data where
 		appropriate.
 
   To do:	Replace parents if less fit.
