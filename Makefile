@@ -108,9 +108,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1846
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 4
+GA_PATCH_VERSION = 5
 GA_UNAME_STRING = 
-GA_VERSION = 0.1846-4
+GA_VERSION = 0.1846-5
 GA_VERSION_STRING = 
 HAVE_MPI = 0
 HAVE_PTHREADS = 1
@@ -120,7 +120,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1846
-LT_REVISION = 4
+LT_REVISION = 5
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -131,7 +131,7 @@ PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
 V3_QUICK = 1
-VERSION = 0.1846-4
+VERSION = 0.1846-5
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
@@ -140,11 +140,11 @@ install_sh = /u1/adcock/gaul-devel-0.1846-4/install-sh
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#ACLOCAL_AMFLAGS = -I .
 
-#SUBDIRS = util src tests examples .
+#ACLOCAL_AMFLAGS = -I .
+SUBDIRS = util src tests examples .
 #SUBDIRS = util src tests examples extra .
-SUBDIRS = util src tests examples debian .
+#SUBDIRS = util src tests examples debian .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec

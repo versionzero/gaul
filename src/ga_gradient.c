@@ -105,8 +105,8 @@ int ga_steepestascent(	population	*pop,
   {
   int		iteration=0;		/* Current iteration number. */
   int		i;			/* Index into arrays. */
-  double	*current_d;		/* Current solution array. */
-  double	*current_g;		/* Current solution gradient array. */
+  double	*current_d;		/* Current iteration solution array. */
+  double	*current_g;		/* Current iteration gradient array. */
   entity	*new;			/* New putative solution. */
   double	*new_d;			/* New putative solution array. */
   entity	*tmpentity;		/* Used to swap working solutions. */
@@ -133,8 +133,8 @@ int ga_steepestascent(	population	*pop,
   buffer = s_malloc(sizeof(double)*pop->gradient_params->dimensions*3);
 
   current_d = buffer;
-  current_g = &(buffer[pop->gradient_params->dimensions]);
-  new_d = &(buffer[pop->gradient_params->dimensions*2]);
+  new_d = &(buffer[pop->gradient_params->dimensions]);
+  current_g = &(buffer[pop->gradient_params->dimensions*2]);
 
   new = ga_get_free_entity(pop);
 
@@ -191,9 +191,11 @@ int ga_steepestascent(	population	*pop,
     pop->gradient_params->from_double(pop, new, new_d);
     pop->evaluate(pop, new);
 
+#if GAUL_DEBUG>2
     printf("DEBUG: current_d = %f %f %f %f\n", current_d[0], current_d[1], current_d[2], current_d[3]);
     printf("DEBUG: current_g = %f %f %f %f grms = %f\n", current_g[0], current_g[1], current_g[2], current_g[3], grms);
     printf("DEBUG: new_d = %f %f %f %f fitness = %f\n", new_d[0], new_d[1], new_d[2], new_d[3], new->fitness);
+#endif
 
     if ( current->fitness > new->fitness )
       {	/* New solution is worse. */
@@ -209,7 +211,9 @@ int ga_steepestascent(	population	*pop,
         pop->gradient_params->from_double(pop, new, new_d);
         pop->evaluate(pop, new);
 
+#if GAUL_DEBUG>2
         printf("DEBUG: new_d = %f %f %f %f fitness = %f\n", new_d[0], new_d[1], new_d[2], new_d[3], new->fitness);
+#endif
         } while( current->fitness > new->fitness && step_size > ApproxZero);
 
       if (step_size <= ApproxZero && grms <= ApproxZero) force_terminate=TRUE;
@@ -217,7 +221,9 @@ int ga_steepestascent(	population	*pop,
     else 
       {	/* New solution is an improvement. */
       step_size *= 1.2;	/* FIXME: Should be a parameter. */
+#if GAUL_DEBUG>2
       printf("DEBUG: step_size = %e\n", step_size);
+#endif
       }
 
 /* Store improved solution. */
@@ -250,99 +256,3 @@ int ga_steepestascent(	population	*pop,
   return iteration;
   }
 
-
-#if 0
-This is the code that I usually use to perform SD minimization:
-
-/* Steepest Descent */
-boolean SteepestDescentMinimize(	double (*ObjectiveFunc)(),
-					double (*DerivativeFunc)(),
-					int n,
-					double *p,
-					double *px,
-					double *gmin,
-					int max_iter,
-					vpointer userdata)
-  {
-  double grad,step;
-  double val;
-  int iter;
-  int i;
-  double *x,*nx;
-
-  x = s_malloc(sizeof(double)*n);
-  nx = s_malloc(sizeof(double)*n);
-
-  step = INITIAL_SD_STEP;
-  *gmin = (*DerivativeFunc)(n,p,px,userdata);
-
-  for( iter=0; iter<max_iter; iter++ )
-    {
-#if OPTIMIZERS_DEBUG>0
-    printf("DEBUG: %d: %f [ ",iter,*gmin);
-    for(i=0; i<n; i++) printf("%f ", p[i]);
-    printf("]\n");
-#endif
-
-    for( i=0; i<n; i++ ) x[i]=p[i]-step*px[i];
-
-    val = (*DerivativeFunc)(n,x,nx,userdata);
-    if ( val >= *gmin )
-      {
-      grad = 0.0;
-      for( i=0; i<n; i++ ) grad += px[i]*px[i];
-      if ( grad < ApproxZero )
-        {
-#if OPTIMIZERS_DEBUG>0
-        printf("DEBUG: SteepestDescentMinimize() Finshed due to small gradient (sum grad squared = %f)\n", grad);
-#endif
-        s_free(x);
-        s_free(nx);
-        return TRUE;
-        }
-
-      do
-        {
-        step *= 0.5;
-        if ( step < ApproxZero )
-          {
-#if OPTIMIZERS_DEBUG>0
-          printf("DEBUG: SteepestDescentMinimize() Finshed due to small step size ( step %f)\n", step);
-#endif
-          s_free(x);
-          s_free(nx);
-          return FALSE;
-          }
-
-/*
-        for( i=0; i<n; i++ ) x[i]=p[i]-step*px[i];
-*/
-        for( i=0; i<n; i++ ) x[i]=p[i]+step*px[i];
-        val = (*ObjectiveFunc)(n,x,userdata);
-        } while( val > *gmin );
-
-      for( i=0; i<n; i++ ) p[i] = x[i];
-      *gmin = (*DerivativeFunc)(n,p,px,userdata);
-      }
-    else 
-      {
-      for( i=0; i<n; i++ )
-        {
-        px[i] = nx[i];
-        p[i] = x[i];
-        }
-      step *= 1.2;
-      *gmin = val;
-      }
-    }
-
-#if OPTIMIZERS_DEBUG>0
-  printf("DEBUG: SteepestDescentMinimize() Finshed because max. iterations performed.\n");
-#endif
-  s_free(x);
-  s_free(nx);
-
-  return FALSE;
-  }
-
-#endif

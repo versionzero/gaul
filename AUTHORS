@@ -2,6 +2,12 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1847:
+Dave Wilkinson - Compilation reports for IRIX and Solaris.
+Syrrx, Inc. - More dollars :-)
+CTBP (http://ctbp.ucsd.edu/) - Computing resources.
+SGI, Inc. - Access to an Altix 3200 of porting and benchmarking.
+
 Prior to release 0.1846:
 Ying-Chieh Liao - Patch for stdbool.h include on FreeBSD.
 

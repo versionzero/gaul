@@ -1573,7 +1573,7 @@ PACKAGE=gaul-devel
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1846
-GA_PATCH_VERSION=4
+GA_PATCH_VERSION=5
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
@@ -8408,8 +8408,6 @@ fi
     fi
   fi
 fi
-LIBS=$old_LIBS
-CFLAGS=$old_CFALGS
 if test ${result} = 0; then
   WILL_USE_MPI="no"
   HAVE_MPI=0
@@ -8422,6 +8420,9 @@ cat >>confdefs.h <<_ACEOF
 #define HAVE_MPI ${result}
 _ACEOF
 
+# Reset CFLAGS and LIBS variables.
+LIBS=$old_LIBS
+CFLAGS=$old_CFALGS
 
 echo "$as_me:$LINENO: checking whether to disable memory chunk allocation" >&5
 echo $ECHO_N "checking whether to disable memory chunk allocation... $ECHO_C" >&6
@@ -8574,6 +8575,7 @@ echo "${ECHO_T}yes" >&6
   WILL_USE_SLANG="yes"
   HAVE_SLANG=1
   LIBS="$LIBS -lslang -lm"
+  INCLUDE="$INCLUDE -I/usr/include/slang/"	# FIXME: Need to detect slang.h location properly.
   echo "$as_me:$LINENO: checking for SLang_init_slang in -lslang" >&5
 echo $ECHO_N "checking for SLang_init_slang in -lslang... $ECHO_C" >&6
 if test "${ac_cv_lib_slang_SLang_init_slang+set}" = set; then
@@ -8775,7 +8777,7 @@ case $CC in
     # Optimisations etc. for the GNU gcc compiler.
     case " $CFLAGS " in
       *[\ \	]-Wall[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -Wall -pedantic" ;;
+      *) CFLAGS="$CFLAGS -Wall" ;;
     esac
 
     if test "x$enable_g" = "xyes"; then
@@ -10906,8 +10908,6 @@ _ACEOF
 
 fi
 
-
-INCLUDE="$INCLUDE -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
 #
 # Checks for header files.
