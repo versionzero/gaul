@@ -1,8 +1,8 @@
 /**********************************************************************
-  wildfire.c
+  wildfire_forked.c
  **********************************************************************
 
-  wildfire - Test/example program for GAUL.
+  wildfire_forked - Test/example program for GAUL.
   Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -25,6 +25,10 @@
  **********************************************************************
 
   Synopsis:	Test/example program for GAUL.
+
+		This is neraly identical to the wildfire example,
+		except that it demonstrates ga_evolution_forked()
+		instead.
 
 		This program aims to solve a problem proposed in:
 		Dennis E. Shasha, "Dr Ecco's Omniheurist Corner:
@@ -577,7 +581,7 @@ boolean wildfire_ga_callback(int generation, population *pop)
   synopsis:	A GAUL example.
   parameters:
   return:
-  updated:	23 May 2002
+  updated:	03 Oct 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -588,7 +592,7 @@ int main(int argc, char **argv)
   int		map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION];	/* Map. */
   int		count=0;	/* Number of cisterns. */
 
-  random_seed(i);
+  random_seed(23091975);
 
   pop = ga_genesis(
        100,			/* const int              population_size */
@@ -622,8 +626,8 @@ int main(int argc, char **argv)
        250		/* const int               max_generations */
               );
 
-  printf( "Solution %d, with score %d, was:\n",
-          i, (int) ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
+  printf( "Best solution, with score %d, was:\n",
+          (int) ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
   /* Decode chromsome, and count number of cisterns. */
   for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
     {
