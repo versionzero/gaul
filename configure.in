@@ -322,10 +322,6 @@ case $CC in
       esac
 
     else
-      case " $CFLAGS " in
-        *[\ \	]-ipo[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -ipo -wp_ipo" ;;
-      esac
 
       case " $CFLAGS " in
         *[\ \	]-O3[\ \	]*) ;;
@@ -333,6 +329,11 @@ case $CC in
       esac
 
     fi
+
+    case " $CFLAGS " in
+      *[\ \	]-ipo[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+    esac
 
     if test "x$enable_prof" = "xyes"; then
       case " $CFLAGS " in
@@ -346,22 +347,6 @@ case $CC in
         *[\ \	]-ansi[\ \	]*) ;;
         *) CFLAGS="$CFLAGS -ansi" ;;
       esac
-    fi
-    ;;
-
-  cc)
-# Could be any compiler!
-# Kludges etc. for the Sun C Compiler.
-    if test "x$CC" = "xcc"; then
-      if test "x$target" = "xsparc-sun-solaris2.8"; then
-
-        if test "x$enable_ansi" = "xyes"; then
-          case " $CFLAGS " in
-            *[\ \	]-ansi[\ \	]*) ;;
-            *) CFLAGS="$CFLAGS -ansi" ;;
-          esac
-        fi
-      fi
     fi
     ;;
 
@@ -417,6 +402,22 @@ case $CC in
         *) CFLAGS="$CFLAGS -Xa" ;;
       esac
     ;;
+  *)
+# Could be any compiler!
+# Kludges etc. for the Sun C Compiler.
+    if test "x$CC" = "xcc"; then
+      if test "x$target" = "xsparc-sun-solaris2.8"; then
+
+        if test "x$enable_ansi" = "xyes"; then
+          case " $CFLAGS " in
+            *[\ \	]-ansi[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -ansi" ;;
+          esac
+        fi
+      fi
+    fi
+    ;;
+
 esac
 changequote([,])dnl
 
@@ -518,7 +519,8 @@ case "$target" in
       icc)
         case " $CFLAGS " in
           *[\ \	]-tpp[1-9\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+	  # -axK
+          *) CFLAGS="$CFLAGS -tpp6" ;;
         esac
         ;;
       gcc)
@@ -535,7 +537,8 @@ case "$target" in
       icc)
         case " $CFLAGS " in
           *[\ \	]-tpp[1-9\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+	  # -axW
+          *) CFLAGS="$CFLAGS -tpp7" ;;
         esac
         ;;
       gcc)
