@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
+  Updated:	04 Dec 2001 SAA	Added routines for 'float's.
+		19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
 		16/06/01 SAA	Added random_double_full().
 		12/06/01 SAA	Added chi squared test to random_test().
 		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
@@ -376,7 +377,7 @@ int random_int_range(const int min, const int max)
   last updated:	16/06/01
  **********************************************************************/
 
-double random_double_full()
+double random_double_full(void)
   {
   return ( ((double)random_rand()/(double)RANDOM_RAND_MAX)*
                 (DBL_MAX-DBL_MIN)+DBL_MIN );
@@ -426,6 +427,78 @@ double random_double_1(void)
 
 
 /**********************************************************************
+  random_float_full()
+  synopsis:	Return a random float within the allowed range.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_full(void)
+  {
+  return ( ((float)random_rand()/(float)RANDOM_RAND_MAX)*
+                (DBL_MAX-DBL_MIN)+DBL_MIN );
+  }
+
+
+/**********************************************************************
+  random_float()
+  synopsis:	Return a random float within the specified range.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float(const float max)
+  {
+  return ( (((float)random_rand()*max)/(float)RANDOM_RAND_MAX) );
+  }
+
+
+/**********************************************************************
+  random_float_range()
+  synopsis:	Return a random float within the specified range.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_range(const float min, const float max)
+  {
+  return ( (((float)random_rand()*(max-min))/(float)RANDOM_RAND_MAX) + min );
+  }
+
+
+/**********************************************************************
+  random_float_1()
+  synopsis:	Return a random float within the range -1.0=>r>1.0
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_1(void)
+  {
+  return ( (((float)random_rand()*2.0)/(float)RANDOM_RAND_MAX) - 1.0 );
+  }
+
+
+/**********************************************************************
+  random_float_unit_uniform()
+  synopsis:	Return a pseudo-random number with a uniform
+		distribution in the range 0.0=>r>1.0
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_unit_uniform(void)
+  {
+  return ( (((float)random_rand())/(float)RANDOM_RAND_MAX) );
+  }
+
+
+/**********************************************************************
   random_unit_uniform()
   synopsis:	Return a pseudo-random number with a uniform
 		distribution in the range 0.0=>r>1.0
@@ -437,6 +510,96 @@ double random_double_1(void)
 double random_unit_uniform(void)
   {
   return ( (((double)random_rand())/(double)RANDOM_RAND_MAX) );
+  }
+
+
+/**********************************************************************
+  random_float_gaussian()
+  synopsis:	Return a pseudo-random number with a normal
+		distribution with a given mean and standard devaiation.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_gaussian(const float mean, const float stddev)
+  {
+  float	q,u,v,x,y;
+
+/* 
+ * Generate P = (u,v) uniform in rectangular acceptance region.
+ */
+  do
+    {
+    u = 1.0-random_float_unit_uniform();	/* in range 0.0>u>=1.0 */
+    v = 1.7156 * (0.5 - random_float_unit_uniform());	/* in range 0.8578>v>=0.8578 */
+
+/* Evaluate the quadratic form. */
+    x = u - 0.449871;
+    y = fabs(v) + 0.386595;
+    q = x * x + y * (0.19600 * y - 0.25472 * x);
+
+/*
+ * Accept P if inside inner ellipse.
+ * Reject P if outside outer ellipse, or outside acceptance region.
+ */
+    } while ((q >= 0.27597) && ((q > 0.27846) || (v * v > -4.0 * log(u) * u * u)));
+
+/* Return ratio of P's coordinates as the normal deviate. */
+  return (mean + 2.0 * stddev * v / u);	/* I'm not entirely sure why this *2.0 factor is needed! */
+  }
+
+
+/**********************************************************************
+  random_float_unit_gaussian()
+  synopsis:	Random number with normal distribution, average 0.0,
+		deviation 1.0
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_unit_gaussian(void)
+  {
+  float	r, u, v;
+
+  do
+    {
+    u = 2.0 * random_float_unit_uniform() - 1.0;
+    v = 2.0 * random_float_unit_uniform() - 1.0;
+    r = u*u + v*v;
+    } while (r >= 1.0);
+
+  return u*sqrt(-2.0 * log(r) / r);
+  }
+
+
+/**********************************************************************
+  random_float_cauchy()
+  synopsis:	Random number with a Cauchy/Lorentzian distribution.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_cauchy(void)
+  {
+  return tan(random_float_range(-PI/2,PI/2));
+  }
+
+
+/**********************************************************************
+  random_float_exponential()
+  synopsis:	Random number with an exponential distribution, mean
+		of 1.0.
+  parameters:
+  return:
+  last updated:	4 Dec 2001
+ **********************************************************************/
+
+float random_float_exponential(void)
+  {
+  return -log(random_float_unit_uniform());
   }
 
 

@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
+  Updated:	4 Dec 2001 SAA	New 'float' functions.
+		20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
 		02/02/01 SAA	Converted from helga_random to random_util.
 		16/05/00 SAA	First code.
 
@@ -101,6 +102,16 @@ double	random_gaussian(const double mean, const double stddev);
 double	random_unit_gaussian(void);
 void	random_diagnostics(void);
 boolean	random_test(void);
+
+float	random_float_full(void);
+float	random_float(const float max);
+float	random_float_range(const float min, const float max);
+float	random_float_1(void);
+float	random_float_unit_uniform(void);
+float	random_float_gaussian(const float mean, const float stddev);
+float	random_float_unit_gaussian(void);
+float	random_float_cauchy(void);
+float	random_float_exponential(void);
 
 #define random_int_full	random_rand
 
