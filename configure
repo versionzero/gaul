@@ -11340,8 +11340,8 @@ echo "${ECHO_T}yes - i586" >&6
         ;;
       gcc)
         case " $CFLAGS " in
-          *\ \	-march=*) ;;
-          *) CFLAGS="$CFLAGS -march=pentium" ;;
+          *\ \	-mcpu=*) ;;
+          *) CFLAGS="$CFLAGS -mcpu=pentium" ;;
         esac
         ;;
     esac
@@ -11359,8 +11359,8 @@ echo "${ECHO_T}yes - i686" >&6
         ;;
       gcc)
         case " $CFLAGS " in
-          *\ \	-march=*) ;;
-          *) CFLAGS="$CFLAGS -march=pentiumpro" ;;
+          *\ \	-mcpu=*) ;;
+          *) CFLAGS="$CFLAGS -mcpu=pentiumpro" ;;
         esac
         ;;
     esac

@@ -345,7 +345,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -march=pentiumpro -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro -I/usr/include/slang/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
 	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
