@@ -32,6 +32,10 @@
 
 		MP-safe.
 
+		For OpenMP code, USE_OPENMP must be defined and 
+		linkedlist_init_openmp() must be called prior to any
+		other function.
+
   To do:        Add sorting functions.
                 Functions for inserting/appending lists etc. (i.e. slink_append_list() )
                 Converting slists to dlists, and visa versa.
@@ -54,6 +58,30 @@ THREAD_LOCK_DEFINE_STATIC(slist_chunk_lock);
 THREAD_LOCK_DEFINE_STATIC(dlist_chunk_lock);
 static MemChunk *slist_chunk = NULL;
 static MemChunk *dlist_chunk = NULL;
+
+#if USE_OPENMP == 1
+static boolean linkedlist_openmp_initialised = FALSE;
+#endif
+
+/*
+ * This function must be called before any other functions is OpenMP
+ * code is to be used.  Can be safely called when OpenMP code is not
+ * being used, and can be safely called more than once.
+ */
+void linkedlist_init_openmp(void)
+  {
+
+#if USE_OPENMP == 1
+  if (linkedlist_openmp_initialised == FALSE)
+    {
+    omp_init_lock(&slist_chunk_lock);
+    omp_init_lock(&dlist_chunk_lock);
+    linkedlist_openmp_initialised = TRUE;
+    }
+#endif
+
+  return;
+  }
 
 
 SLList *slink_new(void)

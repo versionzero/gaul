@@ -180,6 +180,8 @@ typedef enum memory_alloc_type_t
 /*
  * Prototypes
  */
+void	memory_init_openmp(void);
+
 void	memory_open_log(const char *fname);
 void	memory_write_log(const char *text);
 

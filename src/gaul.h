@@ -277,6 +277,7 @@ int	ga_funclookup_label_to_id(char *funcname);
 void	*ga_funclookup_label_to_ptr(char *funcname);
 void	*ga_funclookup_id_to_ptr(int id);
 char	*ga_funclookup_id_to_label(int id);
+void	ga_init_openmp( void );
 
 /*
  * Functions located in ga_io.c:

@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -47,10 +47,18 @@
 		output (within the limits of computational precision)
 		on (at least) the following platforms:
 
-		o Intel x86 (Linux, OpenBSD)
+		o Intel x86 (Linux, OpenBSD, FreeBSD)
+		o AMD x86-64 (Linux)
 		o IBM Power3 (AIX)
-		o MIPS R4K, R10K (IRIX)
+		o MIPS R4K, R10K, R12K (IRIX)
 		o Alpha EV7 (Linux)
+		o SPARC Ultra-4 (Solaris)
+
+		This code should be thread safe.
+
+		For OpenMP code, USE_OPENMP must be defined and 
+		random_init() or random_seed() must be called BY A
+		SINGLE THREAD prior to any other function.
 		
   References:	Standard additive number generator and the linear
 		congruential algorithm:
@@ -106,6 +114,8 @@ static GSList	*state_list=NULL;
 static random_state	current_state;
 static boolean		is_initialised=FALSE;
 
+THREAD_LOCK_DEFINE_STATIC(random_state_lock);
+
 /**********************************************************************
  random_rand()
  Synopsis:	Replacement for the standard rand().
@@ -124,6 +134,8 @@ unsigned int random_rand(void)
 
   if (!is_initialised) die("Neither random_init() or random_seed() have been called.");
 
+  THREAD_LOCK(random_state_lock);
+
   val = (current_state.v[current_state.j]+current_state.v[current_state.k])
         & RANDOM_RAND_MAX;
 
@@ -131,6 +143,8 @@ unsigned int random_rand(void)
   current_state.j = (current_state.j+1) % RANDOM_NUM_STATE_VALS;
   current_state.k = (current_state.k+1) % RANDOM_NUM_STATE_VALS;
   current_state.v[current_state.x] = val;
+
+  THREAD_UNLOCK(random_state_lock);
 
   return val;
   } 
@@ -143,14 +157,24 @@ unsigned int random_rand(void)
 		state array.
   parameters:	const unsigned int seed		Seed value.
   return:	none
-  last updated:	30 May 2002
+  last updated: 04 May 2004
  **********************************************************************/
 
 void random_seed(const unsigned int seed)
   { 
   int	i; 
 
+#if USE_OPENMP == 1
+  if (is_initialised == FALSE)
+    {
+    omp_init_lock(&random_state_lock);
+    is_initialised = TRUE;
+    }
+#else
   is_initialised = TRUE;
+#endif
+
+  THREAD_LOCK(random_state_lock);
 
   current_state.v[0]=(seed & RANDOM_RAND_MAX);
 
@@ -161,6 +185,8 @@ void random_seed(const unsigned int seed)
   current_state.j = 0;
   current_state.k = RANDOM_MM_ALPHA-RANDOM_MM_BETA;
   current_state.x = RANDOM_MM_ALPHA-0;
+
+  THREAD_UNLOCK(random_state_lock);
 
   return;
   } 

@@ -448,8 +448,12 @@ static void gaul_ensure_evaluations(population *pop)
   {
   int		i;			/* Loop variable over entity ranks. */
 
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
   for (i=0; i<pop->size; i++)
     {
+/*printf("DEBUG: gaul_ensure_evaluations() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
       pop->evaluate(pop, pop->entity_iarray[i]);
     }
@@ -759,8 +763,12 @@ static void gaul_adapt_and_evaluate(population *pop)
 
     plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
 
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
+/*printf("DEBUG: gaul_adapt_and_evaluate() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
       pop->evaluate(pop, pop->entity_iarray[i]);
       }
 
@@ -773,6 +781,9 @@ static void gaul_adapt_and_evaluate(population *pop)
 
     if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
       for (i=0; i<pop->orig_size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -782,6 +793,9 @@ static void gaul_adapt_and_evaluate(population *pop)
       }
     else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
       for (i=0; i<pop->orig_size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -793,6 +807,9 @@ static void gaul_adapt_and_evaluate(population *pop)
 
     if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
       { 
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
       for (i=pop->orig_size; i<pop->size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -802,6 +819,9 @@ static void gaul_adapt_and_evaluate(population *pop)
       }
     else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
       for (i=pop->orig_size; i<pop->size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -4350,3 +4370,120 @@ int ga_evolution_mp(	population		*pop,
   }
 
 
+/**********************************************************************
+  ga_evolution_mpi()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given population.
+		This is a generation-based GA which utilizes MPI
+		processes.
+  parameters:
+  return:
+  last updated:	30 Apr 2004
+ **********************************************************************/
+
+int ga_evolution_mpi(	population		*pop,
+			const int		max_generations )
+  {
+#if HAVE_MPI==1
+  int		generation=0;		/* Current generation number. */
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty.");
+
+  plog(LOG_VERBOSE, "The evolution has begun!");
+
+  mpi_init();
+
+  pop->generation = 0;
+
+/*
+ * Rank zero process is master.  This handles evolution.  Other processes are slaves
+ * which simply evaluate entities.
+ */
+  if (mpi_ismaster())
+    {
+
+/*
+ * Score and sort the initial population members.
+ */
+    gaul_ensure_evaluations_mp(pop);
+    sort_population(pop);
+
+    plog( LOG_VERBOSE,
+          "Prior to the first generation, population has fitness scores between %f and %f",
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Do all the generations:
+ *
+ * Stop when (a) max_generations reached, or
+ *           (b) "pop->generation_hook" returns FALSE.
+ */
+    while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
+             generation<max_generations )
+      {
+      generation++;
+      pop->generation = generation;
+      pop->orig_size = pop->size;
+
+      plog(LOG_DEBUG,
+              "Population size is %d at start of generation %d",
+              pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+      gaul_crossover(pop);
+
+/*
+ * Mutation step.
+ */
+      gaul_mutation(pop);
+
+/*
+ * Apply environmental adaptations, score entities, sort entities, etc.
+ */
+      gaul_adapt_and_evaluate_mp(pop);
+
+/*
+ * Survival of the fittest.
+ */
+      gaul_survival_mp(pop);
+
+/*
+ * Use callback.
+ */
+      plog(LOG_VERBOSE,
+           "After generation %d, population has fitness scores between %f and %f",
+           generation,
+           pop->entity_iarray[0]->fitness,
+           pop->entity_iarray[pop->size-1]->fitness );
+
+      }	/* Generation loop. */
+
+/*
+ * Synchronise the population structures held across the processors.
+ */
+    /*gaul_broadcast_population_mp(pop);*/
+    ga_population_send_every(pop, -1);
+    }
+  else
+    {
+    gaul_evaluation_slave_mp(pop);
+    }
+
+  return generation;
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+
+  return 0;
+#endif
+  }

@@ -3,7 +3,7 @@
  **********************************************************************
 
   avltree - AVL tree implementation.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,12 +43,17 @@
 		  - additional avltree_lookup_{lowest|highest}() functions (Useful)
 		  - data returned after removing node (Useful - NULL means nothing removed)
 		  - avltree_destroy for cleaning+deleteing a tree (useful)
+                  - OpenMP code (shared memory parallelisation)
  
 		By default the keys are unsigned longs, but this may
 		be overridden at compile time by defining the constant
 		AVLTREE_KEY_TYPE.
  
 		This code should be thread safe.
+
+		For OpenMP code, USE_OPENMP must be defined and 
+		avltree_init_openmp() must be called prior to any other
+		function.
 
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
@@ -121,6 +126,9 @@ static AVLNode		*node_free_list = NULL;
  * less coarse locks might be better.
  */
 THREAD_LOCK_DEFINE_STATIC(avltree_node_buffer_lock);
+#if USE_OPENMP == 1
+static boolean avltree_openmp_initialised = FALSE;
+#endif
 
 /*
  * Private functions.
@@ -706,6 +714,26 @@ static void avltree_node_check(AVLNode *node)
 /*
  * Public Interface:
  */
+
+/*
+ * This function must be called before any other functions is OpenMP
+ * code is to be used.  Can be safely called when OpenMP code is not
+ * being used, and can be safely called more than once.
+ */
+void avltree_init_openmp(void)
+  {
+
+#if USE_OPENMP == 1
+  if (avltree_openmp_initialised == FALSE)
+    {
+    omp_init_lock(&avltree_node_buffer_lock);
+    avltree_openmp_initialised = TRUE;
+    }
+#endif
+
+  return;
+  }
+
 
 AVLTree *avltree_new(AVLKeyFunc key_generate_func)
   {

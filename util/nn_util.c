@@ -35,6 +35,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
+		Most of these functions are NOT thread-safe!
+
   To do:	Need to define data from external sources.
 		Alternative switching functions.
 		Automated functions for "leave-one-out" validation.

@@ -62,6 +62,7 @@ typedef struct SLList_t
  * Function prototypes.
  */
 
+void	linkedlist_init_openmp(void);
 SLList	*slink_new(void);
 void	slink_free_all(SLList *list);
 void	slink_free(SLList *list);

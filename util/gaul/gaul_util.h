@@ -51,7 +51,42 @@
 #include "gaul/gaul_config.h"
 #endif
 
-#ifndef USE_PTHREADS
+/*
+ * Handle threading includes.
+ */
+#if HAVE_PTHREADS == 1
+# include <pthread.h>
+# define _REENTRANT
+#endif
+
+/*
+ * For OpenMP code, USE_OPENMP must be defined as '1' and 
+ * ga_init_openmp() must be called prior to any
+ * other function.
+ */
+#if USE_OPENMP == 1
+# include <omp.h>
+#endif
+
+#if HAVE_PTHREADS == 1
+# define THREAD_LOCK_DEFINE_STATIC(name)       static pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
+# define THREAD_LOCK_DEFINE(name)	pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
+# define THREAD_LOCK_EXTERN(name)	extern pthread_mutex_t (name)
+# define THREAD_LOCK(name)		pthread_mutex_lock((name))
+# define THREAD_UNLOCK(name)		pthread_mutex_unlock((name))
+# define THREAD_TRYLOCK(name)		pthread_mutex_trylock((name))
+# define thread_mutex_new(name)		pthread_mutex_init((name), NULL)
+# define thread_mutex_free(name)	pthread_mutex_destroy((name))
+#else
+# if USE_OPENMP == 1
+#  define THREAD_LOCK_DEFINE_STATIC(name)       static omp_lock_t (name)
+#  define THREAD_LOCK_DEFINE(name)      omp_lock_t (name)
+#  define THREAD_LOCK_EXTERN(name)      extern omp_lock_t (name)
+#  define THREAD_LOCK(name)             omp_set_lock(&(name))
+#  define THREAD_UNLOCK(name)           omp_unset_lock(&(name))
+#  define THREAD_TRYLOCK(name)          omp_test_lock(&(name))
+#  define thread_mutex_new(name)	omp_lock_init(&(name))
+#  define thread_mutex_free(name)	omp_lock_destroy(&(name))
 /*
  * If threads are used, these must be properly defined somewhere.
  * Unfortunately empty macros cause splint parse errors.  They
@@ -60,30 +95,23 @@
  * In addition, ISO C99 standard doesn't allow extraneous ';'s
  * so we must define some dummy expressions.
  */
-# if defined(__GNUC__) && !defined(_ISOC99_SOURCE)
-#  define THREAD_LOCK_DEFINE_STATIC(name)
-#  define THREAD_LOCK_DEFINE(name)
-#  define THREAD_LOCK_EXTERN(name)
-#  define THREAD_LOCK(name)
-#  define THREAD_UNLOCK(name)
-#  define THREAD_TRYLOCK(name)		0
 # else
-#  define THREAD_LOCK_DEFINE_STATIC(name)	static int (name) = 0
-#  define THREAD_LOCK_DEFINE(name)	int (name) = 0
-#  define THREAD_LOCK_EXTERN(name)	extern int (name)
-#  define THREAD_LOCK(name)		(name) = 1
-#  define THREAD_UNLOCK(name)		(name) = 0
-#  define THREAD_TRYLOCK(name)		0
+#  if defined(__GNUC__) && !defined(_ISOC99_SOURCE)
+#   define THREAD_LOCK_DEFINE_STATIC(name)
+#   define THREAD_LOCK_DEFINE(name)
+#   define THREAD_LOCK_EXTERN(name)
+#   define THREAD_LOCK(name)
+#   define THREAD_UNLOCK(name)
+#   define THREAD_TRYLOCK(name)		0
+#  else
+#   define THREAD_LOCK_DEFINE_STATIC(name)	static int (name) = 0
+#   define THREAD_LOCK_DEFINE(name)	int (name) = 0
+#   define THREAD_LOCK_EXTERN(name)	extern int (name)
+#   define THREAD_LOCK(name)		(name) = 1
+#   define THREAD_UNLOCK(name)		(name) = 0
+#   define THREAD_TRYLOCK(name)		0
+#  endif
 # endif
-#else
-#  define THREAD_LOCK_DEFINE_STATIC(name)       static pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
-#  define THREAD_LOCK_DEFINE(name)      pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
-#  define THREAD_LOCK_EXTERN(name)      extern pthread_mutex_t (name)
-#  define THREAD_LOCK(name)             pthread_mutex_lock((name))
-#  define THREAD_UNLOCK(name)           pthread_mutex_unlock((name))
-#  define THREAD_TRYLOCK(name)          pthread_mutex_trylock((name))
-#  define thread_mutex_new(name)	pthread_mutex_init((name), NULL)
-#  define thread_mutex_free(name)	pthread_mutex_destroy((name))
 #endif
 
 /*

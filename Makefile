@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = .
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,10 +97,10 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -113,7 +113,7 @@ GA_UNAME_STRING =
 GA_VERSION = 0.1846-7
 GA_VERSION_STRING = 
 HAVE_MPI = 0
-HAVE_PTHREADS = 1
+HAVE_PTHREADS = 0
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -130,12 +130,13 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
+USE_OPENMP = 1
 V3_QUICK = 1
 VERSION = 0.1846-7
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1846-4/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1846-7/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4

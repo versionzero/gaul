@@ -65,6 +65,7 @@ typedef struct AVLTree_t
  * Prototypes.
  */
 
+void		avltree_init_openmp(void);
 AVLTree		*avltree_new(AVLKeyFunc key_generate_func);
 void		avltree_delete(AVLTree *tree);
 void		avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func);

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -32,7 +32,7 @@
 		alternative optimisation schemes for comparison and
 		analysis purposes.
 
-		BEWARE: NOT THREAD-SAFE!
+		BEWARE: MANY FUNCTIONS ARE NOT THREAD-SAFE!
 
 		Internally, and in the public C interface, pointers
 		are used to identify the population and entity
@@ -40,11 +40,11 @@
 		pointers are unusable, so identifing integers are
 		used instead.
 
-  Vague usage details:	Set-up with ga_genesis().
+  Vague usage details:	Set-up with ga_genesis_XXX(), where XXX is a built-in chromosome type().
 			Perform calculations with ga_evolution().
 			Grab data for post-analysis with ga_transcend().
 			Evolution will continue if ga_evolution() is
-			called again without calling ga_genesis() again.
+			called again without calling ga_genesis_XXX() again.
 
   To do:	Replace the send_mask int array with a bit vector.
 		All functions here should be based on entity/population _pointers_ while the functions in ga_intrinsics should be based on _handles_.
@@ -59,8 +59,12 @@
 /*
  * Global variables.
  */
-THREAD_LOCK_DEFINE_STATIC(pop_table_lock);
 static TableStruct	*pop_table=NULL;	/* The population table. */
+
+THREAD_LOCK_DEFINE_STATIC(pop_table_lock);
+#ifdef USE_OPENMP
+static boolean gaul_openmp_initialised = FALSE;
+#endif
 
 /*
  * Lookup table for functions.
@@ -755,8 +759,14 @@ boolean ga_population_seed(population *pop)
   if ( !pop ) die("Null pointer to population structure passed.");
   if ( !pop->seed ) die("Population seeding function is not defined.");
 
+/* NOTE: OpenMP adjusts order of seeding operations here, and therefore alters results. */
+#pragma omp parallel for \
+   if (GAUL_DETERMINISTIC_OPENMP==0) \
+   shared(pop) private(i,adam) \
+   schedule(static)
   for (i=0; i<pop->stable_size; i++)
     {
+/*printf("DEBUG: ga_population_seed() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
     adam = ga_get_free_entity(pop);
     pop->seed(pop, adam);
     }
@@ -919,7 +929,9 @@ double ga_entity_evaluate(population *pop, entity *entity)
 boolean ga_population_score_and_sort(population *pop)
   {
   int		i;		/* Loop variable over all entities. */
+#if GA_DEBUG>2
   double	origfitness;	/* Stored fitness value. */
+#endif
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -935,7 +947,9 @@ boolean ga_population_score_and_sort(population *pop)
  */
   for (i=0; i<pop->size; i++)
     {
+#if GA_DEBUG>2
     origfitness = pop->entity_iarray[i]->fitness;
+#endif
     pop->evaluate(pop, pop->entity_iarray[i]);
 
 #if GA_DEBUG>2
@@ -2826,6 +2840,40 @@ ga_elitism_type ga_population_get_elitism(population	*pop)
   if ( !pop ) die("Null pointer to population structure passed.");
 
   return pop->elitism;
+  }
+
+
+/**********************************************************************
+  ga_init_openmp()
+  synopsis:	Initialises OpenMP code.
+		This function must be called in OpenMP enabled code,
+		but the ga_genesis_XXX() functions do this.
+  parameters:	none
+  return:	none
+  last updated:	03 May 2004
+ **********************************************************************/
+
+void ga_init_openmp( void )
+  {
+
+#if USE_OPENMP == 1
+#pragma omp single
+    {
+    if (gaul_openmp_initialised == FALSE)
+      {
+      avltree_init_openmp();
+      linkedlist_init_openmp();
+      memory_init_openmp();
+      mem_chunk_init_openmp();
+      random_seed(0);
+
+      omp_init_lock(&pop_table_lock);
+      gaul_openmp_initialised = TRUE;
+      }
+    }
+#endif
+
+  return;
   }
 
 

@@ -61,6 +61,10 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
+		For OpenMP code, USE_OPENMP must be defined and 
+		memory_init_openmp() must be called prior to any
+		other function.
+
   To do:	A lot!
 
 		Record mem_chunk allocations in the same way as xalloc allocations.
@@ -90,6 +94,7 @@
 		s_malloc0() etc. would be useful.
 
   Bugs:		Padding causes data to become misaligned on alpha processors.
+		These function names aren't strictly allowed under ISO C99!
 
  **********************************************************************/
 
@@ -120,6 +125,9 @@ typedef struct mem_record_t
 
 THREAD_LOCK_DEFINE_STATIC(memory_mem_record_chunk);
 THREAD_LOCK_DEFINE_STATIC(memory_memtree);
+#if USE_OPENMP == 1
+static boolean memory_openmp_initialised = FALSE;
+#endif
 
 static MemChunk *mem_record_chunk=NULL;	/* the memory record buffer. */
 static AVLTree	*memtree=NULL;		/* the global memory allocation tree. */
@@ -144,6 +152,27 @@ static long	memory_count_strdup=0;	/* count total number of s_strdup() calls. */
 static long	memory_count_free=0;	/* count total number of s_free() calls. */
 
 static int	node_count=0;		/* counting tree nodes for debugging. */
+
+/*
+ * This function must be called before any other functions is OpenMP
+ * code is to be used.  Can be safely called when OpenMP code is not
+ * being used, and can be safely called more than once.
+ */
+void memory_init_openmp(void)
+  {
+
+#if USE_OPENMP == 1
+  if (memory_openmp_initialised == FALSE)
+    {
+    omp_init_lock(&memory_mem_record_chunk);
+    omp_init_lock(&memory_memtree);
+    memory_openmp_initialised = TRUE;
+    }
+#endif
+
+  return;
+  }
+
 
 /*
  * avltree.c replacements to avoid usage of the local

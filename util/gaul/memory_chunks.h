@@ -57,6 +57,8 @@ typedef struct MemChunk_t MemChunk;
  * Prototypes.
  */
 
+void		mem_chunk_init_openmp(void);
+
 MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
 MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
 boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);

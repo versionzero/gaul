@@ -160,6 +160,11 @@ population *ga_genesis_integer(	const int		population_size,
   plog(LOG_VERBOSE, "Genesis is beginning!");
 
 /*
+ * Initialise OpenMP code.
+ */
+  ga_init_openmp();
+
+/*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
  */
@@ -319,6 +324,11 @@ population *ga_genesis_char(	const int		population_size,
   plog(LOG_VERBOSE, "Genesis is beginning!");
 
 /*
+ * Initialise OpenMP code.
+ */
+  ga_init_openmp();
+
+/*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
  */
@@ -403,6 +413,11 @@ population *ga_genesis_boolean(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
+
+/*
+ * Initialise OpenMP code.
+ */
+  ga_init_openmp();
 
 /*
  * Allocate and initialise a new population.
@@ -491,6 +506,11 @@ population *ga_genesis_double(	const int		population_size,
   plog(LOG_VERBOSE, "Genesis is beginning!");
 
 /*
+ * Initialise OpenMP code.
+ */
+  ga_init_openmp();
+
+/*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
  */
@@ -575,6 +595,11 @@ population *ga_genesis_bitstring(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
+
+/*
+ * Initialise OpenMP code.
+ */
+  ga_init_openmp();
 
 /*
  * Allocate and initialise a new population.

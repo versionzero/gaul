@@ -31,8 +31,6 @@
 		integrated implementation of memory chunks.
 		It may be used independantly if you feel very brave.
 
-		This is thread safe.
-
 		Define MEMORY_CHUNKS_MIMIC to allow your favourite
 		memory debugger to function properly.  However, note
 		that by defining MEMORY_CHUNKS_MIMIC a number of memory
@@ -41,6 +39,12 @@
 	       	deallocate all memory atoms (which would normally be
 		a valid thing to do).
  
+		This is thread safe.
+
+		For OpenMP code, USE_OPENMP must be defined and 
+		mem_chunk_init_openmp() must be called prior to any
+		other function.
+
   To do:	Padding for array under/overflow checking.
  		Observe contents of atoms in the FreeAtom list.
  
@@ -144,6 +148,30 @@ static node_t		**node_buffers = NULL;
  * less coarse locks might be better.
  */
 THREAD_LOCK_DEFINE_STATIC(node_buffer_lock);
+#if USE_OPENMP == 1
+static boolean mem_chunk_openmp_initialised = FALSE;
+#endif
+
+/*
+ * This function must be called before any other functions is OpenMP
+ * code is to be used.  Can be safely called when OpenMP code is not
+ * being used, and can be safely called more than once.
+ */
+void mem_chunk_init_openmp(void)
+  {
+
+#if USE_OPENMP == 1
+  if (mem_chunk_openmp_initialised == FALSE)
+    {
+    omp_init_lock(&node_buffer_lock);
+    mem_chunk_openmp_initialised = TRUE;
+    }
+#endif
+
+  return;
+  }
+
+
 
 /*
  * Private functions.
