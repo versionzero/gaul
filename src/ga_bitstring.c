@@ -452,9 +452,9 @@ int ga_bit_decode_gray_int( byte *bstr, int n, int length )
 
   gray_to_binary( bstr, n, int_bstr, length );
 
-  s_free(int_bstr);
-
   val = ga_bit_decode_binary_int( int_bstr, 0, length );
+
+  s_free(int_bstr);
 
   return val;
   }
@@ -479,9 +479,9 @@ unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length )
 
   gray_to_binary( bstr, n, int_bstr, length );
 
-  s_free(int_bstr);
-
   val = ga_bit_decode_binary_uint( int_bstr, 0, length );
+
+  s_free(int_bstr);
 
   return val;
   }

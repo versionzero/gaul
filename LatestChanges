@@ -16,6 +16,7 @@ Changes since release 0.1844:
 - Added population accessor functions; ga_population_get_crossover(), ga_population_get_mutation(), ga_population_get_migration(), ga_population_get_elitism(), ga_population_get_scheme().
 - Custom timer code deleted from sorting routines.
 - Changed the website referenced in source comments to http://gaul/sourceforge.net/
+- Fixed a bug resulting from accessing memory after freeing it.
 
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.
