@@ -6,6 +6,7 @@ Changes since release 0.1840:
 - Fixed strsep() bug in compatibility.c
 - Updated configuration files for successful compilation on RedHat 8.0
 - Improved configuration with respect to some simple platform specific optimisations.
+- RPM spec file improved considerably.
 
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().
