@@ -349,7 +349,7 @@ population *ga_population_new(	const int stable_size,
 		field is referenced.
   parameters:	population *	original population structure.
   return:	population *	new population structure.
-  last updated: 24 May 2002
+  last updated: 06 Jul 2003
  **********************************************************************/
 
 population *ga_population_clone_empty(population *pop)
@@ -2905,7 +2905,7 @@ void ga_population_set_migration(	population	*pop,
 
 /**********************************************************************
   ga_population_set_crossover()
-  synopsis:	Sets the crossover rate a population.
+  synopsis:	Sets the crossover rate for a population.
   parameters:
   return:
   last updated:	10 Jun 2002
@@ -3287,6 +3287,91 @@ int ga_population_get_generation(population *pop)
   if ( !pop ) return 0;
 
   return pop->generation;
+  }
+
+
+/**********************************************************************
+  ga_population_get_crossover()
+  synopsis:	Gets the crossover rate of a population.
+  parameters:
+  return:
+  last updated:	06 Jul 2003
+ **********************************************************************/
+
+double ga_population_get_crossover(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->crossover_ratio;
+  }
+
+
+/**********************************************************************
+  ga_population_get_mutation()
+  synopsis:	Gets the mutation rate of a population.
+  parameters:
+  return:
+  last updated:	06 Jul 2003
+ **********************************************************************/
+
+double ga_population_get_mutation(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->mutation_ratio;
+  }
+
+
+/**********************************************************************
+  ga_population_get_migration()
+  synopsis:	Gets the migration rate of a population.
+  parameters:
+  return:
+  last updated:	06 Jul 2003
+ **********************************************************************/
+
+double ga_population_get_migration(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->migration_ratio;
+  }
+
+
+/**********************************************************************
+  ga_population_get_scheme()
+  synopsis:	Gets the evolutionary scheme of a population.
+  parameters:
+  return:
+  last updated:	06 Jul 2003
+ **********************************************************************/
+
+ga_scheme_type ga_population_get_scheme(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->scheme;
+  }
+
+
+/**********************************************************************
+  ga_population_get_elitism()
+  synopsis:	Gets the elitism mode of a population.
+  parameters:
+  return:
+  last updated:	06 Jul 2003
+ **********************************************************************/
+
+ga_elitism_type ga_population_get_elitism(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->elitism;
   }
 
 

@@ -266,6 +266,11 @@ void	ga_population_set_mutation(    population            *pop,
 		                       const double          mutation);
 void	ga_population_set_migration(   population            *pop,
 		                       const double          migration);
+double ga_population_get_crossover(population       *pop);
+double ga_population_get_mutation(population       *pop);
+double ga_population_get_migration(population       *pop);
+ga_scheme_type ga_population_get_scheme(population       *pop);
+ga_elitism_type ga_population_get_elitism(population       *pop);
 population *ga_transcend(unsigned int id);
 unsigned int ga_resurect(population *pop);
 boolean ga_extinction(population *extinct);
