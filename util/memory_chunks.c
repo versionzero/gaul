@@ -1233,7 +1233,7 @@ boolean mem_chunk_isempty(MemChunk *mem_chunk)
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
-  return num_atoms_alloc==0;
+  return mem_chunk->num_atoms_alloc==0;
   }
 
 
