@@ -1,17 +1,14 @@
 Roadmap upto version 1.0 
 ========================
 
-Releases 0.1838 - 0.1859 are preview releases prior to full version 1.0
+Releases 0.1839 - 0.1859 are preview releases prior to full version 1.0
 
 These milestone requirements are subject to change ;)
 
- Milestone  |  Required Additions (besides bug fixing)
+ Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1838     |  Save/Load populations.
+ 0.1839     |  Save/Load populations.
             |  Save/Load entities.
-            |  Remove limiting maximum population sizes.
-------------+--------------------------------------------------------
- 0.1839     |  SUS sampling.
             |  Intro to GAs (mostly) finished.
 ------------+--------------------------------------------------------
  0.1840     |  De Jong - working examples.
@@ -74,7 +71,6 @@ Additional features needed for version 1.0:
 * S-Lang extension example.
 * S-Lang embedding example.
 * Messy GA example.
-* Debian package.
 * Run-time control of statistic collection.
 * More run-time checking.
 
@@ -86,7 +82,7 @@ Optional Features for version 1.0, or (more likely) later:
 * Langauge bindings.
 * Similarity function callbacks.
 * Multi-threaded support.
-* DEE alogorithm.
+* DEE algorithm.
 
 Stewart Adcock, 13 Mar 2002.
 
