@@ -544,22 +544,24 @@ else
 fi
 
 if test "x$target" = "xsparc-sun-solaris2.7"; then
-  AC_DEFINE( SUN_FORTE_C, 2.7, [Define if using Sun's Forte C Compiler] )
-  AC_DEFINE(HAVE_BCOPY,1,[Whether bcopy() is available])	# Big problems!!!
-  AC_DEFINE(HAVE_BCMP,1,[Whether bcmp() is available])
-  AC_DEFINE(HAVE_STRLEN,1,[Whether strlen() is available])
-  AC_DEFINE(HAVE_STRNCMP,1,[Whether strncmp() is available])
-  AC_DEFINE(HAVE_STRNCPY,1,[Whether strncpy() is available])
-  AC_DEFINE(HAVE_STRTOD,1,[Whether strtod() is available])
-  AC_DEFINE(HAVE_STRTOK,1,[Whether strtok() is available])
-  AC_DEFINE(HAVE_MEMSET,1,[Whether memset() is available])
-  AC_DEFINE(HAVE_USLEEP,1,[Whether usleep() is available])
-elif test "x$target" = "xsparc-sun-solaris2.8"; then
-  AC_DEFINE( SUN_FORTE_C, 2.8, [Define if using Sun's Forte C Compiler] )
-  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
-else
-  AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
-  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+  if test "x$CC" = "xcc"; then
+    AC_DEFINE( SUN_FORTE_C, 2.7, [Define if using Sun's Forte C Compiler] )
+    AC_DEFINE(HAVE_BCOPY,1,[Whether bcopy() is available])      # Big problems!!!
+    AC_DEFINE(HAVE_BCMP,1,[Whether bcmp() is available])
+    AC_DEFINE(HAVE_STRLEN,1,[Whether strlen() is available])
+    AC_DEFINE(HAVE_STRNCMP,1,[Whether strncmp() is available])
+    AC_DEFINE(HAVE_STRNCPY,1,[Whether strncpy() is available])
+    AC_DEFINE(HAVE_STRTOD,1,[Whether strtod() is available])
+    AC_DEFINE(HAVE_STRTOK,1,[Whether strtok() is available])
+    AC_DEFINE(HAVE_MEMSET,1,[Whether memset() is available])
+    AC_DEFINE(HAVE_USLEEP,1,[Whether usleep() is available])
+  elif test "x$target" = "xsparc-sun-solaris2.8"; then
+    AC_DEFINE( SUN_FORTE_C, 2.8, [Define if using Sun's Forte C Compiler] )
+    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+  else
+    AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
+    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+  fi
 fi
 
 case "$target" in

@@ -10999,6 +10999,7 @@ echo "${ECHO_T}$ac_cv_func_sincos_" >&6
 fi
 
 if test "x$target" = "xsparc-sun-solaris2.7"; then
+  if test "x$CC" = "xcc"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define SUN_FORTE_C 2.7
@@ -11008,7 +11009,7 @@ _ACEOF
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_BCOPY 1
 _ACEOF
-	# Big problems!!!
+      # Big problems!!!
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_BCMP 1
@@ -11049,7 +11050,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_USLEEP 1
 _ACEOF
 
-elif test "x$target" = "xsparc-sun-solaris2.8"; then
+  elif test "x$target" = "xsparc-sun-solaris2.8"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define SUN_FORTE_C 2.8
@@ -11139,7 +11140,7 @@ _ACEOF
 fi
 done
 
-else
+  else
 
 cat >>confdefs.h <<\_ACEOF
 #define SUN_FORTE_C 0
@@ -11229,6 +11230,7 @@ _ACEOF
 fi
 done
 
+  fi
 fi
 
 case "$target" in
