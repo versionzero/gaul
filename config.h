@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "06/10/04"
+#define GA_BUILD_DATE_STRING "07/10/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0

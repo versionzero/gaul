@@ -100,7 +100,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -145,7 +145,7 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = util src tests examples debian .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
-EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
+EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec autogen.sh
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

@@ -18,6 +18,7 @@ Changes since release 0.1847:
 - A double-linked-list built-in chromosome type added (No genesis or GA operator functions yet).
 - Added experimental efficient memory handling code for chromosomes (Disabled by default, however).
 - All mentions of the outdated V3_QUICK preprocessor constant removed.
+- Added autogen.sh script to distribution.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
