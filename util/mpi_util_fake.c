@@ -3,7 +3,7 @@
  **********************************************************************
 
   mpi_util_fake - mpi_util compilation kludge.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright Â©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

@@ -3,7 +3,7 @@
  **********************************************************************
 
   dstr_util - Dynamic string library.
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright Â©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

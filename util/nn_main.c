@@ -3,7 +3,7 @@
  **********************************************************************
 
   nn_main - Example use of libnn_util.
-  Copyright ©2001-2002, The Regents of the University of California.
+  Copyright Â©2001-2002, The Regents of the University of California.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -175,7 +175,7 @@ void write_usage(void)
 
   printf("\n"
          "nn - Simple standalone neural network utility\n"
-         "Copyright ©2001-2002, Regents of the Universtity of California.\n"
+         "Copyright Â©2001-2002, Regents of the Universtity of California.\n"
          "primary Author: \"Stewart Adcock\" <stewart@linux-domain.com>\n"
          "\n"
          "Usage: nn [switches...]\n"

@@ -3,7 +3,7 @@
  **********************************************************************
 
   nn_util - Simple multi-layer Neural Network routines.
-  Copyright ©2001-2002, The Regents of the University of California.
+  Copyright Â©2001-2002, The Regents of the University of California.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
