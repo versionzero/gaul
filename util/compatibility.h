@@ -272,7 +272,7 @@ char *strupr( char *s );
 #endif
 
 #ifndef HAVE_STRICMP
-int strnicmp( char *s1, char *s2, int n );
+int stricmp( char *s1, char *s2 );
 #endif
 
 #ifndef HAVE_STRNICMP
