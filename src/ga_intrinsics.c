@@ -128,18 +128,16 @@ int ga_population_seed_slang(int *pop_id)
 
 
 /**********************************************************************
-  ga_population_save_slang()
+  ga_population_write_slang()
   synopsis:	Writes entire population and it's genetic data to disk.
-		Currently does not store fitness or userdata -- just
-		stores the genes.
   parameters:
   return:
-  last updated: 22/01/01
+  last updated: 30 May 2002
  **********************************************************************/
 
-int ga_population_save_slang(int *pop_id, char *fname)
+int ga_population_write_slang(int *pop_id, char *fname)
   {
-  return ga_population_save(ga_get_population_from_id(*pop_id), fname);
+  return ga_population_write(ga_get_population_from_id(*pop_id), fname);
   }
 
 
@@ -155,6 +153,43 @@ int ga_population_save_slang(int *pop_id, char *fname)
 int ga_population_read_slang(char *fname)
   {
   return ga_get_population_id(ga_population_read(fname));
+  }
+
+
+/**********************************************************************
+  ga_entity_write_slang()
+  synopsis:	Writes an entity to disk.
+  parameters:
+  return:
+  last updated: 30 May 2002
+ **********************************************************************/
+
+int ga_entity_write_slang(int *pop_id, int *entity_id, char *fname)
+  {
+  population	*pop;
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  return ga_population_write(pop, ga_get_entity_from_id(pop, *entity_id), fname);
+  }
+
+
+/**********************************************************************
+  ga_population_read_slang()
+  synopsis:	Reads entire population and it's genetic data back
+		from disk.
+  parameters:
+  return:
+  last updated: 30 May 2002
+ **********************************************************************/
+
+int ga_population_read_slang(int *pop_id, char *fname)
+  {
+  population	*pop;
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  return ga_get_entity_id(pop, ga_entity_read(pop, fname));
   }
 
 
@@ -1102,12 +1137,18 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_population_seed",
             (FVOID_STAR) ga_population_seed_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
-      || SLadd_intrinsic_function("ga_population_save",
-            (FVOID_STAR) ga_population_save_slang, SLANG_INT_TYPE, 2,
+      || SLadd_intrinsic_function("ga_population_write",
+            (FVOID_STAR) ga_population_write_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_STRING_TYPE)
       || SLadd_intrinsic_function("ga_population_read",
             (FVOID_STAR) ga_population_read_slang, SLANG_INT_TYPE, 1,
             SLANG_STRING_TYPE)
+      || SLadd_intrinsic_function("ga_entity_write",
+            (FVOID_STAR) ga_entity_write_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_STRING_TYPE)
+      || SLadd_intrinsic_function("ga_entity_read",
+            (FVOID_STAR) ga_entity_read_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_STRING_TYPE)
       || SLadd_intrinsic_function("ga_entity_compare_genome",
             (FVOID_STAR) ga_entity_compare_genome_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
