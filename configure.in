@@ -301,9 +301,9 @@ if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
   WILL_USE_SLANG="yes"
   HAVE_SLANG=1
-  LIBS="$LIBS -lslang"
+  LIBS="$LIBS -lslang -lm"
   AC_CHECK_LIB(slang, SLang_init_slang,
-    [LIBS="$LIBS -lslang -lm"],
+    [LIBS="$LIBS -lslang"],
     [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
   result=1
 else
