@@ -3,7 +3,7 @@
  **********************************************************************
 
   goldberg2 - Test/example program for GAUL.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     random_seed(i);
 
     pop = ga_genesis_boolean(
-       50,			/* const int              population_size */
+       60,			/* const int              population_size */
        1,			/* const int              num_chromo */
        30,			/* const int              len_chromo */
 NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
@@ -142,13 +142,13 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
        0.5,			/* double  crossover */
-       0.01,			/* double  mutation */
+       0.05,			/* double  mutation */
        0.0              	/* double  migration */
                               );
 
     ga_evolution(
        pop,		/* population              *pop */
-       50		/* const int               max_generations */
+       100		/* const int               max_generations */
               );
 
     goldberg2_ga_callback(i, pop);
