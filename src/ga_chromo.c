@@ -137,7 +137,7 @@ void ga_chromosome_integer_replicate( population *pop,
 		process.
   parameters:
   return:	Number of bytes processed.
-  last updated: 13/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 unsigned int ga_chromosome_integer_to_bytes(population *pop, entity *joe,
@@ -159,7 +159,7 @@ unsigned int ga_chromosome_integer_to_bytes(population *pop, entity *joe,
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(int);
 
-  *bytes = (byte *)joe->chromosome;
+  *bytes = (byte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -171,7 +171,7 @@ unsigned int ga_chromosome_integer_to_bytes(population *pop, entity *joe,
 		process.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 void ga_chromosome_integer_from_bytes(population *pop, entity *joe, byte *bytes)
@@ -182,7 +182,7 @@ void ga_chromosome_integer_from_bytes(population *pop, entity *joe, byte *bytes)
 
   if (!joe->chromosome) die("Entity has no chromsomes.");
 
-  memcpy(joe->chromosome, bytes,
+  memcpy(joe->chromosome[0], bytes,
          pop->len_chromosomes * pop->num_chromosomes * sizeof(int));
 
   return;
@@ -340,7 +340,7 @@ void ga_chromosome_boolean_replicate( population *pop,
 		than memory or bandwidth)
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 unsigned int ga_chromosome_boolean_to_bytes(population *pop, entity *joe,
@@ -362,7 +362,7 @@ unsigned int ga_chromosome_boolean_to_bytes(population *pop, entity *joe,
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(boolean);
 
-  *bytes = (byte *)joe->chromosome;
+  *bytes = (byte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -374,7 +374,7 @@ unsigned int ga_chromosome_boolean_to_bytes(population *pop, entity *joe,
 		process.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 void ga_chromosome_boolean_from_bytes(population *pop, entity *joe, byte *bytes)
@@ -385,7 +385,7 @@ void ga_chromosome_boolean_from_bytes(population *pop, entity *joe, byte *bytes)
 
   if (!joe->chromosome) die("Entity has no chromsomes.");
 
-  memcpy(joe->chromosome, bytes,
+  memcpy(joe->chromosome[0], bytes,
          pop->len_chromosomes * pop->num_chromosomes * sizeof(boolean));
 
   return;
@@ -524,7 +524,7 @@ void ga_chromosome_double_replicate( population *pop,
 		than memory or bandwidth)
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
@@ -546,7 +546,7 @@ unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(double);
 
-  *bytes = (byte *)joe->chromosome;
+  *bytes = (byte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -558,7 +558,7 @@ unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
 		process.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
@@ -569,7 +569,7 @@ void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
 
   if (!joe->chromosome) die("Entity has no chromsomes.");
 
-  memcpy(joe->chromosome, bytes,
+  memcpy(joe->chromosome[0], bytes,
          pop->len_chromosomes * pop->num_chromosomes * sizeof(double));
 
   return;
@@ -727,7 +727,7 @@ void ga_chromosome_char_replicate( population *pop,
 		trivial process.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
@@ -746,10 +746,9 @@ unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
     return 0;
     }
 
-  num_bytes = pop->len_chromosomes * pop->num_chromosomes *
-              sizeof(char);
+  num_bytes = pop->len_chromosomes * pop->num_chromosomes * sizeof(char);
 
-  *bytes = (byte *)joe->chromosome;
+  *bytes = (byte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -761,7 +760,7 @@ unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
 		process.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 1 Feb 2002
  **********************************************************************/
 
 void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
@@ -772,7 +771,7 @@ void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
 
   if (!joe->chromosome) die("Entity has no chromsomes.");
 
-  memcpy(joe->chromosome, bytes,
+  memcpy(joe->chromosome[0], bytes,
          pop->len_chromosomes * pop->num_chromosomes * sizeof(char));
 
   return;

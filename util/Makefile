@@ -183,7 +183,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS =  -lefence -lslang -lslang
 libmethods_a_LIBADD = 
 libmethods_a_OBJECTS =  avltree.o compatibility.o log_util.o \
 linkedlist.o memory_util.o table.o

@@ -31,7 +31,7 @@
 
 <p><b>Instructions for installation from source code</b></p>
 
-<p>The only non-trivial pre-requisite for a fully functional installation of GAUL is S-Lang.  This may be obtained from <a href="http://www.s-lang.org/">http://www.s-lang.org/</a></p>
+<p>The only non-trivial prerequisite for a fully functional installation of GAUL is S-Lang.  This may be obtained from <a href="http://www.s-lang.org/">http://www.s-lang.org/</a></p>
 
 <p>Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.</p>
 
@@ -40,7 +40,7 @@
 ./configure ; make
 </pre>
 
-<p>Or, if you don't have SLang installed - type:</p>
+<p>Or, if you don't have S-Lang installed - type:</p>
 <pre>
 ./configure --enable-slang=no ; make
 </pre>
@@ -58,10 +58,17 @@
 <p>If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.  Email me if:</p>
 <ul>
 <li>You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))</li>
-<li>You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").</li>
+<li>You would like precompiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").</li>
 </ul>
 
 <p><a href="platforms.html">Here</a> is a table of platforms that are known to work, with some associated information.</p>
+
+<p>Two additional configuration options that you may find useful are:</p>
+<pre>
+./configure --with-efence      # Link with the electric fence malloc debugger.
+./configure --enable-mpi=yes   # Link with the MPI message passing libraries for parallel code.
+</pre>
+<p>(Obviously you need to install the relevant software for those options to work!)</p>
 
 </td></tr></table>
 

@@ -4,14 +4,14 @@ Brief GAUL Installation Instructions
 Full (and maybe more up-to-date) instructions are available on the GAUL website.  This file should have just enough detail to help you.
 
 Dependencies:
-The only non-trivial pre-requisite for GAUL is slang.  This may be obtained from http://www.s-lang.org/
+The only non-trivial prerequisite for GAUL is S-Lang.  This may be obtained from http://www.s-lang.org/
 
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
 
 You should be able to work it out, but for any real dummies out there follow the standard GNU make procedure:
 ./configure ; make
 
-Or if you don't have SLang installed:
+Or if you don't have S-Lang installed:
 ./configure --enable-slang=no ; make
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
@@ -27,14 +27,19 @@ automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake
 If you plan to use the Intel C/C++ compiler, use:
 ./configure --disable-cvs-deps ; automake -i ; make
 
+Two additional configuration options that you may find useful are:
+./configure --with-efence      # Link with the electric fence malloc debugger.
+./configure --enable-mpi=yes   # Link with the MPI message passing libraries for parallel code.
+(Obviously you need to install the relevant software for those options to work!)
+
 Email me if:
 - You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))
-- You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
+- You would like precompiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
 
 Potentially supported platforms:
 - Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
-- Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
+- Non-toy OSs which are POSIX-compliant.  e.g. BeOS, QNX.
 
 An up-to-date list of supported platforms is available at http://gaul.sourceforge.net/platforms.html
 
-Stewart. 25 Jan 2002
+Stewart. 1 Feb 2002
