@@ -88,6 +88,7 @@
  * Compilation constants.
  */
 #define GA_BOLTZMANN_FACTOR	1.38066e-23
+#define GA_TINY_DOUBLE		1.0e-9
 
 /*
  * MPI message tags.

@@ -492,7 +492,7 @@ double ga_similarity_bitstring_cosine(const population *pop,
   ga_similarity_double_count_match_alleles()
   synopsis:	Compares two "double" chromosomes and counts matching
 		alleles.  A match is defined to be when
-		x+GAUL_TINY_DOUBLE>y>x-GAUL_TINY_DOUBLE
+		x+GA_TINY_DOUBLE>y>x-GA_TINY_DOUBLE
   parameters:	const population *pop	Population.
 		const entity *alpha	Alpha chromosome.
 		const entity *beta	Beta chromosome.
@@ -519,7 +519,7 @@ int ga_similarity_double_count_match_alleles( const population *pop,
 
   for ( i=0; i<pop->len_chromosomes; i++ )
     {
-    if (a[i]+GAUL_TINY_DOUBLE>b[i] && b[i]>a[i]-GAUL_TINY_DOUBLE) count++;
+    if (a[i]+GA_TINY_DOUBLE>b[i] && b[i]>a[i]-GA_TINY_DOUBLE) count++;
     }
 
   return count;
