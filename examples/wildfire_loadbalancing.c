@@ -327,19 +327,19 @@ boolean wildfire_score(population *pop, entity *entity)
  * Load-balancing code!
  */
 
-  while (load1>0.9 || load15>1.8)
+  while (load1>1.0 || load15>1.6)
     {
     if (str!=NULL)usleep(1000000);
 
     pf = popen("uptime", "r");
 
-    str=buffer;
     fgets(buffer, 80, pf);
-    while (*str!=':') str++;
+    str=&(buffer[strlen(buffer)]);
+    while (*str!=':') str--;
     str++;
-    sscanf(str, "%lf %lf %lf", &load1, &load5, &load15);
+    sscanf(str, "%lf, %lf, %lf", &load1, &load5, &load15);
     
-/*    printf("load = %f %f %f\n", load1, load5, load15);*/
+    /*printf("load = %f %f %f\n", load1, load5, load15);*/
 
     pclose(pf);
     }
