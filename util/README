@@ -10,27 +10,33 @@ For information, these files are required for these reasons:
 
 SAA_header.h            Specification of general definitins and macros.
 
-avltree.{c|h}           Adel'son-Velskii and Landis tree implementation.
+avltree.{c,h}           Adel'son-Velskii and Landis tree implementation.
 
-compatibility.{c|h}     Miscellaneous functions for portability.
+compatibility.{c,h}     Miscellaneous functions for portability.
 
-dstr_util.{c|h}         Dynamical string implementation.
+dstr_util.{c,h}         Dynamical string implementation.
 
-linkedlist.{c|h}        Single- and double-linked list implementation.
+linkedlist.{c,h}        Single- and double-linked list implementation.
 
-log_util.{c|h}          Portable, multi-processor aware, logging functions.
+log_util.{c,h}          Portable, multi-processor aware, logging functions.
 
-memory_chunks.{c|h}     Efficient memory allocation with run-time sanity
-memory_util.{c|h}       checking, profiling and debugging facilities. 
+memory_chunks.{c,h}     Efficient memory allocation with run-time sanity
+memory_util.{c,h}       checking, profiling and debugging facilities. 
 
-mpi_util.{c|h}          Portable and generalised message passing wrappers.
+nn_util.{c,h}		Efficient Neural Network implementation with a
+nn_main.{c,h}		small and simple NN similation utility.
 
-random_util.{c|h}       Portable and comprehensive pseudo-random number
+mpi_util.{c,h}          Portable and generalised message passing wrappers.
+
+random_util.{c,h}       Portable and comprehensive pseudo-random number
                         functions.
 
-str_util.{c|h}		String handling and manipulation functions.
-str_match.{c|h}
+str_util.{c,h}		String handling and manipulation functions.
+str_match.{c,h}
 
-table.{c|h}             Indexed table implementation.
+table.{c,h}             Indexed table implementation.
 
-Stewart Adcock 11 Feb 2002
+timer_util.{c,h}        General timers.
+
+Stewart Adcock, 04 June 2002
+

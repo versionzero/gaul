@@ -3,31 +3,34 @@ gaul-devel/src/README
 
 This directory contains the core GAUL source-code.  The files are:
 
-gaul.h: The public header file to be included in source code which will link against the GAUL library.
+gaul.h                 The public header file to be included in source code
+                       which will link against the GAUL library.
 
-ga_core.c, ga_core.h: Population and entity handling routines.
+ga_core.{c,h}          Population and entity handling routines.
 
-ga_bitstring.c, ga_bitstring.h: Low-level bitstring handling functions.
+ga_bitstring.{c,h}     Low-level bitstring handling functions.
 
-ga_chromo.c: Built-in chromosome handling routines.
+ga_chromo.c            Built-in chromosome handling routines.
 
-ga_utility.c, ga_utility.h: High level GA and convenience routines.
+ga_utility.{c,h}       High level GA and convenience routines.
 
-ga_similarity.c, ga_similarity.h: Entity and chromosome similarity measures.
+ga_similarity.{c,h}    Entity and chromosome similarity measures.
 
-ga_select.c: Selection operators.
+ga_select.c            Selection operators.
 
-ga_seed.c: Initialisation operators.
+ga_seed.c              Initialisation operators.
 
-ga_replace.c: Crowding, elimination and elitism operators.
+ga_replace.c           Crowding, elimination and elitism operators.
 
-ga_qsort.c, ga_qsort,h: Used internally to sort entities by fitness.
+ga_qsort.{c,h}         Functions used internally to sort entities by fitness.
 
-ga_optim.c, ga_optim.h: Optimisation functions, including the GA routines.
+ga_optim.{c,h}         Optimisation functions, including the GA routines.
 
-ga_mutate.c: Mutation operators.
+ga_mutate.c            Mutation operators.
 
-ga_intrinsics.c, ga_intrinsics.h: Definition of SLang intrinsic functions.
+ga_intrinsics.{c,h}    Definition of S-Lang intrinsic functions.
 
-ga_crossover.c: Crossover operators.
+ga_crossover.c         Crossover operators.
+
+Stewart Adcock, 04 June 2002
 

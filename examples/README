@@ -1,5 +1,5 @@
-GAUL Test/Example code
-======================
+GAUL Example and Tutorial Code
+==============================
 
 [ NOTE: HelGA is not currently available publically... It is a huge piece of
   work (The culmination of my PhD research).  It will become available in
@@ -35,5 +35,9 @@ struggle	A fairly fairly lean example, showing how little
                 Chapter 3 of Darwin's "The Origin of Species",
                 entitled "Struggle for Existence".
                 It uses a character-valued chromosome.
-		WARNING: Slow.
+		Several variations of this program are created.
+
+saveload	Demonstration of the population reading/writing functions.
+
+Stewart Adcock, 04 June 2002
 
