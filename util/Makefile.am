@@ -43,8 +43,6 @@ libgaul_util_la_SOURCES = \
 	memory_util.c \
 	table_util.c \
 	random_util.c \
-	str_util.c \
-	str_match.c \
 	timer_util.c \
 	log_util.c \
 	mpi_util.c 
@@ -65,8 +63,6 @@ nobase_include_HEADERS = \
 	gaul/mpi_util.h \
 	gaul/nn_util.h \
 	gaul/random_util.h \
-	gaul/str_match.h \
-	gaul/str_util.h \
 	gaul/table_util.h \
 	gaul/timer_util.h
 

@@ -26,8 +26,8 @@
  **********************************************************************
 
   Synopsis:	Header file for my general logging functions.
-
-  Updated:	03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
+  Last updated:	03 Sep 2003 SAA	Removed dependence on str_util.
+  		03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
   		29 Jul 2002 SAA	Avoid a warning from the Intel C/C++ compiler.
 		02/02/01 SAA	Converted from helga_log.  Use mpi_util stuff instead of helga_mpi stuff.
 		19/09/00 SAA	Put a 'do{}while(0)' loop around contents of the helga_log() macro to avoid some tricky problems.
@@ -47,7 +47,6 @@
 #include <time.h>
 
 #include "mpi_util.h"
-#include "str_util.h"
 
 /*
  * Constants

@@ -152,8 +152,6 @@ libgaul_util_la_SOURCES = \
 	memory_util.c \
 	table_util.c \
 	random_util.c \
-	str_util.c \
-	str_match.c \
 	timer_util.c \
 	log_util.c \
 	mpi_util.c 
@@ -176,8 +174,6 @@ nobase_include_HEADERS = \
 	gaul/mpi_util.h \
 	gaul/nn_util.h \
 	gaul/random_util.h \
-	gaul/str_match.h \
-	gaul/str_util.h \
 	gaul/table_util.h \
 	gaul/timer_util.h
 
@@ -197,7 +193,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
-	str_util.lo str_match.lo timer_util.lo log_util.lo mpi_util.lo
+	timer_util.lo log_util.lo mpi_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -217,7 +213,6 @@ DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/memory_util.Plo \
 	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
 	./$(DEPDIR)/random_util.Plo \
-	./$(DEPDIR)/str_match.Plo ./$(DEPDIR)/str_util.Plo \
 	./$(DEPDIR)/table_util.Plo \
 	./$(DEPDIR)/timer_util.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -291,8 +286,6 @@ include ./$(DEPDIR)/memory_util.Plo
 include ./$(DEPDIR)/mpi_util.Plo
 include ./$(DEPDIR)/nn_util.Plo
 include ./$(DEPDIR)/random_util.Plo
-include ./$(DEPDIR)/str_match.Plo
-include ./$(DEPDIR)/str_util.Plo
 include ./$(DEPDIR)/table_util.Plo
 include ./$(DEPDIR)/timer_util.Plo
 

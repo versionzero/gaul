@@ -35,7 +35,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	03 Oct 2002 SAA	Changed fread()>0 check to fread()!=0 to avoid warning on Compaq C compiler.
+  Last Updated:	03 Sep 2003 SAA	Removed dependence upon str_util.
+		03 Oct 2002 SAA	Changed fread()>0 check to fread()!=0 to avoid warning on Compaq C compiler.
 		22 Jul 2002 SAA	Renamed NN_randomize_weights() to NN_randomize_weights_11() and added a new NN_randomize_weights() which takes a range for the random values.
   		18 Jul 2002 SAA	Modified NN_read_prop().
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
@@ -1611,6 +1612,39 @@ int NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int 
 
 
 /**********************************************************************
+  nn_nreadline(FILE *fp, int len, char *dest)
+  synopsis:	Reads upto newline/eof from specified stream, to a
+		maximum of len characters, also
+		ensures that the string is always null-terminated.
+  parameters:   char    	*dest	The destination string.
+		FILE		*fp	The input stream.
+  return:	int	actual number of characters read. -1 on failure.
+  last updated: 08 Jan 2003
+ **********************************************************************/
+
+static int nn_nreadline(FILE *fp, const int len, char *dest)
+  {
+  int		count=0, max_count;	/* Number of chars read */
+  int		c;			/* Current character */
+
+  if (!fp) die("Null file handle passed.\n");
+  if (len < 1) die("Stupid length.\n");
+  if (!dest) die("Null string pointer passed.\n");
+
+  max_count = len-1;
+
+/*  while((!feof(fp)) && (c=fgetc(fp)) && (c!='\n') && count<len)*/
+
+  while(count<len && (c=fgetc(fp))!=EOF && ((char)c!='\n'))
+    dest[count++]=(char)c;
+
+  dest[count]='\0';
+
+  return count-1;
+  }
+
+
+/**********************************************************************
   NN_read_prop()
   synopsis:     Read properties from given file.
   parameters:   char *fname	File to read.
@@ -1640,7 +1674,7 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     {
     char	line_copy[MAX_LINE_LEN];	/* Line buffer copy. */
 
-    if (str_nreadline(fp, MAX_LINE_LEN, line_buffer)<=0)
+    if (nn_nreadline(fp, MAX_LINE_LEN, line_buffer)<=0)
       dief("Error reading file \"%s\".\n", fname);
 
     strcpy(line_copy, line_buffer);
@@ -1681,7 +1715,7 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     }
 
 /* Read remainder of file. */
-  while (str_nreadline(fp, MAX_LINE_LEN, line_buffer)>0)
+  while (nn_nreadline(fp, MAX_LINE_LEN, line_buffer)>0)
     {
     if (*num_prop > *num_data) die("Too many property records input.");
 
