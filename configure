@@ -23224,11 +23224,10 @@ fi
 
 
 
-
 for ac_header in pwd.h \
                  sys/select.h sys/signal.h \
                  sys/time.h sys/types.h sys/wait.h \
-                 limits.h values.h unistd.h \
+                 limits.h unistd.h \
 		 string.h strings.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -24764,7 +24763,6 @@ ac_cv_header_sys_time_h=$ac_cv_header_sys_time_h
 ac_cv_header_sys_types_h=$ac_cv_header_sys_types_h
 ac_cv_header_sys_wait_h=$ac_cv_header_sys_wait_h
 ac_cv_header_limits_h=$ac_cv_header_limits_h
-ac_cv_header_values_h=$ac_cv_header_values_h
 ac_cv_header_unistd_h=$ac_cv_header_unistd_h
 ac_cv_header_string_h=$ac_cv_header_string_h
 ac_cv_header_strings_h=$ac_cv_header_strings_h
@@ -25754,9 +25752,6 @@ _EOF_
     fi
     if test x$ac_cv_header_limits_h = xyes; then
       echo '#include <limits.h>' >> $tmpfile
-    fi
-    if test x$ac_cv_header_values_h = xyes; then
-      echo '#include <values.h>' >> $tmpfile
     fi
     if test x$ac_cv_header_unistd_h = xyes; then
       echo '#include <unistd.h>' >> $tmpfile

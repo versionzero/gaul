@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "17/02/05"
+#define GA_BUILD_DATE_STRING "18/02/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -180,9 +180,6 @@
 
 /* Define to 1 if you have the `usleep' function. */
 #define HAVE_USLEEP 1
-
-/* Define to 1 if you have the <values.h> header file. */
-#define HAVE_VALUES_H 1
 
 /* Define to 1 if you have the `waitpid' function. */
 #define HAVE_WAITPID 1

@@ -23,6 +23,7 @@ Changes since release 0.1847:
 - Support for adjustable allele mutation probabilities; added ga_population_set_allele_mutation_prob() and ga_population_get_allele_mutation_prob() functions and examples/royalroad_mutation_prob_demo demonstration program; Deprecated use of the GA_MULTI_BIT_CHANCE constant.  Default behaviour is unchanged.
 - The default crossover, mutation and migration ratios are now 0.9, 0.1 and 0.1, respectively, instead of all being 1.0.
 - It is no longer essential for ga_population_set_parameters() (or any equivalent) to be called prior to any of the evolution functions.
+- No longer include the obsolete values.h header.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

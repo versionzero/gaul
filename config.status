@@ -400,7 +400,6 @@ ac_cv_header_sys_time_h=yes
 ac_cv_header_sys_types_h=yes
 ac_cv_header_sys_wait_h=yes
 ac_cv_header_limits_h=yes
-ac_cv_header_values_h=yes
 ac_cv_header_unistd_h=yes
 ac_cv_header_string_h=yes
 ac_cv_header_strings_h=yes
@@ -965,7 +964,7 @@ ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1847${ac_dD}
 ${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}6${ac_dD}
 ${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_dD}
-${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"17/02/05"${ac_dD}
+${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"18/02/05"${ac_dD}
 ${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1847-6"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
@@ -1017,7 +1016,6 @@ ${ac_dA}HAVE_SYS_TIME_H${ac_dB}HAVE_SYS_TIME_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_WAIT_H${ac_dB}HAVE_SYS_WAIT_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_LIMITS_H${ac_dB}HAVE_LIMITS_H${ac_dC}1${ac_dD}
-${ac_dA}HAVE_VALUES_H${ac_dB}HAVE_VALUES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_UNISTD_H${ac_dB}HAVE_UNISTD_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRING_H${ac_dB}HAVE_STRING_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRINGS_H${ac_dB}HAVE_STRINGS_H${ac_dC}1${ac_dD}
@@ -1041,6 +1039,7 @@ ${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_BCMP${ac_dB}HAVE_BCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRLEN${ac_dB}HAVE_STRLEN${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCMP${ac_dB}HAVE_STRNCMP${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1050,7 +1049,6 @@ CEOF
 /^[	 ]*#[	 ]*define/!b
 t clr
 : clr
-${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMSET${ac_dB}HAVE_MEMSET${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_USLEEP${ac_dB}HAVE_USLEEP${ac_dC}1${ac_dD}
 ${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}8${ac_dD}
@@ -1077,7 +1075,7 @@ ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1847${ac_uD}
 ${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}6${ac_uD}
 ${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_uD}
-${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"17/02/05"${ac_uD}
+${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"18/02/05"${ac_uD}
 ${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1847-6"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
@@ -1129,7 +1127,6 @@ ${ac_uA}HAVE_SYS_TIME_H${ac_uB}HAVE_SYS_TIME_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_WAIT_H${ac_uB}HAVE_SYS_WAIT_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_LIMITS_H${ac_uB}HAVE_LIMITS_H${ac_uC}1${ac_uD}
-${ac_uA}HAVE_VALUES_H${ac_uB}HAVE_VALUES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_UNISTD_H${ac_uB}HAVE_UNISTD_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRING_H${ac_uB}HAVE_STRING_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRINGS_H${ac_uB}HAVE_STRINGS_H${ac_uC}1${ac_uD}
@@ -1153,6 +1150,7 @@ ${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_BCMP${ac_uB}HAVE_BCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRLEN${ac_uB}HAVE_STRLEN${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCMP${ac_uB}HAVE_STRNCMP${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1162,7 +1160,6 @@ CEOF
 /^[	 ]*#[	 ]*undef/!b
 t clr
 : clr
-${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMSET${ac_uB}HAVE_MEMSET${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_USLEEP${ac_uB}HAVE_USLEEP${ac_uC}1${ac_uD}
 ${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}8${ac_uD}
@@ -1506,9 +1503,6 @@ _EOF_
     fi
     if test x$ac_cv_header_limits_h = xyes; then
       echo '#include <limits.h>' >> $tmpfile
-    fi
-    if test x$ac_cv_header_values_h = xyes; then
-      echo '#include <values.h>' >> $tmpfile
     fi
     if test x$ac_cv_header_unistd_h = xyes; then
       echo '#include <unistd.h>' >> $tmpfile

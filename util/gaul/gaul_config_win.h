@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul_config_win.h - GAUL configuration settings for windows.
-  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,7 +43,6 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <limits.h>
-#include <values.h>
 #include <unistd.h>
 #include <string.h>
 #include <io.h>
