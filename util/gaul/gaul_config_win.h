@@ -27,6 +27,8 @@
 
   Synopsis:	GAUL configuration settings for windows.
 
+  		All windows-specific configuration should be done here.
+
  **********************************************************************/
 
 #ifndef GAUL_CONFIG_WIN_H_INCLUDED
@@ -43,6 +45,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <windows.h>
+#include <io.h>
 
 #ifndef errno
 /* Some sytems #define this! */
