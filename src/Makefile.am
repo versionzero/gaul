@@ -32,7 +32,7 @@ lib_LIBRARIES = libgaul.a
 
 # CFLAGS = -g -Wall -O
 
-INCLUDES = -I../util/
+# INCLUDES = -I../util/
 
 libgaul_a_SOURCES = \
     ga_bitstring.c \
