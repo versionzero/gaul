@@ -2,6 +2,7 @@ Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.
 - Numerous fixes for compilation with MingW ( http://www.mingw.org/ ) for Windows.
 - Added kludge to avoid problem with "OpenMOSIX weird bus error bug".
+- Path to S-Lang headers is no longer hard-coded.
 
 Changes since release 0.1840:
 - Added a few missing intrinsic functions.

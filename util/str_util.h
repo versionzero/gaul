@@ -101,6 +101,7 @@ int	str_replaceall(char*, char*, char*);
 char	*str_stripspace(const char *str);
 int	str_cmp_nocase(const char *s1, const char *s2);
 void	str_ncpyt(char *dest, const char *src, const int len);
+void	str_ncpy(char *dest, const char *src, const int len);
 char	*str_nclone(const char *str, const int len);
 char	*str_getline(FILE *fp, int *len);
 int	str_nreadline(FILE *fp, int len, char *dest);

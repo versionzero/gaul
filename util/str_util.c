@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Last Updated:	15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
+  Last Updated:	28 Oct 2002 SAA Added str_sncpy().
+		15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
 		13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
   		25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
   		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
@@ -759,6 +760,40 @@ void str_ncpyt(char *dest, const char *src, const int len)
 
   strncpy(dest, src, len);
   dest[len-1]='\0';
+
+  return;
+  }
+
+
+/**********************************************************************
+  void str_sncpy(char *dest, const char *src, const int len)
+  synopsis:	Copies string as strncpy(), but also ensures the string
+		is null-terminated and terminates at the first
+		white-space character.
+  parameters:   char    	*dest	The destination string.
+		const char	*src	The source string.
+		const int	len	Number of bytes to copy.
+  return:	none
+  last updated: 28 Oct 2002
+ **********************************************************************/
+
+void str_ncpy(char *dest, const char *src, const int len)
+  {
+  char	*end=&(dest[len-1]);
+
+  if (!dest || !src) die("null string pointer passed.\n");
+  if (len < 1) die("Stupid length.\n");
+  
+  if (dest == src) die("Destination and source are same.\n");
+
+  while (*src != ' ' && *src != '\0' && dest < end)
+    {
+    *dest = *src;
+    src++;
+    dest++;
+    }
+
+  *dest='\0';
 
   return;
   }
