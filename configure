@@ -11683,7 +11683,7 @@ ac_config_commands="$ac_config_commands default-1"
 
 
 #AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/pp/Makefile],
-ac_config_files="$ac_config_files Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile"
+ac_config_files="$ac_config_files Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile debian/Makefile"
 ac_config_commands="$ac_config_commands default"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -12234,6 +12234,7 @@ do
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
   "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
+  "debian/Makefile" ) CONFIG_FILES="$CONFIG_FILES debian/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
   "default" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;

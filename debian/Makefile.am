@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 #######################################################################
-# gaul/Makefile.am
+# gaul/debian/Makefile.am
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
@@ -30,11 +30,15 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#ACLOCAL_AMFLAGS = -I .
-
-#SUBDIRS = util src tests examples extra .
-SUBDIRS = util src tests examples debian .
-
-# Configuration process should create gaul.spec from a gaul.spec.in file.
-EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
+EXTRA_DIST = changelog \
+	copyright \
+	dirs \
+	Makefile.am \
+	manpage.1.ex \
+	rules \
+	watch.ex \
+	control \
+	files \
+	README.debian \
+	substvars
 

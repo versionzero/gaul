@@ -1045,7 +1045,7 @@ MEMORY_CHUNKS_MIMIC=$MEMORY_CHUNKS_MIMIC
 ])
 
 #AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/pp/Makefile],
-AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile],
+AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile debian/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h.in]
 	)
 
