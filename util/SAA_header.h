@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
+  Updated:	18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
+  		09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
   		07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
   		01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
 		14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
@@ -209,7 +210,7 @@ typedef short _Bool;
 /*
  * Additional types.
  */
-#ifndef SUN_FORTE_C
+#if !defined(SUN_FORTE_C) || SUN_FORTE_C==0
 typedef void* vpointer;
 #else
 #define vpointer void*

@@ -360,6 +360,118 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
   }
 
 
+#if 0
+/**********************************************************************
+  gaul_ensure_evaluations_threaded()
+  synopsis:	Fitness evaluations.
+		Evaluate all previously unevaluated entities.
+		No adaptation.
+  parameters:	population *pop
+  return:	none
+  last updated:	18 Sep 2002
+ **********************************************************************/
+
+static void gaul_ensure_evaluations_threaded(population *pop, const int num_threads,
+			int *eid, pthread_t *tid)
+  {
+  int		thread_num;		/* Index of current thread. */
+  int		num_threads;		/* Number of threads. */
+  int		eval_num;		/* Index of current entity. */
+  pthread_t	fpid;			/* TID of completed child process. */
+
+/*
+ * A thread is created for each fitness evaluation upto
+ * a maximum of max_threads at which point we wait for
+ * results before continuing.
+ *
+ * Skip evaluations for entities that have been previously evaluated.
+ */
+  thread_num = 0;
+  eval_num = 0;
+
+  /* Fork initial processes. */
+  /* Skip to the next entity which needs evaluating. */
+  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+
+  while (thread_num < num_processes && eval_num < pop->size)
+    {
+    eid[thread_num] = eval_num;
+    pid[thread_num] = XXXX();
+
+    if (pid[thread_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[thread_num] == 0)
+      {       /* This is the child process. */
+      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+      write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+      fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
+      _exit(1);
+      }
+
+    thread_num++;
+    eval_num++;
+
+    /* Skip to the next entity which needs evaluating. */
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+    }
+  num_threads = thread_num;
+
+  /* Wait for a thread to finish and, if needed, create another. */
+  while (num_threads > 0)
+    {
+    fpid = wait(NULL);
+
+    if (fpid == -1) die("Error in wait().");
+
+    /* Find which entity this thread was evaluating. */
+    thread_num = 0;
+    while (fpid != pid[thread_num]) thread_num++;
+
+    if (eid[thread_num] == -1) die("Internal error.  eid is -1");
+
+    read(evalpipe[2*thread_num], &(pop->entity_iarray[eid[thread_num]]->fitness), sizeof(double));
+
+    if (eval_num < pop->size)
+      {       /* New thread. */
+      eid[thread_num] = eval_num;
+      pid[thread_num] = fork();
+
+      if (pid[thread_num] < 0)
+        {       /* Error in thread. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+      else if (pid[thread_num] == 0)
+        {       /* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
+        _exit(1);
+        }
+
+      eval_num++;
+
+      /* Skip to the next entity which needs evaluating. */
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+      }
+    else
+      {
+      pid[thread_num] = -1;
+      eid[thread_num] = -1;
+      num_threads--;
+      }
+    }
+
+  return;
+  }
+#endif
+
+
 /**********************************************************************
   gaul_adapt_and_evaluate()
   synopsis:	Fitness evaluations.
@@ -802,7 +914,6 @@ int ga_evolution(	population		*pop,
 		Thanks go to Syrrx, Inc. who, in essence, funded
 		development of this function.
 
-		*** Only Darwinian evolution works, currently. ***
   parameters:
   return:	Number of generations performed.
   last updated:	11 Jun 2002
@@ -923,6 +1034,131 @@ int ga_evolution_forked(	population		*pop,
 
   return generation;
   }
+
+
+#if 0
+/**********************************************************************
+  ga_evolution_threaded()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given population.  This is a
+		generation-based GA.  ga_genesis(), or equivalent,
+		must be called prior to this function.
+
+		This function is like ga_evolution(), except that all
+		fitness evaluations will be performed in threads
+		and is therefore ideal for use on SMP multiprocessor
+		machines or multipipelined processors (e.g. the new
+		Intel Xeons).
+
+  parameters:
+  return:	Number of generations performed.
+  last updated:	18 Sep 2002
+ **********************************************************************/
+
+int ga_evolution_threaded(	population		*pop,
+				const int		max_generations )
+  {
+  int		generation=0;		/* Current generation number. */
+  int		i;			/* Loop over members of population. */
+  pid_t		*tid;			/* Child TIDs. */
+  int		*eid;			/* Entity which forked process is evaluating. */
+  int		max_threads=0;		/* Maximum number of evaluation threads to use at one time. */
+  char		*max_thread_str;	/* Value of enviroment variable. */
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
+  
+/*
+ * Look at environment to find number of threads to create.
+ */
+  max_thread_str = getenv(GA_NUM_THREADS_ENVVAR_STRING);
+  if (max_thread_str) max_threads = atoi(max_thread_str);
+  if (max_threads == 0) max_threads = GA_DEFAULT_NUM_THREADS;
+
+  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d threads will be created", max_threads);
+
+/*
+ * Allocate memory required for handling the threads.
+ * Clear eid array.
+ */
+  tid = s_malloc(max_threads*sizeof(pthread_t));
+  eid = s_malloc(max_threads*sizeof(int));
+  for (i=0; i<max_threads; i++)
+    {
+    eid[i] = -1;
+    }
+
+/*
+ * Score and sort the initial population members.
+ */
+  gaul_ensure_evaluations_threaded(pop, max_threads, eid, tid);
+  sort_population(pop);
+
+  plog( LOG_VERBOSE,
+        "Prior to the first generation, population has fitness scores between %f and %f",
+        pop->entity_iarray[0]->fitness,
+        pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Do all the generations:
+ *
+ * Stop when (a) max_generations reached, or
+ *           (b) "pop->generation_hook" returns FALSE.
+ */
+  while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
+           generation<max_generations )
+    {
+    generation++;
+    pop->orig_size = pop->size;
+
+    plog(LOG_DEBUG,
+              "Population size is %d at start of generation %d",
+              pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+    gaul_crossover(pop);
+
+/*
+ * Mutation step.
+ */
+    gaul_mutation(pop);
+
+/*
+ * Score all child entities from this generation.
+ */
+    gaul_adapt_and_evaluate_threaded(pop, max_threads, eid, tid);
+
+/*
+ * Apply survival pressure.
+ */
+    gaul_survival(pop);
+
+    plog(LOG_VERBOSE,
+          "After generation %d, population has fitness scores between %f and %f",
+          generation,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+    }	/* Main generation loop. */
+
+/*
+ * Free memory.
+ */
+  s_free(tid);
+  s_free(eid);
+
+  return generation;
+  }
+#endif
 
 
 /**********************************************************************

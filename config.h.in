@@ -1,69 +1,19 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* acconfig.h
 
- GAUL's default settings.
+/* Type of key used by AVL tree routines. */
+#undef AVLTREE_KEY_TYPE
 
- */
+/* Record date of compilation. */
+#undef BUILD_DATE_STRING
 
-
-/* Other stuff */
-
-#undef MEMORY_ALLOC_DEBUG
-#undef MEMORY_ALLOC_SAFE
-#undef MEMORY_ALIGN_SIZE
-#undef MEMORY_PADDING
-
+/* Overall debugging level. */
 #undef DEBUG
+
+/* Core GAUL debugging level. */
 #undef GA_DEBUG
+
+/* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
-
-#undef VERSION
-#undef VERSION_STRING
-#undef BUILD_DATE_STRING
-#undef MAJOR_VERSION
-#undef MINOR_VERSION
-#undef PATCH_VERSION
-#undef UNAME_STRING
-
-#undef AVLTREE_KEY_TYPE
-#undef PARALLEL
-#undef V3_QUICK
-#undef HAVE_SLANG
-#undef MPI_NUM_THREADS_ENVVAR_STRING
-
-#undef HAVE_FLOAT_H
-#undef HAVE_LIMITS_H
-#undef HAVE_POLL
-#undef HAVE_PWD_H
-#undef HAVE_SYS_PARAM_H
-#undef HAVE_SYS_POLL_H
-#undef HAVE_SYS_SELECT_H
-#undef HAVE_SYS_TIME_H
-#undef HAVE_SYS_TIMES_H
-#undef HAVE_STRERROR
-#undef HAVE_STRSIGNAL
-#undef HAVE_UNISTD_H
-#undef HAVE_VALUES_H
-
-#undef NO_SYS_ERRLIST
-
-#undef SIZEOF_DOUBLE
-#undef SIZEOF_CHAR
-#undef SIZEOF_SHORT
-#undef SIZEOF_LONG
-#undef SIZEOF_INT
-#undef SIZEOF_VOID_P
-
-#undef SUN_FORTE_C
-
-/* #undef PACKAGE */
-
-
-/* Type of key used by AVL routines */
-#undef AVLTREE_KEY_TYPE
-
-/* Date of compilation */
-#undef BUILD_DATE_STRING
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
@@ -169,6 +119,9 @@
 
 /* Define to 1 if you have the `sincos' function. */
 #undef HAVE_SINCOS
+
+/* Whether S-Lang is installed. */
+#undef HAVE_SLANG
 
 /* Define to 1 if you have the `snooze' function. */
 #undef HAVE_SNOOZE
@@ -320,13 +273,25 @@
 /* Define to 1 if you have the `waitpid' function. */
 #undef HAVE_WAITPID
 
-/* Major version number */
+/* Major version number. */
 #undef MAJOR_VERSION
 
-/* Minor version number */
+/* Memory alignment boundry characteristics. */
+#undef MEMORY_ALIGN_SIZE
+
+/* Whether to use debugging memory allocation routines. */
+#undef MEMORY_ALLOC_DEBUG
+
+/* Whether to use safe memory allocation routines. */
+#undef MEMORY_ALLOC_SAFE
+
+/* Whether to pad memory. */
+#undef MEMORY_PADDING
+
+/* Minor version number. */
 #undef MINOR_VERSION
 
-/* Environment variable used to request threads */
+/* Environment variable used to request threads. */
 #undef MPI_NUM_THREADS_ENVVAR_STRING
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -347,7 +312,7 @@
 /* type of parallisation */
 #undef PARALLEL
 
-/* Patch count */
+/* Patch level. */
 #undef PATCH_VERSION
 
 /* The size of a `char', as computed by sizeof. */
@@ -368,21 +333,23 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Define if using Sun's Forte C Compiler */
+#undef SUN_FORTE_C
+
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
-/* System information */
+/* record compilation platform information. */
 #undef UNAME_STRING
 
-/* Define to skip error checking in vector routines */
+/* Whether to skip expensive sanity checking in vector routines. */
 #undef V3_QUICK
 
-/* Version string */
+/* Version string. */
 #undef VERSION_STRING
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
-

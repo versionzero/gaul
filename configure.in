@@ -67,18 +67,28 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h)
 
-AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION, [Major version number])
-AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION, [Minor version number])
-AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION, [Patch count])
+AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION, [Major version number.])
+AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION, [Minor version number.])
+AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION, [Patch level.])
 
 dnl Set some defines required to their default values.
-dnl FIXME: allow configuration-time modification.
-AC_DEFINE(V3_QUICK, 1, [Define to skip error checking in vector routines])
-AC_DEFINE(AVLTREE_KEY_TYPE, void *, [Type of key used by AVL routines])
-AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Date of compilation])
-AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string])
-AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads])
-AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [System information])
+dnl FIXME: allow configuration-time modification for many of these.
+AC_DEFINE(V3_QUICK, 1, [Whether to skip expensive sanity checking in vector routines.])
+AC_DEFINE(AVLTREE_KEY_TYPE, void *, [Type of key used by AVL tree routines.])
+AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Record date of compilation.])
+AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string.])
+AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads.])
+AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [record compilation platform information.])
+
+AC_DEFINE( DEBUG, 0, [Overall debugging level.])
+AC_DEFINE( GA_DEBUG, 0, [Core GAUL debugging level.])
+AC_DEFINE( GA_WRITE_STATS, 0, [Whether to dump certian statistics.])
+AC_DEFINE( HAVE_SLANG, 0, [Whether S-Lang is installed.])
+AC_DEFINE( MEMORY_ALIGN_SIZE, 0, [Memory alignment boundry characteristics.])
+AC_DEFINE( MEMORY_ALLOC_DEBUG, 0, [Whether to use debugging memory allocation routines.])
+AC_DEFINE( MEMORY_ALLOC_SAFE, 1, [Whether to use safe memory allocation routines.])
+AC_DEFINE( MEMORY_PADDING, 0, [Whether to pad memory.])
+AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler])
 
 dnl Checks for programs.
 AC_PROG_CC

@@ -1,5 +1,6 @@
 Changes since release 0.1840:
-- Fixed configuration bug causing shared dynamic object libarys to not be installed under UNIX.
+- Avoid use of acconfig.h in configuration since that is now deprecated and discouraged.
+- Fixed configuration bug causing shared dynamic object librarys to not be installed under UNIX.
 - Fixed minor bug in ga_evolution_forked() causing incorrect number of forked processes to be reported.  -- thanks to Daniel Pick.
 
 Changes since release 0.1839:
