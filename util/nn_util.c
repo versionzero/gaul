@@ -1613,7 +1613,7 @@ static int nn_nreadline(FILE *fp, const int len, char *dest)
 
 /*  while((!feof(fp)) && (c=fgetc(fp)) && (c!='\n') && count<len)*/
 
-  while(count<len && (c=fgetc(fp))!=EOF && ((char)c!='\n'))
+  while(count<max_count && (c=fgetc(fp))!=EOF && ((char)c!='\n'))
     dest[count++]=(char)c;
 
   dest[count]='\0';

@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -67,6 +67,8 @@ void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
 void		mem_chunk_clean_real(MemChunk *mem_chunk);
 void		mem_chunk_reset_real(MemChunk *mem_chunk);
 boolean		mem_chunk_test_real(void);
+boolean		mem_chunk_check_all_bounds_real(MemChunk *mem_chunk);
+boolean		mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem);
 void		mem_chunk_diagnostics_real(void);
 
 MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
@@ -79,6 +81,8 @@ void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
 void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
 void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
 boolean		mem_chunk_test_mimic(void);
+boolean		mem_chunk_check_all_bounds_mimic(MemChunk *mem_chunk);
+boolean		mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem);
 void		mem_chunk_diagnostics_mimic(void);
 
 /*
@@ -97,6 +101,8 @@ void		mem_chunk_diagnostics_mimic(void);
 #define mem_chunk_clean(Z)		mem_chunk_clean_real((Z))
 #define mem_chunk_reset(Z)		mem_chunk_reset_real((Z))
 #define mem_chunk_test			mem_chunk_test_real()
+#define mem_chunk_check_all_bounds(Z)	mem_chunk_check_all_bounds_real(Z)
+#define mem_chunk_check_bounds(Y,Z)	mem_chunk_check_bounds_real((Y), (Z))
 #define mem_chunk_diagnostics		mem_chunk_diagnostics_real()
 
 #else
@@ -111,6 +117,8 @@ void		mem_chunk_diagnostics_mimic(void);
 #define mem_chunk_clean(Z)		mem_chunk_clean_mimic((Z))
 #define mem_chunk_reset(Z)		mem_chunk_reset_mimic((Z))
 #define mem_chunk_test			mem_chunk_test_mimic()
+#define mem_chunk_check_all_bounds(Z)	mem_chunk_check_all_bounds_mimic(Z)
+#define mem_chunk_check_bounds(Y,Z)	mem_chunk_check_bounds_mimic((Y), (Z))
 #define mem_chunk_diagnostics		mem_chunk_diagnostics_mimic()
 
 #endif

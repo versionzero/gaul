@@ -1,3 +1,166 @@
+2004-04-29 15:14  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	configure.in, libtool: Added a configure option to make use of
+	Intel's icc compiler's autoparallelisation features more easily. 
+	Also adjusted code to reduce number of remarks/warnings given upon
+	compilation.
+
+2004-04-27 11:38  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, src/ga_simplex.c, tests/Makefile,
+	util/Makefile, util/gaul/gaul_config.h,
+	util/gaul/gaul_config_win.h: Bumped patch version to 7.
+
+2004-04-27 11:07  stewartadcock
+
+	* util/gaul/gaul_util.h: VOID macro not used anywhere, so removed
+	definition.
+
+2004-04-27 10:54  stewartadcock
+
+	* LatestChanges, src/ga_core.c, src/ga_gradient.c, src/ga_optim.c,
+	src/ga_simplex.c: Avoid the use of several reserved C
+	keywords/identifiers in source.
+
+2004-04-27 10:23  stewartadcock
+
+	* LatestChanges, examples/royalroad.c,
+	examples/royalroad_bitstring.c, examples/royalroad_ss.c,
+	examples/struggle3.c, src/ga_core.c, src/ga_optim.c,
+	src/ga_select.c, util/memory_util.c, util/gaul/gaul_util.h: Avoid
+	use of several reserved C keywords/identifiers in source.
+
+2004-04-27 10:03  stewartadcock
+
+	* util/gaul/gaul_util.h: ERROR is a reserved macro name, and not
+	used by GAUL anyway, so removed definition.
+
+2004-04-27 09:04  stewartadcock
+
+	* LatestChanges, src/ga_io.c, util/gaul/gaul_config_win.h,
+	util/gaul/gaul_util.h: Various fixes for using native Windows I/O
+	functions on Windows platforms.
+
+2004-04-26 14:30  stewartadcock
+
+	* src/ga_io.c, util/gaul/gaul_util.h: Native Windows I/O fixes.
+
+2004-04-23 15:42  stewartadcock
+
+	* util/memory_util.c: Use zd format for size_t types in printf
+	statements.
+
+2004-04-23 15:18  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	debian/Makefile, examples/Makefile, src/Makefile, tests/Makefile,
+	util/Makefile, util/gaul/gaul_config.h: Fixed configure script for
+	non-MPI systems.  Default MPI processes is now 8.
+
+2004-04-21 15:49  stewartadcock
+
+	* examples/struggle_mp.c, src/ga_qsort.c: Modified an exit return
+	value.
+
+2004-04-21 11:09  stewartadcock
+
+	* debian/Makefile, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/struggle_mp.c, src/Makefile,
+	src/ga_optim.c, src/gaul/ga_optim.h, tests/Makefile,
+	tests/Makefile.am, tests/Makefile.in, util/Makefile,
+	util/gaul/gaul_config.h: ga_evolution_archipelago_threaded() stub
+	added.	Some refinement of MPI code compilation.
+
+2004-04-21 11:05  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in:
+	ga_evolution_archipelago_threaded() stub added.  Some refinement of
+	MPI code compilation.
+
+2004-04-20 10:18  stewartadcock
+
+	* LatestChanges, src/ga_climbing.c, src/ga_deterministiccrowding.c,
+	src/ga_gradient.c, src/ga_optim.c, src/ga_randomsearch.c,
+	src/ga_sa.c, src/ga_simplex.c, src/ga_systematicsearch.c,
+	src/ga_tabu.c: Altered error messages that mentioned the deprecated
+	ga_genesis().
+
+2004-04-15 13:34  stewartadcock
+
+	* LatestChanges, config.h, config.status, examples/Makefile,
+	examples/Makefile.am, examples/Makefile.in, examples/struggle.c,
+	examples/struggle_forked.c, examples/struggle_threaded.c,
+	src/ga_optim.c, src/gaul/ga_core.h, util/gaul/gaul_config.h:
+	Various threading fixes.
+
+2004-04-06 15:22  stewartadcock
+
+	* AUTHORS: Fixed a typo.
+
+2004-04-06 15:15  stewartadcock
+
+	* LatestChanges, util/memory_chunks.c: Fixed compilation on IRIX
+	with the MIPSpro compiler.
+
+2004-04-06 15:03  stewartadcock
+
+	* Makefile, config.status, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/avltree.c, util/memory_chunks.c, util/memory_util.c,
+	util/gaul/gaul_util.h: Clean compilation on IRIX with the MIPSpro
+	compiler.
+
+2004-04-05 20:46  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Bumped patch version to 6.
+
+2004-04-05 19:10  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, src/ga_core.c,
+	util/memory_chunks.c, util/memory_util.c: Fixed long-standing
+	memory chunk bug exhibited on Solaris, IRIX, HP/UX and possibly
+	other (64-bit) OSes.
+
+2004-04-05 18:08  stewartadcock
+
+	* src/ga_core.c: Added new functions into the function lookup
+	table.
+
+2004-04-05 15:08  stewartadcock
+
+	* AUTHORS, Makefile, Makefile.am, Makefile.in, config.guess,
+	config.h, config.status, config.sub, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, ltmain.sh,
+	debian/Makefile, examples/Makefile, src/Makefile, src/Makefile.am,
+	src/Makefile.in, src/ga_gradient.c, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Bumped patch version.	Some minor fixes
+	for compilation on IRIX.
+
+2004-04-05 14:07  stewartadcock
+
+	* tests/diagnostics.c: Fixed diagnostics.c problems caused of
+	undefined preprocessor constants.
+
+2004-04-05 10:14  stewartadcock
+
+	* util/avltree.c: Minor tidy.
+
+2004-04-01 11:12  stewartadcock
+
+	* ChangeLog, Makefile, Makefile.am, Makefile.in, config.h,
+	config.status, debian/Makefile, examples/Makefile,
+	examples/Makefile.am, examples/Makefile.in, examples/nnevolve.c,
+	src/Makefile, src/Makefile.am, src/Makefile.in,
+	src/ga_similarity.c, tests/Makefile, tests/Makefile.am,
+	tests/Makefile.in, util/Makefile, util/gaul/gaul_config.h: Some
+	minor changes for successfully building a distribution tarball.
+
 2004-03-29 13:16  stewartadcock
 
 	* LatestChanges, Makefile, config.h, config.status, configure,

@@ -405,6 +405,7 @@ boolean	ga_seed_integer_random(population *pop, entity *adam);
 boolean	ga_seed_integer_zero(population *pop, entity *adam);
 boolean	ga_seed_double_random(population *pop, entity *adam);
 boolean	ga_seed_double_zero(population *pop, entity *adam);
+boolean	ga_seed_double_random_unit_gaussian(population *pop, entity *adam);
 boolean	ga_seed_char_random(population *pop, entity *adam);
 boolean	ga_seed_printable_random(population *pop, entity *adam);
 boolean	ga_seed_bitstring_random(population *pop, entity *adam);

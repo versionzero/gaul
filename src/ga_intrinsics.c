@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinics - Genetic algorithm routine intrinsics.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -55,7 +55,7 @@
   last updated: 13 Feb 2002
  **********************************************************************/
 
-int ga_population_new_slang(	int *stable_size,
+static int ga_population_new_slang(	int *stable_size,
 				int *num_chromosome,
 				int *len_chromosome)
   {
@@ -73,7 +73,7 @@ int ga_population_new_slang(	int *stable_size,
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_seed_slang(int *pop_id, int *id)
+static int ga_entity_seed_slang(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
@@ -91,7 +91,7 @@ int ga_entity_seed_slang(int *pop_id, int *id)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_id_from_rank_slang(int *pop_id, int *rank)
+static int ga_entity_id_from_rank_slang(int *pop_id, int *rank)
   {
   return ga_get_entity_id_from_rank(
                ga_get_population_from_id(*pop_id), *rank );
@@ -106,7 +106,7 @@ int ga_entity_id_from_rank_slang(int *pop_id, int *rank)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_rank_from_id_slang(int *pop_id, int *id)
+static int ga_entity_rank_from_id_slang(int *pop_id, int *id)
   {
   return ga_get_entity_rank_from_id(
                ga_get_population_from_id(*pop_id), *id );
@@ -123,7 +123,7 @@ int ga_entity_rank_from_id_slang(int *pop_id, int *id)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_population_seed_slang(int *pop_id)
+static int ga_population_seed_slang(int *pop_id)
   {
   return ga_population_seed(ga_get_population_from_id(*pop_id));
   }
@@ -137,7 +137,7 @@ int ga_population_seed_slang(int *pop_id)
   last updated: 30 May 2002
  **********************************************************************/
 
-int ga_population_write_slang(int *pop_id, char *fname)
+static int ga_population_write_slang(int *pop_id, char *fname)
   {
   return ga_population_write(ga_get_population_from_id(*pop_id), fname);
   }
@@ -152,7 +152,7 @@ int ga_population_write_slang(int *pop_id, char *fname)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_population_read_slang(char *fname)
+static int ga_population_read_slang(char *fname)
   {
   return ga_get_population_id(ga_population_read(fname));
   }
@@ -166,7 +166,7 @@ int ga_population_read_slang(char *fname)
   last updated: 30 May 2002
  **********************************************************************/
 
-int ga_entity_write_slang(int *pop_id, int *entity_id, char *fname)
+static int ga_entity_write_slang(int *pop_id, int *entity_id, char *fname)
   {
   population	*pop;
 
@@ -184,7 +184,7 @@ int ga_entity_write_slang(int *pop_id, int *entity_id, char *fname)
   last updated: 30 May 2002
  **********************************************************************/
 
-int ga_entity_read_slang(int *pop_id, char *fname)
+static int ga_entity_read_slang(int *pop_id, char *fname)
   {
   population	*pop;
 
@@ -202,7 +202,7 @@ int ga_entity_read_slang(int *pop_id, char *fname)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_compare_genome_slang(int *pop_id, int *jack, int *jill)
+static int ga_entity_compare_genome_slang(int *pop_id, int *jack, int *jill)
   {
   population	*pop;			/* Active population structure. */
 
@@ -225,7 +225,7 @@ int ga_entity_compare_genome_slang(int *pop_id, int *jack, int *jill)
   last updated:	07/02/01
  **********************************************************************/
 
-int ga_entity_cross_compare_genome_slang(int *jackpop_id, int *jack,
+static int ga_entity_cross_compare_genome_slang(int *jackpop_id, int *jack,
                                            int *jillpop_id, int *jill)
   {
   population	*jackpop, *jillpop;	/* Population structures. */
@@ -249,7 +249,7 @@ int ga_entity_cross_compare_genome_slang(int *jackpop_id, int *jack,
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_kill_slang(int *pop_id, int *id)
+static int ga_entity_kill_slang(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
@@ -273,7 +273,7 @@ int ga_entity_kill_slang(int *pop_id, int *id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_erase_slang(int *pop_id, int *id)
+static int ga_entity_erase_slang(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
@@ -294,7 +294,7 @@ int ga_entity_erase_slang(int *pop_id, int *id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_new_slang(int *pop_id)
+static int ga_entity_new_slang(int *pop_id)
   {
   population	*pop;			/* Active population structure. */
 
@@ -314,7 +314,7 @@ int ga_entity_new_slang(int *pop_id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_clone_slang(int *pop_id, int *parent)
+static int ga_entity_clone_slang(int *pop_id, int *parent)
   {
   entity	*child;						/* Destination entity. */
   population	*pop = ga_get_population_from_id(*pop_id);	/* Population. */
@@ -334,7 +334,7 @@ int ga_entity_clone_slang(int *pop_id, int *parent)
   last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_chromosome_slang(int *pop_id, int *parent, int *child, int *chromosome)
+static int ga_entity_copy_chromosome_slang(int *pop_id, int *parent, int *child, int *chromosome)
   {
   population	*pop;			/* Active population structure. */
 
@@ -355,7 +355,7 @@ int ga_entity_copy_chromosome_slang(int *pop_id, int *parent, int *child, int *c
   last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_all_chromosomes_slang(int *pop_id, int *parent, int *child)
+static int ga_entity_copy_all_chromosomes_slang(int *pop_id, int *parent, int *child)
   {
   population	*pop;			/* Active population structure. */
 
@@ -379,7 +379,7 @@ int ga_entity_copy_all_chromosomes_slang(int *pop_id, int *parent, int *child)
   last updated:	14/02/01
  **********************************************************************/
 
-int ga_entity_migrate_slang(int *srcpop_id, int *destpop_id, int *jacques)
+static int ga_entity_migrate_slang(int *srcpop_id, int *destpop_id, int *jacques)
   {
   population	*srcpop;	/* Original population. */
   population	*destpop;	/* Destination population. */
@@ -445,7 +445,7 @@ int ga_crossover_chromosome_singlepoints_slang(int *pop_id,
   last updated:	14/02/01
  **********************************************************************/
 
-int ga_crossover_chromosome_mixing_slang(int *pop_id,
+static int ga_crossover_chromosome_mixing_slang(int *pop_id,
                      int *father, int *mother, int *son, int *daughter)
   {
   population    *pop;                   /* Active population structure. */
@@ -471,7 +471,7 @@ int ga_crossover_chromosome_mixing_slang(int *pop_id,
   last updated: 07/02/01
  **********************************************************************/
 
-int ga_entity_score_slang(int *pop_id, int *joe)
+static int ga_entity_score_slang(int *pop_id, int *joe)
   {
   population	*pop;			/* Active population structure. */
 
@@ -500,7 +500,7 @@ int ga_entity_score_slang(int *pop_id, int *joe)
   last updated:	11 Jun 2002
  **********************************************************************/
 
-int ga_evolution_slang(	int	*pop,
+static int ga_evolution_slang(	int	*pop,
 			int	*max_generations )
   {
   ga_evolution( ga_get_population_from_id(*pop), *max_generations );
@@ -519,7 +519,7 @@ int ga_evolution_slang(	int	*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-int ga_evolution_forked_slang(	int	*pop,
+static int ga_evolution_forked_slang(	int	*pop,
 			int	*max_generations )
   {
   ga_evolution_forked( ga_get_population_from_id(*pop), *max_generations );
@@ -538,7 +538,7 @@ int ga_evolution_forked_slang(	int	*pop,
   last updated:	19 Aug 2003
  **********************************************************************/
 
-int ga_evolution_threaded_slang(	int	*pop,
+static int ga_evolution_threaded_slang(	int	*pop,
 			int	*max_generations )
   {
   ga_evolution_threaded( ga_get_population_from_id(*pop), *max_generations );
@@ -558,7 +558,7 @@ int ga_evolution_threaded_slang(	int	*pop,
   last updated:	19 Aug 2003
  **********************************************************************/
 
-int ga_evolution_mpi_slang(	int	*pop,
+static int ga_evolution_mpi_slang(	int	*pop,
 			int	*max_generations )
   {
   ga_evolution_mpi( ga_get_population_from_id(*pop), *max_generations );
@@ -576,7 +576,7 @@ int ga_evolution_mpi_slang(	int	*pop,
   last updated:	19 Aug 2003
  **********************************************************************/
 
-int ga_population_set_parameters_slang( int	*pop,
+static int ga_population_set_parameters_slang( int	*pop,
 					 int	*scheme,
 					 int	*elitism,
 					 double	*crossover,
@@ -600,7 +600,7 @@ int ga_population_set_parameters_slang( int	*pop,
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_population_get_size_slang(int *pop)
+static int ga_population_get_size_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->size;
   }
@@ -614,7 +614,7 @@ int ga_population_get_size_slang(int *pop)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_population_get_maxsize_slang(int *pop)
+static int ga_population_get_maxsize_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->max_size;
   }
@@ -628,7 +628,7 @@ int ga_population_get_maxsize_slang(int *pop)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_population_get_stablesize_slang(int *pop)
+static int ga_population_get_stablesize_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->stable_size;
   }
@@ -643,7 +643,7 @@ int ga_population_get_stablesize_slang(int *pop)
   last updated:	27/03/01
  **********************************************************************/
 
-int ga_population_set_stablesize_slang(int *pop, int *size)
+static int ga_population_set_stablesize_slang(int *pop, int *size)
   {
   ((population*) ga_get_population_from_id(*pop))->stable_size = *size;
   return TRUE;
@@ -658,7 +658,7 @@ int ga_population_set_stablesize_slang(int *pop, int *size)
   last updated:	23/04/01
  **********************************************************************/
 
-double ga_population_get_crossoverratio_slang(int *pop)
+static double ga_population_get_crossoverratio_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->crossover_ratio;
   }
@@ -672,7 +672,7 @@ double ga_population_get_crossoverratio_slang(int *pop)
   last updated:	23/04/01
  **********************************************************************/
 
-int ga_population_set_crossoverratio_slang(int *pop, double *value)
+static int ga_population_set_crossoverratio_slang(int *pop, double *value)
   {
   ((population*) ga_get_population_from_id(*pop))->crossover_ratio = *value;
   return TRUE;
@@ -687,7 +687,7 @@ int ga_population_set_crossoverratio_slang(int *pop, double *value)
   last updated:	23/04/01
  **********************************************************************/
 
-double ga_population_get_mutationratio_slang(int *pop)
+static double ga_population_get_mutationratio_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->mutation_ratio;
   }
@@ -701,7 +701,7 @@ double ga_population_get_mutationratio_slang(int *pop)
   last updated:	23/04/01
  **********************************************************************/
 
-int ga_population_set_mutationratio_slang(int *pop, double *value)
+static int ga_population_set_mutationratio_slang(int *pop, double *value)
   {
   ((population*) ga_get_population_from_id(*pop))->mutation_ratio = *value;
   return TRUE;
@@ -716,7 +716,7 @@ int ga_population_set_mutationratio_slang(int *pop, double *value)
   last updated:	23/04/01
  **********************************************************************/
 
-int ga_population_get_migrationratio_slang(int *pop)
+static int ga_population_get_migrationratio_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->migration_ratio;
   }
@@ -730,7 +730,7 @@ int ga_population_get_migrationratio_slang(int *pop)
   last updated:	23/04/01
  **********************************************************************/
 
-int ga_population_set_migrationratio_slang(int *pop, int *value)
+static int ga_population_set_migrationratio_slang(int *pop, int *value)
   {
   ((population*) ga_get_population_from_id(*pop))->migration_ratio = *value;
   return TRUE;
@@ -745,7 +745,7 @@ int ga_population_set_migrationratio_slang(int *pop, int *value)
   last updated:	20 Sep 2002
  **********************************************************************/
 
-int ga_population_set_scheme_slang(int *pop, int *value)
+static int ga_population_set_scheme_slang(int *pop, int *value)
   {
   ((population*) ga_get_population_from_id(*pop))->scheme = *value;
   return TRUE;
@@ -760,7 +760,7 @@ int ga_population_set_scheme_slang(int *pop, int *value)
   last updated:	20 Sep 2002
  **********************************************************************/
 
-int ga_population_set_elitism_slang(int *pop, int *value)
+static int ga_population_set_elitism_slang(int *pop, int *value)
   {
   ((population*) ga_get_population_from_id(*pop))->elitism = *value;
   return TRUE;
@@ -775,7 +775,7 @@ int ga_population_set_elitism_slang(int *pop, int *value)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_population_get_chromosomenum_slang(int *pop)
+static int ga_population_get_chromosomenum_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->num_chromosomes;
   }
@@ -789,7 +789,7 @@ int ga_population_get_chromosomenum_slang(int *pop)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_population_get_chromosomelen_slang(int *pop)
+static int ga_population_get_chromosomelen_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->len_chromosomes;
   }
@@ -803,7 +803,7 @@ int ga_population_get_chromosomelen_slang(int *pop)
   last updated:	20 Mar 2003
  **********************************************************************/
 
-int ga_population_get_generation_slang(int *pop)
+static int ga_population_get_generation_slang(int *pop)
   {
   return ((population*) ga_get_population_from_id(*pop))->generation;
   }
@@ -817,7 +817,7 @@ int ga_population_get_generation_slang(int *pop)
   last updated:	22/01/01
  **********************************************************************/
 
-double ga_entity_get_fitness_slang(int *pop, int *id)
+static double ga_entity_get_fitness_slang(int *pop, int *id)
   {
   return ga_get_entity_from_id(ga_get_population_from_id(*pop), *id)->fitness;
   }
@@ -831,7 +831,7 @@ double ga_entity_get_fitness_slang(int *pop, int *id)
   last updated:	18 Mar 2002
  **********************************************************************/
 
-int ga_entity_isallocated_slang(int *pop, int *id)
+static int ga_entity_isallocated_slang(int *pop, int *id)
   {
   return ga_get_entity_from_id(ga_get_population_from_id(*pop), *id) != NULL;
   }
@@ -845,7 +845,7 @@ int ga_entity_isallocated_slang(int *pop, int *id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_extinction_slang(int *pop)
+static int ga_extinction_slang(int *pop)
   {
   return ga_extinction( ga_get_population_from_id(*pop) );
   }
@@ -859,7 +859,7 @@ int ga_extinction_slang(int *pop)
   last updated:	11/01/01
  **********************************************************************/
 
-int ga_genocide_slang(int *pop, int *target_size)
+static int ga_genocide_slang(int *pop, int *target_size)
   {
   return ga_genocide( ga_get_population_from_id(*pop), *target_size );
   }
@@ -873,7 +873,7 @@ int ga_genocide_slang(int *pop, int *target_size)
   last updated:	18 Mar 2002
  **********************************************************************/
 
-int ga_allele_search_slang(	int	*pop_id,
+static int ga_allele_search_slang(	int	*pop_id,
 				int	*chromosomeid,
 				int 	*point,
 				int	*min_val,
@@ -934,7 +934,7 @@ int ga_metropolis_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_sa_slang(	int	*pop_id,
+static int ga_sa_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*max_iterations )
   {
@@ -961,7 +961,7 @@ int ga_sa_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_simplex_slang(	int	*pop_id,
+static int ga_simplex_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*max_iterations )
   {
@@ -988,7 +988,7 @@ int ga_simplex_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_tabu_slang(	int	*pop_id,
+static int ga_tabu_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*max_iterations )
   {
@@ -1015,7 +1015,7 @@ int ga_tabu_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_random_search_slang(	int	*pop_id,
+static int ga_random_search_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*max_iterations )
   {
@@ -1042,7 +1042,7 @@ int ga_random_search_slang(	int	*pop_id,
   last updated:	08 Nov 2002
  **********************************************************************/
 
-int ga_search_slang(	int	*pop_id,
+static int ga_search_slang(	int	*pop_id,
 			int	*entity_id )
   {
   entity	*initial;	/* Solution to optimise. */
@@ -1068,7 +1068,7 @@ int ga_search_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_nahc_slang(	int	*pop_id,
+static int ga_nahc_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
@@ -1095,7 +1095,7 @@ int ga_nahc_slang(	int	*pop_id,
   last updated:	06 Nov 2002
  **********************************************************************/
 
-int ga_rahc_slang(	int	*pop_id,
+static int ga_rahc_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
@@ -1123,7 +1123,7 @@ int ga_rahc_slang(	int	*pop_id,
   last updated:	28/02/01
  **********************************************************************/
 
-int ga_population_score_and_sort_slang(int *pop_id)
+static int ga_population_score_and_sort_slang(int *pop_id)
   {
   return ga_population_score_and_sort(ga_get_population_from_id(*pop_id));
   }
@@ -1138,7 +1138,7 @@ int ga_population_score_and_sort_slang(int *pop_id)
   last updated:	20 May 2002
  **********************************************************************/
 
-int ga_population_sort_slang(int *pop_id)
+static int ga_population_sort_slang(int *pop_id)
   {
 
   sort_population(ga_get_population_from_id(*pop_id));
@@ -1155,7 +1155,7 @@ int ga_population_sort_slang(int *pop_id)
   last updated:	13 Jun 2002
  **********************************************************************/
 
-boolean ga_slang_seed(population *pop, entity *adam)
+static boolean ga_slang_seed(population *pop, entity *adam)
   {
 
   plog(LOG_FIXME, "ga_slang_seed() is not implemented.");
@@ -1172,7 +1172,7 @@ boolean ga_slang_seed(population *pop, entity *adam)
   last updated:	24/04/01
  **********************************************************************/
 
-boolean ga_slang_select_one(population *pop, entity **mother)
+static boolean ga_slang_select_one(population *pop, entity **mother)
   {
 
   plog(LOG_FIXME, "ga_slang_select_one() is not implemented.");
@@ -1189,7 +1189,7 @@ boolean ga_slang_select_one(population *pop, entity **mother)
   last updated:	24/04/01
  **********************************************************************/
 
-boolean ga_slang_select_two(population *pop, entity **mother, entity **father)
+static boolean ga_slang_select_two(population *pop, entity **mother, entity **father)
   {
 
   plog(LOG_FIXME, "ga_slang_select_two() is not implemented.");
@@ -1206,7 +1206,7 @@ boolean ga_slang_select_two(population *pop, entity **mother, entity **father)
   last updated:	24/04/01
  **********************************************************************/
 
-entity *ga_slang_adapt(population *pop, entity *child)
+static entity *ga_slang_adapt(population *pop, entity *child)
   {
   entity	*adult;		/* Optimised entity. */
 
@@ -1234,7 +1234,7 @@ entity *ga_slang_adapt(population *pop, entity *child)
   last updated:	24/04/01
  **********************************************************************/
 
-void ga_slang_crossover(population *pop, entity *father, entity *mother, entity *daughter, entity *son)
+static void ga_slang_crossover(population *pop, entity *father, entity *mother, entity *daughter, entity *son)
   {
 
 /* Checks */
@@ -1262,7 +1262,7 @@ void ga_slang_crossover(population *pop, entity *father, entity *mother, entity 
   last updated:	24/04/01
  **********************************************************************/
 
-void ga_slang_mutate(population *pop, entity *father, entity *son)
+static void ga_slang_mutate(population *pop, entity *father, entity *son)
   {
 
 /* Checks */
@@ -1298,7 +1298,7 @@ void ga_slang_mutate(population *pop, entity *father, entity *son)
   last updated:	08 Apr 2003
  **********************************************************************/
 
-void ga_slang_replace(population *pop, entity *child)
+static void ga_slang_replace(population *pop, entity *child)
   {
 
 /* Checks */
@@ -1517,5 +1517,4 @@ boolean ga_intrinsic_sladd(void)
   }
 
 #endif
-
 

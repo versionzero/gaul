@@ -191,7 +191,7 @@ int ga_steepestascent(	population	*pop,
     pop->gradient_params->from_double(pop, putative, putative_d);
     pop->evaluate(pop, putative);
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
     printf("DEBUG: current_d = %f %f %f %f\n", current_d[0], current_d[1], current_d[2], current_d[3]);
     printf("DEBUG: current_g = %f %f %f %f grms = %f\n", current_g[0], current_g[1], current_g[2], current_g[3], grms);
     printf("DEBUG: putative_d = %f %f %f %f fitness = %f\n", putative_d[0], putative_d[1], putative_d[2], putative_d[3], putative->fitness);
@@ -211,7 +211,7 @@ int ga_steepestascent(	population	*pop,
         pop->gradient_params->from_double(pop, putative, putative_d);
         pop->evaluate(pop, putative);
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
         printf("DEBUG: putative_d = %f %f %f %f fitness = %f\n", putative_d[0], putative_d[1], putative_d[2], putative_d[3], putative->fitness);
 #endif
         } while( current->fitness > putative->fitness && step_size > ApproxZero);
@@ -221,7 +221,7 @@ int ga_steepestascent(	population	*pop,
     else 
       {	/* New solution is an improvement. */
       step_size *= 1.2;	/* FIXME: Should be a parameter. */
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
       printf("DEBUG: step_size = %e\n", step_size);
 #endif
       }

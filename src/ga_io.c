@@ -707,22 +707,22 @@ population *ga_population_read(char *fname)
  */
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&crossover_ratio, buffer, sizeof(double));
+  memcpy(&(pop->crossover_ratio), buffer, sizeof(double));
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&mutation_ratio, buffer, sizeof(double));
+  memcpy(&(pop->mutation_ratio), buffer, sizeof(double));
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&migration_ratio, buffer, sizeof(double));
+  memcpy(&(pop->migration_ratio), buffer, sizeof(double));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&scheme, buffer, sizeof(int));
+  memcpy(&(pop->scheme), buffer, sizeof(int));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&elitism, buffer, sizeof(int));
+  memcpy(&(pop->elitism), buffer, sizeof(int));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&island, buffer, sizeof(int));
+  memcpy(&(pop->island), buffer, sizeof(int));
 
 /*
  * Callback handling.  Note that user-implemented functions currently
@@ -771,7 +771,7 @@ population *ga_population_read(char *fname)
  */
   for (i=0; i<size; i++)
     {
-    gaul_read_entity_posix(fp, pop);
+    gaul_read_entity_win32(file, pop);
     }
 
 /*

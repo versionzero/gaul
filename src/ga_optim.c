@@ -636,7 +636,7 @@ static void *_evaluation_thread( void *data )
 
   pop->evaluate(pop, pop->entity_iarray[eval_num]);
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
 printf("DEBUG: Thread %d has evaluated entity %d\n", ((threaddata_t *)data)->thread_num, eval_num);
 #endif
 
@@ -699,7 +699,7 @@ static void gaul_ensure_evaluations_threaded( population *pop, const int max_thr
         }
       }
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
 printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
 #endif
 
@@ -1145,7 +1145,7 @@ static void gaul_adapt_and_evaluate_threaded(population *pop,
         }
       }
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
 printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
 #endif
 
@@ -1644,7 +1644,7 @@ static void gaul_survival_threaded(population *pop,
           }
         }
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
 printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
 #endif
 
@@ -3048,10 +3048,14 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
 		optimisation.  If initial solution is NULL, then a
 		random initial solution is generated.
 		The original entity will not be munged.
+
+		-- This function is deprecated! --
   parameters:
   return:	Best solution found.
   last updated:	18/12/00
  **********************************************************************/
+
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *ga_random_mutation_hill_climbing(	population	*pop,
 						entity		*initial,
@@ -3171,6 +3175,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 
   return best;
   }
+#endif
 
 
 /**********************************************************************
@@ -3190,7 +3195,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   last updated:	21/12/00
  **********************************************************************/
 
-#ifndef COMPILE_DEPRECATED_FUNCTIONS
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *old_ga_next_ascent_hill_climbing(	population		*pop,
 					entity			*initial,
@@ -3336,7 +3341,7 @@ entity *old_ga_next_ascent_hill_climbing(	population		*pop,
   last updated:	19/01/01
  **********************************************************************/
 
-#ifndef COMPILE_DEPRECATED_FUNCTIONS
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *ga_metropolis_mutation(	population		*pop,
 				entity			*initial,
@@ -3484,7 +3489,7 @@ entity *ga_metropolis_mutation(	population		*pop,
   last updated:	21/02/01
  **********************************************************************/
 
-#ifndef COMPILE_DEPRECATED_FUNCTIONS
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *ga_simulated_annealling_mutation(population	*pop,
 					entity		*initial,

@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,6 +43,17 @@
 
 #include "gaul/memory_chunks.h"
 #include "gaul/avltree.h"
+
+/*
+ * Debugging.
+ */
+#ifndef MEMORY_DEBUG
+# ifdef DEBUG
+#  define MEMORY_DEBUG DEBUG
+# else
+#  define MEMORY_DEBUG 0
+# endif
+#endif
 
 /* Take advantage of the GNU malloc checking features. */
 #ifdef __GNUC__

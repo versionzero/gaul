@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_qsort - GA population sorting routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -331,7 +331,7 @@ void sort_population(population *pop)
      -DNO_TRACE -DMEMORY_ALLOC_DEBUG \
      -DQSORT_DEBUG=3
  */
-#if GA_QSORT_COMPILE_MAIN
+#ifdef GA_QSORT_COMPILE_MAIN
 int main(int argc, char **argv)
 #else
 boolean ga_qsort_test(void)
@@ -369,7 +369,7 @@ boolean ga_qsort_test(void)
     printf("%6d: %f\n", i, pop->entity_iarray[i]->fitness);
 */
 
-#if GA_QSORT_COMPILE_MAIN
+#ifdef GA_QSORT_COMPILE_MAIN
   exit(EXIT_SUCCESS);
 #else
   return TRUE;

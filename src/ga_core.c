@@ -136,6 +136,7 @@ static struct func_lookup lookup[]={
 	{ "ga_seed_integer_zero", (void *) ga_seed_integer_zero },
 	{ "ga_seed_double_random", (void *) ga_seed_double_random },
 	{ "ga_seed_double_zero", (void *) ga_seed_double_zero },
+	{ "ga_seed_double_random_unit_gaussian", (void *) ga_seed_double_random_unit_gaussian },
 	{ "ga_seed_char_random", (void *) ga_seed_char_random },
 	{ "ga_seed_printable_random", (void *) ga_seed_printable_random },
 	{ "ga_seed_bitstring_random", (void *) ga_seed_bitstring_random },

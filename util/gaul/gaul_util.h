@@ -146,7 +146,10 @@ typedef short _Bool;
 /*
  * Additional types.
  */
-#if !defined(SUN_FORTE_C) || SUN_FORTE_C==FALSE
+#ifndef SUN_FORTE_C
+# define SUN_FORTE_C 0
+#endif
+#if SUN_FORTE_C==0
 typedef void* vpointer;
 #else
 #define vpointer void*

@@ -3,7 +3,7 @@
  **********************************************************************
 
   avltree - AVL Tree implementation.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -72,6 +72,8 @@ boolean		avltree_insert(AVLTree *tree, vpointer data);
 vpointer	avltree_remove(AVLTree *tree, vpointer data);
 vpointer	avltree_remove_key(AVLTree *tree, AVLKey key);
 vpointer	avltree_lookup(AVLTree *tree, vpointer data);
+vpointer	avltree_lookup_lowest(AVLTree *tree);
+vpointer	avltree_lookup_highest(AVLTree *tree);
 vpointer	avltree_lookup_key(AVLTree *tree, AVLKey key);
 vpointer	avltree_ordered_search(AVLTree *tree,
                          AVLSearchFunc search_func, vpointer userdata);
