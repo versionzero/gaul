@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_select - Genetic algorithm selection operators.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -110,6 +110,8 @@ static boolean ga_select_stats( population *pop,
 boolean ga_select_one_random(population *pop, entity **mother)
   {
 
+  if (!pop) die("Null pointer to population structure passed.");
+
   if (pop->orig_size < 1)
     {
     *mother = NULL;
@@ -135,6 +137,8 @@ boolean ga_select_one_random(population *pop, entity **mother)
 
 boolean ga_select_two_random(population *pop, entity **mother, entity **father)
   {
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   if (pop->orig_size < 2)
     {
@@ -166,6 +170,8 @@ boolean ga_select_two_random(population *pop, entity **mother, entity **father)
 boolean ga_select_one_every(population *pop, entity **mother)
   {
 
+  if (!pop) die("Null pointer to population structure passed.");
+
   *mother = NULL;
 
   if ( pop->orig_size <= pop->select_state )
@@ -191,6 +197,8 @@ boolean ga_select_one_every(population *pop, entity **mother)
 
 boolean ga_select_two_every(population *pop, entity **mother, entity **father)
   {
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   *mother = NULL;
   *father = NULL;
@@ -219,6 +227,8 @@ boolean ga_select_two_every(population *pop, entity **mother, entity **father)
 
 boolean ga_select_one_randomrank(population *pop, entity **mother)
   {
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   pop->select_state++;
 
@@ -250,6 +260,8 @@ boolean ga_select_one_randomrank(population *pop, entity **mother)
 
 boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father)
   {
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   pop->select_state++;
 
@@ -286,6 +298,8 @@ boolean ga_select_one_bestof2(population *pop, entity **mother)
   {
   entity	*mother2;	/* Random competitor. */
 
+  if (!pop) die("Null pointer to population structure passed.");
+
   if (pop->orig_size < 1)
     {
     *mother = NULL;
@@ -319,6 +333,8 @@ boolean ga_select_one_bestof2(population *pop, entity **mother)
 boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
   {
   entity	*challenger;	/* Random competitor. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   if (pop->orig_size < 2)
     {
@@ -368,6 +384,8 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
   static double	total_expval;		/* Total of expectancy values. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   *mother = NULL;
 
@@ -426,6 +444,8 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
   static double	minval;			/* Worst fitness value. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   *mother = NULL;
 
@@ -487,6 +507,8 @@ boolean ga_select_two_roulette( population *pop,
   static double	total_expval;		/* Total of expectancy values. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   *mother = NULL;
   *father = NULL;
@@ -572,6 +594,8 @@ boolean ga_select_two_roulette_rebased( population *pop,
   static double	minval;			/* Worst fitness value. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
   *mother = NULL;
 
