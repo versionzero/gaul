@@ -1915,16 +1915,6 @@ _ACEOF
 
 
 cat >>confdefs.h <<\_ACEOF
-#define DEBUG 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define GA_DEBUG 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
 #define GA_WRITE_STATS 0
 _ACEOF
 
@@ -1936,11 +1926,6 @@ _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
 #define MEMORY_ALLOC_SAFE 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_PADDING 0
 _ACEOF
 
 
@@ -4383,7 +4368,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4386 "configure"' > conftest.$ac_ext
+  echo '#line 4371 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4919,7 +4904,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4922: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4907: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6712,7 +6697,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6715 "configure"
+#line 6700 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6810,7 +6795,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6813 "configure"
+#line 6798 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7745,49 +7730,36 @@ fi
 echo "$as_me:$LINENO: checking whether to enable general GAUL debugging" >&5
 echo $ECHO_N "checking whether to enable general GAUL debugging... $ECHO_C" >&6
 if test "x$enable_debug" = "xyes"; then
-  cat >>confdefs.h <<\_ACEOF
-#define GA_DEBUG 2
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define DEBUG 2
-_ACEOF
-
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   debug=2
 else
   if test "x$enable_debug" = "xno"; then
-    cat >>confdefs.h <<\_ACEOF
-#define GA_DEBUG 0
-_ACEOF
-
-    cat >>confdefs.h <<\_ACEOF
-#define DEBUG 0
-_ACEOF
-
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     debug=0
   else
-    cat >>confdefs.h <<\_ACEOF
-#define GA_DEBUG 1
-_ACEOF
-
-    cat >>confdefs.h <<\_ACEOF
-#define DEBUG 1
-_ACEOF
-
     echo "$as_me:$LINENO: result: partial" >&5
 echo "${ECHO_T}partial" >&6
     debug=1
   fi
 fi
 
+cat >>confdefs.h <<_ACEOF
+#define DEBUG ${debug}
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define GA_DEBUG ${debug}
+_ACEOF
+
+
 echo "$as_me:$LINENO: checking whether to pad memory to detect overflows" >&5
 echo $ECHO_N "checking whether to pad memory to detect overflows... $ECHO_C" >&6
 if test "x$enable_padding" = "xyes"; then
-  cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define MEMORY_PADDING 1
 _ACEOF
 
@@ -7888,45 +7860,52 @@ fi
 # Optimisations etc. for the GNU gcc compiler.
 if test "x$GCC" = "xyes"; then
   case " $CFLAGS " in
-  *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
+    *[\ \	]-Wall[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -Wall" ;;
   esac
 
   if test "x$enable_g" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-g[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -g" ;;
+      *[\ \	]-g[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -g" ;;
     esac
+
+    case " $CFLAGS " in
+      *[\ \	]-O2[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -O2" ;;
+    esac
+
+  else
+    case " $CFLAGS " in
+      *[\ \	]-O3[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -O3" ;;
+    esac
+
   fi
 
   if test "x$enable_prof" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-pg[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pg" ;;
+      *[\ \	]-pg[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -pg" ;;
     esac
   fi
 
-  case " $CFLAGS " in
-  *[\ \	]-O2[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -O2" ;;
-  esac
-
   if test "x$enable_missing_prototypes" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
+      *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
     esac
   fi
 
   if test "x$enable_ansi" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-ansi[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -ansi" ;;
+      *[\ \	]-ansi[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ansi" ;;
     esac
 
     case " $CFLAGS " in
-    *[\ \	]-pedantic[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pedantic" ;;
+      *[\ \	]-pedantic[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -pedantic" ;;
     esac
   fi
 
@@ -7934,44 +7913,51 @@ else
 
 # Optimisations etc. for the Intel C++ compiler.
   if test "x$CC" = "xicc"; then
-    case " $CFLAGS " in
-    *[\ \	]-tpp6[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -tpp6" ;;
-    esac
 
     case " $CFLAGS " in
-    *[\ \	]-w1[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -w1" ;;
+      *[\ \	]-w1[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -w1" ;;
     esac
 
     if test "x$enable_g" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-g[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -g" ;;
+        *[\ \	]-g[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -g" ;;
       esac
-    else
+
       case " $CFLAGS " in
-      *[\ \	]-ipo[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+        *[\ \	]-O2[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O2" ;;
       esac
+
+    else
+#      case " $CFLAGS " in
+#        *[\ \	]-ipo[\ \	]*) ;;
+#        *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+#      esac
+      case " $CFLAGS " in
+        *[\ \	]-ipo[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ipo -wp_ipo" ;;
+      esac
+
+      case " $CFLAGS " in
+        *[\ \	]-O3[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O3" ;;
+      esac
+
     fi
 
     if test "x$enable_prof" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-qp[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -qp" ;;
+        *[\ \	]-qp[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -qp" ;;
       esac
     fi
 
-    case " $CFLAGS " in
-    *[\ \	]-O2[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -O2" ;;
-    esac
-
     if test "x$enable_ansi" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-ansi[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ansi" ;;
+        *[\ \	]-ansi[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ansi" ;;
       esac
     fi
 
@@ -7983,8 +7969,8 @@ else
 
         if test "x$enable_ansi" = "xyes"; then
           case " $CFLAGS " in
-          *[\ \	]-ansi[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -ansi" ;;
+            *[\ \	]-ansi[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -ansi" ;;
           esac
         fi
       fi
@@ -7994,18 +7980,18 @@ else
       if test "x$CC" = "xccc"; then
 
          case " $CFLAGS " in
-        *[\ \	]-Wall[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -Wall" ;;
+          *[\ \	]-Wall[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -Wall" ;;
         esac
 
         case " $CFLAGS " in
-        *[\ \	]-O2[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O2" ;;
+          *[\ \	]-O2[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O2" ;;
         esac
 
         case " $CFLAGS " in
-        *[\ \	]-misalign[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -misalign" ;;
+          *[\ \	]-misalign[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -misalign" ;;
         esac
       fi
     fi
@@ -10713,10 +10699,10 @@ for ac_func in fdopen gethostname getpwuid gettimeofday select \
                 min max \
                 itoa \
                 index rindex \
+	       	snprintf \
                 strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok strpbrk strsep \
-		stricmp strnicmp \
-                strcasecmp strncasecmp snprintf \
+		strcasecmp strncasecmp stricmp strnicmp \
                 strdup strndup \
 		strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
@@ -10890,7 +10876,7 @@ _ACEOF
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_BCOPY 1
 _ACEOF
-
+	# Big problems!!!
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_BCMP 1
 _ACEOF
@@ -10930,7 +10916,52 @@ _ACEOF
 
 fi
 
-# Check for S-Lang.
+case "$target" in
+  *-*-cygwin*)
+    cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRICMP 1
+_ACEOF
+	# stricmp() and strnicmp() are defined as macros by Cygwin, therefore
+    cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRNICMP 1
+_ACEOF
+	# the above tests give incorrect result.
+    ;;
+  *)
+    ;;
+esac
+
+echo "$as_me:$LINENO: checking whether to apply processor specific optimisations" >&5
+echo $ECHO_N "checking whether to apply processor specific optimisations... $ECHO_C" >&6
+case "$target" in
+  i586-*-*)
+    echo "$as_me:$LINENO: result: yes - i586" >&5
+echo "${ECHO_T}yes - i586" >&6
+    if test "x$CC" = "xicc"; then
+
+      case " $CFLAGS " in
+        *\ \	-tpp1-9\ \	*) ;;
+        *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+      esac
+    fi
+    ;;
+  i686-*-*)
+    echo "$as_me:$LINENO: result: yes - i686" >&5
+echo "${ECHO_T}yes - i686" >&6
+    if test "x$CC" = "xicc"; then
+
+      case " $CFLAGS " in
+        *\ \	-tpp1-9\ \	*) ;;
+        *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+      esac
+    fi
+    ;;
+  *)
+    echo "$as_me:$LINENO: result: no - none defined for ${target}" >&5
+echo "${ECHO_T}no - none defined for ${target}" >&6
+    ;;
+esac
+
 echo "$as_me:$LINENO: checking whether to link S-Lang scripting engine" >&5
 echo $ECHO_N "checking whether to link S-Lang scripting engine... $ECHO_C" >&6
 if test "x$enable_slang" = "xyes"; then
@@ -12327,7 +12358,8 @@ echo \
 
   Version:                    ${VERSION}
   Source code location:       ${srcdir}
-  Host System Type:           ${host}
+  Host system Type:           ${host}
+  Target system Type:         ${target}
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}

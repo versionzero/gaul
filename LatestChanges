@@ -5,6 +5,7 @@ Changes since release 0.1840:
 - Fixed minor bug in ga_evolution_forked() causing incorrect number of forked processes to be reported.  -- thanks to Daniel Pick.
 - Fixed strsep() bug in compatibility.c
 - Updated configuration files for successful compilation on RedHat 8.0
+- Improved configuration with respect to some simple platform specific optimisations.
 
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().

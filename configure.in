@@ -25,6 +25,7 @@ dnl
 dnl ***************************************************************
 dnl
 dnl To do:	MPI/PVM/thread checks and configuration.
+dnl		Consider use of AC_TRY_CFLAGS().
 dnl
 dnl ***************************************************************
 
@@ -80,12 +81,9 @@ AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string.])
 AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads.])
 AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [record compilation platform information.])
 
-AC_DEFINE( DEBUG, 0, [Overall debugging level.])
-AC_DEFINE( GA_DEBUG, 0, [Core GAUL debugging level.])
 AC_DEFINE( GA_WRITE_STATS, 0, [Whether to dump certian statistics.])
 AC_DEFINE( MEMORY_ALLOC_DEBUG, 0, [Whether to use debugging memory allocation routines.])
 AC_DEFINE( MEMORY_ALLOC_SAFE, 1, [Whether to use safe memory allocation routines.])
-AC_DEFINE( MEMORY_PADDING, 0, [Whether to pad memory.])
 AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler])
 
 dnl Checks for programs.
@@ -204,28 +202,24 @@ fi
 
 AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
-  AC_DEFINE(GA_DEBUG,2)
-  AC_DEFINE(DEBUG,2)
   AC_MSG_RESULT(yes)
   debug=2
 else
   if test "x$enable_debug" = "xno"; then
-    AC_DEFINE(GA_DEBUG,0)
-    AC_DEFINE(DEBUG,0)
     AC_MSG_RESULT(no)
     debug=0
   else
-    AC_DEFINE(GA_DEBUG,1)
-    AC_DEFINE(DEBUG,1)
     AC_MSG_RESULT(partial)
     debug=1
   fi
 fi
+AC_DEFINE_UNQUOTED( DEBUG, ${debug}, [Overall debugging level.])
+AC_DEFINE_UNQUOTED( GA_DEBUG, ${debug}, [Core GAUL debugging level.])
 
 dnl Whether to pad memory to detect overflows
 AC_MSG_CHECKING(whether to pad memory to detect overflows)
 if test "x$enable_padding" = "xyes"; then
-  AC_DEFINE(MEMORY_PADDING,1)
+  AC_DEFINE( MEMORY_PADDING, 1, [Whether to pad memory.])
   AC_MSG_RESULT(yes)
 else
   AC_DEFINE(MEMORY_PADDING,0)
@@ -258,45 +252,52 @@ changequote(,)dnl
 # Optimisations etc. for the GNU gcc compiler.
 if test "x$GCC" = "xyes"; then
   case " $CFLAGS " in
-  *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
+    *[\ \	]-Wall[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -Wall" ;;
   esac
 
   if test "x$enable_g" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-g[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -g" ;;
+      *[\ \	]-g[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -g" ;;
     esac
+
+    case " $CFLAGS " in
+      *[\ \	]-O2[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -O2" ;;
+    esac
+
+  else
+    case " $CFLAGS " in
+      *[\ \	]-O3[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -O3" ;;
+    esac
+
   fi
 
   if test "x$enable_prof" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-pg[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pg" ;;
+      *[\ \	]-pg[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -pg" ;;
     esac
   fi
 
-  case " $CFLAGS " in
-  *[\ \	]-O2[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -O2" ;;
-  esac
-
   if test "x$enable_missing_prototypes" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
+      *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
     esac
   fi
 
   if test "x$enable_ansi" = "xyes"; then
     case " $CFLAGS " in
-    *[\ \	]-ansi[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -ansi" ;;
+      *[\ \	]-ansi[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ansi" ;;
     esac
 
     case " $CFLAGS " in
-    *[\ \	]-pedantic[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pedantic" ;;
+      *[\ \	]-pedantic[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -pedantic" ;;
     esac
   fi
 
@@ -304,44 +305,51 @@ else
 
 # Optimisations etc. for the Intel C++ compiler.
   if test "x$CC" = "xicc"; then
-    case " $CFLAGS " in
-    *[\ \	]-tpp6[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -tpp6" ;;
-    esac
 
     case " $CFLAGS " in
-    *[\ \	]-w1[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -w1" ;;
+      *[\ \	]-w1[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -w1" ;;
     esac
 
     if test "x$enable_g" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-g[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -g" ;;
+        *[\ \	]-g[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -g" ;;
       esac
-    else
+
       case " $CFLAGS " in
-      *[\ \	]-ipo[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+        *[\ \	]-O2[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O2" ;;
       esac
+
+    else
+#      case " $CFLAGS " in
+#        *[\ \	]-ipo[\ \	]*) ;;
+#        *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+#      esac
+      case " $CFLAGS " in
+        *[\ \	]-ipo[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ipo -wp_ipo" ;;
+      esac
+
+      case " $CFLAGS " in
+        *[\ \	]-O3[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O3" ;;
+      esac
+
     fi
 
     if test "x$enable_prof" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-qp[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -qp" ;;
+        *[\ \	]-qp[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -qp" ;;
       esac
     fi
 
-    case " $CFLAGS " in
-    *[\ \	]-O2[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -O2" ;;
-    esac
-
     if test "x$enable_ansi" = "xyes"; then
       case " $CFLAGS " in
-      *[\ \	]-ansi[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ansi" ;;
+        *[\ \	]-ansi[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ansi" ;;
       esac
     fi
 
@@ -353,8 +361,8 @@ else
 
         if test "x$enable_ansi" = "xyes"; then
           case " $CFLAGS " in
-          *[\ \	]-ansi[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -ansi" ;;
+            *[\ \	]-ansi[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -ansi" ;;
           esac
         fi
       fi
@@ -364,18 +372,18 @@ else
       if test "x$CC" = "xccc"; then
 
          case " $CFLAGS " in
-        *[\ \	]-Wall[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -Wall" ;;
+          *[\ \	]-Wall[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -Wall" ;;
         esac
 
         case " $CFLAGS " in
-        *[\ \	]-O2[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O2" ;;
+          *[\ \	]-O2[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O2" ;;
         esac
 
         case " $CFLAGS " in
-        *[\ \	]-misalign[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -misalign" ;;
+          *[\ \	]-misalign[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -misalign" ;;
         esac
       fi
     fi
@@ -449,7 +457,7 @@ fi
 
 if test "x$target" = "xsparc-sun-solaris2.7"; then
   AC_DEFINE(SUN_FORTE_C,2.7)
-  AC_DEFINE(HAVE_BCOPY,1)
+  AC_DEFINE(HAVE_BCOPY,1)	# Big problems!!!
   AC_DEFINE(HAVE_BCMP,1)
   AC_DEFINE(HAVE_STRLEN,1)
   AC_DEFINE(HAVE_STRNCMP,1)
@@ -462,7 +470,44 @@ elif test "x$target" = "xsparc-sun-solaris2.8"; then
   AC_DEFINE(SUN_FORTE_C,2.8)
 fi
 
-# Check for S-Lang.
+case "$target" in
+  *-*-cygwin*)
+    AC_DEFINE(HAVE_STRICMP,1)	# stricmp() and strnicmp() are defined as macros by Cygwin, therefore
+    AC_DEFINE(HAVE_STRNICMP,1)	# the above tests give incorrect result.
+    ;;
+  *)
+    ;;
+esac
+
+dnl Some processor specific stuff.
+AC_MSG_CHECKING(whether to apply processor specific optimisations)
+case "$target" in
+  i586-*-*)
+    AC_MSG_RESULT(yes - i586)
+    if test "x$CC" = "xicc"; then
+
+      case " $CFLAGS " in
+        *[\ \	]-tpp[1-9\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+      esac
+    fi
+    ;;
+  i686-*-*)
+    AC_MSG_RESULT(yes - i686)
+    if test "x$CC" = "xicc"; then
+
+      case " $CFLAGS " in
+        *[\ \	]-tpp[1-9\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+      esac
+    fi
+    ;;
+  *)
+    AC_MSG_RESULT(no - none defined for ${target})
+    ;;
+esac
+
+dnl Check for S-Lang.
 AC_MSG_CHECKING(whether to link S-Lang scripting engine)
 if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
@@ -519,7 +564,8 @@ echo \
 
   Version:                    ${VERSION}
   Source code location:       ${srcdir}
-  Host System Type:           ${host}
+  Host system Type:           ${host}
+  Target system Type:         ${target}
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}
