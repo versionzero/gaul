@@ -33,6 +33,8 @@
 
 #include "SAA_header.h"
 
+#include <limits.h>
+
 #include "memory_util.h"
 
 typedef struct TableStruct_t
@@ -50,7 +52,8 @@ typedef struct TableStruct_t
 /*
  * Convenience macro.
  */
-#define table_error_index(X) (((TableStruct *)(X))->next)
+/*#define table_error_index(X)	(((TableStruct *)(X))->next)*/
+#define TABLE_ERROR_INDEX	UINT_MAX
 
 /*
  * Prototypes.
@@ -60,6 +63,7 @@ void		table_destroy(TableStruct *table);
 boolean		table_set_size(TableStruct *table, unsigned int size);
 vpointer	table_remove_index(TableStruct *table, unsigned int index);
 unsigned int	table_remove_data(TableStruct *table, vpointer data);
+unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
 vpointer	table_get_data(TableStruct *table, unsigned int index);
 unsigned int	table_lookup_index(TableStruct *table, vpointer data);
 unsigned int	table_add(TableStruct *table, vpointer data);

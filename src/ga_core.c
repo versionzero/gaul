@@ -1744,7 +1744,7 @@ boolean ga_extinction(population *extinct)
 /*
  * Error check.
  */
-  if (id == table_error_index(pop_table))
+  if (id == TABLE_ERROR_INDEX)
     die("Unable to find population structure in table.");
 
 /*

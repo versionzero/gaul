@@ -132,7 +132,7 @@ int main(int argc, char **argv)
             ga_chromosome_char_to_staticstring(pop[i],
                                ga_get_entity_from_rank(pop[i],0)));
 
-/*    ga_extinction(pop[i]); FIXME! */
+    ga_extinction(pop[i]);
     }
 
   exit(2);

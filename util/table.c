@@ -26,9 +26,10 @@
 
   Synopsis:	Table data structure. (basically a growable table)
 
-  Thread-safe
+  Thread-safe.
  
-  Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
+  Updated:	07/08/01 SAA	Added table_remove_data_all().
+		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
  		21/02/01 SAA	Added table_count_items().
  		22/01/01 SAA	Added table_lookup_index().
  		18/01/01 SAA	Frist tidy version.
@@ -51,6 +52,8 @@ static int next_pow2(int num)
   {
   int	n = 1;
 
+  num++;
+
   while(n < num) n <<= 1;
 
   return n;
@@ -66,10 +69,14 @@ static boolean table_ensure_size(TableStruct *table, int size)
     size = next_pow2(size);
     table->data = s_realloc(table->data, sizeof(vpointer)*size);
     table->unused = s_realloc(table->unused, sizeof(unsigned int)*size);
-/* FIXME: Need checks here? */
-    }
 
-  for (i=table->size; i<size; i++) table->data[i]=NULL;
+    for (i=table->size; i<size; i++)
+      table->data[i]=NULL;
+
+    table->size = size;
+
+    printf("DEBUG: Table size is now %d\n", size);
+    }
 
   return TRUE;
   }
@@ -160,7 +167,7 @@ vpointer table_remove_index(TableStruct *table, unsigned int index)
   }
 
 
-/* Returns index of data removed, table->next otherwise. */
+/* Returns index of data removed, TABLE_ERROR_INDEX otherwise. */
 unsigned int table_remove_data(TableStruct *table, vpointer data)
   {
   unsigned int	index=0;
@@ -168,22 +175,48 @@ unsigned int table_remove_data(TableStruct *table, vpointer data)
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL pointer to user data passed.");
 
-  while ( table->data[index] != data && index < table->next) index++;
-
-/* Was that data found in the table?  Do nothing if not. */
-  if (index < table->next)
+  while ( index < table->next)
     {
-    /* Add index to unused list. */
-    table->unused[table->numfree]=index;
-    table->numfree++;
-    table->data[index] = NULL;
-    }
-  else
-    {
-    printf("WARNING: Trying to remove unused item.\n");
+    if ( table->data[index] == data )
+      { /* Data found in table */
+      /* Add index to unused list. */
+      table->unused[table->numfree]=index;
+      table->numfree++;
+      table->data[index] = NULL;
+      return index;
+      }
+    index++;
     }
 
-  return index;
+  printf("WARNING: Trying to remove unused item.\n");
+
+  return TABLE_ERROR_INDEX;
+  }
+
+
+/* Count of items removed, TABLE_ERROR_INDEX otherwise. */
+unsigned int table_remove_data_all(TableStruct *table, vpointer data)
+  {
+  unsigned int	index=0;
+  unsigned int	count=0;
+
+  if (!table) die("NULL pointer to TableStruct passed.");
+  if (!data) die("NULL pointer to user data passed.");
+
+  while ( index < table->next)
+    {
+    if ( table->data[index] == data )
+      { /* Data found in table */
+      /* Add index to unused list. */
+      table->unused[table->numfree]=index;
+      table->numfree++;
+      table->data[index] = NULL;
+      count++;
+      }
+    index++;
+    }
+
+  return count;
   }
 
 
@@ -197,7 +230,7 @@ vpointer table_get_data(TableStruct *table, unsigned int index)
   }
 
 
-/* Returns the index for given data, or table->next on failure. */
+/* Returns the index for given data, or TABLE_ERROR_INDEX on failure. */
 unsigned int table_lookup_index(TableStruct *table, vpointer data)
   {
   unsigned int	index=0;
@@ -205,9 +238,13 @@ unsigned int table_lookup_index(TableStruct *table, vpointer data)
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL vpointer data passed.");
 
-  while ( table->data[index] != data && index < table->next) index++;
+  while ( index < table->next )
+    {
+    if (table->data[index] == data) return index;
+    index++;
+    }
 
-  return index;
+  return TABLE_ERROR_INDEX;
   }
 
 
@@ -248,6 +285,9 @@ void table_diagnostics(void)
   printf("=== Table diagnostics ========================================\n");
   printf("Version:           %s\n", VERSION_STRING);
   printf("Build date:        %s\n", BUILD_DATE_STRING);
+
+  printf("--------------------------------------------------------------\n");
+  printf("TABLE_ERROR_INDEX: %d\n", TABLE_ERROR_INDEX);
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
