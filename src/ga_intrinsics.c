@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinics - Genetic algorithm routine intrinsics.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -1242,7 +1242,7 @@ void ga_slang_replace(population *pop, entity *child)
   synopsis:	Register the S-Lang intrinsics.
   parameters:	none
   return:	success/failure.
-  last updated:	02 Oct 2002
+  last updated:	18 Mar 2003
  **********************************************************************/
 
 #if HAVE_SLANG==0
@@ -1257,7 +1257,7 @@ boolean ga_intrinsic_sladd(void)
   {
   static int    fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
   static int	schemes[7]={GA_SCHEME_DARWIN, GA_SCHEME_LAMARCK_PARENTS, GA_SCHEME_LAMARCK_CHILDREN, GA_SCHEME_LAMARCK_ALL, GA_SCHEME_BALDWIN_PARENTS, GA_SCHEME_BALDWIN_CHILDREN, GA_SCHEME_BALDWIN_ALL};
-  static int	elitism[4]={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE};
+  static int	elitism[5]={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE, GA_ELITISM_RESCORE_PARENTS};
 
   if (  SLadd_intrinsic_variable("GA_SCHEME_DARWIN", &(schemes[0]), SLANG_INT_TYPE, TRUE)
      || SLadd_intrinsic_variable("GA_SCHEME_LAMARCK_PARENTS", &(schemes[1]), SLANG_INT_TYPE, TRUE)
@@ -1270,6 +1270,7 @@ boolean ga_intrinsic_sladd(void)
      || SLadd_intrinsic_variable("GA_ELITISM_PARENTS_SURVIVE", &(elitism[1]), SLANG_INT_TYPE, TRUE)
      || SLadd_intrinsic_variable("GA_ELITISM_ONE_PARENT_SURVIVES", &(elitism[2]), SLANG_INT_TYPE, TRUE)
      || SLadd_intrinsic_variable("GA_ELITISM_PARENTS_DIE", &(elitism[3]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_ELITISM_RESCORE_PARENTS", &(elitism[4]), SLANG_INT_TYPE, TRUE)
      || SLadd_intrinsic_variable("GA_FITNESS_MIN", &fitnessmin, SLANG_DOUBLE_TYPE, TRUE)
      ) return FALSE;
 

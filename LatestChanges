@@ -16,6 +16,7 @@ Changes since release 0.1842:
 - Extensive rewrite of portions of parallel code.
 - Changed strdup() prototype in compatibility routines.
 - Added ga_population_get_generation() function to access the generation number from within the callbacks used during evolution, e.g. the fitness evaluation function.
+- Added new elitism option, GA_ELITISM_RESCORE_PARENTS.  This re-evaluates the parent fitness and maintains them in the population if they still have a sufficiently high fitness.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

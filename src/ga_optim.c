@@ -931,16 +931,17 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 
   parameters:	population *pop
   return:	none
-  last updated:	11 Jun 2002
+  last updated:	18 Mar 2003
  **********************************************************************/
 
 static void gaul_survival(population *pop)
   {
+  int		i;			/* Loop variable over entity ranks. */
 
   plog(LOG_VERBOSE, "*** Survival of the fittest ***");
 
 /*
- * Need to kill parents?
+ * Need to kill parents, or rescore parents?
  */
   if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
     {
@@ -948,6 +949,15 @@ static void gaul_survival(population *pop)
       {
       pop->orig_size--;
       ga_entity_dereference_by_rank(pop, pop->orig_size);
+      }
+    }
+  else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
+    {
+    plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
+
+    for (i=pop->orig_size; i<pop->size; i++)
+      {
+      pop->evaluate(pop, pop->entity_iarray[i]);
       }
     }
 
@@ -1014,6 +1024,374 @@ static void gaul_survival(population *pop)
 
   return;
   }
+
+
+/**********************************************************************
+  gaul_survival_mp()
+  synopsis:	Survival of the fittest.
+		Enforce elitism, apply crowding operator, reduce
+		population back to its stable size and rerank entities,
+		as required.
+
+		*** FIXME: crowding analysis incomplete. ***
+
+  parameters:	population *pop
+  return:	none
+  last updated:	18 Mar 2003
+ **********************************************************************/
+
+static void gaul_survival_mp(population *pop)
+  {
+#ifdef HAVE_MPI
+  int		i;			/* Loop variable over entity ranks. */
+
+  plog(LOG_FIXME, "Need to parallelise this!");
+
+  plog(LOG_VERBOSE, "*** Survival of the fittest ***");
+
+/*
+ * Need to kill parents, or rescore parents?
+ */
+  if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
+    {
+    while (pop->orig_size>(pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES))
+      {
+      pop->orig_size--;
+      ga_entity_dereference_by_rank(pop, pop->orig_size);
+      }
+    }
+  else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
+    {
+    plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
+
+    for (i=pop->orig_size; i<pop->size; i++)
+      {
+      pop->evaluate(pop, pop->entity_iarray[i]);
+      }
+    }
+
+/*
+ * Sort all population members by fitness.
+ */
+  sort_population(pop);
+
+/*
+ * Enforce the type of crowding desired.
+ *
+ * Rough crowding doesn't actual check whether two chromosomes are
+ * identical - just assumes they are if they have identical
+ * fitness.  Exact elitism does make the full check.
+ *
+ * FIXME: Crowding code missing!!!
+ */
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+  ga_genocide(pop, pop->stable_size);
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_survival_forked()
+  synopsis:	Survival of the fittest.
+		Enforce elitism, apply crowding operator, reduce
+		population back to its stable size and rerank entities,
+		as required.
+
+		*** FIXME: crowding analysis incomplete. ***
+
+  parameters:	population *pop
+  return:	none
+  last updated:	18 Mar 2003
+ **********************************************************************/
+
+#if W32_CRIPPLED != 1
+static void gaul_survival_forked(population *pop,
+			const int num_processes,
+			int *eid, pid_t *pid, const int *evalpipe)
+  {
+  int		fork_num;		/* Index of current forked process. */
+  int		num_forks;		/* Number of forked processes. */
+  int		eval_num;		/* Index of current entity. */
+  pid_t		fpid;			/* PID of completed child process. */
+
+  plog(LOG_VERBOSE, "*** Survival of the fittest ***");
+
+/*
+ * Need to kill parents, or rescore parents?
+ */
+  if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
+    {
+    while (pop->orig_size>(pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES))
+      {
+      pop->orig_size--;
+      ga_entity_dereference_by_rank(pop, pop->orig_size);
+      }
+    }
+  else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
+    {
+    plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
+
+/*
+ * A forked process is started for each fitness evaluation upto
+ * a maximum of max_processes at which point we wait for
+ * results before forking more.
+ */
+  fork_num = 0;
+  eval_num = 0;
+
+  /* Fork initial processes. */
+
+  while (fork_num < num_processes && eval_num < pop->orig_size)
+    {
+    eid[fork_num] = eval_num;
+    pid[fork_num] = fork();
+
+    if (pid[fork_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[fork_num] == 0)
+      {       /* This is the child process. */
+      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+      write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+      fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
+      _exit(1);
+      }
+
+    fork_num++;
+    eval_num++;
+
+#ifdef NEED_MOSIX_FORK_HACK
+    usleep(10);
+#endif
+    }
+  num_forks = fork_num;
+
+  /* Wait for a forked process to finish and, if needed, fork another. */
+  while (num_forks > 0)
+    {
+    fpid = wait(NULL);
+
+    if (fpid == -1) die("Error in wait().");
+
+    /* Find which entity this forked process was evaluating. */
+    fork_num = 0;
+    while (fpid != pid[fork_num]) fork_num++;
+
+    if (eid[fork_num] == -1) die("Internal error.  eid is -1");
+
+    read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
+
+    if (eval_num < pop->size)
+      {       /* New fork. */
+      eid[fork_num] = eval_num;
+      pid[fork_num] = fork();
+
+      if (pid[fork_num] < 0)
+        {       /* Error in fork. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+      else if (pid[fork_num] == 0)
+        {       /* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        fsync(evalpipe[2*fork_num+1]);	/* Ensure data is written to pipe. */
+        _exit(1);
+        }
+
+      eval_num++;
+      }
+    else
+      {
+      pid[fork_num] = -1;
+      eid[fork_num] = -1;
+      num_forks--;
+      }
+    }
+    }
+
+/*
+ * Sort all population members by fitness.
+ */
+  sort_population(pop);
+
+/*
+ * Enforce the type of crowding desired.
+ *
+ * Rough crowding doesn't actual check whether two chromosomes are
+ * identical - just assumes they are if they have identical
+ * fitness.  Exact elitism does make the full check.
+ *
+ * FIXME: Crowding code missing!!!
+ */
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+  ga_genocide(pop, pop->stable_size);
+
+  return;
+  }
+#endif
+
+
+/**********************************************************************
+  gaul_survival_threaded()
+  synopsis:	Survival of the fittest.
+		Enforce elitism, apply crowding operator, reduce
+		population back to its stable size and rerank entities,
+		as required.
+
+		*** FIXME: crowding analysis incomplete. ***
+
+  parameters:	population *pop
+  return:	none
+  last updated:	18 Mar 2003
+ **********************************************************************/
+
+#ifdef HAVE_PTHREAD
+static void gaul_survival_threaded(population *pop,
+			const int num_threads,
+			int *eid, pthread_t *tid)
+  {
+  int		thread_num;		/* Index of current thread. */
+  int		num_threads;		/* Number of threads. */
+  int		eval_num;		/* Index of current entity. */
+  pthread_t	fpid;			/* TID of completed child process. */
+
+  plog(LOG_VERBOSE, "*** Survival of the fittest ***");
+
+/*
+ * Need to kill parents, or rescore parents?
+ */
+  if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
+    {
+    while (pop->orig_size>(pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES))
+      {
+      pop->orig_size--;
+      ga_entity_dereference_by_rank(pop, pop->orig_size);
+      }
+    }
+  else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
+    {
+    plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
+
+/*
+ * A thread is created for each fitness evaluation upto
+ * a maximum of max_threads at which point we wait for
+ * results before continuing.
+ */
+  thread_num = 0;
+  eval_num = 0;
+
+  /* Fork initial processes. */
+  while (thread_num < num_processes && eval_num < pop->orig_size)
+    {
+    eid[thread_num] = eval_num;
+    pid[thread_num] = XXXX();
+
+    if (pid[thread_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[thread_num] == 0)
+      {       /* This is the child process. */
+      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+      write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+      fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
+      _exit(1);
+      }
+
+    thread_num++;
+    eval_num++;
+    }
+  num_threads = thread_num;
+
+  /* Wait for a thread to finish and, if needed, create another. */
+  while (num_threads > 0)
+    {
+    fpid = wait(NULL);
+
+    if (fpid == -1) die("Error in wait().");
+
+    /* Find which entity this thread was evaluating. */
+    thread_num = 0;
+    while (fpid != pid[thread_num]) thread_num++;
+
+    if (eid[thread_num] == -1) die("Internal error.  eid is -1");
+
+    read(evalpipe[2*thread_num], &(pop->entity_iarray[eid[thread_num]]->fitness), sizeof(double));
+
+    if (eval_num < pop->orig_size)
+      {       /* New thread. */
+      eid[thread_num] = eval_num;
+      pid[thread_num] = fork();
+
+      if (pid[thread_num] < 0)
+        {       /* Error in thread. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+      else if (pid[thread_num] == 0)
+        {       /* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
+        _exit(1);
+        }
+
+      eval_num++;
+      }
+    else
+      {
+      pid[thread_num] = -1;
+      eid[thread_num] = -1;
+      num_threads--;
+      }
+    }
+    }
+
+/*
+ * Sort all population members by fitness.
+ */
+  sort_population(pop);
+
+/*
+ * Enforce the type of crowding desired.
+ *
+ * Rough crowding doesn't actual check whether two chromosomes are
+ * identical - just assumes they are if they have identical
+ * fitness.  Exact elitism does make the full check.
+ *
+ * FIXME: Crowding code missing!!!
+ */
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+  ga_genocide(pop, pop->stable_size);
+
+  return;
+  }
+#endif /* HAVE_PTHREAD */
 
 
 /**********************************************************************
@@ -1226,7 +1604,7 @@ int ga_evolution_forked(	population		*pop,
 /*
  * Apply survival pressure.
  */
-    gaul_survival(pop);
+    gaul_survival_forked(pop, max_processes, eid, pid, evalpipe);
 
     plog(LOG_VERBOSE,
           "After generation %d, population has fitness scores between %f and %f",
@@ -1394,7 +1772,7 @@ THREAD_LOCK(global_thread_lock);
 /*
  * Apply survival pressure.
  */
-    gaul_survival(pop);
+    gaul_survival_threaded(pop, max_threads, eid, tid);
 
     plog(LOG_VERBOSE,
           "After generation %d, population has fitness scores between %f and %f",
@@ -3439,7 +3817,7 @@ int ga_evolution_mp(	population		*pop,
 /*
  * Survival of the fittest.
  */
-      gaul_survival(pop);
+      gaul_survival_mp(pop);
 
 /*
  * Use callback.

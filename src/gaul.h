@@ -90,7 +90,10 @@ typedef enum ga_elitism_type_t
   {
   GA_ELITISM_UNKNOWN = 0,
   GA_ELITISM_NULL = 0,
-  GA_ELITISM_PARENTS_SURVIVE=1, GA_ELITISM_ONE_PARENT_SURVIVES=2, GA_ELITISM_PARENTS_DIE=3
+  GA_ELITISM_PARENTS_SURVIVE=1,
+  GA_ELITISM_ONE_PARENT_SURVIVES=2,
+  GA_ELITISM_PARENTS_DIE=3,
+  GA_ELITISM_RESCORE_PARENTS=4
   } ga_elitism_type;
 
 /**********************************************************************
