@@ -3,7 +3,8 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
+  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +27,8 @@
 
   Header file for memory_methods
 
-  Updated:	18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
+  Updated:	01 May 2003 SAA	Fixed s_strndup() macros.
+  		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
   		11 Jun 2002 SAA	No longer link the malloc.h header.
   		01/03/01 SAA	Added non-standard strndup() stuff.
 		12/01/01 SAA	Tidied.
