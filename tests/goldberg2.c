@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     pop = ga_genesis(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
-       10,			/* const int              len_chromo */
+       30,			/* const int              len_chromo */
        NULL, 			/* const char             *fname */
 NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */

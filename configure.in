@@ -81,8 +81,6 @@ AC_DEFINE(PARALLEL,0)
 AC_DEFINE(AVLTREE_KEY_TYPE,void *)
 AC_DEFINE_UNQUOTED(BUILD_DATE_STRING,"`date +%d/%m/%y`")
 AC_DEFINE_UNQUOTED(VERSION_STRING,"${VERSION}")
-AC_DEFINE(GA_USE_SLANG,1)
-AC_DEFINE(HAVE_SLANG,1)
 AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS")
 
 dnl Initialize libtool with module loading capability.
@@ -109,31 +107,34 @@ AC_ARG_ENABLE(debug,
        [  --enable-debug=[no/minimum/yes] turn on debugging [default=$debug_default]],,
        enable_debug=$debug_default)
 AC_ARG_ENABLE(memory_debug,
-       [  --enable-memory-debug      turn on memory access debugging [default=no]],,
+       [  --enable-memory-debug     turn on memory access debugging [default=no]],,
        enable_memory_debug=no)
 AC_ARG_ENABLE(ansi,
-       [  --enable-ansi              turn on strict ansi [default=no]],,
+       [  --enable-ansi             turn on strict ansi [default=no]],,
        enable_ansi=no)
 AC_ARG_ENABLE(threads,
-       [  --enable-threads           turn on multi-thread support [default=no]
+       [  --enable-threads          turn on multi-thread support [default=no]
                           ([=no] will override --with-threads)],,
        enable_threads=no)
 AC_ARG_ENABLE(mpi,
-       [  --enable-mpi               turn on MPI support [default=no]
+       [  --enable-mpi              turn on MPI support [default=no]
                           ([=no] will override --with-mpi)],,
        enable_mpi=no)
 AC_ARG_ENABLE(pvm,
-       [  --enable-pvm               turn on PVM3 support [default=no]
+       [  --enable-pvm              turn on PVM3 support [default=no]
                           ([=no] will override --with-pvm)],,
        enable_pvm=no)
+AC_ARG_ENABLE(slang,
+       [  --enable-slang=[yes/no]   use S-Lang for scripting ] [default=yes],,
+       enable_slang=yes)
 AC_ARG_ENABLE(prof,
-       [  --enable-profile           turn on profiling [default=no]],,
+       [  --enable-profile          turn on profiling [default=no]],,
        enable_prof=no)
 AC_ARG_WITH(efence,
-       [  --with-efence              use Electric Fence for memory debugging ],
+       [  --with-efence             use Electric Fence for memory debugging ],
        with_efence=1)
 AC_ARG_WITH(with_padding,
-       [  --with-padding             use memory padding for overflow detection ],
+       [  --with-padding            use memory padding for overflow detection ],
        with_padding=1)
 
 AC_MSG_CHECKING(for type of parallisation)
@@ -160,9 +161,9 @@ else
   AC_MSG_RESULT(PVM3)
 fi
 
-if test "x$enable_threads"="xno"; then
-  if test "x$enable_mpi"="xno"; then
-    if test "x$enable_pvm"="xno"; then
+if test "x$enable_threads" = "xno"; then
+  if test "x$enable_mpi" = "xno"; then
+    if test "x$enable_pvm" = "xno"; then
       AC_MSG_RESULT(none)
     fi
   fi
@@ -177,7 +178,7 @@ else
   AC_MSG_RESULT(no - safe wrappers only)
 fi
 
-AC_MSG_CHECKING(whether to enable general Helga debugging)
+AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   AC_DEFINE(GA_DEBUG,2)
@@ -196,7 +197,7 @@ else
 fi
 
 AC_MSG_CHECKING(whether to enable run-time profiling)
-if test "x$enable_prof"="xno"; then
+if test "x$enable_prof" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -pg"
   AC_MSG_RESULT(yes)
 else
@@ -223,10 +224,20 @@ else
 fi
 
 # Check for SLang.
-AC_CHECK_LIB(slang, SLang_init_slang,
-  [LIBS="$LIBS -lslang"
-   INCLUDES="$INCLUDES -I/usr/include/slang/"],
-  [AC_MSG_ERROR(GAUL requires the SLang library.  see http://space.mit.edu/pub/davis/slang/)])
+AC_MSG_CHECKING(whether to link SLang scripting engine)
+if test "x$enable_slang" = "xyes"; then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_SLANG,1)
+  LIBS="$LIBS -lslang"
+  INCLUDES="$INCLUDES -I/usr/include/slang/"],
+  AC_CHECK_LIB(slang, SLang_init_slang,
+    [LIBS="$LIBS -lslang"
+     INCLUDES="$INCLUDES -I/usr/include/slang/"],
+    [AC_MSG_ERROR(GAUL requires the SLang library for full functionality.  see http://space.mit.edu/pub/davis/slang/ configure with '--with-slang=no' for reduced version.)])
+else
+  AC_MSG_RESULT(no)
+  AC_DEFINE(HAVE_SLANG,0)
+fi
 
 # Checks for programs.
 AC_PROG_CC
@@ -315,5 +326,6 @@ AC_OUTPUT(
            util/Makefile
            src/Makefile
            tests/Makefile
+           docs/Makefile
          )
 

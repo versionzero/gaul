@@ -1,5 +1,5 @@
-GAUL Installation Instructions
-==============================
+Brief GAUL Installation Instructions
+====================================
 
 Full (and maybe more up-to-date) instructions are available on the GAUL website.  This file should have just enough detail to help you.
 
@@ -12,15 +12,16 @@ You should be able to work it out, but for any real dumbies out there follow the
 ./configure ; make
 
 Or if you don't have SLang installed:
-./configure --disable-slang; make
+./configure --enable-slang=no ; make
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
 
 Email me if:
 - You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))
-- You would like pre-compiled binaries.  Note: I can guarentee to provide Linux binaries only.  I may possibly be able to aquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").  I will provide dynamically linked binaries unless you request otherwise.
+- You would like pre-compiled binaries.  Note: I can guarentee to provide Linux binaries only.  I may possibly be able to aquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").
 
 Potentially supported Platforms:
-Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
-Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
+- Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
+- Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
 
+Stewart 13/06/2001.

@@ -1,13 +1,13 @@
 SHORT TODO LIST FOR GAUL
 ========================
-(these are the most urgent things to be done.)
+The following list conmtains the most urgent things to be done.  These are, or at least should be, my current development priorities.
 
-* More flexible chromosomes.
+* Convert core routines so that they are chromosome data type agnostic.
+* Operators for alternative chromosome types, including:
   - Binary chromosomes
   - Variable length array chromsomes
   - Tree chromosomes
-* User data in an array instead of list.
-* Easy enabling/disabling of SLANG through the configure script.
+* Entity user data should be stored in an array instead of a list.
 * Lots of examples.
 * Lots of documentation!
 

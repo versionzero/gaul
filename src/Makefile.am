@@ -36,7 +36,7 @@ lib_LIBRARIES = libga.a
 
 # CFLAGS = -g -Wall -O
 
-INCLUDES = -I../util/ -I/usr/include/slang/
+INCLUDES = -I../util/
 
 libga_a_SOURCES = \
 	ga_intrinsics.c \

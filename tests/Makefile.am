@@ -36,7 +36,7 @@ bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad
 
 CFLAGS = -g -Wall -O
 
-INCLUDES = -I../util/ -I../src/ -I /usr/include/slang/
+INCLUDES = -I../util/ -I../src/ 
 
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c

@@ -35,6 +35,10 @@ The main development platform for GAUL is Linux with the gcc compiler, but in th
 
 This version of GAUL is distributed under the terms of the GNU General Public License.  See the file ./COPYING for full details.
 
+Installation
+------------
+See file ./INSTALL
+
 Bug Submission
 --------------
 

@@ -32,20 +32,19 @@
 
 #define DEBUG 2
 /* #undef HELGA_DEBUG */
-#define MOLSTRUCT_DEBUG 0
+/* #undef MOLSTRUCT_DEBUG */
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1-010605"
-#define BUILD_DATE_STRING "05/06/01"
+#define VERSION_STRING "0.1-010613"
+#define BUILD_DATE_STRING "13/06/01"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1
-#define PATCH_VERSION 010605
+#define PATCH_VERSION 010613
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
 #define V3_QUICK 1
-/* #undef HELGA_USE_SLANG */
-#define HAVE_SLANG 1
+#define HAVE_SLANG 0
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* The number of bytes in a char.  */

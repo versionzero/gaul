@@ -34,7 +34,7 @@
 		(c) Enables saving and restoring state.
 
 		SLang intrinsic function wrappers are provided if the
-		HELGA_USE_SLANG constant is set to 1.
+		HAVE_SLANG constant is set to 1.
 
 		The algorithm I selected is the Mitchell and Moore
 		variant of the standard additive number generator.
@@ -787,7 +787,7 @@ boolean random_test(void)
 
   FIXME: Problem with unsigned vs. signed ints.
  **********************************************************************/
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 
 /* These function don't need wrappers:
 void random_tseed(void)
