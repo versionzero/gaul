@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Updated:	10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
+  Updated:	25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
+  		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
 		20/06/01 SAA	Added a few casts for clean compilation on Solaris.
 		23/03/01 SAA	Added str_scmp().
 		09/01/01 SAA	str_stripnewline() now returns the length of the string returned.
@@ -1219,7 +1220,7 @@ char **str_split(const char *string,
   if (!delimiter) return NULL;
 
   if (max_tokens < 1)
-    max_tokens = INT_MAX;
+    max_tokens = STR_MAX_TOKENS;
 
   s = strstr(string, delimiter);
   if (s)

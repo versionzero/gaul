@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for my general string utility routines
 
-  Updated:	16 Mar 2002 SAA Check for presence of limits.h on this system.
+  Updated:	25 Mar 2002 SAA	Introduced STR_MAX_TOKENS.
+  		16 Mar 2002 SAA Check for presence of limits.h on this system.
 		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join() and str_joinv() prototypes.
 		18/09/00 SAA	Tidied.
 		10/05/99 SAA	Added missing prototypes.
@@ -65,7 +66,18 @@
 #define STR_UTIL_DEBUG	0
 #endif
 
-/* prototypes */
+/*
+ * Compilation constants.
+ */
+#ifdef HAVE_LIMITS_H
+#define STR_MAX_TOKENS	INT_MAX
+#else
+#define STR_MAX_TOKENS	0xFFFFFF
+#endif
+
+/*
+ * Prototypes.
+ */
 int	str_cpos(const char *str, const char c);
 int	str_cposr(const char *str, const char c);
 void	str_toupper(char *str);
