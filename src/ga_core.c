@@ -688,6 +688,28 @@ population *ga_population_read(char *fname)
 
 
 /**********************************************************************
+  ga_entity_evaluate()
+  synopsis:	Score a single entity.
+  parameters:	population *pop
+		entity *entity
+  return:	double			the fitness
+  last updated: 06 Feb 2002
+ **********************************************************************/
+
+double ga_entity_evaluate(population *pop, entity *entity)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!entity) die("Null pointer to entity structure passed.");
+  if (!pop->evaluate) die("Evaluation callback not defined.");
+
+  pop->evaluate(pop, entity);
+
+  return entity->fitness;
+  }
+
+
+/**********************************************************************
   ga_population_score_and_sort()
   synopsis:	Score and sort entire population.  This is probably
 		a good idea after reading the population from disk!
