@@ -193,13 +193,13 @@ int main(int argc, char **argv)
   if (filename_in == NULL)
     {
     pop = ga_genesis_char(
-       100,				/* const int              population_size */
-       1,				/* const int              num_chromo */
-       strlen(target_text),		/* const int              len_chromo */
-       NULL,			 	/* GAgeneration_hook      generation_hook */
-       NULL,				/* GAiteration_hook       iteration_hook */
-       NULL,				/* GAdata_destructor      data_destructor */
-       NULL,				/* GAdata_ref_incrementor data_ref_incrementor */
+       100,			/* const int              population_size */
+       1,			/* const int              num_chromo */
+       strlen(target_text),	/* const int              len_chromo */
+       NULL,		 	/* GAgeneration_hook      generation_hook */
+       NULL,			/* GAiteration_hook       iteration_hook */
+       NULL,			/* GAdata_destructor      data_destructor */
+       NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
        struggle_score,			/* GAevaluate             evaluate */
        ga_seed_printable_random,	/* GAseed                 seed */
        NULL,				/* GAadapt                adapt */
@@ -207,7 +207,8 @@ int main(int argc, char **argv)
        ga_select_two_roulette,		/* GAselect_two           select_two */
        ga_mutate_printable_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_char_allele_mixing,	/* GAcrossover            crossover */
-       NULL				/* GAreplace replace */
+       NULL,			/* GAreplace replace */
+       NULL			/* vpointer	User data */
             );
 
     ga_population_set_parameters(

@@ -173,21 +173,22 @@ int main(int argc, char **argv)
   random_seed(23091975);
 
   pop = ga_genesis_double(
-       200,				/* const int              population_size */
-       1,				/* const int              num_chromo */
-       4,				/* const int              len_chromo */
-       test_generation_callback,	/* GAgeneration_hook      generation_hook */
-       NULL,				/* GAiteration_hook       iteration_hook */
-       NULL,				/* GAdata_destructor      data_destructor */
-       NULL,				/* GAdata_ref_incrementor data_ref_incrementor */
-       test_score,			/* GAevaluate             evaluate */
-       test_seed,			/* GAseed                 seed */
-       NULL,				/* GAadapt                adapt */
-       ga_select_one_bestof2,		/* GAselect_one           select_one */
-       ga_select_two_bestof2,		/* GAselect_two           select_two */
+       200,			/* const int              population_size */
+       1,			/* const int              num_chromo */
+       4,			/* const int              len_chromo */
+       test_generation_callback,/* GAgeneration_hook      generation_hook */
+       NULL,			/* GAiteration_hook       iteration_hook */
+       NULL,			/* GAdata_destructor      data_destructor */
+       NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+       test_score,		/* GAevaluate             evaluate */
+       test_seed,		/* GAseed                 seed */
+       NULL,			/* GAadapt                adapt */
+       ga_select_one_bestof2,	/* GAselect_one           select_one */
+       ga_select_two_bestof2,	/* GAselect_two           select_two */
        ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_double_doublepoints,	/* GAcrossover            crossover */
-       NULL				/* GAreplace              replace */
+       NULL,			/* GAreplace              replace */
+       NULL			/* vpointer	User data */
             );
 
   ga_population_set_parameters(

@@ -611,6 +611,7 @@ int main(int argc, char **argv)
        wildfire_mutate_flip,	/* GAmutate               mutate */
        wildfire_crossover,	/* GAcrossover   crossover */
        NULL			/* GAreplace     replace */
+       NULL			/* vpointer	User data */
             );
 
   ga_population_set_parameters(

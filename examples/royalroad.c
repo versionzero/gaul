@@ -220,7 +220,8 @@ int main(int argc, char **argv)
      ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
      /*ga_mutate_boolean_multipoint,*/	/* GAmutate               mutate */
      ga_crossover_boolean_doublepoints,	/* GAcrossover            crossover */
-     NULL			/* GAreplace              replace */
+     NULL,			/* GAreplace              replace */
+     NULL			/* vpointer	User data */
             );
 
   ga_population_set_parameters(

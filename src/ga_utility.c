@@ -87,12 +87,10 @@ void ga_diagnostics(void)
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
 		Assumes the use of integer chromosomes is desired.
-		This currently only exists for compatibility with
-		older versions of GAUL.
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13 Feb 2002
+  last updated:	17 Jan 2003
  **********************************************************************/
 
 population *ga_genesis_int(	const int		population_size,
@@ -109,7 +107,8 @@ population *ga_genesis_int(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   population	*pop;	/* The new population structure. */
 
@@ -121,6 +120,11 @@ population *ga_genesis_int(	const int		population_size,
  */
   if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
     return NULL;
+
+/*
+ * Assign population's user data.
+ */
+  pop->data = userdata;
 
 /*
  * Define some callback functions.
@@ -192,7 +196,8 @@ population *ga_genesis(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   plog(LOG_FIXME, "Use of ga_genesis() should be deprecated.");
 
@@ -227,7 +232,8 @@ population *ga_genesis_char(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   population	*pop;	/* The new population structure. */
 
@@ -239,6 +245,11 @@ population *ga_genesis_char(	const int		population_size,
  */
   if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
     return NULL;
+
+/*
+ * Assign population's user data.
+ */
+  pop->data = userdata;
 
 /*
  * Define some callback functions.
@@ -307,7 +318,8 @@ population *ga_genesis_boolean(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   population	*pop;	/* The new population structure. */
 
@@ -319,6 +331,11 @@ population *ga_genesis_boolean(	const int		population_size,
  */
   if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
     return NULL;
+
+/*
+ * Assign population's user data.
+ */
+  pop->data = userdata;
 
 /*
  * Define some callback functions.
@@ -387,7 +404,8 @@ population *ga_genesis_double(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   population	*pop;	/* The new population structure. */
 
@@ -399,6 +417,11 @@ population *ga_genesis_double(	const int		population_size,
  */
   if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
     return NULL;
+
+/*
+ * Assign population's user data.
+ */
+  pop->data = userdata;
 
 /*
  * Define some callback functions.
@@ -467,7 +490,8 @@ population *ga_genesis_bitstring(	const int		population_size,
 			GAselect_two		select_two,
 			GAmutate		mutate,
 			GAcrossover		crossover,
-			GAreplace		replace )
+			GAreplace		replace,
+			vpointer		userdata )
   {
   population	*pop;	/* The new population structure. */
 
@@ -479,6 +503,11 @@ population *ga_genesis_bitstring(	const int		population_size,
  */
   if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
     return NULL;
+
+/*
+ * Assign population's user data.
+ */
+  pop->data = userdata;
 
 /*
  * Define some callback functions.

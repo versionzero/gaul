@@ -643,7 +643,8 @@ int main(int argc, char **argv)
        ga_select_two_roulette_rebased,	/* GAselect_two           select_two */
        wildfire_mutate_flip,	/* GAmutate               mutate */
        wildfire_crossover,	/* GAcrossover   crossover */
-       NULL			/* GAreplace     replace */
+       NULL,			/* GAreplace     replace */
+       NULL			/* vpointer	User data */
             );
 
     ga_population_set_parameters(

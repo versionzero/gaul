@@ -205,21 +205,22 @@ int main(int argc, char **argv)
   random_seed(23091975);
 
   pop = ga_genesis_double(
-       50,				/* const int              population_size */
-       1,				/* const int              num_chromo */
-       4,				/* const int              len_chromo */
-       NULL,				/* GAgeneration_hook      generation_hook */
+       50,			/* const int              population_size */
+       1,			/* const int              num_chromo */
+       4,			/* const int              len_chromo */
+       NULL,			/* GAgeneration_hook      generation_hook */
        test_iteration_callback,	/* GAiteration_hook       iteration_hook */
-       NULL,				/* GAdata_destructor      data_destructor */
-       NULL,				/* GAdata_ref_incrementor data_ref_incrementor */
-       test_score,			/* GAevaluate             evaluate */
-       test_seed,			/* GAseed                 seed */
-       NULL,				/* GAadapt                adapt */
-       NULL,				/* GAselect_one           select_one */
-       NULL,				/* GAselect_two           select_two */
-       NULL,				/* GAmutate               mutate */
-       NULL,				/* GAcrossover            crossover */
-       NULL				/* GAreplace              replace */
+       NULL,			/* GAdata_destructor      data_destructor */
+       NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+       test_score,		/* GAevaluate             evaluate */
+       test_seed,		/* GAseed                 seed */
+       NULL,			/* GAadapt                adapt */
+       NULL,			/* GAselect_one           select_one */
+       NULL,			/* GAselect_two           select_two */
+       NULL,			/* GAmutate               mutate */
+       NULL,			/* GAcrossover            crossover */
+       NULL,			/* GAreplace              replace */
+       NULL			/* vpointer	User data */
             );
 
   ga_population_set_gradient_parameters(
