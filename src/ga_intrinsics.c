@@ -672,6 +672,36 @@ int ga_population_set_migrationratio_slang(int *pop, int *value)
 
 
 /**********************************************************************
+  ga_population_set_scheme_slang()
+  synopsis:	Alter population's evolutionary class field.
+  parameters:
+  return:
+  last updated:	20 Sep 2002
+ **********************************************************************/
+
+int ga_population_set_scheme_slang(int *pop, int *value)
+  {
+  ((population*) ga_get_population_from_id(*pop))->scheme = *value;
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_set_elitism_slang()
+  synopsis:	Alter population's elitism mode field.
+  parameters:
+  return:
+  last updated:	20 Sep 2002
+ **********************************************************************/
+
+int ga_population_set_elitism_slang(int *pop, int *value)
+  {
+  ((population*) ga_get_population_from_id(*pop))->elitism = *value;
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_population_get_chromosomenum_slang()
   synopsis:	Access population's num_chromosomes field.
   parameters:
@@ -1136,7 +1166,25 @@ boolean ga_intrinsic_sladd(void)
 
 boolean ga_intrinsic_sladd(void)
   {
-  return (
+  static int    fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
+  static int[]	schemes={GA_SCHEME_DARWIN, GA_SCHEME_LAMARCK_PARENTS, GA_SCHEME_LAMARCK_CHILDREN, GA_SCHEME_LAMARCK_ALL, GA_SCHEME_BALDWIN_PARENTS, GA_SCHEME_BALDWIN_CHILDREN, GA_SCHEME_BALDWIN_ALL};
+  static int[]	elitism={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE};
+
+  if (  SLadd_intrinsic_variable("GA_SCHEME_DARWIN", &(schemes[0]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_LAMARCK_PARENTS", &(schemes[1]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_LAMARCK_CHILDREN", &(schemes[2]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_LAMARCK_ALL", &(schemes[3]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_BALDWIN_PARENTS", &(schemes[4]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_BALDWIN_CHILDREN", &(schemes[5]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_SCHEME_BALDWIN_ALL", &(schemes[6]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_ELITISM_UNKNOWN", &(elitism[0]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_ELITISM_PARENTS_SURVIVE", &(elitism[1]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_ELITISM_ONE_PARENT_SURVIVES", &(elitism[2]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_ELITISM_PARENTS_DIE", &(elitism[3]), SLANG_INT_TYPE, TRUE)
+     || SLadd_intrinsic_variable("GA_FITNESS_MIN", &fitnessmin, SLANG_DOUBLE_TYPE, TRUE)
+     ) return FALSE;
+
+  if (
          SLadd_intrinsic_function("ga_population_new",
             (FVOID_STAR) ga_population_new_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
@@ -1221,6 +1269,12 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_population_set_migrationratio",
             (FVOID_STAR) ga_population_set_migrationratio_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_DOUBLE_TYPE)
+      || SLadd_intrinsic_function("ga_population_set_scheme",
+            (FVOID_STAR) ga_population_set_scheme_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_population_set_elitism",
+            (FVOID_STAR) ga_population_set_elitism_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_get_chromosomenum",
             (FVOID_STAR) ga_population_get_chromosomenum_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
@@ -1274,7 +1328,9 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_crossover_chromosome_mixing_slang, SLANG_INT_TYPE, 5,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
 */
-     );
+     ) return FALSE;
+
+  return TRUE;
   }
 
 #endif

@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "18/09/02"
+#define BUILD_DATE_STRING "20/09/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -119,7 +119,7 @@
 #define HAVE_SELECT 1
 
 /* Define to 1 if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Whether S-Lang is installed. */
 #define HAVE_SLANG 0
