@@ -64,11 +64,14 @@ THREAD_LOCK_DEFINE_STATIC(pop_table_lock);
 static TableStruct	*pop_table=NULL;	/* The population table. */
 
 /*
- * Lookup table for functions.  This is required for saving defined code hooks in files.
+ * Lookup table for functions.
+ *
+ * This is required for saving defined code hooks in files and for
+ * some script interfaces.
  */
 struct func_lookup {char *funcname; void *func_ptr;};
 
-static struct func_lookup lookup[90]={
+static struct func_lookup lookup[]={
 	{ NULL, NULL },
 	{ "ga_select_one_random", (void *) ga_select_one_random },
 	{ "ga_select_two_random", (void *) ga_select_two_random },
@@ -156,8 +159,6 @@ static struct func_lookup lookup[90]={
 	{ "ga_chromosome_bitstring_to_bytes", (void *) ga_chromosome_bitstring_to_bytes },
 	{ "ga_chromosome_bitstring_from_bytes", (void *) ga_chromosome_bitstring_from_bytes },
 	{ "ga_chromosome_bitstring_to_string", (void *) ga_chromosome_bitstring_to_string },
-	{ NULL, NULL },
-	{ NULL, NULL },
 	{ NULL, NULL } };
 
 
@@ -763,21 +764,22 @@ static entity *gaul_read_entity(FILE *fp, population *pop)
 
 
 /**********************************************************************
-  gaul_lookup_hook_id()
+  ga_funclookup_ptr_to_id()
   synopsis:     Assign a unique id to a callback function for
-		population disk format.
+		population disk format from its pointer.
   parameters:
   return:
-  last updated: 30 May 2002
+  last updated: 10 Apr 2003
  **********************************************************************/
 
-static int gaul_lookup_hook_id(void *func)
+int ga_funclookup_ptr_to_id(void *func)
   {
   int	id=1;	/* Index into lookup table. */
 
   if ( !func ) return 0;
 
-  while (lookup[id].func_ptr != NULL && func != lookup[id].func_ptr) id++;
+  while (lookup[id].func_ptr != NULL && func != lookup[id].func_ptr)
+    id++;
 
 #if GAUL_DEBUG>2
   printf("Function id is %d\n", id);
@@ -788,14 +790,40 @@ static int gaul_lookup_hook_id(void *func)
 
 
 /**********************************************************************
-  gaul_lookup_hook()
-  synopsis:     Returns a pointer to a function from its unique id.
+  ga_funclookup_label_to_id()
+  synopsis:     Assign a unique id to a callback function for
+		population disk format from its label.
   parameters:
   return:
-  last updated: 30 May 2002
+  last updated: 10 Apr 2003
  **********************************************************************/
 
-static void *gaul_lookup_hook(int id)
+int ga_funclookup_label_to_id(char *funcname)
+  {
+  int	id=1;	/* Index into lookup table. */
+
+  if ( !funcname ) return 0;
+
+  while (lookup[id].funcname != NULL && strcmp(funcname, lookup[id].funcname) != 0)
+    id++;
+
+#if GAUL_DEBUG>2
+  printf("Function id is %d\n", id);
+#endif
+
+  return lookup[id].func_ptr!=NULL?id:-1;
+  }
+
+
+/**********************************************************************
+  ga_funclookup_id_to_ptr()
+  synopsis:     Returns the pointer to a function from its unique id.
+  parameters:
+  return:
+  last updated: 10 Apr 2003
+ **********************************************************************/
+
+void *ga_funclookup_id_to_ptr(int id)
   {
 
 #if GAUL_DEBUG>2
@@ -803,6 +831,25 @@ static void *gaul_lookup_hook(int id)
 #endif
 
   return (id<0)?NULL:lookup[id].func_ptr;
+  }
+
+
+/**********************************************************************
+  ga_funclookup_id_to_label()
+  synopsis:     Returns the label for a function from its unique id.
+  parameters:
+  return:
+  last updated: 10 Apr 2003
+ **********************************************************************/
+
+char *ga_funclookup_id_to_label(int id)
+  {
+
+#if GAUL_DEBUG>2
+  printf("Looking for function with id %d\n", id);
+#endif
+
+  return (id<0)?NULL:lookup[id].funcname;
   }
 
 
@@ -872,11 +919,11 @@ boolean ga_population_write(population *pop, char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  id[0] = gaul_lookup_hook_id((void *)pop->generation_hook);
-  id[1] = gaul_lookup_hook_id((void *)pop->iteration_hook);
+  id[0] = ga_funclookup_ptr_to_id((void *)pop->generation_hook);
+  id[1] = ga_funclookup_ptr_to_id((void *)pop->iteration_hook);
 
-  /*gaul_lookup_hook_id((void *)pop->data_destructor);*/
-  /*gaul_lookup_hook_id((void *)pop->data_ref_incrementor);*/
+  /*ga_funclookup_ptr_to_id((void *)pop->data_destructor);*/
+  /*ga_funclookup_ptr_to_id((void *)pop->data_ref_incrementor);*/
   /* GAUL doesn't define any functions for either of these. */
   if (pop->data_destructor)
     id[2] = -1;
@@ -888,21 +935,21 @@ boolean ga_population_write(population *pop, char *fname)
   else
     id[3] = 0;
 
-  id[4] = gaul_lookup_hook_id((void *)pop->chromosome_constructor);
-  id[5] = gaul_lookup_hook_id((void *)pop->chromosome_destructor);
-  id[6] = gaul_lookup_hook_id((void *)pop->chromosome_replicate);
-  id[7] = gaul_lookup_hook_id((void *)pop->chromosome_to_bytes);
-  id[8] = gaul_lookup_hook_id((void *)pop->chromosome_from_bytes);
-  id[9] = gaul_lookup_hook_id((void *)pop->chromosome_to_string);
+  id[4] = ga_funclookup_ptr_to_id((void *)pop->chromosome_constructor);
+  id[5] = ga_funclookup_ptr_to_id((void *)pop->chromosome_destructor);
+  id[6] = ga_funclookup_ptr_to_id((void *)pop->chromosome_replicate);
+  id[7] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_bytes);
+  id[8] = ga_funclookup_ptr_to_id((void *)pop->chromosome_from_bytes);
+  id[9] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_string);
 
-  id[10] = gaul_lookup_hook_id((void *)pop->evaluate);
-  id[11] = gaul_lookup_hook_id((void *)pop->seed);
-  id[12] = gaul_lookup_hook_id((void *)pop->adapt);
-  id[13] = gaul_lookup_hook_id((void *)pop->select_one);
-  id[14] = gaul_lookup_hook_id((void *)pop->select_two);
-  id[15] = gaul_lookup_hook_id((void *)pop->mutate);
-  id[16] = gaul_lookup_hook_id((void *)pop->crossover);
-  id[17] = gaul_lookup_hook_id((void *)pop->replace);
+  id[10] = ga_funclookup_ptr_to_id((void *)pop->evaluate);
+  id[11] = ga_funclookup_ptr_to_id((void *)pop->seed);
+  id[12] = ga_funclookup_ptr_to_id((void *)pop->adapt);
+  id[13] = ga_funclookup_ptr_to_id((void *)pop->select_one);
+  id[14] = ga_funclookup_ptr_to_id((void *)pop->select_two);
+  id[15] = ga_funclookup_ptr_to_id((void *)pop->mutate);
+  id[16] = ga_funclookup_ptr_to_id((void *)pop->crossover);
+  id[17] = ga_funclookup_ptr_to_id((void *)pop->replace);
 
   fwrite(id, sizeof(int), 18, fp);
 
@@ -1014,27 +1061,27 @@ static population *ga_population_read_001(char *fname)
  */
   fread(id, sizeof(int), 18, fp);
 
-  pop->generation_hook        = (GAgeneration_hook)  gaul_lookup_hook(id[0]);
-  pop->iteration_hook         = (GAiteration_hook)   gaul_lookup_hook(id[1]);
+  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
+  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
 
-  pop->data_destructor        = (GAdata_destructor)      gaul_lookup_hook(id[2]);
-  pop->data_ref_incrementor   = (GAdata_ref_incrementor) gaul_lookup_hook(id[3]);
+  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[2]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[3]);
 
-  pop->chromosome_constructor = (GAchromosome_constructor) gaul_lookup_hook(id[4]);
-  pop->chromosome_destructor  = (GAchromosome_destructor)  gaul_lookup_hook(id[5]);
-  pop->chromosome_replicate   = (GAchromosome_replicate)   gaul_lookup_hook(id[6]);
-  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    gaul_lookup_hook(id[7]);
-  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  gaul_lookup_hook(id[8]);
-  pop->chromosome_to_string   = (GAchromosome_to_string)   gaul_lookup_hook(id[9]);
+  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[4]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[5]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[6]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[7]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[8]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[9]);
 
-  pop->evaluate               = (GAevaluate)       gaul_lookup_hook(id[10]);
-  pop->seed                   = (GAseed)           gaul_lookup_hook(id[11]);
-  pop->adapt                  = (GAadapt)          gaul_lookup_hook(id[12]);
-  pop->select_one             = (GAselect_one)     gaul_lookup_hook(id[13]);
-  pop->select_two             = (GAselect_two)     gaul_lookup_hook(id[14]);
-  pop->mutate                 = (GAmutate)         gaul_lookup_hook(id[15]);
-  pop->crossover              = (GAcrossover)      gaul_lookup_hook(id[16]);
-  pop->replace                = (GAreplace)        gaul_lookup_hook(id[17]);
+  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[10]);
+  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[11]);
+  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[12]);
+  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[13]);
+  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[14]);
+  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
+  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
+  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
 
 /*
  * Warn user of any unhandled data.
@@ -1151,27 +1198,27 @@ population *ga_population_read(char *fname)
  */
   fread(id, sizeof(int), 18, fp);
 
-  pop->generation_hook        = (GAgeneration_hook)  gaul_lookup_hook(id[0]);
-  pop->iteration_hook         = (GAiteration_hook)   gaul_lookup_hook(id[1]);
+  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
+  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
 
-  pop->data_destructor        = (GAdata_destructor)      gaul_lookup_hook(id[2]);
-  pop->data_ref_incrementor   = (GAdata_ref_incrementor) gaul_lookup_hook(id[3]);
+  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[2]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[3]);
 
-  pop->chromosome_constructor = (GAchromosome_constructor) gaul_lookup_hook(id[4]);
-  pop->chromosome_destructor  = (GAchromosome_destructor)  gaul_lookup_hook(id[5]);
-  pop->chromosome_replicate   = (GAchromosome_replicate)   gaul_lookup_hook(id[6]);
-  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    gaul_lookup_hook(id[7]);
-  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  gaul_lookup_hook(id[8]);
-  pop->chromosome_to_string   = (GAchromosome_to_string)   gaul_lookup_hook(id[9]);
+  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[4]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[5]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[6]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[7]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[8]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[9]);
 
-  pop->evaluate               = (GAevaluate)       gaul_lookup_hook(id[10]);
-  pop->seed                   = (GAseed)           gaul_lookup_hook(id[11]);
-  pop->adapt                  = (GAadapt)          gaul_lookup_hook(id[12]);
-  pop->select_one             = (GAselect_one)     gaul_lookup_hook(id[13]);
-  pop->select_two             = (GAselect_two)     gaul_lookup_hook(id[14]);
-  pop->mutate                 = (GAmutate)         gaul_lookup_hook(id[15]);
-  pop->crossover              = (GAcrossover)      gaul_lookup_hook(id[16]);
-  pop->replace                = (GAreplace)        gaul_lookup_hook(id[17]);
+  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[10]);
+  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[11]);
+  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[12]);
+  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[13]);
+  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[14]);
+  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
+  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
+  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
 
 /*
  * Warn user of any unhandled data.
