@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright Â©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -55,9 +55,9 @@ struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
-lib_LIBRARIES = libbtree.a
+lib_LTLIBRARIES = libbtree.la
 
-libbtree_a_SOURCES = btree.c
+libbtree_la_SOURCES = btree.c
 
 noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h

@@ -41,16 +41,16 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
-build_libtool_libs=yes
+build_libtool_libs=no
 
 # Whether or not to build static libraries.
 build_old_libs=yes
 
 # Whether or not to add -lc for building shared libraries.
-build_libtool_need_lc=no
+build_libtool_need_lc=yes
 
 # Whether or not to optimize for fast installation.
-fast_install=yes
+fast_install=needless
 
 # The host system.
 host_alias=
@@ -64,10 +64,10 @@ AR="ar"
 AR_FLAGS="cru"
 
 # The default C compiler.
-CC="gcc"
+CC="icc"
 
 # Is the compiler the GNU C compiler?
-with_gcc=yes
+with_gcc=
 
 # The linker used to build libraries.
 LD="/usr/bin/ld"
@@ -101,7 +101,7 @@ reload_flag=" -r"
 reload_cmds="\$LD\$reload_flag -o \$output\$reload_objs"
 
 # How to pass a linker flag through the compiler.
-wl="-Wl,"
+wl=""
 
 # Object file suffix (normally "o").
 objext="o"
@@ -113,17 +113,17 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -fPIC"
+pic_flag=""
 pic_mode=default
 
 # Does compiler simultaneously support -c and -o options?
-compiler_c_o="yes"
+compiler_c_o="no"
 
 # Can we write directly to a .lo ?
-compiler_o_lo="yes"
+compiler_o_lo="no"
 
 # Must we lock files when doing compilation ?
-need_locks="no"
+need_locks="yes"
 
 # Do we need the lib prefix for modules?
 need_lib_prefix=no
@@ -141,10 +141,10 @@ dlopen_self=unknown
 dlopen_self_static=unknown
 
 # Compiler flag to prevent dynamic linking.
-link_static_flag="-static"
+link_static_flag=""
 
 # Compiler flag to turn off builtin functions.
-no_builtin_flag=" -fno-builtin -fno-rtti -fno-exceptions"
+no_builtin_flag=""
 
 # Compiler flag to allow reflexive dlopens.
 export_dynamic_flag_spec="\${wl}--export-dynamic"
@@ -253,7 +253,7 @@ hardcode_shlibpath_var=unsupported
 
 # Variables whose values should be saved in libtool wrapper scripts and
 # restored at relink time.
-variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
+variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
 link_all_deplibs=unknown

@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 #######################################################################
-# util Makefile.am
+# util/Makefile.am
 #######################################################################
 #
 # util - General collection of C-programming utitily routines.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright Â©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -29,10 +29,10 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libstuff.a \
-	libnn_util.a \
-        liblog_util.a liblog_util_parallel.a \
-	libmpi_util.a libmpi_util_fake.a
+#lib_LIBRARIES = libstuff.a \
+#	libnn_util.a \
+#	liblog_util.a liblog_util_parallel.a \
+#	libmpi_util.a libmpi_util_fake.a
 
 lib_LTLIBRARIES = libstuff.la \
 	libnn_util.la \
@@ -44,17 +44,17 @@ bin_PROGRAMS = nn
 nn_SOURCES = \
 	nn_main.c
 
-libstuff_a_SOURCES = \
-	avltree.c \
-	compatibility.c \
-	linkedlist.c \
-	memory_util.c \
-	table_util.c \
-	random_util.c \
-	str_util.c \
-	dstr_util.c \
-	str_match.c \
-	timer_util.c
+#libstuff_a_SOURCES = \
+#	avltree.c \
+#	compatibility.c \
+#	linkedlist.c \
+#	memory_util.c \
+#	table_util.c \
+#	random_util.c \
+#	str_util.c \
+#	dstr_util.c \
+#	str_match.c \
+#	timer_util.c
 
 libstuff_la_SOURCES = \
 	avltree.c \
@@ -68,32 +68,32 @@ libstuff_la_SOURCES = \
 	str_match.c \
 	timer_util.c
 
-liblog_util_parallel_a_SOURCES = \
-	log_util_parallel.c
+#liblog_util_parallel_a_SOURCES = \
+#	log_util_parallel.c
 
 liblog_util_parallel_la_SOURCES = \
 	log_util_parallel.c
 
-liblog_util_a_SOURCES = \
-	log_util.c
+#liblog_util_a_SOURCES = \
+#	log_util.c
 
 liblog_util_la_SOURCES = \
 	log_util.c
 
-libmpi_util_fake_a_SOURCES = \
-	mpi_util_fake.c 
+#libmpi_util_fake_a_SOURCES = \
+#	mpi_util_fake.c 
 
 libmpi_util_fake_la_SOURCES = \
 	mpi_util_fake.c 
 
-libmpi_util_a_SOURCES = \
-	mpi_util.c 
+#libmpi_util_a_SOURCES = \
+#	mpi_util.c 
 
 libmpi_util_la_SOURCES = \
 	mpi_util.c 
 
-libnn_util_a_SOURCES = \
-	nn_util.c
+#libnn_util_a_SOURCES = \
+#	nn_util.c
 
 libnn_util_la_SOURCES = \
 	nn_util.c

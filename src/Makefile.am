@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright Â©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -28,24 +28,24 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
+#lib_LIBRARIES = libgaul.a
+
 lib_LTLIBRARIES = libgaul.la
 
-lib_LIBRARIES = libgaul.a
-
-libgaul_a_SOURCES = \
-    ga_bitstring.c \
-    ga_chromo.c \
-    ga_core.c \
-    ga_crossover.c \
-    ga_intrinsics.c \
-    ga_mutate.c \
-    ga_optim.c \
-    ga_qsort.c \
-    ga_replace.c \
-    ga_seed.c \
-    ga_select.c \
-    ga_similarity.c \
-    ga_utility.c
+#libgaul_a_SOURCES = \
+#    ga_bitstring.c \
+#    ga_chromo.c \
+#    ga_core.c \
+#    ga_crossover.c \
+#    ga_intrinsics.c \
+#    ga_mutate.c \
+#    ga_optim.c \
+#    ga_qsort.c \
+#    ga_replace.c \
+#    ga_seed.c \
+#    ga_select.c \
+#    ga_similarity.c \
+#    ga_utility.c
 
 libgaul_la_SOURCES = \
     ga_bitstring.c \
