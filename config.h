@@ -20,11 +20,11 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1839-0"
-#define BUILD_DATE_STRING "31/05/02"
+#define VERSION_STRING "0.1839-1"
+#define BUILD_DATE_STRING "11/06/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
-#define PATCH_VERSION 0
+#define PATCH_VERSION 1
 #define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
@@ -68,7 +68,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "31/05/02"
+#define BUILD_DATE_STRING "11/06/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -335,7 +335,7 @@
 #define PARALLEL 0
 
 /* Patch count */
-#define PATCH_VERSION 0
+#define PATCH_VERSION 1
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -371,7 +371,7 @@
 /* #undef VERSION */
 
 /* Version string */
-#define VERSION_STRING "0.1839-0"
+#define VERSION_STRING "0.1839-1"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

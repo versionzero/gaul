@@ -2398,24 +2398,139 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
   synopsis:	Sets the GA parameters for a population.
   parameters:
   return:
-  last updated:	23/04/01
+  last updated:	10 Jun 2002
  **********************************************************************/
 
-void ga_population_set_parameters(	population	*pop,
-					double	crossover,
-					double	mutation,
-					double	migration)
+void ga_population_set_parameters(	population		*pop,
+					const ga_scheme_type	scheme,
+					const ga_elitism_type	elitism,
+					const double		crossover,
+					const double		mutation,
+					const double		migration)
   {
 
   if ( !pop ) die("Null pointer to population structure passed.");
 
   plog( LOG_VERBOSE,
-        "The population's GA parameters have been set.   crossover = %f mutation = %f migration = %f",
+        "Population's parameters: scheme = %d elitism = %d crossover = %f mutation = %f migration = %f",
+        (int) scheme, (int) elitism,
         crossover, mutation, migration );
 
+  pop->scheme = scheme;
+  pop->elitism = elitism;
   pop->crossover_ratio = crossover;
   pop->mutation_ratio = mutation;
   pop->migration_ratio = migration;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_scheme()
+  synopsis:	Sets the evolutionary class for a population.
+  parameters:
+  return:
+  last updated:	10 Jun 2002
+ **********************************************************************/
+
+void ga_population_set_scheme(	population		*pop,
+				const ga_scheme_type	scheme)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's evolutionary class = %d", (int) scheme);
+
+  pop->scheme = scheme;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_elitism()
+  synopsis:	Sets the elitism mode for a population.
+  parameters:
+  return:
+  last updated:	10 Jun 2002
+ **********************************************************************/
+
+void ga_population_set_elitism(	population		*pop,
+				const ga_elitism_type	elitism)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's elitism mode = %d", (int) elitism);
+
+  pop->elitism = elitism;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_mutation()
+  synopsis:	Sets the mutation rate for a population.
+  parameters:
+  return:
+  last updated:	10 Jun 2002
+ **********************************************************************/
+
+void ga_population_set_mutation(	population	*pop,
+					const double	mutation)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's mutation rate = %f", mutation);
+
+  pop->mutation_ratio = mutation;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_migration()
+  synopsis:	Sets the migration rate for a population.
+  parameters:
+  return:
+  last updated:	10 Jun 2002
+ **********************************************************************/
+
+void ga_population_set_migration(	population	*pop,
+					const double	migration)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's migration rate = %f", migration);
+
+  pop->migration_ratio = migration;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_crossover()
+  synopsis:	Sets the crossover rate a population.
+  parameters:
+  return:
+  last updated:	10 Jun 2002
+ **********************************************************************/
+
+void ga_population_set_crossover(	population	*pop,
+					const double	crossover)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's crossover rate = %f", crossover);
+
+  pop->crossover_ratio = crossover;
 
   return;
   }

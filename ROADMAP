@@ -18,6 +18,9 @@ These milestone requirements are subject to change ;)
             |    *** This will break compatibility! ***
             |  Return number of generations performed from the evolutionary functions.
             |    *** This will break compatibility! ***
+            |  Rename "ga_get_entity_rank()" etc to "ga_entity_get_rank()" etc.
+            |    *** This will break compatibility! ***
+            |  Accessor functions for the callback functions.  Change examples to use these.
 ------------+--------------------------------------------------------
  0.1841     |  ga_evolution_mp() and associated example.
             |  Use MemChunks in chromosome allocation, where appropriate.

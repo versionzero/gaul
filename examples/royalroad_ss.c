@@ -225,15 +225,16 @@ int main(int argc, char **argv)
             );
 
   ga_population_set_parameters(
-       pop,		/* population      *pop */
-       1.0,		/* double  crossover */
-       0.1,		/* double  mutation */
-       0.0              /* double  migration */
+       pop,			/* population      *pop */
+       GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
+       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type    elitism */
+       1.0,			/* double  crossover */
+       0.1,			/* double  mutation */
+       0.0              	/* double  migration */
                               );
 
   ga_evolution_steady_state(
        pop,		/* population              *pop */
-       GA_CLASS_DARWIN,	/* const ga_class_type     class */
        500000		/* const int               max_iterations */
               );
 

@@ -160,20 +160,25 @@ int main(int argc, char **argv)
             );
 
   ga_population_set_parameters(
-     popd,		/* population   *pop */
-     0.9,		/* double       crossover */
-     0.1,		/* double       mutation */
-     0.0		/* double       migration */
+     popd,			/* population   *pop */
+     GA_SCHEME_DARWIN,		/* const ga_scheme_type scheme */
+     GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
+     0.9,			/* const double       crossover */
+     0.1,			/* const double       mutation */
+     0.0			/* const double       migration */
                             );
 
-/* Make exact copies of the populations. */
+/*
+ * Make exact copies of the populations, except modify
+ * their evolutionary schemes.
+ */
   popb = ga_population_clone(popd);
+  ga_population_set_scheme(popb, GA_SCHEME_BALDWIN_CHILDREN);
   popl = ga_population_clone(popd);
+  ga_population_set_scheme(popl, GA_SCHEME_LAMARCK_CHILDREN);
 
   ga_evolution(
     popd,			/* population          *pop */
-    GA_CLASS_DARWIN,		/* const ga_class_type class */
-    GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
     600				/* const int           max_generations */
             );
 
@@ -184,8 +189,6 @@ int main(int argc, char **argv)
 
   ga_evolution(
     popb,			/* population          *pop */
-    GA_CLASS_BALDWIN,		/* const ga_class_type class */
-    GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
     200				/* const int           max_generations */
             );
 
@@ -196,8 +199,6 @@ int main(int argc, char **argv)
 
   ga_evolution(
     popl,			/* population          *pop */
-    GA_CLASS_LAMARCK,		/* const ga_class_type class */
-    GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
     200				/* const int           max_generations */
             );
 

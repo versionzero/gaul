@@ -35,9 +35,6 @@
 
 		Interested parties are directed the documentation.
 		http://gaul.sourceforge.net/similarity.pdf
-		(NB/ As of May 14 2002, this doesn't actually exist on
-		the website.  Email stewart if you really need this.
-		It will be posted fairly soon.)
 
 		It is probably best not to use the following functions,
 		i.e. they may be deprecated/removed soon:

@@ -281,7 +281,7 @@ boolean nnevolve_seed(population *pop, entity *adam)
 
 entity *nnevolve_adapt(population *pop, entity *child)
   {
-  entity        *adult;         /* Adapted solution. */
+  entity	*adult;		/* Adapted solution. */
   network_t	*nn=(network_t *)child->chromosome[0];
   int		n, item;
 
@@ -918,11 +918,13 @@ int main(int argc, char **argv)
 
 /*
  * Set the GA parameters:
- * Crossover ratio  = 0.40
- * Mutation ratio   = 0.01
- * Migration ration = 0.0
+ * Evolutionary scheme = Lamarckian adaptation on entire population.
+ * Elitism scheme      = Parents may pass to next generation.
+ * Crossover ratio     = 0.40
+ * Mutation ratio      = 0.01
+ * Migration ration    = 0.0
  */
-  ga_population_set_parameters( pop, 0.40, 0.01, 0.0 );
+  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 0.40, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -930,14 +932,14 @@ int main(int argc, char **argv)
   nnevolve_setup_data();
 
 /*
- * Perform Lamarckian evolution for 500 generations.
+ * Perform the Lamarckian evolution for 500 generations.
  */
   timer_start(&lga_timer);
-  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 500 );
+  ga_evolution( pop, 500 );
   timer_check(&lga_timer);
 
   printf("The fitness of the final solution found was: %f\n",
-		  ga_get_entity_from_rank(pop,0)->fitness);
+		 ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
   
   nnevolve_display_evaluation(pop, ga_get_entity_from_rank(pop,0));
 

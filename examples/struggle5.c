@@ -119,11 +119,10 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters( pop[i], 0.75, 0.25, 0.001 );
+    ga_population_set_parameters( pop[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
     }
 
-  ga_evolution_archipelago( GA_STRUGGLE_NUM_POPS, pop,
-       GA_CLASS_DARWIN,	GA_ELITISM_PARENTS_SURVIVE, 250 );
+  ga_evolution_archipelago( GA_STRUGGLE_NUM_POPS, pop, 250 );
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
     {

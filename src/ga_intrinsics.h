@@ -78,8 +78,8 @@ boolean	ga_multipoint_mutation(entity *father, entity *son);
 */
 int	ga_entity_score_slang(int *popid, int *joe);
 int	ga_evolution_slang(       int     *pop,
-                                int     *class,
-                                int     *elitism,
+                                int     *max_generations );
+int	ga_evolution_forked_slang(       int     *pop,
                                 int     *max_generations );
 int	ga_population_get_size_slang(int *pop);
 int	ga_population_get_maxsize_slang(int *pop);

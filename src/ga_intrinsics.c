@@ -495,16 +495,32 @@ int ga_entity_score_slang(int *pop_id, int *joe)
 		population.
   parameters:
   return:
-  last updated:	22/01/01
+  last updated:	11 Jun 2002
  **********************************************************************/
 
 int ga_evolution_slang(	int	*pop,
-				int	*class,
-				int	*elitism,
-				int	*max_generations )
+			int	*max_generations )
   {
-  ga_evolution( ga_get_population_from_id(*pop),
-                *class, *elitism, *max_generations );
+  ga_evolution( ga_get_population_from_id(*pop), *max_generations );
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_evolution_forked_slang()
+  synopsis:	Wrapper around the main genetic algorithm routine.
+		It performs a GA-based optimisation on the specified
+		population.
+  parameters:
+  return:
+  last updated:	11 Jun 2002
+ **********************************************************************/
+
+int ga_evolution_forked_slang(	int	*pop,
+			int	*max_generations )
+  {
+  ga_evolution_forked( ga_get_population_from_id(*pop), *max_generations );
 
   return TRUE;
   }
@@ -1170,8 +1186,11 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_entity_copy_all_chromosomes_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_evolution",
-            (FVOID_STAR) ga_evolution_slang, SLANG_INT_TYPE, 4,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+            (FVOID_STAR) ga_evolution_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_evolution_forked",
+            (FVOID_STAR) ga_evolution_forked_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_get_size",
             (FVOID_STAR) ga_population_get_size_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)

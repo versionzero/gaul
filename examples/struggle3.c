@@ -198,31 +198,33 @@ int main(int argc, char **argv)
   random_seed(42);
 
   pop = ga_genesis_char(
-     120,			/* const int              population_size */
-     1,				/* const int              num_chromo */
-     strlen(target_text),	/* const int              len_chromo */
-     struggle_generation_hook, 	/* GAgeneration_hook      generation_hook */
-     NULL,			/* GAiteration_hook       iteration_hook */
-     NULL,			/* GAdata_destructor      data_destructor */
-     NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-     struggle_score,		/* GAevaluate             evaluate */
-     ga_seed_printable_random,	/* GAseed                 seed */
-     struggle_adaptation,	/* GAadapt                adapt */
-     ga_select_one_roulette,	/* GAselect_one           select_one */
-     ga_select_two_roulette,	/* GAselect_two           select_two */
-     ga_mutate_printable_singlepoint_drift,	/* GAmutate    mutate */
-     ga_crossover_char_allele_mixing,	/* GAcrossover         crossover */
-     NULL			/* GAreplace replace */
+     120,				/* const int              population_size */
+     1,					/* const int              num_chromo */
+     strlen(target_text),		/* const int              len_chromo */
+     struggle_generation_hook, 		/* GAgeneration_hook      generation_hook */
+     NULL,				/* GAiteration_hook       iteration_hook */
+     NULL,				/* GAdata_destructor      data_destructor */
+     NULL,				/* GAdata_ref_incrementor data_ref_incrementor */
+     struggle_score,			/* GAevaluate             evaluate */
+     ga_seed_printable_random,		/* GAseed                 seed */
+     struggle_adaptation,		/* GAadapt                adapt */
+     ga_select_one_sus,			/* GAselect_one		select_one */
+     ga_select_two_sus,			/* GAselect_two		select_two */
+     ga_mutate_printable_singlepoint_drift,	/* GAmutate	mutate */
+     ga_crossover_char_allele_mixing,	/* GAcrossover		crossover */
+     NULL				/* GAreplace		replace */
             );
 
   ga_population_set_parameters(
-     pop,		/* population   *pop */
-     0.8,		/* double       crossover */
-     0.05,		/* double       mutation */
-     0.0		/* double       migration */
+     pop,				/* population		*pop */
+     GA_SCHEME_LAMARCK_CHILDREN,	/* const ga_scheme_type	scheme */
+     GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type	elitism */
+     0.8,				/* const double		crossover */
+     0.05,				/* const double		mutation */
+     0.0				/* const double		migration */
                             );
 
-  if ( ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE,	1000 ) )
+  if ( ga_evolution( pop, 1000 ) )
     {
     printf("The evolution was stopped because the termination criteria were met.\n" );
     }

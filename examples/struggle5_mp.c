@@ -132,7 +132,7 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters( pops[i], 0.75, 0.25, 0.001 );
+    ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
     }
 
 /*
@@ -159,8 +159,7 @@ int main(int argc, char **argv)
  * The only significant difference between "examples/struggle5" and
  * "examples/struggle5_mp" is in the following statement.
  */
-  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS_PER_PROC, pops,
-       GA_CLASS_DARWIN,	GA_ELITISM_PARENTS_SURVIVE, 250 );
+  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS_PER_PROC, pops, 250 );
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
     {

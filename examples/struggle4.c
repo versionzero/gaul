@@ -321,10 +321,10 @@ int main(int argc, char **argv)
   pop->adapt = struggle_adaptation;
 
 /* Mutation selection operator. */
-  pop->select_one = ga_select_one_roulette;
+  pop->select_one = ga_select_one_sus;
 
 /* Crossover selection operator. */
-  pop->select_two = ga_select_two_roulette;
+  pop->select_two = ga_select_two_sus;
 
 /* Mutation operator. */
   pop->mutate = struggle_mutate;
@@ -343,14 +343,16 @@ int main(int argc, char **argv)
 
 /*
  * Set the GA parameters.
+ * Lamarkian evolution.
+ * Parents may survive into next generation.
  * Crossover ratio = 0.9.
  * Mutation ratio = 0.1.
  * Migration ration = 0.0.
  * Note that custom operator functions may choose to ignore these values.
  */
-  ga_population_set_parameters( pop, 0.9, 0.1, 0.0 );
+  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_CHILDREN, GA_ELITISM_PARENTS_SURVIVE, 0.9, 0.1, 0.0 );
 
-  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 500 );
+  ga_evolution( pop, 500 );
 
   printf( "The final solution with score %f was:\n",
           ga_get_entity_from_rank(pop,0)->fitness );

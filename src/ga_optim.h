@@ -47,12 +47,11 @@ typedef void    (*GAspecificmutate)(int chromo, int point, int *data);
 /*
  * Prototypes
  */
-boolean ga_evolution(	population		*pop,
-			const ga_class_type	class,
-			const ga_elitism_type	elitism,
+int	ga_evolution(	population		*pop,
 			const int		max_generations );
-boolean ga_evolution_steady_state(	population		*pop,
-			const ga_class_type	class,
+int	ga_evolution_forked(	population		*pop,
+			const int		max_generations );
+int	ga_evolution_steady_state(	population		*pop,
 			const int		max_iterations );
 entity	*ga_random_mutation_hill_climbing(	population	*pop,
 			entity			*initial,
@@ -70,15 +69,11 @@ entity	*ga_simulated_annealling_mutation(population      *pop,
                                 const int       num_iterations,
                                 const int       initial_temperature,
                                 const int       final_temperature);
-boolean	ga_evolution_archipelago( const int num_pops,
+int	ga_evolution_archipelago( const int num_pops,
                         population              **pops,
-                        const ga_class_type     class,
-                        const ga_elitism_type   elitism,
                         const int               max_generations );
-boolean	ga_evolution_archipelago_mp( const int num_pops,
+int	ga_evolution_archipelago_mp( const int num_pops,
                         population              **pops,
-                        const ga_class_type     class,
-                        const ga_elitism_type   elitism,
                         const int               max_generations );
 
 #endif	/* GA_OPTIM_H */

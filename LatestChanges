@@ -1,5 +1,15 @@
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().
+- Modified sorting routines such that identical results are produced on all supported platforms.
+- Added 'double-array' chromosome similarity routines; Tanimoto, Dice, Cosine similarity coefficients.
+- *** API CHANGE *** evolutionary functions now return the number of generations performed.
+- *** API CHANGE *** ga_population_parameters() is now used to define elitism mode and evolutionary scheme instead of the evolutionary functions' parameter list.
+- Evolutionary code cleaned and optimised for both speed and size through better code re-use.
+- ga_population_set_scheme(), ga_population_set_elitism(), ga_population_set_crossover(), ga_population_set_mutation(), ga_population_set_migration() added.
+- Example programs fixed with respect to the extensive API changes.
+- Some unnecessary fitness evaluations are no longer performed.
+- *** API CHANGE *** adaptation functions can no longer assume that passed entities have been evaluated (in fact, it is likely that they haven't).
+- *** API CHANGE *** adaptation type is named "scheme" instead of "class" to avoid confusing the computer scientists ;)
 
 Changes since release 0.1838:
 - Added Stochastic Universal Sampling selection functions ga_select_one_sus() and ga_select_two_sus().

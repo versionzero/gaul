@@ -98,7 +98,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1839
-LT_REVISION = 0
+LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
@@ -107,15 +107,15 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 0
+PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1839-0
+VERSION = 0.1839-1
 
 AUTOMAKE_OPTIONS = 1.4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON =  README Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

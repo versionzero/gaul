@@ -43,7 +43,13 @@
 
 #include <math.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
+/*
+ * Programming utilities.
+ */
 #include "compatibility.h"	/* For portability stuff. */
 #include "linkedlist.h"		/* For linked lists. */
 #include "log_util.h"		/* For logging facilities. */
@@ -61,6 +67,18 @@
 # else
 #  define GA_DEBUG	0
 # endif
+#endif
+
+/*
+ * Specification for number of processes used in
+ * multiprocess functions.
+ */
+#ifndef GA_NUM_PROCESSES_ENVVAR_STRING
+#define GA_NUM_PROCESSES_ENVVAR_STRING  "GAUL_NUM_PROCESSES"
+#endif
+  
+#ifndef GA_DEFAULT_NUM_PROCESSES
+#define GA_DEFAULT_NUM_PROCESSES        8
 #endif
 
 /*
@@ -144,9 +162,15 @@ struct population_t
   vpointer	data;			/* User data. */
 
   int		select_state;		/* Available to selection algorithm. */
-  double	crossover_ratio;	/* Chance for crossover. */
-  double	mutation_ratio;		/* Chance for mutation. */
-  double	migration_ratio;	/* Chance for migration. */
+
+/*
+ * Evolutionary parameters.
+ */
+  double		crossover_ratio;	/* Chance for crossover. */
+  double		mutation_ratio;		/* Chance for mutation. */
+  double		migration_ratio;	/* Chance for migration. */
+  ga_scheme_type	scheme;			/* Evolutionary scheme. */
+  ga_elitism_type	elitism;		/* Elitism mode. */
 
 /*
  * Scoring function and the other callbacks are defined here.
@@ -242,16 +266,23 @@ population *ga_population_receive( int src_node );
 void ga_population_send( population *pop, int dest_node );
 void ga_population_send_all( population *pop, int dest_node );
 
-#if 0
-entity	*ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
-boolean	ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
-#endif
-
 entity	*ga_optimise_entity(population *pop, entity *unopt);
-void	ga_population_set_parameters(      population      *pop,
-                                        double  crossover,
-                                        double  mutation,
-                                        double  migration);
+void	ga_population_set_parameters(  population            *pop,
+                                       const ga_scheme_type  scheme,
+                                       const ga_elitism_type elitism,
+                                       const double          crossover,
+                                       const double          mutation,
+                                       const double          migration);
+void	ga_population_set_scheme(      population            *pop,
+                                       const ga_scheme_type  scheme);
+void	ga_population_set_elitism(     population            *pop,
+                                       const ga_elitism_type elitism);
+void	ga_population_set_crossover(   population            *pop,
+                                       const double          crossover);
+void	ga_population_set_mutation(    population            *pop,
+                                       const double          mutation);
+void	ga_population_set_migration(   population            *pop,
+                                       const double          migration);
 population *ga_transcend(unsigned int id);
 unsigned int ga_resurect(population *pop);
 boolean ga_extinction(population *extinct);
