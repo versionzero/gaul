@@ -172,7 +172,7 @@ int main(int argc, char **argv)
   printf("Configuration details:\n");
 
   printf("GA_BUILD_DATE_STRING:           %s\n", GA_BUILD_DATE_STRING);
-  printf("GA_DEFAULT_NUM_PROCESSES:       %d\n",GA_DEFAULT_NUM_PROCESSES);
+  printf("GA_DEFAULT_NUM_PROCESSES:       %d\n", GA_DEFAULT_NUM_PROCESSES);
   printf("GA_DEFAULT_NUM_THREADS:         %d\n", GA_DEFAULT_NUM_THREADS);
   printf("GA_NUM_PROCESSES_ENVVAR_STRING: %s\n", GA_NUM_PROCESSES_ENVVAR_STRING);
   printf("GA_NUM_THREADS_ENVVAR_STRING:   %s\n", GA_NUM_THREADS_ENVVAR_STRING);

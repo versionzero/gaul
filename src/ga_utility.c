@@ -41,7 +41,7 @@
   synopsis:	Display diagnostics message.
   parameters:	none
   return:	none
-  last updated:	14 Jun 2004
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 void ga_diagnostics(void)
@@ -49,29 +49,34 @@ void ga_diagnostics(void)
   int	num_pops;	/* Number of populations defined, or -1 for no table. */
 
   printf("=== GA utility library =======================================\n");
-  printf("Version:                   %s\n", GA_VERSION_STRING);
-  printf("Build date:                %s\n", GA_BUILD_DATE_STRING);
+  printf("Version:                     %s\n", GA_VERSION_STRING);
+  printf("Build date:                  %s\n", GA_BUILD_DATE_STRING);
   printf("Compilation machine characteristics:\n%s\n", GA_UNAME_STRING);
   printf("--- Constants ------------------------------------------------\n");
-  printf("GA_DEBUG:                  %d\n", GA_DEBUG);
-  printf("GA_BOLTZMANN_FACTOR:       %e\n", GA_BOLTZMANN_FACTOR);
-  printf("GA_MIN_FITNESS:            %e\n", GA_MIN_FITNESS);
-  printf("BYTEBITS:                  %d\n", BYTEBITS);
+  printf("GA_DEBUG:                    %d\n", GA_DEBUG);
+  printf("GA_BOLTZMANN_FACTOR:         %e\n", GA_BOLTZMANN_FACTOR);
+  printf("GA_MIN_FITNESS:              %e\n", GA_MIN_FITNESS);
+  printf("BYTEBITS:                    %d\n", BYTEBITS);
+  printf("--- Defaults -------------------------------------------------\n");
+  printf("GA_DEFAULT_CROSSOVER_RATIO:  %d\n", GA_DEFAULT_CROSSOVER_RATIO);
+  printf("GA_DEFAULT_MUTATION_RATIO:   %d\n", GA_DEFAULT_MUTATION_RATIO);
+  printf("GA_DEFAULT_MIGRATION_RATIO:  %d\n", GA_DEFAULT_MIGRATION_RATIO);
+  printf("GA_DEFAULT_ALLELE_MUTATION_PROB: %d\n", GA_DEFAULT_ALLELE_MUTATION_PROB);
   printf("--- Data structures ------------------------------------------\n");
-  printf("structure                  sizeof\n");
-  printf("population                 %lu\n", (unsigned long) sizeof(population));
-  printf("entity                     %lu\n", (unsigned long) sizeof(entity));
-  printf("byte                       %lu\n", (unsigned long) sizeof(byte));
+  printf("structure                    sizeof\n");
+  printf("population                   %lu\n", (unsigned long) sizeof(population));
+  printf("entity                       %lu\n", (unsigned long) sizeof(entity));
+  printf("byte                         %lu\n", (unsigned long) sizeof(byte));
   printf("--- Current variables ----------------------------------------\n");
   num_pops = ga_get_num_populations();
   if (num_pops==-1)
     {
-    printf("Population table:          undefined\n");
+    printf("Population table:            undefined\n");
     }
   else
     {
-    printf("Population table:          defined\n");
-    printf("Size:                      %d\n", num_pops);
+    printf("Population table:            defined\n");
+    printf("Size:                        %d\n", num_pops);
     }
   printf("==============================================================\n");
 

@@ -64,6 +64,10 @@
 		This implementation uses a GAUL boolean chromosome
 		with a standard generational GA.
 
+		This is a version of the royalroad.c example modified
+		to demonstrate the
+		ga_population_set_allele_mutation_prob() function.
+
  **********************************************************************/
 
 /*

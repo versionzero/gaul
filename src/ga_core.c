@@ -294,13 +294,13 @@ population *ga_population_new(	const int stable_size,
   newpop->island = -1;
   newpop->generation = 0;
 
-  newpop->crossover_ratio = 1.0;
-  newpop->mutation_ratio = 1.0;
-  newpop->migration_ratio = 1.0;
+  newpop->crossover_ratio = GA_DEFAULT_CROSSOVER_RATIO;
+  newpop->mutation_ratio = GA_DEFAULT_MUTATION_RATIO;
+  newpop->migration_ratio = GA_DEFAULT_MIGRATION_RATIO;
   newpop->scheme = GA_SCHEME_DARWIN;
-  newpop->elitism = GA_ELITISM_UNKNOWN;
+  newpop->elitism = GA_ELITISM_PARENTS_SURVIVE;
 
-  newpop->allele_mutation_prob = DEFAULT_ALLELE_MUTATION_PROB;
+  newpop->allele_mutation_prob = GA_DEFAULT_ALLELE_MUTATION_PROB;
 
   THREAD_LOCK_NEW(newpop->lock);
 #if USE_CHROMO_CHUNKS == 1

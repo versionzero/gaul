@@ -132,6 +132,7 @@
 #define GA_TAG_POPCROSSOVER	202
 #define GA_TAG_POPMUTATION	203
 #define GA_TAG_POPMIGRATION	204
+#define GA_TAG_POPALLELEMUTPROB	205
 
 /*
  * Entity Structure.
@@ -353,10 +354,17 @@ struct population_t
 #define GA_MIN_FITNESS			DBL_MIN
 
 /*
+ * Define some default values.
+ */
+#define GA_DEFAULT_CROSSOVER_RATIO	0.9
+#define GA_DEFAULT_MUTATION_RATIO	0.1
+#define GA_DEFAULT_MIGRATION_RATIO	0.1
+
+/*
  * Define chance of any given allele being mutated in one mutation
  * operation (only for certain mutation functions).
  */
-#define DEFAULT_ALLELE_MUTATION_PROB	0.02
+#define GA_DEFAULT_ALLELE_MUTATION_PROB	0.02
 
 /* Final includes. */
 #include "gaul/ga_utility.h"	/* Hmm. */
