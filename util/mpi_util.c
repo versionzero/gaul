@@ -2,8 +2,8 @@
   mpi_util.c
  **********************************************************************
 
-  mpi_util - Abstract message passing with checkpointing stuff.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  mpi_util - Generalised message passing.
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -25,19 +25,14 @@
  **********************************************************************
 
   Synopsis:	Originally Helga's portable routines for message
-		passing.  Now generalised.  Uses the MPI
-		library.  Written such that MPI could be replaced by
-		just about any other message passing API, hopefully.
+		passing.  Now generalised.  Currently only fully
+                supports the MPI library but written such that MPI
+                could be readily replaced by just about any other
+                message passing API, hopefully.
 
-		The extra special secret super-turbo feature is
-		portable checkpointing and resuming on
-		multiple processors.  This is coarse checkpointing,
-		performed when requested by the programmer - an
-		advantage of this method is that it becomes
-		simple enough for me to code ;)
-
-		BTW: When I say "portable", I mean "should work on
-		POSIX compliant UNIX-like systems".
+		This offers only a tiny subset of the functions from
+		the MPI specification.  There is no concept of
+		'communicators'.  Message tags are observed, however.
 
 		The wrapped library is set at compile time using the
 		pre-processor constant 'PARALLEL' which is defined in
@@ -56,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	04/02/01 SAA	Code for basic BSPlib support.
+  Updated:	23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
+		04/02/01 SAA	Code for basic BSPlib support.
 		02/02/01 SAA	Removed from helga.  Use plog() instead of helga_log().
 		12/01/01 SAA	helga_mpi_test now returns a boolean value (Although, at present this is always TRUE).
 		11/01/01 SAA	For convenience in the pthread version, helga_setup_mpi() now takes the server and client functions as arguments.  _Lots_ of functions renamed for more consistent namespace.
@@ -85,6 +81,7 @@
  * Global variables.
  * Having this stuff stored removes the need for quite a number
  * of MPI calls.
+ *
  * Size is used to inticate that MPI has been initialized.  Appears much quicker
  * than using MPI_Initialized().  (Also isn't restricted to MPI only).
  */
@@ -288,7 +285,7 @@ void mpi_exit(void)
   {
 
 #if PARALLEL == 0
-  /* Nothing. */
+  /* Do nothing. */
 
 #else
 #if PARALLEL == 1
@@ -497,41 +494,6 @@ int mpi_get_prev_rank()
 
 
 /**********************************************************************
-  mpi_checkpoint()
-  synopsis:	Save state of all associated processes.
-  parameters:
-  return:
-  last updated:	06/02/01
- **********************************************************************/
-
-boolean mpi_checkpoint()
-  {
-
-#if PARALLEL == 0
-  die("sequential checkpointing code not implemented.");
-#else
-#if PARALLEL == 1
-  die("pthread checkpointing code not implemented.");
-#else
-#if PARALLEL == 2
-  die("MPI checkpointing code not implemented.");
-#else
-#if PARALLEL == 3
-  die("PVM checkpointing code not implemented.");
-#else
-#if PARALLEL == 4
-  die("BSP checkpointing code not implemented.");
-#endif
-#endif
-#endif
-#endif
-#endif
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
   mpi_sync()
   synopsis:	Syncronize all MPI processes.  Does nothing on scalar
 		versions.
@@ -543,13 +505,11 @@ boolean mpi_checkpoint()
 boolean mpi_sync()
   {
 
-  if (MPI_CHECKPOINT_ONSYNC) mpi_checkpoint();
-
 #if PARALLEL == 0
   /* Do nothing. */
 #else
 #if PARALLEL == 1
-  die("PVM syncing code not implemented.");
+  die("pthread syncing code not implemented.");
 #else
 #if PARALLEL == 2
   MPI_Barrier(MPI_COMM_WORLD);
@@ -712,62 +672,10 @@ boolean mpi_send_test_next()
 #endif /* PARALLEL==2 */
 
 
-#if 0
-/**********************************************************************
-  mpi_send_population()
-  synopsis:	Send the entire population to another node.
-  parameters:	The node to send the population to.  node = -1 for
-		broadcast to all nodes.
-  return:	TRUE successful.  FALSE otherwise.
-  last updated:	05/05/00
- **********************************************************************/
-
-boolean mpi_send_population(int node)
-  {
-/*
-  MPI_Send( xlocal[maxn/size], maxn, MPI_DOUBLE, rank + 1, 0,
-                  MPI_COMM_WORLD );
-*/
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
-  mpi_send_population_all()
-  synopsis:	Send the entire population to all nodes.
-  parameters:
-  return:	TRUE successful.  FALSE otherwise.
-  last updated:	05/05/00
- **********************************************************************/
-
-boolean mpi_send_population_all()
-  {
-  return( mpi_send_population(-1) );
-  }
-
-
-/**********************************************************************
-  mpi_send_population_next()
-  synopsis:	Send the entire population to the next node.
-  parameters:
-  return:	TRUE successful.  FALSE otherwise.
-  last updated:	05/05/00
- **********************************************************************/
-
-boolean mpi_send_population_next()
-  {
-  int	next=rank+1;	/* The rank of the next node */
-
-  if (next==size) next=0;
-  return( mpi_send_population(next) );
-  }
-#endif
-
-
 /**********************************************************************
   mpi_synchronous_send()
-  synopsis:	Send data to another node.
+  synopsis:	Send data to another node using sychronous (blocking)
+  		communication.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	21/11/00
@@ -775,7 +683,7 @@ boolean mpi_send_population_next()
 
 boolean mpi_synchronous_send(const void *buf, const int count,
                                const enum mpi_datatype type, const int node,
-                               const enum mpi_message_tag tag)
+                               const int tag)
   {
   /* Checks */
   if (!buf) die("Null pointer to (void *) buffer passed.");
@@ -805,6 +713,49 @@ boolean mpi_synchronous_send(const void *buf, const int count,
   }
 
 
+#if 0
+/**********************************************************************
+  mpi_nonblocking_send()
+  synopsis:	Send data to another node using buffered (non-blocking)
+  		communication.
+  parameters:
+  return:	TRUE successful.  FALSE otherwise.
+  last updated:	23 Jan 2002
+ **********************************************************************/
+
+boolean mpi_nonblocking_send(const void *buf, const int count,
+                               const enum mpi_datatype type, const int node,
+                               const int tag)
+  {
+  /* Checks */
+  if (!buf) die("Null pointer to (void *) buffer passed.");
+  if (node==rank) die("Why should I send a message to myself?");
+
+#if PARALLEL == 0
+  die("Uh oh.  Single processor, single threaded code trying to send an interprocess message.");
+#else
+#if PARALLEL == 1
+  die("FIXME: Not implemented.");
+#else
+#if PARALLEL == 2
+  MPI_IBsend( buf, count, type, node, tag, MPI_COMM_WORLD );
+#else
+#if PARALLEL == 3
+  die("PVM send not implemented.");
+#else
+#if PARALLEL == 4
+  bsp_put( node, buf, NULL, 0, count*type );
+#endif
+#endif
+#endif
+#endif
+#endif
+
+  return TRUE;
+  }
+#endif
+
+
 /**********************************************************************
   mpi_standard_send()
   synopsis:	Send data to another node.
@@ -815,7 +766,7 @@ boolean mpi_synchronous_send(const void *buf, const int count,
 
 boolean mpi_standard_send(const void *buf, const int count,
                             const enum mpi_datatype type, const int node,
-                            const enum mpi_message_tag tag)
+                            const int tag)
   {
   /* Checks */
   if (!buf) die("Null pointer to (void *) buffer passed.");
@@ -855,7 +806,7 @@ boolean mpi_standard_send(const void *buf, const int count,
 
 boolean mpi_standard_broadcast(const void *buf, const int count,
                             const enum mpi_datatype type,
-                            const enum mpi_message_tag tag)
+                            const int tag)
   {
   /* Checks */
   if (!buf) die("Null pointer to (void *) buffer passed.");
@@ -906,7 +857,7 @@ boolean mpi_standard_broadcast(const void *buf, const int count,
 
 boolean mpi_standard_distribute(const void *buf, const int count,
                             const enum mpi_datatype type, const int root,
-                            const enum mpi_message_tag tag)
+                            const int tag)
   {
   /* Checks */
   if (!buf) die("Null pointer to (void *) buffer passed.");
@@ -938,7 +889,7 @@ boolean mpi_standard_distribute(const void *buf, const int count,
 
 /**********************************************************************
   mpi_receive()
-  synopsis:	Send data to another node.
+  synopsis:	Receive specific data from a aspecific node.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	21/11/00
@@ -946,7 +897,7 @@ boolean mpi_standard_distribute(const void *buf, const int count,
 
 boolean mpi_receive(const void *buf, const int count,
                                const enum mpi_datatype type, const int node,
-                               const enum mpi_message_tag tag)
+                               const int tag)
   {
 #if PARALLEL == 2
   MPI_Status	status;		/* MPI status struct */
@@ -983,8 +934,59 @@ boolean mpi_receive(const void *buf, const int count,
 
 
 /**********************************************************************
+  mpi_receive_any()
+  synopsis:	Receive any data (assuming correct type) from another
+		any node.
+  parameters:
+  return:	TRUE successful.  FALSE otherwise.
+  last updated:	23 Jan 2002
+ **********************************************************************/
+
+boolean mpi_receive_any(const void *buf, const int count,
+                    const enum mpi_datatype type,
+		    int *node, int *tag)
+  {
+#if PARALLEL == 2
+  MPI_Status	status;		/* MPI status struct */
+#endif
+
+  /* Checks */
+  if (!buf) die("Null pointer to (void *) buffer passed");
+  if (!node) die("Null pointer to node variable passed");
+  if (!tag) die("Null pointer to tag variable passed");
+
+#if PARALLEL == 0
+  die("Uh oh.  Single processor, single threaded code trying to receive an interprocess message.");
+#else
+#if PARALLEL == 1
+  die("FIXME: Not implemented.");
+#else
+#if PARALLEL == 2
+  MPI_Recv( buf, count, (MPI_Datatype) type, MPI_SOURCE_ANY, MPI_TAG_ANY, MPI_COMM_WORLD, &status );
+  node = status.source;
+  tag = status.tag;
+
+#else
+#if PARALLEL == 3
+  die("FIXME: PVM version not implemented.");
+#else
+#if PARALLEL == 4
+  bsp_get( node, buf, 0, NULL, count*type );
+#endif
+#endif
+#endif
+#endif
+#endif /* PARALLEL */
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   mpi_test()
   synopsis:	Test the MPI interface routines.
+		This is the main() function if 'MPI_UTIL_COMPILE_MAIN'
+		is defined.
   parameters:
   return:	A GSList, or NULL on failure.
   last updated:	11/04/00

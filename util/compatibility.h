@@ -26,7 +26,7 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().
+  Updated:	10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
 	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
 		19/03/01 SAA	Removed GNU specific stuff.
@@ -245,6 +245,10 @@ char *basename (char *path);
 
 #ifndef HAVE_READLINE
 char *readline (char *prompt);
+#endif
+
+#ifndef HAVE_STRSPN
+size_t strspn(const char *string, const char *accept);
 #endif
 
 #ifndef HAVE_STRCSPN

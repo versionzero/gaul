@@ -102,7 +102,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.
+  Updated:	10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
   		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
 		17/12/00 SAA	Added ipow().
@@ -311,6 +311,7 @@ char	*strncpy(char *str1, const char *str2, const int len)
  * Get the next token from STR (pass in NULL on the 2nd, 3rd,
  * etc. calls), tokens are a list of characters deliminated by a
  * character from DELIM.  writes null into STR to end token.
+ * This is not thread-safe.
  */
 char	*strtok(char *str, char *delim)
 {
@@ -1370,7 +1371,7 @@ char *basename (char *path)
 #endif
 
 char *readline (char *prompt)
-{
+  {
   int lim = BUFSIZ;
   int i = 0;
   int isdone = 0;
@@ -1407,33 +1408,62 @@ char *readline (char *prompt)
   buf[i] = 0;
 
   return *buf ? buf : NULL;
-}
+  }
 #endif /* HAVE_READLINE */
 
 
-#ifndef HAVE_STRCSPN
-size_t strcspn(const char *string, const char *reject)
+#ifndef HAVE_STRSPN
+/*
+ * The strspn() function calculates the length of the initial segment of s which
+ * consists entirely of characters in accept.
+ */
+size_t strspn(const *string, const *accept)
 {
   size_t count = 0;
-  while (strchr (reject, *string) == 0)
-    ++count, ++string;
+
+  while (strchr(accept, *string)!=0)
+    {
+    count++;
+    string++;
+    }
 
   return count;
 }
+#endif /* HAVE_STRSPN */
+
+
+#ifndef HAVE_STRCSPN
+/*
+ * The  strcspn()  function  calculates  the  length  of the initial segment of s which
+ * consists entirely of characters not in reject.
+ */
+size_t strcspn(const char *string, const char *reject)
+  {
+  size_t count = 0;
+
+  while (strchr(reject, *string) == 0)
+    {
+    count++;
+    string++;
+    }
+
+  return count;
+  }
 #endif /* HAVE_STRCSPN */
 
 
 #ifndef HAVE_WAITPID
 pid_t waitpid(pid_t pid, int *pstatus, int options)
-{
+  {
   pid_t result;
 
-  do {
-    result = wait (pstatus);
-  } while  (result >= 0 && result != pid);
+  do
+    {
+    result = wait(pstatus);
+    } while (result >= 0 && result != pid);
 
   return result;
-}
+  }
 #endif /* HAVE_WAITPID */
 
 
@@ -1464,15 +1494,17 @@ int max( int a, int b )
  */
 #ifndef HAVE_STRUPR
 char *strupr( char *s )
-{
-        char    *p = s;
+  {
+  char    *p = s;
 
-        while( *s ) {
-                *s = toupper( *s );
-                s++;
-        }
-        return p;
-}
+  while( *s )
+    {
+    *s = toupper( *s );
+    s++;
+    }
+
+  return p;
+  }
 #endif /* HAVE_STRUPR */
 
 
@@ -1497,8 +1529,7 @@ int stricmp( char *s1, char *s2 )
 
 
 #ifndef HAVE_STRNICMP
-int
-strnicmp( char *s1, char *s2, int n )
+int strnicmp( char *s1, char *s2, int n )
 {
         int     i;
 
@@ -1525,8 +1556,8 @@ maybeinline void sincos( double radians, double *s, double *c )
 #if __i368__
   __asm__ ("fsincos" : "=t" (*c), "=u" (*s) : "0" (radians));
 #else
-  s = sin(radians);
-  c = cos(radians);
+  *s = sin(radians);
+  *c = cos(radians);
 #endif
 
   return;

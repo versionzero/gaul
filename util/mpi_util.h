@@ -2,8 +2,8 @@
   mpi_util.h
  **********************************************************************
 
-  mpi_util - Generalised message passing and checkpointing functions.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  mpi_util - Generalised message passing.
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -27,7 +27,8 @@
   Synopsis:	Header file for some abstract message passing functions
 		using the MPI API.
 
-  Updated:	02/02/01 SAA	Converted from helga_mpi.h to mpi_util.h
+  Updated:	23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
+		02/02/01 SAA	Converted from helga_mpi.h to mpi_util.h
 		11/01/01 SAA	SAA_header.h includes the parallel library header files as necessary.
 		10/04/00 SAA	First code.
 
@@ -51,21 +52,6 @@
 #ifndef MPI_NUM_THREADS_ENVVAR_STRING
 #define MPI_NUM_THREADS_ENVVAR_STRING	"NUM_THREADS"
 #endif
-#ifndef MPI_CHECKPOINT_ONSYNC
-#define MPI_CHECKPOINT_ONSYNC	TRUE
-#endif
-
-/*
- * Message identification tags.
- * FIXME: Needs sorting out...
- */
-enum mpi_message_tag {
-  HELGA_TAG_NONE=0, HELGA_TAG_TEST,
-  HELGA_TAG_IPARAM, HELGA_TAG_DPARAM, HELGA_TAG_SPARAM,
-  HELGA_TAG_SEQUENCE,
-  HELGA_TAG_MIGRATIONINFO, HELGA_TAG_MIGRATIONDATA,
-  HELGA_TAG_BESTSYNC
-  };
 
 /*
  * Message datatypes.
