@@ -52,8 +52,8 @@ void ga_diagnostics(void)
   printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
   printf("--- Constants ------------------------------------------------\n");
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
-  printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);
-  printf("GA_MIN_FITNESS:            %f\n", GA_MIN_FITNESS);
+  printf("GA_BOLTZMANN_FACTOR:       %e\n", GA_BOLTZMANN_FACTOR);
+  printf("GA_MIN_FITNESS:            %e\n", GA_MIN_FITNESS);
   printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
   printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
   printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
