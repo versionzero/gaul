@@ -21,11 +21,11 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1838-2"
-#define BUILD_DATE_STRING "23/05/02"
+#define BUILD_DATE_STRING "24/05/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1838
 #define PATCH_VERSION 2
-#define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
+#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
@@ -66,7 +66,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "23/05/02"
+#define BUILD_DATE_STRING "24/05/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -357,7 +357,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* System information */
-#define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
+#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
 
 /* Define to skip error checking in vector routines */
 #define V3_QUICK 1

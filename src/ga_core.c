@@ -224,25 +224,29 @@ population *ga_population_new(	const int stable_size,
 
 
 /**********************************************************************
-  ga_population_clone()
+  ga_population_clone_empty()
   synopsis:	Allocates and initialises a new population structure,
 		and fills it with an exact copy of the data from an
-		existing population.  The population's user data
+		existing population, with the exception that entity
+		data is not copied.  The population's user data
 		field is referenced.
-		Entity id's between the popultions will _NOT_
-		correspond.
   parameters:	population *	original population structure.
   return:	population *	new population structure.
-  last updated: 18 Mar 2002
+  last updated: 24 May 2002
  **********************************************************************/
 
-population *ga_population_clone(population *pop)
+population *ga_population_clone_empty(population *pop)
   {
   int		i;		/* Loop variable. */
   population	*newpop=NULL;	/* New population structure. */
-  entity	*newentity;	/* Used for cloning entities. */
   unsigned int	pop_id;		/* Handle for new population structure. */
 
+  /* Checks */
+  if (!pop) die("Null pointer to population structure passed.");
+
+/*
+ * Allocate new structure.
+ */
   newpop = s_malloc(sizeof(population));
 
 /*
@@ -303,15 +307,6 @@ population *ga_population_clone(population *pop)
     }
 
 /*
- * Clone each of the constituent entities.
- */
-  for (i=0; i<pop->size; i++)
-    {
-    newentity = ga_get_free_entity(newpop);
-    ga_entity_copy(newpop, newentity, pop->entity_iarray[i]);
-    }
-
-/*
  * Add this new population into the population table.
  */
   THREAD_LOCK(pop_table_lock);
@@ -322,6 +317,46 @@ population *ga_population_clone(population *pop)
 
   plog( LOG_DEBUG, "New pop = %p id = %d (cloned from %p)",
         newpop, pop_id, pop );
+
+  return newpop;
+  }
+
+
+/**********************************************************************
+  ga_population_clone()
+  synopsis:	Allocates and initialises a new population structure,
+		and fills it with an exact copy of the data from an
+		existing population, including the individual
+		entity data.  The population's user data
+		field is referenced.
+		Entity id's between the populations will _NOT_
+		correspond.
+  parameters:	population *	original population structure.
+  return:	population *	new population structure.
+  last updated: 24 May 2002
+ **********************************************************************/
+
+population *ga_population_clone(population *pop)
+  {
+  int		i;		/* Loop variable. */
+  population	*newpop=NULL;	/* New population structure. */
+  entity	*newentity;	/* Used for cloning entities. */
+
+/* Note that checks are performed in the ga_population_clone_empty() function. */
+
+/*
+ * Clone the population data.
+ */
+  newpop = ga_population_clone_empty(pop);
+
+/*
+ * Clone each of the constituent entities.
+ */
+  for (i=0; i<pop->size; i++)
+    {
+    newentity = ga_get_free_entity(newpop);
+    ga_entity_copy(newpop, newentity, pop->entity_iarray[i]);
+    }
 
   return newpop;
   }
@@ -1519,13 +1554,15 @@ void ga_population_send_every( population *pop, int dest_node )
   unsigned int	max_len=0;		/* Maximum length of buffer. */
   byte		*buffer=NULL;
 
+  if (!pop) die("Null pointer to population structure passed.");
+
 /*
  * Send number of entities.
  */
   mpi_send(&(pop->size), 1, MPI_TYPE_INT, dest_node, GA_TAG_NUMENTITIES);
 
 /* 
- * Slight knudge to determine length of buffer.  Should have a more
+ * Slight kludge to determine length of buffer.  Should have a more
  * elegant approach for this.
  * Sending this length here should not be required at all.
  */
@@ -1570,6 +1607,8 @@ void ga_population_append_receive( population *pop, int src_node )
   byte		*buffer;		/* Receive buffer. */
   int		num_to_recv;		/* Number of entities to receive. */
   entity	*entity;		/* New entity. */
+
+  if (!pop) die("Null pointer to population structure passed.");
 
 /*
  * Get number of entities to receive and the length of each.
@@ -1618,14 +1657,18 @@ void ga_population_append_receive( population *pop, int src_node )
 		defined by the user.
   parameters:
   return:
-  last updated: 24 Jan 2002
+  last updated: 24 May 2002
  **********************************************************************/
 
 population *ga_population_new_receive( int src_node )
   {
   population *pop=NULL;
 
-  plog(LOG_FIXME, "Function not implemented");
+  plog(LOG_FIXME, "Function not fully implemented");
+  mpi_receive(&(pop->stable_size), 1, MPI_TYPE_INT, src_node, GA_TAG_POPSTABLESIZE);
+  mpi_receive(&(pop->crossover_ratio), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_POPCROSSOVER);
+  mpi_receive(&(pop->mutation_ratio), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_POPMUTATION);
+  mpi_receive(&(pop->migration_ratio), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_POPMIGRATION);
 
   return pop;
   }
@@ -1655,14 +1698,23 @@ population *ga_population_receive( int src_node )
   ga_population_send()
   synopsis:	Send population structure (excluding actual entities)
  		to another processor.
+		It should be noted that neither the userdata nor the
+		function definitions will be sent.
+		Some other less useful data is also not transfered.
   parameters:
   return:
-  last updated: 24 Jan 2002
+  last updated: 24 May 2002
  **********************************************************************/
 
 void ga_population_send( population *pop, int dest_node )
   {
-  plog(LOG_FIXME, "Function not implemented");
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  mpi_send(&(pop->stable_size), 1, MPI_TYPE_INT, dest_node, GA_TAG_POPSTABLESIZE);
+  mpi_send(&(pop->crossover_ratio), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_POPCROSSOVER);
+  mpi_send(&(pop->mutation_ratio), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_POPMUTATION);
+  mpi_send(&(pop->migration_ratio), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_POPMIGRATION);
 
   return;
   }
@@ -1679,6 +1731,8 @@ void ga_population_send( population *pop, int dest_node )
 
 void ga_population_send_all( population *pop, int dest_node )
   {
+
+  /* Note that checks are performed in the two called functions. */
 
   ga_population_send(pop, dest_node);
   ga_population_send_every(pop, dest_node);
@@ -1918,6 +1972,7 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
   entity	*optimised;
 
   /* Checks */
+  if (!pop) die("Null pointer to population structure passed.");
   if (!unopt) die("Null pointer to entity structure passed.");
 
   plog(LOG_FIXME,
@@ -1954,7 +2009,7 @@ void ga_population_set_parameters(	population	*pop,
   if ( !pop ) die("Null pointer to population structure passed.");
 
   plog( LOG_VERBOSE,
-        "The population's GA parameters have been set. cro. %f mut. %f mig. %f",
+        "The population's GA parameters have been set.   crossover = %f mutation = %f migration = %f",
         crossover, mutation, migration );
 
   pop->crossover_ratio = crossover;
@@ -1994,6 +2049,8 @@ population *ga_transcend(unsigned int id)
 
 unsigned int ga_resurect(population *pop)
   {
+  if (!pop) die("Null pointer to population structure passed.");
+
   plog(LOG_VERBOSE, "The population has been restored!");
 
   return table_add(pop_table, pop);
@@ -2002,7 +2059,8 @@ unsigned int ga_resurect(population *pop)
 
 /**********************************************************************
   ga_extinction()
-  synopsis:	Purge all memory used by a population.
+  synopsis:	Purge all memory used by a population, also remove
+		it from the population table.
   parameters:
   return:
   last updated:	18 Mar 2002
@@ -2012,12 +2070,9 @@ boolean ga_extinction(population *extinct)
   {
   int		id;		/* Internal index for this extinct population. */
 
-  plog(LOG_VERBOSE, "This population is becoming extinct!");
-/*
-  ga_population_dump(extinct);
-*/
-
   if (!extinct) die("Null pointer to population structure passed.");
+
+  plog(LOG_VERBOSE, "This population is becoming extinct!");
 
 /*
  * Remove this population from the population table.

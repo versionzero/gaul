@@ -94,10 +94,16 @@
  * MPI message tags.
  */
 #define GA_TAG_NULL		0
+
 #define GA_TAG_NUMENTITIES	101
 #define GA_TAG_ENTITYLEN	102
 #define GA_TAG_ENTITYFITNESS	103
 #define GA_TAG_ENTITYCHROMOSOME	104
+
+#define GA_TAG_POPSTABLESIZE	201
+#define GA_TAG_POPCROSSOVER	202
+#define GA_TAG_POPMUTATION	203
+#define GA_TAG_POPMIGRATION	204
 
 /*
  * Entity Structure.
@@ -185,6 +191,7 @@ struct population_t
 population *ga_population_new(	const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome);
+population *ga_population_clone_empty( population *pop );
 population *ga_population_clone( population *pop );
 int	ga_get_num_populations(void);
 population *ga_get_population_from_id(unsigned int id);

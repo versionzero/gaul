@@ -7,6 +7,7 @@ Changes since release 0.1838:
 - Some fixes for compilation with Solaris/SunOS and the Sun Forte Developer C++ compiler.
 - Added bitstring chromosome similarity routines; Tanimoto, Dice, Hamming, Euclidean, Cosine similarity coefficients.
 - Added accessor functions: ga_entity_get_fitness(), ga_entity_set_fitness(), ga_population_get_stablesize(), ga_population_get_size(), ga_population_get_maxsize(), ga_population_set_stablesize().
+- Added ga_population_clone_empty() function.
 
 Changes since release 0.1837:
 - Documentation is now maintained in a seperate CVS module, gaul-docs.
