@@ -464,16 +464,22 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
  */
 #ifndef HAVE_USLEEP
 void usleep(unsigned long usec)
-{
-#ifdef HAVE_SNOOZE		/* i.e. BeOS, AtheOS */
-  snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
+  {
+#ifdef W32_CRIPPLED
+  /* FIXME: Need to add windows code for sleeping here. */
 #else
+  #ifdef HAVE_SNOOZE		/* i.e. BeOS, AtheOS, Syllable. */
+  snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
+  #else
   struct timeval tv;
   tv.tv_sec=0;
   tv.tv_usec=usec;
   select(0, NULL, NULL, NULL, &tv);
+  #endif
 #endif
-}
+
+  return;
+  }
 #endif /* HAVE_USLEEP */
 
 

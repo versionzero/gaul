@@ -79,7 +79,7 @@ install_sh_PROGRAM = $(install_sh) -c
 install_sh_SCRIPT = $(install_sh) -c
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_HEADER = $(INSTALL_DATA)
-transform = s,x,x,
+transform = s,^,i386-pc-mingw32-,
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
@@ -90,8 +90,8 @@ build_alias =
 build_triplet = i686-pc-linux-gnu
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-target_alias = 
-target_triplet = i686-pc-linux-gnu
+target_alias = i386-pc-mingw32
+target_triplet = i386-pc-mingw32
 
 EXEEXT = 
 OBJEXT = o
@@ -305,7 +305,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/
 DIST_SOURCES = $(liblog_util_la_SOURCES) \
 	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
 	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \

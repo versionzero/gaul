@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "28/10/02"
+#define BUILD_DATE_STRING "29/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -71,7 +71,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Whether itoa() is available */
-/* #undef HAVE_ITOA */
+#define HAVE_ITOA 1
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1

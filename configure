@@ -10895,7 +10895,11 @@ fi
 done
 
 
-if test "x$enable_mpi" = "xyes" || test "x$target" = "x*-*-mingw*"; then
+case "$target" in
+  *-*-mingw*) is_mingw="yes" ;;
+  *) is_mingw="no" ;;
+esac
+if ( test "x$enable_mpi" = "xyes" || test $is_mingw = yes ); then
   # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
 
 cat >>confdefs.h <<\_ACEOF
