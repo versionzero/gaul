@@ -137,8 +137,6 @@ install_sh = @install_sh@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#EXTRA_PROGRAMS = 
-
 # Kludge:
 INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
@@ -149,6 +147,7 @@ bin_PROGRAMS = \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
+	onemax \
 	struggle struggle_forked \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
@@ -176,6 +175,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
+onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
@@ -226,6 +226,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
+onemax_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
@@ -260,6 +261,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -292,8 +294,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	wildfire_forked$(EXEEXT) wildfire_loadbalancing$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
-	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
-	struggle_randomsearch$(EXEEXT) \
+	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
+	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -318,6 +320,9 @@ goldberg2_LDFLAGS =
 am_nnevolve_OBJECTS = nnevolve.$(OBJEXT)
 nnevolve_OBJECTS = $(am_nnevolve_OBJECTS)
 nnevolve_LDFLAGS =
+am_onemax_OBJECTS = onemax.$(OBJEXT)
+onemax_OBJECTS = $(am_onemax_OBJECTS)
+onemax_LDFLAGS =
 am_pingpong_OBJECTS = pingpong.$(OBJEXT)
 pingpong_OBJECTS = $(am_pingpong_OBJECTS)
 pingpong_LDFLAGS =
@@ -410,8 +415,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/fitting_sd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/fitting_simplex.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/pingpong.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/pingpong_sa.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/onemax.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/pingpong.Po ./$(DEPDIR)/pingpong_sa.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pingpong_tabu.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pingpong_tabu2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/royalroad.Po \
@@ -442,7 +447,7 @@ CFLAGS = @CFLAGS@
 DIST_SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) \
 	$(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) \
 	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
-	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
+	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
 	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
 	$(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) \
 	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
@@ -457,7 +462,7 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) \
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -526,6 +531,9 @@ goldberg2$(EXEEXT): $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
 nnevolve$(EXEEXT): $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES) 
 	@rm -f nnevolve$(EXEEXT)
 	$(LINK) $(nnevolve_LDFLAGS) $(nnevolve_OBJECTS) $(nnevolve_LDADD) $(LIBS)
+onemax$(EXEEXT): $(onemax_OBJECTS) $(onemax_DEPENDENCIES) 
+	@rm -f onemax$(EXEEXT)
+	$(LINK) $(onemax_LDFLAGS) $(onemax_OBJECTS) $(onemax_LDADD) $(LIBS)
 pingpong$(EXEEXT): $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES) 
 	@rm -f pingpong$(EXEEXT)
 	$(LINK) $(pingpong_LDFLAGS) $(pingpong_OBJECTS) $(pingpong_LDADD) $(LIBS)
@@ -618,6 +626,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nnevolve.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/onemax.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong_sa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong_tabu.Po@am__quote@

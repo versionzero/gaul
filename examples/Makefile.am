@@ -29,8 +29,6 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#EXTRA_PROGRAMS = 
-
 # Kludge:
 INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
