@@ -320,6 +320,7 @@ boolean ga_select_two_linearrank( population *pop, entity **mother, entity **fat
  */
 void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_integer_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_allele_mixing( population *pop,
                                  entity *father, entity *mother,
@@ -347,6 +348,7 @@ void	ga_crossover_double_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                        entity *son, entity *daughter );
 void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_double_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_double_allele_mixing( population *pop,
                                 entity *father, entity *mother,
                                  entity *son, entity *daughter );

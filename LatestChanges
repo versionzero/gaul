@@ -37,6 +37,7 @@ Changes since release 0.1846:
 - Added new selection operators: ga_select_one_bestof3() and ga_select_two_bestof3().  Fixed potential bug in ga_select_two_bestof2().
 - Removed all references to the deprecated constants GA_ELITISM_CONSTANT and GA_ELITISM_MULTIPLIER.
 - Renamed the "diagnostics" test execuatable to "gaul_diagnostics" to avoid potential name clash.
+- Added two new crossover operators: ga_crossover_double_mean() and ga_crossover_integer_mean().
 
 
 Changes since release 0.1845:

@@ -270,7 +270,7 @@ int main(int argc, char **argv)
        ga_select_one_linearrank,	/* GAselect_one           select_one */
        ga_select_two_linearrank,	/* GAselect_two           select_two */
        fitting_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
-       ga_crossover_double_allele_mixing,	/* GAcrossover            crossover */
+       ga_crossover_double_mean,	/* GAcrossover            crossover */
        NULL,				/* GAreplace              replace */
        NULL				/* vpointer	User data */
             );

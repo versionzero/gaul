@@ -220,6 +220,50 @@ void ga_crossover_integer_mixing( population *pop,
 
 
 /**********************************************************************
+  ga_crossover_integer_mean()
+  synopsis:	`Mates' two genotypes by averaging the parents
+		alleles.  son rounded down, daughter rounded up.
+		Keeps no chromosomes intact, and therefore will
+		need to recreate all structural data.
+  parameters:
+  return:
+  last updated: 18 Jun 2004
+ **********************************************************************/
+
+void ga_crossover_integer_mean( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter )
+  {
+  int		i, j;		/* Loop over all chromosomes, alleles. */
+  int		sum;		/* Intermediate value. */
+
+  /* Checks. */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    for (j=0; j<pop->len_chromosomes; j++)
+      {
+      sum = ((int *)father->chromosome[i])[j] + ((int *)mother->chromosome[i])[j];
+      if ( sum > 0 )
+        {
+        ((int *)son->chromosome[i])[j] = sum/2;
+        ((int *)daughter->chromosome[i])[j] = (sum + 1)/2;
+        }
+      else
+        {
+        ((int *)son->chromosome[i])[j] = (sum - 1)/2;
+        ((int *)daughter->chromosome[i])[j] = sum/2;
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
   ga_crossover_integer_allele_mixing()
   synopsis:	`Mates' two genotypes by randomizing the parents
 		alleles.
@@ -613,6 +657,41 @@ void ga_crossover_double_mixing( population *pop,
               pop->len_chromosomes*sizeof(double) );
       ga_copy_data(pop, daughter, father, i);
       ga_copy_data(pop, son, mother, i);
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_double_mean()
+  synopsis:	`Mates' two genotypes by averaging the parents
+		alleles.
+		Keeps no chromosomes intact, and therefore will
+		need to recreate all structural data.
+		FIXME: Children are identical!
+  parameters:
+  return:
+  last updated: 18 Jun 2004
+ **********************************************************************/
+
+void ga_crossover_double_mean( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter )
+  {
+  int		i, j;		/* Loop over all chromosomes, alleles. */
+
+  /* Checks. */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    for (j=0; j<pop->len_chromosomes; j++)
+      {
+      ((double *)son->chromosome[i])[j] = 0.5 * (((double *)father->chromosome[i])[j] + ((double *)mother->chromosome[i])[j]);
+      ((double *)daughter->chromosome[i])[j] = 0.5 * (((double *)father->chromosome[i])[j] + ((double *)mother->chromosome[i])[j]);
       }
     }
 

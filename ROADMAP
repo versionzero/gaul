@@ -15,7 +15,7 @@ These milestone requirements are subject to change ;)
  0.1848     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Use MemChunks in chromosome allocation, where appropriate.
-            |  Move prototypes for public functions into src/gaul.h
+            |  Move prototypes for all public functions into src/gaul.h
             |  Fully document chromosomes.
             |  Compile a native windows DLL.
             |  Replace roulette wheel and SUS selection operators with thread-safe alternatives.
@@ -32,9 +32,11 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1851     |  Binary tree chromosome.
             |  Genetic programming example.
+            |  ES examples.
 ------------+--------------------------------------------------------
  0.1852     |  Distribution of points on sphere example.
             |  Improve in-code documentation/comments.
+            |  Cellular GAs.
 ------------+--------------------------------------------------------
  0.1853     |  Tidy and rationalise S-Lang interface, and provide examples.
 ------------+--------------------------------------------------------
@@ -70,6 +72,7 @@ Features to be added if enough interest is demonstrated:
 * DEE algorithm.
 * PVM support.
 * Replica-exchange SA search.
+* EDAs.
 
-Stewart Adcock, 05 Apr 2003.
+Stewart Adcock, 18 Jun 2004.
 
