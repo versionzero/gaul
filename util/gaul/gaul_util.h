@@ -72,11 +72,11 @@
 # define THREAD_LOCK_DEFINE_STATIC(name)       static pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
 # define THREAD_LOCK_DEFINE(name)	pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
 # define THREAD_LOCK_EXTERN(name)	extern pthread_mutex_t (name)
-# define THREAD_LOCK(name)		pthread_mutex_lock((name))
-# define THREAD_UNLOCK(name)		pthread_mutex_unlock((name))
-# define THREAD_TRYLOCK(name)		pthread_mutex_trylock((name))
-# define thread_mutex_new(name)		pthread_mutex_init((name), NULL)
-# define thread_mutex_free(name)	pthread_mutex_destroy((name))
+# define THREAD_LOCK(name)		pthread_mutex_lock(&(name))
+# define THREAD_UNLOCK(name)		pthread_mutex_unlock(&(name))
+# define THREAD_TRYLOCK(name)		pthread_mutex_trylock(&(name))
+# define thread_mutex_new(name)		pthread_mutex_init(&(name), NULL)
+# define thread_mutex_free(name)	pthread_mutex_destroy(&(name))
 #else
 # if USE_OPENMP == 1
 #  define THREAD_LOCK_DEFINE_STATIC(name)       static omp_lock_t (name)

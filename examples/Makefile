@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -99,7 +99,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-7/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -112,7 +112,7 @@ GA_UNAME_STRING =
 GA_VERSION = 0.1846-7
 GA_VERSION_STRING = 
 HAVE_MPI = 0
-HAVE_PTHREADS = 0
+HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -129,7 +129,7 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-USE_OPENMP = 1
+USE_OPENMP = 0
 V3_QUICK = 1
 VERSION = 0.1846-7
 W32_CRIPPLED = 0
@@ -423,7 +423,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lslang -lm -lslang
+LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
@@ -460,7 +460,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -openmp -openmp_report2 -tpp7   -I/usr/include/slang/
+CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
 DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \

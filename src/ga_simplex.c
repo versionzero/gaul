@@ -186,13 +186,21 @@ int ga_simplex(	population		*pop,
  * amount specified by the step parameter; it might be better to perturb
  * all dimensions and/or by a randomized amount.
  */
-  pop->simplex_params->to_double(pop, putative[0], putative_d[0]);
-  pop->evaluate(pop, putative[0]);
-
-  for (i=1; i<num_points; i++)
+#pragma omp parallel \
+   if (GAUL_DETERMINISTIC_OPENMP==0) \
+   shared(pop,num_points,putative_d,putative) private(i,j)
     {
-    for (j=0; j<pop->simplex_params->dimensions; j++)
-      putative_d[i][j] = putative_d[0][j] +
+#pragma omp single \
+   nowait
+    pop->simplex_params->to_double(pop, putative[0], putative_d[0]);
+    pop->evaluate(pop, putative[0]);
+
+#pragma omp for \
+   schedule(static) nowait
+    for (i=1; i<num_points; i++)
+      {
+      for (j=0; j<pop->simplex_params->dimensions; j++)
+        putative_d[i][j] = putative_d[0][j] +
                 random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
 /*
@@ -203,9 +211,10 @@ int ga_simplex(	population		*pop,
       putative_d[i][i-1] += 1.0;
 */
 
-    pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
-    pop->evaluate(pop, putative[i]);
-    }
+      pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
+      pop->evaluate(pop, putative[i]);
+      }
+    }	/* End of parallel block. */
 
 /*
  * Sort the initial solutions by fitness.
