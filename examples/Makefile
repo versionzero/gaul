@@ -253,7 +253,7 @@ saveload_OBJECTS =  saveload.o
 saveload_LDFLAGS = 
 nnevolve_OBJECTS =  nnevolve.o
 nnevolve_LDFLAGS = 
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
+CFLAGS =  -I/usr/include/slang/ -Wall -g -O2 -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

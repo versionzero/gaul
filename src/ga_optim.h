@@ -72,6 +72,9 @@ entity	*ga_simulated_annealling_mutation(population      *pop,
 int	ga_evolution_archipelago( const int num_pops,
                         population              **pops,
                         const int               max_generations );
+int	ga_evolution_archipelago_forked( const int num_pops,
+                        population              **pops,
+                        const int               max_generations );
 int	ga_evolution_archipelago_mp( const int num_pops,
                         population              **pops,
                         const int               max_generations );

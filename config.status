@@ -41,7 +41,7 @@ sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\&%]/\\&/g;
 /^[ 	]*VPATH[ 	]*=[^:]*$/d
 
 s%@SHELL@%/bin/sh%g
-s%@CFLAGS@%-g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/%g
+s%@CFLAGS@% -I/usr/include/slang/ -Wall -g -O2 -I../util/ -I../src/%g
 s%@CPPFLAGS@%%g
 s%@CXXFLAGS@%%g
 s%@FFLAGS@%%g

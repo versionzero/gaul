@@ -36,7 +36,7 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 ### BEGIN LIBTOOL CONFIG
 # Libtool was configured as follows, on host desktop.stewart-adcock.co.uk:
 #
-# CC="gcc" CFLAGS="-g -O2" CPPFLAGS="" \
+# CC="gcc" CFLAGS="" CPPFLAGS="" \
 # LD="/usr/bin/ld" LDFLAGS="" LIBS="" \
 # NM="/usr/bin/nm -B" RANLIB="ranlib" LN_S="ln -s" \
 # DLLTOOL="" OBJDUMP="" AS="" \

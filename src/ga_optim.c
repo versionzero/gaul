@@ -58,6 +58,56 @@ static void gaul_entity_swap_rank(population *pop, const int rank1, const int ra
 
 
 /**********************************************************************
+  gaul_migration()
+  synopsis:	Migration cycle.
+  parameters:	population *pop
+  return:	none
+  last updated:	11 Jun 2002
+ **********************************************************************/
+
+static void gaul_migration(const int num_pops, population **pops)
+  {
+  int		pop0_osize;		/* Required for correct migration. */
+  int		island;			/* Current island number. */
+  int		i;			/* Loop over members of population. */
+
+  plog( LOG_VERBOSE, "*** Migration Cycle ***" );
+
+  pop0_osize = pops[0]->size;
+  for(island=1; island<num_pops; island++)
+    {
+    for(i=0; i<pops[island]->size; i++)
+      {
+      if (random_boolean_prob(pops[island]->migration_ratio))
+        {
+        ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
+/* printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
+        }
+      }
+    }
+
+  for(i=0; i<pop0_osize; i++)
+    {
+    if (random_boolean_prob(pops[0]->migration_ratio))
+      ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
+/*  printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[island]->entity_iarray[i]->fitness);*/
+    }
+
+/*
+ * Sort the individuals in each population.
+ * Need this to ensure that new immigrants are ranked correctly.
+ * FIXME: It would be more efficient to insert the immigrants correctly.
+ */
+  for(island=0; island<num_pops; island++)
+    {
+    sort_population(pops[island]);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
   gaul_crossover()
   synopsis:	Mating cycle. (i.e. Sexual reproduction).
   parameters:	population *pop
@@ -155,6 +205,7 @@ static void gaul_mutation(population *pop)
   last updated:	11 Jun 2002
  **********************************************************************/
 
+#if 0
 static void gaul_evaluations(population *pop, const int start, const int stop)
   {
   int		i;			/* Loop variable over entity ranks. */
@@ -166,6 +217,7 @@ static void gaul_evaluations(population *pop, const int start, const int stop)
 
   return;
   }
+#endif
 
 
 /**********************************************************************
@@ -506,6 +558,8 @@ int ga_evolution_forked(	population		*pop,
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
 
+  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d processes will be fork'ed", max_processes);
+  
 /*
  * Look at environment to find number of processes to fork.
  */
@@ -527,8 +581,6 @@ int ga_evolution_forked(	population		*pop,
     pid[i] = -1;
     eid[i] = -1;
     }
-
-  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d processes will be fork'ed", max_processes);
 
 /*
  * Score and sort the initial population members.
@@ -820,7 +872,8 @@ int ga_evolution_with_stats(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
-  ga_population_score_and_sort(pop);
+  gaul_ensure_evaluations(pop);
+  sort_population(pop);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -1102,7 +1155,8 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
-  ga_population_score_and_sort(pop);
+  gaul_ensure_evaluations(pop);
+  sort_population(pop);
 
   plog( LOG_VERBOSE,
         "Prior to the first iteration, population has fitness scores between %f and %f",
@@ -1922,8 +1976,10 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 		respective entities.  This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
-  parameters:
-  return:
+  parameters:	const int	num_pops
+		population	**pops
+		const int	max_generations
+  return:	number of generation performed
   last updated:	11 Jun 2002
  **********************************************************************/
 
@@ -1933,11 +1989,8 @@ int ga_evolution_archipelago( const int num_pops,
   {
   int		generation=0;		/* Current generation number. */
   int		island;			/* Current island number. */
-  int		i;			/* Loop over members of population. */
-  entity	*adult;			/* Temporary copy for gene optimisation. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
-  int		pop0_osize;		/* Required for correct migration. */
 
 /* Checks. */
   if (!pops)
@@ -1966,10 +2019,13 @@ int ga_evolution_archipelago( const int num_pops,
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
+
 /*
  * Score and sort the initial population members.
  */
-    ga_population_score_and_sort(pop);
+    gaul_ensure_evaluations(pop);
+    sort_population(pop);
+  
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on island %d has fitness scores between %f and %f",
           island,
@@ -1983,39 +2039,15 @@ int ga_evolution_archipelago( const int num_pops,
     generation++;
 
 /*
- * Migration Cycle.
+ * Migration step.
  */
-    plog( LOG_VERBOSE, "*** Migration Cycle ***" );
-    pop0_osize = pops[0]->size;
-    for(island=1; island<num_pops; island++)
-      {
-      for(i=0; i<pops[island]->size; i++)
-        {
-        if (random_boolean_prob(pops[island]->migration_ratio))
-	  {
-          ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
-/*	  printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
-	  }
-        }
-      }
-    for(i=0; i<pop0_osize; i++)
-      {
-      if (random_boolean_prob(pops[0]->migration_ratio))
-        ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
-/*        printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[island]->entity_iarray[i]->fitness);*/
-      }
+    gaul_migration(num_pops, pops);
 
     for(island=0; island<num_pops; island++)
       {
       pop = pops[island];
 
       plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
-
-/*
- * Sort the individuals in each population.
- * Need this to ensure that new immigrants are ranked correctly.
- */
-      sort_population(pop);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -2066,6 +2098,194 @@ int ga_evolution_archipelago( const int num_pops,
 
 
 /**********************************************************************
+  ga_evolution_archipelago_forked()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given populations using a simple
+		island model.  Migration occurs around a cyclic
+		topology only.  Migration causes a duplication of the
+		respective entities.  This is a generation-based GA.
+		ga_genesis(), or equivalent, must be called prior to
+		this function.
+		This is a multiprocess version, using a forked process
+		for each island.
+  parameters:	const int	num_pops
+		population	**pops
+		const int	max_generations
+  return:	number of generation performed
+  last updated:	11 Jun 2002
+ **********************************************************************/
+
+#if 0
+int ga_evolution_archipelago_forked( const int num_pops,
+			population		**pops,
+			const int		max_generations )
+  {
+  int		generation=0;		/* Current generation number. */
+  int		island;			/* Current island number. */
+  population	*pop=NULL;		/* Current population. */
+  boolean	complete=FALSE;		/* Whether evolution is terminated. */
+  int		i;			/* Loop over members of population. */
+  int		*evalpipe;		/* Pipes for returning fitnesses. */
+  pid_t		*pid;			/* Child PIDs. */
+  int		*eid;			/* Entity which forked process is evaluating. */
+  int		fork_num;		/* Index of current forked process. */
+  int		num_forks;		/* Number of forked processes. */
+  int		eval_num;		/* Index of current entity. */
+  pid_t		fpid;			/* PID of completed child process. */
+
+/* Checks. */
+  if (!pops)
+    die("NULL pointer to array of population structures passed.");
+  if (num_pops<2)
+    die("Need at least two populations for the island model.");
+
+  for (island=0; island<num_pops; island++)
+    {
+    pop = pops[island];
+
+    if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+    if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+    if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+    if (!pop->mutate) die("Population's mutation callback is undefined.");
+    if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+    if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+
+/* Set island property. */
+    pop->island = island;
+    }
+
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
+  
+/*
+ * Allocate memory.
+ * Open pipes for reporting fitnesses.
+ * Clear pid and eid arrays.
+ */
+  pid = s_malloc(max_processes*sizeof(pid_t));
+  eid = s_malloc(max_processes*sizeof(int));
+  evalpipe = s_malloc(2*max_processes*sizeof(int));
+  for (i=0; i<max_processes; i++)
+    {
+    if (pipe(&evalpipe[2*i])==-1) die("Unable to open pipe");
+    pid[i] = -1;
+    eid[i] = -1;
+    }
+
+  for (island=0; island<num_pops; island++)
+    {
+    pop = pops[island];
+
+    if (pid[fork_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[fork_num] == 0)
+      {       /* This is the child process. */
+
+/*
+ * Score and sort the initial population members.
+ */
+    gaul_ensure_evaluations(pop);
+    sort_population(pop);
+
+    plog( LOG_VERBOSE,
+          "Prior to the first generation, population on island %d has fitness scores between %f and %f",
+          island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+    }
+
+/* Do all the generations: */
+    while ( generation<max_generations && complete==FALSE)
+      {
+      generation++;
+
+/*
+ * Migration and synchronisation step.
+ */
+      FIXME.
+
+      plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
+
+      if ( pop->generation_hook?pop->generation_hook(generation, pop):TRUE &&
+           complete == FALSE )
+        {
+        pop->orig_size = pop->size;
+
+        plog( LOG_DEBUG,
+              "Population %d size is %d at start of generation %d",
+              island, pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+        gaul_crossover(pop);	/* FIXME: Need to pass island for messages. */
+
+/*
+ * Mutation step.
+ */
+        gaul_mutation(pop);	/* FIXME: Need to pass island for messages. */
+
+/*
+ * Apply environmental adaptations, score entities, sort entities, etc.
+ */
+        gaul_adapt_and_evaluate(pop);
+
+/*
+ * Survival of the fittest.
+ */
+        gaul_survival(pop);
+
+        }
+      else
+        {
+        complete = TRUE;
+        }
+
+      plog(LOG_VERBOSE,
+          "After generation %d, population %d has fitness scores between %f and %f",
+          generation,
+          island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+      }	/* Generation loop. */
+
+    _exit((int) complete);
+    }
+
+/*
+ * Parent waits for children.
+ * Synchronise children at the beginning of each generation, and
+ * tell them to die if necessary.
+ */
+  FIXME.
+  
+/*
+ * Collate final entities.
+ */
+  FIXME.
+
+/*
+ * Close the pipes and free memory.
+ */
+  for (i=0; i<max_processes; i++)
+    {
+    close(evalpipe[2*i]);
+    close(evalpipe[2*i+1]);
+    }
+
+  s_free(pid);
+  s_free(eid);
+  s_free(evalpipe);
+
+  return generation;
+  }
+#endif
+
+
+/**********************************************************************
   ga_evolution_archipelago_mp()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
@@ -2082,11 +2302,11 @@ int ga_evolution_archipelago( const int num_pops,
 		case.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
-
-		*** FIXME: Needs updating. ***
-  parameters:
-  return:
-  last updated:	24 Jan 2002
+  parameters:	const int	num_pops
+		population	**pops
+		const int	max_generations
+  return:	number of generation performed
+  last updated:	11 Jun 2002
  **********************************************************************/
 
 int ga_evolution_archipelago_mp( const int num_pops,
@@ -2096,24 +2316,12 @@ int ga_evolution_archipelago_mp( const int num_pops,
   int		generation=0;		/* Current generation number. */
   int		island;			/* Current island number. */
   int		i;			/* Loop over members of population. */
-  entity	*mother, *father;	/* Parent entities. */
-  entity	*son, *daughter;	/* Child entities. */
-  entity	*adult;			/* Temporary copy for gene optimisation. */
-  boolean	finished;		/* Whether crossover/mutation rounds are complete. */
-  int		new_pop_size;		/* Population size prior to adaptation. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		pop0_osize;		/* Required for correct migration. */
   boolean	*send_mask;		/* Whether particular entities need to be sent. */
   int		send_count;		/* Number of entities to send. */
   int		max_size=0;		/* Largest maximum size of populations. */
-#if GA_WRITE_STATS==TRUE
-  FILE		*STATS_OUT;		/* Filehandle for stats log. */
-  char		stats_fname[80];	/* Filename for stats log. */
-  int		crossover_good, crossover_poor;	/* Fornication statistics. */
-  int		mutation_good, mutation_poor;	/*  - " -  */
-  double	crossover_gain, mutation_gain;	/*  - " -  */
-#endif
 
 /* Checks. */
   if (!pops)
@@ -2136,17 +2344,6 @@ int ga_evolution_archipelago_mp( const int num_pops,
     }
 
   plog(LOG_VERBOSE, "The evolution has begun on %d islands on node %d!", num_pops, mpi_get_rank());
-
-/*
- * Create name for statistics log file.
- * Write a simple header to that file.
- */
-#if GA_WRITE_STATS==TRUE
-  sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
-  STATS_OUT = fopen(stats_fname, "a");
-  fprintf(STATS_OUT, "gen crossover mutation\n");
-  fclose(STATS_OUT);
-#endif
 
   for (island=0; island<num_pops; island++)
     {
@@ -2172,19 +2369,6 @@ int ga_evolution_archipelago_mp( const int num_pops,
   while ( generation<max_generations && complete==FALSE)
     {
     generation++;
-
-/*
- * Zero statistics.
- */
-#if GA_WRITE_STATS==TRUE
-    crossover_good=0;
-    crossover_poor=0;
-    mutation_good=0;
-    mutation_poor=0;
-
-    crossover_gain=0.0;
-    mutation_gain=0.0;
-#endif
 
 /*
  * Migration Cycle.
@@ -2275,181 +2459,25 @@ int ga_evolution_archipelago_mp( const int num_pops,
               island, pop->orig_size, generation );
 
 /*
- * Mating cycle.
- *
- * Select pairs of entities to mate via crossover. (Sexual reproduction).
- *
- * Score the new entities as we go.
+ * Crossover step.
  */
-        plog(LOG_VERBOSE, "*** Mating cycle ***");
-
-        pop->select_state = 0;
-
-        finished = FALSE;
-        while (!finished)
-          {
-          finished = pop->select_two(pop, &mother, &father);
-
-          if (mother && father)
-            {
-            plog( LOG_VERBOSE, "Crossover between %d (%d = %f) and %d (%d = %f) on island %d",
-                  ga_get_entity_id(pop, mother),
-                  ga_get_entity_rank(pop, mother), mother->fitness,
-                  ga_get_entity_id(pop, father),
-                  ga_get_entity_rank(pop, father), father->fitness,
-                  island );
-
-            son = ga_get_free_entity(pop);
-            daughter = ga_get_free_entity(pop);
-            pop->crossover(pop, mother, father, daughter, son);
-            pop->evaluate(pop, daughter);
-            pop->evaluate(pop, son);
-
-/* Collate stats. */
-#if GA_WRITE_STATS==TRUE
-            if (son->fitness > father->fitness)
-              crossover_good++;
-            else
-              crossover_poor++;
-            if (daughter->fitness > father->fitness)
-              crossover_good++;
-            else
-              crossover_poor++;
-            if (son->fitness > mother->fitness)
-              crossover_good++;
-            else
-              crossover_poor++;
-            if (daughter->fitness > mother->fitness)
-              crossover_good++;
-            else
-              crossover_poor++;
-
-            if (son->fitness > MAX(mother->fitness,father->fitness))
-              crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
-            if (daughter->fitness > MAX(mother->fitness,father->fitness))
-              crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
-#endif
-            }
-          else
-            {
-            plog( LOG_VERBOSE, "Crossover not performed." );
-            }
-          }
+        gaul_crossover(pop);	/* FIXME: Need to pass island for messages. */
 
 /*
- * Mutation cycle.
- *
- * Select entities to undergo asexual reproduction, in which case the child will
- * have a genetic mutation of some type.
- *
- * Score the new entities as we go.
+ * Mutation step.
  */
-        plog(LOG_VERBOSE, "*** Mutation cycle ***");
-
-        pop->select_state = 0;
-
-        finished = FALSE;
-        while (!finished)
-          {
-          finished = pop->select_one(pop, &mother);
-
-          if (mother)
-            {
-            plog( LOG_VERBOSE, "Mutation of %d (%d = %f)",
-                  ga_get_entity_id(pop, mother),
-                  ga_get_entity_rank(pop, mother), mother->fitness );
-
-            daughter = ga_get_free_entity(pop);
-            pop->mutate(pop, mother, daughter);
-            pop->evaluate(pop, daughter);
-
-/* Collate stats. */
-#if GA_WRITE_STATS==TRUE
-            if (daughter->fitness > mother->fitness)
-              {
-              mutation_good++;
-              mutation_gain += daughter->fitness-mother->fitness;
-              }
-            else
-              {
-              mutation_poor++;
-              }
-#endif
-
-            }
-          else
-            {
-            plog( LOG_VERBOSE, "Mutation not performed." );
-            }
-          }
+        gaul_mutation(pop);	/* FIXME: Need to pass island for messages. */
 
 /*
- * Environmental adaptation.
- *
- * Skipped in the case of Darwinian evolution.
- * Performed in the case of Baldwinian evolution.
- * Performed, and genes are modified, in the case of Lamarckian evolution.
- *
- * Maybe, could reoptimise all solutions at each generation.  This would allow
- * a reduced optimisation protocol and only those solutions which are
- * reasonable would survive for further optimisation.
+ * Apply environmental adaptations, score entities, sort entities, etc.
  */
-      if (pop->scheme != GA_SCHEME_DARWIN)
-        {
-        plog(LOG_VERBOSE, "*** Adaptation round ***");
-
-        new_pop_size = pop->size;
-
-        switch (pop->scheme)
-          {
-          case (GA_SCHEME_BALDWIN_CHILDREN):
-            /* Baldwinian evolution for children only. */
-            for (i=pop->orig_size; i<new_pop_size; i++)
-              {
-              adult = pop->adapt(pop, pop->entity_iarray[i]);
-              pop->entity_iarray[i]->fitness=adult->fitness;
-    /* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
-              ga_entity_dereference_by_rank(pop, new_pop_size);
-              }
-            break;
-          case (GA_SCHEME_BALDWIN_ALL):
-            /* Baldwinian evolution for entire population. */
-            /* I don't recommend this, but it is here for completeness. */
-            for (i=0; i<new_pop_size; i++)
-              {
-              adult = pop->adapt(pop, pop->entity_iarray[i]);
-              pop->entity_iarray[i]->fitness=adult->fitness;
-    /* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
-              ga_entity_dereference_by_rank(pop, new_pop_size);
-              }
-            break;
-          case (GA_SCHEME_LAMARCK_CHILDREN):
-            /* Lamarckian evolution for children only. */
-            while (new_pop_size>pop->orig_size)
-              {
-              new_pop_size--;
-              adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
-              ga_entity_dereference_by_rank(pop, new_pop_size);
-              }
-            break;
-          case (GA_SCHEME_LAMARCK_ALL):
-            /* Lamarckian evolution for entire population. */
-            while (new_pop_size>0)
-              {
-              new_pop_size--;
-              adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
-              ga_entity_dereference_by_rank(pop, new_pop_size);
-              }
-            break;
-          default:
-            dief("Unknown evolutionary scheme %d.\n", pop->scheme);
-          }
-        }
+        gaul_adapt_and_evaluate(pop);
 
 /*
- * Cull population, etc.
+ * Survival of the fittest.
  */
         gaul_survival(pop);
+
         }
       else
         {
@@ -2464,16 +2492,6 @@ int ga_evolution_archipelago_mp( const int num_pops,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
 
-/*
- * Write statistics.
- */
-#if GA_WRITE_STATS==TRUE
-    STATS_OUT = fopen(stats_fname, "a");
-    fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", generation,
-            crossover_good, crossover_poor, crossover_gain,
-            mutation_good, mutation_poor, mutation_gain);
-    fclose(STATS_OUT);
-#endif
     }	/* Generation loop. */
 
   /* Free the send_mask array. */
