@@ -352,7 +352,7 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 min max \
                 sincos \
                 index rindex \
-                strchr strrchr rindex strcat strlen \
+                strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok \
                 strcasecmp strncasecmp snprintf \
                 strdup strndup strnfill strcatv strtod strsignal strrev \
