@@ -196,6 +196,7 @@ boolean ga_population_seed_soup(population *pop, const char *fname);
 boolean ga_write_soup(population *pop);
 boolean ga_population_save(population *pop, char *fname);
 population *ga_population_read(char *fname);
+double	ga_entity_evaluate(population *pop, entity *entity);
 boolean	ga_population_score_and_sort(population *pop);
 double	ga_population_convergence_genotypes( population *pop );
 double	ga_population_convergence_chromsomes( population *pop );
