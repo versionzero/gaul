@@ -248,62 +248,62 @@ fi
 
 dnl Compiler specific switches.
 changequote(,)dnl
-# Optimisations etc. for the GNU gcc compiler.
-if test "x$GCC" = "xyes"; then
-  case " $CFLAGS " in
-    *[\ \	]-Wall[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -Wall" ;;
-  esac
-
-  if test "x$enable_g" = "xyes"; then
+case $CC in
+  gcc)
+    # Optimisations etc. for the GNU gcc compiler.
     case " $CFLAGS " in
-      *[\ \	]-g[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -g" ;;
+      *[\ \	]-Wall[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -Wall" ;;
     esac
 
-    case " $CFLAGS " in
-      *[\ \	]-O2[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -O2" ;;
-    esac
+    if test "x$enable_g" = "xyes"; then
+      case " $CFLAGS " in
+        *[\ \	]-g[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -g" ;;
+      esac
 
-  else
-    case " $CFLAGS " in
-      *[\ \	]-O3[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -O3" ;;
-    esac
+      case " $CFLAGS " in
+        *[\ \	]-O2[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O2" ;;
+      esac
 
-  fi
+    else
+      case " $CFLAGS " in
+        *[\ \	]-O3[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O3" ;;
+      esac
 
-  if test "x$enable_prof" = "xyes"; then
-    case " $CFLAGS " in
-      *[\ \	]-pg[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -pg" ;;
-    esac
-  fi
+    fi
 
-  if test "x$enable_missing_prototypes" = "xyes"; then
-    case " $CFLAGS " in
-      *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
-    esac
-  fi
+    if test "x$enable_prof" = "xyes"; then
+      case " $CFLAGS " in
+        *[\ \	]-pg[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -pg" ;;
+      esac
+    fi
 
-  if test "x$enable_ansi" = "xyes"; then
-    case " $CFLAGS " in
-      *[\ \	]-ansi[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ansi" ;;
-    esac
+    if test "x$enable_missing_prototypes" = "xyes"; then
+      case " $CFLAGS " in
+        *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
+      esac
+    fi
 
-    case " $CFLAGS " in
-      *[\ \	]-pedantic[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -pedantic" ;;
-    esac
-  fi
+    if test "x$enable_ansi" = "xyes"; then
+      case " $CFLAGS " in
+        *[\ \	]-ansi[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ansi" ;;
+      esac
 
-else
+      case " $CFLAGS " in
+        *[\ \	]-pedantic[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -pedantic" ;;
+      esac
+    fi
+    ;;
 
+  icc)
 # Optimisations etc. for the Intel C++ compiler.
-  if test "x$CC" = "xicc"; then
 
     case " $CFLAGS " in
       *[\ \	]-w1[\ \	]*) ;;
@@ -322,10 +322,6 @@ else
       esac
 
     else
-#      case " $CFLAGS " in
-#        *[\ \	]-ipo[\ \	]*) ;;
-#        *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
-#      esac
       case " $CFLAGS " in
         *[\ \	]-ipo[\ \	]*) ;;
         *) CFLAGS="$CFLAGS -ipo -wp_ipo" ;;
@@ -351,9 +347,10 @@ else
         *) CFLAGS="$CFLAGS -ansi" ;;
       esac
     fi
+    ;;
 
-  else
-
+  cc)
+# Could be any compiler!
 # Kludges etc. for the Sun C Compiler.
     if test "x$CC" = "xcc"; then
       if test "x$target" = "xsparc-sun-solaris2.8"; then
@@ -365,38 +362,62 @@ else
           esac
         fi
       fi
-
-# Kludges etc. for the Compaq C Compiler
-    else
-      if test "x$CC" = "xccc"; then
-
-        if test "x$enable_g" = "xyes"; then
-          case " $CFLAGS " in
-            *[\ \	]-g[\ \	]*) ;;
-            *) CFLAGS="$CFLAGS -g3" ;;
-          esac
-
-        else
-          case " $CFLAGS " in
-            *[\ \	]-O3[\ \	]*) ;;
-            *) CFLAGS="$CFLAGS -O3" ;;
-          esac
-
-        fi
-
-        case " $CFLAGS " in
-          *[\ \	]-Wall[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -Wall" ;;
-        esac
-
-        case " $CFLAGS " in
-          *[\ \	]-misalign[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -misalign" ;;
-        esac
-      fi
     fi
-  fi
-fi
+    ;;
+
+  ccc)
+# Kludges etc. for the Compaq C Compiler
+
+      if test "x$enable_g" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-g[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -g3" ;;
+        esac
+
+      else
+        case " $CFLAGS " in
+          *[\ \	]-O3[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O3" ;;
+        esac
+
+      fi
+
+      case " $CFLAGS " in
+        *[\ \	]-Wall[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -Wall" ;;
+      esac
+
+      case " $CFLAGS " in
+        *[\ \	]-misalign[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -misalign" ;;
+      esac
+    ;;
+
+  pgcc)
+# The Portland Group C compiler.
+# Note: Should consider use of -tp flags to specify processor type.
+# I should also consider investigating the pgcc profiling options.
+
+      if test "x$enable_g" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-g[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -g" ;;
+        esac
+
+      else
+        case " $CFLAGS " in
+          *[\ \	]-fast[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -fast" ;;
+        esac
+
+      fi
+
+      case " $CFLAGS " in
+        *[\ \	]-Xa[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -Xa" ;;
+      esac
+    ;;
+esac
 changequote([,])dnl
 
 dnl Checks for standard library functions.
