@@ -277,4 +277,6 @@ void sincos( double radians, double *s, double *c );
 int gethostname(char *name, size_t len);
 #endif
 
-#endif
+#endif /* COMPATIBILITY_H_INCLUDED */
+
+

@@ -771,7 +771,9 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
     current1=0;
     current2=0;
 
-    if (permutation!=NULL) dief("Internal error.  Permutation buffer not NULL.");
+    if (permutation!=NULL)
+      die("Internal error.  Permutation buffer not NULL.");
+
     permutation = s_malloc(sizeof(int)*pop->orig_size);
     ordered = s_malloc(sizeof(int)*pop->orig_size);
     for (i=0; i<pop->orig_size;i++)
@@ -918,7 +920,7 @@ boolean ga_select_one_linearrank(population *pop, entity **mother)
 
   pop->select_state++;
 
-  *mother = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+  *mother = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
 
   return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
@@ -940,10 +942,10 @@ boolean ga_select_two_linearrank(population *pop, entity **mother, entity **fath
 
   pop->select_state++;
 
-  *mother = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+  *mother = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
   do
     {
-    *father = pop->orig_size*(1.0-sqrt(random_unit_uniform()));
+    *father = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
     } while (*mother == *father);
 
   return pop->select_state>(pop->orig_size*pop->crossover_ratio);

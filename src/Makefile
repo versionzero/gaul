@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -111,7 +111,7 @@ GA_PATCH_VERSION = 2
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-2
 GA_VERSION_STRING = 
-HAVE_MPI = 1
+HAVE_MPI = 0
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -123,8 +123,8 @@ LT_REVISION = 2
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = -D_REENTRANT
-MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+MPIFLAGS = 
+MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -216,7 +216,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
@@ -243,7 +243,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -pedantic -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
+CFLAGS =  -Wall -pedantic -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 

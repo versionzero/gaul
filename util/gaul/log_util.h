@@ -123,4 +123,6 @@ void plog( const enum log_level_type level, const char *format, ... );
 void	log_wrapper(int *level, char *message);
 #endif
 
-#endif
+#endif /* LOG_UTIL_H_INCLUDED */
+
+
