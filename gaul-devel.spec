@@ -1,6 +1,6 @@
 %define PACKAGE_VERSION 	0
 %define RELEASE			1842
-%define PATCH			2
+%define PATCH			3
 %define prefix			/usr/local/
 
 ########################################################################
@@ -8,7 +8,7 @@
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -68,6 +68,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Thu Jan 09 2003 Stewart Adcock <stewart@linux-domain.com>
+- 0.1842-3
+- Added packager tag.
+
 * Wed Jan 08 2003 Stewart Adcock <stewart@linux-domain.com>
 - That 'dnl' change was stupid because it broke the spec file!
 - Copyright notices changed to 2003.

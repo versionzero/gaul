@@ -1,7 +1,10 @@
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
 - Changed name of test example to test_ga to avoid name clash with file from binutils package.
-- Use 'dnl' not '#' for m4 comments.
+- use 'dnl' not '#' for m4 comments.
+- use '#' not 'dnl' for RPM spec comments.
+- Split statistics functions to seperate source file.  Added ga_fitness_mean().
+- Public function prototypes added to the gaul.h header.
 - Fixed/standardised RPM spec file.
 - Removed standalone neural network simulator from archive and distribution.
 

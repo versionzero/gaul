@@ -29,27 +29,10 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#lib_LIBRARIES = libstuff.a \
-#	libnn_util.a \
-#	liblog_util.a liblog_util_parallel.a \
-#	libmpi_util.a libmpi_util_fake.a
-
 lib_LTLIBRARIES = libstuff.la \
 	libnn_util.la \
-        liblog_util.la liblog_util_parallel.la \
+	liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
-
-#libstuff_a_SOURCES = \
-#	avltree.c \
-#	compatibility.c \
-#	linkedlist.c \
-#	memory_util.c \
-#	table_util.c \
-#	random_util.c \
-#	str_util.c \
-#	dstr_util.c \
-#	str_match.c \
-#	timer_util.c
 
 libstuff_la_SOURCES = \
 	avltree.c \
@@ -63,32 +46,17 @@ libstuff_la_SOURCES = \
 	str_match.c \
 	timer_util.c
 
-#liblog_util_parallel_a_SOURCES = \
-#	log_util_parallel.c
-
 liblog_util_parallel_la_SOURCES = \
 	log_util_parallel.c
-
-#liblog_util_a_SOURCES = \
-#	log_util.c
 
 liblog_util_la_SOURCES = \
 	log_util.c
 
-#libmpi_util_fake_a_SOURCES = \
-#	mpi_util_fake.c 
-
 libmpi_util_fake_la_SOURCES = \
 	mpi_util_fake.c 
 
-#libmpi_util_a_SOURCES = \
-#	mpi_util.c 
-
 libmpi_util_la_SOURCES = \
 	mpi_util.c 
-
-#libnn_util_a_SOURCES = \
-#	nn_util.c
 
 libnn_util_la_SOURCES = \
 	nn_util.c
@@ -114,9 +82,6 @@ include_HEADERS = \
 libstuff_a_LIBFLAGS =
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-libnn_util_a_LIBFLAGS =
-libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
 liblog_util_a_LIBFLAGS =
 liblog_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
@@ -128,4 +93,7 @@ libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_fake_a_LIBFLAGS =
 libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+
+libnn_util_a_LIBFLAGS =
+libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 

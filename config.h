@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "08/01/03"
+#define BUILD_DATE_STRING "09/01/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -137,7 +137,7 @@
 /* #undef HAVE_SINCOS */
 
 /* Whether S-Lang is installed. */
-#define HAVE_SLANG 0
+#define HAVE_SLANG 1
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -311,7 +311,7 @@
 #define MEMORY_ALLOC_SAFE 1
 
 /* Define to disable memory chunk allocation routines. */
-#define MEMORY_CHUNKS_MIMIC 1
+/* #undef MEMORY_CHUNKS_MIMIC */
 
 /* Whether to pad memory. */
 #define MEMORY_PADDING 0
@@ -368,7 +368,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-19.8.0 #1 Thu Dec 12 04:37:40 EST 2002 i686 athlon i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-19.8.0smp #1 SMP Thu Dec 12 04:36:25 EST 2002 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
