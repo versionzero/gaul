@@ -16,6 +16,7 @@ These milestone requirements are subject to change ;)
             |  ga_evolution_{mpi,pvm}() and associated examples.
             |  ga_evolution_threaded() and associated example.
             |  Updated tutorial documentation.
+            |  Add GA_ELITISM_PARENTS_RESCORE elitism mode.
 ------------+--------------------------------------------------------
  0.1844     |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h

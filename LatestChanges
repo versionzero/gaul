@@ -10,13 +10,14 @@ Changes since release 0.1842:
 - Modified copyright notices.
 - HP-UX fixes.
 - *** API CHANGE *** Changed parameters to the ga_genesis_XXX() functions.  This enables userdata field of the population structure to be defined prior to use by the seeding operator.
-- Fixed bug in ga_select_one_sus() causing incorrect nuber of entities to be selected.
+- Fixed bug in ga_select_one_sus() causing incorrect number of entities to be selected.
 - Fixed bug in configure.in _Bool tests.
 - Code linking to GAUL now only needs "-lgaul -lgaul_util -lm".
 - Extensive rewrite of portions of parallel code.
 - Changed strdup() prototype in compatibility routines.
 - Added ga_population_get_generation() function to access the generation number from within the callbacks used during evolution, e.g. the fitness evaluation function.
-- Added new elitism option, GA_ELITISM_RESCORE_PARENTS.  This re-evaluates the parent fitness and maintains them in the population if they still have a sufficiently high fitness.
+- Added new elitism option, GA_ELITISM_RESCORE_PARENTS.  This re-evaluates the parents' fitness and maintains them in the population if they still have a sufficiently high fitness.
+- Added ga_population_get_generation() intrinsic for S-Lang scripting.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

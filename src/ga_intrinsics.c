@@ -732,6 +732,20 @@ int ga_population_get_chromosomelen_slang(int *pop)
 
 
 /**********************************************************************
+  ga_population_get_generation_slang()
+  synopsis:	Access population's generation field.
+  parameters:
+  return:
+  last updated:	20 Mar 2003
+ **********************************************************************/
+
+int ga_population_get_generation_slang(int *pop)
+  {
+  return ((population*) ga_get_population_from_id(*pop))->generation;
+  }
+
+
+/**********************************************************************
   ga_entity_get_fitness_slang()
   synopsis:	Access entity's fitness field.
   parameters:
@@ -1370,6 +1384,9 @@ boolean ga_intrinsic_sladd(void)
             SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_get_chromosomelen",
             (FVOID_STAR) ga_population_get_chromosomelen_slang, SLANG_INT_TYPE, 1,
+            SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_population_get_generation",
+            (FVOID_STAR) ga_population_get_generation_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_get_fitness",
             (FVOID_STAR) ga_entity_get_fitness_slang, SLANG_DOUBLE_TYPE, 2,
