@@ -55,11 +55,12 @@ lib_LIBRARIES = libbtree.a
 
 libbtree_a_SOURCES = btree.c
 
-include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
+noinst_HEADERS = \
+	btree.h dejong.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 DEPENDENCIES = \
 	../util/librandom.a \
-	../util/libmethods.a \
+	../util/libstuff.a \
 	../util/libmpi_util.a \
 	../util/libnn_util.a \
 	../util/libstr_util.a \
@@ -68,7 +69,8 @@ DEPENDENCIES = \
 
 EXTRA_DIST = \
 	chromostubs.c \
-	chromostubs.h
+	chromostubs.h \
+	wine.data
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
