@@ -24,6 +24,7 @@ Changes since release 0.1846:
 - *** API CHANGE *** Initial step size for simplex added to ga_population_set_simplex_parameters() parameters.
 - Fixed long-standing memory chunk bug exhibited on Solaris, IRIX, HP/UX and possibly other (64-bit) OSes.
 - Fixed compilation on IRIX with the MIPSpro compiler.
+- Added missing struggle_threaded example source, discussed in the tutorial.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

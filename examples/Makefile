@@ -150,7 +150,8 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
-	struggle struggle_forked struggle_mp \
+	struggle \
+	struggle_forked struggle_threaded struggle_mp \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -231,6 +232,7 @@ struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_systematicsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
+struggle_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
@@ -267,6 +269,7 @@ struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -295,8 +298,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
 	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
-	struggle_mp$(EXEEXT) struggle_dc$(EXEEXT) \
-	struggle_randomsearch$(EXEEXT) \
+	struggle_threaded$(EXEEXT) struggle_mp$(EXEEXT) \
+	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -393,6 +396,9 @@ am_struggle_systematicsearch_OBJECTS = \
 struggle_systematicsearch_OBJECTS = \
 	$(am_struggle_systematicsearch_OBJECTS)
 struggle_systematicsearch_LDFLAGS =
+struggle_threaded_SOURCES = struggle_threaded.c
+struggle_threaded_OBJECTS = struggle_threaded.$(OBJEXT)
+struggle_threaded_LDFLAGS =
 am_test_ga_OBJECTS = test_ga.$(OBJEXT)
 test_ga_OBJECTS = $(am_test_ga_OBJECTS)
 test_ga_LDFLAGS =
@@ -441,6 +447,7 @@ DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 	./$(DEPDIR)/struggle_randomsearch.Po \
 	./$(DEPDIR)/struggle_ss.Po \
 	./$(DEPDIR)/struggle_systematicsearch.Po \
+	./$(DEPDIR)/struggle_threaded.Po \
 	./$(DEPDIR)/test_ga.Po ./$(DEPDIR)/test_sd.Po \
 	./$(DEPDIR)/test_simplex.Po ./$(DEPDIR)/wildfire.Po \
 	./$(DEPDIR)/wildfire_forked.Po \
@@ -465,13 +472,14 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
 	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
 	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) \
-	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+	$(struggle_systematicsearch_SOURCES) struggle_threaded.c \
+	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -600,6 +608,9 @@ struggle_ss$(EXEEXT): $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
 struggle_systematicsearch$(EXEEXT): $(struggle_systematicsearch_OBJECTS) $(struggle_systematicsearch_DEPENDENCIES) 
 	@rm -f struggle_systematicsearch$(EXEEXT)
 	$(LINK) $(struggle_systematicsearch_LDFLAGS) $(struggle_systematicsearch_OBJECTS) $(struggle_systematicsearch_LDADD) $(LIBS)
+struggle_threaded$(EXEEXT): $(struggle_threaded_OBJECTS) $(struggle_threaded_DEPENDENCIES) 
+	@rm -f struggle_threaded$(EXEEXT)
+	$(LINK) $(struggle_threaded_LDFLAGS) $(struggle_threaded_OBJECTS) $(struggle_threaded_LDADD) $(LIBS)
 test_ga$(EXEEXT): $(test_ga_OBJECTS) $(test_ga_DEPENDENCIES) 
 	@rm -f test_ga$(EXEEXT)
 	$(LINK) $(test_ga_LDFLAGS) $(test_ga_OBJECTS) $(test_ga_LDADD) $(LIBS)
@@ -654,6 +665,7 @@ include ./$(DEPDIR)/struggle_mp-struggle_mp.Po
 include ./$(DEPDIR)/struggle_randomsearch.Po
 include ./$(DEPDIR)/struggle_ss.Po
 include ./$(DEPDIR)/struggle_systematicsearch.Po
+include ./$(DEPDIR)/struggle_threaded.Po
 include ./$(DEPDIR)/test_ga.Po
 include ./$(DEPDIR)/test_sd.Po
 include ./$(DEPDIR)/test_simplex.Po

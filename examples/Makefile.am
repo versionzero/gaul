@@ -40,7 +40,8 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
-	struggle struggle_forked struggle_mp \
+	struggle \
+	struggle_forked struggle_threaded struggle_mp \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -118,6 +119,7 @@ struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_systematicsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
+struggle_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
@@ -154,6 +156,7 @@ struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm

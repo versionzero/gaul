@@ -1,9 +1,9 @@
 /**********************************************************************
-  struggle.c
+  struggle_threaded.c
  **********************************************************************
 
   struggle - Test/example program for GAUL.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,16 +25,15 @@
 
  **********************************************************************
 
-  Synopsis:	Test/example program for GAUL.
-
-		This program is fairly lean, showing how little
-		application code is needed when using GAUL.
+  Synopsis:	Test/example program for GAUL using the
+		ga_evolution_threaded() evolution function.
 
 		This program aims to generate the final sentence from
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is explained in docs/html/tutorial/simple.html
+		This example is explained at
+		http://gaul.sourceforge.net/tutorial/multiprocessor.html
 
  **********************************************************************/
 
@@ -84,7 +83,7 @@ boolean struggle_score(population *pop, entity *entity)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	19 Aug 2002
+  updated:	05 Sep 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -126,7 +125,7 @@ int main(int argc, char **argv)
        0.0              	/* double  migration */
                               );
 
-    ga_evolution(
+    ga_evolution_threaded(
        pop,			/* population      *pop */
        500			/* const int       max_generations */
               );

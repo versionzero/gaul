@@ -37,7 +37,8 @@
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is explained in docs/html/tutorial9.html
+		This example is explained at
+		http://gaul.sourceforge.net/tutorial/multiprocessor.html
 
  **********************************************************************/
 
@@ -134,10 +135,10 @@ int main(int argc, char **argv)
        500			/* const int       max_generations */
               );
 
-    printf("The final solution with seed = %d was:\n", i);
+    printf( "The final solution with seed = %d was:\n", i );
     beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
     printf("%s\n", beststring);
-    printf("With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
+    printf( "With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
 
     ga_extinction(pop);
     }

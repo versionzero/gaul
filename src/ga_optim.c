@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Optimisation and evolution routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -41,6 +41,7 @@
 		Need to fix elitism/crowding stuff.
 		Remove much duplicated code.
 		OpenMOSIX fix.  See below.
+		gaul_adapt_and_evaluate_forked() and gaul_adapt_and_evaluate_threaded() are only parallelized for the case that no adaptation occurs.
 
  **********************************************************************/
 
@@ -604,19 +605,47 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
   synopsis:	Fitness evaluations.
 		Evaluate all previously unevaluated entities.
 		No adaptation.
+		Threaded processing version.
   parameters:	population *pop
   return:	none
   last updated:	18 Sep 2002
  **********************************************************************/
 
-#if HAVE_PTHREAD == 1
-static void gaul_ensure_evaluations_threaded(population *pop, const int num_threads,
-			int *eid, pthread_t *tid)
+#if HAVE_PTHREADS == 1
+
+typedef struct threaddata_s
+  {
+  int thread_num;
+  int eval_num;
+  population *pop;
+  pthread_t pid;
+  } threaddata_t;
+
+/*
+ * This is the child thread code used by gaul_ensure_evaluations_threaded(),
+ * gaul_adapt_and_evaluate_threaded() and gaul_survival_threaded() to evaluate entities.
+ */
+static void *_evaluation_thread( void *data )
+  {
+  int		eval_num = ((threaddata_t *)data)->eval_num;
+  population	*pop = ((threaddata_t *)data)->pop;
+
+  pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+#if GAUL_DEBUG>2
+printf("DEBUG: Thread %d has evaluated entity %d\n", ((threaddata_t *)data)->thread_num, eval_num);
+#endif
+
+  ((threaddata_t *)data)->thread_num = -1;	/* Signal that this thread is finished. */
+
+  pthread_exit(NULL);
+  }
+
+static void gaul_ensure_evaluations_threaded( population *pop, const int max_threads, threaddata_t *threaddata )
   {
   int		thread_num;		/* Index of current thread. */
-  int		num_threads;		/* Number of threads. */
+  int		num_threads;		/* Number of threads currently in use. */
   int		eval_num;		/* Index of current entity. */
-  pthread_t	fpid;			/* TID of completed child process. */
 
 /*
  * A thread is created for each fitness evaluation upto
@@ -628,87 +657,80 @@ static void gaul_ensure_evaluations_threaded(population *pop, const int num_thre
   thread_num = 0;
   eval_num = 0;
 
-  /* Fork initial processes. */
   /* Skip to the next entity which needs evaluating. */
   while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
 
-  while (thread_num < num_processes && eval_num < pop->size)
+  while (thread_num < max_threads && eval_num < pop->size)
     {
-    eid[thread_num] = eval_num;
-    pid[thread_num] = XXXX();
+    threaddata[thread_num].thread_num = thread_num;
+    threaddata[thread_num].eval_num = eval_num;
 
-    if (pid[thread_num] < 0)
-      {       /* Error in fork. */
-      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-      }
-    else if (pid[thread_num] == 0)
-      {       /* This is the child process. */
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-      write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-      fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
-      _exit(1);
+    if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+      {       /* Error in thread creation. */
+      dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
       }
 
     thread_num++;
     eval_num++;
 
     /* Skip to the next entity which needs evaluating. */
-    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS)
+      eval_num++;
     }
+
   num_threads = thread_num;
 
   /* Wait for a thread to finish and, if needed, create another. */
+  /* Also, find which entity this thread was evaluating. */
+  thread_num=0;
   while (num_threads > 0)
     {
-    fpid = wait(NULL);
+    while (threaddata[thread_num].thread_num >= 0)
+      {
+      thread_num++;
+      if (thread_num==max_threads)
+        {
+        thread_num=0;
+/* FIXME: Insert short sleep here? */
+        }
+      }
 
-    if (fpid == -1) die("Error in wait().");
+#if GAUL_DEBUG>2
+printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
+#endif
 
-    /* Find which entity this thread was evaluating. */
-    thread_num = 0;
-    while (fpid != pid[thread_num]) thread_num++;
-
-    if (eid[thread_num] == -1) die("Internal error.  eid is -1");
-
-    read(evalpipe[2*thread_num], &(pop->entity_iarray[eid[thread_num]]->fitness), sizeof(double));
+    if ( pthread_join(threaddata[thread_num].pid, NULL) < 0 )
+      {
+      dief("Error %d in pthread_join. (%s)", errno, errno==ESRCH?"ESRCH":errno==EINVAL?"EINVAL":errno==EDEADLK?"EDEADLK":"unknown");
+      }
 
     if (eval_num < pop->size)
       {       /* New thread. */
-      eid[thread_num] = eval_num;
-      pid[thread_num] = fork();
+      threaddata[thread_num].thread_num = thread_num;
+      threaddata[thread_num].eval_num = eval_num;
 
-      if (pid[thread_num] < 0)
-        {       /* Error in thread. */
-        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-        }
-      else if (pid[thread_num] == 0)
-        {       /* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-        write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-        fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
-        _exit(1);
+      if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+        {       /* Error in thread creation. */
+        dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
         }
 
       eval_num++;
 
       /* Skip to the next entity which needs evaluating. */
-      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS)
+        eval_num++;
       }
     else
       {
-      pid[thread_num] = -1;
-      eid[thread_num] = -1;
+      threaddata[thread_num].thread_num = 0;
+      threaddata[thread_num].eval_num = -1;
       num_threads--;
       }
     }
 
   return;
   }
-#endif /* HAVE_PTHREAD */
+#endif /* HAVE_PTHREADS */
 
 
 /**********************************************************************
@@ -1041,6 +1063,171 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 
 
 /**********************************************************************
+  gaul_adapt_and_evaluate_threaded()
+  synopsis:	Fitness evaluations.
+		Evaluate the new entities produced in the current
+		generation, whilst performing any necessary adaptation.
+		Threaded processing version.
+  parameters:	population *pop
+  return:	none
+  last updated:	15 Apr 2004
+ **********************************************************************/
+
+#if HAVE_PTHREADS == 1
+static void gaul_adapt_and_evaluate_threaded(population *pop,
+	       		const int max_threads,
+			threaddata_t *threaddata)
+  {
+  int		i;			/* Loop variable over entity ranks. */
+  entity	*adult=NULL;		/* Adapted entity. */
+  int		adultrank;		/* Rank of adapted entity. */
+  int		thread_num;		/* Index of current thread. */
+  int		num_threads;		/* Number of threads currently in use. */
+  int		eval_num;		/* Index of current entity. */
+
+  if (pop->scheme == GA_SCHEME_DARWIN)
+    {	/* This is pure Darwinian evolution.  Simply assess fitness of all children.  */
+
+    plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
+
+/* 
+ * A thread is created for each fitness evaluation upto
+ * a maximum of max_threads at which point we wait for 
+ * results before creating more.
+ *
+ * Skip evaluations for entities that have been previously evaluated.
+ *
+ * FIXME: This lump of code is almost identical to that in
+ * gaul_ensure_evaluations_threaded() and shouldn't really be duplicated.
+ */
+  thread_num = 0;
+  eval_num = 0;
+
+  /* Skip to the next entity which needs evaluating. */
+  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+
+  while (thread_num < max_threads && eval_num < pop->size)
+    {
+    threaddata[thread_num].thread_num = thread_num;
+    threaddata[thread_num].eval_num = eval_num;
+
+    if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+      {       /* Error in thread creation. */
+      dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+
+    thread_num++;
+    eval_num++;
+
+    /* Skip to the next entity which needs evaluating. */
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS)
+      eval_num++;
+    }
+
+  num_threads = thread_num;
+
+  /* Wait for a thread to finish and, if needed, create another. */
+  /* Also, find which entity this thread was evaluating. */
+  thread_num=0;
+  while (num_threads > 0)
+    {
+    while (threaddata[thread_num].thread_num >= 0)
+      {
+      thread_num++;
+      if (thread_num==max_threads)
+        {
+        thread_num=0;
+/* FIXME: Insert short sleep here? */
+        }
+      }
+
+#if GAUL_DEBUG>2
+printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
+#endif
+
+    if ( pthread_join(threaddata[thread_num].pid, NULL) < 0 )
+      {
+      dief("Error %d in pthread_join. (%s)", errno, errno==ESRCH?"ESRCH":errno==EINVAL?"EINVAL":errno==EDEADLK?"EDEADLK":"unknown");
+      }
+
+    if (eval_num < pop->size)
+      {       /* New thread. */
+      threaddata[thread_num].thread_num = thread_num;
+      threaddata[thread_num].eval_num = eval_num;
+
+      if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+        {       /* Error in thread creation. */
+        dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+        }
+
+      eval_num++;
+
+      /* Skip to the next entity which needs evaluating. */
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS)
+        eval_num++;
+      }
+    else
+      {
+      threaddata[thread_num].thread_num = 0;
+      threaddata[thread_num].eval_num = -1;
+      num_threads--;
+      }
+    }
+
+    return;
+    }
+  else
+    {	/* Some kind of adaptation is required.  First reevaluate parents, as needed, then children. */
+
+    plog(LOG_VERBOSE, "*** Adaptation and Fitness Evaluations ***");
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
+      {
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
+      { 
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
+      {
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+    }
+
+  return;
+  }
+#endif
+
+
+/**********************************************************************
   gaul_survival()
   synopsis:	Survival of the fittest.
 		Enforce elitism, apply crowding operator, reduce
@@ -1225,6 +1412,7 @@ static void gaul_survival_mp(population *pop)
 		Enforce elitism, apply crowding operator, reduce
 		population back to its stable size and rerank entities,
 		as required.
+		Forked processing version.
 
 		*** FIXME: crowding analysis incomplete. ***
 
@@ -1375,6 +1563,7 @@ static void gaul_survival_forked(population *pop,
 		Enforce elitism, apply crowding operator, reduce
 		population back to its stable size and rerank entities,
 		as required.
+		Threaded processing version.
 
 		*** FIXME: crowding analysis incomplete. ***
 
@@ -1383,15 +1572,14 @@ static void gaul_survival_forked(population *pop,
   last updated:	18 Mar 2003
  **********************************************************************/
 
-#if HAVE_PTHREAD == 1
+#if HAVE_PTHREADS == 1
 static void gaul_survival_threaded(population *pop,
-			const int num_threads,
-			int *eid, pthread_t *tid)
+			const int max_threads,
+			threaddata_t *threaddata)
   {
   int		thread_num;		/* Index of current thread. */
-  int		num_threads;		/* Number of threads. */
+  int		num_threads;		/* Number of threads currently in use. */
   int		eval_num;		/* Index of current entity. */
-  pthread_t	fpid;			/* TID of completed child process. */
 
   plog(LOG_VERBOSE, "*** Survival of the fittest ***");
 
@@ -1408,84 +1596,79 @@ static void gaul_survival_threaded(population *pop,
     }
   else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
     {
+
     plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
 
 /*
  * A thread is created for each fitness evaluation upto
  * a maximum of max_threads at which point we wait for
  * results before continuing.
+ *
+ * Skip evaluations for entities that have been previously evaluated.
  */
-  thread_num = 0;
-  eval_num = 0;
-
-  /* Fork initial processes. */
-  while (thread_num < num_processes && eval_num < pop->orig_size)
-    {
-    eid[thread_num] = eval_num;
-    pid[thread_num] = XXXX();
-
-    if (pid[thread_num] < 0)
-      {       /* Error in fork. */
-      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-      }
-    else if (pid[thread_num] == 0)
-      {       /* This is the child process. */
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-      write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-      fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
-      _exit(1);
-      }
-
-    thread_num++;
-    eval_num++;
-    }
-  num_threads = thread_num;
-
-  /* Wait for a thread to finish and, if needed, create another. */
-  while (num_threads > 0)
-    {
-    fpid = wait(NULL);
-
-    if (fpid == -1) die("Error in wait().");
-
-    /* Find which entity this thread was evaluating. */
     thread_num = 0;
-    while (fpid != pid[thread_num]) thread_num++;
+    eval_num = 0;
 
-    if (eid[thread_num] == -1) die("Internal error.  eid is -1");
+    while (thread_num < max_threads && eval_num < pop->orig_size)
+      {
+      threaddata[thread_num].thread_num = thread_num;
+      threaddata[thread_num].eval_num = eval_num;
 
-    read(evalpipe[2*thread_num], &(pop->entity_iarray[eid[thread_num]]->fitness), sizeof(double));
-
-    if (eval_num < pop->orig_size)
-      {       /* New thread. */
-      eid[thread_num] = eval_num;
-      pid[thread_num] = fork();
-
-      if (pid[thread_num] < 0)
-        {       /* Error in thread. */
-        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-        }
-      else if (pid[thread_num] == 0)
-        {       /* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-        write(evalpipe[2*thread_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-        fsync(evalpipe[2*thread_num+1]);	/* Ensure data is written to pipe. */
-        _exit(1);
+      if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+        {       /* Error in thread creation. */
+        dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
         }
 
+      thread_num++;
       eval_num++;
       }
-    else
+
+    num_threads = thread_num;
+
+  /* Wait for a thread to finish and, if needed, create another. */
+  /* Also, find which entity this thread was evaluating. */
+    thread_num=0;
+    while (num_threads > 0)
       {
-      pid[thread_num] = -1;
-      eid[thread_num] = -1;
-      num_threads--;
+      while (threaddata[thread_num].thread_num >= 0)
+        {
+        thread_num++;
+        if (thread_num==max_threads)
+          {
+          thread_num=0;
+/* FIXME: Insert short sleep here? */
+          }
+        }
+
+#if GAUL_DEBUG>2
+printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num, num_threads, eval_num, pop->size);
+#endif
+
+      if ( pthread_join(threaddata[thread_num].pid, NULL) < 0 )
+        {
+        dief("Error %d in pthread_join. (%s)", errno, errno==ESRCH?"ESRCH":errno==EINVAL?"EINVAL":errno==EDEADLK?"EDEADLK":"unknown");
+        }
+
+      if (eval_num < pop->orig_size)
+        {       /* New thread. */
+        threaddata[thread_num].thread_num = thread_num;
+        threaddata[thread_num].eval_num = eval_num;
+
+        if (pthread_create(&(threaddata[thread_num].pid), NULL, _evaluation_thread, (void *)&(threaddata[thread_num])) < 0)
+          {       /* Error in thread creation. */
+          dief("Error %d in pthread_create. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+          }
+
+        eval_num++;
+        }
+      else
+        {
+        threaddata[thread_num].thread_num = 0;
+        threaddata[thread_num].eval_num = -1;
+        num_threads--;
+        }
       }
-    }
+
     }
 
 /*
@@ -1511,7 +1694,7 @@ static void gaul_survival_threaded(population *pop,
 
   return;
   }
-#endif /* HAVE_PTHREAD */
+#endif /* HAVE_PTHREADS */
 
 
 /**********************************************************************
@@ -1774,10 +1957,140 @@ int ga_evolution_forked(	population		*pop,
 
   parameters:
   return:	Number of generations performed.
+  last updated:	15 Apr 2004
+ **********************************************************************/
+
+#if HAVE_PTHREADS == 1
+int ga_evolution_threaded(	population		*pop,
+				const int		max_generations )
+  {
+  int		generation=0;		/* Current generation number. */
+  int		max_threads=0;		/* Maximum number of threads to use at one time. */
+  char		*max_thread_str;	/* Value of enviroment variable. */
+  threaddata_t	*threaddata;		/* Used for passing data to threads. */
+  int		i;			/* Loop over threaddata elements. */
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
+  
+/*
+ * Look at environment to find number of threads to use.
+ */
+  max_thread_str = getenv(GA_NUM_THREADS_ENVVAR_STRING);
+  if (max_thread_str) max_threads = atoi(max_thread_str);
+  if (max_threads == 0) max_threads = GA_DEFAULT_NUM_THREADS;
+
+  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d threads will be created", max_threads);
+
+/*
+ * Allocate memory required for handling the threads.
+ */
+  threaddata = s_malloc(sizeof(threaddata_t)*max_threads);
+  for (i=0; i<max_threads; i++)
+    threaddata[i].pop = pop;
+
+  pop->generation = 0;
+
+/*
+ * Score and sort the initial population members.
+ */
+  gaul_ensure_evaluations_threaded(pop, max_threads, threaddata);
+  sort_population(pop);
+
+  plog( LOG_VERBOSE,
+        "Prior to the first generation, population has fitness scores between %f and %f",
+        pop->entity_iarray[0]->fitness,
+        pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Do all the generations:
+ *
+ * Stop when (a) max_generations reached, or
+ *           (b) "pop->generation_hook" returns FALSE.
+ */
+  while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
+           generation<max_generations )
+    {
+    generation++;
+    pop->generation = generation;
+    pop->orig_size = pop->size;
+
+    plog(LOG_DEBUG,
+              "Population size is %d at start of generation %d",
+              pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+    gaul_crossover(pop);
+
+/*
+ * Mutation step.
+ */
+    gaul_mutation(pop);
+
+/*
+ * Score all child entities from this generation.
+ */
+    gaul_adapt_and_evaluate_threaded(pop, max_threads, threaddata);
+
+/*
+ * Apply survival pressure.
+ */
+    gaul_survival_threaded(pop, max_threads, threaddata);
+
+    plog(LOG_VERBOSE,
+          "After generation %d, population has fitness scores between %f and %f",
+          generation,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+    }	/* Main generation loop. */
+
+/* Free memory used for storing thread information. */
+  s_free(threaddata);
+
+  return generation;
+  }
+#else
+int ga_evolution_threaded(	population		*pop,
+				const int		max_generations )
+  {
+
+  die("Support for ga_evolution_threaded() not compiled.");
+
+  return 0;
+  }
+#endif /* HAVE_PTHREADS */
+
+
+/**********************************************************************
+  ga_evolution_threaded()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given population.  This is a
+		generation-based GA.  ga_genesis(), or equivalent,
+		must be called prior to this function.
+
+		This function is like ga_evolution(), except that all
+		fitness evaluations will be performed in threads
+		and is therefore ideal for use on SMP multiprocessor
+		machines or multipipelined processors (e.g. the new
+		Intel Xeons).
+
+  parameters:
+  return:	Number of generations performed.
   last updated:	18 Sep 2002
  **********************************************************************/
 
-#if HAVE_PTHREAD == 1
+#if HAVE_PTHREADS == -2
+/* Old version of code. */
 int ga_evolution_threaded(	population		*pop,
 				const int		max_generations )
   {
@@ -1814,7 +2127,7 @@ int ga_evolution_threaded(	population		*pop,
 /*
  * Start with all threads locked.
  */
-THREAD_LOCK(global_thread_lock);
+  THREAD_LOCK(global_thread_lock);
 
 /*
  * Allocate memory required for handling the threads.
@@ -1923,16 +2236,7 @@ THREAD_LOCK(global_thread_lock);
 
   return generation;
   }
-#else
-int ga_evolution_threaded(	population		*pop,
-				const int		max_generations )
-  {
-
-  die("Support for ga_evolution_threaded() not compiled.");
-
-  return 0;
-  }
-#endif /* HAVE_PTHREAD */
+#endif
 
 
 /**********************************************************************

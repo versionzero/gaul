@@ -38,6 +38,11 @@
  */
 #include "gaul.h"
 
+#ifdef HAVE_PTHREADS
+# include <pthread.h>
+# define _REENTRANT
+#endif
+
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
