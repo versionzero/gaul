@@ -104,6 +104,9 @@ dnl Debugging default.
 debug_default=no
 
 dnl declare --enable-* args and collect ac_help strings
+AC_ARG_ENABLE(g,
+       [  --enable-g=[yes/no]             compile with symbolic debug information [default=yes]],,
+       enable_g=yes)
 AC_ARG_ENABLE(debug,
        [  --enable-debug=[no/minimum/yes] turn on debugging [default=$debug_default]],,
        enable_debug=$debug_default)
@@ -211,14 +214,6 @@ else
   fi
 fi
 
-AC_MSG_CHECKING(whether to enable run-time profiling)
-if test "x$enable_prof" = "xyes"; then
-  CFLAGS="$CFLAGS -pg"
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
-fi
-
 dnl Whether to pad memory to detect overflows
 AC_MSG_CHECKING(whether to pad memory to detect overflows)
 if test "x$enable_padding" = "xyes"; then
@@ -280,10 +275,30 @@ else
 fi
 
 changequote(,)dnl
+# Optimisations etc. for the GNU gcc compiler.
 if test "x$GCC" = "xyes"; then
   case " $CFLAGS " in
   *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall -O2 -g" ;;
+  *) CFLAGS="$CFLAGS -Wall" ;;
+  esac
+
+  if test "x$enable_g" = "xyes"; then
+    case " $CFLAGS " in
+    *[\ \	]-g[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -g" ;;
+    esac
+  fi
+
+  if test "x$enable_prof" = "xyes"; then
+    case " $CFLAGS " in
+    *[\ \	]-pg[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -pg" ;;
+    esac
+  fi
+
+  case " $CFLAGS " in
+  *[\ \	]-O2[\ \	]*) ;;
+  *) CFLAGS="$CFLAGS -O2" ;;
   esac
 
   if test "x$enable_missing_prototypes" = "xyes"; then
@@ -303,6 +318,52 @@ if test "x$GCC" = "xyes"; then
     *[\ \	]-pedantic[\ \	]*) ;;
     *) CFLAGS="$CFLAGS -pedantic" ;;
     esac
+  fi
+
+else
+
+# Optimisations etc. for the Intel C++ compiler.
+  if test "x$CC" = "xicc"; then
+    case " $CFLAGS " in
+    *[\ \	]-tpp6[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -tpp6" ;;
+    esac
+
+    case " $CFLAGS " in
+    *[\ \	]-w1[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -w1" ;;
+    esac
+
+    if test "x$enable_g" = "xyes"; then
+      case " $CFLAGS " in
+      *[\ \	]-g[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -g" ;;
+      esac
+    else
+      case " $CFLAGS " in
+      *[\ \	]-ipo[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ipo" ;;
+      esac
+    fi
+
+    if test "x$enable_prof" = "xyes"; then
+      case " $CFLAGS " in
+      *[\ \	]-qp[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -qp" ;;
+      esac
+    fi
+
+    case " $CFLAGS " in
+    *[\ \	]-O2[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -O2" ;;
+    esac
+
+    if test "x$enable_ansi" = "xyes"; then
+      case " $CFLAGS " in
+      *[\ \	]-ansi[\ \	]*) ;;
+      *) CFLAGS="$CFLAGS -ansi" ;;
+      esac
+    fi
   fi
 fi
 changequote([,])dnl

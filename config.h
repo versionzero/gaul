@@ -20,17 +20,17 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1838-1"
-#define BUILD_DATE_STRING "23/04/02"
+#define VERSION_STRING "0.1838-2"
+#define BUILD_DATE_STRING "29/04/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1838
-#define PATCH_VERSION 1
+#define PATCH_VERSION 2
 #define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
 #define V3_QUICK 1
-#define HAVE_SLANG 0
+#define HAVE_SLANG 1
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* #undef HAVE_FLOAT_H */
@@ -66,7 +66,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "23/04/02"
+#define BUILD_DATE_STRING "29/04/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -162,7 +162,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -330,7 +330,7 @@
 #define PARALLEL 0
 
 /* Patch count */
-#define PATCH_VERSION 1
+#define PATCH_VERSION 2
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -366,7 +366,7 @@
 /* #undef VERSION */
 
 /* Version string */
-#define VERSION_STRING "0.1838-1"
+#define VERSION_STRING "0.1838-2"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

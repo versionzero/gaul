@@ -786,7 +786,7 @@ char *nnevolve_chromosome_to_string(population *pop, entity *joe)
 		FIXME: Also need to free this data eventually.
   parameters:	none
   return:	none
-  updated:	04 Feb 2002
+  updated:	29 Apr 2002
  **********************************************************************/
 
 void nnevolve_setup_data(void)
@@ -796,8 +796,8 @@ void nnevolve_setup_data(void)
 
 #include "wine.data"	/* This is a quick kludge! */
 
-  train_property = s_malloc(sizeof(float *)*178);
-  train_data = s_malloc(sizeof(float *)*178);
+  train_property = s_malloc(sizeof(float *)*179);
+  train_data = s_malloc(sizeof(float *)*179);
 
 /*
  * Transfer data into global data arrays.
@@ -810,8 +810,8 @@ void nnevolve_setup_data(void)
 
   for (i=0; i<178; i++)
     {
-    train_property[num_train_data] = s_malloc(sizeof(float)*3);
-    train_data[num_train_data] = s_malloc(sizeof(float)*13);
+    train_property[num_train_data] = s_malloc(sizeof(float)*4);
+    train_data[num_train_data] = s_malloc(sizeof(float)*14);
 
     for (j=0; j<4; j++)
       {

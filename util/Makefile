@@ -99,7 +99,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1838
-LT_REVISION = 1
+LT_REVISION = 2
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
@@ -108,9 +108,9 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 1
+PATCH_VERSION = 2
 RANLIB = ranlib
-VERSION = 0.1838-1
+VERSION = 0.1838-2
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -272,7 +272,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = 
+LIBS =  -lslang -lslang
 libstuff_a_LIBADD = 
 libstuff_a_OBJECTS =  avltree.o compatibility.o linkedlist.o \
 memory_util.o table_util.o
@@ -319,7 +319,7 @@ PROGRAMS =  $(bin_PROGRAMS)
 nn_OBJECTS =  nn_main.o
 nn_DEPENDENCIES = 
 nn_LDFLAGS = 
-CFLAGS = -g -O2 -Wall -O2 -g -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
