@@ -166,6 +166,14 @@ typedef struct
   } ga_sa_t;
 
 /*
+ * Hill climbing parameter structure.
+ */
+typedef struct
+  {
+  GAmutate_allele	mutate_allele;	/* Allele mutation function. */
+  } ga_climbing_t;
+
+/*
  * Population Structure.
  *
  * FIXME: Make opaque. (I have already written the accessor functions.)
@@ -205,6 +213,7 @@ struct population_t
  */
   ga_tabu_t	*tabu_params;			/* Parameters for tabu-searches. */
   ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
+  ga_climbing_t	*climbing_params;		/* Parameters for hill climbing. */
 
 /*
  * Scoring function and the other callbacks are defined here.

@@ -896,29 +896,12 @@ int ga_sa_slang(	int	*pop_id,
 
 /**********************************************************************
   ga_nahc_slang()
-  synopsis:	Wrapper around ga_next_ascent_hill_climbing() for
+  synopsis:	Wrapper around ga_next_ascent_hillclimbing() for
 		scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	22/01/01
+  last updated:	24 Oct 2002
  **********************************************************************/
-
-/*
- * FIXME: This is a temporary function.  The hard-coded values are probably
- * not suitable for your particular task.
- */
-static void _temporary_nahc_mutation(int chromosome, int point, int *data)
-  {
-  int           orig=data[point];       /* The original data */
-
-  do
-    {
-    data[point] = random_int(RAND_MAX)-(RAND_MAX/2);
-    } while (data[point]==orig);
-
-  return;
-  }
-
 
 int ga_nahc_slang(	int	*pop_id,
 			int	*entity_id,
@@ -927,30 +910,30 @@ int ga_nahc_slang(	int	*pop_id,
   entity	*initial, *final;	/* Initial and final solutions. */
   population	*pop;			/* Active population structure. */
 
-  plog( LOG_FIXME, "Selection of optimisation function is currently unavailable from the script interface.");
+  plog( LOG_FIXME,
+        "Selection of optimisation function is currently unavailable from the script interface." );
 
   pop = ga_get_population_from_id(*pop_id);
 
   initial = ga_get_entity_from_id(pop, *entity_id);
 
-  final = ga_next_ascent_hill_climbing( pop, initial,
-                                        *num_iterations,
-					_temporary_nahc_mutation );
+  final = ga_next_ascent_hillclimbing( pop, initial,
+                                        *num_iterations);
 
   return ga_get_entity_id(pop, final);
   }
 
 
 /**********************************************************************
-  ga_rmhc_slang()
-  synopsis:	Wrapper around ga_next_ascent_hill_climbing() for
+  ga_rahc_slang()
+  synopsis:	Wrapper around ga_random_ascent_hillclimbing() for
 		scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	22/01/01
+  last updated:	24 Oct 2002
  **********************************************************************/
 
-int ga_rmhc_slang(	int	*pop_id,
+int ga_rahc_slang(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
@@ -961,8 +944,8 @@ int ga_rmhc_slang(	int	*pop_id,
 
   initial = ga_get_entity_from_id(pop, *entity_id);
 
-  final = ga_random_mutation_hill_climbing( pop, initial,
-                                            *num_iterations );
+  final = ga_random_ascent_hillclimbing( pop, initial,
+                                         *num_iterations );
 
   return ga_get_entity_id(pop, final);
   }
@@ -1321,17 +1304,14 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_allele_search",
             (FVOID_STAR) ga_allele_search_slang, SLANG_INT_TYPE, 6,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
-      || SLadd_intrinsic_function("ga_metropolis",
-            (FVOID_STAR) ga_metropolis_slang, SLANG_INT_TYPE, 4,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_sa",
             (FVOID_STAR) ga_sa_slang, SLANG_INT_TYPE, 5,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_nahc",
             (FVOID_STAR) ga_nahc_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
-      || SLadd_intrinsic_function("ga_rmhc",
-            (FVOID_STAR) ga_rmhc_slang, SLANG_INT_TYPE, 3,
+      || SLadd_intrinsic_function("ga_rahc",
+            (FVOID_STAR) ga_rahc_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_sort",
             (FVOID_STAR) ga_population_sort_slang, SLANG_INT_TYPE, 1,
@@ -1345,14 +1325,6 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_entity_migrate",
             (FVOID_STAR) ga_entity_migrate_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
-/*
-      || SLadd_intrinsic_function("ga_crossover_chromosome_singlepoints",
-            (FVOID_STAR) ga_crossover_chromosome_singlepoints_slang, SLANG_INT_TYPE, 5,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
-      || SLadd_intrinsic_function("ga_crossover_chromosome_mixing",
-            (FVOID_STAR) ga_crossover_chromosome_mixing_slang, SLANG_INT_TYPE, 5,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
-*/
      ) return FALSE;
 
   return TRUE;

@@ -30,16 +30,36 @@
                 and MC functions do not exactly run from the initial
                 temperature to the final temperature.  They are offset
                 slightly so that sequential calls to these functions
-                will have a linear temperature change.
+                will have a linear temperature change.  The SA and MC
+		code in this file is deprecated anyway - these routines
+		have been replaced with much more flexible alternatives
+		and will be removed in the near future.
 
   To do:	Finish rewriting parallel versions, ga_evolution_mp() in particular.
-		Temperatures should be double-precision floats?
+		Write ga_evolution_pvm().
 		Need to fix elitism/crowding stuff.
 		Remove much duplicated code.
+		OpenMOSIX fix.  See below.
 
  **********************************************************************/
 
 #include "ga_core.h"
+
+/*
+ * Here is a kludge.
+ *
+ * This constant, if defined, causes a 5 microsecond delay to be
+ * inserted after each fork() call.  It shouldn't be needed, but
+ * aparrently on OpenMOSIX lots of processes started at the same
+ * time cause all sorts of problems (mostly bus errors).  This
+ * delay gives OpenMOSIX a chance to migrate some processes to
+ * other nodes before this becomes a problem (hopefully).
+ *
+ * A long-term fix fix will be to check the return value from the
+ * forked processes and repeat them if they died.  This will be
+ * added... eventually.
+ */
+#define NEED_MOSIX_FORK_HACK 1
 
 /**********************************************************************
   gaul_entity_swap_rank()

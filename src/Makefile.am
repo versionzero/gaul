@@ -33,6 +33,7 @@ lib_LTLIBRARIES = libgaul.la
 libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
+    ga_climbing.c \
     ga_core.c \
     ga_crossover.c \
     ga_intrinsics.c \
@@ -50,6 +51,7 @@ libgaul_la_SOURCES = \
 include_HEADERS = \
     ga_bitstring.h \
     ga_chromo.h \
+    ga_climbing.h \
     ga_core.h \
     ga_intrinsics.h \
     ga_optim.h \

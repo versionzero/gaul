@@ -2421,12 +2421,13 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
 /**********************************************************************
   ga_optimise_entity()
-  synopsis:	Optimise the entity's structure through systematic
+  synopsis:	Optimise the entity's structure through local
 		searching in the gene space.
 		Should be default choice for "adaptation" function.
+		The original entity will be left untouched.
   parameters:
   return:
-  last updated: 01/08/00
+  last updated: 24 Oct 2002
  **********************************************************************/
 
 entity *ga_optimise_entity(population *pop, entity *unopt)
@@ -2438,13 +2439,16 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
   if (!unopt) die("Null pointer to entity structure passed.");
 
   plog(LOG_FIXME,
-            "Code incomplete, using 20 iterations of the RMHC algorithm for now.");
+       "Code incomplete, using 25 iterations of the RAHC algorithm for now.");
 
-/* FIXME: hard-coded values. */
-  optimised = ga_random_mutation_hill_climbing( pop, unopt, 20 );
+  optimised = ga_entity_clone(pop, unopt);
 
-  plog(LOG_DEBUG, "Entity optimised from %f to %f.",
-            unopt->fitness, optimised->fitness);
+/* FIXME: hard-coded value. */
+  ga_random_ascent_hillclimbing( pop, optimised, 25 );
+
+  plog(LOG_DEBUG,
+       "Entity optimised from %f to %f.",
+       unopt->fitness, optimised->fitness);
 
   return optimised;
   }

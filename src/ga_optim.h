@@ -53,22 +53,6 @@ int	ga_evolution_forked(	population		*pop,
 			const int		max_generations );
 int	ga_evolution_steady_state(	population		*pop,
 			const int		max_iterations );
-entity	*ga_random_mutation_hill_climbing(	population	*pop,
-			entity			*initial,
-			const int		num_iterations);
-entity	*ga_next_ascent_hill_climbing(  population              *pop,
-                                        entity                  *initial,
-                                        const int               max_iterations,
-                                        GAspecificmutate        mutationfunc);
-entity	*ga_metropolis_mutation(	population		*pop,
-			entity			*initial,
-			const int		num_iterations,
-			const int 		temperature);
-entity	*ga_simulated_annealling_mutation(population      *pop,
-                                entity          *initial,
-                                const int       num_iterations,
-                                const int       initial_temperature,
-                                const int       final_temperature);
 int	ga_evolution_archipelago( const int num_pops,
                         population              **pops,
                         const int               max_generations );

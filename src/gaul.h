@@ -133,6 +133,7 @@ typedef void    (*GAreplace)(population *pop, entity *child);
  */
 typedef boolean	(*GAtabu_accept)(population *pop, entity *putative, entity *tabu);
 typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
+typedef boolean	(*GAmutate_allele)(population *pop, entity *parent, entity *child, const int chromosomeid, const int alleleid);
 
 /*
  * Include remainder of this library's headers.
