@@ -26,7 +26,9 @@
 
   Synopsis:     Routines for gene-based optimisation.
 
-  Updated:	23/04/01 SAA	orig_pop_size variable in ga_evolution() replaced with pop->orig_size - needed for selection callbacks.  Lots of changes required due to rationalisation of the mutation and crossover callbacks.  ga_evolution() calling simplified by moving many parameters in to the population structure.  Also simplified by removing all "optional hacks" - these should now be reimplemented in a consistent manor, if desired.  Parallelisation code removed - Reimplementation is required.  Sub-population code removed - Reimplementation is required.  Inbreeding check is now to be handled in the selection callbacks, if desired.  Functions with a 'drift' mode are now obsellete.  All parallelised functions removed (for now).  All usage of ga_entity_seed_random() replaced with ga_entity_seed().  Specific Monte Carlo functions no longer needed - they may now just be a special case of the mutation functions.
+  Updated:	31/05/01 SAA	Added a steady-state GA.
+		22/05/01 SAA	Fixed crash in ga_simulated_annealling_mutation() due to use of mutation selection operator that potentially returns a NULL selection, but in fact no selection is needed at all!.
+		23/04/01 SAA	orig_pop_size variable in ga_evolution() replaced with pop->orig_size - needed for selection callbacks.  Lots of changes required due to rationalisation of the mutation and crossover callbacks.  ga_evolution() calling simplified by moving many parameters in to the population structure.  Also simplified by removing all "optional hacks" - these should now be reimplemented in a consistent manor, if desired.  Parallelisation code removed - Reimplementation is required.  Sub-population code removed - Reimplementation is required.  Inbreeding check is now to be handled in the selection callbacks, if desired.  Functions with a 'drift' mode are now obsellete.  All parallelised functions removed (for now).  All usage of ga_entity_seed_random() replaced with ga_entity_seed().  Specific Monte Carlo functions no longer needed - they may now just be a special case of the mutation functions.
 		17/04/01 SAA	The optimisation routines moved here from ga_util for ease of maintainance.  Option for parents to die during generation in ga_evolve as part of the elitism parameter.
 
   To do:	Reimplement sub-populations.
@@ -390,6 +392,281 @@ boolean ga_evolution(	population		*pop,
 
 
 /**********************************************************************
+  ga_evolution_steady_state()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the active population.
+		This is a steady-state GA.
+		ga_genesis() must be called prior to this function.
+  parameters:
+  return:
+  last updated:	23/04/01
+ **********************************************************************/
+
+boolean ga_evolution_steady_state(	population		*pop,
+					const ga_class_type	class,
+					const int		max_iterations )
+  {
+  int		iteration=0;		/* Current iteration count. */
+  int		i;			/* Loop over members of population. */
+  entity	*mother, *father;	/* Parent entities. */
+  entity	*son, *daughter, *child;	/* Child entities. */
+  entity	*adult;			/* Temporary copy for gene optimisation. */
+  int		new_pop_size;		/* Population size prior to adaptation. */
+  int		crossover_good, crossover_poor;	/* Fornication statistics. */
+  int		mutation_good, mutation_poor;	/*  - " -  */
+  double	crossover_gain, mutation_gain;	/*  - " -  */
+  FILE		*STATS_OUT;		/* Filehandle for stats log. */
+  char		stats_fname[80];	/* Filename for stats log. */
+
+/* Checks. */
+  if (!pop) die("NULL pointer to population structure passed.");
+  if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+  if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+  if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->replace) die("Population's replacement callback is undefined.");
+  if (class != GA_CLASS_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+
+  plog(LOG_VERBOSE, "The evolution has begun!");
+
+/*
+ * Create name for statistics log file.
+ * Write a simple header to that file.
+ */
+  sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
+  STATS_OUT = fopen(stats_fname, "a");
+  fprintf(STATS_OUT, "gen crossover mutation\n");
+  fclose(STATS_OUT);
+
+/*
+ * Score and sort the initial population members.
+ */
+  ga_population_score_and_sort(pop);
+
+  plog( LOG_VERBOSE,
+        "Prior to the first iteration, population has fitness scores between %f and %f",
+        pop->entity_iarray[0]->fitness,
+        pop->entity_iarray[pop->size-1]->fitness );
+
+/* Do all the iterations: */
+  while ( (pop->generation_hook?pop->generation_hook(iteration, pop):TRUE) &&
+           iteration<max_iterations )
+    {
+    iteration++;
+    pop->orig_size = pop->size;
+
+    son = NULL;
+    daughter = NULL;
+    child = NULL;
+
+    plog(LOG_DEBUG,
+              "Population size is %d at start of iteration %d",
+              pop->orig_size, iteration );
+
+/*
+ * Zero statistics.
+ */
+    crossover_good=0;
+    crossover_poor=0;
+    mutation_good=0;
+    mutation_poor=0;
+
+    crossover_gain=0.0;
+    mutation_gain=0.0;
+
+/*
+ * Mating cycle.
+ *
+ * Select pairs of entities to mate via crossover. (Sexual reproduction).
+ *
+ * Score the new entities as we go.
+ */
+    plog(LOG_VERBOSE, "*** Mating ***");
+
+    pop->select_state = 0;
+
+    pop->select_two(pop, &mother, &father);
+
+    if (mother && father)
+      {
+      plog(LOG_VERBOSE, "Crossover between %d (%d = %f) and %d (%d = %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness,
+             ga_get_entity_id(pop, father),
+             ga_get_entity_rank(pop, father), father->fitness);
+
+      son = ga_get_free_entity(pop);
+      daughter = ga_get_free_entity(pop);
+      pop->crossover(pop, mother, father, daughter, son);
+      pop->evaluate(pop, daughter);
+      pop->evaluate(pop, son);
+
+/* Collate stats. */
+      if (son->fitness > father->fitness)
+        crossover_good++;
+      else
+        crossover_poor++;
+      if (daughter->fitness > father->fitness)
+        crossover_good++;
+      else
+        crossover_poor++;
+      if (son->fitness > mother->fitness)
+        crossover_good++;
+      else
+        crossover_poor++;
+      if (daughter->fitness > mother->fitness)
+        crossover_good++;
+      else
+        crossover_poor++;
+
+      if (son->fitness > MAX(mother->fitness,father->fitness))
+        crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
+      if (daughter->fitness > MAX(mother->fitness,father->fitness))
+        crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
+      }
+    else
+      {
+      plog( LOG_VERBOSE, "Crossover not performed." );
+      }
+
+/*
+ * Mutation cycle.
+ *
+ * Select entities to undergo asexual reproduction, in which case the child will
+ * have a genetic mutation of some type.
+ *
+ * Score the new entities as we go.
+ */
+    plog(LOG_VERBOSE, "*** Mutation ***");
+
+    pop->select_state = 0;
+
+    pop->select_one(pop, &mother);
+
+    if (mother)
+      {
+      plog(LOG_VERBOSE, "Mutation of %d (%d = %f)",
+             ga_get_entity_id(pop, mother),
+             ga_get_entity_rank(pop, mother), mother->fitness );
+
+      child = ga_get_free_entity(pop);
+      pop->mutate(pop, mother, child);
+      pop->evaluate(pop, child);
+
+/* Collate stats. */
+      if (child->fitness > mother->fitness)
+        {
+        mutation_good++;
+        mutation_gain += child->fitness-mother->fitness;
+        }
+      else
+        {
+        mutation_poor++;
+        }
+      }
+    else
+      {
+      plog( LOG_VERBOSE, "Mutation not performed." );
+      }
+
+/*
+ * Environmental adaptation.
+ *
+ * Skipped in the case of Darwinian evolution.
+ * Performed in the case of Lamarckian evolution.
+ * Performed, and genes are modified, in the case of Baldwinian evolution.
+ *
+ * Maybe, could reoptimise all structures at each generation.  This would allow
+ * a reduced optimisation protocol and only those structures which are
+ * reasonable would survive for further optimisation.
+ */
+  if (class != GA_CLASS_DARWIN)
+    {
+    plog(LOG_VERBOSE, "*** Adaptation ***");
+
+    new_pop_size = pop->size;
+
+    switch (class)
+      {
+      case (GA_CLASS_BALDWIN):
+        /* Baldwinian evolution for children only. */
+        for (i=pop->orig_size; i<new_pop_size; i++)
+          {
+          adult = pop->adapt(pop, pop->entity_iarray[i]);
+          pop->entity_iarray[i]->fitness=adult->fitness;
+/* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_CLASS_BALDWIN_ALL):
+        /* Baldwinian evolution for entire population. */
+        /* I don't recommend this, but it is here for completeness. */
+        for (i=0; i<new_pop_size; i++)
+          {
+          adult = pop->adapt(pop, pop->entity_iarray[i]);
+          pop->entity_iarray[i]->fitness=adult->fitness;
+/* check. */ s_assert(ga_get_entity_rank(pop, adult) == new_pop_size);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_CLASS_LAMARCK):
+        /* Lamarckian evolution for children only. */
+        while (new_pop_size>pop->orig_size)
+          {
+          new_pop_size--;
+          adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      case (GA_CLASS_LAMARCK_ALL):
+        /* Lamarckian evolution for entire population. */
+        while (new_pop_size>0)
+          {
+          new_pop_size--;
+          adult = pop->adapt(pop, pop->entity_iarray[new_pop_size]);
+          ga_entity_dereference_by_rank(pop, new_pop_size);
+          }
+        break;
+      default:
+        dief("Unknown adaptation class %d.\n", class);
+      }
+    }
+
+/*
+ * Insert new entities into population.
+ */
+    if (son) pop->replace(pop, son);
+    if (daughter) pop->replace(pop, daughter);
+    if (child) pop->replace(pop, child);
+
+/*
+ * Use callback.
+ */
+    plog(LOG_VERBOSE, "*** Analysis ***");
+
+    plog(LOG_VERBOSE,
+          "After iteration %d, population has fitness scores between %f and %f",
+          iteration,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Write statistics.
+ */
+    STATS_OUT = fopen(stats_fname, "a");
+    fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", iteration,
+            crossover_good, crossover_poor, crossover_gain,
+            mutation_good, mutation_poor, mutation_gain);
+    fclose(STATS_OUT);
+    }	/* Iteration loop. */
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_random_mutation_hill_climbing()
   synopsis:	Perform equivalent to zero temperature metropolis
 		optimisation.  If initial solution is NULL, then a
@@ -414,7 +691,6 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
-  if (!pop->select_one) die("Population's asexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
 
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
@@ -469,13 +745,6 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /*
  * Perform random mutation.
  */
-    pop->select_one(pop, &current);
-
-    if (!current) 
-      {
-      plog( LOG_VERBOSE, "Mutation not performed." );
-      }
-
     plog(LOG_VERBOSE, "Mutation of %d (%d = %f)",
          ga_get_entity_id(pop, current),
          ga_get_entity_rank(pop, current), current->fitness );
@@ -692,7 +961,6 @@ entity *ga_metropolis_mutation(	population		*pop,
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
   if ( !pop->evaluate ) die("Population's evaluation callback is undefined.");
-  if ( !pop->select_one ) die("Population's asexual selection callback is undefined.");
   if ( !pop->mutate ) die("Population's mutation callback is undefined.");
 
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
@@ -747,13 +1015,6 @@ entity *ga_metropolis_mutation(	population		*pop,
 /*
  * Perform random mutation.
  */
-    pop->select_one(pop, &current);
-
-    if (!current) 
-      {
-      plog( LOG_VERBOSE, "Mutation not performed." );
-      }
-
     plog(LOG_VERBOSE, "Mutation of %d (%d = %f)",
          ga_get_entity_id(pop, current),
          ga_get_entity_rank(pop, current), current->fitness );
@@ -839,7 +1100,6 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
   if ( !pop->evaluate ) die("Population's evaluation callback is undefined.");
-  if ( !pop->select_one ) die("Population's asexual selection callback is undefined.");
   if ( !pop->mutate ) die("Population's mutation callback is undefined.");
 
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
@@ -897,16 +1157,9 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 /*
  * Perform random mutation.
  */
-    pop->select_one(pop, &current);
-
-    if (!current) 
-      {
-      plog( LOG_VERBOSE, "Mutation not performed." );
-      }
-
     plog(LOG_VERBOSE, "Mutation of %d (%d = %f)",
-         ga_get_entity_id(pop, current),
-         ga_get_entity_rank(pop, current), current->fitness );
+       ga_get_entity_id(pop, current),
+       ga_get_entity_rank(pop, current), current->fitness );
 
     pop->mutate(pop, current, new);
 

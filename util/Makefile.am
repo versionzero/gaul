@@ -31,7 +31,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-CFLAGS = -g -Wall -O
+# CFLAGS = -g -Wall -O
 
 INCLUDES =
 

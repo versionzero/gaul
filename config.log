@@ -18,9 +18,11 @@ configure:1193: checking whether the C compiler (gcc  ) works
 configure:1209: gcc -o conftest    conftest.c  1>&5
 configure:1235: checking whether the C compiler (gcc  ) is a cross-compiler
 configure:1240: checking whether we are using GNU C
+configure:1249: gcc -E conftest.c
 configure:1268: checking whether gcc accepts -g
 configure:1311: checking for ld used by GCC
 configure:1373: checking if the linker (/usr/bin/ld) is GNU ld
+GNU ld version 2.10.90 (with BFD 2.10.0.18)
 configure:1389: checking for BSD-compatible nm
 configure:1425: checking whether ln -s works
 ltconfig:603: checking for object suffix
@@ -97,98 +99,529 @@ main() { void *self, *ptr1, *ptr2; self=dlopen(0,LTDL_GLOBAL|LTDL_LAZY_OR_NOW);
     if(ptr1 || ptr2) { dlclose(self); exit(0); } } exit(1); } 
 
 configure:1616: checking whether to enable maintainer-specific portions of Makefiles
-configure:1718: checking for type of parallisation
-configure:1763: checking whether to enable memory access debugging
-configure:1779: checking whether to enable general Helga debugging
-configure:1816: checking whether to enable molstruct library debugging
-configure:1841: checking whether to enable run-time profiling
-configure:1850: checking whether to pad memory to detect overflows
-configure:1866: checking whether to link Electric Fence for memory debugging
-configure:1915: checking for SLang_init_slang in -lslang
-configure:1961: checking for gcc
-configure:2074: checking whether the C compiler (gcc -g -O2 -g -pg ) works
-configure:2090: gcc -o conftest -g -O2 -g -pg   conftest.c  -lslang 1>&5
-configure:2116: checking whether the C compiler (gcc -g -O2 -g -pg ) is a cross-compiler
-configure:2121: checking whether we are using GNU C
-configure:2149: checking whether gcc accepts -g
-configure:2184: checking for gcc option to accept ANSI C
-configure:2272: checking for a BSD compatible install
-configure:2346: checking for vprintf
-configure:2454: checking for atexit
-configure:2454: checking for on_exit
-configure:2508: checking size of double
-configure:2547: checking size of char
-configure:2586: checking size of long
-configure:2625: checking size of int
-configure:2664: checking size of void *
-configure:2704: checking for working const
-configure:2779: checking whether struct tm is in sys/time.h or time.h
-configure:2815: checking memory alignment
-configure:2837: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
-configure:2861: checking how to run the C preprocessor
-configure:2941: checking for ANSI C header files
-configure:3045: checking whether time.h and sys/time.h may both be included
-configure:3085: checking for arpa/inet.h
-configure:3085: checking for netdb.h
-configure:3085: checking for netinet/in.h
-configure:3085: checking for pwd.h
-configure:3085: checking for sys/ioctl.h
-configure:3085: checking for sys/select.h
-configure:3085: checking for sys/signal.h
-configure:3085: checking for sys/socket.h
-configure:3085: checking for sys/termio.h
-configure:3085: checking for sys/time.h
-configure:3085: checking for sys/types.h
-configure:3085: checking for sys/uio.h
-configure:3085: checking for termios.h
-configure:3085: checking for unistd.h
-configure:3085: checking for fcntl.h
-configure:3137: checking for fdopen
-configure:3137: checking for gethostname
-configure:3137: checking for getpwuid
-configure:3137: checking for gettimeofday
-configure:3137: checking for select
-configure:3137: checking for memcpy
-configure:3137: checking for ipow
-configure:3137: checking for strchr
-configure:3137: checking for strrchr
-configure:3137: checking for rindex
-configure:3137: checking for strcat
-configure:3137: checking for strlen
-configure:3137: checking for strcmp
-configure:3137: checking for strncmp
-configure:3137: checking for strcpy
-configure:3137: checking for strncpy
-configure:3137: checking for strtok
-configure:3137: checking for strcasecmp
-configure:3137: checking for strncasecmp
-configure:3137: checking for snprintf
-configure:3137: checking for memset
-configure:3137: checking for memmove
-configure:3137: checking for bcopy
-configure:3137: checking for memrev
-configure:3137: checking for memchr
-configure:3137: checking for memmem
-configure:3137: checking for memcmp
-configure:3137: checking for strdup
-configure:3137: checking for memdup
-configure:3137: checking for sincos
-configure:3137: checking for strndup
-configure:3137: checking for strnfill
-configure:3137: checking for strcatv
-configure:3137: checking for strtod
-configure:3137: checking for strsignal
-configure:3137: checking for strrev
-configure:3137: checking for basename
-configure:3137: checking for readline
-configure:3137: checking for strcspn
-configure:3137: checking for waitpid
-configure:3137: checking for min
-configure:3137: checking for max
-configure:3137: checking for snooze
-configure:3137: checking for strerror
-configure:3137: checking for strlcat
-configure:3137: checking for strlcpy
-configure:3137: checking for strstr
-configure:3137: checking for usleep
-configure:3137: checking for vsnprintf
+configure:1720: checking for type of parallisation
+configure:1765: checking whether to enable memory access debugging
+configure:1781: checking whether to enable general Helga debugging
+configure:1818: checking whether to enable molstruct library debugging
+configure:1843: checking whether to enable run-time profiling
+configure:1852: checking whether to pad memory to detect overflows
+configure:1868: checking whether to link Electric Fence for memory debugging
+configure:1917: checking for SLang_init_slang in -lslang
+configure:1936: gcc -o conftest -g -O2 -g -pg   conftest.c -lslang   1>&5
+configure:1963: checking for gcc
+configure:2076: checking whether the C compiler (gcc -g -O2 -g -pg ) works
+configure:2092: gcc -o conftest -g -O2 -g -pg   conftest.c  -lslang 1>&5
+configure:2118: checking whether the C compiler (gcc -g -O2 -g -pg ) is a cross-compiler
+configure:2123: checking whether we are using GNU C
+configure:2151: checking whether gcc accepts -g
+configure:2186: checking for gcc option to accept ANSI C
+configure:2239: gcc  -c -g -O2 -g -pg  conftest.c 1>&5
+configure:2274: checking for a BSD compatible install
+configure:2348: checking for vprintf
+configure:2376: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2456: checking for atexit
+configure:2484: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2456: checking for on_exit
+configure:2484: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2510: checking size of double
+configure:2529: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2521: warning: return type defaults to `int'
+configure: In function `main':
+configure:2523: warning: implicit declaration of function `exit'
+configure:2549: checking size of char
+configure:2568: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2560: warning: return type defaults to `int'
+configure: In function `main':
+configure:2562: warning: implicit declaration of function `exit'
+configure:2588: checking size of long
+configure:2607: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2599: warning: return type defaults to `int'
+configure: In function `main':
+configure:2601: warning: implicit declaration of function `exit'
+configure:2627: checking size of int
+configure:2646: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2638: warning: return type defaults to `int'
+configure: In function `main':
+configure:2640: warning: implicit declaration of function `exit'
+configure:2666: checking size of void *
+configure:2685: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2677: warning: return type defaults to `int'
+configure: In function `main':
+configure:2679: warning: implicit declaration of function `exit'
+configure:2706: checking for working const
+configure:2760: gcc -c -g -O2 -g -pg -Wall  conftest.c 1>&5
+configure: In function `main':
+configure:2734: warning: unused variable `s'
+configure:2754: warning: unused variable `foo'
+configure:2722: warning: unused variable `zero'
+configure:2716: warning: unused variable `x'
+configure:2733: warning: `t' might be used uninitialized in this function
+configure:2751: warning: `b' might be used uninitialized in this function
+configure:2781: checking whether struct tm is in sys/time.h or time.h
+configure:2794: gcc -c -g -O2 -g -pg -Wall  conftest.c 1>&5
+configure: In function `main':
+configure:2790: warning: statement with no effect
+configure:2817: checking memory alignment
+configure:2839: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:2863: checking how to run the C preprocessor
+configure:2884: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:2943: checking for ANSI C header files
+configure:2956: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3023: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure: In function `main':
+configure:3018: warning: implicit declaration of function `exit'
+configure:3047: checking whether time.h and sys/time.h may both be included
+configure:3061: gcc -c -g -O2 -g -pg -Wall  conftest.c 1>&5
+configure: In function `main':
+configure:3057: warning: unused variable `tp'
+configure:3087: checking for arpa/inet.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for netdb.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for netinet/in.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for pwd.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/ioctl.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/select.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/signal.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/socket.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/termio.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3093:24: sys/termio.h: No such file or directory
+configure: failed program was:
+#line 3092 "configure"
+#include "confdefs.h"
+#include <sys/termio.h>
+configure:3087: checking for sys/time.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/types.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for sys/uio.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for termios.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for unistd.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3087: checking for fcntl.h
+configure:3097: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:3139: checking for fdopen
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for gethostname
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for getpwuid
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for gettimeofday
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for select
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memcpy
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `memcpy'
+configure:3139: checking for ipow
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccWY6beH.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `ipow'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char ipow(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char ipow();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_ipow) || defined (__stub___ipow)
+choke me
+#else
+ipow();
+#endif
+
+; return 0; }
+configure:3139: checking for strchr
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strrchr
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for rindex
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strcat
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strlen
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `strlen'
+configure:3139: checking for strcmp
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `strcmp'
+configure:3139: checking for strncmp
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strcpy
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `strcpy'
+configure:3139: checking for strncpy
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strtok
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strcasecmp
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strncasecmp
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for snprintf
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memset
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `memset'
+configure:3139: checking for memmove
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for bcopy
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memrev
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccqv4ypx.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `memrev'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char memrev(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char memrev();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_memrev) || defined (__stub___memrev)
+choke me
+#else
+memrev();
+#endif
+
+; return 0; }
+configure:3139: checking for memchr
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memmem
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memcmp
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3151: warning: conflicting types for built-in function `memcmp'
+configure:3139: checking for strdup
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for memdup
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccjpyDYQ.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `memdup'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char memdup(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char memdup();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_memdup) || defined (__stub___memdup)
+choke me
+#else
+memdup();
+#endif
+
+; return 0; }
+configure:3139: checking for sincos
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strndup
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strnfill
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/cccqInki.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `strnfill'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strnfill(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strnfill();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strnfill) || defined (__stub___strnfill)
+choke me
+#else
+strnfill();
+#endif
+
+; return 0; }
+configure:3139: checking for strcatv
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccaQqO4b.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `strcatv'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strcatv(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strcatv();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strcatv) || defined (__stub___strcatv)
+choke me
+#else
+strcatv();
+#endif
+
+; return 0; }
+configure:3139: checking for strtod
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strsignal
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strrev
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/cctWSYaE.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `strrev'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strrev(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strrev();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strrev) || defined (__stub___strrev)
+choke me
+#else
+strrev();
+#endif
+
+; return 0; }
+configure:3139: checking for basename
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for readline
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/cccQjf1P.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `readline'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char readline(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char readline();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_readline) || defined (__stub___readline)
+choke me
+#else
+readline();
+#endif
+
+; return 0; }
+configure:3139: checking for strcspn
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for waitpid
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for min
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/cc70rCZv.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `min'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char min(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char min();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_min) || defined (__stub___min)
+choke me
+#else
+min();
+#endif
+
+; return 0; }
+configure:3139: checking for max
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccjMfGQp.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `max'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char max(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char max();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_max) || defined (__stub___max)
+choke me
+#else
+max();
+#endif
+
+; return 0; }
+configure:3139: checking for snooze
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccTttR0l.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `snooze'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char snooze(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char snooze();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_snooze) || defined (__stub___snooze)
+choke me
+#else
+snooze();
+#endif
+
+; return 0; }
+configure:3139: checking for strerror
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for strlcat
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccgjAhin.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `strlcat'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strlcat(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strlcat();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strlcat) || defined (__stub___strlcat)
+choke me
+#else
+strlcat();
+#endif
+
+; return 0; }
+configure:3139: checking for strlcpy
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+/tmp/ccBmKtrH.o: In function `main':
+/home/stewart/code_development/gaul-devel/configure:3161: undefined reference to `strlcpy'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 3144 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strlcpy(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strlcpy();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strlcpy) || defined (__stub___strlcpy)
+choke me
+#else
+strlcpy();
+#endif
+
+; return 0; }
+configure:3139: checking for strstr
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for usleep
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5
+configure:3139: checking for vsnprintf
+configure:3167: gcc -o conftest -g -O2 -g -pg -Wall   conftest.c  -lslang 1>&5

@@ -265,15 +265,15 @@ boolean ga_select_two_randomrank(population *pop, entity **mother, entity **fath
   *mother = NULL;
   *father = NULL;
 
-  if ( pop->orig_size < SQU(pop->select_state) )
+  if ( pop->orig_size < pop->select_state )
     {
     return TRUE;
     }
 
   if ( random_boolean_prob(pop->crossover_ratio) )
     {
-    *mother = pop->entity_iarray[random_int(pop->select_state%pop->orig_size)];
-    *father = pop->entity_iarray[pop->select_state/pop->orig_size];
+    *mother = pop->entity_iarray[random_int(pop->select_state)];
+    *father = pop->entity_iarray[pop->select_state];
     }
 
   return FALSE;

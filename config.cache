@@ -13,7 +13,6 @@
 # --recheck option to rerun configure.
 #
 ac_cv_c_const=${ac_cv_c_const=yes}
-ac_cv_file_tests_sasadata=${ac_cv_file_tests_sasadata=yes}
 ac_cv_func_atexit=${ac_cv_func_atexit=yes}
 ac_cv_func_basename=${ac_cv_func_basename=yes}
 ac_cv_func_bcopy=${ac_cv_func_bcopy=yes}
@@ -83,7 +82,6 @@ ac_cv_header_sys_uio_h=${ac_cv_header_sys_uio_h=yes}
 ac_cv_header_termios_h=${ac_cv_header_termios_h=yes}
 ac_cv_header_time=${ac_cv_header_time=yes}
 ac_cv_header_unistd_h=${ac_cv_header_unistd_h=yes}
-ac_cv_lib_efence_malloc=${ac_cv_lib_efence_malloc=yes}
 ac_cv_lib_slang_SLang_init_slang=${ac_cv_lib_slang_SLang_init_slang=yes}
 ac_cv_path_LD=${ac_cv_path_LD=/usr/bin/ld}
 ac_cv_path_NM=${ac_cv_path_NM='/usr/bin/nm -B'}

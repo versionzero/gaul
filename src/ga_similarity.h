@@ -45,6 +45,7 @@
  */
 boolean	ga_compare_genome(population *pop, entity *alpha, entity *beta);
 double	ga_genome_euclidean_similarity(population *pop, entity *alpha, entity *beta);
+int	ga_count_match_alleles(const int length, const int *alpha, const int *beta);
 double	ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta);
 
 #endif	/* GA_SIMILARITY_H_INCLUDED */

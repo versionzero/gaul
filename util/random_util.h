@@ -76,6 +76,7 @@ typedef struct random_state_t
  * Function prototypes.
  */
 
+unsigned int	random_rand(void);
 void	random_seed(const unsigned int seed);
 void	random_tseed(void);
 void	random_init(void);

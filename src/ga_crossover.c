@@ -29,7 +29,8 @@
 		These functions should duplicate user data where
 		appropriate.
 
-  Updated:	23/04/01 SAA	Split from ga_util.c for ease of maintainance.  These functions now have no return value.
+  Updated:	31/05/01 SAA	Added double-point crossover stuff.
+		23/04/01 SAA	Split from ga_util.c for ease of maintainance.  These functions now have no return value.
 
  **********************************************************************/
 
@@ -59,6 +60,7 @@ void ga_singlepoint_crossover_chromosome(population *pop, int *father, int *moth
   /* Choose crossover point and perform operation */
   location=random_int(pop->len_chromosomes);
 
+#if 0
   if (random_boolean())
     {
     memcpy(son, father, location*sizeof(int));
@@ -75,6 +77,49 @@ void ga_singlepoint_crossover_chromosome(population *pop, int *father, int *moth
     memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(int));
     memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(int));
     }
+#endif
+
+  memcpy(son, mother, location);
+  memcpy(daughter, father, location);
+
+  memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(int));
+  memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(int));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_doublepoint_crossover_chromosome()
+  synopsis:	`Mates' two chromosomes by double-point crossover.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+void ga_doublepoint_crossover_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
+  {
+  int	location1, location2;	/* Points of crossover */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to chromosome structure passed.");
+
+  /* Choose crossover point and perform operation */
+  location1=random_int(pop->len_chromosomes);
+  do
+    {
+    location2=random_int(pop->len_chromosomes);
+    } while (location2==location1);
+
+  memcpy(son, father, location1*sizeof(int));
+  memcpy(daughter, mother, location1*sizeof(int));
+
+  memcpy(&(son[location1]), &(mother[location1]), (location2-location1)*sizeof(int));
+  memcpy(&(daughter[location1]), &(father[location1]), (location2-location1)*sizeof(int));
+
+  memcpy(&(son[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(int));
+  memcpy(&(daughter[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(int));
 
   return;
   }
@@ -112,7 +157,7 @@ void ga_crossover_chromosome_singlepoints(population *pop, entity *father, entit
 
 /**********************************************************************
   ga_crossover_chromosome_mixing()
-  synopsis:	`Mates' two genotypes by single-point crossover.
+  synopsis:	`Mates' two genotypes by mixing parents chromsomes.
 		Keeps all chromosomes intact, and therefore do not
 		need to recreate structural data.
   parameters:
@@ -191,6 +236,36 @@ void ga_crossover_allele_mixing( population *pop,
         son->chromosome[i][j] = mother->chromosome[i][j];
         }
       }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_chromosome_doublepoints()
+  synopsis:	`Mates' two genotypes by double-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 31/05/00
+ **********************************************************************/
+
+void ga_crossover_chromosome_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+  {
+  int		i;	/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_singlepoint_crossover_chromosome( pop,
+                        father->chromosome[i],
+			mother->chromosome[i],
+			son->chromosome[i],
+			daughter->chromosome[i]);
     }
 
   return;

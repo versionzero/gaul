@@ -3,7 +3,7 @@
  **********************************************************************
 
   wildfire - Test/example program for GAUL.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -71,7 +71,7 @@
  * Prototypes.
  */
 boolean wildfire_score(population *pop, entity *entity);
-void wildfire_seed(int chromosome, int *data);
+void wildfire_seed(population *pop, entity *adam);
 void wildfire_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
 void wildfire_mutate(population *pop, entity *mother, entity *son);
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   pingpong - Test/example program for GAUL.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -291,7 +291,7 @@ void pingpong_mutate(population *pop, entity *mother, entity *son)
 
 /**********************************************************************
   pingpong_ga_callback()
-  synopsis:	Mutation.
+  synopsis:	Analysis callback.
   parameters:
   return:
   updated:	23/04/01
@@ -374,7 +374,8 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        ga_select_one_randomrank,	/* GAselect_one           select_one */
        ga_select_two_randomrank,	/* GAselect_two           select_two */
        pingpong_mutate,		/* GAmutate               mutate */
-       pingpong_crossover	/* GAcrossover            crossover */
+       pingpong_crossover,	/* GAcrossover            crossover */
+       NULL			/* GAreplace              replace */
             );
 
     ga_population_set_parameters(
@@ -387,7 +388,7 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     ga_evolution(
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
-       GA_ELITISM_NONE,	/* const ga_elitism_type   elitism */
+       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
        200		/* const int               max_generations */
               );
 

@@ -51,7 +51,8 @@
 			Evolution will continue if ga_evolution() is
 			called again without calling ga_genesis() again.
 
-  Updated:	15/05/01 SAA	Prototype for seeding function (GAseed) altered.
+  Updated:	31/05/01 SAA	Added ga_population_convergence_{genotypes|chromosomes|alleles}().
+		15/05/01 SAA	Prototype for seeding function (GAseed) altered.
 		30/04/01 SAA	Moved ga_population_stats() into here.
 		24/04/01 SAA	Renamed project to GAUL (Genetic Algorithm Utility Library) and removed any trace of propriety code which may still be lurking in here.
 		23/04/01 SAA	ga_genesis() is now much simpler.  ga_entity_seed_random() no longer needed - now a special case of ga_entity_seed().  Many of the crossover and mutation variants have been removed - the calling code may reimplement them if necessary through the crossover and mutation callback mechanisms.  The remaining functions have been moved to ga_mutate.c and ga_crossover.c.  A whole shed-load of debugging code has been removed.  Added ga_population_set_parameters() which is now needed to define the GA parameters.
@@ -110,12 +111,16 @@
 		Genome distance measures (tanimoto, euclidean, tverski etc.)
 		Rename this as ga_core or ga_base?
 
+		Population/entity iterator functions.
+
  **********************************************************************/
 
 #include "ga_util.h"
 
 #include "ga_crossover.c"
 #include "ga_mutate.c"
+#include "ga_replace.c"
+#include "ga_seed.c"
 #include "ga_select.c"
 
 /*
@@ -171,8 +176,14 @@ static void destruct_list(population *pop, SLList *list)
 /* Deallocate list sructure. */
   slink_free_all(list);
 
+#if GA_DEBUG>2
+  /*
+   * Not typically needed now, because num_destrtoyed may (correctly) differ
+   * from the actual number of chromosomes.
+   */
   if (num_destroyed != pop->num_chromosomes)
     printf("Uh oh! Dodgy user data here? %d %d\n", num_destroyed, pop->num_chromosomes);
+#endif
 
   return;
   }
@@ -249,6 +260,7 @@ population *ga_population_new(	const int max_size,
   newpop->select_two = NULL;
   newpop->mutate = NULL;
   newpop->crossover = NULL;
+  newpop->replace = NULL;
 
 /*
  * Seed the population.
@@ -800,6 +812,108 @@ boolean ga_population_score_and_sort(population *pop)
   quicksort_population(pop);
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_convergence_genotypes()
+  synopsis:	Determine ratio of converged genotypes in population.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+double ga_population_convergence_genotypes( population *pop )
+  {
+  int		i, j;		/* Loop over pairs of entities. */
+  int		total=0, converged=0;	/* Number of comparisons, matches. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (pop->size < 1) die("Pointer to empty population structure passed.");
+
+  for (i=1; i<pop->size; i++)
+    {
+    for (j=0; j<i; j++)
+      {
+      if (ga_compare_genome(pop, pop->entity_iarray[i], pop->entity_iarray[j]))
+        converged++;
+      total++;
+      }
+    }
+
+  return (double) converged/total;
+  }
+
+
+/**********************************************************************
+  ga_population_convergence_chromosomes()
+  synopsis:	Determine ratio of converged chromosomes in population.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+double ga_population_convergence_chromosomes( population *pop )
+  {
+  int		i, j;		/* Loop over pairs of entities. */
+  int		k;		/* Loop over chromosomes. */
+  int		total=0, converged=0;	/* Number of comparisons, matches. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (pop->size < 1) die("Pointer to empty population structure passed.");
+
+  for (i=1; i<pop->size; i++)
+    {
+    for (j=0; j<i; j++)
+      {
+      for (k=0; k<pop->num_chromosomes; k++)
+        {
+/* FIXME: Not totally effiecient: */
+        if (ga_count_match_alleles( pop->len_chromosomes,
+                                    pop->entity_iarray[i]->chromosome[k],
+                                    pop->entity_iarray[j]->chromosome[k] ) == pop->len_chromosomes)
+          converged++;
+        total++;
+        }
+      }
+    }
+
+  return (double) converged/total;
+  }
+
+
+/**********************************************************************
+  ga_population_convergence_alleles()
+  synopsis:	Determine ratio of converged alleles in population.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+double ga_population_convergence_alleles( population *pop )
+  {
+  int		i, j;		/* Loop over pairs of entities. */
+  int		k;		/* Loop over chromosomes. */
+  int		total=0, converged=0;	/* Number of comparisons, matches. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (pop->size < 1) die("Pointer to empty population structure passed.");
+
+  for (i=1; i<pop->size; i++)
+    {
+    for (j=0; j<i; j++)
+      {
+      for (k=0; k<pop->num_chromosomes; k++)
+        {
+        converged+=ga_count_match_alleles( pop->len_chromosomes,
+                                           pop->entity_iarray[i]->chromosome[k],
+                                           pop->entity_iarray[j]->chromosome[k] );
+        total+=pop->len_chromosomes;
+        }
+      }
+    }
+
+  return (double) converged/total;
   }
 
 
@@ -1606,7 +1720,8 @@ population *ga_genesis(	const int		population_size,
 			GAselect_one		select_one,
 			GAselect_two		select_two,
 			GAmutate		mutate,
-			GAcrossover		crossover )
+			GAcrossover		crossover,
+			GAreplace		replace )
   {
   population	*pop;	/* The new population structure. */
 
@@ -1642,6 +1757,7 @@ population *ga_genesis(	const int		population_size,
   pop->select_two = select_two;
   pop->mutate = mutate;
   pop->crossover = crossover;
+  pop->replace = replace;
 
 /*
  * Seed the population.

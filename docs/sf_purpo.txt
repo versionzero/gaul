@@ -1,6 +1,6 @@
 GAUL: Genetic Algorithm Utility Library
 
-GAUL is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms.  It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm.  Additional stochastic algorithms are provided for comparison to the genetic algorithms.  Much of the functionality is also vailable through a simple SLang interface.
+GAUL is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms.  It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm.  Additional stochastic algorithms are provided for comparison to the genetic algorithms.  Much of the functionality is also available through a simple but powerful SLang interface.
 
 The aim of this project is to produce documentation, examples and test cases for the open-source release of GAUL.  Several new features are also planned for GAUL including wrappers to enable its use with programming languages other than C.
 

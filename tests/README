@@ -21,3 +21,9 @@ wildfire	Solves the fire-fighting problem presented in:
 		Should use a single binary chromosome.
 		*** As of today (17/05/01) this doesn't work! ***
 
+goldbergX	Ports of the examples from Goldberg's book.
+
+dejongX		Ports of DeJong's GA test suite.
+
+royalroad	Holland's royal road problem.
+

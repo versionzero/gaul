@@ -360,4 +360,86 @@ void ga_multipoint_mutation(population *pop, entity *father, entity *son)
   }
 
 
+/**********************************************************************
+  ga_mutate_boolean_singlepoint()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is inverted.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/* Copy unchanging data. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+  son->chromosome[chromo][point] = !son->chromosome[chromo][point];
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_boolean_multipoint()
+  synopsis:	Cause a number of mutation events.
+  parameters:
+  return:
+  last updated: 31/05/01
+ **********************************************************************/
+
+void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
+    }
+
+/*
+ * Mutate by flipping random bits.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+        {
+        son->chromosome[chromo][point] = !son->chromosome[chromo][point];
+        }
+      }
+    }
+
+  return;
+  }
+
 

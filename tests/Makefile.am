@@ -32,7 +32,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = pingpong wildfire
+bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad
 
 CFLAGS = -g -Wall -O
 
@@ -40,8 +40,11 @@ INCLUDES = -I../util/ -I../src/ -I /usr/include/slang/
 
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c
+goldberg1_SOURCES = goldberg1.c
+goldberg2_SOURCES = goldberg2.c
+royalroad_SOURCES = royalroad.c
 
-include_HEADERS = pingpong.h wildfire.h
+include_HEADERS = pingpong.h wildfire.h goldberg1.h goldberg2.h
 
 pingpong_DEPENDENCIES = \
 	../util/libmethods.a \
@@ -55,4 +58,7 @@ wildfire_DEPENDENCIES = \
 
 pingpong_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
 wildfire_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
+goldberg1_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
+goldberg2_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
+royalroad_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   wildfire - Test/example program for GAUL.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -350,7 +350,7 @@ boolean wildfire_score(population *pop, entity *entity)
   updated:	12/05/01
  **********************************************************************/
 
-void wildfire_seed(int chromosome, int *data)
+void wildfire_seed(population *pop, entity *adam)
   {
   int		i, j, k;	/* Map square. */
 
@@ -358,7 +358,7 @@ void wildfire_seed(int chromosome, int *data)
     {
     for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
       {
-      data[i] = random_boolean_prob((double)WILDFIRE_CISTERNS/
+      adam->chromosome[0][i] = random_boolean_prob((double)WILDFIRE_CISTERNS/
                  ((double)WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION));
       }
     }
@@ -371,13 +371,13 @@ void wildfire_seed(int chromosome, int *data)
     while (k>0)
       {
       i = (i+j)%(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
-      if (data[i] == 1)
+      if (adam->chromosome[0][i] == 1)
         {
         j = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
         }
       else
         {
-        data[i] = 1;
+        adam->chromosome[0][i] = 1;
         }
       k--;
       }
@@ -536,7 +536,9 @@ void wildfire_crossover( population *pop,
 
 /**********************************************************************
   wildfire_ga_callback()
-  synopsis:	Rescore all entities.
+  synopsis:	Rescore all entities.  This is needed since the
+		scores depend upon the wind directions and random
+		lightning strikes.
   parameters:
   return:
   updated:	11/05/01
@@ -605,7 +607,8 @@ int main(int argc, char **argv)
        ga_select_one_randomrank,	/* GAselect_one           select_one */
        ga_select_two_randomrank,	/* GAselect_two           select_two */
        wildfire_mutate_flip,		/* GAmutate               mutate */
-       wildfire_crossover	/* GAcrossover   crossover */
+       wildfire_crossover,	/* GAcrossover   crossover */
+       NULL			/* GAreplace     replace */
             );
 
     ga_population_set_parameters(
@@ -618,7 +621,7 @@ int main(int argc, char **argv)
     ga_evolution(
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
-       GA_ELITISM_NONE,	/* const ga_elitism_type   elitism */
+       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
        50		/* const int               max_generations */
               );
 

@@ -34,7 +34,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 lib_LIBRARIES = libga.a
 
-CFLAGS = -g -Wall -O
+# CFLAGS = -g -Wall -O
 
 INCLUDES = -I../util/ -I/usr/include/slang/
 

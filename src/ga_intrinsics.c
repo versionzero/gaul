@@ -33,7 +33,8 @@
 		pointers are unusable, so identifing integers are
 		used instead.
 
-  Updated:      24/04/01 SAA	Added ga_slang_mutate() and friends.
+  Updated:      03/06/01 SAA	Stuff for replacement operator added.
+		24/04/01 SAA	Added ga_slang_mutate() and friends.
 		23/04/01 SAA	Modifications required due to changes to ga_util/ga_optim functions and the population structure.  Obsellete functions removed.
 		17/04/01 SAA	Added ga_intrinsic_sladd().
 		27/03/01 SAA	Added ga_population_set_stablesize().
@@ -1079,6 +1080,30 @@ void ga_slang_mutate(population *pop, entity *father, entity *son)
                         ga_get_entity_id(pop, father), 
                         ga_get_entity_id(pop, son)) == -1 )
     die("Error calling SLang function \"mutate_hook\".");
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_slang_replace()
+  synopsis:	Handle SLang based replacement operator.
+  parameters:
+  return:
+  last updated:	03/06/01
+ **********************************************************************/
+
+void ga_slang_replace(population *pop, entity *child)
+  {
+
+/* Checks */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!child) die("Null pointer to entity structure passed.");
+
+  if ( SLang_run_hooks( "replace_hook", 3,
+                        ga_get_population_id(pop), 
+                        ga_get_entity_id(pop, child)) == -1 )
+    die("Error calling SLang function \"replace_hook\".");
 
   return;
   }

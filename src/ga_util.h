@@ -47,12 +47,12 @@
 
 #include <unistd.h>
 
-#include "linkedlist.h"		/* For linked lists. */
-#include "log_util.h"		/* For logging facilities. */
-#include "memory_util.h"	/* Memory handling. */
-#include "mpi_util.h"		/* For multiprocessing facilities. */
-#include "random_util.h"	/* For PRNGs. */
-#include "table.h"		/* Handling unique integer ids. */
+#include "../util/linkedlist.h"		/* For linked lists. */
+#include "../util/log_util.h"		/* For logging facilities. */
+#include "../util/memory_util.h"	/* Memory handling. */
+#include "../util/mpi_util.h"		/* For multiprocessing facilities. */
+#include "../util/random_util.h"	/* For PRNGs. */
+#include "../util/table.h"		/* Handling unique integer ids. */
 
 /*
  * Debugging
@@ -87,7 +87,7 @@ typedef enum ga_class_type_t
 typedef enum ga_elitism_type_t
   {
   GA_ELITISM_UNKNOWN = 0,
-  GA_ELITISM_NONE, GA_ELITISM_ROUGH, GA_ELITISM_ROUGH_COMP,
+  GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ROUGH, GA_ELITISM_ROUGH_COMP,
   GA_ELITISM_EXACT, GA_ELITISM_EXACT_COMP,
   GA_ELITISM_PARENTS_DIE
   } ga_elitism_type;
@@ -132,15 +132,25 @@ typedef boolean	(*GAselect_two)(population *pop, entity **mother, entity **fathe
 /* 
  * Callback function typedefs.
  */
-/* Analysis. */
+/*
+ * Analysis and termination.
+ */
 typedef boolean	(*GAgeneration_hook)(const int generation, population *pop);
 typedef boolean	(*GAiteration_hook)(const int iteration, entity *entity);
 
-/* Data cache handling. */
+/*
+ * Data cache handling.
+ */
 typedef void	(*GAdata_destructor)(vpointer data);
 typedef void	(*GAdata_ref_incrementor)(vpointer data);
 
-/* GA operations. */
+/*
+ * GA operations.
+ *
+ * FIXME: Adaptation prototype should match the mutation prototype so that
+ * the adaptation local optimisation algorithms may be used as mutation
+ * operators.
+ */
 typedef boolean	(*GAevaluate)(population *pop, entity *entity);
 /*typedef void	(*GAseed)(int chromosome, int *data);*/
 typedef void	(*GAseed)(population *pop, entity *adam);
@@ -149,12 +159,16 @@ typedef boolean	(*GAselect_one)(population *pop, entity **mother);
 typedef boolean	(*GAselect_two)(population *pop, entity **mother, entity **father);
 typedef void	(*GAmutate)(population *pop, entity *mother, entity *daughter);
 typedef void	(*GAcrossover)(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
+typedef void	(*GAreplace)(population *pop, entity *child);
 
 /*
  * Entity Structure.
+ *
  * FIXME: Make opaque i.e. move definition into ga_util.c
- * Use accessor functions rather than tweaking values in this
- * structure manually.
+ * Should encourage the use of accessor functions rather than directly tweaking
+ * the values in this structure manually.
+ *
+ * FIXME: chomosome field should be a moe generic type, and cast when required.
  */
 struct entity_t
   {
@@ -166,6 +180,7 @@ struct entity_t
 
 /*
  * Population Structure.
+ *
  * FIXME: Make opaque. (I have already written the accessor functions.)
  * IMPORTANT NOTE: If you really must iterate over all entities in
  * a population in external code, loop over entity_iarray... NOT entity_array.
@@ -218,6 +233,7 @@ struct population_t
   GAselect_two			select_two;
   GAmutate			mutate;
   GAcrossover			crossover;
+  GAreplace			replace;
   };
 
 /*
@@ -227,7 +243,7 @@ struct population_t
 #define GA_ELITISM_MULTIPLIER	0.05
 #define GA_ELITISM_CONSTANT	2.0
 
-#define GA_UTIL_MIN_FITNESS	-9999999.0
+#define GA_UTIL_MIN_FITNESS	-999999999.0
 
 /*
  * Prototypes
@@ -246,6 +262,9 @@ boolean ga_write_soup(population *pop);
 boolean ga_population_save(population *pop, char *fname);
 population *ga_population_read(char *fname);
 boolean	ga_population_score_and_sort(population *pop);
+double	ga_population_convergence_genotypes( population *pop );
+double	ga_population_convergence_chromsomes( population *pop );
+double	ga_population_convergence_alleles( population *pop );
 boolean	ga_population_stats( population *pop,
                              double *average, double *stddev );
 boolean ga_compare_genome(population *pop, entity *alpha, entity *beta);
@@ -268,9 +287,6 @@ boolean ga_copy_entity(population *pop, entity *dest, entity *src);
 entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity *local );
 boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count );
 entity *ga_optimise_entity(population *pop, entity *unopt);
-void	ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son);
-void	ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *son);
-void	ga_multipoint_mutation(population *pop, entity *father, entity *son);
 population *ga_genesis( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
@@ -285,7 +301,8 @@ population *ga_genesis( const int               population_size,
                         GAselect_one            select_one,
                         GAselect_two            select_two,
                         GAmutate                mutate,
-                        GAcrossover             crossover );
+                        GAcrossover             crossover,
+                        GAreplace               replace );
 void	ga_population_set_parameters(      population      *pop,
                                         double  crossover,
                                         double  mutation,
@@ -327,5 +344,18 @@ void	ga_crossover_chromosome_mixing(population *pop, entity *father, entity *mot
 void	ga_crossover_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter );
+void	ga_crossover_chromosome_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+
+void	ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son);
+void	ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *son);
+void	ga_multipoint_mutation(population *pop, entity *father, entity *son);
+void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son);
+void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
+
+void	ga_seed_boolean_random(population *pop, entity *adam);
+void	ga_seed_integer_random(population *pop, entity *adam);
+void	ga_seed_integer_zero(population *pop, entity *adam);
+
+void	ga_replace_by_fitness(population *pop, entity *child);
 
 #endif	/* GA_UTIL_H */

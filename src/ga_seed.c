@@ -84,7 +84,7 @@ void ga_seed_integer_random(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      adam->chromosome[chromo][point] = random_int();
+      adam->chromosome[chromo][point] = random_rand();
       }
     }
 

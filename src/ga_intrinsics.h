@@ -125,6 +125,7 @@ boolean	ga_slang_select_two(population *pop, entity **mother, entity **father);
 entity	*ga_slang_adapt(population *pop, entity *child);
 void	ga_slang_crossover(population *pop, entity *father, entity *mother, entity *daughter, entity *son);
 void	ga_slang_mutate(population *pop, entity *father, entity *son);
+void	ga_slang_replace(population *pop, entity *child);
 boolean	ga_intrinsic_sladd(void);
 
 #endif	/* GA_INTRINSICS_H_INCLUDED */
