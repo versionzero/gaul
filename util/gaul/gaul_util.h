@@ -288,7 +288,7 @@ typedef unsigned char byte;
 /*
  * Wrappers for multi-statement macros.
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define MWRAP_BEGIN
 #define MWRAP_END
 #else

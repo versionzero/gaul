@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -64,10 +64,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -95,11 +95,11 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_DATE_STRING = 
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -131,7 +131,7 @@ VERSION_STRING =
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1845/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1845/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -178,7 +178,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/diagnostics.Po \
@@ -191,7 +191,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -w2 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in
 SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c

@@ -414,7 +414,7 @@ case $CC in
 
     case " $CFLAGS " in
       *[\ \	]-w1[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -w1" ;;
+      *) CFLAGS="$CFLAGS -w2" ;;
     esac
 
     if test "x$enable_g" = "xyes"; then

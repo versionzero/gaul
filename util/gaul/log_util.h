@@ -111,11 +111,11 @@ void	log_output( const enum log_level_type level,
  * We have a less-functional replacement for other systems.
  */
 #if ( defined(__GNUC__) || defined(__INTEL_COMPILER) ) && !defined(__APPLE_CPP__) && !defined(__APPLE_CC__)
-#define	plog( level, format, ... ) do { 	\
+#define	plog( level, format, ... ) { 	\
 	if ( (level) <= log_get_level() ) 	\
 	  log_output(level, __PRETTY_FUNCTION__,	\
 	                   __FILE__, __LINE__,		\
-	                   format , ##__VA_ARGS__); } while(0)
+	                   format , ##__VA_ARGS__); }
 #else
 void plog( const enum log_level_type level, const char *format, ... );
 #endif

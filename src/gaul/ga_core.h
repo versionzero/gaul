@@ -88,7 +88,7 @@
  * Whether simple statistics should be dumped to disk.
  */
 #ifndef GA_WRITE_STATS
-# if DEBUG > 1
+# if GA_DEBUG > 1
 #  define GA_WRITE_STATS	TRUE
 # else
 #  define GA_WRITE_STATS	FALSE
