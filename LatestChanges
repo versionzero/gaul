@@ -11,6 +11,9 @@ Changes since release 0.1845:
 - Applied the minor changes required for compilation with Dev-C++ on MS Windows.
 - Split disk i/o functions into their own source file to facilitate a future native windows port.
 - Added versions of disk i/o functions using MS Windows API instead of POSIX API.
+- Added dummy function to display message if ga_evolution_threaded() not compiled.
+- Added a couple of missing S-Lang intrinsic functions.
+- Added S-Lang test/example code.
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.

@@ -901,6 +901,7 @@ boolean ga_population_score_and_sort(population *pop)
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !pop->evaluate ) die("Evaluation callback not defined.");
 
 /*
  * Score and sort all of the population members.

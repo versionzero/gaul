@@ -33,10 +33,11 @@ INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
 bin_PROGRAMS = diagnostics
 
-noinst_PROGRAMS = test_prng test_utils test_bitstrings
+noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 

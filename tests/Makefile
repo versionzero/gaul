@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -141,12 +141,13 @@ INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
 bin_PROGRAMS = diagnostics
 
-noinst_PROGRAMS = test_prng test_utils test_bitstrings
+noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
@@ -154,7 +155,7 @@ CONFIG_HEADER = $(top_builddir)/config.h \
 CONFIG_CLEAN_FILES =
 bin_PROGRAMS = diagnostics$(EXEEXT)
 noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
-	test_bitstrings$(EXEEXT)
+	test_bitstrings$(EXEEXT) test_slang$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
 
 diagnostics_SOURCES = diagnostics.c
@@ -169,6 +170,10 @@ test_prng_SOURCES = test_prng.c
 test_prng_OBJECTS = test_prng.$(OBJEXT)
 test_prng_DEPENDENCIES =
 test_prng_LDFLAGS =
+test_slang_SOURCES = test_slang.c
+test_slang_OBJECTS = test_slang.$(OBJEXT)
+test_slang_DEPENDENCIES =
+test_slang_LDFLAGS =
 test_utils_SOURCES = test_utils.c
 test_utils_OBJECTS = test_utils.$(OBJEXT)
 test_utils_DEPENDENCIES =
@@ -183,7 +188,8 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/diagnostics.Po \
 	./$(DEPDIR)/test_bitstrings.Po \
-	./$(DEPDIR)/test_prng.Po ./$(DEPDIR)/test_utils.Po
+	./$(DEPDIR)/test_prng.Po ./$(DEPDIR)/test_slang.Po \
+	./$(DEPDIR)/test_utils.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -192,9 +198,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = -g -w2 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
-DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c
+DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c \
+	test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in
-SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c
+SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c test_utils.c
 
 all: all-am
 
@@ -250,6 +257,9 @@ test_bitstrings$(EXEEXT): $(test_bitstrings_OBJECTS) $(test_bitstrings_DEPENDENC
 test_prng$(EXEEXT): $(test_prng_OBJECTS) $(test_prng_DEPENDENCIES) 
 	@rm -f test_prng$(EXEEXT)
 	$(LINK) $(test_prng_LDFLAGS) $(test_prng_OBJECTS) $(test_prng_LDADD) $(LIBS)
+test_slang$(EXEEXT): $(test_slang_OBJECTS) $(test_slang_DEPENDENCIES) 
+	@rm -f test_slang$(EXEEXT)
+	$(LINK) $(test_slang_LDFLAGS) $(test_slang_OBJECTS) $(test_slang_LDADD) $(LIBS)
 test_utils$(EXEEXT): $(test_utils_OBJECTS) $(test_utils_DEPENDENCIES) 
 	@rm -f test_utils$(EXEEXT)
 	$(LINK) $(test_utils_LDFLAGS) $(test_utils_OBJECTS) $(test_utils_LDADD) $(LIBS)
@@ -263,6 +273,7 @@ distclean-compile:
 include ./$(DEPDIR)/diagnostics.Po
 include ./$(DEPDIR)/test_bitstrings.Po
 include ./$(DEPDIR)/test_prng.Po
+include ./$(DEPDIR)/test_slang.Po
 include ./$(DEPDIR)/test_utils.Po
 
 distclean-depend:

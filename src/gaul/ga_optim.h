@@ -56,6 +56,8 @@ int	ga_evolution_mp(	population		*pop,
 			const int		max_generations );
 int	ga_evolution_forked(	population		*pop,
 			const int		max_generations );
+int	ga_evolution_threaded(	population		*pop,
+			const int		max_generations );
 int	ga_evolution_steady_state(	population		*pop,
 			const int		max_iterations );
 int	ga_evolution_archipelago( const int num_pops,
