@@ -175,7 +175,7 @@ int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 void *memset(void *dst0, int c0, size_t bytes);
 #endif
 
-#ifdef HAVE_MEMMOVE
+#ifndef HAVE_MEMMOVE
 /* Some systems, such as SunOS do have BCOPY instead. */
 # ifdef HAVE_BCOPY
 #  define memmove(A, B, C) bcopy((A), (B), (C))
