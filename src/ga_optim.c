@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Gene-based optimisation routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,8 +26,7 @@
 
   Synopsis:     Routines for gene-based optimisation.
 
-  To do:	Reimplement sub-populations.
-		Rewrite parallel versions.
+  To do:	Rewrite parallel versions.
 		Temperatures should be double-precision floats?
 		Need to fix elitism/crowding stuff.
 
@@ -38,7 +37,7 @@
 /**********************************************************************
   ga_evolution()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
-		optimisation on the active population.
+		optimisation on the given population.
 		This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
@@ -60,11 +59,13 @@ boolean ga_evolution(	population		*pop,
   boolean	finished;		/* Whether crossover/mutation rounds are complete. */
   int		new_pop_size;		/* Population size prior to adaptation. */
   double	elitism_penalty;	/* Penalty for maintaining diversity. */
+#if GA_WRITE_STATS==TRUE
+  FILE		*STATS_OUT;		/* Filehandle for stats log. */
+  char		stats_fname[80];	/* Filename for stats log. */
   int		crossover_good, crossover_poor;	/* Fornication statistics. */
   int		mutation_good, mutation_poor;	/*  - " -  */
   double	crossover_gain, mutation_gain;	/*  - " -  */
-  FILE		*STATS_OUT;		/* Filehandle for stats log. */
-  char		stats_fname[80];	/* Filename for stats log. */
+#endif
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -82,10 +83,12 @@ boolean ga_evolution(	population		*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "gen crossover mutation\n");
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score and sort the initial population members.
@@ -111,6 +114,7 @@ boolean ga_evolution(	population		*pop,
 /*
  * Zero statistics.
  */
+#if GA_WRITE_STATS==TRUE
     crossover_good=0;
     crossover_poor=0;
     mutation_good=0;
@@ -118,6 +122,7 @@ boolean ga_evolution(	population		*pop,
 
     crossover_gain=0.0;
     mutation_gain=0.0;
+#endif
 
 /*
  * Mating cycle.
@@ -149,7 +154,10 @@ boolean ga_evolution(	population		*pop,
         pop->evaluate(pop, daughter);
         pop->evaluate(pop, son);
 
-/* Collate stats. */
+/*
+ * Collate stats.
+ */
+#if GA_WRITE_STATS==TRUE
         if (son->fitness > father->fitness)
           crossover_good++;
         else
@@ -171,6 +179,7 @@ boolean ga_evolution(	population		*pop,
           crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
         if (daughter->fitness > MAX(mother->fitness,father->fitness))
           crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
+#endif
         }
       else
         {
@@ -205,7 +214,10 @@ boolean ga_evolution(	population		*pop,
         pop->mutate(pop, mother, daughter);
         pop->evaluate(pop, daughter);
 
-/* Collate stats. */
+/*
+ * Collate stats.
+ */
+#if GA_WRITE_STATS==TRUE
         if (daughter->fitness > mother->fitness)
           {
           mutation_good++;
@@ -215,6 +227,8 @@ boolean ga_evolution(	population		*pop,
           {
           mutation_poor++;
           }
+#endif
+
         }
       else
         {
@@ -374,11 +388,13 @@ boolean ga_evolution(	population		*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", generation,
             crossover_good, crossover_poor, crossover_gain,
             mutation_good, mutation_poor, mutation_gain);
     fclose(STATS_OUT);
+#endif
     }	/* Generation loop. */
 
   return (generation<max_generations);
@@ -388,7 +404,7 @@ boolean ga_evolution(	population		*pop,
 /**********************************************************************
   ga_evolution_steady_state()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
-		optimisation on the active population.
+		optimisation on the given population.
 		This is a steady-state GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
@@ -407,11 +423,13 @@ boolean ga_evolution_steady_state(	population		*pop,
   entity	*son, *daughter, *child;	/* Child entities. */
   entity	*adult;			/* Temporary copy for gene optimisation. */
   int		new_pop_size;		/* Population size prior to adaptation. */
+#if GA_WRITE_STATS==TRUE
+  FILE		*STATS_OUT;		/* Filehandle for stats log. */
+  char		stats_fname[80];	/* Filename for stats log. */
   int		crossover_good, crossover_poor;	/* Fornication statistics. */
   int		mutation_good, mutation_poor;	/*  - " -  */
   double	crossover_gain, mutation_gain;	/*  - " -  */
-  FILE		*STATS_OUT;		/* Filehandle for stats log. */
-  char		stats_fname[80];	/* Filename for stats log. */
+#endif
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -430,10 +448,12 @@ boolean ga_evolution_steady_state(	population		*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "gen crossover mutation\n");
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score and sort the initial population members.
@@ -463,6 +483,7 @@ boolean ga_evolution_steady_state(	population		*pop,
 /*
  * Zero statistics.
  */
+#if GA_WRITE_STATS==TRUE
     crossover_good=0;
     crossover_poor=0;
     mutation_good=0;
@@ -470,6 +491,7 @@ boolean ga_evolution_steady_state(	population		*pop,
 
     crossover_gain=0.0;
     mutation_gain=0.0;
+#endif
 
 /*
  * Mating cycle.
@@ -498,7 +520,10 @@ boolean ga_evolution_steady_state(	population		*pop,
       pop->evaluate(pop, daughter);
       pop->evaluate(pop, son);
 
-/* Collate stats. */
+/*
+ * Collate stats.
+ */
+#if GA_WRITE_STATS==TRUE
       if (son->fitness > father->fitness)
         crossover_good++;
       else
@@ -520,6 +545,7 @@ boolean ga_evolution_steady_state(	population		*pop,
         crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
       if (daughter->fitness > MAX(mother->fitness,father->fitness))
         crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
+#endif
       }
     else
       {
@@ -550,7 +576,10 @@ boolean ga_evolution_steady_state(	population		*pop,
       pop->mutate(pop, mother, child);
       pop->evaluate(pop, child);
 
-/* Collate stats. */
+/*
+ * Collate stats.
+ */
+#if GA_WRITE_STATS==TRUE
       if (child->fitness > mother->fitness)
         {
         mutation_good++;
@@ -560,6 +589,8 @@ boolean ga_evolution_steady_state(	population		*pop,
         {
         mutation_poor++;
         }
+#endif
+
       }
     else
       {
@@ -650,11 +681,13 @@ boolean ga_evolution_steady_state(	population		*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", iteration,
             crossover_good, crossover_poor, crossover_gain,
             mutation_good, mutation_poor, mutation_gain);
     fclose(STATS_OUT);
+#endif
     }	/* Iteration loop. */
 
   return (iteration<max_iterations);
@@ -680,8 +713,10 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   {
   int		iteration=0;			/* Current iteration number. */
   entity	*current, *best, *new, *temp;	/* The solutions. */
+#if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
   char		stats_fname[80];		/* Filename for stats log. */
+#endif
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
@@ -708,10 +743,12 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "rmhc_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "Random Mutation Hill Climbing\n");
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score the initial solution.
@@ -769,9 +806,11 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %f\n", iteration, best->fitness);
     fclose(STATS_OUT);
+#endif
     }
 
   plog( LOG_VERBOSE,
@@ -814,9 +853,11 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
   {
   int		iteration=0;		/* Current iteration number. */
   entity	*current, *best;	/* The solutions. */
+  int		chromo=0, point=0;	/* Mutation locus. */
+#if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
-  int		chromo=0, point=0;	/* Mutation locus. */
+#endif
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
@@ -845,10 +886,12 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "nahc_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "Next Ascent Hill Climbing\n");
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score the initial solution.
@@ -894,9 +937,11 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %f (%d %d)\n", iteration, best->fitness, chromo, point);
     fclose(STATS_OUT);
+#endif
 
 /*
  * Choose next nucleotide to mutate/optimise.
@@ -950,8 +995,10 @@ entity *ga_metropolis_mutation(	population		*pop,
   int		iteration=0;			/* Current iteration number. */
   entity	*current, *best, *new;		/* The solutions. */
   entity	*temp=NULL;			/* Used for swapping current and new. */
+#if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
   char		stats_fname[80];		/* Filename for stats log. */
+#endif
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
@@ -980,10 +1027,12 @@ entity *ga_metropolis_mutation(	population		*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "mstats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "Metropolis optimisation at %d degrees.\n", temperature);
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score the initial solution.
@@ -1045,9 +1094,11 @@ entity *ga_metropolis_mutation(	population		*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %f\n", iteration, best->fitness);
     fclose(STATS_OUT);
+#endif
     }
 
   plog( LOG_VERBOSE,
@@ -1088,9 +1139,11 @@ entity *ga_simulated_annealling_mutation(population	*pop,
   int		iteration=0;			/* Current iteration number. */
   entity	*current, *best, *new;		/* The solutions. */
   entity	*temp=NULL;			/* Used for swapping current and new. */
+  int		temperature;			/* Current temperature. */
+#if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;			/* Filehandle for stats log. */
   char		stats_fname[80];		/* Filename for stats log. */
-  int		temperature;			/* Current temperature. */
+#endif
 
 /* Checks. */
   if ( !pop ) die("NULL pointer to population structure passed.");
@@ -1120,11 +1173,13 @@ entity *ga_simulated_annealling_mutation(population	*pop,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "sastats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "MC/SA optimisation at %d to %d degrees.\n",
                      initial_temperature, final_temperature);
   fclose(STATS_OUT);
+#endif
 
 /*
  * Score the initial solution.
@@ -1188,10 +1243,12 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: (%d degrees) %f\n",
             iteration, temperature, best->fitness);
     fclose(STATS_OUT);
+#endif
     }
 
   plog(LOG_VERBOSE,
@@ -1212,7 +1269,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 /**********************************************************************
   ga_evolution_archipelago()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
-		optimisation on the active population using a simple
+		optimisation on the given populations using a simple
 		island model.  Migration occurs around a cyclic
 		topology only.  Migration causes a duplication of the
 		respective entities.  This is a generation-based GA.
@@ -1238,14 +1295,16 @@ boolean ga_evolution_archipelago( const int num_pops,
   boolean	finished;		/* Whether crossover/mutation rounds are complete. */
   int		new_pop_size;		/* Population size prior to adaptation. */
   double	elitism_penalty;	/* Penalty for maintaining diversity. */
-  int		crossover_good, crossover_poor;	/* Fornication statistics. */
-  int		mutation_good, mutation_poor;	/*  - " -  */
-  double	crossover_gain, mutation_gain;	/*  - " -  */
-  FILE		*STATS_OUT;		/* Filehandle for stats log. */
-  char		stats_fname[80];	/* Filename for stats log. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		pop0_osize;		/* Required for correct migration. */
+#if GA_WRITE_STATS==TRUE
+  FILE		*STATS_OUT;		/* Filehandle for stats log. */
+  char		stats_fname[80];	/* Filename for stats log. */
+  int		crossover_good, crossover_poor;	/* Fornication statistics. */
+  int		mutation_good, mutation_poor;	/*  - " -  */
+  double	crossover_gain, mutation_gain;	/*  - " -  */
+#endif
 
 /* Checks. */
   if (!pops)
@@ -1282,10 +1341,12 @@ boolean ga_evolution_archipelago( const int num_pops,
  * Create name for statistics log file.
  * Write a simple header to that file.
  */
+#if GA_WRITE_STATS==TRUE
   sprintf(stats_fname, "ga_stats_%d.dat", (int) getpid());
   STATS_OUT = fopen(stats_fname, "a");
   fprintf(STATS_OUT, "gen crossover mutation\n");
   fclose(STATS_OUT);
+#endif
 
   for (island=0; island<num_pops; island++)
     {
@@ -1301,9 +1362,11 @@ boolean ga_evolution_archipelago( const int num_pops,
   while ( generation<max_generations && complete==FALSE)
     {
     generation++;
+
 /*
  * Zero statistics.
  */
+#if GA_WRITE_STATS==TRUE
     crossover_good=0;
     crossover_poor=0;
     mutation_good=0;
@@ -1311,6 +1374,7 @@ boolean ga_evolution_archipelago( const int num_pops,
 
     crossover_gain=0.0;
     mutation_gain=0.0;
+#endif
 
 /*
  * Migration Cycle.
@@ -1383,6 +1447,7 @@ boolean ga_evolution_archipelago( const int num_pops,
             pop->evaluate(pop, son);
 
 /* Collate stats. */
+#if GA_WRITE_STATS==TRUE
             if (son->fitness > father->fitness)
               crossover_good++;
             else
@@ -1404,6 +1469,7 @@ boolean ga_evolution_archipelago( const int num_pops,
               crossover_gain += son->fitness-MAX(mother->fitness,father->fitness);
             if (daughter->fitness > MAX(mother->fitness,father->fitness))
               crossover_gain += daughter->fitness-MAX(mother->fitness,father->fitness);
+#endif
             }
           else
             {
@@ -1610,11 +1676,13 @@ boolean ga_evolution_archipelago( const int num_pops,
 /*
  * Write statistics.
  */
+#if GA_WRITE_STATS==TRUE
     STATS_OUT = fopen(stats_fname, "a");
     fprintf(STATS_OUT, "%d: %d-%d %f %d-%d %f\n", generation,
             crossover_good, crossover_poor, crossover_gain,
             mutation_good, mutation_poor, mutation_gain);
     fclose(STATS_OUT);
+#endif
     }	/* Generation loop. */
 
   return (generation<max_generations);

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -52,7 +52,22 @@
  * Debugging
  */
 #ifndef GA_DEBUG
-#define GA_DEBUG	DEBUG
+# ifdef DEBUG
+#  define GA_DEBUG	DEBUG
+# else
+#  define GA_DEBUG	0
+# endif
+#endif
+
+/*
+ * Whether simple statistics should be dumped to disk.
+ */
+#ifndef GA_WRITE_STATS
+# if DEBUG > 1
+#  define GA_WRITE_STATS	TRUE
+# else
+#  define GA_WRITE_STATS	FALSE
+# endif
 #endif
 
 /*
