@@ -1,7 +1,9 @@
 Changes since release 0.1842:
-- Lots of "behind-the-scenes" code tidying.
+- Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
 - Changed name of test example to test_ga to avoid name clash with file from binutils package.
-- use 'dnl' not '#' for m4 comments.
+- Use 'dnl' not '#' for m4 comments.
+- Fixed/standardised RPM spec file.
+- Removed standalone neural network simulator from archive and distribution.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.
