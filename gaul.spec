@@ -25,14 +25,14 @@
 #######################################################################
 
 %define PACKAGE_VERSION 0
-%define RELEASE 1836
+%define RELEASE 1837
 
 Summary: Genetic Algorithm Utility Library
 Name: GAUL
 Version: %{PACKAGE_VERSION}
 Release: %{RELEASE}
 Copyright: Copyright: (c) 2000-2002 Stewart Adcock, released under GPL.  See COPYING.
-Group: Math
+Group: Scientific/Engineering
 Source: gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}.tar.gz
 URL: http://gaul.sourceforge.net/
 
@@ -43,6 +43,7 @@ GAUL: Genetic Algorithm Utility Library.  GAUL is a flexible programming library
 %setup
 
 %build
+./configure
 make
 
 %install
@@ -54,8 +55,3 @@ make install
 %doc AUTHORS COPYING ChangeLog NEWS README
 %{prefix}/gaul
 
-#%files devel
-#%defattr(-, root, root)
-
-#%{prefix}/tests/*
-#%{prefix}/docs/*

@@ -59,7 +59,7 @@ float      **train_property=NULL;   /* Training properties. */
  * Compilation constants.
  */
 #define NNEVOLVE_NUM_SCORE	100
-#define NNEVOLVE_NUM_TRAIN	75
+#define NNEVOLVE_NUM_TRAIN	500
 
 
 /**********************************************************************
@@ -314,15 +314,15 @@ entity *nnevolve_adapt(population *pop, entity *child)
 
 
 /**********************************************************************
-  nnevolve_crossover()
-  synopsis:	Crossover.
-		FIXME: Only quickly hacked together.
+  nnevolve_crossover_layerwise()
+  synopsis:	Crossover by swapping whole layers.
+		Note that this doesn't work particularly well.
   parameters:
   return:
   updated:	28 Jan 2002
  **********************************************************************/
 
-void nnevolve_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
+void nnevolve_crossover_layerwise(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
   {
   int		l, i;	/* Layer, neuron, number. */
   network_t     *nn1=(network_t *)son->chromosome[0], *nn2=(network_t *)daughter->chromosome[0];
@@ -367,6 +367,170 @@ void nnevolve_crossover(population *pop, entity *mother, entity *father, entity 
         {
         memcpy(nn1->layer[l].weight[i], ((network_t *)father->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
         memcpy(nn2->layer[l].weight[i], ((network_t *)mother->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
+        }
+      }
+    }
+
+/*  printf("DEBUG: Crossover: rate = %f %f -> %f %f momentum = %f %f -> %f %f\n", ((network_t *)father->chromosome[0])->rate, ((network_t *)mother->chromosome[0])->rate, nn1->rate, nn2->rate, ((network_t *)father->chromosome[0])->momentum, ((network_t *)mother->chromosome[0])->momentum, nn1->momentum, nn2->momentum);*/
+
+  return;
+  }
+
+
+/**********************************************************************
+  nnevolve_crossover_out()
+  synopsis:	Crossover by swapping clusters of neurons from an
+  		output node.
+  parameters:
+  return:
+  updated:	08 Feb 2002
+ **********************************************************************/
+
+void nnevolve_crossover_out(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
+  {
+  int		h, i, j, k;	/* Layer, neuron, number. */
+  network_t     *nn1=(network_t *)son->chromosome[0], *nn2=(network_t *)daughter->chromosome[0];
+  float		temp;
+
+  NN_copy((network_t *)mother->chromosome[0], nn1);
+  NN_copy((network_t *)father->chromosome[0], nn2);
+
+  if (random_boolean())
+    {
+    temp = nn1->momentum;
+    nn1->momentum = nn2->momentum;
+    nn2->momentum = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->rate;
+    nn1->rate = nn2->rate;
+    nn2->rate = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->gain;
+    nn1->gain = nn2->gain;
+    nn2->gain = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->bias;
+    nn1->bias = nn2->bias;
+    nn2->bias = temp;
+    }
+
+/*
+ * This algorithm would naturally be recursive, but unrolled for the sake
+ * of speed.  I assume four layers in total.
+ */
+  h=random_int(nn1->layer[3].neurons)+1;
+  
+  for (i=1; i<=nn1->layer[2].neurons; i++)
+    {
+    nn1->layer[3].weight[h][i] = ((network_t *)father->chromosome[0])->layer[3].weight[h][i];
+    nn2->layer[3].weight[h][i] = ((network_t *)mother->chromosome[0])->layer[3].weight[h][i];
+
+    if (random_boolean_prob(0.2))
+      {
+      for (j=1; j<=nn1->layer[1].neurons; j++)
+	{
+        nn1->layer[2].weight[i][j] = ((network_t *)father->chromosome[0])->layer[2].weight[i][j];
+        nn2->layer[2].weight[i][j] = ((network_t *)mother->chromosome[0])->layer[2].weight[i][j];
+
+        if (random_boolean_prob(0.2))
+          {
+          for (k=1; k<=nn1->layer[0].neurons; k++)
+            {
+            nn1->layer[1].weight[j][k] = ((network_t *)father->chromosome[0])->layer[1].weight[j][k];
+            nn2->layer[1].weight[j][k] = ((network_t *)mother->chromosome[0])->layer[1].weight[j][k];
+	    }
+	  }
+        }
+      }
+    }
+
+/*  printf("DEBUG: Crossover: rate = %f %f -> %f %f momentum = %f %f -> %f %f\n", ((network_t *)father->chromosome[0])->rate, ((network_t *)mother->chromosome[0])->rate, nn1->rate, nn2->rate, ((network_t *)father->chromosome[0])->momentum, ((network_t *)mother->chromosome[0])->momentum, nn1->momentum, nn2->momentum);*/
+
+  return;
+  }
+
+
+/**********************************************************************
+  nnevolve_crossover_in()
+  synopsis:	Crossover by swapping clusters of neurons from an
+  		input node.
+  parameters:
+  return:
+  updated:	08 Feb 2002
+ **********************************************************************/
+
+void nnevolve_crossover_in(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
+  {
+  int		h, i, j, k;	/* Layer, neuron, number. */
+  network_t     *nn1=(network_t *)son->chromosome[0], *nn2=(network_t *)daughter->chromosome[0];
+  float		temp;
+
+  NN_copy((network_t *)mother->chromosome[0], nn1);
+  NN_copy((network_t *)father->chromosome[0], nn2);
+
+  if (random_boolean())
+    {
+    temp = nn1->momentum;
+    nn1->momentum = nn2->momentum;
+    nn2->momentum = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->rate;
+    nn1->rate = nn2->rate;
+    nn2->rate = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->gain;
+    nn1->gain = nn2->gain;
+    nn2->gain = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->bias;
+    nn1->bias = nn2->bias;
+    nn2->bias = temp;
+    }
+
+/*
+ * This algorithm would naturally be recursive, but unrolled for the sake
+ * of speed.  I assume four layers in total.
+ */
+  h=random_int(nn1->layer[0].neurons+1);
+  
+  for (i=1; i<=nn1->layer[1].neurons; i++)
+    {
+    nn1->layer[1].weight[h][i] = ((network_t *)father->chromosome[0])->layer[1].weight[h][i];
+    nn2->layer[1].weight[h][i] = ((network_t *)mother->chromosome[0])->layer[1].weight[h][i];
+
+    if (random_boolean_prob(0.2))
+      {
+      for (j=1; j<=nn1->layer[2].neurons; j++)
+	{
+        nn1->layer[2].weight[i][j] = ((network_t *)father->chromosome[0])->layer[2].weight[i][j];
+        nn2->layer[2].weight[i][j] = ((network_t *)mother->chromosome[0])->layer[2].weight[i][j];
+
+        if (random_boolean_prob(0.2))
+          {
+          for (k=1; k<=nn1->layer[3].neurons; k++)
+            {
+            nn1->layer[3].weight[j][k] = ((network_t *)father->chromosome[0])->layer[3].weight[j][k];
+            nn2->layer[3].weight[j][k] = ((network_t *)mother->chromosome[0])->layer[3].weight[j][k];
+	    }
+	  }
         }
       }
     }
@@ -691,20 +855,22 @@ int main(int argc, char **argv)
   entity	*entity=NULL;	/* Used to test standard back-prop. */
   chrono_t	lga_timer, bp_timer;	/* Timers. */
 
+  log_set_level(LOG_NORMAL);
+
 /*
  * Initialize random number generator.
  */
   random_init();
-  random_seed(42);
+  random_seed(1001001);
 
 /*
  * Allocate a new popuation structure.
  * max. individuals        = 300
- * stable num. individuals = 80
+ * stable num. individuals = 40
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 200, 80, 1, 0 );
+  pop = ga_population_new( 200, 40, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -740,7 +906,9 @@ int main(int argc, char **argv)
   pop->select_one = ga_select_one_bestof2;
   pop->select_two = ga_select_two_bestof2;
   pop->mutate = nnevolve_mutate;
-  pop->crossover = nnevolve_crossover;
+  pop->crossover = nnevolve_crossover_layerwise;
+  pop->crossover = nnevolve_crossover_in;
+  pop->crossover = nnevolve_crossover_out;
   pop->replace = NULL;
 
 /*
@@ -750,11 +918,11 @@ int main(int argc, char **argv)
 
 /*
  * Set the GA parameters:
- * Crossover ratio  = 0.65
- * Mutation ratio   = 0.05
+ * Crossover ratio  = 0.45
+ * Mutation ratio   = 0.01
  * Migration ration = 0.0
  */
-  ga_population_set_parameters( pop, 0.4, 0.01, 0.0 );
+  ga_population_set_parameters( pop, 0.45, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -762,13 +930,13 @@ int main(int argc, char **argv)
   nnevolve_setup_data();
 
 /*
- * Perform Lamarckian evolution for 200 generations.
+ * Perform Lamarckian evolution for 250 generations.
  */
 /*
-  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 200 );
+  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 250 );
 */
   timer_start(&lga_timer);
-  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 1000 );
+  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 250 );
   timer_check(&lga_timer);
 
   printf("The fitness of the final solution found was: %f\n",
@@ -779,7 +947,7 @@ int main(int argc, char **argv)
 /*
  * Write the best solution to disk.
  */
-  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "ga_best.nn");
+  NN_write((network_t *)ga_get_entity_from_rank(pop,0)->chromosome[0], "ga_best.nn");
 
 /*
  * For comparison, try standard back-propagation.
@@ -793,7 +961,7 @@ int main(int argc, char **argv)
   NN_set_bias((network_t *)entity->chromosome[0], 1.0);
 
   timer_start(&bp_timer);
-  NN_train_random((network_t *)entity->chromosome[0], 5000);
+  NN_train_random((network_t *)entity->chromosome[0], 10000);
   timer_check(&bp_timer);
 
   ga_entity_evaluate(pop, entity);
