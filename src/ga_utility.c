@@ -113,7 +113,7 @@ population *ga_genesis(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
+  plog(LOG_FIXME, "Use of ga_genesis() should be deprecated.");
 
 /*
  * Allocate and initialise a new population.
@@ -175,9 +175,6 @@ population *ga_genesis(	const int		population_size,
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
-		Assumes the use of integer chromosomes is desired.
-		This currently only exists for compatibility with
-		older versions of GAUL.
 		Character-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
@@ -265,9 +262,6 @@ population *ga_genesis_char(	const int		population_size,
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
-		Assumes the use of integer chromosomes is desired.
-		This currently only exists for compatibility with
-		older versions of GAUL.
 		Boolean-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
@@ -355,9 +349,6 @@ population *ga_genesis_boolean(	const int		population_size,
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
-		Assumes the use of integer chromosomes is desired.
-		This currently only exists for compatibility with
-		older versions of GAUL.
 		Double precision real-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
@@ -445,9 +436,6 @@ population *ga_genesis_double(	const int		population_size,
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
-		Assumes the use of integer chromosomes is desired.
-		This currently only exists for compatibility with
-		older versions of GAUL.
 		Bitstring-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.

@@ -25,7 +25,7 @@
  **********************************************************************
 
   Synopsis:     Wrappers around the routines for handling populations
-		and performing GA operations.
+		and performing GA operations using S-Lang scripting.
 
 		Internally, and in the public C interface, pointers
 		are used to identify the population and entity
@@ -34,6 +34,7 @@
 		used instead.
 
   To do: 	More error checking.
+		Add missing wrappers.
 
  **********************************************************************/
 

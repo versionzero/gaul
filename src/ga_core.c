@@ -125,11 +125,12 @@ static void destruct_list(population *pop, SLList *list)
 
 #if GA_DEBUG>2
   /*
-   * Not typically needed now, because num_destrtoyed may (correctly) differ
-   * from the actual number of chromosomes.
+   * Not typically needed now, because num_destrtoyed may
+   * (correctly) differ from the actual number of chromosomes.
    */
   if (num_destroyed != pop->num_chromosomes)
-    printf("Uh oh! Dodgy user data here? %d %d\n", num_destroyed, pop->num_chromosomes);
+    printf("Uh oh! Dodgy user data here? %d %d\n",
+                 num_destroyed, pop->num_chromosomes);
 #endif
 
   return;
@@ -357,30 +358,6 @@ int ga_get_num_populations(void)
 
   return num;
   }
-
-
-#if 0
-/**********************************************************************
-  ga_set_active_population()
-  synopsis:	Sets the active population.
-  parameters:	unsigned int	id for active population.
-  return:	Success/Failure.
-  last updated: 19/01/01
- **********************************************************************/
-
-boolean ga_set_active_population(unsigned int id)
-  {
-  THREAD_LOCK(pop_table);
-  if (pop_id != id)
-    {
-    pop = table_get_data(pop_table, id);
-    pop_id = id;
-    }
-  THREAD_UNLOCK(pop_table);
-
-  return TRUE;
-  }
-#endif
 
 
 /**********************************************************************

@@ -26,15 +26,21 @@
 
   Synopsis:     Routines for performing GA seeding operations.
 
+		Seeding operations generate genetic data by some
+		non-evolutionary means.  Typically, this is often
+		just random generation.
+
  **********************************************************************/
 
 #include "ga_core.h"
 
 /**********************************************************************
   ga_seed_boolean_random()
-  synopsis:
-  parameters:
-  return:
+  synopsis:	Seed genetic data for a single entity with a boolean
+		chromosome by randomly setting each bit.
+  parameters:	population *pop
+		entity *adam
+  return:	none
   last updated: 15/05/01
  **********************************************************************/
 
@@ -62,9 +68,11 @@ void ga_seed_boolean_random(population *pop, entity *adam)
 
 /**********************************************************************
   ga_seed_integer_random()
-  synopsis:
-  parameters:
-  return:
+  synopsis:	Seed genetic data for a single entity with an integer
+		chromosome by randomly setting each allele.
+  parameters:	population *pop
+		entity *adam
+  return:	none
   last updated: 15/05/01
  **********************************************************************/
 
@@ -92,9 +100,11 @@ void ga_seed_integer_random(population *pop, entity *adam)
 
 /**********************************************************************
   ga_seed_integer_zero()
-  synopsis:
-  parameters:
-  return:
+  synopsis:	Seed genetic data for a single entity with an integer
+		chromosome by setting each allele to zero.
+  parameters:	population *pop
+		entity *adam
+  return:	none
   last updated: 15/05/01
  **********************************************************************/
 
@@ -122,9 +132,12 @@ void ga_seed_integer_zero(population *pop, entity *adam)
 
 /**********************************************************************
   ga_seed_char_random()
-  synopsis:
-  parameters:
-  return: last updated: 16/06/01
+  synopsis:	Seed genetic data for a single entity with a character
+		chromosome by randomly setting each allele.
+  parameters:	population *pop
+		entity *adam
+  return:	none
+  last updated: 16/06/01
  **********************************************************************/
 
 void ga_seed_char_random(population *pop, entity *adam)
@@ -152,9 +165,12 @@ void ga_seed_char_random(population *pop, entity *adam)
 
 /**********************************************************************
   ga_seed_double_random()
-  synopsis:
-  parameters:
-  return:
+  synopsis:	Seed genetic data for a single entity with a double-
+		precision floating-point chromosome by randomly
+		setting each allele.
+  parameters:	population *pop
+		entity *adam
+  return:	none
   last updated: 16/06/01
  **********************************************************************/
 
@@ -243,8 +259,9 @@ void ga_seed_printable_random(population *pop, entity *adam)
 /**********************************************************************
   ga_seed_bitstring_random()
   synopsis:	Randomly seed bitstring chromosomes.
-  parameters:
-  return:
+  parameters:	population *pop
+		entity *adam
+  return:	none
   last updated: 30/06/01
  **********************************************************************/
 
