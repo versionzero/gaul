@@ -1,5 +1,5 @@
 Changes since release 0.1837:
-- none
+- Added slang-devel requirement to spec file and renamed it from gaul.spec to gaul-devel.spec
 
 Changes since release 0.1836:
 - Added ga_get_all_populations() which returns array of all currently allocated populations.
