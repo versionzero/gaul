@@ -98,7 +98,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1846-8/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -142,11 +142,13 @@ AUTOMAKE_OPTIONS = 1.4
 # Kludge:
 INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/ -I/usr/include/slang/
 
-bin_PROGRAMS = diagnostics
+bin_PROGRAMS = gaul_diagnostics
 
 noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+gaul_diagnostics_SOURCES = diagnostics.c
+
+gaul_diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
@@ -156,15 +158,15 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
-bin_PROGRAMS = diagnostics$(EXEEXT)
+bin_PROGRAMS = gaul_diagnostics$(EXEEXT)
 noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
 	test_bitstrings$(EXEEXT) test_slang$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
 
-diagnostics_SOURCES = diagnostics.c
-diagnostics_OBJECTS = diagnostics.$(OBJEXT)
-diagnostics_DEPENDENCIES =
-diagnostics_LDFLAGS =
+am_gaul_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
+gaul_diagnostics_OBJECTS = $(am_gaul_diagnostics_OBJECTS)
+gaul_diagnostics_DEPENDENCIES =
+gaul_diagnostics_LDFLAGS =
 test_bitstrings_SOURCES = test_bitstrings.c
 test_bitstrings_OBJECTS = test_bitstrings.$(OBJEXT)
 test_bitstrings_DEPENDENCIES =
@@ -200,11 +202,11 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro -I/u2/include -I/usr/include/slang/
-DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c \
-	test_utils.c
+CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7 -I/u2/include -I/usr/include/slang/
+DIST_SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_prng.c \
+	test_slang.c test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in
-SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c test_utils.c
+SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_prng.c test_slang.c test_utils.c
 
 all: all-am
 
@@ -251,9 +253,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES) 
-	@rm -f diagnostics$(EXEEXT)
-	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
+gaul_diagnostics$(EXEEXT): $(gaul_diagnostics_OBJECTS) $(gaul_diagnostics_DEPENDENCIES) 
+	@rm -f gaul_diagnostics$(EXEEXT)
+	$(LINK) $(gaul_diagnostics_LDFLAGS) $(gaul_diagnostics_OBJECTS) $(gaul_diagnostics_LDADD) $(LIBS)
 test_bitstrings$(EXEEXT): $(test_bitstrings_OBJECTS) $(test_bitstrings_DEPENDENCIES) 
 	@rm -f test_bitstrings$(EXEEXT)
 	$(LINK) $(test_bitstrings_LDFLAGS) $(test_bitstrings_OBJECTS) $(test_bitstrings_LDADD) $(LIBS)

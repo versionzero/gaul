@@ -31,11 +31,13 @@ AUTOMAKE_OPTIONS = 1.4
 # Kludge:
 INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/ -I/usr/include/slang/
 
-bin_PROGRAMS = diagnostics
+bin_PROGRAMS = gaul_diagnostics
 
 noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+gaul_diagnostics_SOURCES = diagnostics.c
+
+gaul_diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
