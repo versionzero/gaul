@@ -191,9 +191,6 @@
  */
 #if defined(HAVE_STDBOOL_H)
 # include <stdbool.h>
-# if !defined(HAVE__BOOL)
-typedef short _Bool;
-# endif
 #else
 
 # if !defined(__bool_true_false_are_defined)

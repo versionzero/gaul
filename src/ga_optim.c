@@ -260,6 +260,7 @@ static void gaul_ensure_evaluations(population *pop)
   last updated:	30 Jun 2002
  **********************************************************************/
 
+#if W32_CRIPPLED != 1
 static void gaul_ensure_evaluations_forked(population *pop, const int num_processes,
 			int *eid, pid_t *pid, const int *evalpipe)
   {
@@ -361,6 +362,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
 
   return;
   }
+#endif
 
 
 /**********************************************************************
@@ -565,6 +567,7 @@ static void gaul_adapt_and_evaluate(population *pop)
   last updated:	11 Jun 2002
  **********************************************************************/
 
+#if W32_CRIPPLED != 1
 static void gaul_adapt_and_evaluate_forked(population *pop,
 	       		const int num_processes,
 			int *eid, pid_t *pid, const int *evalpipe)
@@ -714,6 +717,7 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 
   return;
   }
+#endif
 
 
 /**********************************************************************
@@ -925,6 +929,7 @@ int ga_evolution(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
+#if W32_CRIPPLED != 1
 int ga_evolution_forked(	population		*pop,
 				const int		max_generations )
   {
@@ -1040,6 +1045,7 @@ int ga_evolution_forked(	population		*pop,
 
   return generation;
   }
+#endif
 
 
 /**********************************************************************
@@ -2714,6 +2720,7 @@ int ga_evolution_archipelago( const int num_pops,
   last updated:	11 Jun 2002
  **********************************************************************/
 
+#if W32_CRIPPLED != 1
 int ga_evolution_archipelago_forked( const int num_pops,
 			population		**pops,
 			const int		max_generations )
@@ -2885,6 +2892,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
 
   return generation;
   }
+#endif
 
 
 /**********************************************************************
