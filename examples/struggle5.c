@@ -34,7 +34,8 @@
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is explained in docs/html/tutorial5.html
+		This example is explained (very briefly) in
+		docs/html/tutorial5.html
 
  **********************************************************************/
 

@@ -31,21 +31,21 @@
 <p>It is now time to look at the parameters to the &quot;ga_genesis_char()&quot; (and the other genesis functions, including, &quot;ga_genesis_bitstring()&quot; &quot;ga_genesis_integer()&quot;, &quot;ga_genesis_double()&quot; and so on).</p>
 <p>The function prototype for the genesis functions, where XXX relates to the built-in chromosome type, is:
 <pre>
-population *ga_genesis( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
+population *ga_genesis_XXX( const int               population_size,
+                            const int               num_chromo,
+                            const int               len_chromo,
+                            GAgeneration_hook       generation_hook,
+                            GAiteration_hook        iteration_hook,
+                            GAdata_destructor       data_destructor,
+                            GAdata_ref_incrementor  data_ref_incrementor,
+                            GAevaluate              evaluate,
+                            GAseed                  seed,
+                            GAadapt                 adapt,
+                            GAselect_one            select_one,
+                            GAselect_two            select_two,
+                            GAmutate                mutate,
+                            GAcrossover             crossover,
+                            GAreplace               replace );
 </pre>
 <p><b>Basic parameters</b></p>
 <p>The &quot;population_size&quot; parameter defines the stable size for the population  At any given time the population may be a different size, but this is the maximum number of individuals which will pass into a following generation.</p>
@@ -57,7 +57,7 @@ population *ga_genesis( const int               population_size,
 <p>&quot;data_destructor&quot; and &quot;data_ref_incrementor&quot; specify callback functions which handle memory allocation for user defined (phenomic) data.  These may safely be defined as &quot;NULL&quot; functions, in which case the phenomes are assummed to be either static data, or empty.</p>
 <p><b>GA Operator functions</b></p>
 <p>The remainder of the parameters define the set of genetic algorithm operators.  Either the built-in functions, or custom functions may be used.  It is perfectly safe to modify the specified functions during an evolutionary run.  As an example of this, we swap between single-point and double-point crossover in the code below.  You may wish to dynamically switch the scoring function, this is also possible.</p>
-<p><p>Lower-level functions</b></p>
+<p><b>Lower-level functions</b></p>
 <p>The genesis functions are high-level convenience functions which encapsulate several lower level GAUL functions.  Sometimes you will need more fine control over the population setup.  Below, a set of equivalent low-level GAUL functions are explained.  These would give you, say, the ability do do things like seed the initial population from a file on disk.  The source code for this extended example is examples/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/examples/struggle4.c?content-type=text/plain&amp;only_with_tag=MAIN">struggle4.c</a>.</p>
 <p>Our new &quot;main()&quot; function and a set of custom operator functions is:</p>
 <pre>

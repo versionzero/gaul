@@ -29,8 +29,8 @@
 <tr>
 <td>
 <p>The selection operator to be used in GAUL is defined through a callback mechanism.  Several common types of selection have been implemented, and it is easy to add your own.</p>
-<p>In GAUL there are two classes of selection operator - those which select only one individual, and those which select two individuals.  The advatage of having a specialist operator for selecting two individuals is that it may optionally include incest control (i.e. a pair of closely related individuals will not be selected).</p>
-<p>The built-in selection operators are defined in src/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/src/select.c?content-type=text/plain&amp;only_with_tag=MAIN">ga_select.c</a>:</p>
+<p>In GAUL there are two classes of selection operator - those which select only one individual, and those which select two individuals.  The advantage of having a specialist operator for selecting two individuals is that it may optionally include incest control (i.e. a pair of closely related individuals will not be selected).</p>
+<p>The built-in selection operators are defined in src/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/src/ga_select.c?content-type=text/plain&amp;only_with_tag=MAIN">ga_select.c</a>:</p>
 <table>
   <tr>
     <td>Random Selection</td>
@@ -43,7 +43,7 @@
         <tt>boolean ga_select_two_every(population *pop, entity **mother, entity **father)</tt></td>
   </tr>
   <tr>
-    <td>&quot;Randomranked&quot; Selection</td>
+    <td>&quot;Random/ranked&quot; Selection</td>
     <td><tt>boolean ga_select_one_randomrank(population *pop, entity **mother)</tt><br>
         <tt>boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father)</tt></td>
   </tr>
