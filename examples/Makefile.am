@@ -28,7 +28,9 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-EXTRA_PROGRAMS = diagnostics \
+#EXTRA_PROGRAMS = 
+
+bin_PROGRAMS = diagnostics \
 	pingpong wildfire wildfire_forked \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \

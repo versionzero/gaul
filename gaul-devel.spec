@@ -24,27 +24,27 @@
 #
 #######################################################################
 
-%define PACKAGE_VERSION 0
-%define RELEASE		1840
-%define PATCH		1
-%define prefix		/usr/local/
+%define PACKAGE_VERSION 	0
+%define RELEASE			1840
+%define PATCH			1
+%define prefix			/usr/local/
 
-Summary: Genetic Algorithm Utility Library
-Name: gaul-devel
-Version: %{PACKAGE_VERSION}
-Release: %{RELEASE}
-Copyright: Copyright: (c) 2000-2002 Stewart Adcock, released under GPL.  See COPYING.
-Vendor: "Stewart Adcock" <gaul@linux-domain.com>
-Group: Scientific/Engineering
-Source: gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}.tar.gz
-URL: http://gaul.sourceforge.net/
-Requires: slang-devel
+Summary:	Genetic Algorithm Utility Library
+Name:		gaul-devel
+Version:	%{PACKAGE_VERSION}
+Release:	%{RELEASE}
+Copyright:	Copyright: (c) 2000-2002 Stewart Adcock.
+Vendor:		"Stewart Adcock" <gaul@linux-domain.com>
+# License:	GPL
+Group:		Scientific/Engineering
+Source:		gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}.tar.gz
+URL:		http://gaul.sourceforge.net/
+Requires:	slang-devel
 
 %description
 The Genetic Algorithm Utility Library (GAUL) is an open source programming library designed to assist in the development of code using genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Much of the functionality is also available through a simple S-Lang interface.
 
 %prep
-
 %setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
 
 %build
@@ -53,6 +53,9 @@ make
 
 %install
 make install
+
+%clean
+rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-, root, root)
@@ -107,9 +110,11 @@ make install
 %{prefix}/include/gaul/memory_chunks.c
 %{prefix}/include/gaul/timer_util.h
 %{prefix}/include/gaul/
+%{prefix}/bin/nn
 %{prefix}/bin/diagnostics
 %{prefix}/bin/pingpong
 %{prefix}/bin/wildfire
+%{prefix}/bin/wildfire_forked
 %{prefix}/bin/goldberg1
 %{prefix}/bin/goldberg2
 %{prefix}/bin/royalroad
@@ -123,9 +128,13 @@ make install
 #%{prefix}/bin/struggle5_mp
 %{prefix}/bin/struggle5_forked
 %{prefix}/bin/struggle_ss
-%{prefix}/bin/nn
-%{prefix}/bin/nnevolve
 %{prefix}/bin/saveload
+%{prefix}/bin/nnevolve
 
 %doc AUTHORS COPYING ChangeLog NEWS README
+
+%changelog
+* Thu Oct 03 2002 Stewart Adcock <stewart@linux-domain.com>
+- 0.1840-1
+- Tidied spec file.
 

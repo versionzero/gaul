@@ -126,7 +126,9 @@ install_sh = @install_sh@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-EXTRA_PROGRAMS = diagnostics \
+
+#EXTRA_PROGRAMS = 
+bin_PROGRAMS = diagnostics \
 	pingpong wildfire wildfire_forked \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
@@ -232,13 +234,15 @@ libbtree_la_LDFLAGS =
 libbtree_la_LIBADD =
 am_libbtree_la_OBJECTS = btree.lo
 libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
-EXTRA_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) \
-	wildfire$(EXEEXT) wildfire_forked$(EXEEXT) goldberg1$(EXEEXT) \
-	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
-	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle2$(EXEEXT) \
-	struggle3$(EXEEXT) struggle4$(EXEEXT) struggle5$(EXEEXT) \
-	struggle5_mp$(EXEEXT) struggle5_forked$(EXEEXT) \
-	struggle_ss$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
+bin_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) wildfire$(EXEEXT) \
+	wildfire_forked$(EXEEXT) goldberg1$(EXEEXT) goldberg2$(EXEEXT) \
+	royalroad$(EXEEXT) royalroad_ss$(EXEEXT) struggle$(EXEEXT) \
+	struggle_forked$(EXEEXT) struggle2$(EXEEXT) struggle3$(EXEEXT) \
+	struggle4$(EXEEXT) struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
+	struggle5_forked$(EXEEXT) struggle_ss$(EXEEXT) \
+	saveload$(EXEEXT) nnevolve$(EXEEXT)
+PROGRAMS = $(bin_PROGRAMS)
+
 am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
 diagnostics_OBJECTS = $(am_diagnostics_OBJECTS)
 diagnostics_LDFLAGS =
@@ -359,6 +363,35 @@ clean-noinstLTLIBRARIES:
 	done
 libbtree.la: $(libbtree_la_OBJECTS) $(libbtree_la_DEPENDENCIES) 
 	$(LINK)  $(libbtree_la_LDFLAGS) $(libbtree_la_OBJECTS) $(libbtree_la_LIBADD) $(LIBS)
+binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	     || test -f $$p1 \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
+	  rm -f $(DESTDIR)$(bindir)/$$f; \
+	done
+
+clean-binPROGRAMS:
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
 diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES) 
 	@rm -f diagnostics$(EXEEXT)
 	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
@@ -539,9 +572,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
 
 installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
 
 install: install-am
 install-exec: install-exec-am
@@ -569,8 +603,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
-	mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 
@@ -587,7 +621,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
+install-exec-am: install-binPROGRAMS
 
 install-info: install-info-am
 
@@ -604,19 +638,19 @@ mostlyclean: mostlyclean-am
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
-.PHONY: GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLTLIBRARIES distclean \
+.PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic clean-libtool clean-noinstLTLIBRARIES distclean \
 	distclean-compile distclean-depend distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am info \
-	info-am install install-am install-data install-data-am \
-	install-exec install-exec-am install-info install-info-am \
-	install-man install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool tags uninstall uninstall-am \
-	uninstall-info-am
+	info-am install install-am install-binPROGRAMS install-data \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-binPROGRAMS uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
