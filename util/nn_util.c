@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Last Updated:	18 Jul 2002 SAA	Modified NN_read_prop().
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA Added version info to NN_diagnostics.
 		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
@@ -1570,23 +1571,74 @@ int NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int 
 /**********************************************************************
   NN_read_prop()
   synopsis:     Read properties from given file.
-  parameters:   filename
-                data
+  parameters:   char *fname	File to read.
+		float ***data	Data.
+		char ***labels	Data labels.
+		int *num_prop	Number of data items read in total.
+		int *num_data	Number of data items expected in total.
+		int *dimensions	Dimensions of data, or -1 to determine here.
   return:       none.
-  last updated: 10 Dec 2001
+  last updated: 18 Jul 2002
  **********************************************************************/
 
-void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions)
+void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int *dimensions)
   {
   FILE  *fp;		        	/* Filehandle. */
   char  line_buffer[MAX_LINE_LEN];	/* Line buffer. */
   char  *line;                          /* Line pointer. */
   int   data_count;		        /* Number of fields input from current record. */
 
-  if ( !(fp = fopen(fname, "r")) ) dief("Unable to open file \"%s\" for input.\n", fname);
+  if ( !(fp = fopen(fname, "r")) )
+    dief("Unable to open file \"%s\" for input.\n", fname);
 
   *data = (float **) s_realloc(*data, sizeof(float*)*(*num_data));
 
+/* Count data items on first line, if necessary. */
+  if (*dimensions == -1)
+    {
+    char	line_copy[MAX_LINE_LEN];	/* Line buffer copy. */
+
+    if (str_nreadline(fp, MAX_LINE_LEN, line_buffer)<=0)
+      dief("Error reading file \"%s\".\n", fname);
+
+    strcpy(line_copy, line_buffer);
+    line = line_copy;
+
+    if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)
+      dief("Label mismatch \"%s\" to \"%s\"", (*labels)[*num_prop], line);
+
+    line = strtok(&(line[strlen((*labels)[*num_prop])]), " ");
+    *dimensions=1;
+
+    while ( (line = strtok(NULL, " "))!=NULL )
+      {
+      (*dimensions)++;
+      }
+
+    line = line_buffer;
+
+    if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)
+      dief("Label mismatch \"%s\" to \"%s\"", (*labels)[*num_prop], line);
+
+    (*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float));
+
+    line = strtok(&(line[strlen((*labels)[*num_prop])]), " ");
+    (*data)[*num_prop][0] = (float) atof(line);
+    data_count=1;
+
+    while ( (line = strtok(NULL, " "))!=NULL )
+      {
+      if (data_count==*dimensions) die("Internal error which should never occur.");
+
+      (*data)[*num_prop][data_count] = (float) atof(line);
+
+      data_count++;
+      }
+
+    (*num_prop)++;
+    }
+
+/* Read remainder of file. */
   while (str_nreadline(fp, MAX_LINE_LEN, line_buffer)>0)
     {
     if (*num_prop > *num_data) die("Too many property records input.");
@@ -1596,7 +1648,7 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)
       dief("Label mismatch \"%s\" to \"%s\"", (*labels)[*num_prop], line);
 
-    (*data)[*num_prop] = (float *) s_malloc(dimensions*sizeof(float));
+    (*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float));
 
     line = strtok(&(line[strlen((*labels)[*num_prop])]), " ");
     (*data)[*num_prop][0] = (float) atof(line);
@@ -1604,16 +1656,20 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
 
     while ( (line = strtok(NULL, " "))!=NULL )
       {
-      if (data_count==dimensions) die("Too many data items.");
+      if (data_count==*dimensions) die("Too many data items.");
 
       (*data)[*num_prop][data_count] = (float) atof(line);
 
       data_count++;
       }
 
-    if (data_count!=dimensions) dief("Too few data items (%d instead of %d).", data_count, dimensions);
-
     (*num_prop)++;
+
+    /* Simple check. */
+    if (data_count!=*dimensions)
+      {
+      dief("Too few data items (%d instead of %d) for item %d.", data_count, *dimensions, *num_prop);
+      }
     }
 
   fclose(fp);

@@ -1648,6 +1648,8 @@ void sincos( double radians, double *s, double *c )
   *c = cos(radians);
 #endif
 
+/*printf("DEBUG: sincos(%f) = %f %f\n", radians, *s, *c);*/
+
   return;
   }
 #endif /* HAVE_SINCOS */

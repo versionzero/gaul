@@ -176,7 +176,7 @@ void	NN_define_eval_data(int ndata, float **data, float **prop);
 void	NN_define_predict_data(int ndata, float **data);
 int	NN_read_fingerprint_binary_header(FILE *fp);
 int	NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data);
-void	NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions);
+void	NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int *dimensions);
 
 #endif /* NN_UTIL_H_INCLUDED */
 

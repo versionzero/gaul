@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
+  Last Updated:	17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
+		26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
 		04 Apr 2002 SAA write_usage() tweaked slightly.
 		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  Added some new options.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
@@ -293,6 +294,9 @@ int main(int argc, char **argv)
 
   FILE		*historyfp=NULL;	/* Training history data file. */
 
+  int		input_layer_dim=-1, output_layer_dim=-1;	/* Specified layer dimensions. */
+  int		input_data_dim=-1, output_data_dim=-1;		/* Read layer dimensions. */
+
   printf("Stewart's simple standalone neural network utility.\n");
 
   for(i=1;i<argc;i++)
@@ -333,6 +337,8 @@ int main(int argc, char **argv)
         neurons[j] = atoi(argv[i]);
         printf("The number of neurons in layer %d will be: %d\n", j, neurons[j]);
         }
+      input_layer_dim = neurons[0];
+      output_layer_dim = neurons[num_layers-1];
       }
     else if (!strcmp(argv[i],"--epochs"))
       {
@@ -520,8 +526,103 @@ int main(int argc, char **argv)
   random_init();
   random_seed(seed);
 
+/*
+ * Read the datasets.
+ */
+  if (comma_infname[0] != '\0')
+    {   /* Read comma-delimited data.  This is designed for testing and benchmarking use. */
+die("FIXME: code broken.");
+    read_comma_delimited_data(comma_infname, &train_data, &train_property, &train_labels,
+                              &num_train_data, &max_train_data);
+
+    if ( input_layer_dim == -1 ) 
+      input_layer_dim = input_data_dim;
+    else if ( input_layer_dim != input_data_dim)
+      die("Input data dimension mismatch");
+
+    split_data(&train_data, &train_property, &train_labels, &num_train_data, &max_train_data,
+               &test_data, &test_property, &test_labels, &num_test_data, &max_test_data,
+               &eval_data, &eval_property, &eval_labels, &num_eval_data, &max_eval_data,
+               10,10);
+    }
+  else
+    {   /* Read sets of data files.  Intended for reading output from "rfp". */
+    if (do_train)
+      {
+      input_data_dim = NN_read_data(train_fp_infname, &train_data, &train_labels,
+                     &num_train_data, &max_train_data);
+
+      if ( input_layer_dim == -1 ) 
+        input_layer_dim = input_data_dim;
+      else if ( input_layer_dim != input_data_dim)
+        die("Input data dimension mismatch");
+
+      if ( input_data_dim !=
+           NN_read_data(test_fp_infname, &test_data, &test_labels,
+                     &num_test_data, &max_test_data) )
+        die("Input data dimension mismatch");
+
+      NN_read_prop(train_prop_infname, &train_property, &train_labels,
+                    &num_train_prop, &num_train_data,  &output_data_dim);
+      if (output_data_dim != input_data_dim)
+        die("Output data dimension mismatch");
+      NN_read_prop(test_prop_infname, &test_property, &test_labels,
+                    &num_test_prop, &num_test_data, &output_data_dim);
+      if (output_data_dim != input_data_dim)
+        die("Output data dimension mismatch");
+      }
+
+    if (do_evaluate)
+      {
+      input_data_dim = NN_read_data(eval_fp_infname, &eval_data, &eval_labels,
+                     &num_eval_data, &max_eval_data);
+
+      if ( input_layer_dim == -1 )
+        input_layer_dim = input_data_dim;
+      else if ( input_layer_dim != input_data_dim)
+        die("Input data dimension mismatch");
+
+      NN_read_prop(eval_prop_infname, &eval_property, &eval_labels,
+                    &num_eval_prop, &num_eval_data, &output_data_dim);
+      if (output_data_dim != input_data_dim)
+        die("Output data dimension mismatch");
+      }
+      
+    if (do_predict)
+      {
+      input_data_dim =  NN_read_data(predict_fp_infname, &predict_data, &predict_labels,
+                     &num_predict_data, &max_predict_data);
+
+      if ( input_layer_dim == -1 ) 
+        input_layer_dim = input_data_dim;
+      else if ( input_layer_dim != input_data_dim)
+        die("Input data dimension mismatch");
+      }
+    }
+
+  NN_define_train_data(num_train_data, train_data, train_property);
+  NN_define_test_data(num_test_data, test_data, test_property);
+  NN_define_eval_data(num_eval_data, eval_data, eval_property);
+  NN_define_predict_data(num_predict_data, predict_data);
+
+  printf("\n");
+  printf("Data sets are:\n");
+  printf("\n");
+  printf("num_train_data = %d/%d (%s)\n", num_train_data, max_train_data, train_data?"full":"empty");
+  printf("num_test_data = %d/%d (%s)\n", num_test_data, max_test_data, test_data?"full":"empty");
+  printf("num_eval_data = %d/%d (%s)\n", num_eval_data, max_eval_data, eval_data?"full":"empty");
+  printf("num_predict_data = %d/%d (%s)\n", num_predict_data, max_predict_data, predict_data?"full":"empty");
+  printf("\n");
+  printf("num_train_prop = %d/(%d) (%s)\n", num_train_prop, max_train_data, train_property?"full":"empty");
+  printf("num_test_prop = %d/(%d) (%s)\n", num_test_prop, max_test_data, test_property?"full":"empty");
+  printf("num_eval_prop = %d/(%d) (%s)\n", num_eval_prop, max_eval_data, eval_property?"full":"empty");
+  printf("\n");
+
+/*
+ * Prepare neural network.
+ */
   if (do_readnn)
-    {	/* Read a pre-computed NN. */
+    {   /* Read a pre-computed NN. */
     network = NN_read(nn_infname);
     }
   else
@@ -531,15 +632,17 @@ int main(int argc, char **argv)
  *
  * Do we have all the required info?
  */
-    if (neurons==NULL || num_layers==0)
+    while (num_layers<2)
       {
-      while (num_layers<2)
-        {
-        printf("Enter number of layers (incl. input and output)\n");
-        scanf("%d", &num_layers);
-        }
-      if (neurons==NULL) neurons = (int *) s_malloc(sizeof(int)*num_layers);
-      for (i=0; i<num_layers; i++)
+      printf("Enter number of layers (incl. input and output)\n");
+      scanf("%d", &num_layers);
+      }
+    if (neurons==NULL)
+      {
+      neurons = (int *) s_malloc(sizeof(int)*num_layers);
+      printf("Dimensions of input layer are %d.\n", input_layer_dim);
+      neurons[0] = input_layer_dim;
+      for (i=1; i<num_layers-1; i++)
         {
         do
           {
@@ -547,6 +650,8 @@ int main(int argc, char **argv)
           scanf("%d", &(neurons[i]));
           } while(neurons[i]<1);
         }
+      neurons[num_layers-1] = output_layer_dim;
+      printf("Dimensions of output layer are %d.\n", output_layer_dim);
       }
 
     network = NN_new(num_layers, neurons);
@@ -561,87 +666,19 @@ int main(int argc, char **argv)
       {
       case randomize11:
         NN_randomize_weights(network);
-	break;
+        break;
       case randomize01:
         NN_randomize_weights_01(network);
-	break;
+        break;
       case fixed:
-	NN_set_all_weights(network, initval);
-	break;
+        NN_set_all_weights(network, initval);
+        break;
       default:
-	die("Unknown weight initialization mode.");
+        die("Unknown weight initialization mode.");
       }
     }
 
   NN_display_summary(network);
-
-/*
- * Read the datasets.
- */
-  if (comma_infname[0] != '\0')
-    {   /* Read comma-delimited data.  This is designed for testing and benchmarking use. */
-    read_comma_delimited_data(comma_infname, &train_data, &train_property, &train_labels,
-                              &num_train_data, &max_train_data);
-    split_data(&train_data, &train_property, &train_labels, &num_train_data, &max_train_data,
-               &test_data, &test_property, &test_labels, &num_test_data, &max_test_data,
-               &eval_data, &eval_property, &eval_labels, &num_eval_data, &max_eval_data,
-               10,10);
-    }
-  else
-    {   /* Read sets of data files.  Intended for reading output from "rfp". */
-    if (do_train)
-      {
-      if ( network->layer[0].neurons !=
-           NN_read_data(train_fp_infname, &train_data, &train_labels,
-                     &num_train_data, &max_train_data) )
-        die("Input data dimension mismatch");
-      if ( network->layer[0].neurons !=
-           NN_read_data(test_fp_infname, &test_data, &test_labels,
-                     &num_test_data, &max_test_data) )
-        die("Input data dimension mismatch");
-      NN_read_prop(train_prop_infname, &train_property, &train_labels,
-                    &num_train_prop, &num_train_data,
-                    network->layer[network->num_layers-1].neurons);
-      NN_read_prop(test_prop_infname, &test_property, &test_labels,
-                    &num_test_prop, &num_test_data,
-                    network->layer[network->num_layers-1].neurons);
-      }
-
-    if (do_evaluate)
-      {
-      if ( network->layer[0].neurons !=
-           NN_read_data(eval_fp_infname, &eval_data, &eval_labels,
-                     &num_eval_data, &max_eval_data) )
-        die("Input data dimension mismatch");
-      NN_read_prop(eval_prop_infname, &eval_property, &eval_labels,
-                    &num_eval_prop, &num_eval_data,
-                    network->layer[network->num_layers-1].neurons);
-      }
-      
-    if (do_predict)
-      {
-      if ( network->layer[0].neurons !=
-           NN_read_data(predict_fp_infname, &predict_data, &predict_labels,
-                     &num_predict_data, &max_predict_data) )
-        die("Input data dimension mismatch");
-      }
-    }
-
-  NN_define_train_data(num_train_data, train_data, train_property);
-  NN_define_test_data(num_test_data, test_data, test_property);
-  NN_define_eval_data(num_eval_data, eval_data, eval_property);
-  NN_define_predict_data(num_predict_data, predict_data);
-
-  printf("\n");
-  printf("num_train_data = %d/%d (%s)\n", num_train_data, max_train_data, train_data?"full":"empty");
-  printf("num_test_data = %d/%d (%s)\n", num_test_data, max_test_data, test_data?"full":"empty");
-  printf("num_eval_data = %d/%d (%s)\n", num_eval_data, max_eval_data, eval_data?"full":"empty");
-  printf("num_predict_data = %d/%d (%s)\n", num_predict_data, max_predict_data, predict_data?"full":"empty");
-  printf("\n");
-  printf("num_train_prop = %d/(%d) (%s)\n", num_train_prop, max_train_data, train_property?"full":"empty");
-  printf("num_test_prop = %d/(%d) (%s)\n", num_test_prop, max_test_data, test_property?"full":"empty");
-  printf("num_eval_prop = %d/(%d) (%s)\n", num_eval_prop, max_eval_data, eval_property?"full":"empty");
-  printf("\n");
 
 /*
  * Train the network.
