@@ -59,7 +59,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
-/* #undef HAVE_LIBMPI */
+#define HAVE_LIBMPI 1
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -83,7 +83,7 @@
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 0
+#define HAVE_MPI 1
 
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1
