@@ -432,7 +432,7 @@ gaul__bool=yes
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1846
-GA_PATCH_VERSION=3
+GA_PATCH_VERSION=4
 GA_VERSION_STRING=
 
 V3_QUICK=1
@@ -559,12 +559,12 @@ s,@target_vendor@,pc,;t t
 s,@target_os@,linux-gnu,;t t
 s,@LT_RELEASE@,0.1846,;t t
 s,@LT_CURRENT@,0,;t t
-s,@LT_REVISION@,3,;t t
+s,@LT_REVISION@,4,;t t
 s,@INSTALL_PROGRAM@,${INSTALL},;t t
 s,@INSTALL_SCRIPT@,${INSTALL},;t t
 s,@INSTALL_DATA@,${INSTALL} -m 644,;t t
 s,@PACKAGE@,gaul-devel,;t t
-s,@VERSION@,0.1846-3,;t t
+s,@VERSION@,0.1846-4,;t t
 s,@ACLOCAL@,${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run aclocal-1.6,;t t
 s,@AUTOCONF@,${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run autoconf,;t t
 s,@AUTOMAKE@,${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run automake-1.6,;t t
@@ -600,8 +600,8 @@ s,@EGREP@,grep -E,;t t
 s,@LIBTOOL@,$(SHELL) $(top_builddir)/libtool,;t t
 s,@GA_MAJOR_VERSION@,0,;t t
 s,@GA_MINOR_VERSION@,1846,;t t
-s,@GA_PATCH_VERSION@,3,;t t
-s,@GA_VERSION@,0.1846-3,;t t
+s,@GA_PATCH_VERSION@,4,;t t
+s,@GA_VERSION@,0.1846-4,;t t
 s,@GA_VERSION_STRING@,,;t t
 s,@MPIFLAGS@,,;t t
 s,@MPILIBS@,,;t t
@@ -899,10 +899,10 @@ ${ac_dA}PACKAGE_STRING${ac_dB}PACKAGE_STRING${ac_dC}""${ac_dD}
 ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}""${ac_dD}
 ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1846${ac_dD}
-${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}3${ac_dD}
+${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}4${ac_dD}
 ${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
-${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"23/03/04"${ac_dD}
-${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1846-3"${ac_dD}
+${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"29/03/04"${ac_dD}
+${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1846-4"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_STAT_H${ac_dB}HAVE_SYS_STAT_H${ac_dC}1${ac_dD}
@@ -1028,10 +1028,10 @@ ${ac_uA}PACKAGE_STRING${ac_uB}PACKAGE_STRING${ac_uC}""${ac_uD}
 ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}""${ac_uD}
 ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1846${ac_uD}
-${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}3${ac_uD}
+${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}4${ac_uD}
 ${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
-${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"23/03/04"${ac_uD}
-${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1846-3"${ac_uD}
+${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"29/03/04"${ac_uD}
+${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1846-4"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_STAT_H${ac_uB}HAVE_SYS_STAT_H${ac_uC}1${ac_uD}

@@ -185,6 +185,10 @@ typedef struct
 typedef struct
   {
   int		dimensions;	/* Size of double array. */
+  double	alpha;		/*  (range: 0=no extrap, 1=unit step extrap, higher OK.) */
+  double	beta;		/*  (range: 0=no contraction, 1=full contraction.) */
+  double	gamma;		/*  (range: 0=no contraction, 1=full contraction.) */
+  double	step;		/* Initial randomisation step (range: >0, 1=unit step randomisation, higher OK.) */
   GAto_double	to_double;	/* Convert chromosome to double array. */
   GAfrom_double	from_double;	/* Convert chromosome from double array. */
   } ga_simplex_t;

@@ -11,7 +11,7 @@ Changes since release 0.1846:
 - More careful with includes.
 - Only use pthread library for thread support.
 - Rewritten MPI/thread checks and configuration.
-- Avoid stricmp()/strnicmp() kludges for Cygwin environment by using strcasecmp()/strncasesmp() instead.
+- Avoid stricmp()/strnicmp() kludges for Cygwin environment by using strcasecmp()/strncasecmp() instead.
 - Culled redundant comments in code, mostly "last updated" type of details.  Also, fixed/clarified some incorrect comments.
 - Changed license/copyright details in util/gaul/gaul_util.h
 - Added ga_select_one_linearrank() and ga_select_two_linearrank(), a selection operator based on a linear probability distribution with respect to rank.
@@ -21,6 +21,7 @@ Changes since release 0.1846:
 - Tweaked fitting, fitting_sd and fitting_simplex examples.
 - Added two new selection criteria, based on Stochastic Universal Sampling; ga_select_one_sussq() and ga_select_two_sussq().  These select entities with probability proportional to their squared fitness.
 - *** API CHANGE *** ga_genesis_int() renamed to ga_genesis_integer() for consistency with remainder of integer function names.
+- *** API CHANGE *** Initial step size for simplex added to ga_population_set_simplex_parameters() parameters.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

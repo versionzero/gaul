@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_simplex - A simplex search algorithm for comparison and local search.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -54,17 +54,19 @@
   ga_population_set_simplex_parameters()
   synopsis:     Sets the simplex-search parameters for a population.
   parameters:	population *pop		Population to set parameters of.
+		const int		Number of dimensions for double array (Needn't match dimensions of chromosome.)
+		const double		Initial step size.
 		const GAto_double	Map chromosomal data to array of doubles.
 		const GAfrom_double	Map array of doubles to chromosomal data.
-		const int		Number of dimensions for double array (Needn't match dimensions of chromosome.)
   return:	none
-  last updated: 30 Oct 2002
+  last updated: 29 Mar 2004
  **********************************************************************/
 
 void ga_population_set_simplex_parameters( population		*pop,
+					const int		dimensions,
+					const double		step,
                                         const GAto_double	to_double,
-                                        const GAfrom_double	from_double,
-					const int		dimensions)
+                                        const GAfrom_double	from_double)
   {
 
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -79,6 +81,12 @@ void ga_population_set_simplex_parameters( population		*pop,
   pop->simplex_params->to_double = to_double;
   pop->simplex_params->from_double = from_double;
   pop->simplex_params->dimensions = dimensions;
+
+  pop->simplex_params->step = step;	/* range: >0, 1=unit step randomisation, higher OK. */
+
+  pop->simplex_params->alpha = 1.50;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
+  pop->simplex_params->beta = 0.75;	/* range: 0=no contraction, 1=full contraction. */
+  pop->simplex_params->gamma = 0.25;	/* range: 0=no contraction, 1=full contraction. */
 
   return;
   }
@@ -98,7 +106,7 @@ void ga_population_set_simplex_parameters( population		*pop,
 		available to the caller in any obvious way.
   parameters:
   return:
-  last updated:	25 Nov 2002
+  last updated:	29 Mar 2004
  **********************************************************************/
 
 int ga_simplex(	population		*pop,
@@ -119,12 +127,6 @@ int ga_simplex(	population		*pop,
   boolean       done=FALSE;		/* Whether the shuffle sort is complete. */
   boolean	did_replace;		/* Whether worst solution was replaced. */
   boolean	restart_needed;		/* Whether the search needs restarting. */
-
-/* FIXME: Make these user-definable parameters: */
-  double alpha = 1.50;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
-  double beta = 0.75;	/* range: 0=no contraction, 1=full contraction. */
-  double gamma = 0.25;	/* range: 0=no contraction, 1=full contraction. */
-  double step = 1.00;	/* range: >0, 1=unit step randomisation, higher OK. */
 
 /*
  * Checks.
@@ -190,7 +192,8 @@ int ga_simplex(	population		*pop,
   for (i=1; i<num_points; i++)
     {
     for (j=0; j<pop->simplex_params->dimensions; j++)
-      putative_d[i][j] = putative_d[0][j] + random_double_range(-step,step);
+      putative_d[i][j] = putative_d[0][j] +
+                random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
 /*
  * Alternative is to perturb by unit step in one dimension:
@@ -299,15 +302,16 @@ printf("\n");
   if (restart_needed != FALSE)
     {
 printf("DEBUG: restarting search.\n");
-    step *= 0.50;
-    alpha *= 0.75;
-    beta *= 0.75;
-    gamma *= 0.75;
+    pop->simplex_params->step *= 0.50;
+    pop->simplex_params->alpha *= 0.75;
+    pop->simplex_params->beta *= 0.75;
+    pop->simplex_params->gamma *= 0.75;
 
     for (i=1; i<num_points; i++)
       {
       for (j=0; j<pop->simplex_params->dimensions; j++)
-        putative_d[i][j] = putative_d[0][j] + random_double_range(-step,step);
+        putative_d[i][j] = putative_d[0][j] +
+                 random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
       pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
       pop->evaluate(pop, putative[i]);
@@ -319,7 +323,8 @@ printf("DEBUG: restarting search.\n");
  */
    for (j = 0; j < pop->simplex_params->dimensions; j++)
      {
-     new_d[j] = (1.0 + alpha) * average[j] - alpha * putative_d[num_points-1][j];
+     new_d[j] = (1.0 + pop->simplex_params->alpha) * average[j] -
+                pop->simplex_params->alpha * putative_d[num_points-1][j];
      }
 
 /*
@@ -337,7 +342,8 @@ printf("DEBUG: restarting search.\n");
 printf("DEBUG: new (%f) is fitter than p0 ( %f )\n", new->fitness, putative[0]->fitness);
 
       for (j = 0; j < pop->simplex_params->dimensions; j++)
-        new2_d[j] = (1.0 + alpha) * new_d[j] - alpha * putative_d[num_points-1][j];
+        new2_d[j] = (1.0 + pop->simplex_params->alpha) * new_d[j] -
+                    pop->simplex_params->alpha * putative_d[num_points-1][j];
 
       pop->simplex_params->from_double(pop, new2, new2_d);
       pop->evaluate(pop, new2);
@@ -418,7 +424,8 @@ printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dim
  * Perform a contraction of the simplex along one dimension, away from worst point.
  */
       for (j = 0; j < num_points; j++)
-        new_d[j] = (1.0 - beta) * average[j] + beta * putative_d[num_points-1][j];
+        new_d[j] = (1.0 - pop->simplex_params->beta) * average[j] +
+                   pop->simplex_params->beta * putative_d[num_points-1][j];
 
       pop->simplex_params->from_double(pop, new, new_d);
       pop->evaluate(pop, new);
@@ -462,7 +469,8 @@ printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->simplex_params->dimensions; j++)
-            putative_d[i][j] = average[j] + gamma * (putative_d[i][j] - average[j]);
+            putative_d[i][j] = average[j] +
+                               pop->simplex_params->gamma * (putative_d[i][j] - average[j]);
 
           pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
           pop->evaluate(pop, putative[i]);
@@ -473,7 +481,8 @@ printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->simplex_params->dimensions; j++)
-            putative_d[i][j] = putative_d[0][j] + gamma * (putative_d[i][j] - putative_d[0][j]);
+            putative_d[i][j] = putative_d[0][j] +
+                               pop->simplex_params->gamma * (putative_d[i][j] - putative_d[0][j]);
 
           pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
           pop->evaluate(pop, putative[i]);

@@ -273,9 +273,10 @@ int main(int argc, char **argv)
 
   ga_population_set_simplex_parameters(
        pop,				/* population		*pop */
+       4,				/* const int		num_dimensions */
+       0.5,				/* const double         Initial step size. */
        fitting_to_double,		/* const GAto_double	to_double */
-       fitting_from_double,		/* const GAfrom_double	from_double */
-       4				/* const int		num_dimensions */
+       fitting_from_double		/* const GAfrom_double	from_double */
                        );
 
   get_data(&data);

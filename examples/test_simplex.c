@@ -193,10 +193,11 @@ int main(int argc, char **argv)
 
   ga_population_set_simplex_parameters(
        pop,				/* population		*pop */
-       test_to_double,		/* const GAto_double	to_double */
-       test_from_double,		/* const GAfrom_double	from_double */
-       4				/* const int		num_dimensions */
-                       );
+       4,				/* const int		num_dimensions */
+       0.5,				/* const double         Initial step size. */
+       test_to_double,			/* const GAto_double	to_double */
+       test_from_double			/* const GAfrom_double	from_double */
+       );
 
   /* Evaluate and sort the initial population members (i.e. select best of 50 random solutions. */
   ga_population_score_and_sort(pop);
