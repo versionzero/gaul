@@ -51,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
+  Updated:	31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
+		30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
   		23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
 		04/02/01 SAA	Code for basic BSPlib support.
 		02/02/01 SAA	Removed from helga.  Use plog() instead of helga_log().
@@ -308,20 +309,14 @@ boolean mpi_init( int *argc, char ***argv )
 /*
   plog(LOG_DEBUG, "MPI_Init() returned %d", MPI_Init(argc, argv));
 */
-printf("MPI_Init\n");
   MPI_Init(argc, argv);
 
-printf("MPI_Comm_size\n");
   MPI_Comm_size(MPI_COMM_WORLD, &size);
-printf("MPI_Comm_rank\n");
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-printf("MPI_Get_processor_name\n");
   MPI_Get_processor_name(node_name, &namelen);
 
   plog(LOG_VERBOSE,
             "Process %d of %d initialized on %s",
-            rank, size, node_name);
-  printf("Process %d of %d initialized on %s",
             rank, size, node_name);
 
 /*
@@ -887,14 +882,14 @@ boolean mpi_nonblocking_send(void *buf, const int count,
 
 
 /**********************************************************************
-  mpi_standard_send()
+  mpi_send()
   synopsis:	Send data to another node.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
-  last updated:	21/11/00
+  last updated:	31 Jan 2002
  **********************************************************************/
 
-boolean mpi_standard_send(void *buf, const int count,
+boolean mpi_send(void *buf, const int count,
                             const mpi_datatype type, const int node,
                             const int tag)
   {
@@ -927,14 +922,14 @@ boolean mpi_standard_send(void *buf, const int count,
 
 
 /**********************************************************************
-  mpi_standard_broadcast()
+  mpi_broadcast()
   synopsis:	Send data to all nodes.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	19/12/00
  **********************************************************************/
 
-boolean mpi_standard_broadcast(void *buf, const int count,
+boolean mpi_broadcast(void *buf, const int count,
                             const mpi_datatype type,
                             const int tag)
   {
@@ -982,14 +977,14 @@ boolean mpi_standard_broadcast(void *buf, const int count,
 
 
 /**********************************************************************
-  mpi_standard_distribute()
+  mpi_distribute()
   synopsis:	Distribute data from one node to all other nodes.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	19/12/00
  **********************************************************************/
 
-boolean mpi_standard_distribute(void *buf, const int count,
+boolean mpi_distribute(void *buf, const int count,
                             const mpi_datatype type, const int root,
                             const int tag)
   {
@@ -1023,7 +1018,7 @@ boolean mpi_standard_distribute(void *buf, const int count,
 
 /**********************************************************************
   mpi_receive()
-  synopsis:	Receive specific data from a aspecific node.
+  synopsis:	Receive specific data from a a specific node.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	21/11/00

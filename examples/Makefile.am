@@ -99,5 +99,5 @@ struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lst
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm @MPIFLAGS@
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm 
 

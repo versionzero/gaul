@@ -165,15 +165,15 @@ include_HEADERS = \
      str_pcre_tab.c
 
 
-libmethods_a_LIBFLAGS = -lm
+libmethods_a_LIBFLAGS = -lm @MPIFLAGS@
 
 libmpi_util_a_LIBFLAGS = @MPIFLAGS@
 
-librandom_a_LIBFLAGS = -lm
+librandom_a_LIBFLAGS = -lm @MPIFLAGS@
 
-libstr_util_a_LIBFLAGS = 
+libstr_util_a_LIBFLAGS = @MPIFLAGS@
 
-libnn_util_a_LIBFLAGS = 
+libnn_util_a_LIBFLAGS = @MPIFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

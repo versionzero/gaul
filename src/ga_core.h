@@ -87,6 +87,15 @@
 #define GA_BOLTZMANN_FACTOR	1.38066e-23
 
 /*
+ * MPI message tags.
+ */
+#define GA_TAG_NULL		0
+#define GA_TAG_NUMENTITIES	101
+#define GA_TAG_ENTITYLEN	102
+#define GA_TAG_ENTITYFITNESS	103
+#define GA_TAG_ENTITYCHROMOSOME	104
+
+/*
  * Entity Structure.
  *
  * FIXME: Make opaque i.e. move definition into ga_core.c
@@ -212,9 +221,9 @@ entity	*ga_entity_clone(population *pop, entity *parent);
 
 void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask );
 void ga_population_send_every( population *pop, int dest_node );
-void ga_population_append_recieve( population *pop, int src_node );
-population *ga_population_new_recieve( int src_node );
-population *ga_population_recieve( int src_node );
+void ga_population_append_receive( population *pop, int src_node );
+population *ga_population_new_receive( int src_node );
+population *ga_population_receive( int src_node );
 void ga_population_send( population *pop, int dest_node );
 void ga_population_send_all( population *pop, int dest_node );
 

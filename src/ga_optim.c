@@ -1351,6 +1351,10 @@ boolean ga_evolution_archipelago( const int num_pops,
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
+/*
+ * Score and sort the initial population members.
+ */
+    ga_population_score_and_sort(pop);
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on island %d has fitness scores between %f and %f",
           island,
@@ -1402,10 +1406,10 @@ boolean ga_evolution_archipelago( const int num_pops,
       plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
 
 /*
- * Score and sort the individuals in each population.
+ * Sort the individuals in each population.
  * Need this to ensure that new immigrants are ranked correctly.
  */
-      ga_population_score_and_sort(pop);
+      quicksort_population(pop);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -1769,7 +1773,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
     pop->island = island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands on node %d!", num_pops, mpi_get_rank());
 
 /*
  * Create name for statistics log file.
@@ -1788,6 +1792,10 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
+/*
+ * Score and sort the initial population members.
+ */
+    ga_population_score_and_sort(pop);
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on island %d (process %d) has fitness scores between %f and %f",
           island, mpi_get_rank(),
@@ -1852,11 +1860,11 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
 
         ga_population_send_by_mask(pops[0], mpi_get_prev_rank(), send_count, send_mask);
 
-        ga_population_append_recieve(pops[num_pops-1], mpi_get_next_rank());
+        ga_population_append_receive(pops[num_pops-1], mpi_get_next_rank());
 	}
       else
 	{ /* Recieve then Send. */
-        ga_population_append_recieve(pops[num_pops-1], mpi_get_next_rank());
+        ga_population_append_receive(pops[num_pops-1], mpi_get_next_rank());
 
 	send_count = 0;
 	for(i=0; i<pop0_osize; i++)
@@ -1876,10 +1884,10 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
       plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
 
 /*
- * Score and sort the individuals in each population.
+ * Sort the individuals in each population.
  * Need this to ensure that new immigrants are ranked correctly.
  */
-      ga_population_score_and_sort(pop);
+      quicksort_population(pop);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {

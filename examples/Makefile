@@ -186,7 +186,7 @@ struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lst
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

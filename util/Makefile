@@ -165,15 +165,15 @@ include_HEADERS = \
      str_pcre_tab.c
 
 
-libmethods_a_LIBFLAGS = -lm
+libmethods_a_LIBFLAGS = -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
 libmpi_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-librandom_a_LIBFLAGS = -lm
+librandom_a_LIBFLAGS = -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-libstr_util_a_LIBFLAGS = 
+libstr_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-libnn_util_a_LIBFLAGS = 
+libnn_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
+  Updated:	31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
+		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
 		07/02/01 SAA	Added warning-level messages.  LOG_WARNING is intended for non-fatal errors and so on.
 		02/02.01 SAA	Converted from helga_log.c to log_util.c
 		03/01/01 SAA	non-GNU reduced version of helga_log() now will call the callback function if defined.  Made thread-safe.
@@ -59,8 +60,8 @@
  *
  * NB/ log_filename and log_callback are meaningless on non-GNU C systems.
  */
-THREAD_LOCK_DEFINE_STATIC(log_global);
-THREAD_LOCK_DEFINE_STATIC(log_callback);
+THREAD_LOCK_DEFINE_STATIC(log_global_lock);
+THREAD_LOCK_DEFINE_STATIC(log_callback_lock);
 
 char		*log_filename=NULL;		/* Log filename */
 log_func	log_callback=NULL;		/* Callback function for log */
@@ -73,11 +74,10 @@ boolean		log_date=TRUE;			/* Whether to display date in logs */
   synopsis:	Initialise logging facilities.  If func and fname are
 		both NULL, use stdout instead.
   parameters:	int	level	Logging level.
-		char	*fname	Filename (I don't think this is safe
-				for multi-process apps). Or NULL.
-		log_func	func	Callback function. Or NULL.
+		char	*fname	Filename, or NULL.
+		log_func	func	Callback function, or NULL.
   return:	none
-  last updated:	08/05/00
+  last updated:	31 Jan 2002
  **********************************************************************/
 
 void log_init(	enum log_level_type	level,
@@ -85,16 +85,20 @@ void log_init(	enum log_level_type	level,
 			log_func		func,
 			boolean			date)
   {
+  char	*oldfname=NULL;
 
-  THREAD_LOCK(log_global);
+  THREAD_LOCK(log_global_lock);
   log_level = level;
-  log_filename = fname;
+  if (log_filename != fname) oldfname = log_filename;
+  log_filename = s_strdup(fname);
   log_date = date;
-  THREAD_UNLOCK(log_global);
+  THREAD_UNLOCK(log_global_lock);
 
-  THREAD_LOCK(log_callback);
+  THREAD_LOCK(log_callback_lock);
   log_callback = func;
-  THREAD_UNLOCK(log_callback);
+  THREAD_UNLOCK(log_callback_lock);
+
+  if (oldfname) s_free(oldfname);
 
 #if PARALLEL==2
   plog(LOG_VERBOSE, "Log started. (parallel with MPI)");
@@ -117,10 +121,10 @@ void log_init(	enum log_level_type	level,
 
 void log_set_level(const enum log_level_type level)
   {
-  THREAD_LOCK(log_global);
+  THREAD_LOCK(log_global_lock);
   log_level = level;
   plog(LOG_VERBOSE, "Log level adjusted to %d.", level);
-  THREAD_UNLOCK(log_global);
+  THREAD_UNLOCK(log_global_lock);
 
   return;
   }
@@ -149,15 +153,21 @@ enum log_level_type log_get_level(void)
   synopsis:	Adjust log file level.
   parameters:	int	level	New logging level.
   return:	none
-  last updated:	16/05/00
+  last updated:	31 Jan 2002
  **********************************************************************/
 
 void log_set_file(const char *fname)
   {
-  THREAD_LOCK(log_global);
-  log_filename = str_clone(fname);
+  char	*oldfname=NULL;
+
+  THREAD_LOCK(log_global_lock);
+  if (log_filename != fname) oldfname = log_filename;
+  log_filename = s_strdup(fname);
+  THREAD_UNLOCK(log_global_lock);
+
+  if (oldfname) s_free(oldfname);
+
   plog(LOG_VERBOSE, "Log file adjusted to \"%s\".", fname);
-  THREAD_UNLOCK(log_global);
 
   return;
   }
@@ -209,12 +219,12 @@ void log_output(	const enum	log_level_type level,
   va_end(ap);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback);
+  THREAD_LOCK(log_callback_lock);
   if (log_callback) log_callback(level, func_name, file_name, line_num, message);
-  THREAD_UNLOCK(log_callback);
+  THREAD_UNLOCK(log_callback_lock);
 
 /* Write to file? */
-  THREAD_LOCK(log_global);
+  THREAD_LOCK(log_global_lock);
   if (log_filename)
     {
     if ( !(fh=fopen(log_filename, "a+")) )
@@ -243,7 +253,7 @@ void log_output(	const enum	log_level_type level,
 /*    fflush(fh);*/
     fclose(fh);
     }
-  THREAD_UNLOCK(log_global);
+  THREAD_UNLOCK(log_global_lock);
 
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
@@ -287,9 +297,9 @@ void plog(const enum log_level_type level, const char *format, ...)
   t = time(&t);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback);
+  THREAD_LOCK(log_callback_lock);
   if (log_callback) log_callback(level, "unknown", "unknown", 0, message);
-  THREAD_UNLOCK(log_callback);
+  THREAD_UNLOCK(log_callback_lock);
 
   if ( (level) <= log_level )
     {
@@ -329,9 +339,9 @@ void log_wrapper(int *level, char *message)
   t = time(&t);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback);
+  THREAD_LOCK(log_callback_lock);
   if (log_callback) log_callback(*level, "[SLang]", "unknown", 0, message);
-  THREAD_UNLOCK(log_callback);
+  THREAD_UNLOCK(log_callback_lock);
 
   if ( *level <= log_level )
     {

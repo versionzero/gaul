@@ -107,6 +107,8 @@ int main(int argc, char **argv)
   int		i;					/* Loop over populations. */
   population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of populations. */
 
+  log_set_level(LOG_DEBUG);
+
   mpi_init(&argc, &argv);
 
   random_init();
@@ -133,6 +135,24 @@ int main(int argc, char **argv)
             );
 
     ga_population_set_parameters( pops[i], 0.75, 0.25, 0.001);
+    ga_population_set_parameters( pops[i], 0.75, 0.25, 0.1);
+    }
+
+/*
+ * Test chromosome packing.
+ */
+  for (i=0; i<pops[0]->size; i++)
+    {
+    int len;
+    byte *buffer1=NULL, *buffer2=NULL;
+    unsigned int max_len=0;
+
+    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
+    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer2, &max_len);
+    pops[0]->chromosome_from_bytes(pops[0], pops[0]->entity_iarray[i], buffer1);
+    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
+    
+    printf("E %d len %d match %d\n", i, len, memcmp(buffer1, buffer2, len));
     }
 
 /*

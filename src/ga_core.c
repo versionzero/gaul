@@ -1351,17 +1351,63 @@ entity *ga_entity_clone(population *pop, entity *parent)
  **********************************************************************/
 
 /**********************************************************************
-  ga_population_send_by_mark()
+  ga_population_send_by_mask()
   synopsis:	Send selected entities from a population to another
-		processor.
+		processor.  Only fitness and chromosomes sent.
   parameters:
   return:
-  last updated: 24 Jan 2002
+  last updated: 31 Jan 2002
  **********************************************************************/
 
 void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask )
   {
-  plog(LOG_FIXME, "Function not implemented");
+  int		i;
+  int		count=0;
+  unsigned int	len, max_len=0;		/* Length of buffer to send. */
+  byte		*buffer=NULL;
+
+/*
+ * Send number of entities.
+ */
+  mpi_send(&num_to_send, 1, MPI_TYPE_INT, dest_node, GA_TAG_NUMENTITIES);
+
+/* 
+ * Slight knudge to determine length of buffer.  Should have a more
+ * elegant approach for this.
+ * Sending this length here should not be required at all.
+ */
+  len = (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
+  mpi_send(&len, 1, MPI_TYPE_INT, dest_node, GA_TAG_ENTITYLEN);
+
+  printf("DEBUG: Node %d sending %d entities of length %d to %d\n",
+           mpi_get_rank(), num_to_send, len, dest_node);
+
+/*
+ * Send required entities individually.
+ */
+  for (i=0; i<pop->size && count<num_to_send; i++)
+    {
+    if (send_mask[i])
+      {
+      printf("DEBUG: Node %d sending entity %d/%d (%d/%d) with fitness %f\n",
+             mpi_get_rank(), count, num_to_send, i, pop->size, pop->entity_iarray[i]->fitness);
+      mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
+      if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+	die("Internal length mismatch");
+      printf("> %d 1\n", mpi_get_rank());
+      mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
+      printf("> %d 2\n", mpi_get_rank());
+      count++;
+      }
+    }
+
+  if (count != num_to_send)
+    die("Incorrect value for num_to_send");
+
+  if (buffer);
+    s_free(buffer);
+
+  printf("DEBUG: Node %d finished sending\n", mpi_get_rank());
 
   return;
   }
@@ -1370,47 +1416,117 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
 /**********************************************************************
   ga_population_send_every()
   synopsis:	Send all entities from a population to another
-		processor.
+		processor.  Only fitness and chromosomes sent.
   parameters:
   return:
-  last updated: 24 Jan 2002
+  last updated: 31 Jan 2002
  **********************************************************************/
 
 void ga_population_send_every( population *pop, int dest_node )
   {
-  plog(LOG_FIXME, "Function not implemented");
+  int		i;
+  int		len;			/* Length of buffer to send. */
+  unsigned int	max_len=0;		/* Maximum length of buffer. */
+  byte		*buffer=NULL;
+
+/*
+ * Send number of entities.
+ */
+  mpi_send(&(pop->size), 1, MPI_TYPE_INT, dest_node, GA_TAG_NUMENTITIES);
+
+/* 
+ * Slight knudge to determine length of buffer.  Should have a more
+ * elegant approach for this.
+ * Sending this length here should not be required at all.
+ */
+  len = (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
+  mpi_send(&len, 1, MPI_TYPE_INT, dest_node, GA_TAG_ENTITYLEN);
+
+/*
+ * Send all entities individually.
+ */
+  for (i=0; i<pop->size; i++)
+    {
+    mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
+    if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+      die("Internal length mismatch");
+    mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
+    }
+
+  s_free(buffer);
 
   return;
   }
 
 
 /**********************************************************************
-  ga_population_append_recieve()
+  ga_population_append_receive()
   synopsis:	Recieve a set of entities from a population on another
 		processor and append them to a current population.
+		Only fitness and chromosomes received.
   parameters:
   return:
-  last updated: 24 Jan 2002
+  last updated: 31 Jan 2002
  **********************************************************************/
 
-void ga_population_append_recieve( population *pop, int src_node )
+void ga_population_append_receive( population *pop, int src_node )
   {
-  plog(LOG_FIXME, "Function not implemented");
+  int		i;
+  int		len;			/* Length of buffer to receive. */
+  byte		*buffer;		/* Receive buffer. */
+  int		num_to_recv;		/* Number of entities to receive. */
+  entity	*entity;		/* New entity. */
+
+/*
+ * Get number of entities to receive and the length of each.
+ * FIXME: This length data shouldn't be needed!
+ */
+  mpi_receive(&num_to_recv, 1, MPI_TYPE_INT, src_node, GA_TAG_NUMENTITIES);
+  mpi_receive(&len, 1, MPI_TYPE_INT, src_node, GA_TAG_ENTITYLEN);
+
+  printf("DEBUG: Node %d anticipating %d entities of length %d from %d\n",
+           mpi_get_rank(), num_to_recv, len, src_node);
+
+  if (num_to_recv>0)
+    {
+    buffer = s_malloc(len*sizeof(byte));
+
+/*
+ * Receive all entities individually.
+ */
+    for (i=0; i<num_to_recv; i++)
+      {
+      entity = ga_get_free_entity(pop);
+      printf("< %d 1\n", mpi_get_rank());
+      mpi_receive(&(entity->fitness), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_ENTITYFITNESS);
+      printf("< %d 2\n", mpi_get_rank());
+      mpi_send(buffer, len, MPI_TYPE_BYTE, src_node, GA_TAG_ENTITYCHROMOSOME);
+      pop->chromosome_from_bytes(pop, entity, buffer);
+      printf("DEBUG: Node %d received entity %d/%d (%d) with fitness %f\n",
+             mpi_get_rank(), i, num_to_recv, pop->size, entity->fitness);
+      }
+
+    s_free(buffer);
+    }
+
+  printf("DEBUG: Node %d finished receiving\n", mpi_get_rank());
 
   return;
   }
 
 
 /**********************************************************************
-  ga_population_new_recieve()
+  ga_population_new_receive()
   synopsis:	Recieve a population structure (excluding actual
   		entities) from another processor.
+		Note that the callbacks wiil need to be subsequently
+		defined by the user.
   parameters:
   return:
   last updated: 24 Jan 2002
  **********************************************************************/
 
-population *ga_population_new_recieve( int src_node )
+population *ga_population_new_receive( int src_node )
   {
   population *pop=NULL;
 
@@ -1421,7 +1537,7 @@ population *ga_population_new_recieve( int src_node )
 
 
 /**********************************************************************
-  ga_population_recieve()
+  ga_population_receive()
   synopsis:	Recieve a population structure (including actual
   		entities) from another processor.
   parameters:
@@ -1429,12 +1545,12 @@ population *ga_population_new_recieve( int src_node )
   last updated: 24 Jan 2002
  **********************************************************************/
 
-population *ga_population_recieve( int src_node )
+population *ga_population_receive( int src_node )
   {
   population *pop;
 
-  pop = ga_population_new_recieve( src_node );
-  ga_population_append_recieve( pop, src_node );
+  pop = ga_population_new_receive( src_node );
+  ga_population_append_receive( pop, src_node );
 
   return pop;
   }
@@ -1508,8 +1624,8 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
   {
   double	global_max;		/* Maximum value across all nodes. */
   int		maxnode;		/* Node with maximum value. */
-  int		*buffer=NULL;		/* Send/recieve buffer. */
-  int		*buffer_ptr=NULL;	/* Current position in end/recieve buffer. */
+  int		*buffer=NULL;		/* Send/receive buffer. */
+  int		*buffer_ptr=NULL;	/* Current position in end/receive buffer. */
   int		buffer_size;		/* Size of buffer. */
   int		j;			/* Loop over chromosomes. */
   entity	*tmpentity;		/* Entity ptr for swapping. */
@@ -1534,11 +1650,11 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
       buffer_ptr += pop->len_chromosomes;
       }
 
-    mpi_standard_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
+    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
     }
   else
     {
-    mpi_standard_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
+    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
 
     for (j=0; j<pop->num_chromosomes; j++)
       {
@@ -1575,10 +1691,10 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
 boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
   {
   int		i, j;			/* Loop over all chromosomes in all entities. */
-  int		next, prev;		/* Processor to send/recieve entities with. */
-  int		*buffer=NULL;		/* Send/recieve buffer. */
-  int		*buffer_ptr=NULL;	/* Current position in end/recieve buffer. */
-  int		recv_count;		/* Number of entities to recieve. */
+  int		next, prev;		/* Processor to send/receive entities with. */
+  int		*buffer=NULL;		/* Send/receive buffer. */
+  int		*buffer_ptr=NULL;	/* Current position in end/receive buffer. */
+  int		recv_count;		/* Number of entities to receive. */
   int		recv_size, send_size=0;	/* Size of buffer. */
   int		index=0;		/* Index of entity to send. */
   entity	*immigrant;		/* New entity. */
@@ -1622,12 +1738,12 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
 /* Send data to next node. */
   plog(LOG_DEBUG, "Sending %d to node %d.", send_count, next);
-  mpi_standard_send( &send_count, 1, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONINFO );
+  mpi_send( &send_count, 1, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONINFO );
 
   if (send_count > 0)
     {
     plog(LOG_DEBUG, "Sending %d ints to node %d.", send_size, next);
-    mpi_standard_send( buffer, send_size, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONDATA );
+    mpi_send( buffer, send_size, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONDATA );
     }
 
 /*
@@ -1880,7 +1996,8 @@ boolean ga_extinction(population *extinct)
 
 /**********************************************************************
   ga_genocide()
-  synopsis:	Kill population members.
+  synopsis:	Kill entities to reduce population size down to
+		specified value.
   parameters:
   return:
   last updated:	11/01/01

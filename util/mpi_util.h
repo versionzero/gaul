@@ -70,6 +70,7 @@ typedef int mpi_datatype;
 #define MPI_TYPE_INT		1
 #define MPI_TYPE_DOUBLE		2
 #define MPI_TYPE_CHAR		3
+#define MPI_TYPE_BYTE		4
 
 #else
 #if PARALLEL == 2
@@ -77,17 +78,19 @@ typedef int mpi_datatype;
 typedef MPI_Datatype mpi_datatype;
 #define MPI_TYPE_UNKNOWN	(MPI_Datatype) 0
 #define MPI_TYPE_INT		(MPI_Datatype) MPI_INT
-#define MPI_TYPE_DOUBLE		(MPI_Datatype) MPI_DOUBLE,
+#define MPI_TYPE_DOUBLE		(MPI_Datatype) MPI_DOUBLE
 #define MPI_TYPE_CHAR		(MPI_Datatype) MPI_CHAR
+#define MPI_TYPE_BYTE		(MPI_Datatype) MPI_BYTE
 
 #else
 #if PARALLEL == 3 || PARALLEL == 4
 /* For PVM and BSP, use size of the primitives. */
 typedef size_t mpi_datatype;
 #define MPI_TYPE_UNKNOWN	(size_t) 0
-#define MPI_TYPE_INT		SIZEOF_INT,
-#define MPI_TYPE_DOUBLE		SIZEOF_DOUBLE,
+#define MPI_TYPE_INT		SIZEOF_INT
+#define MPI_TYPE_DOUBLE		SIZEOF_DOUBLE
 #define MPI_TYPE_CHAR		SIZEOF_CHAR
+#define MPI_TYPE_BYTE		SIZEOF_BYTE
 
 #endif
 #endif
@@ -112,13 +115,13 @@ int mpi_find_global_max(const double local, double *global);
 boolean mpi_synchronous_send(void *buf, const int count,
                                const mpi_datatype type, const int node,
                                int tag);
-boolean mpi_standard_send(void *buf, const int count,
+boolean mpi_send(void *buf, const int count,
                             const mpi_datatype type, const int node,
                             int tag);
-boolean mpi_standard_broadcast(void *buf, const int count,
+boolean mpi_broadcast(void *buf, const int count,
                             const mpi_datatype type,
                             int tag);
-boolean mpi_standard_distribute(void *buf, const int count,
+boolean mpi_distribute(void *buf, const int count,
                             const mpi_datatype type, const int root,
                             int tag);
 boolean mpi_receive(void *buf, const int count,
