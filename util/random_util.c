@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -1064,18 +1064,18 @@ void random_seed_wrapper(int *seed)
 
 
 #if 0
-THREAD_LOCK_DEFINE_STATIC(state_table);
+THREAD_LOCK_DEFINE_STATIC(state_table_lock);
 TableStruct     *state_table=NULL;        /* Table for state handles. */
 
 int random_get_state_wrapper(void)
   {
   int	stateid;	/* State handle. */
 
-  THREAD_LOCK(state_table);
+  THREAD_LOCK(state_table_lock);
   if (!state_table) state_table=table_new();
 
   stateid = table_add(state_table, (vpointer) current_state);	/* FIXME: Need to copy state. */
-  THREAD_UNLOCK(state_table);
+  THREAD_UNLOCK(state_table_lock);
 
   return stateid;
   }
@@ -1085,9 +1085,9 @@ void random_set_state_wrapper(int stateid)
   {
   random_state	state;	/* State to restore. */
 
-  THREAD_LOCK(state_table);
+  THREAD_LOCK(state_table_lock);
   state = table_get_data(state_table, stateid);
-  THREAD_UNLOCK(state_table);
+  THREAD_UNLOCK(state_table_lock);
 
   if (!state) die("Unmatched state handle.");
 

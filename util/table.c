@@ -3,7 +3,7 @@
  **********************************************************************
 
   table - Table data structure.
-  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -49,7 +49,7 @@
 
 #include "table.h"
 
-THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_thread);
+THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_lock);
 static MemChunk *table_mem_chunk = NULL;
 
 static unsigned int next_pow2(unsigned int num)
@@ -92,12 +92,12 @@ TableStruct *table_new(void)
   {
   TableStruct *table;
 
-  THREAD_LOCK(table_mem_chunk_thread);
+  THREAD_LOCK(table_mem_chunk_lock);
   if(!table_mem_chunk)
     table_mem_chunk = mem_chunk_new(sizeof(TableStruct), 64);
 
   table = mem_chunk_alloc(table_mem_chunk);
-  THREAD_UNLOCK(table_mem_chunk_thread);
+  THREAD_UNLOCK(table_mem_chunk_lock);
 
   table->data = NULL;
   table->unused = NULL;
@@ -121,9 +121,9 @@ void table_destroy(TableStruct *table)
   if (table->data) s_free(table->data);
   if (table->unused) s_free(table->unused);
 
-  THREAD_LOCK(table_mem_chunk_thread);
+  THREAD_LOCK(table_mem_chunk_lock);
   mem_chunk_free(table_mem_chunk, table);
-  THREAD_UNLOCK(table_mem_chunk_thread);
+  THREAD_UNLOCK(table_mem_chunk_lock);
 
   return;
   }

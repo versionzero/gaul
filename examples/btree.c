@@ -3,7 +3,7 @@
  **********************************************************************
 
   btree - Binary Tree implementation.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -38,19 +38,19 @@
 
 #include "btree.h"
 
-THREAD_LOCK_DEFINE_STATIC(btree_chunk);
+THREAD_LOCK_DEFINE_STATIC(btree_chunk_lock);
 static MemChunk *btree_chunk = NULL;
 
 BTree *btree_new(void)
   {
   BTree *node;
 
-  THREAD_LOCK(btree_chunk);
+  THREAD_LOCK(btree_chunk_lock);
   if (!btree_chunk)
     btree_chunk = mem_chunk_new(sizeof(BTree), 512);
 
   node = mem_chunk_alloc(btree_chunk);
-  THREAD_UNLOCK(btree_chunk);
+  THREAD_UNLOCK(btree_chunk_lock);
 
   node->parent = NULL;
   node->left = NULL;
@@ -65,9 +65,9 @@ void btree_free(BTree *tree)
   {
   if (tree)
     {
-    THREAD_LOCK(btree_chunk);
+    THREAD_LOCK(btree_chunk_lock);
     mem_chunk_free(btree_chunk, tree);
-    THREAD_UNLOCK(btree_chunk);
+    THREAD_UNLOCK(btree_chunk_lock);
     }
 
   return;

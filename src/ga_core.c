@@ -72,7 +72,7 @@
 /*
  * Global variables.
  */
-THREAD_LOCK_DEFINE_STATIC(pop_table);
+THREAD_LOCK_DEFINE_STATIC(pop_table_lock);
 TableStruct	*pop_table=NULL;	/* The population table. */
 
 /**********************************************************************
@@ -218,11 +218,11 @@ population *ga_population_new(	const int max_size,
 /*
  * Add this new population into the population table.
  */
-  THREAD_LOCK(pop_table);
+  THREAD_LOCK(pop_table_lock);
   if (!pop_table) pop_table=table_new();
 
   pop_id = table_add(pop_table, (vpointer) newpop);
-  THREAD_UNLOCK(pop_table);
+  THREAD_UNLOCK(pop_table_lock);
 
   plog( LOG_DEBUG, "New pop = %p id = %d", newpop, pop_id);
 
@@ -315,11 +315,11 @@ population *ga_population_clone(population *pop)
 /*
  * Add this new population into the population table.
  */
-  THREAD_LOCK(pop_table);
+  THREAD_LOCK(pop_table_lock);
   if (!pop_table) pop_table=table_new();
 
   pop_id = table_add(pop_table, (vpointer) newpop);
-  THREAD_UNLOCK(pop_table);
+  THREAD_UNLOCK(pop_table_lock);
 
   plog( LOG_DEBUG, "New pop = %p id = %d (cloned from %p)",
         newpop, pop_id, pop );
@@ -340,7 +340,7 @@ int ga_get_num_populations(void)
   {
   int	num;
 
-  THREAD_LOCK(pop_table);
+  THREAD_LOCK(pop_table_lock);
   if (!pop_table)
     {
     num=-1;
@@ -349,7 +349,7 @@ int ga_get_num_populations(void)
     {
     num = table_count_items(pop_table);
     }
-  THREAD_UNLOCK(pop_table);
+  THREAD_UNLOCK(pop_table_lock);
 
   return num;
   }
@@ -1836,9 +1836,9 @@ boolean ga_extinction(population *extinct)
 /*
  * Remove this population from the population table.
  */
-  THREAD_LOCK(pop_table);
+  THREAD_LOCK(pop_table_lock);
   id = table_remove_data(pop_table, extinct);
-  THREAD_UNLOCK(pop_table);
+  THREAD_UNLOCK(pop_table_lock);
 
 /*
  * Error check.

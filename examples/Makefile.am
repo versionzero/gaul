@@ -32,7 +32,7 @@ bin_PROGRAMS = diagnostics \
 	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle2 struggle3 struggle4 struggle5 struggle_ss \
+	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
 	nnevolve
 
 diagnostics_SOURCES = diagnostics.c
@@ -47,6 +47,7 @@ struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
+struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
 nnevolve_SOURCES = diagnostics.c
 
@@ -78,6 +79,7 @@ struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
+struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
@@ -93,6 +95,7 @@ struggle2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 

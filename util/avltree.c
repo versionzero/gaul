@@ -3,7 +3,7 @@
  **********************************************************************
 
   avltree - AVL tree implementation.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -107,7 +107,7 @@ static void		avltree_node_check(AVLTreeNode *node);
 /*
  * Global variables.
  */
-THREAD_LOCK_DEFINE_STATIC(avltree_global);
+THREAD_LOCK_DEFINE_STATIC(avltree_global_lock);
 static MemChunk		*node_mem_chunk = NULL;
 static AVLTreeNode	*node_free_list = NULL;
 
@@ -119,7 +119,7 @@ static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
   {
   AVLTreeNode *node;
 
-  THREAD_LOCK(avltree_global);
+  THREAD_LOCK(avltree_global_lock);
 /*
  * We must handle our own atom re-use because the memory chunk implementation
  * uses avltrees to record atom usage.
@@ -136,7 +136,7 @@ static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
 
     node = mem_chunk_alloc(node_mem_chunk);
     }
-  THREAD_UNLOCK(avltree_global);
+  THREAD_UNLOCK(avltree_global_lock);
 
   node->balance = 0;
   node->left = NULL;
@@ -150,10 +150,10 @@ static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
 
 static void avltree_node_free(AVLTreeNode *node)
   {
-  THREAD_LOCK(avltree_global);
+  THREAD_LOCK(avltree_global_lock);
   node->right = node_free_list;
   node_free_list = node;
-  THREAD_UNLOCK(avltree_global);
+  THREAD_UNLOCK(avltree_global_lock);
 
   return;
   }

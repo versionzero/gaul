@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation (singly- and doubly- linked).
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -56,8 +56,8 @@
 #endif
 
 
-THREAD_LOCK_DEFINE_STATIC(slist_chunk_thread);
-THREAD_LOCK_DEFINE_STATIC(dlist_chunk_thread);
+THREAD_LOCK_DEFINE_STATIC(slist_chunk_lock);
+THREAD_LOCK_DEFINE_STATIC(dlist_chunk_lock);
 static MemChunk *slist_chunk = NULL;
 static MemChunk *dlist_chunk = NULL;
 
@@ -66,12 +66,12 @@ SLList *slink_new(void)
   {
   SLList *element;
 
-  THREAD_LOCK(slist_chunk_thread);
+  THREAD_LOCK(slist_chunk_lock);
   if (!slist_chunk)
     slist_chunk = mem_chunk_new(sizeof(SLList), 512);
 
   element = mem_chunk_alloc(slist_chunk);
-  THREAD_UNLOCK(slist_chunk_thread);
+  THREAD_UNLOCK(slist_chunk_lock);
 
   element->next = NULL;
   element->data = NULL;
@@ -84,14 +84,14 @@ void slink_free_all(SLList *list)
   {
   SLList	*element;
 
-  THREAD_LOCK(slist_chunk_thread);
+  THREAD_LOCK(slist_chunk_lock);
   while (list)
     {
     element = list->next;
     mem_chunk_free(slist_chunk, list);
     list = element;
     }
-  THREAD_UNLOCK(slist_chunk_thread);
+  THREAD_UNLOCK(slist_chunk_lock);
 
   return;
   }
@@ -101,9 +101,9 @@ void slink_free(SLList *list)
   {
   if (!list) return;
 
-  THREAD_LOCK(slist_chunk_thread);
+  THREAD_LOCK(slist_chunk_lock);
   mem_chunk_free(slist_chunk, list);
-  THREAD_UNLOCK(slist_chunk_thread);
+  THREAD_UNLOCK(slist_chunk_lock);
 
   return;
   }
@@ -449,12 +449,12 @@ DLList *dlink_new(void)
   {
   DLList *element;
 
-  THREAD_LOCK(dlist_chunk_thread);
+  THREAD_LOCK(dlist_chunk_lock);
   if (!dlist_chunk)
     dlist_chunk = mem_chunk_new(sizeof(DLList), 512);
 
   element = mem_chunk_alloc(dlist_chunk);
-  THREAD_UNLOCK(dlist_chunk_thread);
+  THREAD_UNLOCK(dlist_chunk_lock);
 
   element->prev = NULL;
   element->next = NULL;
@@ -468,7 +468,7 @@ void dlink_free_all(DLList *list)
   {
   DLList        *element;
 
-  THREAD_LOCK(dlist_chunk_thread);
+  THREAD_LOCK(dlist_chunk_lock);
   while (list->next)
     {
     element = list->next;
@@ -481,7 +481,7 @@ void dlink_free_all(DLList *list)
     mem_chunk_free(dlist_chunk, list);
     list = element;
     }
-  THREAD_UNLOCK(dlist_chunk_thread);
+  THREAD_UNLOCK(dlist_chunk_lock);
 
   return;
   }
@@ -491,9 +491,9 @@ void dlink_free(DLList *list)
   {
   if (!list) return;
   
-  THREAD_LOCK(dlist_chunk_thread);
+  THREAD_LOCK(dlist_chunk_lock);
   mem_chunk_free(dlist_chunk, list);
-  THREAD_UNLOCK(dlist_chunk_thread);
+  THREAD_UNLOCK(dlist_chunk_lock);
 
   return;
   }
