@@ -34,7 +34,7 @@
 		(c) Enables saving and restoring state.
 
 		SLang intrinsic function wrappers are provided if the
-		HELGA_USE_SLANG constant is set to 1.
+		HAVE_SLANG constant is set to 1.
 
 		The algorithm I selected is the Mitchell and Moore
 		variant of the standard additive number generator.
@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
+  Updated:	05/06/01 SAA	Removed last remaining Helga stuff.
+		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
 		21/02/01 SAA	Added double random_double_1() for convenience.
 		02/02/01 SAA	Converted from helga_random to random_util.
 		28/01/01 SAA	Added helga_random_tseed().  Added access to the state structure as a char array for access through SLang etc.
@@ -740,7 +741,7 @@ boolean random_test(void)
 
   FIXME: Problem with unsigned vs. signed ints.
  **********************************************************************/
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 
 /* These function don't need wrappers:
 void random_tseed(void)

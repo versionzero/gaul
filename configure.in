@@ -24,16 +24,8 @@ dnl http://www.gnu.org/
 dnl
 dnl ***************************************************************
 dnl
-dnl Last Updated:	17/05/01 SAA	GAUL now gets it's own configure.in for use on sourceforge.
-dnl			17/04/01 SAA	Preparations for module loading support.
-dnl			02/02/01 SAA	Changes due to reorganisation of ga_util/intrinsics, helga_qsort, helga_log and helga_mpi.
-dnl			29/01/01 SAA	SLang checks.
-dnl			05/01/01 SAA	Debugging ;(.
-dnl			04/01/01 SAA	First configure.in attempt.
-dnl
 dnl To do:	MPI/PVM/thread checks and configuration.
 dnl		Ability to turn off SLang stuff.
-dnl		glib-config stuff sorted in here instead of in the Makefile.am
 dnl
 dnl ***************************************************************
 
@@ -89,9 +81,9 @@ AC_DEFINE(PARALLEL,0)
 AC_DEFINE(AVLTREE_KEY_TYPE,void *)
 AC_DEFINE_UNQUOTED(BUILD_DATE_STRING,"`date +%d/%m/%y`")
 AC_DEFINE_UNQUOTED(VERSION_STRING,"${VERSION}")
-AC_DEFINE(HELGA_USE_SLANG,1)
+AC_DEFINE(GA_USE_SLANG,1)
 AC_DEFINE(HAVE_SLANG,1)
-AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "HELGA_NUM_THREADS")
+AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS")
 
 dnl Initialize libtool with module loading capability.
 AC_LIBTOOL_DLOPEN
@@ -191,16 +183,16 @@ fi
 AC_MSG_CHECKING(whether to enable general Helga debugging)
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  AC_DEFINE(HELGA_DEBUG,2)
+  AC_DEFINE(GA_DEBUG,2)
   AC_DEFINE(DEBUG,2)
   AC_MSG_RESULT(yes)
 else
   if test "x$enable_debug" = "xno"; then
-    AC_DEFINE(HELGA_DEBUG,0)
+    AC_DEFINE(GA_DEBUG,0)
     AC_DEFINE(DEBUG,0)
     AC_MSG_RESULT(no)
   else
-    AC_DEFINE(HELGA_DEBUG,1)
+    AC_DEFINE(GA_DEBUG,1)
     AC_DEFINE(DEBUG,1)
     AC_MSG_RESULT(partial)
   fi
@@ -296,7 +288,6 @@ AC_C_CONST
 AC_STRUCT_TM
 
 dnl Determine memory alignment characteristics.
-#HELGA_MEMORY_ALIGN
 AC_MSG_CHECKING(memory alignment)
 AC_CACHE_VAL(MEMORY_ALIGN_SIZE,
 [AC_TRY_RUN([

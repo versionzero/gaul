@@ -31,22 +31,22 @@
 #define MEMORY_PADDING 0
 
 #define DEBUG 2
-#define HELGA_DEBUG 2
+/* #undef HELGA_DEBUG */
 #define MOLSTRUCT_DEBUG 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1-010523"
-#define BUILD_DATE_STRING "23/05/01"
+#define VERSION_STRING "0.1-010605"
+#define BUILD_DATE_STRING "05/06/01"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1
-#define PATCH_VERSION 010523
+#define PATCH_VERSION 010605
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
 #define V3_QUICK 1
-#define HELGA_USE_SLANG 1
+/* #undef HELGA_USE_SLANG */
 #define HAVE_SLANG 1
-#define MPI_NUM_THREADS_ENVVAR_STRING "HELGA_NUM_THREADS"
+#define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* The number of bytes in a char.  */
 #define SIZEOF_CHAR 1

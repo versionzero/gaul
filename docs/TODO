@@ -1,7 +1,13 @@
 SHORT TODO LIST FOR GAUL
 ========================
+(these are the most urgent things to be done.)
 
-* Variable length chromosomes.
-* User data in array instead of list.
-* Binary chromosomes.
+* More flexible chromosomes.
+  - Binary chromosomes
+  - Variable length array chromsomes
+  - Tree chromosomes
+* User data in an array instead of list.
+* Easy enabling/disabling of SLANG through the configure script.
+* Lots of examples.
+* Lots of documentation!
 

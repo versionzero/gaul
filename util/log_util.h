@@ -116,7 +116,7 @@ void plog( const enum log_level_type level, const char *format, ... );
 /*
  * SLang intrinsic function with equivalent functionality.
  */
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 void	log_wrapper(int *level, char *message);
 #endif
 

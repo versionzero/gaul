@@ -315,7 +315,7 @@ void plog(const enum log_level_type level, const char *format, ...)
 /*
  * SLang intrinsic wrappers.
  */
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 void log_wrapper(int *level, char *message)
   {
 /*
@@ -342,5 +342,5 @@ void log_wrapper(int *level, char *message)
 
   return;
   }
-#endif	/* HELGA_USE_SLANG==1 */
+#endif	/* HAVE_SLANG==1 */
 

@@ -32,7 +32,8 @@
   Implementation note:	I can clearly choose functions to inline better
 			than gcc/egcs can.  (Shame)
 
-  Last Updated:	02/02/01 SAA	Converted from helga_qsort.c to ga_qsort.c.  Removed all dependancies on helga.
+  Last Updated:	05/06/01 SAA	Removed last remaining Helga stuff.
+		02/02/01 SAA	Converted from helga_qsort.c to ga_qsort.c.  Removed all dependancies on helga.
 		22/01/01 SAA	The population is now passed as a pointer to the structure.
 		12/01/01 SAA	helga_qsort_test now returns a boolean value (Although, at present this is always TRUE).  Changed HELGA_QSORT_TEST to HELGA_QSORT_COMPILE_MAIN for consistency with the other helga source code.
 		21/11/00 SAA	Removed some expensive debug code.
@@ -344,7 +345,7 @@ boolean ga_qsort_test(void)
 /*
  * SLang intrinsic wrapper.
  */
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 void ga_population_sort(int *id)
   {
   quicksort_population(ga_get_population_from_id(*id));

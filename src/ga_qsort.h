@@ -55,7 +55,7 @@
 void	quicksort_population(population *pop);
 boolean	ga_qsort_test(void);
 
-#if HELGA_USE_SLANG==1
+#if HAVE_SLANG==1
 void	ga_population_sort(int *id);
 #endif
 

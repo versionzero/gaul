@@ -32,8 +32,8 @@
 
  **********************************************************************/
 
-#ifndef HELGA_COMPATIBILITY_INCLUDED
-#define HELGA_COMPATIBILITY_INCLUDED
+#ifndef COMPATIBILITY_H_INCLUDED
+#define COMPATIBILITY_H_INCLUDED
 
 #include "SAA_header.h"
 
@@ -78,8 +78,8 @@
 /*
  * Debugging
  */
-#ifndef HELGA_COMPAT_DEBUG
-#define HELGA_COMPAT_DEBUG   2
+#ifndef COMPAT_DEBUG
+#define COMPAT_DEBUG   2
 #endif
 
 /*

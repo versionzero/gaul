@@ -4,26 +4,26 @@
 %define  rel     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 %define prefix   /usr
 
-Summary: HelGA - Helix Packing by a Genetic Algorithm
-Name: helga
+Summary: Genetic Algorithm Utility Library
+Name: GAUL
 Version: %ver
 Release: %rel
 Copyright: GPL
 Group: Math
 Source: none
-BuildRoot: /var/tmp/helga-%{PACKAGE_VERSION}-root
+BuildRoot: /var/tmp/gaul-%{PACKAGE_VERSION}-root
 URL: http://www.stewart-adcock.co.uk/
 Docdir: %{prefix}/doc
 
 %description
-Helix Packing by a Genetic Algorithm.
+Genetic Algorithm Utility Library.
 
 %package devel
-Summary: Helix Packing by a Genetic Algorithm developers stuff.
+Summary: Genetic Algorithm Utility Library developers stuff.
 Group: Math
 
 %description devel
-Helix Packing by a Genetic Algorithm.  Development stuff.
+Genetic Algorithm Utility Library.  Development stuff.
 
 %changelog
 
@@ -57,7 +57,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README
-%{prefix}/helga
+%{prefix}/gaul
 
 %files devel
 %defattr(-, root, root)
