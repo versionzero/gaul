@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
+  Updated:	25 Jan 2002 SAA Removed residual comment about HelGA.
+		07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
 		04 Dec 2001 SAA	Added routines for 'float's.
 		19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
 		16/06/01 SAA	Added random_double_full().
@@ -804,7 +805,7 @@ void random_diagnostics(void)
   {
   int	i;	/* Loop over PRNG array. */
 
-  printf("=== Helga's PRNG routines diagnostic information =============\n");
+  printf("=== PRNG routines diagnostic information =====================\n");
   printf("Build date:                %s\n", BUILD_DATE_STRING);
   printf("RANDOM_DEBUG:              %d\n", RANDOM_DEBUG);
   printf("RANDOM_RAND_MAX:           %u\n", RANDOM_RAND_MAX);

@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Random number utility routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	4 Dec 2001 SAA	New 'float' functions.
+  Updated:	25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
+		4 Dec 2001 SAA	New 'float' functions.
 		20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
 		02/02/01 SAA	Converted from helga_random to random_util.
 		16/05/00 SAA	First code.
@@ -52,7 +53,11 @@
  * Debugging.
  */
 #ifndef RANDOM_DEBUG
-#define RANDOM_DEBUG DEBUG
+# ifdef DEBUG
+#  define RANDOM_DEBUG DEBUG
+# else
+#  define RANDOM_DEBUG 0
+# endif
 #endif
 
 /*
