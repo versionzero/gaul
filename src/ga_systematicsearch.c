@@ -2,7 +2,7 @@
   ga_systematicsearch.c
  **********************************************************************
 
-  ga_systematicsearch - Random search algorithm for comparison and search.
+  ga_systematicsearch - Systematic algorithm for comparison and search.
   Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -25,10 +25,8 @@
 
  **********************************************************************
 
-  Synopsis:     Randomsearch algorithm for comparison and local search.
-
-  		I strongly recommend that you only use this function
-		for benchmarking purposes!
+  Synopsis:     A systematic search algorithm for comparison and local
+		search.
 
  **********************************************************************/
 
@@ -36,7 +34,7 @@
 
 /**********************************************************************
   ga_population_set_search_parameters()
-  synopsis:     Sets the tabu-search parameters for a population.
+  synopsis:     Sets the systematic search parameters for a population.
   parameters:
   return:
   last updated: 08 Nov 2002

@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -100,7 +100,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1846-8/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
