@@ -49,7 +49,8 @@ void ga_diagnostics(void)
   printf("=== GA utility library =======================================\n");
   printf("Version:                   %s\n", VERSION_STRING);
   printf("Build date:                %s\n", BUILD_DATE_STRING);
-  printf("--------------------------------------------------------------\n");
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("--- Constants ------------------------------------------------\n");
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
   printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);
   printf("GA_MIN_FITNESS:            %f\n", GA_MIN_FITNESS);
@@ -57,12 +58,12 @@ void ga_diagnostics(void)
   printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
   printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
   printf("BYTEBITS:                  %d\n", BYTEBITS);
-  printf("--------------------------------------------------------------\n");
+  printf("--- Data structures ------------------------------------------\n");
   printf("structure                  sizeof\n");
   printf("population                 %Zd\n", sizeof(population));
   printf("entity                     %Zd\n", sizeof(entity));
   printf("byte                       %Zd\n", sizeof(byte));
-  printf("--------------------------------------------------------------\n");
+  printf("--- Current variables ----------------------------------------\n");
   num_pops = ga_get_num_populations();
   if (num_pops==-1)
     {
@@ -73,7 +74,7 @@ void ga_diagnostics(void)
     printf("Population table:          defined\n");
     printf("Size:                      %d\n", num_pops);
     }
-  printf("--------------------------------------------------------------\n");
+  printf("==============================================================\n");
 
   return;
   }

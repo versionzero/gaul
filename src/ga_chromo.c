@@ -53,7 +53,8 @@
 		lists
 		many more.
 
-  Bugs:		The staticstring stuff will be really bad for threading!
+  Bugs:		The staticstring stuff will be really bad for
+		multi-threaded applications!
 
   To do:	Will need chromosome comparison functions.
 

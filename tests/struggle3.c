@@ -48,6 +48,8 @@
  */
 char *target_text="When we reflect on this struggle, we may console ourselves with the full belief, that the war of nature is not incessant, that no fear is felt, that death is generally prompt, and that the vigorous, the healthy, and the happy survive and multiply.";
 
+long evaluation_count=0;	/* Number of fitness evaluations performed. */
+
 /**********************************************************************
   struggle_score()
   synopsis:	Score solution.
@@ -73,6 +75,8 @@ boolean struggle_score(population *pop, entity *entity)
      */
     entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
     }
+
+  evaluation_count++;
 
   return TRUE;
   }
@@ -133,20 +137,46 @@ entity *struggle_adaptation(population *pop, entity *child)
 
 boolean struggle_generation_hook(int generation, population *pop)
   {
-  entity	*adult;		/* Adapted solution. */
-  int		allele;		/* Randomly selected allele. */
+  static double	total_best_fitnesses=0.0;	/* Sum of best fitness score at each generation. */
+  double	average, stddev;	/* Simple stats. */
+
+  total_best_fitnesses += ga_get_entity_from_rank(pop,0)->fitness;
 
 /*
- * Display on-line statistics every 20th generation.
+ * Display statistics every 20th generation.
  */
+  if (generation%20 == 0)
+    {
+    printf("Generation = %d\n", generation);
+    printf("Number of evaluations = %ld\n", evaluation_count);
+    printf("Best fitness = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
+    ga_population_stats(pop, &average, &stddev);
+    printf("Mean fitness = %f, with standard deviation = %f\n", average, stddev);
+    if (generation>0)
+      printf("Average best fitness for entire run = %f\n", total_best_fitnesses/generation);
+    }
 
 /*
  * Stop if we have the exact solution.
  */
+  if (!strncmp(target_text,
+               (char *)ga_get_entity_from_rank(pop,0)->chromosome[0],
+               strlen(target_text)))
+    {
+    printf("Exact solution has been found!\n");
+    return FALSE;
+    }
 
 /*
- * Stop if the population has converged to a narrow range of solutions.
+ * Stop if the population has converged.
  */
+  if (!strncmp((char *)ga_get_entity_from_rank(pop,0)->chromosome[0],
+               (char *)ga_get_entity_from_rank(pop,pop->size-1)->chromosome[0],
+               strlen(target_text)))
+    {
+    printf("Solutions have converged!\n");
+    return FALSE;
+    }
 
   return TRUE;	/* TRUE indicates that evolution should continue. */
   }
@@ -168,10 +198,10 @@ int main(int argc, char **argv)
   random_seed(42);
 
   pop = ga_genesis_char(
-     80,			/* const int              population_size */
+     120,			/* const int              population_size */
      1,				/* const int              num_chromo */
      strlen(target_text),	/* const int              len_chromo */
-     NULL,		 	/* GAgeneration_hook      generation_hook */
+     struggle_generation_hook, 	/* GAgeneration_hook      generation_hook */
      NULL,			/* GAiteration_hook       iteration_hook */
      NULL,			/* GAdata_destructor      data_destructor */
      NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
@@ -187,8 +217,8 @@ int main(int argc, char **argv)
 
   ga_population_set_parameters(
      pop,		/* population   *pop */
-     0.9,		/* double       crossover */
-     0.1,		/* double       mutation */
+     0.8,		/* double       crossover */
+     0.05,		/* double       mutation */
      0.0		/* double       migration */
                             );
 
@@ -205,6 +235,7 @@ int main(int argc, char **argv)
           ga_get_entity_from_rank(pop,0)->fitness );
   printf( "%s\n",
           ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)) );
+  printf( "Total number of fitness evaluations: %ld\n", evaluation_count );
 
   ga_extinction(pop);
 

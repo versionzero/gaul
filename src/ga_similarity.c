@@ -24,6 +24,11 @@
 
  **********************************************************************
 
+  **************************************************************
+  *** These functions should now be rewritten to fit in with ***
+  *** the current version of GAUL.                           ***
+  **************************************************************
+
   Synopsis:     Routines for comparing genomes/chromosomes.
 
 		Definitions:
@@ -45,7 +50,8 @@
 		Hamming coefficient = M/n
 		Euclidean coefficient = sqrt(M/n)
 
-  Warning:	THESE ARE CURRENTLY ONLY VALID FOR INTEGER CHROMOSOMES.
+  Warning:	MOST OF THESE ARE CURRENTLY ONLY VALID FOR INTEGER ARRAY
+		CHROMOSOMES.
 
   References:	A general reference that I've found useful in the past
 		but maybe is tricky to obtain, but is:

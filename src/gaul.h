@@ -76,6 +76,8 @@ typedef enum ga_elitism_type_t
 
 /*
  * Include remainder of this library's headers.
+ * These should, mostly, contain private definitions etc.
+ * But they currently contain everything.
  */
 #include "ga_core.h"
 

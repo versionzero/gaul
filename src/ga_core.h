@@ -40,12 +40,12 @@
 #include <limits.h>
 #include <unistd.h>
 
-#include "../util/linkedlist.h"		/* For linked lists. */
-#include "../util/log_util.h"		/* For logging facilities. */
-#include "../util/memory_util.h"	/* Memory handling. */
-#include "../util/mpi_util.h"		/* For multiprocessing facilities. */
-#include "../util/random_util.h"	/* For PRNGs. */
-#include "../util/table.h"		/* Handling unique integer ids. */
+#include "linkedlist.h"		/* For linked lists. */
+#include "log_util.h"		/* For logging facilities. */
+#include "memory_util.h"	/* Memory handling. */
+#include "mpi_util.h"		/* For multiprocessing facilities. */
+#include "random_util.h"	/* For PRNGs. */
+#include "table.h"		/* Handling unique integer ids. */
 
 /*
  * Debugging
@@ -319,6 +319,7 @@ void	ga_seed_double_random(population *pop, entity *adam);
 void	ga_seed_double_zero(population *pop, entity *adam);
 void	ga_seed_char_random(population *pop, entity *adam);
 void	ga_seed_printable_random(population *pop, entity *adam);
+void	ga_seed_bitstring_random(population *pop, entity *adam);
 
 
 void	ga_replace_by_fitness(population *pop, entity *child);

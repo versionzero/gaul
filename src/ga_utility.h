@@ -34,9 +34,7 @@
 /*
  * Includes.
  */
-#include "SAA_header.h"
-
-#include "ga_core.h"
+#include "gaul.h"
 
 /*
  * Prototypes.

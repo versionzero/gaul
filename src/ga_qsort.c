@@ -92,11 +92,7 @@ double check_timer(void)
   Return:	nought be returned.
  **********************************************************************/
 
-#ifdef __GNUC__
-inline int partition(entity **array_of_ptrs, int first, int last, double pivot)
-#else
-int partition(entity **array_of_ptrs, int first, int last, double pivot)
-#endif
+maybeinline static int partition(entity **array_of_ptrs, int first, int last, double pivot)
   {
 #if GA_QSORT_DEBUG>2
   printf("DEBUG: partitioning first %d last %d at %f\n", first, last, pivot);
@@ -118,11 +114,7 @@ int partition(entity **array_of_ptrs, int first, int last, double pivot)
   }
 
 
-#ifdef __GNUC__
-inline boolean find_pivot(entity **array_of_ptrs, int first, int last, double *pivot_ptr)
-#else
-boolean find_pivot(entity **array_of_ptrs, int first, int last, double *pivot_ptr)
-#endif
+maybeinline static boolean find_pivot(entity **array_of_ptrs, int first, int last, double *pivot_ptr)
   {
   double a, b;
 

@@ -30,16 +30,17 @@
 #define MEMORY_ALIGN_SIZE 4
 #define MEMORY_PADDING 0
 
-#define DEBUG 1
+#define DEBUG 2
 /* #undef HELGA_DEBUG */
 /* #undef MOLSTRUCT_DEBUG */
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1834"
-#define BUILD_DATE_STRING "22/07/01"
+#define VERSION_STRING "0.1835"
+#define BUILD_DATE_STRING "23/07/01"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1834
-#define PATCH_VERSION 010722
+#define MINOR_VERSION 1835
+#define PATCH_VERSION 010723
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.0-test9 #2 Wed Feb 7 17:02:32 GMT 2001 i586 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0

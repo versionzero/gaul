@@ -27,7 +27,9 @@
   Synopsis:	Test/example program for GAUL.
 
 		This program demonstrates the use of custom GA
-		operator functions.
+		operator functions.  The long-hand method is used
+		to set up the population's genomic form, rather than
+		and of the high-level utility functions.
 
 		This program aims to generate the final sentence from
 		Chapter 3 of Darwin's "The Origin of Species",
@@ -131,6 +133,22 @@ entity *struggle_adaptation(population *pop, entity *child)
 
 void struggle_seed(population *pop, entity *adam)
   {
+  int           chromo;         /* Index of chromosome to seed */
+  int           point;          /* Index of 'nucleotide' to seed */
+
+/* Checks (Not really necessary here). */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((char *)adam->chromosome[chromo])[point]
+            = random_int('~'-' ')+' ';
+      }
+    }
 
   return;
   }
@@ -144,8 +162,45 @@ void struggle_seed(population *pop, entity *adam)
   updated:	08/07/01
  **********************************************************************/
 
-void struggle_mutate(population *pop, entity *mother, entity *daughter)
+void struggle_mutate(population *pop, entity *father, entity *son)
   {
+  int           i;              /* Loop variable over all chromosomes */
+  int           chromo;         /* Index of chromosome to mutate */
+  int           point;          /* Index of 'nucleotide' to mutate */
+  int           dir=random_boolean()?-1:1;      /* The direction of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/*
+ * Copy unchanged data.
+ */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(char));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+/*
+ * Mutate by tweaking a single nucleotide.
+ */
+  ((char *)son->chromosome[chromo])[point] += dir;
+
+  if (((char *)son->chromosome[chromo])[point]>'~')
+    ((char *)son->chromosome[chromo])[point]=' ';
+  if (((char *)son->chromosome[chromo])[point]<' ')
+    ((char *)son->chromosome[chromo])[point]='~';
 
   return;
   }
@@ -196,20 +251,18 @@ void struggle_crossover( population *pop,
 
 boolean struggle_generation_hook(int generation, population *pop)
   {
-  entity	*adult;		/* Adapted solution. */
-  int		allele;		/* Randomly selected allele. */
-
-/*
- * Display on-line statistics every 20th generation.
- */
 
 /*
  * Stop if we have the exact solution.
  */
+  if (!strncmp(target_text,
+               (char *)ga_get_entity_from_rank(pop,0)->chromosome[0],
+               strlen(target_text)))
+    {
+    printf("Exact solution has been found!\n");
+    return FALSE;
+    }
 
-/*
- * Stop if the population has converged to a narrow range of solutions.
- */
 
   return TRUE;	/* TRUE indicates that evolution should continue. */
   }
@@ -240,6 +293,18 @@ int main(int argc, char **argv)
   pop = ga_population_new( 400, 100, 1, strlen(target_text) );
 
   if ( !pop ) die("Unable to allocate population.");
+
+/*
+ * Define chromosome handling functions.
+ * Normally these functions would only be set manually when
+ * creating a custom chromosome type.
+ */
+  pop->chromosome_constructor = ga_chromosome_char_allocate;
+  pop->chromosome_destructor = ga_chromosome_char_deallocate;
+  pop->chromosome_replicate = ga_chromosome_char_replicate;
+  pop->chromosome_to_bytes = ga_chromosome_char_to_bytes;
+  pop->chromosome_from_bytes = ga_chromosome_char_from_bytes;
+  pop->chromosome_to_string = ga_chromosome_char_to_staticstring;
 
 /* Define all the needed callback functions. */
   pop->generation_hook = NULL;
@@ -276,6 +341,7 @@ int main(int argc, char **argv)
  * just calls pop->seed() 100 times in this case.)
  */
   ga_population_seed(pop);
+
 /*
  * Set the GA parameters.
  * Crossover ratio = 0.9.

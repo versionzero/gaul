@@ -221,8 +221,8 @@ unsigned int table_add(TableStruct *table, vpointer data)
   if (table->numfree>0)
     {	/* Re-use some old indices. */
     table->numfree--;
-    table->data[table->numfree]=data;
-    return table->numfree;
+    table->data[table->unused[table->numfree]]=data;
+    return table->unused[table->numfree];
     }
 
 /* Must append to end of array. */

@@ -1,10 +1,10 @@
 A list of jobs for which I would like help:
 ===========================================
 
-* Portability
+* Portability.
   - Compiling code on alternative systems, to check and improve portability.
 
-* Example/test programs
+* Example/test programs.
   - Ports of the example programs from Goldberg's book.
   - Examples using the steady-state GA.
   - An automated test script for the GAUL algorithms/features.
@@ -12,11 +12,11 @@ A list of jobs for which I would like help:
     (most notably the random number generator)
   - Quite simply, more test programs are required.
 
-* Feedback
+* Feedback.
   - Reports of bugs that need fixing.
   - Requests for features that should be added.
 
-* Benchmarking
+* Benchmarking.
   - I would like to see benchmarks for GAUL vs SGA-C, gallops, galib, sugal etc.
     (I found in a totally unscientific and unfair test that GAUL completed
     Goldberg's examples 1 and 2 in approximately 10% of the time required by

@@ -37,6 +37,7 @@
 <p><b>Example Implementation</b></p>
 <p>Again, we use the same objective function as in struggle.c, except this time we only apply the Lamarkian GA.  An additional function is defined which GAUL calls at the beginning of each generation.  If at any point this function gives a return value of &quot;FALSE&quot; then the GA routine will be terminated.  This is useful for preventing further calculations once a predetermined level of convergence has been obtained, or if your prefect solution has been found.  In this case the GA routine (i.e. &quot;ga_evolution()&quot; or &quot;ga_evolution_steady_state&quot;) will return with the value &quot;TRUE&quot;.  The other reason for termination is if the specified maximum number of generations has been reached, in which case the GA routine will return with the value &quot;FALSE&quot;.</p>
 <p>It is typically up to the programmer to collect the relevent statistics for a given problem, but GAUL does provide some utility functions for the most commonly required statistics.</p>
+<p>Although not demonstrated in this example, an additional and very powerful feature is that the programmer is able to change the GA parameters within this routine.  For example, using &quot;ga_population_set_parameters()&quot; the mututation ratio may be increased if the population begins to converge.  In one of the author's applications, it was found to be highly advantageous to drastically reduce the population size after the first few generations.</p>
 <pre>
 boolean struggle_generation_hook(int generation, population *pop)
   {

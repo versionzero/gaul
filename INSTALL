@@ -16,7 +16,7 @@ Or if you don't have SLang installed:
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
 
-On Solaris, you should use 'gmake' instead of 'make'.
+On some systems, including Solaris and IRIX, you need to specify GNU make instead the native make.  In this case substitute 'make' with 'gmake'.
 
 If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
 automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake

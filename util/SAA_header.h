@@ -78,6 +78,9 @@
 #define _GNU_SOURCE
 #endif
 
+/*
+ * Ensure that we always include the configuration header, if appropriate.
+ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -90,7 +93,7 @@
  * PARALLEL==1			Pthreads.
  * PARALLEL==2			MPI 1.2.x
  * PARALLEL==3			PVM
- * PARALLEL==4			BSP
+ * PARALLEL==4			BSPlib
  * PARALLEL==5			OpenMP
  *
  * Transparently include MPI/whatever header in all files if this is parallel
@@ -119,7 +122,11 @@
 #endif
 
 #if PARALLEL!=1
-/* If threads are used, these must be properly defined somewhere. */
+/*
+ * If threads are used, these must be properly defined somewhere.  But
+ * otherwise, they are just set to nothing so they same code can be readily
+ * used in serial innovocations.
+ */
 #define THREAD_LOCK_DEFINE_STATIC(name)
 #define THREAD_LOCK_DEFINE(name)
 #define THREAD_LOCK_EXTERN(name)
@@ -283,9 +290,10 @@ typedef unsigned char	byte;
  */
 #define LERP(x,l,h)	((l)+(((h)-(l))*(x)))
 
-/* Is this a GNU system? */
-#ifndef __GNUC__
-/* No. */
+/*
+ * Is this a GNU system? If not, __PRETTY_FUNCTION__ will not be defined.
+ */
+#ifndef __PRETTY_FUNCTION__
 #define __PRETTY_FUNCTION__ "<unavailable>"
 #endif
 

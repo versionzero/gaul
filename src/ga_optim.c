@@ -1243,7 +1243,7 @@ boolean ga_evolution_archipelago( const int num_pops,
   double	crossover_gain, mutation_gain;	/*  - " -  */
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
-  population	*pop;			/* Current population. */
+  population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		pop0_osize;		/* Required for correct migration. */
 

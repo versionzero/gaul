@@ -43,8 +43,8 @@
  */
 #include "gaul.h"
 
-/* Specify the number of populations(islands) to use. */
-#define GA_STRUGGLE_NUM_POPS	4
+/* Specify the number of populations (islands) to use. */
+#define GA_STRUGGLE_NUM_POPS	5
 
 /*
  * The solution string.
@@ -96,12 +96,12 @@ int main(int argc, char **argv)
   population	*pop[GA_STRUGGLE_NUM_POPS];	/* Array of populations. */
 
   random_init();
-  random_seed(i);
+  random_seed(42);
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
     {
     pop[i] = ga_genesis_char(
-       100,			/* const int              population_size */
+       80,			/* const int              population_size */
        1,			/* const int              num_chromo */
        strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */
@@ -118,16 +118,11 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters(
-       pop[i],		/* population      *pop */
-       1.0,		/* double  crossover */
-       0.1,		/* double  mutation */
-       0.01,            /* double  migration */
-                              );
+    ga_population_set_parameters( pop[i], 0.75, 0.25, 0.001);
     }
 
   ga_evolution_archipelago( GA_STRUGGLE_NUM_POPS, pop,
-       GA_CLASS_DARWIN,	GA_ELITISM_PARENTS_SURVIVE, 200 );
+       GA_CLASS_DARWIN,	GA_ELITISM_PARENTS_SURVIVE, 250 );
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
     {
@@ -137,7 +132,7 @@ int main(int argc, char **argv)
             ga_chromosome_char_to_staticstring(pop[i],
                                ga_get_entity_from_rank(pop[i],0)));
 
-    ga_extinction(pop);
+/*    ga_extinction(pop[i]); FIXME! */
     }
 
   exit(2);
