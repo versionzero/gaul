@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for linked list implementation.
 
-  Updated:	25/04/01 SAA	Added convenience macros slink_data() and dlink_data().
+  Updated:	17 Apr 2002 SAA	Several prototypes had 'remove' instead of 'delete'.
+		25/04/01 SAA	Added convenience macros slink_data() and dlink_data().
 
  **********************************************************************/
 
@@ -71,9 +72,9 @@ SLList	*slink_append(SLList *list, vpointer data);
 SLList	*slink_prepend(SLList *list, vpointer data);
 SLList	*slink_insert_next(SLList *list, vpointer data);
 SLList	*slink_insert_index(SLList *list, vpointer data, int index);
-SLList	*slink_remove_data(SLList *list, vpointer data);
-SLList	*slink_remove_all_data(SLList *list, vpointer data);
-SLList	*slink_remove_link(SLList *list, SLList *link);
+SLList	*slink_delete_data(SLList *list, vpointer data);
+SLList	*slink_delete_all_data(SLList *list, vpointer data);
+SLList	*slink_delete_link(SLList *list, SLList *link);
 SLList	*slink_clone(SLList *list);
 SLList	*slink_reverse(SLList *list);
 SLList	*slink_nth(SLList *list, unsigned int index);
@@ -100,9 +101,9 @@ DLList	*dlink_insert_prev(DLList *list, vpointer data);
 DLList	*dlink_insert_index(DLList	*list,
 	       vpointer	 data,
 	       int	 index);
-DLList	*dlink_remove_all_data(DLList *list, vpointer data);
-DLList	*dlink_remove_data(DLList *list, vpointer data);
-DLList	*dlink_remove_link(DLList *list, DLList *link);
+DLList	*dlink_delete_all_data(DLList *list, vpointer data);
+DLList	*dlink_delete_data(DLList *list, vpointer data);
+DLList	*dlink_delete_link(DLList *list, DLList *link);
 DLList	*dlink_clone(DLList *list);
 DLList	*dlink_reverse(DLList *list);
 DLList	*dlink_nth(DLList *list, unsigned int index);
