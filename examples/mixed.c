@@ -1,8 +1,8 @@
 /**********************************************************************
-  onemax.c
+  mixed.c
  **********************************************************************
 
-  onemax - Test/example program for GAUL.
+  mixed - Test/example program for GAUL.
   Copyright ©2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
