@@ -36,7 +36,7 @@
 
 #define NO_PARALLEL
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 /*
  * Forced over-ride of the PARALLEL constant.
