@@ -55,8 +55,8 @@ typedef void	(*AVLDestructorFunc)(vpointer data);
 
 typedef struct AVLTree_t
   {
-  struct AVLTreeNode_t  *root;  /* opaque from hereonin. */
-  AVLKeyFunc            key_generate_func;
+  struct AVLNode_t	*root;  /* opaque from hereonin. */
+  AVLKeyFunc		key_generate_func;
   } AVLTree;
 
 /*
