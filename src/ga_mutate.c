@@ -34,7 +34,7 @@
 #include "ga_core.h"
 
 /**********************************************************************
-  ga_singlepoint_drift_mutation()
+  ga_mutate_integer_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
 		nucleotide is cycled.
   parameters:
@@ -42,7 +42,8 @@
   last updated: 01/09/00
  **********************************************************************/
 
-void ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son)
+void ga_mutate_integer_singlepoint_drift( population *pop,
+                                          entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -85,7 +86,7 @@ void ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son)
 
 
 /**********************************************************************
-  ga_singlepoint_randomize_mutation()
+  ga_mutate_integer_singlepoint_randomize()
   synopsis:	Cause a single mutation event in which a single
 		nucleotide is randomized.
   parameters:
@@ -93,7 +94,8 @@ void ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son)
   last updated: 01/09/00
  **********************************************************************/
 
-void ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *son)
+void ga_mutate_integer_singlepoint_randomize( population *pop,
+                                              entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -127,7 +129,7 @@ void ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *
 
 
 /**********************************************************************
-  ga_multipoint_mutation()
+  ga_mutate_integer_multipoint()
   synopsis:	Cause a number of mutation events.  This is equivalent
 		to the more common 'bit-drift' mutation.
   parameters:
@@ -135,7 +137,7 @@ void ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *
   last updated: 21/07/00
  **********************************************************************/
 
-void ga_multipoint_mutation(population *pop, entity *father, entity *son)
+void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -249,6 +251,155 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
       if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
         {
         ((boolean *)son->chromosome[chromo])[point] = !((boolean *)son->chromosome[chromo])[point];
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_char_singlepoint_drift()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is cycled.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_mutate_char_singlepoint_drift( population *pop,
+                                       entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+  int		dir=random_boolean()?-1:1;	/* The direction of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/*
+ * Copy unchanged data.
+ */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(char));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+/*
+ * Mutate by tweaking a single nucleotide.
+ */
+  ((char *)son->chromosome[chromo])[point] += dir;
+
+/* Don't need these because char's **should** wrap safely.
+  if (((char *)son->chromosome[chromo])[point]>CHAR_MAX)
+    ((char *)son->chromosome[chromo])[point]=CHAR_MIN;
+  if (((char *)son->chromosome[chromo])[point]<CHAR_MIN)
+    ((char *)son->chromosome[chromo])[point]=CHAR_MAX;
+*/
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_char_singlepoint_randomize()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is randomized.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_mutate_char_singlepoint_randomize( population *pop,
+                                           entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/* Copy unchanging data. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(char));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+  ((char *)son->chromosome[chromo])[point] = random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_char_multipoint()
+  synopsis:	Cause a number of mutation events.  This is equivalent
+		to the more common 'bit-drift' mutation.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+  int		dir=random_boolean()?-1:1;	/* The direction of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(char));
+    }
+
+/*
+ * Mutate by tweaking nucleotides.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+        {
+        ((char *)son->chromosome[chromo])[point] += dir;
+
+/* Don't need these because char's **should** wrap safely.
+        if (((char *)son->chromosome[chromo])[point]>CHAR_MAX)
+          ((char *)son->chromosome[chromo])[point]=CHAR_MIN;
+        if (((char *)son->chromosome[chromo])[point]<CHAR_MIN)
+          ((char *)son->chromosome[chromo])[point]=CHAR_MAX;
+*/
         }
       }
     }

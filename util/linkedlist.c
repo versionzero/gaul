@@ -370,6 +370,8 @@ unsigned int slink_size(SLList *list)
 boolean slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata)
   {
 
+  if (!func) die("Null pointer to LLForeachFunc passed.");
+
   while (list)
     {
     if ((*func)(list->data, userdata)) return TRUE;
@@ -809,6 +811,8 @@ unsigned int dlink_size(DLList *list)
 boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
   {
 
+  if (!func) die("Null pointer to LLForeachFunc passed.");
+
   while (list)
     {
     if ((*func)(list->data, userdata)) return TRUE;
@@ -822,6 +826,8 @@ boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
 boolean dlink_foreach_reverse(DLList *list,
                        LLForeachFunc func, vpointer userdata)
   {
+
+  if (!func) die("Null pointer to LLForeachFunc passed.");
 
   while (list)
     {

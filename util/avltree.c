@@ -144,6 +144,9 @@ static void avltree_node_delete(AVLTreeNode *node)
   }
 
 
+/*
+ * Actually, an iterative version would be preferable...
+ */
 static void avltree_node_destroy(AVLTreeNode *node, AVLDestructorFunc free_func)
   {
   if (node)
@@ -159,7 +162,7 @@ static void avltree_node_destroy(AVLTreeNode *node, AVLDestructorFunc free_func)
 
 
 /*
- * Systemmatically search tree with a search function which has the
+ * Systematically search tree with a search function which has the
  * same ordering as the tree.
  * This iterative version is much faster than the equivalent recursive version.
  */
@@ -257,7 +260,8 @@ static AVLTreeNode *avltree_node_insert(AVLTreeNode *node,
 /*
     *inserted = FALSE;
  */
-printf(" -- Replaced node --\n");
+    printf(" -- Replaced node -- (Key clash?)\n");
+
     node->data = data;
     return node;
     }

@@ -37,6 +37,7 @@
  */
 #include "SAA_header.h"
 
+#include <limits.h>
 #include <unistd.h>
 
 #include "../util/linkedlist.h"		/* For linked lists. */

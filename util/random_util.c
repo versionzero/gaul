@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	12/06/01 SAA	Added chi squared test to random_test().
+  Updated:	16/06/01 SAA	Added random_double_full().
+		12/06/01 SAA	Added chi squared test to random_test().
 		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
 		21/02/01 SAA	Added double random_double_1() for convenience.
 		02/02/01 SAA	Converted from helga_random to random_util.
@@ -363,6 +364,21 @@ int random_int_range(const int min, const int max)
   return (random_rand()*(max-min)/RANDOM_RAND_MAX + min);
 */
   return min + (random_rand()%(max-min));
+  }
+
+
+/**********************************************************************
+  random_double_full()
+  synopsis:	Return a random double within the allowed range.
+  parameters:
+  return:
+  last updated:	16/06/01
+ **********************************************************************/
+
+double random_double_full()
+  {
+  return ( ((double)random_rand()/(double)RANDOM_RAND_MAX)*
+                (DBL_MAX-DBL_MIN)+DBL_MIN );
   }
 
 

@@ -129,10 +129,12 @@ libstr_util_a_SOURCES =  	str_util.c 	dstr_util.c 	str_match.c
 librandom_a_SOURCES =  	random_util.c
 
 
-include_HEADERS =  	avltree.h 	compatibility.h 	log_util.h 	linkedlist.h 	memory_util.h 	mpi_util.h 	random_util.h 	table.h
+include_HEADERS =  	SAA_header.h 	avltree.h 	compatibility.h 	log_util.h 	linkedlist.h 	memory_util.h 	mpi_util.h 	random_util.h 	table.h
 
 
 libmethods_a_LIBFLAGS = -lm
+
+librandom_a_LIBFLAGS = -lm
 
 libstr_util_a_LIBFLAGS = 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

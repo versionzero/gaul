@@ -55,6 +55,8 @@
 
   Bugs:		The staticstring stuff will be really bad for threading!
 
+  To do:	Will need chromosome comparison functions.
+
  **********************************************************************/
 
 #include "ga_chromo.h"
@@ -444,3 +446,392 @@ char *ga_chromosome_boolean_to_staticstring(
 
   return text;
   }
+
+
+/**********************************************************************
+  ga_chromosome_double_allocate()
+  synopsis:	Allocate the chromosomes for an entity.  Initial
+		contents are garbage (there is no need to zero them).
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_double_allocate(population *pop, entity *embryo)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!embryo) die("Null pointer to entity structure passed.");
+
+  if (embryo->chromosome!=NULL)
+    die("This entity already contains chromosomes.");
+
+  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(double *));
+  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
+                 pop->len_chromosomes*sizeof(double));
+
+  for (i=1; i<pop->num_chromosomes; i++)
+    {
+    embryo->chromosome[i] = &(((double *)embryo->chromosome[i-1])[pop->len_chromosomes]);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_double_deallocate()
+  synopsis:	Dellocate the chromosomes for an entity.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_double_deallocate(population *pop, entity *corpse)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!corpse) die("Null pointer to entity structure passed.");
+
+  if (corpse->chromosome==NULL)
+    die("This entity already contains no chromosomes.");
+
+  s_free(corpse->chromosome[0]);
+  s_free(corpse->chromosome);
+  corpse->chromosome=NULL;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_double_replicate()
+  synopsis:	Duplicate a chromosome exactly.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_double_replicate( population *pop,
+                                      entity *parent, entity *child,
+                                      const int chromosomeid )
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!parent || !child) die("Null pointer to entity structure passed.");
+  if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
+
+  memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
+              pop->len_chromosomes * pop->num_chromosomes * sizeof(double));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_double_to_bytes()
+  synopsis:	Convert to contiguous form.  In this case, a trivial
+		process.  (Note that we could compress the data at this
+		point but CPU time is currenty more important to me
+		than memory or bandwidth)
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
+                                    byte **bytes, unsigned int *max_bytes)
+  {
+  int		num_bytes;	/* Actual size of genes. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (*max_bytes!=0) die("Internal error.");
+
+  if (!joe->chromosome)
+    {
+    *bytes = (byte *)"\0";
+    return 0;
+    }
+
+  num_bytes = pop->len_chromosomes * pop->num_chromosomes *
+              sizeof(double);
+
+  *bytes = (byte *)joe->chromosome;
+
+  return num_bytes;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_double_from_bytes()
+  synopsis:	Convert from contiguous form.  In this case, a trivial
+		process.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (!joe->chromosome) die("Entity has no chromsomes.");
+
+  memcpy(joe->chromosome, bytes,
+         pop->len_chromosomes * pop->num_chromosomes * sizeof(double));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_double_to_staticstring()
+  synopsis:	Convert to human readable form.
+  parameters:
+  return:
+  last updated: 13/06/01
+ **********************************************************************/
+
+char *ga_chromosome_double_to_staticstring(
+                              population *pop, entity *joe)
+  {
+  int		i, j;		/* Loop over chromosome, alleles. */
+  int		k=0;		/* Pointer into 'text'. */
+  int		l;		/* Number of 'snprintf'ed characters. */
+  static char	*text=NULL;	/* String for display. */
+  static int	textlen=0;	/* Length of string. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+    {
+    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * textlen);
+    }
+
+  if (textlen == 0)
+    {	/* Allocate a reasonable amount of memory. */
+    textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
+    text = s_malloc(sizeof(char) * textlen);
+    }
+
+  if (!joe->chromosome)
+    {
+    text[1] = '\0';
+    return text;
+    }
+
+  for(i=0; i<pop->num_chromosomes; i++)
+    {
+    for(j=0; j<pop->len_chromosomes; j++)
+      {
+      l = snprintf(&(text[k]), textlen-k, " %f",
+                       ((double *)joe->chromosome[i])[j]);
+
+      if (l == -1)
+        {	/* Truncation occured. */
+	textlen *= 2;	/* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * textlen);
+        l = snprintf(&(text[k]), textlen-k, " %f",
+                       ((double *)joe->chromosome[i])[j]);
+
+        if (l == -1) die("Internal error, string truncated again.");
+        }
+
+      k += l;
+      }
+    }
+
+  return &(text[1]);	/* Index of 1 skips first ' ' character. */
+  }
+
+
+/**********************************************************************
+  ga_chromosome_char_allocate()
+  synopsis:	Allocate the chromosomes for an entity.  Initial
+		contents are garbage (there is no need to zero them).
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_char_allocate(population *pop, entity *embryo)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!embryo) die("Null pointer to entity structure passed.");
+
+  if (embryo->chromosome!=NULL)
+    die("This entity already contains chromosomes.");
+
+  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(char *));
+  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
+                 pop->len_chromosomes*sizeof(char));
+
+  for (i=1; i<pop->num_chromosomes; i++)
+    {
+    embryo->chromosome[i] = &(((char *)embryo->chromosome[i-1])[pop->len_chromosomes]);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_char_deallocate()
+  synopsis:	Dellocate the chromosomes for an entity.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_char_deallocate(population *pop, entity *corpse)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!corpse) die("Null pointer to entity structure passed.");
+
+  if (corpse->chromosome==NULL)
+    die("This entity already contains no chromosomes.");
+
+  s_free(corpse->chromosome[0]);
+  s_free(corpse->chromosome);
+  corpse->chromosome=NULL;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_char_replicate()
+  synopsis:	Duplicate a chromosome exactly.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_char_replicate( population *pop,
+                                   entity *parent, entity *child,
+                                   const int chromosomeid )
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!parent || !child) die("Null pointer to entity structure passed.");
+  if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
+
+  memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
+              pop->len_chromosomes * pop->num_chromosomes * sizeof(char));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_char_to_bytes()
+  synopsis:	Convert to contiguous form.  In this case, a highly
+		trivial process.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
+                                    byte **bytes, unsigned int *max_bytes)
+  {
+  int		num_bytes;	/* Actual size of genes. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (*max_bytes!=0) die("Internal error.");
+
+  if (!joe->chromosome)
+    {
+    *bytes = (byte *)"\0";
+    return 0;
+    }
+
+  num_bytes = pop->len_chromosomes * pop->num_chromosomes *
+              sizeof(char);
+
+  *bytes = (byte *)joe->chromosome;
+
+  return num_bytes;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_char_from_bytes()
+  synopsis:	Convert from contiguous form.  In this case, a trivial
+		process.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (!joe->chromosome) die("Entity has no chromsomes.");
+
+  memcpy(joe->chromosome, bytes,
+         pop->len_chromosomes * pop->num_chromosomes * sizeof(char));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_boolean_to_staticstring()
+  synopsis:	Convert to human readable form.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+char *ga_chromosome_char_to_staticstring(
+                              population *pop, entity *joe)
+  {
+  int		i;		/* Loop over chromosome, alleles. */
+  int		k=0;		/* Pointer into 'text'. */
+  static char	*text=NULL;	/* String for display. */
+  static int	textlen=0;	/* Length of string. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+    {
+    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * textlen);
+    }
+
+  if (!joe->chromosome)
+    {
+    text[0] = '\0';
+    }
+  else
+    {
+    for(i=0; i<pop->num_chromosomes; i++)
+      {
+      memcpy(joe->chromosome, &(text[k]),
+         pop->len_chromosomes * sizeof(char));
+      k += pop->len_chromosomes;
+      }
+    text[k] = '\0';
+    }
+
+  return text;
+  }
+
+

@@ -34,9 +34,11 @@ AUTOMAKE_OPTIONS = 1.4
 
 bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad
 
-CFLAGS = -g -Wall -O
+#CFLAGS = -g -Wall -O
 
 INCLUDES = -I../util/ -I../src/ 
+
+lib_LIBRARIES = libbtree.a
 
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c
@@ -44,7 +46,9 @@ goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 
-include_HEADERS = pingpong.h wildfire.h goldberg1.h goldberg2.h
+libbtree_a_SOURCES = btree.c
+
+include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
 pingpong_DEPENDENCIES = \
 	../util/libmethods.a \

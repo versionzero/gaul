@@ -55,6 +55,7 @@ librandom_a_SOURCES = \
 	random_util.c
 
 include_HEADERS = \
+	SAA_header.h \
 	avltree.h \
 	compatibility.h \
 	log_util.h \
@@ -65,6 +66,8 @@ include_HEADERS = \
 	table.h
 
 libmethods_a_LIBFLAGS = -lm
+
+librandom_a_LIBFLAGS = -lm
 
 libstr_util_a_LIBFLAGS =
 

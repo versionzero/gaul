@@ -41,7 +41,9 @@
   last updated: 18/10/00
  **********************************************************************/
 
-void ga_singlepoint_crossover_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
+void ga_singlepoint_crossover_integer_chromosome( population *pop,
+                                         int *father, int *mother,
+                                         int *son, int *daughter )
   {
   int	location;	/* Point of crossover */
 
@@ -49,32 +51,8 @@ void ga_singlepoint_crossover_integer_chromosome(population *pop, int *father, i
   if (!father || !mother || !son || !daughter)
     die("Null pointer to chromosome structure passed.");
 
-#if 0
-  if (dint_size(father) != dint_size(mother))
-    die("Chromosomes have different lengths.");
-#endif
-
   /* Choose crossover point and perform operation */
   location=random_int(pop->len_chromosomes);
-
-#if 0
-  if (random_boolean())
-    {
-    memcpy(son, father, location*sizeof(int));
-    memcpy(daughter, mother, location*sizeof(int));
-
-    memcpy(&(son[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(int));
-    memcpy(&(daughter[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(int));
-    }
-  else
-    {
-    memcpy(son, mother, location);
-    memcpy(daughter, father, location);
-
-    memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(int));
-    memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(int));
-    }
-#endif
 
   memcpy(son, mother, location);
   memcpy(daughter, father, location);
@@ -297,9 +275,9 @@ void ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *
 
 
 /**********************************************************************
-  ga_crossover_booleean_doublepoints()
+  ga_crossover_boolean_doublepoints()
   synopsis:	`Mates' two genotypes by double-point crossover of
-		each chromosome.  I assume that booleeean == integer.
+		each chromosome.  I assume that boolean == integer.
   parameters:
   return:
   last updated: 31/05/00
@@ -402,6 +380,182 @@ void ga_crossover_boolean_allele_mixing( population *pop,
         {
         ((boolean *)daughter->chromosome[i])[j] = ((boolean *)father->chromosome[i])[j];
         ((boolean *)son->chromosome[i])[j] = ((boolean *)mother->chromosome[i])[j];
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_char_mixing()
+  synopsis:	`Mates' two genotypes by mixing parents chromsomes.
+		Keeps all chromosomes intact, and therefore do not
+		need to recreate structural data.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_crossover_char_mixing( population *pop,
+                               entity *father, entity *mother,
+                               entity *son, entity *daughter )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    if (random_boolean())
+      {
+      memcpy( son->chromosome[i], father->chromosome[i],
+              pop->len_chromosomes*sizeof(char) );
+      memcpy( daughter->chromosome[i], mother->chromosome[i],
+              pop->len_chromosomes*sizeof(char) );
+      ga_copy_data(pop, son, father, i);
+      ga_copy_data(pop, daughter, mother, i);
+      }
+    else
+      {
+      memcpy( daughter->chromosome[i], father->chromosome[i],
+              pop->len_chromosomes*sizeof(char) );
+      memcpy( son->chromosome[i], mother->chromosome[i],
+              pop->len_chromosomes*sizeof(char) );
+      ga_copy_data(pop, daughter, father, i);
+      ga_copy_data(pop, son, mother, i);
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_char_allele_mixing()
+  synopsis:	`Mates' two genotypes by randomizing the parents
+		alleles.
+		Keeps no chromosomes intact, and therefore will
+		need to recreate all structural data.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_crossover_char_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter )
+  {
+  int		i, j;		/* Loop over all chromosomes, alleles. */
+
+  /* Checks. */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    for (j=0; j<pop->len_chromosomes; j++)
+      {
+      if (random_boolean())
+        {
+        ((char *)son->chromosome[i])[j] = ((char *)father->chromosome[i])[j];
+        ((char *)daughter->chromosome[i])[j] = ((char *)mother->chromosome[i])[j];
+        }
+      else
+        {
+        ((char *)daughter->chromosome[i])[j] = ((char *)father->chromosome[i])[j];
+        ((char *)son->chromosome[i])[j] = ((char *)mother->chromosome[i])[j];
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_double_mixing()
+  synopsis:	`Mates' two genotypes by mixing parents chromsomes.
+		Keeps all chromosomes intact, and therefore do not
+		need to recreate structural data.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_crossover_double_mixing( population *pop,
+                               entity *father, entity *mother,
+                               entity *son, entity *daughter )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    if (random_boolean())
+      {
+      memcpy( son->chromosome[i], father->chromosome[i],
+              pop->len_chromosomes*sizeof(double) );
+      memcpy( daughter->chromosome[i], mother->chromosome[i],
+              pop->len_chromosomes*sizeof(double) );
+      ga_copy_data(pop, son, father, i);
+      ga_copy_data(pop, daughter, mother, i);
+      }
+    else
+      {
+      memcpy( daughter->chromosome[i], father->chromosome[i],
+              pop->len_chromosomes*sizeof(double) );
+      memcpy( son->chromosome[i], mother->chromosome[i],
+              pop->len_chromosomes*sizeof(double) );
+      ga_copy_data(pop, daughter, father, i);
+      ga_copy_data(pop, son, mother, i);
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_double_allele_mixing()
+  synopsis:	`Mates' two genotypes by randomizing the parents
+		alleles.
+		Keeps no chromosomes intact, and therefore will
+		need to recreate all structural data.
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_crossover_double_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter )
+  {
+  int		i, j;		/* Loop over all chromosomes, alleles. */
+
+  /* Checks. */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    for (j=0; j<pop->len_chromosomes; j++)
+      {
+      if (random_boolean())
+        {
+        ((double *)son->chromosome[i])[j] = ((double *)father->chromosome[i])[j];
+        ((double *)daughter->chromosome[i])[j] = ((double *)mother->chromosome[i])[j];
+        }
+      else
+        {
+        ((double *)daughter->chromosome[i])[j] = ((double *)father->chromosome[i])[j];
+        ((double *)son->chromosome[i])[j] = ((double *)mother->chromosome[i])[j];
         }
       }
     }

@@ -120,3 +120,93 @@ void ga_seed_integer_zero(population *pop, entity *adam)
   }
 
 
+/**********************************************************************
+  ga_seed_char_random()
+  synopsis:
+  parameters:
+  return: last updated: 16/06/01
+ **********************************************************************/
+
+void ga_seed_char_random(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of 'nucleotide' to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((char *)adam->chromosome[chromo])[point]
+            = random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_seed_double_random()
+  synopsis:
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_seed_double_random(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of 'nucleotide' to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((double *)adam->chromosome[chromo])[point] = random_double_full();
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_seed_double_zero()
+  synopsis:
+  parameters:
+  return:
+  last updated: 16/06/01
+ **********************************************************************/
+
+void ga_seed_double_zero(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of 'nucleotide' to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((double *)adam->chromosome[chromo])[point] = 0.0;
+      }
+    }
+
+  return;
+  }
+
+

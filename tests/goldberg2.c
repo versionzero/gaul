@@ -138,8 +138,8 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
 
     ga_population_set_parameters(
        pop,		/* population      *pop */
-       0.3,		/* double  crossover */
-       0.005,		/* double  mutation */
+       0.5,		/* double  crossover */
+       0.01,		/* double  mutation */
        0.0              /* double  migration */
                               );
 

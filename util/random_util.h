@@ -36,6 +36,7 @@
 
 #include "SAA_header.h"
 
+#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,6 +90,7 @@ boolean	random_boolean(void);
 boolean	random_boolean_prob(const double prob);
 unsigned int	random_int(const unsigned int max);
 int	random_int_range(const int min, const int max);
+double	random_double_full();
 double	random_double(const double max);
 double	random_double_range(const double min, const double max);
 double	random_double_1(void);
@@ -98,6 +100,7 @@ double	random_unit_gaussian(void);
 void	random_diagnostics(void);
 boolean	random_test(void);
 
+#define random_int_full	random_rand
 
 #if HAVE_SLANG==1
 
