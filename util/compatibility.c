@@ -102,7 +102,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
+  Updated:	25 Oct 2002 SAA	Added gethostname() stub.
+		02 Oct 2002 SAA A #ifndef HAVE_STRCASECMP should have been #ifndef HAVE_STRSEP
+		12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
 		09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
 		14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
 		13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
@@ -1690,5 +1692,39 @@ void itoa(const int n, char *s)
   }
 #endif /* HAVE_ITOA */
 
+#ifndef HAVE_GETHOSTNAME
+/*
+ * gethostname() − get host name
 
+   This function is used to access the host name of the current processor.  It
+   returns a NUL‐terminated hostname by filling the array name with a length of
+   len bytes.  In case the NUL‐terminated hostname does not fit, no error is
+   returned, but the hostname is truncated.  In the specification, it is
+   unspecified whether the truncated hostname will be NUL‐terminated, but here
+   it is.
+
+   What should happen is that upon success, zero is returned.  On error, −1 is
+   returned, and errno is set to EINVAL.  But here the hostname is set to
+   <unknown>.
+
+  From the manpage:
+       EINVAL len is negative or, for sethostname, len is larger than the max‐
+              imum allowed size, or, for gethostname  on  Linux/i386,  len  is
+              smaller than the actual size.  (In this last case glibc 2.1 uses
+              ENAMETOOLONG.)
+
+   SUSv2 guarantees that ‘Host names are limited to 255  bytes’.  POSIX
+   1003.1‐2001 guarantees that ‘Host names (not including the terminating
+   NUL) are limited to HOST_NAME_MAX bytes’.
+
+ */
+
+int gethostname(char *name, size_t len)
+  {
+
+  snprintf(name, len, "<unknown>");
+
+  return TRUE;
+  }
+#endif /* HAVE_GETHOSTNAME */
 

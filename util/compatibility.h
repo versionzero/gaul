@@ -315,4 +315,8 @@ void sincos( double radians, double *s, double *c );
 void itoa(const int n, char *s);
 #endif
 
+#ifndef HAVE_GETHOSTNAME
+int gethostname(char *name, size_t len);
+#endif
+
 #endif
