@@ -1213,11 +1213,11 @@ boolean ga_select_one_roundrobin(population *pop, entity **mother)
 
   if (!pop) die("Null pointer to population structure passed.");
 
-  *mother = pop->entity_iarray[pop->select_state%pop->orig_size];
-
   pop->select_state++;
 
-  return pop->select_state>=(pop->orig_size*pop->mutation_ratio);
+  *mother = pop->entity_iarray[pop->select_state%pop->orig_size];
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
 
 
