@@ -131,7 +131,7 @@ boolean nnevolve_display_evaluation(population *pop, entity *entity)
   		for all data items.
   parameters:
   return:
-  updated:	05 Feb 2002
+  updated:	11 Jun 2002
  **********************************************************************/
 
 boolean nnevolve_evaluate_all(population *pop, entity *entity)
@@ -180,7 +180,7 @@ boolean nnevolve_evaluate_all(population *pop, entity *entity)
       }
     }
 
-  entity->fitness = -(error+wrong_count)/num_train_data;
+  entity->fitness = 1.0/(1.0+(error+wrong_count)/num_train_data);
 
   return TRUE;
   }
@@ -191,7 +191,7 @@ boolean nnevolve_evaluate_all(population *pop, entity *entity)
   synopsis:	Score solution - measure network error.
   parameters:
   return:
-  updated:	29 Jan 2002
+  updated:	11 Jun 2002
  **********************************************************************/
 
 boolean nnevolve_evaluate1(population *pop, entity *entity)
@@ -207,7 +207,7 @@ boolean nnevolve_evaluate1(population *pop, entity *entity)
     error += nn->error;
     }
 
-  entity->fitness = -error/NNEVOLVE_NUM_SCORE;
+  entity->fitness = 1.0/(1.0+error/NNEVOLVE_NUM_SCORE);
 
   return TRUE;
   }
@@ -219,7 +219,7 @@ boolean nnevolve_evaluate1(population *pop, entity *entity)
   		assignments.
   parameters:
   return:
-  updated:	05 Feb 2002
+  updated:	11 Jun 2002
  **********************************************************************/
 
 boolean nnevolve_evaluate2(population *pop, entity *entity)
@@ -227,22 +227,23 @@ boolean nnevolve_evaluate2(population *pop, entity *entity)
   int		item, n;
   network_t	*nn=(network_t *)entity->chromosome[0];
   float		property[4];	/* Prediction from NN. */
+  double	fitness=0.0;	/* Fitness score. */
 
-  entity->fitness = 0.0;
+  fitness = 0.0;
 
   for (n=0; n<NNEVOLVE_NUM_SCORE; n++)
     {
     item = random_int(num_train_data);
     NN_run(nn, train_data[item], property);
-    if (NN_IS_ON(property[0])  != NN_IS_ON(train_property[item][0]))  entity->fitness -= 1;
-    if (NN_IS_OFF(property[0]) != NN_IS_OFF(train_property[item][0])) entity->fitness -= 1;
-    if (NN_IS_ON(property[1])  != NN_IS_ON(train_property[item][1]))  entity->fitness -= 1;
-    if (NN_IS_OFF(property[1]) != NN_IS_OFF(train_property[item][1])) entity->fitness -= 1;
-    if (NN_IS_ON(property[2])  != NN_IS_ON(train_property[item][2]))  entity->fitness -= 1;
-    if (NN_IS_OFF(property[2]) != NN_IS_OFF(train_property[item][2])) entity->fitness -= 1;
+    if (NN_IS_ON(property[0])  != NN_IS_ON(train_property[item][0]))  fitness += 1.0;
+    if (NN_IS_OFF(property[0]) != NN_IS_OFF(train_property[item][0])) fitness += 1.0;
+    if (NN_IS_ON(property[1])  != NN_IS_ON(train_property[item][1]))  fitness += 1.0;
+    if (NN_IS_OFF(property[1]) != NN_IS_OFF(train_property[item][1])) fitness += 1.0;
+    if (NN_IS_ON(property[2])  != NN_IS_ON(train_property[item][2]))  fitness += 1.0;
+    if (NN_IS_OFF(property[2]) != NN_IS_OFF(train_property[item][2])) fitness += 1.0;
     }
 
-  entity->fitness /= NNEVOLVE_NUM_SCORE;
+  entity->fitness = 1.0/(1.0+fitness/NNEVOLVE_NUM_SCORE);
 
   return TRUE;
   }
@@ -898,11 +899,11 @@ int main(int argc, char **argv)
   pop->seed = nnevolve_seed;
   pop->adapt = nnevolve_adapt;
 /*
-  pop->select_one = ga_select_one_roulette;
-  pop->select_two = ga_select_two_roulette;
-*/
   pop->select_one = ga_select_one_bestof2;
   pop->select_two = ga_select_two_bestof2;
+*/
+  pop->select_one = ga_select_one_sus;
+  pop->select_two = ga_select_two_sus;
   pop->mutate = nnevolve_mutate;
 /*
   pop->crossover = nnevolve_crossover_layerwise;
