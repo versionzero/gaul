@@ -313,7 +313,7 @@ double wildfire_simulation(int map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION], b
   updated:	23 May 2002
  **********************************************************************/
 
-#define NUM_PROC	2
+#define NUM_PROC	4
 
 boolean wildfire_score(population *pop, entity *entity)
   {
