@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_crossover - Genetic algorithm crossover operators.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -52,7 +52,7 @@ static void ga_singlepoint_crossover_integer_chromosome( population *pop,
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
-    die("Null pointer to chromosome structure passed.");
+    die("Null pointer to integer-array chromosome structure passed.");
 
   /* Choose crossover point and perform operation */
   location=random_int(pop->len_chromosomes);
@@ -75,14 +75,16 @@ static void ga_singlepoint_crossover_integer_chromosome( population *pop,
   last updated: 31/05/01
  **********************************************************************/
 
-static void ga_doublepoint_crossover_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
+static void ga_doublepoint_crossover_integer_chromosome(population *pop,
+                                     int *father, int *mother,
+                                     int *son, int *daughter)
   {
   int	location1, location2;	/* Points of crossover. */
   int	tmp;			/* For swapping crossover loci. */
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
-    die("Null pointer to chromosome structure passed.");
+    die("Null pointer to integer-array chromosome structure passed.");
 
   /* Choose crossover point and perform operation */
   location1=random_int(pop->len_chromosomes);
@@ -120,7 +122,9 @@ static void ga_doublepoint_crossover_integer_chromosome(population *pop, int *fa
   last updated: 12/05/00
  **********************************************************************/
 
-void ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+void ga_crossover_integer_singlepoints( population *pop,
+                              entity *father, entity *mother,
+                              entity *son, entity *daughter )
   {
   int		i;	/* Loop variable over all chromosomes */
 
@@ -183,7 +187,9 @@ void ga_crossover_integer_doublepoints( population *pop,
   last updated: 27/04/00
  **********************************************************************/
 
-void ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+void ga_crossover_integer_mixing( population *pop,
+                                  entity *father, entity *mother,
+                                  entity *son, entity *daughter)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -256,29 +262,108 @@ void ga_crossover_integer_allele_mixing( population *pop,
 
 
 /**********************************************************************
-  ga_crossover_boolean_singlepoints()
-  synopsis:	`Mates' two genotypes by single-point crossover of
-		each chromosome.  I assume that boolean == integer.
+  ga_singlepoint_crossover_boolean_chromosome()
+  synopsis:	`Mates' two chromosomes by single-point crossover.
   parameters:
   return:
-  last updated: 12/05/00
+  last updated: 29 Jun 2003
  **********************************************************************/
 
-void ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+static void ga_singlepoint_crossover_boolean_chromosome( population *pop,
+                                         boolean *father, boolean *mother,
+                                         boolean *son, boolean *daughter )
+  {
+  int	location;	/* Point of crossover */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to boolean-array chromosome structure passed.");
+
+  /* Choose crossover point and perform operation */
+  location=random_int(pop->len_chromosomes);
+
+  memcpy(son, mother, location*sizeof(boolean));
+  memcpy(daughter, father, location*sizeof(boolean));
+
+  memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(boolean));
+  memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(boolean));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_doublepoint_crossover_boolean_chromosome()
+  synopsis:	`Mates' two chromosomes by double-point crossover.
+  parameters:
+  return:
+  last updated: 29 Jun 2003
+ **********************************************************************/
+
+static void ga_doublepoint_crossover_boolean_chromosome(population *pop,
+                             boolean *father, boolean *mother,
+                             boolean *son, boolean *daughter)
+  {
+  int	location1, location2;	/* Points of crossover. */
+  int	tmp;			/* For swapping crossover loci. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to boolean-array chromosome structure passed.");
+
+  /* Choose crossover point and perform operation */
+  location1=random_int(pop->len_chromosomes);
+  do
+    {
+    location2=random_int(pop->len_chromosomes);
+    } while (location2==location1);
+
+    if (location1 > location2)
+      {
+      tmp = location1;
+      location1 = location2;
+      location2 = tmp;
+      }
+
+  memcpy(son, father, location1*sizeof(boolean));
+  memcpy(daughter, mother, location1*sizeof(boolean));
+
+  memcpy(&(son[location1]), &(mother[location1]), (location2-location1)*sizeof(boolean));
+  memcpy(&(daughter[location1]), &(father[location1]), (location2-location1)*sizeof(boolean));
+
+  memcpy(&(son[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(boolean));
+  memcpy(&(daughter[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(boolean));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_boolean_singlepoints()
+  synopsis:	`Mates' two genotypes by single-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 29 Jun 2003
+ **********************************************************************/
+
+void ga_crossover_boolean_singlepoints( population *pop,
+                                        entity *father, entity *mother,
+                                        entity *son, entity *daughter )
   {
   int		i;	/* Loop variable over all chromosomes */
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
-    die("Null pointer to entity structure passed");
+    die("Null pointer to entity structure passed.");
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    ga_singlepoint_crossover_integer_chromosome( pop,
-                        (int *)father->chromosome[i],
-			(int *)mother->chromosome[i],
-			(int *)son->chromosome[i],
-			(int *)daughter->chromosome[i]);
+    ga_singlepoint_crossover_boolean_chromosome( pop,
+                        (boolean *)father->chromosome[i],
+			(boolean *)mother->chromosome[i],
+			(boolean *)son->chromosome[i],
+			(boolean *)daughter->chromosome[i]);
     }
 
   return;
@@ -288,10 +373,10 @@ void ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *
 /**********************************************************************
   ga_crossover_boolean_doublepoints()
   synopsis:	`Mates' two genotypes by double-point crossover of
-		each chromosome.  I assume that boolean == integer.
+		each chromosome.
   parameters:
   return:
-  last updated: 31/05/00
+  last updated: 29 Jun 2003
  **********************************************************************/
 
 void ga_crossover_boolean_doublepoints( population *pop,
@@ -302,15 +387,15 @@ void ga_crossover_boolean_doublepoints( population *pop,
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
-    die("Null pointer to entity structure passed");
+    die("Null pointer to entity structure passed.");
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    ga_doublepoint_crossover_integer_chromosome( pop,
-                        (int *)father->chromosome[i],
-			(int *)mother->chromosome[i],
-			(int *)son->chromosome[i],
-			(int *)daughter->chromosome[i]);
+    ga_doublepoint_crossover_boolean_chromosome( pop,
+                        (boolean *)father->chromosome[i],
+			(boolean *)mother->chromosome[i],
+			(boolean *)son->chromosome[i],
+			(boolean *)daughter->chromosome[i]);
     }
 
   return;
@@ -327,13 +412,15 @@ void ga_crossover_boolean_doublepoints( population *pop,
   last updated: 27/04/00
  **********************************************************************/
 
-void ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+void ga_crossover_boolean_mixing( population *pop,
+                                  entity *father, entity *mother,
+                                  entity *son, entity *daughter )
   {
   int		i;		/* Loop variable over all chromosomes */
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
-    die("Null pointer to entity structure passed");
+    die("Null pointer to entity structure passed.");
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
