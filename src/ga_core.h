@@ -47,7 +47,7 @@
 #include "memory_util.h"	/* Memory handling. */
 #include "mpi_util.h"		/* For multiprocessing facilities. */
 #include "random_util.h"	/* For PRNGs. */
-#include "table.h"		/* Handling unique integer ids. */
+#include "table_util.h"		/* Handling unique integer ids. */
 
 /*
  * Debugging

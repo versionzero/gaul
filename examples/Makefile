@@ -103,7 +103,7 @@ MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
 MINOR_VERSION = 1836
-MPIFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
@@ -146,8 +146,9 @@ DEPENDENCIES = \
 	../util/librandom.a \
 	../util/libmethods.a \
 	../util/libmpi_util.a \
-	../util/libstr_util.a \
 	../util/libnn_util.a \
+	../util/libstr_util.a \
+	../util/libtimer_util.a \
 	../src/libgaul.la
 
 
@@ -184,9 +185,9 @@ struggle2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lst
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lnn_util -lrandom -lstr_util -lm 
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lnn_util -lrandom -lstr_util -ltimer_util -lm 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

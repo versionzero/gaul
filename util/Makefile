@@ -104,7 +104,7 @@ MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
 MINOR_VERSION = 1836
-MPIFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
@@ -113,7 +113,9 @@ VERSION = 0.1836
 
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a libmpi_util.a
+lib_LIBRARIES = libmethods.a \
+	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
+
 
 libmethods_a_SOURCES = \
 	avltree.c \
@@ -121,11 +123,15 @@ libmethods_a_SOURCES = \
 	log_util.c \
 	linkedlist.c \
 	memory_util.c \
-	table.c
+	table_util.c
 
 
 libmpi_util_a_SOURCES = \
 	mpi_util.c 
+
+
+libnn_util_a_SOURCES = \
+	nn_util.c
 
 
 librandom_a_SOURCES = \
@@ -138,8 +144,8 @@ libstr_util_a_SOURCES = \
 	str_match.c
 
 
-libnn_util_a_SOURCES = \
-	nn_util.c
+libtimer_util_a_SOURCES = \
+	timer_util.c
 
 
 include_HEADERS = \
@@ -158,22 +164,25 @@ include_HEADERS = \
      str_match.h \
      str_perl.h \
      str_util.h \
-     table.h \
+     table_util.h \
      memory_chunks.c \
      str_atof.c \
      str_hash.c \
-     str_pcre_tab.c
+     str_pcre_tab.c \
+     timer_util.h
 
 
-libmethods_a_LIBFLAGS = -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libmethods_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-libmpi_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libnn_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-librandom_a_LIBFLAGS = -lm -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libmpi_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-libstr_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+librandom_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
-libnn_util_a_LIBFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libstr_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+
+libtimer_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -186,15 +195,17 @@ LDFLAGS =
 LIBS =  -lslang -lslang
 libmethods_a_LIBADD = 
 libmethods_a_OBJECTS =  avltree.o compatibility.o log_util.o \
-linkedlist.o memory_util.o table.o
-libstr_util_a_LIBADD = 
-libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
-librandom_a_LIBADD = 
-librandom_a_OBJECTS =  random_util.o
-libnn_util_a_LIBADD = 
-libnn_util_a_OBJECTS =  nn_util.o
+linkedlist.o memory_util.o table_util.o
 libmpi_util_a_LIBADD = 
 libmpi_util_a_OBJECTS =  mpi_util.o
+libnn_util_a_LIBADD = 
+libnn_util_a_OBJECTS =  nn_util.o
+librandom_a_LIBADD = 
+librandom_a_OBJECTS =  random_util.o
+libstr_util_a_LIBADD = 
+libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
+libtimer_util_a_LIBADD = 
+libtimer_util_a_OBJECTS =  timer_util.o
 AR = ar
 CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -213,9 +224,9 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/linkedlist.P .deps/log_util.P .deps/memory_util.P \
 .deps/mpi_util.P .deps/nn_util.P .deps/random_util.P .deps/str_match.P \
-.deps/str_util.P .deps/table.P
-SOURCES = $(libmethods_a_SOURCES) $(libstr_util_a_SOURCES) $(librandom_a_SOURCES) $(libnn_util_a_SOURCES) $(libmpi_util_a_SOURCES)
-OBJECTS = $(libmethods_a_OBJECTS) $(libstr_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libnn_util_a_OBJECTS) $(libmpi_util_a_OBJECTS)
+.deps/str_util.P .deps/table_util.P .deps/timer_util.P
+SOURCES = $(libmethods_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES)
+OBJECTS = $(libmethods_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -297,25 +308,30 @@ libmethods.a: $(libmethods_a_OBJECTS) $(libmethods_a_DEPENDENCIES)
 	$(AR) cru libmethods.a $(libmethods_a_OBJECTS) $(libmethods_a_LIBADD)
 	$(RANLIB) libmethods.a
 
-libstr_util.a: $(libstr_util_a_OBJECTS) $(libstr_util_a_DEPENDENCIES)
-	-rm -f libstr_util.a
-	$(AR) cru libstr_util.a $(libstr_util_a_OBJECTS) $(libstr_util_a_LIBADD)
-	$(RANLIB) libstr_util.a
-
-librandom.a: $(librandom_a_OBJECTS) $(librandom_a_DEPENDENCIES)
-	-rm -f librandom.a
-	$(AR) cru librandom.a $(librandom_a_OBJECTS) $(librandom_a_LIBADD)
-	$(RANLIB) librandom.a
+libmpi_util.a: $(libmpi_util_a_OBJECTS) $(libmpi_util_a_DEPENDENCIES)
+	-rm -f libmpi_util.a
+	$(AR) cru libmpi_util.a $(libmpi_util_a_OBJECTS) $(libmpi_util_a_LIBADD)
+	$(RANLIB) libmpi_util.a
 
 libnn_util.a: $(libnn_util_a_OBJECTS) $(libnn_util_a_DEPENDENCIES)
 	-rm -f libnn_util.a
 	$(AR) cru libnn_util.a $(libnn_util_a_OBJECTS) $(libnn_util_a_LIBADD)
 	$(RANLIB) libnn_util.a
 
-libmpi_util.a: $(libmpi_util_a_OBJECTS) $(libmpi_util_a_DEPENDENCIES)
-	-rm -f libmpi_util.a
-	$(AR) cru libmpi_util.a $(libmpi_util_a_OBJECTS) $(libmpi_util_a_LIBADD)
-	$(RANLIB) libmpi_util.a
+librandom.a: $(librandom_a_OBJECTS) $(librandom_a_DEPENDENCIES)
+	-rm -f librandom.a
+	$(AR) cru librandom.a $(librandom_a_OBJECTS) $(librandom_a_LIBADD)
+	$(RANLIB) librandom.a
+
+libstr_util.a: $(libstr_util_a_OBJECTS) $(libstr_util_a_DEPENDENCIES)
+	-rm -f libstr_util.a
+	$(AR) cru libstr_util.a $(libstr_util_a_OBJECTS) $(libstr_util_a_LIBADD)
+	$(RANLIB) libstr_util.a
+
+libtimer_util.a: $(libtimer_util_a_OBJECTS) $(libtimer_util_a_DEPENDENCIES)
+	-rm -f libtimer_util.a
+	$(AR) cru libtimer_util.a $(libtimer_util_a_OBJECTS) $(libtimer_util_a_LIBADD)
+	$(RANLIB) libtimer_util.a
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

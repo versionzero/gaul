@@ -46,6 +46,7 @@
 
 #include "gaul.h"
 #include "nn_util.h"
+#include "timer_util.h"
 
 /*
  * Global data storage.
@@ -57,8 +58,8 @@ float      **train_property=NULL;   /* Training properties. */
 /*
  * Compilation constants.
  */
-#define NNEVOLVE_NUM_SCORE	75
-#define NNEVOLVE_NUM_TRAIN	50
+#define NNEVOLVE_NUM_SCORE	100
+#define NNEVOLVE_NUM_TRAIN	75
 
 
 /**********************************************************************
@@ -66,7 +67,7 @@ float      **train_property=NULL;   /* Training properties. */
   synopsis:	Write score information.
   parameters:
   return:
-  updated:	05 Feb 2002
+  updated:	06 Feb 2002
  **********************************************************************/
 
 boolean nnevolve_display_evaluation(population *pop, entity *entity)
@@ -82,17 +83,40 @@ boolean nnevolve_display_evaluation(population *pop, entity *entity)
     NN_simulate_with_output(nn, train_data[n], train_property[n], property);
     error += nn->error;
 
-    if (NN_IS_ON(property[0]) != NN_IS_ON(train_property[n][0]))
-      wrong_count++;
-    if (NN_IS_ON(property[1]) != NN_IS_ON(train_property[n][1]))
-      wrong_count++;
-    if (NN_IS_ON(property[2]) != NN_IS_ON(train_property[n][2]))
-      wrong_count++;
+/*
+ * This looks a mess, but it uses the fewest 'if' statements in the
+ * average case.
+ */
+    if (property[0] > property[1])
+      {
+      if (property[0] > property[2])
+        {
+        if (train_property[n][0] < train_property[n][1] ||
+            train_property[n][0] < train_property[n][2])
+          wrong_count++;
+        }
+      else
+        {
+        if (train_property[n][2] < train_property[n][0] ||
+            train_property[n][2] < train_property[n][1])
+          wrong_count++;
+        }
+      }
+    else if (property[1] > property[2])
+      {
+      if (train_property[n][1] < train_property[n][0] ||
+          train_property[n][1] < train_property[n][2])
+        wrong_count++;
+      }
+    else
+      {
+      if (train_property[n][2] < train_property[n][0] ||
+          train_property[n][2] < train_property[n][1])
+        wrong_count++;
+      }
 
-    printf("%d: %f %f %f ... %f %f %f\n", n, property[0], property[1], property[2], train_property[n][0], train_property[n][1], train_property[n][2]);
+    printf("%d: %f %f %f ... %f %f %f --- %d\n", n, property[0], property[1], property[2], train_property[n][0], train_property[n][1], train_property[n][2], wrong_count);
     }
-
-  entity->fitness = -(error+wrong_count)/num_train_data;
 
   printf("Total network error is %f with %d incorrect predictions.  Score = %f\n",
 	 error, wrong_count, entity->fitness);
@@ -123,12 +147,37 @@ boolean nnevolve_evaluate_all(population *pop, entity *entity)
     NN_simulate_with_output(nn, train_data[n], train_property[n], property);
     error += nn->error;
 
-    if (NN_IS_ON(property[0]) != NN_IS_ON(train_property[n][0]))
-      wrong_count++;
-    if (NN_IS_ON(property[1]) != NN_IS_ON(train_property[n][1]))
-      wrong_count++;
-    if (NN_IS_ON(property[2]) != NN_IS_ON(train_property[n][2]))
-      wrong_count++;
+/*
+ * This looks a mess, but it uses the fewest 'if' statements in the
+ * average case.
+ */
+    if (property[0] > property[1])
+      {
+      if (property[0] > property[2])
+        {
+        if (train_property[n][0] < train_property[n][1] ||
+            train_property[n][0] < train_property[n][2])
+          wrong_count++;
+        }
+      else
+        {
+        if (train_property[n][2] < train_property[n][0] ||
+            train_property[n][2] < train_property[n][1])
+          wrong_count++;
+        }
+      }
+    else if (property[1] > property[2])
+      {
+      if (train_property[n][1] < train_property[n][0] ||
+          train_property[n][1] < train_property[n][2])
+        wrong_count++;
+      }
+    else
+      {
+      if (train_property[n][2] < train_property[n][0] ||
+          train_property[n][2] < train_property[n][1])
+        wrong_count++;
+      }
     }
 
   entity->fitness = -(error+wrong_count)/num_train_data;
@@ -256,7 +305,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
     NN_adjust_weights(nn);
     }
 
-  pop->evaluate(pop, adult);
+  ga_entity_evaluate(pop, adult);
 
 /*  printf("DEBUG: Fitness %f -> %f\n", child->fitness, adult->fitness);*/
 
@@ -422,7 +471,7 @@ boolean nnevolve_generation_hook(int generation, population *pop)
 void nnevolve_chromosome_constructor(population *pop, entity *embryo)
   {
   int        num_layers=4;   /* Number of layers in NN. */
-  int        neurons[4]={11,20,20,3};  /* Number of neurons in each layer. */
+  int        neurons[4]={11,10,10,3};  /* Number of neurons in each layer. */
 
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -579,11 +628,21 @@ char *nnevolve_chromosome_to_string(population *pop, entity *joe)
 void nnevolve_setup_data(void)
   {
   int		i, j;
+  float		min_data[13],max_data[13];
 
-#include "wine.data"
+#include "wine.data"	/* This is a quick kludge! */
 
   train_property = s_malloc(sizeof(float *)*178);
   train_data = s_malloc(sizeof(float *)*178);
+
+/*
+ * Transfer data into global data arrays.
+ * Then normalize the data.
+ */
+  for (j=0; j<13; j++)
+    {
+    max_data[j] = min_data[j] = data[0][j+3];
+    }
 
   for (i=0; i<178; i++)
     {
@@ -594,12 +653,25 @@ void nnevolve_setup_data(void)
       {
       train_property[num_train_data][j] = data[num_train_data][j];
       }
-    for (j=4; j<16; j++)
+    for (j=0; j<13; j++)
       {
-      train_data[num_train_data][j-4] = data[num_train_data][j];
+      train_data[num_train_data][j] = data[num_train_data][j+3];
+
+      if (max_data[j]<train_data[num_train_data][j])
+        max_data[j]=train_data[num_train_data][j];
+      else if (min_data[j]>train_data[num_train_data][j])
+        min_data[j]=train_data[num_train_data][j];
       }
     num_train_data++;
     }
+
+  for (j=0; j<13; j++)
+    {
+    for (i=0; i<178; i++)
+      {
+      train_data[i][j] = (train_data[i][j]-min_data[j])/(max_data[j]-min_data[j]);
+      }
+   }
 
   return;
   }
@@ -617,6 +689,7 @@ int main(int argc, char **argv)
   {
   population	*pop=NULL;	/* Population of solutions. */
   entity	*entity=NULL;	/* Used to test standard back-prop. */
+  chrono_t	lga_timer, bp_timer;	/* Timers. */
 
 /*
  * Initialize random number generator.
@@ -631,7 +704,7 @@ int main(int argc, char **argv)
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 300, 80, 1, 0 );
+  pop = ga_population_new( 200, 80, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -653,11 +726,11 @@ int main(int argc, char **argv)
   pop->data_destructor = NULL;
   pop->data_ref_incrementor = NULL;
 
-  pop->evaluate = nnevolve_evaluate_all;
 /*
   pop->evaluate = nnevolve_evaluate1;
   pop->evaluate = nnevolve_evaluate2;
 */
+  pop->evaluate = nnevolve_evaluate_all;
   pop->seed = nnevolve_seed;
   pop->adapt = nnevolve_adapt;
 /*
@@ -681,7 +754,7 @@ int main(int argc, char **argv)
  * Mutation ratio   = 0.05
  * Migration ration = 0.0
  */
-  ga_population_set_parameters( pop, 0.5, 0.01, 0.0 );
+  ga_population_set_parameters( pop, 0.4, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -694,7 +767,9 @@ int main(int argc, char **argv)
 /*
   ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 200 );
 */
-  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 500 );
+  timer_start(&lga_timer);
+  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 1000 );
+  timer_check(&lga_timer);
 
   printf("The fitness of the final solution found was: %f\n",
 		  ga_get_entity_from_rank(pop,0)->fitness);
@@ -706,16 +781,25 @@ int main(int argc, char **argv)
  */
   NN_write((network_t *)ga_get_entity_from_rank(pop,0), "ga_best.nn");
 
-
 /*
  * For comparison, try standard back-propagation.
  */
   NN_define_train_data(num_train_data, train_data, train_property);
   entity = ga_get_free_entity(pop);
-  nnevolve_seed(pop, entity);
-  NN_train_systematic((network_t *)entity->chromosome[0], 1000);
-  nnevolve_display_evaluation(pop, ga_get_entity_from_rank(pop,0));
-  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "bp_best.nn");
+  NN_randomize_weights_01((network_t *)entity->chromosome[0]);
+  NN_set_momentum((network_t *)entity->chromosome[0], 0.5);
+  NN_set_rate((network_t *)entity->chromosome[0], 0.3);
+  NN_set_gain((network_t *)entity->chromosome[0], 1.0);
+  NN_set_bias((network_t *)entity->chromosome[0], 1.0);
+
+  timer_start(&bp_timer);
+  NN_train_random((network_t *)entity->chromosome[0], 5000);
+  timer_check(&bp_timer);
+
+  ga_entity_evaluate(pop, entity);
+  nnevolve_display_evaluation(pop, entity);
+
+  NN_write((network_t *)entity->chromosome[0], "bp_best.nn");
 
   ga_extinction(pop);
 

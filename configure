@@ -1931,11 +1931,11 @@ EOF
 fi
 
 # For LAM on chemcca0 / desktop.
-MPIFLAGS="-DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
+MPIFLAGS="-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
 # For MPICH on chemcca40.
-#MPIFLAGS="-DPARALLEL=2 -DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -L/usr/share/mpi/lib -lmpich"
+#MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -L/usr/share/mpi/lib -lmpich"
 # For non-MPI machines.
-#MPIFLAGS="-DPARALLEL=0"
+#MPIFLAGS=""
 
 echo $ac_n "checking whether to link Electric Fence for memory debugging""... $ac_c" 1>&6
 echo "configure:1942: checking whether to link Electric Fence for memory debugging" >&5

@@ -13,6 +13,7 @@ Changes since release 0.1836:
 - Minor alterations required for clean compilation using Intel C/C++.
 - A neural network evolution example added.
 - A multi-processor (using MPI) island-model example added.
+- Added ga_entity_evaluate() convenience function.
 - Many millions of minor bugfixes.
 - Many millions of major bugfixes.
 - Many millions of new bugs.
