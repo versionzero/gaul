@@ -26,7 +26,7 @@
 
 %define PACKAGE_VERSION 	0
 %define RELEASE			1842
-%define PATCH			0
+%define PATCH			1
 %define prefix			/usr/local/
 
 Name:		gaul-devel

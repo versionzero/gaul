@@ -1,14 +1,17 @@
+Changes since release 0.1842:
+
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.
 - Numerous fixes for compilation with MingW ( http://www.mingw.org/ ) for Windows.
-- Added kludge to avoid problem with "OpenMOSIX weird bus error bug".
 - Path to S-Lang headers is no longer hard-coded.
+- Added kludge to avoid problem with "OpenMOSIX weird bus error bug".
 - Added missing prototypes for built-in Tabu-search acceptance functions.
 - Added simplex search algorithm, and an example.
 - Added random search algorithm, and an example.
 - Added systematic search algorithm, and an example.
 - Added missing ga_crossover_double_singlepoints() and ga_crossover_double_doublepoints() functions.
 - Some minor fixes for clean compilation on Solaris 8 and FreeBSD.
+- Added steepest ascents code.
 
 Changes since release 0.1840:
 - Added a few missing intrinsic functions.
