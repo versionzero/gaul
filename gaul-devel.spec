@@ -45,7 +45,7 @@ The Genetic Algorithm Utility Library (GAUL) is an open source programming libra
 %setup -n gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}
 
 %build
-./configure
+./configure --prefix=%{_prefix} --libdir=%{_libdir}
 make
 
 %install
@@ -63,6 +63,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Wed Jun 30 2004 Stewart Adcock <stewart@linux-domain.com>
+- 0.1847-1
+- Fixes for successful build for AMD64 machines.
+
 * Wed May 28 2003 Stewart Adcock <stewart@linux-domain.com>
 - 0.1843-3
 - Tidied, removed dodgy prefix stuff.

@@ -45,7 +45,7 @@ The Genetic Algorithm Utility Library (GAUL) is an open source programming libra
 %setup -n gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}
 
 %build
-./configure --enable-slang=no
+./configure --enable-slang=no --prefix=%{_prefix} --libdir=%{_libdir}
 make
 
 %install

@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -180,10 +180,9 @@ nobase_include_HEADERS = \
 
 
 libgaul_util_a_LIBFLAGS = 
-libgaul_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 
+#libgaul_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 libnn_util_a_LIBFLAGS = 
-libnn_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 subdir = util
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
@@ -191,11 +190,13 @@ CONFIG_HEADER = $(top_builddir)/config.h \
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
+libgaul_util_la_LDFLAGS =
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
 	timer_util.lo log_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
+libnn_util_la_LDFLAGS =
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
 libnn_util_la_OBJECTS = $(am_libnn_util_la_OBJECTS)
@@ -488,6 +489,7 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-am uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-nobase_includeHEADERS
 
+#libnn_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 
 # Regenerate gaul_config.h with config.status whenever gaul_config.h.in changes.
 gaul_config.h: gaul/stamp-gaul_config
