@@ -454,7 +454,7 @@ void NN_set_decay(network_t *network, const float decay)
   parameters:   network_t *network
   		const char *fname
   return:       none
-  last updated: 01 Mar 2002
+  last updated: 29 Apr 2002
  **********************************************************************/
 
 void NN_write(network_t *network, const char *fname)
@@ -482,9 +482,9 @@ void NN_write(network_t *network, const char *fname)
 
   for (l=1; l<network->num_layers; l++)
     {
-    for (i=0; i<=network->layer[l].neurons; i++)
+    for (i=1; i<=network->layer[l].neurons; i++)
       {
-      fwrite(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons, fp);
+      fwrite(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons+1, fp);
       }
     }
 
@@ -569,7 +569,7 @@ network_t *NN_read_compat(const char *fname)
 		contents from a binary format file on disk.
   parameters:   const char *fname
   return:	network_t *network
-  last updated: 01 Mar 2002
+  last updated: 29 Apr 2002
  **********************************************************************/
 
 network_t *NN_read(const char *fname)
@@ -618,10 +618,10 @@ network_t *NN_read(const char *fname)
     network->layer[l].weight_change = (float**) s_calloc(network->layer[l].neurons+1, sizeof(float*));
     network->layer[l].output[0]   = network->bias;
       
-    for (i=0; i<=network->layer[l].neurons; i++)
+    for (i=1; i<=network->layer[l].neurons; i++)
       {
       network->layer[l].weight[i]      = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
-      fread(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons, fp);
+      fread(network->layer[l].weight[i], sizeof(float), network->layer[l-1].neurons+1, fp);
       network->layer[l].weight_save[i]  = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
       network->layer[l].weight_change[i] = (float*) s_calloc(network->layer[l-1].neurons+1, sizeof(float));
       }
