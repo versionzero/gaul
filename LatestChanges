@@ -6,6 +6,7 @@ Changes since release 0.1848:
 - GARank callback added along with built-in ga_rank_fitness().
 - Support for differential evolution algorithm added.
 - Optimisation of alternative search functions when applied to double-array chromosomes.
+- Fixed bug in src/ga_intrinsics.c - minimum fitness was stored in int not double.
 
 Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.

@@ -1303,7 +1303,7 @@ boolean ga_intrinsic_sladd(void)
 
 boolean ga_intrinsic_sladd(void)
   {
-  static int    fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
+  static double	fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
   static int	schemes[7]={GA_SCHEME_DARWIN, GA_SCHEME_LAMARCK_PARENTS, GA_SCHEME_LAMARCK_CHILDREN, GA_SCHEME_LAMARCK_ALL, GA_SCHEME_BALDWIN_PARENTS, GA_SCHEME_BALDWIN_CHILDREN, GA_SCHEME_BALDWIN_ALL};
   static int	elitism[5]={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE, GA_ELITISM_RESCORE_PARENTS};
 
