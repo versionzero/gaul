@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,26 +96,26 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_DATE_STRING = 
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
-GA_MINOR_VERSION = 1844
+GA_MINOR_VERSION = 1845
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 6
-GA_VERSION = 0.1844-6
+GA_PATCH_VERSION = 0
+GA_VERSION = 0.1845-0
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
-LT_RELEASE = 0.1844
-LT_REVISION = 6
+LT_RELEASE = 0.1845
+LT_REVISION = 0
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -127,12 +127,12 @@ RANLIB = ranlib
 STRIP = strip
 UNAME_STRING = 
 V3_QUICK = 1
-VERSION = 0.1844-6
+VERSION = 0.1845-0
 VERSION_STRING = 
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -213,7 +213,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lslang -lslang
+LIBS = -L/home/stewart/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
@@ -240,7 +240,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 

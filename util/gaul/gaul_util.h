@@ -2,7 +2,7 @@
   gaul_util.h
  **********************************************************************
 
-  gaul_util.h - My general header to define a few useful things
+  gaul_util.h - General header to define a few useful things
   Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -25,6 +25,8 @@
   http://opensource.org/licenses/
 
  **********************************************************************
+
+  Synopsis:	Define some common macros, constants, etc.
 
  **********************************************************************/
 
@@ -139,8 +141,10 @@ typedef void* vpointer;
 #else
 #define vpointer void*
 #endif
+
 typedef const void *constvpointer;
 typedef unsigned char byte;
+
 #ifdef BITSPERBYTE
 # define BYTEBITS	BITSPERBYTE
 #else
