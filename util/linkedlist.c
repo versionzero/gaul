@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Last Updated:	14 Jun 2002 SAA	GList emulation not relied upon in this file now.
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
  
   To do:        Add sorting functions.
                 Functions for inserting/appending lists etc. (i.e. slink_append_list() )
@@ -966,6 +967,8 @@ int main(int argc, char **argv)
 #else
 boolean linkedlist_test(void)
 #endif
+
+#ifdef LINKEDLIST_EMULATE_GLIST
   {
   DLList *list, *t;
   SLList *slist, *st;
@@ -1076,6 +1079,119 @@ boolean linkedlist_test(void)
   g_slist_free(slist);
 
   printf("ok\n");
+
+#else
+  {
+  DLList *list, *t;
+  SLList *slist, *st;
+  unsigned int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  unsigned int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
+  unsigned int i;
+
+  printf("Checking doubly linked lists...\n");
+
+  list = NULL;
+  for (i = 0; i < 10; i++)
+    list = dlink_append(list, &sorteddata[i]);
+  list = dlink_reverse(list);
+
+  for (i = 0; i < 10; i++)
+    {
+      t = dlink_nth_data(list, i);
+      if (*((int*) t->data) != (9 - i))
+	printf("Regular insert failed\n");
+    }
+
+  for (i = 0; i < 10; i++)
+    if(dlink_index_link(list, dlink_nth_data(list, i)) != i)
+      printf("dlink_index_link does not seem to be the inverse of dlink_nth_data\n");
+
+  dlink_free_all(list);
+  list = NULL;
+
+  for (i = 0; i < 10; i++)
+    list = dlink_insert_sorted(list, &data[i], test_list_compare_one);
+
+  dlink_foreach(list, test_list_print, NULL);
+  printf("\n");
+
+  for (i = 0; i < 10; i++)
+    {
+      t = dlink_nth_data(list, i);
+      if (*((unsigned int*) t->data) != i)
+         printf("Sorted insert failed\n");
+    }
+
+  dlink_free_all(list);
+  list = NULL;
+
+  for (i = 0; i < 10; i++)
+    list = dlink_insert_sorted(list, &data[i], test_list_compare_two);
+
+  dlink_foreach(list, test_list_print, NULL);
+  printf("\n");
+
+  for (i = 0; i < 10; i++)
+    {
+      t = dlink_nth_data(list, i);
+      if (*((int*) t->data) != (9 - i))
+         printf("Sorted insert failed\n");
+    }
+
+  dlink_free_all(list);
+
+  printf ("ok\n");
+
+  printf ("Checking singly linked lists...\n");
+
+  slist = NULL;
+  for (i = 0; i < 10; i++)
+    slist = slink_append(slist, &sorteddata[i]);
+  slist = slink_reverse(slist);
+
+  for (i = 0; i < 10; i++)
+    {
+      st = slink_nth_data(slist, i);
+      if (*((int*) st->data) != (9 - i))
+	printf ("failed\n");
+    }
+
+  slink_free_all(slist);
+  slist = NULL;
+
+  for (i = 0; i < 10; i++)
+    slist = slink_insert_sorted(slist, &data[i], test_list_compare_one);
+
+  slink_foreach(slist, test_list_print, NULL);
+  printf("\n");
+
+  for (i = 0; i < 10; i++)
+    {
+      st = slink_nth_data(slist, i);
+      if (*((int*) st->data) != i)
+         printf ("Sorted insert failed\n");
+    }
+
+  slink_free_all(slist);
+  slist = NULL;
+
+  for (i = 0; i < 10; i++)
+    slist = slink_insert_sorted(slist, &data[i], test_list_compare_two);
+
+  slink_foreach(slist, test_list_print, NULL);
+  printf("\n");
+
+  for (i = 0; i < 10; i++)
+    {
+      st = slink_nth_data(slist, i);
+      if (*((int*) st->data) != (9 - i))
+         printf("Sorted insert failed\n");
+    }
+
+  slink_free_all(slist);
+
+  printf("ok\n");
+#endif
 
 #ifdef LINKEDLIST_COMPILE_MAIN
   exit(2);

@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for linked list implementation.
 
-  Updated:	17 Apr 2002 SAA	Several prototypes had 'remove' instead of 'delete'.
+  Updated:	14 Jun 2002 SAA	GList emulation is now optional.
+		17 Apr 2002 SAA	Several prototypes had 'remove' instead of 'delete'.
 		25/04/01 SAA	Added convenience macros slink_data() and dlink_data().
 
  **********************************************************************/
@@ -140,10 +141,10 @@ boolean linkedlist_test(void);
 
 /*
  * glib list emulation stuff.
- * Asumming that the gtk/glib headers have been included already,
- * GSList will be defined and these definitions are not required.
+ *
+ * These macro redirections will be used if LINKEDLIST_EMULATE_GLIST is defined.
  */
-#ifndef GSList
+#ifdef LINKEDLIST_EMULATE_GLIST
 
 #define GSList	SLList
 #define GList	DLList
