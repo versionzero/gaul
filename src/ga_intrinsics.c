@@ -529,6 +529,70 @@ int ga_evolution_forked_slang(	int	*pop,
 
 
 /**********************************************************************
+  ga_evolution_threaded_slang()
+  synopsis:	Wrapper around the main genetic algorithm routine.
+		It performs a GA-based optimisation on the specified
+		population.
+  parameters:
+  return:
+  last updated:	19 Aug 2003
+ **********************************************************************/
+
+int ga_evolution_threaded_slang(	int	*pop,
+			int	*max_generations )
+  {
+  ga_evolution_threaded( ga_get_population_from_id(*pop), *max_generations );
+
+  return TRUE;
+  }
+
+
+#if 0
+/**********************************************************************
+  ga_evolution_mpi_slang()
+  synopsis:	Wrapper around the main genetic algorithm routine.
+		It performs a GA-based optimisation on the specified
+		population.
+  parameters:
+  return:
+  last updated:	19 Aug 2003
+ **********************************************************************/
+
+int ga_evolution_mpi_slang(	int	*pop,
+			int	*max_generations )
+  {
+  ga_evolution_mpi( ga_get_population_from_id(*pop), *max_generations );
+
+  return TRUE;
+  }
+#endif
+
+
+/**********************************************************************
+  ga_population_set_parameters_slang()
+  synopsis:	Sets the GA parameters for a population.
+  parameters:
+  return:
+  last updated:	19 Aug 2003
+ **********************************************************************/
+
+int ga_population_set_parameters_slang( int	*pop,
+					 int	*scheme,
+					 int	*elitism,
+					 double	*crossover,
+					 double	*mutation,
+					 double	*migration)
+  {
+
+  ga_population_set_parameters( ga_get_population_from_id(*pop),
+                     (ga_scheme_type) *scheme, (ga_elitism_type) *elitism,
+                     *crossover, *mutation, *migration );
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_population_get_size_slang()
   synopsis:	Access population's size field.
   parameters:
@@ -1343,6 +1407,17 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_evolution_forked",
             (FVOID_STAR) ga_evolution_forked_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_evolution_threaded",
+            (FVOID_STAR) ga_evolution_threaded_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
+/*
+      || SLadd_intrinsic_function("ga_evolution_mpi",
+            (FVOID_STAR) ga_evolution_mpi_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
+*/
+      || SLadd_intrinsic_function("ga_population_set_parameters",
+            (FVOID_STAR) ga_population_set_parameters_slang, SLANG_INT_TYPE, 6,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_DOUBLE_TYPE, SLANG_DOUBLE_TYPE, SLANG_DOUBLE_TYPE)
       || SLadd_intrinsic_function("ga_population_get_size",
             (FVOID_STAR) ga_population_get_size_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)
