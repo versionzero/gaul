@@ -19,7 +19,7 @@ These milestone requirements are subject to change ;)
  0.1841     |  ga_evolution_mp() and associated example.
             |  Use MemChunks in chromosome allocation.
 ------------+--------------------------------------------------------
- 0.1843     |  Tverski/Euclidean etc. similarity routines.
+ 0.1843     |  Similarity routines for continuous chromosome types.
 ------------+--------------------------------------------------------
  0.1843     |  More replacement operators.
             |  Replacement operators documentation

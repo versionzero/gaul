@@ -40,6 +40,7 @@
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
+
 #include <math.h>
 #include <unistd.h>
 
@@ -103,10 +104,6 @@
  * FIXME: Make opaque i.e. move definition into ga_core.c
  * Should encourage the use of accessor functions rather than directly tweaking
  * the values in this structure manually.
- *
- * FIXME: chomosome field should be a more generic type, and cast when required.
- * FIXME: userdata field should be a more generic type, and cast when required:
- * vpointer *userdata;       
  */
 struct entity_t
   {
@@ -124,24 +121,18 @@ struct entity_t
  */
 struct population_t
   {
-  int		max_size;		/* Maximum population size. */
+  int		max_size;		/* Current maximum population size. */
   int		stable_size;		/* Requested population size. */
   int		size;			/* Actual population size. */
   int		orig_size;		/* Number of parents (entities at start of generation). */
   int		island;			/* Population's island. */
   int		free_index;		/* Next potentially free entity index. */
 
-#if 0
-/*  int		max_entity;*/		/* Number of allocated entities. */
-  entity	*entity_array;		/* The population as an array
-                                           (malloc'ed in one go! */
-#endif
-
   MemChunk	*entity_chunk;		/* Buffer for entity structures. */
   entity	**entity_array;		/* The population in id order. */
   entity	**entity_iarray;	/* The population sorted by fitness. */
 
-  int		num_chromosomes;	/* Number of chromosomes in genotype - should be an array of lengths. */
+  int		num_chromosomes;	/* Number of chromosomes in genotype.  FIXME: should be an array of lengths. */
   int		len_chromosomes;	/* Maximum length of each chromosome. */
   vpointer	data;			/* User data. */
 
