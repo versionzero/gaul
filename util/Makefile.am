@@ -44,7 +44,6 @@ libgaul_util_la_SOURCES = \
 	table_util.c \
 	random_util.c \
 	str_util.c \
-	dstr_util.c \
 	str_match.c \
 	timer_util.c \
 	log_util.c \
@@ -58,7 +57,6 @@ nobase_include_HEADERS = \
 	gaul/gaul_util.h \
 	gaul/avltree.h \
 	gaul/compatibility.h \
-	gaul/dstr_util.h \
 	gaul/linkedlist.h \
 	gaul/log_util.h \
 	gaul/memory_chunks.h \

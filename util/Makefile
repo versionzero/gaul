@@ -153,7 +153,6 @@ libgaul_util_la_SOURCES = \
 	table_util.c \
 	random_util.c \
 	str_util.c \
-	dstr_util.c \
 	str_match.c \
 	timer_util.c \
 	log_util.c \
@@ -169,7 +168,6 @@ nobase_include_HEADERS = \
 	gaul/gaul_util.h \
 	gaul/avltree.h \
 	gaul/compatibility.h \
-	gaul/dstr_util.h \
 	gaul/linkedlist.h \
 	gaul/log_util.h \
 	gaul/memory_chunks.h \
@@ -198,8 +196,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
-	str_util.lo dstr_util.lo str_match.lo timer_util.lo log_util.lo \
-	mpi_util.lo
+	str_util.lo str_match.lo timer_util.lo log_util.lo mpi_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -214,7 +211,6 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/compatibility.Plo \
-	./$(DEPDIR)/dstr_util.Plo \
 	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
 	./$(DEPDIR)/memory_chunks.Plo \
 	./$(DEPDIR)/memory_util.Plo \
@@ -287,7 +283,6 @@ distclean-compile:
 
 include ./$(DEPDIR)/avltree.Plo
 include ./$(DEPDIR)/compatibility.Plo
-include ./$(DEPDIR)/dstr_util.Plo
 include ./$(DEPDIR)/linkedlist.Plo
 include ./$(DEPDIR)/log_util.Plo
 include ./$(DEPDIR)/memory_chunks.Plo

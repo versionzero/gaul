@@ -6,6 +6,7 @@ Changes since release 0.1845:
 - Removed use of the deprecated ga_genesis() function from the examples.
 - Added the common "onemax" GA test as an example program.
 - Prepended "GA_" to some constants' names to reduce occurrance of clashes with external code.
+- Removed unused dynamic string handling code.
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.
