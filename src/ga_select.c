@@ -387,7 +387,7 @@ boolean ga_select_one_bestof3(population *pop, entity **mother)
 
 boolean ga_select_two_bestof3(population *pop, entity **mother, entity **father)
   {
-  entity	*challenger1, challenger2;	/* Random competitors. */
+  entity	*challenger1, *challenger2;	/* Random competitors. */
 
   if (!pop) die("Null pointer to population structure passed.");
 

@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "24/05/04"
+#define GA_BUILD_DATE_STRING "14/06/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,7 +32,7 @@
 #define GA_PATCH_VERSION 8
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux 66-74-219-49.san.rr.com 2.4.22-1.2188.nptl #1 Wed Apr 21 20:36:05 EDT 2004 i686 i686 i386 GNU/Linux"
+#define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
 #define GA_VERSION_STRING "0.1846-8"
