@@ -24,8 +24,7 @@
 
  **********************************************************************
 
-  Synopsis:	Efficient bulk memory allocation.  Mostly stolen from
-		glib's gmem.c
+  Synopsis:	Efficient bulk memory allocation.
  
 		This code is part of memory_util.c - its own
 		integrated implementation of memory chunks.
@@ -33,20 +32,22 @@
 
 		This is thread safe.
  
-  Last updated:	16 Aug 2002 SAA	Added mem_chunk_isempty().
+  Last updated:	21 Nov 2002 SAA Added cut-down and local version of my tree routines.
+		16 Aug 2002 SAA	Added mem_chunk_isempty().
   		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
 		27/02/01 SAA	gpointer replaced with vpointer.
  		18/01/01 SAA	Default compiler constant definition moved out to header file.
  		17/01/01 SAA	Fixed the severe bug causing corruption of data when other data is freed - but I don't know how ;(
 		16/01/01 SAA	Some simple padding support added.  Must be configured at compile-time.
- 		04/01/01 SAA	MemChunks with unreleasable atoms available, which doesn't use my AVLTree implementation added.
+ 		04/01/01 SAA	MemChunks with unreleasable atoms available, which doesn't use my AVL implementation added.
  
   To do:	Padding for array under/overflow checking.
  		Observe contents of atoms in the FreeAtom list.
  
   Known bugs:	High padding may be offset from the real end of the data - so some
  		overflows will be missed.
+		Much of the tree handling code may now be optimised.
  
  **********************************************************************/
 
@@ -55,6 +56,22 @@
 /* MEMORY_ALIGN_SIZE should have been set in config.h */
 
 #define MEMORY_AREA_SIZE 4L
+
+typedef void *Key_t;
+
+typedef struct node_s
+  {
+  struct node_s *left;		/* Left subtree. */
+  struct node_s *right;		/* Right subtree. */
+  int		balance;	/* Height (left) - height (right). */
+  Key_t		key;		/* The key for this node. */
+  vpointer	data;		/* Data stored at this node. */
+  } node_t;
+
+typedef struct
+  {
+  node_t	*root;
+  } tree_t;
 
 typedef struct FreeAtom_t
   {
@@ -65,23 +82,15 @@ typedef struct MemArea_t
   {
   struct MemArea_t *next;	/* the next mem area */
   struct MemArea_t *prev;	/* the previous mem area */
-#if 0
-  unsigned long index;              /* the current index into the "mem" array */
-  unsigned long free;               /* the number of free bytes in this mem area */
-  unsigned long used;        /* the number of atoms allocated from this area */
-  unsigned long mark;               /* is this mem area marked for deletion */
-#endif
   size_t	index;		/* the current index into the "mem" array */
   size_t	free;		/* the number of free bytes in this mem area */
   unsigned int	used;		/* the number of atoms allocated from this area */
-/* I assume the start of the 'mem' buffer is aligned sensibly. */
-/* If not I will restore the four unsigned long's above... */
   unsigned char	mem[MEMORY_AREA_SIZE];  /* the mem array from which atoms get allocated
 			      * the actual size of this array is determined by
 			      *  the mem chunk "area_size". ANSI says that it
 			      *  must be declared to be the maximum size it
 			      *  can possibly be (even though the actual size
-			      *  may be less).
+			      *  will, almost certianly, be less).
 			      */
   } MemArea;
 
@@ -95,27 +104,525 @@ struct MemChunk_t
   MemArea	*mem_areas;	/* a list of all the mem areas owned by this chunk */
   MemArea	*free_mem_area;	/* the free area...which is about to be destroyed */
   FreeAtom	*free_atoms;	/* the free atoms list */
-  AVLTree	*mem_tree;	/* tree of mem areas sorted by memory address */
+  tree_t	*mem_tree;	/* tree of mem areas sorted by memory address */
   };
 
+/*
+ * Private function prototypes.
+ */
+static node_t	*node_new(Key_t key, void *data);
+static void	node_free(node_t *node);
+static void	node_delete(node_t *node);
+static node_t	*node_insert(node_t *node, Key_t key,
+					     void *data, boolean *inserted);
+static node_t	*node_remove(node_t *node,
+                                             Key_t key, void **removed_data);
+static node_t	*node_balance(node_t *node);
+static node_t	*node_remove_leftmost(node_t *node,
+						     node_t **leftmost);
+static node_t	*node_restore_left_balance(node_t *node,
+						     int old_balance);
+static node_t	*node_restore_right_balance(node_t *node,
+						     int old_balance);
+static int	node_height(node_t *node);
+static node_t	*node_rotate_left(node_t *node);
+static node_t	*node_rotate_right(node_t *node);
 
 /*
- * AVLTree functions:
+ * Compilation constants.
+ */
+#define _NODE_BUFFER_NUM_INCR	16
+#define _NODE_BUFFER_SIZE		1024
+
+/*
+ * Global variables.
+ */
+static node_t		*node_free_list = NULL;
+static int		num_trees = 0;	/* Count number of trees in use. */
+static int		buffer_num = -1;
+static int		num_buffers = 0;
+static int		num_used = _NODE_BUFFER_SIZE;
+static node_t		**node_buffers = NULL;
+
+/*
+ * Note that a single coarse thread lock is used when a number of
+ * less coarse locks might be better.
+ */
+THREAD_LOCK_DEFINE_STATIC(node_buffer_lock);
+
+/*
+ * Private functions.
  */
 
-static AVLKey mem_chunk_key_generate(constvpointer data)
+/*
+ * Deallocate all memory associated with buffers.  Should
+ * never be called outside of a "node_buffer_lock"
+ * block.
+ */
+static void _destroy_buffers(void)
   {
-  return (AVLKey) ((MemArea *)data)->mem;
+
+  while (buffer_num >= 0)
+    {
+    s_free(node_buffers[buffer_num]);
+    buffer_num--;
+    }
+
+  s_free(node_buffers);
+  node_buffers = NULL;
+  num_buffers = 0;
+  num_used = _NODE_BUFFER_SIZE;
+
+  node_free_list = NULL;
+
+  return;
   }
 
 
-static int mem_chunk_search_func(constvpointer data, vpointer userdata)
+static node_t *node_new(Key_t key, void *data)
   {
-  if (userdata < (vpointer) ((MemArea *)data)->mem)
-    return -1;
-  if (userdata > (vpointer) &(((MemArea *)data)->mem[((MemArea *)data)->index]) )
-    return 1;
-  return 0;
+  node_t *node;
+
+  THREAD_LOCK(node_buffer_lock);
+/*
+ * Find an unused node.  Look for unused node in current buffer, then
+ * in the free node list, then allocate new buffer.
+ */
+  if (num_used < _NODE_BUFFER_SIZE)
+    {
+    node = &(node_buffers[buffer_num][num_used]);
+    num_used++;
+    }
+  else
+    {
+    if (node_free_list)
+      {
+      node = node_free_list;
+      node_free_list = node->right;
+      }
+    else
+      {
+      buffer_num++;
+
+      if (buffer_num == num_buffers)
+        {
+        num_buffers += _NODE_BUFFER_NUM_INCR;
+        node_buffers = s_realloc(node_buffers, sizeof(node_t *)*num_buffers);
+        }
+
+      node_buffers[buffer_num] = malloc(sizeof(node_t)*_NODE_BUFFER_SIZE);
+
+      node = node_buffers[buffer_num];
+      num_used = 1;
+      }
+    }
+  THREAD_UNLOCK(node_buffer_lock);
+
+  node->balance = 0;
+  node->left = NULL;
+  node->right = NULL;
+  node->key = key;
+  node->data = data;
+
+  return node;
+  }
+
+
+static void node_free(node_t *node)
+  {
+  THREAD_LOCK(node_buffer_lock);
+  node->right = node_free_list;
+  node_free_list = node;
+  THREAD_UNLOCK(node_buffer_lock);
+
+  return;
+  }
+
+
+static void node_delete(node_t *node)
+  {
+  if (node)
+    {
+    node_delete(node->right);
+    node_delete(node->left);
+    node_free(node);
+    }
+
+  return;
+  }
+
+
+/*
+ * Systematically search tree with a search function which has the
+ * same ordering as the tree.
+ * This iterative version is much faster than the equivalent recursive version.
+ */
+static void *node_ordered_search(node_t *node, void *userdata)
+  {
+
+  while (node)
+    {
+    if (userdata < (void *) ((MemArea *)node->data)->mem)
+      node=node->left;
+    else if (userdata > (void *) &(((MemArea *)node->data)->mem[((MemArea *)node->data)->index]))
+      node=node->right;
+    else
+      return node->data;
+    }
+
+  return NULL;
+  }
+
+
+static node_t *node_insert(node_t *node,
+		    Key_t key, void *data, boolean *inserted)
+  {
+  int old_balance;
+
+  if (!node)
+    {
+    *inserted = TRUE;
+    return node_new(key, data);
+    }
+
+  if (key < node->key)
+    {
+    if (node->left)
+      {
+      old_balance = node->left->balance;
+      node->left = node_insert(node->left, key, data, inserted);
+
+      if ((old_balance != node->left->balance) && node->left->balance)
+        node->balance--;
+      }
+    else
+      {
+      *inserted = TRUE;
+      node->left = node_new(key, data);
+      node->balance--;
+      }
+    }
+  else if (key > node->key)
+    {
+    if (node->right)
+      {
+      old_balance = node->right->balance;
+      node->right = node_insert(node->right, key, data, inserted);
+
+      if ((old_balance != node->right->balance) && node->right->balance)
+        node->balance++;
+      }
+    else
+      {
+      *inserted = TRUE;
+      node->right = node_new(key, data);
+      node->balance++;
+      }
+    }
+  else
+    {	/* key == node->key */
+/*
+    *inserted = FALSE;
+ */
+    printf("WARNING: -- Replaced node -- (Key clash?)\n");
+
+    node->data = data;
+    return node;
+    }
+
+  if (*inserted && (node->balance < -1 || node->balance > 1))
+    node = node_balance(node);
+
+  return node;
+  }
+
+
+static node_t *node_remove(node_t *node,
+                            Key_t key, void **removed_data)
+  {
+  node_t	*new_root;
+  int		old_balance;
+
+  if (!node) return NULL;
+
+  if (key < node->key)
+    {
+    if (node->left)
+      {
+      old_balance = node->left->balance;
+      node->left = node_remove(node->left, key, removed_data);
+      node = node_restore_left_balance(node, old_balance);
+      }
+    }
+  else if (key > node->key)
+    {
+    if (node->right)
+      {
+      old_balance = node->right->balance;
+      node->right = node_remove(node->right, key, removed_data);
+      node = node_restore_right_balance(node, old_balance);
+      }
+    }
+  else if (key == node->key)
+    {
+    node_t *removed_node;
+
+    removed_node = node;
+
+    if (!node->right)
+      {
+      node = node->left;
+      }
+    else
+      {
+      old_balance = node->right->balance;
+      node->right = node_remove_leftmost (node->right, &new_root);
+      new_root->left = node->left;
+      new_root->right = node->right;
+      new_root->balance = node->balance;
+      node = node_restore_right_balance (new_root, old_balance);
+      }
+
+    *removed_data = removed_node->data;
+    node_free(removed_node);
+    }
+
+  return node;
+  }
+
+
+static node_t *node_balance(node_t *node)
+  {
+  if (node->balance < -1)
+    {
+    if (node->left->balance > 0)
+      node->left = node_rotate_left(node->left);
+    node = node_rotate_right (node);
+    }
+  else if (node->balance > 1)
+    {
+    if (node->right->balance < 0)
+      node->right = node_rotate_right(node->right);
+    node = node_rotate_left (node);
+    }
+
+  return node;
+  }
+
+
+static node_t *node_remove_leftmost(node_t  *node,
+			     node_t **leftmost)
+  {
+  int old_balance;
+
+  if (!node->left)
+    {
+    *leftmost = node;
+    return node->right;
+    }
+
+  old_balance = node->left->balance;
+  node->left = node_remove_leftmost(node->left, leftmost);
+  return node_restore_left_balance(node, old_balance);
+  }
+
+
+static node_t *node_restore_left_balance(node_t	*node,
+				  int		old_balance)
+  {
+  if ( (!node->left) || ((node->left->balance != old_balance) &&
+           (node->left->balance == 0)) )
+    {
+    node->balance++;
+    }
+
+  if (node->balance > 1) return node_balance(node);
+
+  return node;
+  }
+
+
+static node_t *node_restore_right_balance(node_t	*node,
+				   int		old_balance)
+  {
+  if ( (!node->right) || ((node->right->balance != old_balance) &&
+	   (node->right->balance == 0)) )
+    {
+    node->balance--;
+    }
+
+  if (node->balance < -1) return node_balance(node);
+
+  return node;
+  }
+
+
+static int node_height(node_t *node)
+  {
+  int left_height;
+  int right_height;
+
+  if (!node) return 0;
+
+  if (node->left)
+    left_height = node_height(node->left);
+  else
+    left_height = 0;
+
+  if (node->right)
+    right_height = node_height(node->right);
+  else
+    right_height = 0;
+
+  return MAX(left_height, right_height) + 1;
+  }
+
+
+static node_t *node_rotate_left(node_t *node)
+  {
+  node_t *left;
+  node_t *right;
+  int a_bal;
+  int b_bal;
+
+  left = node->left;
+  right = node->right;
+
+  node->right = right->left;
+  right->left = node;
+
+  a_bal = node->balance;
+  b_bal = right->balance;
+
+  if (b_bal <= 0)
+    {
+    if (a_bal >= 1) right->balance = b_bal - 1;
+    else right->balance = a_bal + b_bal - 2;
+
+    node->balance = a_bal - 1;
+    }
+  else
+    {
+    if (a_bal <= b_bal) right->balance = a_bal - 2;
+    else right->balance = b_bal - 1;
+
+    node->balance = a_bal - b_bal - 1;
+    }
+
+  return right;
+  }
+
+
+static node_t *node_rotate_right(node_t *node)
+  {
+  node_t *left;
+  node_t *right;
+  int a_bal;
+  int b_bal;
+
+  left = node->left;
+  right = node->right;
+
+  node->left = left->right;
+  left->right = node;
+
+  a_bal = node->balance;
+  b_bal = left->balance;
+
+  if (b_bal <= 0)
+    {
+    if (b_bal > a_bal) left->balance = b_bal + 1;
+    else left->balance = a_bal + 2;
+
+    node->balance = a_bal - b_bal + 1;
+    }
+  else
+    {
+    if (a_bal <= -1) left->balance = b_bal + 1;
+    else left->balance = a_bal + b_bal + 2;
+
+    node->balance = a_bal + 1;
+    }
+
+  return left;
+  }
+
+
+tree_t *tree_new(void)
+  {
+  tree_t *tree;
+
+  num_trees++;
+
+  if (!(tree = malloc(sizeof(tree_t))) ) die("Unable to allocate memory.");
+
+  tree->root = NULL;
+
+  return tree;
+  }
+
+
+void delete(tree_t *tree)
+  {
+  if (!tree) return;
+
+  node_delete(tree->root);
+
+  s_free(tree);
+
+  num_trees--;
+
+  THREAD_LOCK(node_buffer_lock);
+  if (num_trees == 0)
+    _destroy_buffers();
+  THREAD_UNLOCK(node_buffer_lock);
+
+  return;
+  }
+
+
+boolean insert(tree_t *tree, void *data)
+  {
+  boolean	inserted=FALSE;
+
+  if (!data) die("Internal error: Trying to insert NULL data.");
+  if (!tree) die("Internal error: Trying to insert into NULL tree.");
+
+  tree->root = node_insert(tree->root, (Key_t) ((MemArea *)data)->mem, data, &inserted);
+
+  return inserted;
+  }
+
+
+void *remove_data(tree_t *tree, void *data)
+  {
+  void *removed=NULL;
+
+  if (!tree || !tree->root) return NULL;
+
+  tree->root = node_remove(tree->root, (Key_t) ((MemArea *)data)->mem, &removed);
+
+  return removed;
+  }
+
+
+void *remove_key(tree_t *tree, Key_t key)
+  {
+  void *removed=NULL;
+
+  if (!tree || !tree->root) return NULL;
+
+  tree->root = node_remove(tree->root, key, &removed);
+
+  return removed;
+  }
+
+
+void *ordered_search(tree_t *tree, void *userdata)
+  {
+  if (!tree || !tree->root) return NULL;
+
+  return node_ordered_search(tree->root, userdata);
   }
 
 
@@ -128,7 +635,7 @@ static unsigned char *pad_values="abcdefghijklmnopqr";
 #define BUMP_DOWN(X)	( (void *) (((unsigned char *)(X))-MEMORY_ALIGN_SIZE) )
 #define BUMP_UP(X)	( (void *) (((unsigned char *)(X))+MEMORY_ALIGN_SIZE) )
 
-static void set_pad_low(MemChunk *mem_chunk, vpointer mem)
+static void set_pad_low(MemChunk *mem_chunk, void *mem)
   {
   memcpy(((unsigned char *)mem),pad_values,MEMORY_ALIGN_SIZE);
 
@@ -136,7 +643,7 @@ static void set_pad_low(MemChunk *mem_chunk, vpointer mem)
   }
 
 
-static void set_pad_high(MemChunk *mem_chunk, vpointer mem)
+static void set_pad_high(MemChunk *mem_chunk, void *mem)
   {
   memcpy(((unsigned char *)mem)+mem_chunk->atom_size-MEMORY_ALIGN_SIZE,
             pad_values,MEMORY_ALIGN_SIZE);
@@ -145,13 +652,13 @@ static void set_pad_high(MemChunk *mem_chunk, vpointer mem)
   }
 
 
-static int check_pad_low(MemChunk *mem_chunk, vpointer mem)
+static int check_pad_low(MemChunk *mem_chunk, void *mem)
   {
   return memcmp(((unsigned char *)mem),pad_values,MEMORY_ALIGN_SIZE);
   }
 
 
-static int check_pad_high(MemChunk *mem_chunk, vpointer mem)
+static int check_pad_high(MemChunk *mem_chunk, void *mem)
   {
   return memcmp(((unsigned char *)mem)+mem_chunk->atom_size-MEMORY_ALIGN_SIZE,
                    pad_values,MEMORY_ALIGN_SIZE);
@@ -169,9 +676,6 @@ boolean mem_chunk_has_freeable_atoms(MemChunk *mem_chunk)
 static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
   {
   MemChunk	*mem_chunk;
-/*
-  size_t	area_size;
-*/
 
 /*
  * Ensure that we don't misalign allocated memory for the user.
@@ -186,11 +690,6 @@ static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
 #if MEMORY_PADDING==TRUE
   atom_size += 2*MEMORY_ALIGN_SIZE;
 #endif
-
-/*
-  area_size = (area_size + atom_size - 1) / atom_size;
-  area_size *= atom_size;
-*/
 
   if ( !(mem_chunk = (MemChunk *) malloc(sizeof(MemChunk))) )
     die("Unable to allocate memory.");
@@ -245,7 +744,7 @@ MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
   if (num_atoms<1) die("Passed number of atoms is < 1.");
 
   mem_chunk = _mem_chunk_new(atom_size, num_atoms);
-  mem_chunk->mem_tree = avltree_new((AVLKeyFunc) mem_chunk_key_generate);
+  mem_chunk->mem_tree = tree_new();
   
   return mem_chunk;
   }
@@ -266,7 +765,7 @@ void mem_chunk_destroy(MemChunk *mem_chunk)
     free(temp_area);
     }
   
-  avltree_delete(mem_chunk->mem_tree);
+  delete(mem_chunk->mem_tree);
   
   free(mem_chunk);
 
@@ -274,187 +773,10 @@ void mem_chunk_destroy(MemChunk *mem_chunk)
   }
 
 
-#if 0
-vpointer old_mem_chunk_alloc(MemChunk *mem_chunk)
-  {
-  MemArea	*temp_area;
-  vpointer	mem;
-  FreeAtom	*this=NULL;
-
-  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
-
-/*
-printf("Allocating from chunk %p\n", mem_chunk);
-printf("mem_chunk->free_atoms = %p\n", mem_chunk->free_atoms);
-*/
-  
-  if (mem_chunk->mem_tree)
-    {	/* There may be a free atom available for re-use. */
-    while (mem_chunk->free_atoms)
-      {
-      /* Get the first piece of memory on the "free_atoms" list.
-       * We can go ahead and destroy the list node we used to keep
-       *  track of it with and to update the "free_atoms" list to
-       *  point to its next element.
-       */
-      mem = mem_chunk->free_atoms;
-      mem_chunk->free_atoms = mem_chunk->free_atoms->next;
-      
-      /* Determine which area this piece of memory is allocated from. */
-      temp_area = avltree_ordered_search(mem_chunk->mem_tree,
-                          mem_chunk_search_func, mem);
-      if (!temp_area) die("Unable to find temp_area");
-      
-      /* If the area isn't being used, it may be deallocated.
-       *
-       * We check to see if all of the segments on the free list that
-       *  reference this area have been removed. This occurs when
-       *  the amount of free memory is less than the allocatable size.
-       * If the chunk should be freed, then we place it in the "free_mem_area".
-       * This is so we make sure not to free the mem area here and then
-       *  allocate it again a few lines down.
-       * If we don't allocate a chunk a few lines down then the "free_mem_area"
-       *  will be freed.
-       * If there is already a "free_mem_area" then we'll just free this mem area.
-       */
-/*
-      printf("temp_area->unused = %s\n", temp_area->unused?TRUE:FALSE);
-*/
-
-      if (temp_area->used==0)
-        {
-        if (temp_area == mem_chunk->mem_area)
-          mem_chunk->mem_area = NULL;
-	      
-        if (mem_chunk->free_mem_area)
-          {
-          mem_chunk->num_mem_areas--;
-		  
-          if (temp_area->next)
-            temp_area->next->prev = temp_area->prev;
-          if (temp_area->prev)
-            temp_area->prev->next = temp_area->next;
-          if (temp_area == mem_chunk->mem_areas)
-            mem_chunk->mem_areas = mem_chunk->mem_areas->next;
-		  
-          if (!avltree_remove(mem_chunk->mem_tree, temp_area)) die("Unable to find temp_area.");
-
-          /* Loop through free atoms and forget any for this area. */
-          this = mem_chunk->free_atoms;
-          while (this)
-            {
-            if ( this->next >= (FreeAtom *) temp_area->mem &&
-                 this->next < (FreeAtom *) &(temp_area->mem[temp_area->index]) )
-              {
-              this->next=this->next->next;
-              }
-            else
-              {
-              this=this->next;
-              }
-            }
-          
-          free(temp_area);
-          }
-        else
-          {
-          mem_chunk->free_mem_area = temp_area;
-          }
-
-        mem_chunk->num_unused_areas--;
-        }
-      else
-        {
-/*
- * Update the number of allocated atoms count.
- */
-        temp_area->used++;
-	  
-/*
- * The area is used.  return this lump of memory.
- */
-/*
-printf("formerly freed mem\n");
-*/
-#if MEMORY_PADDING==TRUE
-        set_pad_low(mem_chunk, mem);
-        set_pad_high(mem_chunk, mem);
-        if (check_pad_low(mem_chunk, mem)!=0) die("LOW MEMORY_PADDING ALREADY CORRUPT!");
-        if (check_pad_high(mem_chunk, mem)!=0) die("HIGH MEMORY_PADDING ALREADY CORRUPT!");
-        mem = BUMP_UP(mem);
-#endif
-
-printf("reused mem %p\n", mem);
-
-        return mem;
-        }
-      }
-    }
-  
-  /* If there isn't a current mem area or the current mem area is out of space
-   *  then allocate a new mem area. We'll first check and see if we can use
-   *  the "free_mem_area". Otherwise we'll just malloc the mem area.
-   */
-  if ((!mem_chunk->mem_area) ||
-      ((mem_chunk->mem_area->index + mem_chunk->atom_size) > mem_chunk->area_size))
-    {	/* A new MemArea must be allocated. */
-/*
-printf("Current mem_area out of space.\n");
-*/
-    if (mem_chunk->free_mem_area)
-      {
-      mem_chunk->mem_area = mem_chunk->free_mem_area;
-      mem_chunk->free_mem_area = NULL;
-      }
-    else
-      {
-      mem_chunk->mem_area = (MemArea*) malloc(sizeof(MemArea)-MEMORY_AREA_SIZE+mem_chunk->area_size);
-
-      if (!mem_chunk->mem_area) die("Unable to allocate memory.");
-	  
-      mem_chunk->num_mem_areas++;
-      mem_chunk->mem_area->next = mem_chunk->mem_areas;
-      mem_chunk->mem_area->prev = NULL;
-	  
-      if (mem_chunk->mem_areas)
-        mem_chunk->mem_areas->prev = mem_chunk->mem_area;
-      mem_chunk->mem_areas = mem_chunk->mem_area;
-	  
-/*
-printf("Inserting new memory area %p size=%lu (%lu)\n", mem_chunk->mem_area, (unsigned long) mem_chunk->area_size, (unsigned long) (sizeof(MemArea)-MEMORY_AREA_SIZE+mem_chunk->area_size));
-*/
-      avltree_insert(mem_chunk->mem_tree, mem_chunk->mem_area);
-      }
-      
-    mem_chunk->mem_area->index = 0;
-    mem_chunk->mem_area->used = 0;
-    }
-  
-  /* Get the memory and modify the state variables appropriately.
-   */
-  mem = (vpointer) &mem_chunk->mem_area->mem[mem_chunk->mem_area->index];
-  mem_chunk->mem_area->index += mem_chunk->atom_size;
-  mem_chunk->mem_area->used++;
-
-#if MEMORY_PADDING==TRUE
-  set_pad_low(mem_chunk, mem);
-  set_pad_high(mem_chunk, mem);
-  if (check_pad_low(mem_chunk, mem)!=0) die("LOW MEMORY_PADDING ALREADY CORRUPT!");
-  if (check_pad_high(mem_chunk, mem)!=0) die("HIGH MEMORY_PADDING ALREADY CORRUPT!");
-  mem = BUMP_UP(mem);
-#endif
-
-printf("new mem %p\n", mem);
-
-  return mem;
-  }
-#endif
-
-
-vpointer mem_chunk_alloc(MemChunk *mem_chunk)
+void *mem_chunk_alloc(MemChunk *mem_chunk)
   {
   MemArea *temp_area;
-  vpointer mem;
+  void *mem;
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
@@ -469,8 +791,7 @@ vpointer mem_chunk_alloc(MemChunk *mem_chunk)
       mem_chunk->free_atoms = mem_chunk->free_atoms->next;
 
       /* Determine which area this piece of memory is allocated from */
-      temp_area = avltree_ordered_search(mem_chunk->mem_tree,
-                          mem_chunk_search_func, mem);
+      temp_area = ordered_search(mem_chunk->mem_tree, mem);
 
       /* If the area is unused, then it may be destroyed.
        * We check to see if all of the segments on the free list that
@@ -495,7 +816,7 @@ vpointer mem_chunk_alloc(MemChunk *mem_chunk)
 
               if (mem_chunk->free_mem_area)
                 {
-mem_chunk->num_mem_areas--;
+                mem_chunk->num_mem_areas--;
 
                   if (temp_area->next)
                     temp_area->next->prev = temp_area->prev;
@@ -506,7 +827,7 @@ mem_chunk->num_mem_areas--;
 
                   if (mem_chunk->mem_tree)
                     {
-if (!avltree_remove(mem_chunk->mem_tree, temp_area)) die("Unable to find temp_area.");
+                    if (!remove_data(mem_chunk->mem_tree, temp_area)) die("Unable to find temp_area.");
                     }
 
                   free (temp_area);
@@ -566,7 +887,7 @@ if (!avltree_remove(mem_chunk->mem_tree, temp_area)) die("Unable to find temp_ar
           mem_chunk->mem_areas = mem_chunk->mem_area;
 
           if (mem_chunk->mem_tree)
-            avltree_insert(mem_chunk->mem_tree, mem_chunk->mem_area);
+            insert(mem_chunk->mem_tree, mem_chunk->mem_area);
         }
 
       mem_chunk->mem_area->index = 0;
@@ -596,7 +917,7 @@ if (!avltree_remove(mem_chunk->mem_tree, temp_area)) die("Unable to find temp_ar
   }
 
 
-void mem_chunk_free(MemChunk *mem_chunk, vpointer mem)
+void mem_chunk_free(MemChunk *mem_chunk, void *mem)
   {
   MemArea *temp_area;
   FreeAtom *free_atom;
@@ -620,7 +941,7 @@ void mem_chunk_free(MemChunk *mem_chunk, vpointer mem)
   free_atom->next = mem_chunk->free_atoms;
   mem_chunk->free_atoms = free_atom;
 
-  if (!(temp_area = avltree_ordered_search(mem_chunk->mem_tree, mem_chunk_search_func, mem)) )
+  if (!(temp_area = ordered_search(mem_chunk->mem_tree, mem)) )
     die("Unable to find temp_area.");
 
   temp_area->used--;
@@ -634,75 +955,13 @@ void mem_chunk_free(MemChunk *mem_chunk, vpointer mem)
   }
 
 
-#if 0
-/* This doesn't free the free_area if there is one */
-void old_mem_chunk_clean(MemChunk *mem_chunk)
-  {
-  MemArea	*mem_area;
-  FreeAtom	*prev_free_atom;
-  FreeAtom	*temp_free_atom;
-  vpointer	mem;
-  
-  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
-  if (!mem_chunk->mem_tree) die("MemChunk passed has no freeable atoms.");
-  
-  prev_free_atom = NULL;
-  temp_free_atom = mem_chunk->free_atoms;
-      
-  while (temp_free_atom)
-    {
-    mem = (vpointer) temp_free_atom;
-	  
-    if (!(mem_area = avltree_ordered_search(mem_chunk->mem_tree, mem_chunk_search_func, mem)) ) die("mem_area not found.");
-	  
-/*
- * If this mem area is unused so we may deallocate the entire
- *  area and list node and decrement the free mem.
- */
-    if (mem_area->used==0)
-      {
-      if (prev_free_atom)
-        prev_free_atom->next = temp_free_atom->next;
-      else
-        mem_chunk->free_atoms = temp_free_atom->next;
-      temp_free_atom = temp_free_atom->next;
-	      
-      mem_chunk->num_mem_areas--;
-      mem_chunk->num_unused_areas--;
-		  
-      if (mem_area->next)
-        mem_area->next->prev = mem_area->prev;
-      if (mem_area->prev)
-        mem_area->prev->next = mem_area->next;
-      if (mem_area == mem_chunk->mem_areas)
-        mem_chunk->mem_areas = mem_chunk->mem_areas->next;
-      if (mem_area == mem_chunk->mem_area)
-        mem_chunk->mem_area = NULL;
-		  
-      if (!avltree_remove_key(mem_chunk->mem_tree, (AVLKey) mem_area))
-        die("mem_area not found.");
-
-      free(mem_area);
-      }
-    else
-      {
-      prev_free_atom = temp_free_atom;
-      temp_free_atom = temp_free_atom->next;
-      }
-    }
-
-  return;
-  }
-#endif
-
-
 /* This doesn't free the free_area if there is one */
 void mem_chunk_clean(MemChunk *mem_chunk)
   {
   MemArea *mem_area;
   FreeAtom *prev_free_atom;
   FreeAtom *temp_free_atom;
-  vpointer mem;
+  void *mem;
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
   if (!mem_chunk->mem_tree) die("MemChunk passed has no freeable atoms.");
@@ -716,7 +975,7 @@ void mem_chunk_clean(MemChunk *mem_chunk)
       {
       mem = (vpointer) temp_free_atom;
 
-      if (!(mem_area = avltree_ordered_search(mem_chunk->mem_tree, mem_chunk_search_func, mem)) ) die("mem_area not found.");
+      if (!(mem_area = ordered_search(mem_chunk->mem_tree, mem)) ) die("mem_area not found.");
 
 /*
  * If this mem area is unused then delete the
@@ -747,7 +1006,7 @@ void mem_chunk_clean(MemChunk *mem_chunk)
  
           if (mem_chunk->mem_tree)
             {
-            if (!avltree_remove_key(mem_chunk->mem_tree, (AVLKey) mem_area))
+            if (!remove_key(mem_chunk->mem_tree, (Key_t) mem_area))
               die("mem_area not found.");
             }
 
@@ -789,8 +1048,8 @@ void mem_chunk_reset(MemChunk *mem_chunk)
   
   if (mem_chunk->mem_tree)
     {
-    avltree_delete(mem_chunk->mem_tree);
-    mem_chunk->mem_tree = avltree_new((AVLKeyFunc)mem_chunk_key_generate);
+    delete(mem_chunk->mem_tree);
+    mem_chunk->mem_tree = tree_new();
     }
 
   return;
@@ -840,7 +1099,7 @@ void mem_chunk_check_all_bounds(MemChunk *mem_chunk)
   }
 
 
-boolean mem_chunk_check_bounds(MemChunk *mem_chunk, vpointer mem)
+boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
   {
   mem = BUMP_DOWN(mem);
   if (check_pad_low(mem_chunk, mem)!=0)
@@ -851,7 +1110,7 @@ boolean mem_chunk_check_bounds(MemChunk *mem_chunk, vpointer mem)
   return TRUE;
   }
 #else
-boolean mem_chunk_check_bounds(MemChunk *mem_chunk, vpointer mem)
+boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
   {
   return TRUE;
   }

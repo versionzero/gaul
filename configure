@@ -7727,12 +7727,12 @@ echo "${ECHO_T}no - safe wrappers only" >&6
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define MEMORY_ALLOC_DEBUG ${result}1
+#define MEMORY_ALLOC_DEBUG ${result1}
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define MEMORY_ALLOC_SAFE ${result}2
+#define MEMORY_ALLOC_SAFE ${result2}
 _ACEOF
 
 

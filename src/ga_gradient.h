@@ -43,7 +43,8 @@ void ga_population_set_gradient_parameters( population		*pop,
                                         const GAto_double	to_double,
                                         const GAfrom_double	from_double,
                                         const GAgradient	gradient,
-					const int		dimensions);
+					const int		dimensions,
+					const double		step_size);
 int ga_gradient(    population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );

@@ -66,6 +66,7 @@
   To do:	rebuilding tree after changing key/hashing function.
  		remove function return success flag.
  		convert some recursive functions into iterative functions where sensible (e.g. avltree_node_count)
+		Use the memory_chunk allocators.  This should now be safe.
 
  **********************************************************************/
 

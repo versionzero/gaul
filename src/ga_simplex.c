@@ -116,11 +116,13 @@ int ga_simplex(	population		*pop,
   int           first=0, last;		/* Indices into solution arrays. */
   boolean       done=FALSE;		/* Whether the shuffle sort is complete. */
   boolean	did_replace;		/* Whether worst solution was replaced. */
+  boolean	restart_needed;		/* Whether the search needs restarting. */
 
 /* Make these parameters: */
-  double alpha = 1.0;	/* range: 0=no extrap, 1=unit step extrap, higher OK */
-  double beta = 0.5;	/* range: 0=no contraction, 1=full contraction */
-  double gamma = 0.5;	/* range: 0=no contraction, 1=full contraction */
+  double alpha = 1.0;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
+  double beta = 0.5;	/* range: 0=no contraction, 1=full contraction. */
+  double gamma = 0.5;	/* range: 0=no contraction, 1=full contraction. */
+  double step = 0.5;	/* range: >0, 1=unit step randomisation, higher OK. */
 
 /*
  * Checks.
@@ -138,7 +140,7 @@ int ga_simplex(	population		*pop,
   num_points = pop->simplex_params->dimensions+1;
   putative = s_malloc(sizeof(entity *)*num_points);
   putative_d = s_malloc(sizeof(double *)*num_points);
-  putative_d_buffer = s_malloc(sizeof(double)*pop->simplex_params->dimensions*num_points+3);
+  putative_d_buffer = s_malloc(sizeof(double)*pop->simplex_params->dimensions*num_points*3);
 
   putative_d[0] = putative_d_buffer;
   average = &(putative_d_buffer[num_points*pop->simplex_params->dimensions]);
@@ -166,6 +168,8 @@ int ga_simplex(	population		*pop,
   else
     {   
     plog(LOG_VERBOSE, "Will perform simplex search with specified starting solution.");
+
+    putative[0] = ga_get_free_entity(pop);
     ga_entity_copy(pop, putative[0], initial);
     }
 
@@ -183,12 +187,14 @@ int ga_simplex(	population		*pop,
   for (i=1; i<num_points; i++)
     {
     for (j=0; j<pop->simplex_params->dimensions; j++)
-      putative_d[i][j] = putative_d[0][j];
+      putative_d[i][j] = putative_d[0][j] + random_double_range(-step,step);
 
+/*
     if (random_boolean())
-      putative_d[i][i] -= 1.0;
+      putative_d[i][i-1] -= 1.0;
     else
-      putative_d[i][i] += 1.0;
+      putative_d[i][i-1] += 1.0;
+*/
 
     pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
     pop->evaluate(pop, putative[i]);
@@ -259,7 +265,8 @@ int ga_simplex(	population		*pop,
       average[j] = 0.0;
       }
 
-    for (i = 1; i < num_points; i++)
+/*    for (i = 1; i < num_points; i++)*/
+    for (i = 0; i < num_points-1; i++)
       {
       for (j = 0; j < pop->simplex_params->dimensions; j++)
         {
@@ -268,12 +275,46 @@ int ga_simplex(	population		*pop,
       }
 
 /*
+ * Check for convergence and restart if needed.
+ * Reduce step, alpha, beta and gamma each time this happens.
+ */
+    restart_needed = TRUE;
+printf("DEBUG: average = ");
+    for (j = 0; j < pop->simplex_params->dimensions; j++)
+      {
+      /* Finish calculating average here to avoid an extra loop. */
+      average[j] /= pop->simplex_params->dimensions;
+      if ( average[j]-TINY > putative_d[pop->simplex_params->dimensions][j] ||
+           average[j]+TINY < putative_d[pop->simplex_params->dimensions][j] )
+        restart_needed = FALSE;
+      
+      printf("%f ", average[j]/pop->simplex_params->dimensions);
+      }
+printf("\n");
+
+  if (restart_needed == TRUE)
+    {
+printf("DEBUG: restarting search.\n");
+    step /= 2.0;
+    alpha /= 2.0;
+    beta /= 2.0;
+    gamma /= 2.0;
+
+    for (i=1; i<num_points; i++)
+      {
+      for (j=0; j<pop->simplex_params->dimensions; j++)
+        putative_d[i][j] = putative_d[0][j] + random_double_range(-step,step);
+
+      pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
+      pop->evaluate(pop, putative[i]);
+      }
+    }
+
+/*
  * Simplex reflection - Extrapolate by a factor alpha away from worst point.
  */
    for (j = 0; j < pop->simplex_params->dimensions; j++)
      {
-     /* Finish calculating average here to avoid an extra loop. */
-     average[j] /= pop->simplex_params->dimensions;
      new_d[j] = (1.0 + alpha) * average[j] - alpha * putative_d[num_points-1][j];
      }
 
@@ -289,6 +330,8 @@ int ga_simplex(	population		*pop,
  * The new solution is fitter than the previously fittest solution, so attempt an 
  * additional extrapolation by a factor alpha.
  */
+printf("DEBUG: new (%f) is fitter than p0 ( %f )\n", new->fitness, putative[0]->fitness);
+
       for (j = 0; j < pop->simplex_params->dimensions; j++)
         new2_d[j] = (1.0 + alpha) * new_d[j] - alpha * putative_d[num_points-1][j];
 
@@ -301,6 +344,8 @@ int ga_simplex(	population		*pop,
  * This additional extrapolation succeeded, so replace the least fit solution
  * by inserting new solution in correct position.
  */
+printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);
+
         tmpentity = putative[pop->simplex_params->dimensions];
         tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
 
@@ -342,20 +387,25 @@ int ga_simplex(	population		*pop,
       {
 /*
  * The reflected point is worse than the second-least fit.  
- * If it is better than the least fit, then use it to replace the
- * least fit.
  */
+printf("DEBUG: new (%f) is less fit than p(n-1) ( %f )\n", new->fitness, putative[pop->simplex_params->dimensions-1]->fitness);
+
       did_replace = FALSE;
 
       if (new->fitness > putative[pop->simplex_params->dimensions]->fitness)
         {
+/*
+ * It is better than the least fit, so use it to replace the
+ * least fit.
+ */
+printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dimensions]->fitness);
         did_replace = TRUE;
 
         tmpentity = putative[pop->simplex_params->dimensions];
         tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
 
-        putative[pop->simplex_params->dimensions-1] = new;
-        putative_d[pop->simplex_params->dimensions-1] = new_d;
+        putative[pop->simplex_params->dimensions] = new;
+        putative_d[pop->simplex_params->dimensions] = new_d;
 
         new = tmpentity;
         new_d = tmpdoubleptr;
@@ -375,6 +425,9 @@ int ga_simplex(	population		*pop,
  * The contraction gave an improvement, so accept it by
  * inserting the new solution at the correct position.
  */
+        did_replace = TRUE;
+
+printf("DEBUG: contracted new (%f) is fitter than p(n) ( %f )\n", new->fitness, putative[pop->simplex_params->dimensions]->fitness);
         i = 0;
         while (putative[i]->fitness > new->fitness) i++;
 
@@ -400,6 +453,8 @@ int ga_simplex(	population		*pop,
  * The new solution is worse than the previous worse.  So, contract
  * toward the most fit point.
  */
+printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
+
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->simplex_params->dimensions; j++)
@@ -418,8 +473,14 @@ int ga_simplex(	population		*pop,
  * Replace the old worst solution by inserting the new solution at the
  * correct position.
  */
+printf("DEBUG: new (%f) is fitter than worst 2\n", new->fitness);
+      for (j=0; j < pop->simplex_params->dimensions; j++)
+        printf("%d fitness = %f\n", j, putative[j]->fitness);
+
       i = 0;
       while (putative[i]->fitness > new->fitness) i++;
+
+printf("DEBUG: new inserted at position %d\n", i);
 
       tmpentity = putative[pop->simplex_params->dimensions];
       tmpdoubleptr = putative_d[pop->simplex_params->dimensions];

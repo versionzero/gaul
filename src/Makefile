@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /u2/
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -135,6 +135,7 @@ libgaul_la_SOURCES = \
     ga_core.c \
     ga_crossover.c \
     ga_intrinsics.c \
+    ga_gradient.c \
     ga_mutate.c \
     ga_optim.c \
     ga_qsort.c \
@@ -156,6 +157,7 @@ include_HEADERS = \
     ga_climbing.h \
     ga_core.h \
     ga_intrinsics.h \
+    ga_gradient.h \
     ga_optim.h \
     ga_qsort.h \
     ga_randomsearch.h \
@@ -178,10 +180,11 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
-	ga_core.lo ga_crossover.lo ga_intrinsics.lo ga_mutate.lo \
-	ga_optim.lo ga_qsort.lo ga_replace.lo ga_randomsearch.lo \
-	ga_seed.lo ga_select.lo ga_sa.lo ga_similarity.lo ga_simplex.lo \
-	ga_systematicsearch.lo ga_tabu.lo ga_utility.lo
+	ga_core.lo ga_crossover.lo ga_intrinsics.lo ga_gradient.lo \
+	ga_mutate.lo ga_optim.lo ga_qsort.lo ga_replace.lo \
+	ga_randomsearch.lo ga_seed.lo ga_select.lo ga_sa.lo \
+	ga_similarity.lo ga_simplex.lo ga_systematicsearch.lo \
+	ga_tabu.lo ga_utility.lo
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
@@ -195,6 +198,7 @@ DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
 	./$(DEPDIR)/ga_chromo.Plo \
 	./$(DEPDIR)/ga_climbing.Plo ./$(DEPDIR)/ga_core.Plo \
 	./$(DEPDIR)/ga_crossover.Plo \
+	./$(DEPDIR)/ga_gradient.Plo \
 	./$(DEPDIR)/ga_intrinsics.Plo \
 	./$(DEPDIR)/ga_mutate.Plo ./$(DEPDIR)/ga_optim.Plo \
 	./$(DEPDIR)/ga_qsort.Plo \
@@ -270,6 +274,7 @@ include ./$(DEPDIR)/ga_chromo.Plo
 include ./$(DEPDIR)/ga_climbing.Plo
 include ./$(DEPDIR)/ga_core.Plo
 include ./$(DEPDIR)/ga_crossover.Plo
+include ./$(DEPDIR)/ga_gradient.Plo
 include ./$(DEPDIR)/ga_intrinsics.Plo
 include ./$(DEPDIR)/ga_mutate.Plo
 include ./$(DEPDIR)/ga_optim.Plo

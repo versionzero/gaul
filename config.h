@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "18/11/02"
+#define BUILD_DATE_STRING "21/11/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -302,10 +302,10 @@
 #define MEMORY_ALIGN_SIZE 4
 
 /* Whether to use debugging memory allocation routines. */
-#define MEMORY_ALLOC_DEBUG 01
+#define MEMORY_ALLOC_DEBUG 0
 
 /* Whether to use safe memory allocation routines. */
-#define MEMORY_ALLOC_SAFE 02
+#define MEMORY_ALLOC_SAFE 1
 
 /* Whether to pad memory. */
 #define MEMORY_PADDING 0
@@ -362,7 +362,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-17.8.0smp #1 SMP Tue Oct 8 12:39:01 EDT 2002 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-18.8.0smp #1 SMP Wed Nov 13 23:11:20 EST 2002 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

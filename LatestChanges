@@ -4,7 +4,7 @@ Changes since release 0.1841:
 - Added kludge to avoid problem with "OpenMOSIX weird bus error bug".
 - Path to S-Lang headers is no longer hard-coded.
 - Added missing prototypes for built-in Tabu-search acceptance functions.
-- Added simplex search algorithm.
+- Added simplex search algorithm, and an example.
 - Added random search algorithm, and an example.
 - Added systematic search algorithm, and an example.
 - Added missing ga_crossover_double_singlepoints() and ga_crossover_double_doublepoints() functions.

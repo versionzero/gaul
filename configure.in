@@ -207,8 +207,8 @@ else
   result1=0
   result2=1
 fi
-  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result}1, [Whether to use debugging memory allocation routines.])
-  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result}2, [Whether to use safe memory allocation routines.])
+  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result1}, [Whether to use debugging memory allocation routines.])
+  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result2}, [Whether to use safe memory allocation routines.])
 
 AC_MSG_CHECKING(whether to enable dumping of statistics)
 if test "x$enable_stats" = "xyes"; then

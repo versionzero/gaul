@@ -129,6 +129,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 #EXTRA_PROGRAMS = 
 bin_PROGRAMS = diagnostics \
+	fitting fitting_simplex \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
@@ -140,6 +141,8 @@ bin_PROGRAMS = diagnostics \
 
 
 diagnostics_SOURCES = diagnostics.c
+fitting_SOURCES = fitting.c
+fitting_simplex_SOURCES = fitting_simplex.c
 pingpong_SOURCES = pingpong.c
 pingpong_tabu_SOURCES = pingpong_tabu.c
 pingpong_tabu2_SOURCES = pingpong_tabu2.c
@@ -183,6 +186,8 @@ EXTRA_DIST = \
 
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
+fitting_DEPENDENCIES = ${DEPENDENCIES}
+fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
@@ -210,6 +215,8 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+fitting_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
@@ -247,7 +254,8 @@ libbtree_la_LDFLAGS =
 libbtree_la_LIBADD =
 am_libbtree_la_OBJECTS = btree.lo
 libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
-bin_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) \
+bin_PROGRAMS = diagnostics$(EXEEXT) fitting$(EXEEXT) \
+	fitting_simplex$(EXEEXT) pingpong$(EXEEXT) \
 	pingpong_tabu$(EXEEXT) pingpong_tabu2$(EXEEXT) \
 	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
 	wildfire_loadbalancing$(EXEEXT) goldberg1$(EXEEXT) \
@@ -263,6 +271,12 @@ PROGRAMS = $(bin_PROGRAMS)
 am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
 diagnostics_OBJECTS = $(am_diagnostics_OBJECTS)
 diagnostics_LDFLAGS =
+am_fitting_OBJECTS = fitting.$(OBJEXT)
+fitting_OBJECTS = $(am_fitting_OBJECTS)
+fitting_LDFLAGS =
+am_fitting_simplex_OBJECTS = fitting_simplex.$(OBJEXT)
+fitting_simplex_OBJECTS = $(am_fitting_simplex_OBJECTS)
+fitting_simplex_LDFLAGS =
 am_goldberg1_OBJECTS = goldberg1.$(OBJEXT)
 goldberg1_OBJECTS = $(am_goldberg1_OBJECTS)
 goldberg1_LDFLAGS =
@@ -346,6 +360,8 @@ LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/fitting.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/fitting_simplex.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/pingpong.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pingpong_sa.Po \
@@ -374,6 +390,7 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
+	$(fitting_SOURCES) $(fitting_simplex_SOURCES) \
 	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
 	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
 	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
@@ -388,7 +405,7 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -442,6 +459,12 @@ clean-binPROGRAMS:
 diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES) 
 	@rm -f diagnostics$(EXEEXT)
 	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
+fitting$(EXEEXT): $(fitting_OBJECTS) $(fitting_DEPENDENCIES) 
+	@rm -f fitting$(EXEEXT)
+	$(LINK) $(fitting_LDFLAGS) $(fitting_OBJECTS) $(fitting_LDADD) $(LIBS)
+fitting_simplex$(EXEEXT): $(fitting_simplex_OBJECTS) $(fitting_simplex_DEPENDENCIES) 
+	@rm -f fitting_simplex$(EXEEXT)
+	$(LINK) $(fitting_simplex_LDFLAGS) $(fitting_simplex_OBJECTS) $(fitting_simplex_LDADD) $(LIBS)
 goldberg1$(EXEEXT): $(goldberg1_OBJECTS) $(goldberg1_DEPENDENCIES) 
 	@rm -f goldberg1$(EXEEXT)
 	$(LINK) $(goldberg1_LDFLAGS) $(goldberg1_OBJECTS) $(goldberg1_LDADD) $(LIBS)
@@ -523,6 +546,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/btree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diagnostics.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_simplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldberg2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nnevolve.Po@am__quote@

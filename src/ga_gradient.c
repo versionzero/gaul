@@ -59,8 +59,8 @@ void ga_population_set_gradient_parameters( population		*pop,
                                         const GAto_double	to_double,
                                         const GAfrom_double	from_double,
                                         const GAgradient	gradient,
-					const double		step_size,
-					const int		dimensions)
+					const int		dimensions,
+					const double		step_size)
   {
 
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -97,23 +97,22 @@ void ga_population_set_gradient_parameters( population		*pop,
   last updated:	19 Nov 2002
  **********************************************************************/
 
-int ga_steepestascent(	population		*pop,
-		entity			*initial,
-		const int		max_iterations )
+int ga_steepestascent(	population	*pop,
+			entity		*current,
+			const int	max_iterations )
   {
   int		iteration=0;		/* Current iteration number. */
-  int		i, j;			/* Index into putative solution array. */
-  entity	**putative;		/* Current working solutions. */
-  entity	*new, *new2;		/* New putative solutions. */
+  int		i;			/* Index into arrays. */
+  double	*current_d;		/* Current solution array. */
+  double	*current_g;		/* Current solution gradient array. */
+  entity	*new;			/* New putative solution. */
+  double	*new_d;			/* New putative solution array. */
   entity	*tmpentity;		/* Used to swap working solutions. */
   double	*tmpdoubleptr;		/* Used to swap working solutions. */
-  int		num_points;		/* Number of search points. */
-  double	**putative_d, *putative_d_buffer;	/* Storage for double arrays. */
-  double	*average;		/* Vector average of solutions. */
-  double	*new_d, *new2_d;	/* New putative solutions. */
-  int           first=0, last;		/* Indices into solution arrays. */
-  boolean       done=FALSE;		/* Whether the shuffle sort is complete. */
-  boolean	did_replace;		/* Whether worst solution was replaced. */
+  double	*buffer;		/* Storage for double arrays. */
+  double	step_size;		/* Current step size. */
+  double	grms;			/* Current RMS gradient. */
+  boolean	force_terminate=FALSE;	/* Force optimisation to terminate. */
 
 /*
  * Checks.
@@ -125,343 +124,113 @@ int ga_steepestascent(	population		*pop,
 
 /* 
  * Prepare working entities and double arrays.
- * The space for the average and new arrays are allocated simultaneously.
  */
-  num_points = pop->gradient_params->dimensions+1;
-  putative = s_malloc(sizeof(entity *)*num_points);
-  putative_d = s_malloc(sizeof(double *)*num_points);
-  putative_d_buffer = s_malloc(sizeof(double)*pop->gradient_params->dimensions*num_points+3);
+  buffer = s_malloc(sizeof(double *)*pop->gradient_params->dimensions*3);
 
-  putative_d[0] = putative_d_buffer;
-  average = &(putative_d_buffer[num_points*pop->gradient_params->dimensions]);
-  new_d = &(putative_d_buffer[(num_points+1)*pop->gradient_params->dimensions]);
-  new2_d = &(putative_d_buffer[(num_points+2)*pop->gradient_params->dimensions]);
-
-  for (i=1; i<num_points; i++)
-    {
-    putative[i] = ga_get_free_entity(pop);    /* The 'working' solutions. */
-    putative_d[i] = &(putative_d_buffer[i*pop->gradient_params->dimensions]);
-    }
+  current_d = buffer;
+  current_g = &(buffer[pop->gradient_params->dimensions]);
+  new_d = &(buffer[pop->gradient_params->dimensions*2]);
 
   new = ga_get_free_entity(pop);
-  new2 = ga_get_free_entity(pop);
 
 /* Do we need to generate a random starting solution? */
-  if (!initial)
+  if (!current)
     {
     plog(LOG_VERBOSE, "Will perform gradient search with random starting solution.");
 
-    putative[0] = ga_get_free_entity(pop);
-    ga_entity_seed(pop, putative[0]);
-    initial = ga_get_free_entity(pop);
+    current = ga_get_free_entity(pop);
+    ga_entity_seed(pop, current);
     }
   else
     {   
     plog(LOG_VERBOSE, "Will perform gradient search with specified starting solution.");
-    ga_entity_copy(pop, putative[0], initial);
     }
 
 /*
- * Generate sample points.
- * Ensure that these initial solutions are scored.
- *
- * NOTE: Only perturb each solution by one dimension, by a unit
- * amount; it might be better to perturb all dimensions and/or
- * by a randomized amount.
+ * Get initial fitness and derivatives.
  */
-  pop->gradient_params->to_double(pop, putative[0], putative_d[0]);
-  pop->evaluate(pop, putative[0]);
-
-  for (i=1; i<num_points; i++)
-    {
-    for (j=0; j<pop->gradient_params->dimensions; j++)
-      putative_d[i][j] = putative_d[0][j];
-
-    if (random_boolean())
-      putative_d[i][i] -= 1.0;
-    else
-      putative_d[i][i] += 1.0;
-
-    pop->gradient_params->from_double(pop, putative[i], putative_d[i]);
-    pop->evaluate(pop, putative[i]);
-    }
-
-/*
- * Sort the initial solutions by fitness.
- * We use a bi-directional bubble sort algorithm (which is
- * called shuffle sort, apparently).
- */ 
-  last = pop->gradient_params->dimensions-1;
-  while (done == FALSE && first < last)
-    {
-    for (j = last ; j > first ; j--)
-      {
-      if ( putative[j]->fitness > putative[j-1]->fitness )
-        {	/* Swap! */
-        tmpentity = putative[j];
-        putative[j] = putative[j-1];
-        putative[j-1] = tmpentity;
-        tmpdoubleptr = putative_d[j];
-        putative_d[j] = putative_d[j-1];
-        putative_d[j-1] = tmpdoubleptr;
-        }
-      }
-    first++;    /* The first one is definitely correct now. */
-
-    done = TRUE;
-
-    for (j = first ; j < last ; j++)
-      {
-      if ( putative[j]->fitness < putative[j+1]->fitness )
-        {	/* Swap! */
-        tmpentity = putative[j];
-        putative[j] = putative[j+1];
-        putative[j+1] = tmpentity;
-        tmpdoubleptr = putative_d[j];
-        putative_d[j] = putative_d[j+1];
-        putative_d[j+1] = tmpdoubleptr;
-        done = FALSE;
-        }
-      }
-    last--;     /* The last one is definitely correct now. */
-    }
+  step_size = pop->gradient_params->step_size;
+  pop->evaluate(pop, current);
+  pop->gradient_params->to_double(pop, current, current_d);
 
   plog( LOG_VERBOSE,
         "Prior to the first iteration, the current solution has fitness score of %f",
-         putative[0]->fitness );
+         current->fitness );
 
 /*
  * Do all the iterations:
  *
  * Stop when (a) max_iterations reached, or
  *           (b) "pop->iteration_hook" returns FALSE.
+ * The iteration hook could evaluate the RMS gradient, or the maximum component
+ * of the gradient, or any other termination criteria that may be desirable.
  */
-  while ( (pop->iteration_hook?pop->iteration_hook(iteration, putative[0]):TRUE) &&
-           iteration<max_iterations )
+  while ( force_terminate==FALSE &&
+          (pop->iteration_hook?pop->iteration_hook(iteration, current):TRUE) &&
+          iteration<max_iterations )
     {
     iteration++;
 
-/*
- * Compute the vector average of all solutions except the least fit.
- * Exploration will proceed along the vector from the least fit point
- * to that vector average.
- */
-    for (j = 0; j < pop->gradient_params->dimensions; j++)
-      {
-      average[j] = 0.0;
-      }
+    grms = pop->gradient_params->gradient(pop, current, current_d, current_g);
 
-    for (i = 1; i < num_points; i++)
-      {
-      for (j = 0; j < pop->gradient_params->dimensions; j++)
-        {
-        average[j] += putative_d[i][j];
-        }
-      }
+    for( i=0; i<pop->gradient_params->dimensions; i++ )
+      new_d[i]=current_d[i]+step_size*current_g[i];
 
-/*
- * Simplex reflection - Extrapolate by a factor alpha away from worst point.
- */
-   for (j = 0; j < pop->gradient_params->dimensions; j++)
-     {
-     /* Finish calculating average here to avoid an extra loop. */
-     average[j] /= pop->gradient_params->dimensions;
-     new_d[j] = (1.0 + alpha) * average[j] - alpha * putative_d[num_points-1][j];
-     }
-
-/*
- * Evaluate the function at this reflected point.  
- */
     pop->gradient_params->from_double(pop, new, new_d);
     pop->evaluate(pop, new);
 
-    if (new->fitness > putative[0]->fitness)
-      {
-/*
- * The new solution is fitter than the previously fittest solution, so attempt an 
- * additional extrapolation by a factor alpha.
- */
-      for (j = 0; j < pop->gradient_params->dimensions; j++)
-        new2_d[j] = (1.0 + alpha) * new_d[j] - alpha * putative_d[num_points-1][j];
+    if ( current->fitness > new->fitness )
+      {	/* New solution is worse. */
 
-      pop->gradient_params->from_double(pop, new2, new2_d);
-      pop->evaluate(pop, new2);
-
-      if (new2->fitness > putative[0]->fitness)
+      do
         {
-/*
- * This additional extrapolation succeeded, so replace the least fit solution
- * by inserting new solution in correct position.
- */
-        tmpentity = putative[pop->gradient_params->dimensions];
-        tmpdoubleptr = putative_d[pop->gradient_params->dimensions];
+        step_size *= 0.5;	/* FIXME: Should be a parameter. */
 
-        for (j = pop->gradient_params->dimensions; j > 0; j--)
-          {
-          putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
-          }
+        for( i=0; i<pop->gradient_params->dimensions; i++ )
+          new_d[i]=current_d[i]+step_size*current_g[i];
 
-        putative[0] = new2;
-        putative_d[0] = new2_d;
+        pop->gradient_params->from_double(pop, new, new_d);
+        pop->evaluate(pop, new);
+        } while( current->fitness > new->fitness && step_size > ApproxZero);
 
-        new2 = tmpentity;
-        new2_d = tmpdoubleptr;
-        }
-      else
-        {
-/*
- * This additional extrapolation failed, so use the original
- * reflected solution.
- */
-        tmpentity = putative[pop->gradient_params->dimensions];
-        tmpdoubleptr = putative_d[pop->gradient_params->dimensions];
-
-        for (j = pop->gradient_params->dimensions; j > 0; j--)
-          {
-          putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
-          }
-
-        putative[0] = new;
-        putative_d[0] = new_d;
-
-        new = tmpentity;
-        new_d = tmpdoubleptr;
-        }
+      if (step_size <= ApproxZero) force_terminate=TRUE;
       }
-    else if (new->fitness < putative[pop->gradient_params->dimensions-1]->fitness)
-      {
-/*
- * The reflected point is worse than the second-least fit.  
- * If it is better than the least fit, then use it to replace the
- * least fit.
- */
-      did_replace = FALSE;
-
-      if (new->fitness > putative[pop->gradient_params->dimensions]->fitness)
-        {
-        did_replace = TRUE;
-
-        tmpentity = putative[pop->gradient_params->dimensions];
-        tmpdoubleptr = putative_d[pop->gradient_params->dimensions];
-
-        putative[pop->gradient_params->dimensions-1] = new;
-        putative_d[pop->gradient_params->dimensions-1] = new_d;
-
-        new = tmpentity;
-        new_d = tmpdoubleptr;
-        }
-/*
- * Perform a contraction of the gradient along one dimension, away from worst point.
- */
-      for (j = 0; j < num_points; j++)
-        new_d[j] = (1.0 - beta) * average[j] + beta * putative_d[num_points-1][j];
-
-      pop->gradient_params->from_double(pop, new, new_d);
-      pop->evaluate(pop, new);
-
-      if (new->fitness > putative[pop->gradient_params->dimensions]->fitness)
-        {
-/*
- * The contraction gave an improvement, so accept it by
- * inserting the new solution at the correct position.
- */
-        i = 0;
-        while (putative[i]->fitness > new->fitness) i++;
-
-        tmpentity = putative[pop->gradient_params->dimensions];
-        tmpdoubleptr = putative_d[pop->gradient_params->dimensions];
-
-        for (j = pop->gradient_params->dimensions; j > i; j--)
-          {
-          putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
-          }
-
-        putative[i] = new;
-        putative_d[i] = new_d;
-
-        new = tmpentity;
-        new_d = tmpdoubleptr;
-        }
-
-      if (did_replace == FALSE)
-        {
-/*
- * The new solution is worse than the previous worse.  So, contract
- * toward the most fit point.
- */
-        for (i = 1; i < num_points; i++)
-          {
-          for (j = 0; j < pop->gradient_params->dimensions; j++)
-            putative_d[i][j] = putative_d[0][j] + gamma * (putative_d[i][j] - putative_d[0][j]);
-
-          pop->gradient_params->from_double(pop, putative[i], putative_d[i]);
-          pop->evaluate(pop, putative[i]);
-          }
-        }
+    else 
+      {	/* New solution is an improvement. */
+      step_size *= 1.2;	/* FIXME: Should be a parameter. */
       }
-    else
-      {
-/*
- * The reflection gave a solution which was better than the worst two
- * solutions, but worse than the best solution.
- * Replace the old worst solution by inserting the new solution at the
- * correct position.
- */
-      i = 0;
-      while (putative[i]->fitness > new->fitness) i++;
 
-      tmpentity = putative[pop->gradient_params->dimensions];
-      tmpdoubleptr = putative_d[pop->gradient_params->dimensions];
+/* Store improved solution. */
+    tmpentity = current;
+    current = new;
+    new = tmpentity;
 
-      for (j = pop->gradient_params->dimensions; j > i; j--)
-        {
-        putative[j]=putative[j-1];
-        putative_d[j]=putative_d[j-1];
-        }
-
-      putative[i] = new;
-      putative_d[i] = new_d;
-
-      new = tmpentity;
-      new_d = tmpdoubleptr;
-      }
+    tmpdoubleptr = current_d;
+    current_d = new_d;
+    new_d = tmpdoubleptr;
 
 /*
  * Use the iteration callback.
  */
     plog( LOG_VERBOSE,
-          "After iteration %d, the current solution has fitness score of %f",
-          iteration,
-          putative[0]->fitness );
+          "After iteration %d, the current solution has fitness score of %f and RMS gradient of %f (step_size = %f)",
+          iteration, current->fitness, grms, step_size );
 
     }	/* Iteration loop. */
-
-/*
- * Store best solution.
- */
-  ga_entity_copy(pop, initial, putative[0]);
 
 /*
  * Cleanup.
  */
   ga_entity_dereference(pop, new);
-  ga_entity_dereference(pop, new2);
 
-  for (i=0; i<num_points; i++)
-    {
-    ga_entity_dereference(pop, putative[i]);
-    }
-
-  s_free(putative);
-  s_free(putative_d);
-  s_free(putative_d_buffer);
+  s_free(buffer);
 
   return iteration;
   }
 
+
+#if 0
+This is the code that I usually use to perform SD minimization:
 
 /* Steepest Descent */
 boolean SteepestDescentMinimize(	double (*ObjectiveFunc)(),
@@ -554,4 +323,4 @@ boolean SteepestDescentMinimize(	double (*ObjectiveFunc)(),
   return FALSE;
   }
 
-
+#endif

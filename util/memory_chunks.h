@@ -24,7 +24,8 @@
 
  **********************************************************************
 
- Last Updated:	15 Aug 2002 SAA	Rearranged order of include directives for clarity and consistency.  Also some tidying.
+ Last Updated:	21 Nov 2002 SAA	Use void * instead of vpointer.
+ 		15 Aug 2002 SAA	Rearranged order of include directives for clarity and consistency.  Also some tidying.
 
  **********************************************************************/
 
@@ -35,8 +36,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#include "avltree.h"
 
 #ifndef MEMORY_ALIGN_SIZE
 #define MEMORY_ALIGN_SIZE       MAX(sizeof(void *), sizeof(long))
@@ -61,8 +60,8 @@ MemChunk	*mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms);
 MemChunk	*mem_chunk_new(size_t atom_size, unsigned int num_atoms);
 boolean		mem_chunk_isempty(MemChunk *mem_chunk);
 void		mem_chunk_destroy(MemChunk *mem_chunk);
-vpointer	mem_chunk_alloc(MemChunk *mem_chunk);
-void		mem_chunk_free(MemChunk *mem_chunk, vpointer mem);
+void		*mem_chunk_alloc(MemChunk *mem_chunk);
+void		mem_chunk_free(MemChunk *mem_chunk, void *mem);
 void		mem_chunk_clean(MemChunk *mem_chunk);
 void		mem_chunk_reset(MemChunk *mem_chunk);
 boolean		mem_chunk_test(void);
