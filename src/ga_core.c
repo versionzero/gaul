@@ -953,14 +953,14 @@ int ga_get_entity_id(population *pop, entity *e)
 		(subscript in the entity_array array).
   parameters:
   return:
-  last updated: 18 Mar 2002
+  last updated: 29 Apr 2002
  **********************************************************************/
 
 entity *ga_get_entity_from_id(population *pop, const unsigned int id)
   {
   if (!pop) die("Null pointer to population structure passed.");
 
-  if (id<0 || id>pop->max_size) return NULL;
+  if (id>pop->max_size) return NULL;
 
   return pop->entity_array[id];
   }
