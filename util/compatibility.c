@@ -959,23 +959,6 @@ char *strdup(const char *str)
 #endif /* HAVE_STRDUP */
 
 
-#if HAVE_MEMDUP != 1
-void *memdup(const void *mem, int byte_size)
-  {
-  void *dest;
-
-  if (!mem) return NULL;
-
-  dest = s_malloc(byte_size);
-
-/* Don't need memmove; I be concerned if these blocks of memory ever overlap! */
-  memcpy(dest, mem, byte_size);
-
-  return dest;
-  }
-#endif /* HAVE_MEMDUP */
-
-
 #if HAVE_STRNDUP != 1
 char *strndup(const char *str, size_t n)
   {

@@ -220,10 +220,6 @@ int memcmp(const void *src1, const void *src2, size_t n);
 char *strdup(const char *str);
 #endif
 
-#if HAVE_MEMDUP != 1
-void *memdup(const void *mem, int byte_size);
-#endif
-
 #if HAVE_STRNDUP != 1
 char *strndup(const char *str, size_t n);
 #endif
