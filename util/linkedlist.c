@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation (singly- and doubly- linked).
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	24 Dec 2002 SAA Use standard exit value.  Added so explicit typecasts.
+  Last Updated:	06 Jan 2003 SAA	Don't bother using unsigned ints for indices anymore.  Some parameters now declared as const.
+  		24 Dec 2002 SAA Use standard exit value.  Added so explicit typecasts.
   		15 Oct 2002 SAA Avoid some unsigned comparison warnings when using Compaq's ccc.
 		22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
   		16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
@@ -325,19 +326,21 @@ SLList *slink_reverse(SLList *list)
   }
 
 
-SLList *slink_nth(SLList *list, unsigned int index)
+SLList *slink_nth(SLList *list, const int index)
   {
-  while (index > 0 && list)
+  int	i=index;
+
+  while (i > 0 && list)
     {
     list = list->next;
-    index--;
+    i--;
     }
 
   return list;
   }
 
 
-vpointer slink_nth_data(SLList *list, unsigned int index)
+vpointer slink_nth_data(SLList *list, const int index)
   {
   list = slink_nth(list, index);
 
@@ -404,9 +407,9 @@ SLList *slink_last(SLList *list)
   }
 
 
-unsigned int slink_size(SLList *list)
+int slink_size(SLList *list)
   {
-  unsigned int size=0;
+  int	size=0;
 
   while (list)
     {
@@ -641,7 +644,7 @@ DLList *dlink_insert_index(DLList *list, vpointer data, int index)
     return dlink_prepend(list, data);
     }
   
-  this_list = dlink_nth(list, (unsigned int) index);
+  this_list = dlink_nth(list, index);
   if (!this_list)
     return dlink_append(list, data);
   
@@ -767,31 +770,35 @@ DLList *dlink_reverse(DLList *list)
   }
 
 
-DLList *dlink_nth(DLList *list, unsigned int index)
-  {
-  while (index > 0 && list)
+DLList *dlink_nth(DLList *list, const int index)
+  {  
+  int	i=index;
+
+  while (i > 0 && list)
     {
     list = list->next;
-    index++;
+    i--;
     }
   
   return list;
   }
 
 
-DLList *dlink_pth(DLList *list, unsigned int index)
+DLList *dlink_pth(DLList *list, const int index)
   {
-  while (index > 0 && list)
+  int	i=index;
+
+  while (i > 0 && list)
     {
     list = list->prev;
-    index--;
+    i--;
     }
   
   return list;
   }
 
 
-vpointer dlink_nth_data(DLList *list, unsigned int index)
+vpointer dlink_nth_data(DLList *list, const int index)
   {
   list = dlink_nth(list, index);
   
@@ -799,7 +806,7 @@ vpointer dlink_nth_data(DLList *list, unsigned int index)
   }
 
 
-vpointer dlink_pth_data(DLList *list, unsigned int index)
+vpointer dlink_pth_data(DLList *list, const int index)
   {
   list = dlink_pth(list, index);
   
@@ -876,9 +883,9 @@ DLList *dlink_first(DLList *list)
   }
 
 
-unsigned int dlink_size(DLList *list)
+int dlink_size(DLList *list)
   {
-  unsigned int size=0;
+  int	size=0;
   
   while (list)
     {
@@ -1018,9 +1025,9 @@ boolean linkedlist_test(void)
   {
   DLList *list, *t;
   SLList *slist, *st;
-  unsigned int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-  unsigned int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
-  unsigned int i;
+  int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
+  int i;
 
   printf("Checking doubly linked lists...\n");
 
@@ -1052,7 +1059,7 @@ boolean linkedlist_test(void)
   for (i = 0; i < 10; i++)
     {
       t = g_list_nth(list, i);
-      if (*((unsigned int*) t->data) != i)
+      if (*((int*) t->data) != i)
          printf("Sorted insert failed\n");
     }
 
@@ -1130,9 +1137,9 @@ boolean linkedlist_test(void)
   {
   DLList *list, *t;
   SLList *slist, *st;
-  unsigned int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-  unsigned int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
-  unsigned int i;
+  int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
+  int i;
 
   printf("Checking doubly linked lists...\n");
 
@@ -1164,7 +1171,7 @@ boolean linkedlist_test(void)
   for (i = 0; i < 10; i++)
     {
       t = dlink_nth(list, i);
-      if (*((unsigned int*) t->data) != i)
+      if (*((int*) t->data) != i)
          printf("Sorted insert failed\n");
     }
 

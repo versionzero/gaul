@@ -48,7 +48,7 @@
   To do:	Reading/writing 'soup' files.
 		Replace the send_mask int array with a bit vector.
 		All functions here should be based on entity/population _pointers_ while the functions in ga_intrinsics should be based on _handles_.
-		More "if (!pop) die("Null pointer to population structure passed.");" checks are needed.
+		More "if ( !pop ) die("Null pointer to population structure passed.");" checks are needed.
 		Population/entity iterator functions.
 		ga_get_struct_whatever() should be renamed to ga_struct_get_whatever().
 
@@ -155,6 +155,8 @@ static struct func_lookup lookup[90]={
 	{ "ga_chromosome_bitstring_to_bytes", (void *) ga_chromosome_bitstring_to_bytes },
 	{ "ga_chromosome_bitstring_from_bytes", (void *) ga_chromosome_bitstring_from_bytes },
 	{ "ga_chromosome_bitstring_to_string", (void *) ga_chromosome_bitstring_to_string },
+	{ NULL, NULL },
+	{ NULL, NULL },
 	{ NULL, NULL } };
 
 
@@ -320,7 +322,7 @@ population *ga_population_new(	const int stable_size,
  * Add this new population into the population table.
  */
   THREAD_LOCK(pop_table_lock);
-  if (!pop_table) pop_table=table_new();
+  if ( !pop_table ) pop_table=table_new();
 
   pop_id = table_add(pop_table, (vpointer) newpop);
   THREAD_UNLOCK(pop_table_lock);
@@ -350,7 +352,7 @@ population *ga_population_clone_empty(population *pop)
   unsigned int	pop_id;		/* Handle for new population structure. */
 
   /* Checks */
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
 /*
  * Allocate new structure.
@@ -424,7 +426,7 @@ population *ga_population_clone_empty(population *pop)
  * Add this new population into the population table.
  */
   THREAD_LOCK(pop_table_lock);
-  if (!pop_table) pop_table=table_new();
+  if ( !pop_table ) pop_table=table_new();
 
   pop_id = table_add(pop_table, (vpointer) newpop);
   THREAD_UNLOCK(pop_table_lock);
@@ -607,8 +609,8 @@ population **ga_get_all_populations(void)
 boolean ga_entity_seed(population *pop, entity *adam)
   {
 
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!pop->seed) die("Population seeding function is not defined.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !pop->seed ) die("Population seeding function is not defined.");
 
   return pop->seed(pop, adam);
   }
@@ -630,8 +632,8 @@ boolean ga_population_seed(population *pop)
 
   plog(LOG_DEBUG, "Population seeding by user-defined genesis.");
 
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!pop->seed) die("Population seeding function is not defined.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !pop->seed ) die("Population seeding function is not defined.");
 
   for (i=0; i<pop->stable_size; i++)
     {
@@ -667,8 +669,8 @@ boolean ga_population_seed_soup(population *pop, const char *fname)
   plog(LOG_DEBUG, "Population seeding by reading soup file.");
   plog(LOG_FIXME, "Code incomplete.");
 
-  if (!fname) die("Null pointer to filename passed.");
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
 #if 0
 /*
@@ -770,7 +772,7 @@ static int gaul_lookup_hook_id(void *func)
   {
   int	id=1;	/* Index into lookup table. */
 
-  if (func==NULL) return 0;
+  if ( !func ) return 0;
 
   while (lookup[id].func_ptr != NULL && func != lookup[id].func_ptr) id++;
 
@@ -824,13 +826,13 @@ boolean ga_population_write(population *pop, char *fname)
   char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
 
 /* Checks. */
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!fname) die("Null pointer to filename passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
 
 /*
  * Open output file.
  */
-  if((fp=fopen(fname,"w"))==NULL)
+  if( !(fp=fopen(fname,"w")) )
     dief("Cannot open population file \"%s\" for output.", fname);
 
 /*
@@ -956,12 +958,12 @@ static population *ga_population_read_001(char *fname)
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
 
 /* Checks. */
-  if (!fname) die("Null pointer to filename passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
 
 /*
  * Open output file.
  */
-  if((fp=fopen(fname,"r"))==NULL)
+  if( !(fp=fopen(fname,"r")) )
     dief("Cannot open population file \"%s\" for input.", fname);
 
 /*
@@ -989,7 +991,7 @@ static population *ga_population_read_001(char *fname)
 /*
  * Got a population structure?
  */
-  if (!pop) die("Unable to allocate population structure.");
+  if ( !pop ) die("Unable to allocate population structure.");
 
 /*
  * GA parameters.
@@ -1088,12 +1090,12 @@ population *ga_population_read(char *fname)
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
 
 /* Checks. */
-  if (!fname) die("Null pointer to filename passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
 
 /*
  * Open output file.
  */
-  if((fp=fopen(fname,"r"))==NULL)
+  if( !(fp=fopen(fname,"r")) )
     dief("Cannot open population file \"%s\" for input.", fname);
 
 /*
@@ -1125,7 +1127,7 @@ population *ga_population_read(char *fname)
 /*
  * Got a population structure?
  */
-  if (!pop) die("Unable to allocate population structure.");
+  if ( !pop ) die("Unable to allocate population structure.");
 
 /*
  * GA parameters.
@@ -1222,14 +1224,14 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
   FILE		*fp;			/* Filehandle. */
 
 /* Checks. */
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!entity) die("Null pointer to entity structure passed.");
-  if (!fname) die("Null pointer to filename passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !entity ) die("Null pointer to entity structure passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
 
 /*
  * Open output file.
  */
-  if((fp=fopen(fname,"w"))==NULL)
+  if( !(fp=fopen(fname,"w")) )
     dief("Cannot open entity file \"%s\" for output.", fname);
 
 /*
@@ -1271,13 +1273,13 @@ entity *ga_entity_read(population *pop, char *fname)
   entity	*entity;		/* Input entity. */
 
 /* Checks. */
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!fname) die("Null pointer to filename passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !fname ) die("Null pointer to filename passed.");
 
 /*
  * Open output file.
  */
-  if((fp=fopen(fname,"w"))==NULL)
+  if( !(fp=fopen(fname,"w")) )
     dief("Cannot open entity file \"%s\" for output.", fname);
 
 /*
@@ -1310,9 +1312,9 @@ entity *ga_entity_read(population *pop, char *fname)
 double ga_entity_evaluate(population *pop, entity *entity)
   {
 
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!entity) die("Null pointer to entity structure passed.");
-  if (!pop->evaluate) die("Evaluation callback not defined.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !entity ) die("Null pointer to entity structure passed.");
+  if ( !pop->evaluate ) die("Evaluation callback not defined.");
 
   pop->evaluate(pop, entity);
 
@@ -1336,7 +1338,7 @@ boolean ga_population_score_and_sort(population *pop)
   double	origfitness;	/* Stored fitness value. */
 
 /* Checks. */
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
 /*
  * Score and sort all of the population members.
@@ -1380,7 +1382,7 @@ boolean ga_population_sort(population *pop)
   {
 
 /* Checks. */
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
   sort_population(pop);
 
@@ -1403,7 +1405,7 @@ double ga_population_convergence_genotypes( population *pop )
   int		i, j;		/* Loop over pairs of entities. */
   int		total=0, converged=0;	/* Number of comparisons, matches. */
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
 
   for (i=1; i<pop->size; i++)
@@ -1434,7 +1436,7 @@ double ga_population_convergence_chromosomes( population *pop )
   int		k;		/* Loop over chromosomes. */
   int		total=0, converged=0;	/* Number of comparisons, matches. */
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
 
   for (i=1; i<pop->size; i++)
@@ -1471,7 +1473,7 @@ double ga_population_convergence_alleles( population *pop )
   int		k;		/* Loop over chromosomes. */
   int		total=0, converged=0;	/* Number of comparisons, matches. */
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
 
   for (i=1; i<pop->size; i++)
@@ -1576,8 +1578,8 @@ int ga_get_entity_id(population *pop, entity *e)
   {
   int	id=0;	/* The index. */
 
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!e) die("Null pointer to entity structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !e ) die("Null pointer to entity structure passed.");
 
   while (id < pop->max_size)
     {
@@ -1600,7 +1602,7 @@ int ga_get_entity_id(population *pop, entity *e)
 
 entity *ga_get_entity_from_id(population *pop, const unsigned int id)
   {
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
   if (id>pop->max_size) return NULL;
 
@@ -1638,8 +1640,10 @@ entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
 boolean ga_entity_setup(population *pop, entity *joe)
   {
 
-  if (!joe) die("Null pointer to entity structure passed.");
-  if (!pop->chromosome_constructor) die("Chromosome constructor not defined.");
+  if (!joe)
+    die("Null pointer to entity structure passed.");
+  if (!pop->chromosome_constructor)
+    die("Chromosome constructor not defined.");
 
 /* Allocate chromosome structures. */
   joe->chromosome = NULL;
@@ -1922,9 +1926,9 @@ entity *ga_get_free_entity(population *pop)
 
 boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chromosome)
   {
-  vpointer	tmpdata;	/* Temporary pointer. */
+  vpointer	tmpdata=NULL;	/* Temporary pointer. */
 
-  if (!src || (tmpdata = slink_nth_data(src->data, chromosome)) == NULL)
+  if ( !src || !(tmpdata = slink_nth_data(src->data, chromosome)) )
     {
     dest->data = slink_append(dest->data, NULL);
     }
@@ -1949,7 +1953,7 @@ boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chrom
   last updated: 18/12/00
  **********************************************************************/
 
-boolean ga_copy_chromosome( population *pop, entity *dest, entity *src,
+static boolean ga_copy_chromosome( population *pop, entity *dest, entity *src,
                             const int chromosome )
   {
 
@@ -2091,7 +2095,7 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
   {
   int		i;
   int		count=0;
-  unsigned int	len, max_len=0;		/* Length of buffer to send. */
+  int		len=0, max_len=0;		/* Length of buffer to send. */
   byte		*buffer=NULL;
 
 /*
@@ -2122,7 +2126,7 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
 /* printf("DEBUG: Node %d sending entity %d/%d (%d/%d) with fitness %f\n",
              mpi_get_rank(), count, num_to_send, i, pop->size, pop->entity_iarray[i]->fitness); */
       mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
-      if (len != pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+      if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
 	die("Internal length mismatch");
       mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
       count++;
@@ -2160,7 +2164,7 @@ void ga_population_send_every( population *pop, int dest_node )
   unsigned int	max_len=0;		/* Maximum length of buffer. */
   byte		*buffer=NULL;
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
 /*
  * Send number of entities.
@@ -2172,7 +2176,7 @@ void ga_population_send_every( population *pop, int dest_node )
  * elegant approach for this.
  * Sending this length here should not be required at all.
  */
-  len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
+  len = (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
   mpi_send(&len, 1, MPI_TYPE_INT, dest_node, GA_TAG_ENTITYLEN);
 
 /*
@@ -2181,7 +2185,7 @@ void ga_population_send_every( population *pop, int dest_node )
   for (i=0; i<pop->size; i++)
     {
     mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
-    if (len != pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+    if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
       die("Internal length mismatch");
     mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
     }
@@ -2209,12 +2213,12 @@ void ga_population_send_every( population *pop, int dest_node )
 void ga_population_append_receive( population *pop, int src_node )
   {
   int		i;
-  int		len;			/* Length of buffer to receive. */
+  int		len=0;			/* Length of buffer to receive. */
   byte		*buffer;		/* Receive buffer. */
   int		num_to_recv;		/* Number of entities to receive. */
   entity	*entity;		/* New entity. */
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
 /*
  * Get number of entities to receive and the length of each.
@@ -2315,7 +2319,7 @@ population *ga_population_receive( int src_node )
 void ga_population_send( population *pop, int dest_node )
   {
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
   mpi_send(&(pop->stable_size), 1, MPI_TYPE_INT, dest_node, GA_TAG_POPSTABLESIZE);
   mpi_send(&(pop->crossover_ratio), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_POPCROSSOVER);
@@ -2459,8 +2463,8 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
   plog(LOG_FIXME, "Warning... untested code.");
 
 /* Checks */
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!send_mask) die("Null pointer to int array.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !send_mask ) die("Null pointer to int array.");
 
   next = mpi_get_next_rank();
   prev = mpi_get_prev_rank();
@@ -2579,8 +2583,8 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
   entity	*optimised;
 
   /* Checks */
-  if (!pop) die("Null pointer to population structure passed.");
-  if (!unopt) die("Null pointer to entity structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
+  if ( !unopt ) die("Null pointer to entity structure passed.");
 
   plog(LOG_FIXME,
        "Code incomplete, using 25 iterations of the RAHC algorithm for now.");
@@ -2790,7 +2794,7 @@ unsigned int ga_resurect(population *pop)
   {
   unsigned int	id=TABLE_ERROR_INDEX;	/* Internal population id. */
 
-  if (!pop) die("Null pointer to population structure passed.");
+  if ( !pop ) die("Null pointer to population structure passed.");
 
   plog(LOG_VERBOSE, "The population has been restored!");
 
@@ -2818,7 +2822,7 @@ boolean ga_extinction(population *extinct)
   {
   unsigned int	id = TABLE_ERROR_INDEX;	/* Internal index for this extinct population. */
 
-  if (!extinct) die("Null pointer to population structure passed.");
+  if ( !extinct ) die("Null pointer to population structure passed.");
 
   plog(LOG_VERBOSE, "This population is becoming extinct!");
 
@@ -2881,7 +2885,7 @@ boolean ga_extinction(population *extinct)
 
 boolean ga_genocide(population *pop, int target_size)
   {
-  if (!pop) return FALSE;
+  if ( !pop ) return FALSE;
 
   plog(LOG_VERBOSE,
             "The population is being culled from %d to %d individuals!",
@@ -2926,7 +2930,7 @@ double ga_entity_get_fitness(entity *e)
 
 boolean ga_entity_set_fitness(entity *e, double fitness)
   {
-  if (!e) return FALSE;
+  if ( !e ) return FALSE;
 
   e->fitness=fitness;
 
@@ -2991,7 +2995,7 @@ int ga_population_get_maxsize(population *pop)
 
 boolean ga_population_set_stablesize(population *pop, int stable_size)
   {
-  if (!pop) return FALSE;
+  if ( !pop ) return FALSE;
 
   pop->stable_size = stable_size;
 
@@ -3009,7 +3013,7 @@ boolean ga_population_set_stablesize(population *pop, int stable_size)
 
 boolean ga_population_set_data(population *pop, vpointer data)
   {
-  if (!pop) return FALSE;
+  if ( !pop ) return FALSE;
 
   pop->data = data;
 
@@ -3027,7 +3031,7 @@ boolean ga_population_set_data(population *pop, vpointer data)
 
 vpointer ga_population_get_data(population *pop)
   {
-  if (!pop) return NULL;
+  if ( !pop ) return NULL;
 
   return pop->data;
   }
@@ -3045,15 +3049,15 @@ boolean ga_entity_set_data(population *pop, entity *e, SLList *data)
   {
   SLList	*this;		/* Current list element. */
 
-  if (!pop) return FALSE;
-  if (!e) return FALSE;
+  if ( !pop ) return FALSE;
+  if ( !e ) return FALSE;
 
   if (e->data)
     {
     if (pop->data_destructor)
       {
       this = data;
-      while (this)
+      while (this!=NULL)
         {
         pop->data_destructor(slink_data(this));
         this = slink_next(this);
@@ -3078,8 +3082,9 @@ boolean ga_entity_set_data(population *pop, entity *e, SLList *data)
 
 SLList *ga_entity_get_data(population *pop, entity *e)
   {
-  if (!pop) return FALSE;
-  if (!e) return FALSE;
+
+  if ( !pop ) return NULL;
+  if ( !e ) return NULL;
 
   return e->data;
   }

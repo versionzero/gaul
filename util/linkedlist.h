@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for linked list implementation.
 
-  Updated:	14 Jun 2002 SAA	GList emulation is now optional.
+  Last Updated:	06 Jan 2003 SAA	Don't bother using unsigned ints for indices anymore.  Some parameters now declared as const.
+  		14 Jun 2002 SAA	GList emulation is now optional.
 		17 Apr 2002 SAA	Several prototypes had 'remove' instead of 'delete'.
 		25/04/01 SAA	Added convenience macros slink_data() and dlink_data().
 
@@ -78,14 +79,14 @@ SLList	*slink_delete_all_data(SLList *list, vpointer data);
 SLList	*slink_delete_link(SLList *list, SLList *link);
 SLList	*slink_clone(SLList *list);
 SLList	*slink_reverse(SLList *list);
-SLList	*slink_nth(SLList *list, unsigned int index);
-vpointer	slink_nth_data(SLList *list, unsigned int index);
+SLList	*slink_nth(SLList *list, const int index);
+vpointer	slink_nth_data(SLList *list, const int index);
 SLList	*slink_find(SLList *list, vpointer data);
 SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
 int	slink_index_link(SLList *list, SLList *link);
 int	slink_index_data(SLList *list, vpointer data);
 SLList	*slink_last(SLList *list);
-unsigned int	slink_size(SLList *list);
+int	slink_size(SLList *list);
 boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
 SLList	*slink_sort_merge (SLList      *l1, 
 		     SLList      *l2,
@@ -107,17 +108,17 @@ DLList	*dlink_delete_data(DLList *list, vpointer data);
 DLList	*dlink_delete_link(DLList *list, DLList *link);
 DLList	*dlink_clone(DLList *list);
 DLList	*dlink_reverse(DLList *list);
-DLList	*dlink_nth(DLList *list, unsigned int index);
-DLList	*dlink_pth(DLList *list, unsigned int index);
-vpointer	dlink_nth_data(DLList *list, unsigned int index);
-vpointer	dlink_pth_data(DLList *list, unsigned int index);
+DLList	*dlink_nth(DLList *list, const int index);
+DLList	*dlink_pth(DLList *list, const int index);
+vpointer	dlink_nth_data(DLList *list, const int index);
+vpointer	dlink_pth_data(DLList *list, const int index);
 DLList	*dlink_find(DLList *list, vpointer data);
 DLList	*dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func);
 int	dlink_index_link(DLList *list, DLList *link);
 int	dlink_index_data(DLList *list, vpointer data);
 DLList	*dlink_last(DLList *list);
 DLList	*dlink_first(DLList *list);
-unsigned int	dlink_size(DLList *list);
+int	dlink_size(DLList *list);
 boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
 boolean	dlink_foreach_reverse(DLList *list,
                        LLForeachFunc func, vpointer userdata);

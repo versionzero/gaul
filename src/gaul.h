@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul - Genetic Algorithm Utility Library.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -194,6 +194,7 @@ int	ga_get_entity_id_from_rank(population *pop, int rank);
 boolean ga_entity_setup(population *pop, entity *e);
 boolean	ga_entity_dereference_by_rank(population *pop, int rank);
 boolean ga_entity_dereference(population *p, entity *dying);
+boolean ga_entity_dereference_by_id(population *pop, int id);
 void ga_entity_clear_data(population *p, entity *entity, const int chromosome);
 void ga_entity_blank(population *p, entity *entity);
 entity *ga_get_free_entity(population *pop);
