@@ -19,10 +19,10 @@ These milestone requirements are subject to change ;)
  0.1841     |  ga_evolution_mp() and associated example.
             |  Use MemChunks in chromosome allocation.
 ------------+--------------------------------------------------------
- 0.1843     |  Tverski similarity routines for bits/booleans/integers
+ 0.1843     |  Tverski/Euclidean etc. similarity routines.
 ------------+--------------------------------------------------------
- 0.1843     |  more replacement operators.
-            |  replacement operators documentation
+ 0.1843     |  More replacement operators.
+            |  Replacement operators documentation
 ------------+--------------------------------------------------------
  0.1844     |  Save/Load soup.
             |  Return number of generations performed from evolutionary functions.
@@ -85,6 +85,7 @@ Optional Features for version 1.0, or (more likely) later:
 * Similarity function callbacks.
 * Multi-threaded support.
 * DEE algorithm.
+* PVM support.
 
-Stewart Adcock, 13 Mar 2002.
+Stewart Adcock, 06 May 2002.
 
