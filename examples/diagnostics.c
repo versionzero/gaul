@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 #endif
 
 /*
- * Usual initilisations.
+ * Usual initializations.
  */
   random_init();
 
