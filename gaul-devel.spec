@@ -3,7 +3,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright Â©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -26,7 +26,7 @@
 
 %define PACKAGE_VERSION 0
 %define RELEASE		1839
-%define PATCH		1
+%define PATCH		2
 %define prefix		/usr/local/
 
 Summary: Genetic Algorithm Utility Library
