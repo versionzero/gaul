@@ -120,7 +120,7 @@ int ga_simplex(	population		*pop,
   boolean	did_replace;		/* Whether worst solution was replaced. */
   boolean	restart_needed;		/* Whether the search needs restarting. */
 
-/* Make these parameters: */
+/* FIXME: Make these user-definable parameters: */
   double alpha = 1.50;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
   double beta = 0.75;	/* range: 0=no contraction, 1=full contraction. */
   double gamma = 0.25;	/* range: 0=no contraction, 1=full contraction. */
