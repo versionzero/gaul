@@ -59,7 +59,7 @@ static char *target_text="When we reflect on this struggle, we may console ourse
   updated:	16/06/01
  **********************************************************************/
 
-boolean struggle_score(population *pop, entity *entity)
+static boolean struggle_score(population *pop, entity *entity)
   {
   int		k;		/* Loop variable over all alleles. */
 
@@ -90,7 +90,7 @@ boolean struggle_score(population *pop, entity *entity)
   updated:	07/07/01
  **********************************************************************/
 
-entity *struggle_adaptation(population *pop, entity *child)
+static entity *struggle_adaptation(population *pop, entity *child)
   {
   entity	*adult;		/* Adapted solution. */
   int		allele;		/* Randomly selected allele. */

@@ -38,7 +38,7 @@
 
 /**********************************************************************
   ga_diagnostics()
-  synopsis:	Diagnostics.
+  synopsis:	Display diagnostics message.
   parameters:	none
   return:	none
   last updated:	14 Jun 2004

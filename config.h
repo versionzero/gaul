@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "04/08/04"
+#define GA_BUILD_DATE_STRING "21/09/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 3
+#define GA_PATCH_VERSION 5
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1847-3"
+#define GA_VERSION_STRING "0.1847-5"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0

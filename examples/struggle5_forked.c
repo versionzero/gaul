@@ -62,7 +62,7 @@ static char *target_text="When we reflect on this struggle, we may console ourse
   updated:	16/06/01
  **********************************************************************/
 
-boolean struggle_score(population *pop, entity *entity)
+static boolean struggle_score(population *pop, entity *entity)
   {
   int		k;		/* Loop variable over all alleles. */
 

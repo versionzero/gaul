@@ -151,6 +151,7 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
+	all5s \
 	struggle \
 	struggle_forked struggle_threaded \
 	struggle_mp struggle_mpi \
@@ -182,6 +183,7 @@ royalroad_SOURCES = royalroad.c
 royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
+all5s_SOURCES = all5s.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
 struggle_mpi_SOURCES = struggle_mpi.c
@@ -229,6 +231,7 @@ royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
+all5s_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -267,6 +270,7 @@ royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
@@ -302,9 +306,9 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	wildfire_forked$(EXEEXT) wildfire_loadbalancing$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
-	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
-	struggle_threaded$(EXEEXT) struggle_mp$(EXEEXT) \
-	struggle_mpi$(EXEEXT) struggle_dc$(EXEEXT) \
+	onemax$(EXEEXT) all5s$(EXEEXT) struggle$(EXEEXT) \
+	struggle_forked$(EXEEXT) struggle_threaded$(EXEEXT) \
+	struggle_mp$(EXEEXT) struggle_mpi$(EXEEXT) struggle_dc$(EXEEXT) \
 	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
@@ -313,6 +317,9 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	mixed$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
+am_all5s_OBJECTS = all5s.$(OBJEXT)
+all5s_OBJECTS = $(am_all5s_OBJECTS)
+all5s_LDFLAGS =
 am_fitting_OBJECTS = fitting.$(OBJEXT)
 fitting_OBJECTS = $(am_fitting_OBJECTS)
 fitting_LDFLAGS =
@@ -435,7 +442,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/all5s.Po ./$(DEPDIR)/fitting.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/fitting_sd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/fitting_simplex.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mixed.Po ./$(DEPDIR)/nnevolve.Po \
@@ -471,7 +479,7 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
-DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
+DIST_SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
 	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
@@ -490,7 +498,7 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -530,6 +538,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+all5s$(EXEEXT): $(all5s_OBJECTS) $(all5s_DEPENDENCIES) 
+	@rm -f all5s$(EXEEXT)
+	$(LINK) $(all5s_LDFLAGS) $(all5s_OBJECTS) $(all5s_LDADD) $(LIBS)
 fitting$(EXEEXT): $(fitting_OBJECTS) $(fitting_DEPENDENCIES) 
 	@rm -f fitting$(EXEEXT)
 	$(LINK) $(fitting_LDFLAGS) $(fitting_OBJECTS) $(fitting_LDADD) $(LIBS)
@@ -651,6 +662,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/all5s.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_sd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_simplex.Po@am__quote@

@@ -58,7 +58,7 @@ static char *target_text="When we reflect on this struggle, we may console ourse
   updated:	16/06/01
  **********************************************************************/
 
-boolean struggle_score(population *pop, entity *entity)
+static boolean struggle_score(population *pop, entity *entity)
   {
   int		k;		/* Loop variable over all alleles. */
 
@@ -89,7 +89,7 @@ boolean struggle_score(population *pop, entity *entity)
   updated:	07/07/01
  **********************************************************************/
 
-entity *struggle_adaptation(population *pop, entity *child)
+static entity *struggle_adaptation(population *pop, entity *child)
   {
   entity	*adult;		/* Adapted solution. */
   int		allele;		/* Randomly selected allele. */
@@ -132,7 +132,7 @@ entity *struggle_adaptation(population *pop, entity *child)
   updated:	08/07/01
  **********************************************************************/
 
-boolean struggle_seed(population *pop, entity *adam)
+static boolean struggle_seed(population *pop, entity *adam)
   {
   int           chromo;         /* Index of chromosome to seed */
   int           point;          /* Index of allele to seed */
@@ -163,7 +163,7 @@ boolean struggle_seed(population *pop, entity *adam)
   updated:	08/07/01
  **********************************************************************/
 
-void struggle_mutate(population *pop, entity *father, entity *son)
+static void struggle_mutate(population *pop, entity *father, entity *son)
   {
   int           i;              /* Loop variable over all chromosomes */
   int           chromo;         /* Index of chromosome to mutate */
@@ -216,11 +216,11 @@ void struggle_mutate(population *pop, entity *father, entity *son)
   updated:	07/07/01
  **********************************************************************/
 
-void struggle_crossover( population *pop,
+static void struggle_crossover( population *pop,
                         entity *father, entity *mother,
                         entity *son, entity *daughter );
 
-void the_other_struggle_crossover( population *pop,
+static void the_other_struggle_crossover( population *pop,
                         entity *father, entity *mother,
                         entity *son, entity *daughter )
   {
@@ -230,7 +230,7 @@ void the_other_struggle_crossover( population *pop,
   return;
   }
 
-void struggle_crossover( population *pop,
+static void struggle_crossover( population *pop,
                         entity *father, entity *mother,
                         entity *son, entity *daughter )
   {
@@ -247,10 +247,10 @@ void struggle_crossover( population *pop,
 		beginning of every generation.
   parameters:
   return:
-  updated:	07/07/01
+  updated:	25 Aug 2004
  **********************************************************************/
 
-boolean struggle_generation_hook(int generation, population *pop)
+static boolean struggle_generation_hook(int generation, population *pop)
   {
 
 /*
@@ -260,7 +260,7 @@ boolean struggle_generation_hook(int generation, population *pop)
                (char *)ga_get_entity_from_rank(pop,0)->chromosome[0],
                strlen(target_text)))
     {
-    printf("Exact solution has been found!\n");
+    printf("Exact solution has been found during generation %d!\n", generation);
     return FALSE;
     }
 

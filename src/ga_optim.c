@@ -3233,7 +3233,7 @@ int ga_evolution_with_stats(	population		*pop,
  **********************************************************************/
 
 int ga_evolution_steady_state(	population		*pop,
-					const int		max_iterations )
+				const int		max_iterations )
   {
   int		iteration=0;		/* Current iteration count. */
   int		i;			/* Loop over members of population. */

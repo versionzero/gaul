@@ -57,7 +57,7 @@ long evaluation_count=0;	/* Number of fitness evaluations performed. */
   updated:	16/06/01
  **********************************************************************/
 
-boolean struggle_score(population *pop, entity *entity)
+static boolean struggle_score(population *pop, entity *entity)
   {
   int		k;		/* Loop variable over all alleles. */
 
@@ -90,7 +90,7 @@ boolean struggle_score(population *pop, entity *entity)
   updated:	07/07/01
  **********************************************************************/
 
-entity *struggle_adaptation(population *pop, entity *child)
+static entity *struggle_adaptation(population *pop, entity *child)
   {
   entity	*adult;		/* Adapted solution. */
   int		allele;		/* Randomly selected allele. */
@@ -134,7 +134,7 @@ entity *struggle_adaptation(population *pop, entity *child)
   updated:	07/07/01
  **********************************************************************/
 
-boolean struggle_generation_hook(int generation, population *pop)
+static boolean struggle_generation_hook(int generation, population *pop)
   {
   static double	sum_best_fitnesses=0.0;	/* Sum of best fitness score at each generation. */
   double	average, stddev;	/* Simple stats. */

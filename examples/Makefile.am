@@ -40,6 +40,7 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
+	all5s \
 	struggle \
 	struggle_forked struggle_threaded \
 	struggle_mp struggle_mpi \
@@ -70,6 +71,7 @@ royalroad_SOURCES = royalroad.c
 royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
+all5s_SOURCES = all5s.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
 struggle_mpi_SOURCES = struggle_mpi.c
@@ -115,6 +117,7 @@ royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
+all5s_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -153,6 +156,7 @@ royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
