@@ -1,4 +1,9 @@
 Changes since release 0.1832:
+- Changes for docs/html/books.html to validate.
+- Used cvs2cl.pl to create change log.
+
+Changes since release 0.1832:
+
 - Added 'GPL'd header' to source files which were missing it.
 - Changes for compilation under FreeBSD. (There are still lots of warnings about the use of the deprecated header file "malloc.h")
 - Changes for compilation under Solaris.

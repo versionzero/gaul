@@ -30,15 +30,15 @@
 #define MEMORY_ALIGN_SIZE 4
 #define MEMORY_PADDING 0
 
-#define DEBUG 1
+#define DEBUG 2
 /* #undef HELGA_DEBUG */
 /* #undef MOLSTRUCT_DEBUG */
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1832"
+#define VERSION_STRING "0.1833"
 #define BUILD_DATE_STRING "20/06/01"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1832
+#define MINOR_VERSION 1833
 #define PATCH_VERSION 010620
 
 #define AVLTREE_KEY_TYPE void *

@@ -1,2 +1,295 @@
-See individual source files for now.
+2001-06-20 22:03  stewartadcock
+
+	* INSTALL, LatestChanges, Makefile.am, Makefile.in, README,
+	config.h, config.status, configure, configure.in, stamp-h.in,
+	docs/JOBS, docs/README, docs/TODO, docs/html/books.html,
+	docs/html/documentation.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/installation.html,
+	docs/html/intro.html, docs/html/license.html,
+	docs/html/platforms.html, src/Makefile.am, src/Makefile.in,
+	src/ga_core.c, tests/README, tests/struggle.c, util/Makefile.am,
+	util/Makefile.in, util/dstr_util.c, util/dstr_util.h,
+	util/random_util.h, util/str_hash.c, util/str_hash.h,
+	util/str_match.c, util/str_match.h, util/str_perl.c,
+	util/str_perl.h, util/str_util.c, util/str_util.h: Changes for
+	compilation under FreeBSD. (There are still lots of warnings about
+	the use of the deprecated header file "malloc.h")
+	
+	Changes for compilation under Solaris.
+	
+	Fixed some spelling mistakes/typos in the headers and on the
+	web-pages.
+	
+	Slightly updated the INSTALL file.
+	
+	Rationalised use of population_extinction() in tests/struggle.c
+	
+	Sorted out stuff required by 'make dist' and friends.
+	
+	The documentation will now be distributed seperately to the source
+	code, at least until the stable release.
+	
+	Supported platform info added to web-pages.
+
+2001-06-17 20:48  stewartadcock
+
+	* LatestChanges, docs/html/examples.html, docs/html/index.html,
+	tests/btree.c, tests/btree.h, util/avltree.c, util/avltree.h,
+	util/linkedlist.c, util/linkedlist.h, util/str_atof.c,
+	util/table.c, util/table.h: Added 'GPL'd header' to source files
+	which were missing it.
+
+2001-06-17 13:22  stewartadcock
+
+	* LatestChanges, configure.in, diff.ignore,
+	docs/html/examples.html: Added LatestChanges file to CVS.  Added
+	tests/struggle info to docs/html/examples.html
+
+2001-06-17 12:57  stewartadcock
+
+	* config.h, config.status, configure, configure.in, docs/TODO,
+	docs/html/index.html, src/Makefile.am, src/Makefile.in,
+	src/ga_chromo.c, src/ga_chromo.h, src/ga_core.c, src/ga_core.h,
+	src/ga_crossover.c, src/ga_mutate.c, src/ga_replace.c,
+	src/ga_seed.c, src/ga_select.c, src/ga_utility.c, src/ga_utility.h,
+	tests/Makefile.am, tests/Makefile.in, tests/README,
+	tests/goldberg1.c, tests/goldberg2.c, tests/pingpong.c,
+	tests/royalroad.c, tests/struggle.c: Lots of minor changes + bug
+	fixes.	- Fixed minor bug in ./configure.in, message said
+	"--with-slang=no", but should have said "--enable-slang=no".  - Add
+	files tests/btree.c and tests/btree.h - code doesn't compile
+	without them! - Some more, really suspect, functions added to
+	src/ga_utility.c.  ga_entity_dump() and ga_population_dump() also
+	added.	- New "printable characters"-based mutations etc.  - A new
+	example program added, tests/struggle.c - src/libga.a renamed to
+	src/libgaul.a - Some additional prototypes added into the header
+	files.	- Examples now use ga_chromosome_XXX_to_staticstring()
+	where appropriate.  - Replaced s_calloc() calls in src/ga_chromo.c
+	with s_malloc() calls.	- Fixed bug in ga_select_stats().  -
+	Overhauled tests/Makefile.am - Fixed serious bug (segfault) in
+	ga_select_roulette_{one|two}().  - Added
+	ga_crossover_char_{singlepoints|doublepoints}().
+
+2001-06-16 22:44  stewartadcock
+
+	* configure.in, docs/html/index.html, src/ga_utility.c,
+	tests/btree.c, tests/btree.h: some trivial binary tree code added. 
+	Will form base for "tree chromosome" example.
+
+2001-06-16 21:42  stewartadcock
+
+	* config.h, config.status, docs/html/books.html,
+	docs/html/examples.html, docs/html/installation.html,
+	src/ga_chromo.c, src/ga_core.h, src/ga_crossover.c,
+	src/ga_mutate.c, src/ga_seed.c, tests/Makefile.am,
+	tests/Makefile.in, tests/goldberg2.c, util/Makefile.am,
+	util/Makefile.in, util/avltree.c, util/linkedlist.c,
+	util/random_util.c, util/random_util.h: Minor tweaks prior to
+	release 0.1836
+
+2001-06-14 01:13  stewartadcock
+
+	* Makefile.in, docs/Makefile.in, src/Makefile.in,
+	tests/Makefile.in, util/Makefile.in: Added Makefile.in files so
+	people don't need autoconf to use code from CVS.
+
+2001-06-14 01:04  stewartadcock
+
+	* INSTALL, README, config.h, config.status, configure,
+	configure.in, docs/TODO, docs/html/contribute.html,
+	docs/html/documentation.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/installation.html, src/Makefile.am,
+	src/README, src/ga_chromo.c, src/ga_chromo.h, src/ga_core.c,
+	src/ga_core.h, src/ga_crossover.c, src/ga_intrinsics.c,
+	src/ga_intrinsics.h, src/ga_mutate.c, src/ga_optim.c,
+	src/ga_optim.h, src/ga_qsort.c, src/ga_qsort.h, src/ga_replace.c,
+	src/ga_seed.c, src/ga_select.c, src/ga_similarity.c,
+	src/ga_similarity.h, src/ga_util.c, src/ga_util.h,
+	src/ga_utility.c, src/ga_utility.h, src/gaul.h, tests/goldberg1.c,
+	tests/goldberg1.h, tests/goldberg2.c, tests/goldberg2.h,
+	tests/pingpong.c, tests/pingpong.h, tests/royalroad.c,
+	tests/wildfire.c, tests/wildfire.h: Extensive rewrite to make core
+	routines chromosome datatype agnostic.	Some more documentation
+	added.
+
+2001-06-13 15:46  stewartadcock
+
+	* INSTALL, README, acconfig.h, config.h, config.h.in,
+	config.status, configure, configure.in, libtool, docs/TODO,
+	src/Makefile.am, tests/Makefile.am, tests/goldberg2.c,
+	util/random_util.c, util/random_util.h: Fixed up a configuration
+	option to disable usage of S-Lang.  None of the examples currently
+	use S-Lang anyway.
+
+2001-06-13 14:09  stewartadcock
+
+	* configure.in, docs/html/books.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/intro.html, util/SAA_header.h,
+	util/random_util.c, util/random_util.h: Sync'ed to personal CVS. 
+	Lots of minor modifications, but nothing significant.
+
+2001-06-10 20:04  stewartadcock
+
+	* docs/html/examples.html, tests/pingpong, tests/wildfire: Removed
+	executables from the CVS archive.
+
+2001-06-10 19:50  stewartadcock
+
+	* docs/html/books.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/intro.html, docs/html/license.html,
+	src/ga_optim.c, src/ga_replace.c: Added some documentation of the
+	example programs.  (Not much though!)
+
+2001-06-10 13:26  stewartadcock
+
+	* docs/html/: books.html, index.html, intro.html, license.html:
+	Actually commited the docs/html stuff this time (whoops).
+
+2001-06-08 21:41  stewartadcock
+
+	* src/SAA_header.h: Added a new directory: docs/html/ - contains a
+	copy of the website.  Deleted src/SAA_header.h since it it isn't
+	needed.
+
+2001-06-08 21:29  stewartadcock
+
+	* acglib.m4, config.cache, config.log, makeps.csh, docs/JOBS,
+	docs/sf_purpo.txt: Added a list of jobs to do at docs/JOBS. 
+	Deleted several unnecessary files.
+
+2001-06-08 21:05  stewartadcock
+
+	* INSTALL, NEWS, README, diff.ignore, src/README,
+	src/ga_crossover.c, src/ga_intrinsics.c, src/ga_intrinsics.h,
+	src/ga_mutate.c, src/ga_optim.c, src/ga_optim.h, src/ga_qsort.c,
+	src/ga_qsort.h, src/ga_replace.c, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.c, src/ga_similarity.h, src/ga_util.c,
+	src/ga_util.h, src/gaul.h, tests/README, util/README: 
+		Removed "ChangeLog"-like information from each source file
+	in the src/ directory since this is now handled through the CVS
+	archive.  Cool.
+		Updated the README files.
+
+2001-06-06 21:02  stewartadcock
+
+	* docs/README: Added README file to documentation directory.
+
+2001-06-06 20:52  stewartadcock
+
+	* README, config.h, config.log, config.status, configure,
+	configure.in, gaul.spec, docs/TODO, src/ga_qsort.c, src/ga_qsort.h,
+	tests/pingpong, tests/wildfire, util/compatibility.h,
+	util/log_util.c, util/log_util.h, util/random_util.c,
+	util/random_util.h: Tidied configure.in, config.h.in, gaul.spec and
+	a few other build files.  Negated De Jong functions: maximisation
+	instead of minimisation.  Changed a few constant definitions for
+	better consistency.
+
+2001-06-04 22:14  stewartadcock
+
+	* diff.ignore: Added a "ignore" file for diff to the repository.
+
+2001-06-04 22:09  stewartadcock
+
+	* docs/: gaul_starburst_245x189.jpeg, index.html, license.html,
+	sflogo.htm: Removed some junk from the documentation directory.
+
+2001-06-04 22:02  stewartadcock
+
+	* tests/: goldberg1.c, goldberg1.h, goldberg2.c, goldberg2.h:
+	Examples one and two from Goldberg's book.
+
+2001-06-04 22:00  stewartadcock
+
+	* tests/royalroad.c: Holland's royal road test case.
+
+2001-06-04 21:57  stewartadcock
+
+	* src/ga_replace.c: New file for replacement operators.
+
+2001-06-04 21:50  stewartadcock
+
+	* src/gaul.h: New public header
+
+2001-06-04 21:36  stewartadcock
+
+	* config.cache, config.h, config.log, config.status, configure,
+	configure.in, docs/index.html, docs/license.html,
+	docs/sf_purpo.txt, src/Makefile.am, src/ga_crossover.c,
+	src/ga_intrinsics.c, src/ga_intrinsics.h, src/ga_mutate.c,
+	src/ga_optim.c, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.h, src/ga_util.c, src/ga_util.h,
+	tests/Makefile.am, tests/README, tests/pingpong.c,
+	tests/pingpong.h, tests/pingpong9.c, tests/wildfire.c,
+	tests/wildfire.h, util/Makefile.am, util/random_util.h: Sync'ing
+	CVS with personal version.  Numerous tweaks: - New replacement
+	operator hook - (slightly) more documentation - Tidied make
+	procedure - Several more example programs.
+
+2001-05-22 12:50  stewartadcock
+
+	* Makefile.am, config.h, config.h.in, config.log, config.status,
+	configure, configure.in, mkinstalldirs, src/Makefile.am,
+	src/ga_similarity.h, src/ga_util.h, tests/Makefile.am,
+	tests/pingpong.c, tests/pingpong.h, util/Makefile.am,
+	util/random_util.c: Some alterations to make the code compile
+	cleanly from CVS.
+
+2001-05-17 17:03  stewartadcock
+
+	* acconfig.h, acglib.m4, AUTHORS, ChangeLog, aclocal.m4,
+	config.cache, config.guess, config.h, config.h.in, config.log,
+	config.status, config.sub, COPYING, INSTALL, configure,
+	configure.in, gaul.spec.in, install-sh, libtool, ltconfig,
+	Makefile.am, NEWS, README, gaul.m4, gaul.spec, ltmain.sh,
+	makeps.csh, missing, mkinstalldirs, stamp-h, stamp-h.in,
+	src/ga_crossover.c, src/ga_intrinsics.c, src/ga_intrinsics.h,
+	src/ga_mutate.c, src/ga_optim.c, src/ga_optim.h, src/ga_qsort.c,
+	src/ga_qsort.h, src/ga_seed.c, docs/gaul_starburst_245x189.jpeg,
+	docs/index.html, src/Makefile.am, src/README, src/SAA_header.h,
+	src/ga_select.c, src/ga_similarity.c, src/ga_similarity.h,
+	src/ga_util.c, src/ga_util.h, docs/TODO, docs/license.html,
+	docs/sf_purpo.txt, docs/sflogo.htm, tests/Makefile.am,
+	tests/README, tests/pingpong, tests/pingpong.c, tests/pingpong.h,
+	tests/pingpong9.c, tests/wildfire, tests/wildfire.c,
+	tests/wildfire.h, util/README, util/avltree.c, util/avltree.h,
+	util/random_util.c, util/compatibility.c, util/compatibility.h,
+	util/Makefile.am, util/dstr_util.c, util/dstr_util.h,
+	util/linkedlist.c, util/linkedlist.h, util/log_util.c,
+	util/log_util.h, util/memory_chunks.c, util/memory_chunks.h,
+	util/memory_util.c, util/memory_util.h, util/SAA_header.h,
+	util/mpi_util.c, util/mpi_util.h, util/random_util.h,
+	util/str_atof.c, util/str_hash.c, util/str_hash.h,
+	util/str_match.c, util/str_match.h, util/str_pcre_tab.c,
+	util/str_perl.c, util/str_perl.h, util/str_util.c, util/str_util.h,
+	util/table.c, util/table.h: Initial revision
+
+2001-05-17 17:03  stewartadcock
+
+	* acconfig.h, acglib.m4, AUTHORS, ChangeLog, aclocal.m4,
+	config.cache, config.guess, config.h, config.h.in, config.log,
+	config.status, config.sub, COPYING, INSTALL, configure,
+	configure.in, gaul.spec.in, install-sh, libtool, ltconfig,
+	Makefile.am, NEWS, README, gaul.m4, gaul.spec, ltmain.sh,
+	makeps.csh, missing, mkinstalldirs, stamp-h, stamp-h.in,
+	src/ga_crossover.c, src/ga_intrinsics.c, src/ga_intrinsics.h,
+	src/ga_mutate.c, src/ga_optim.c, src/ga_optim.h, src/ga_qsort.c,
+	src/ga_qsort.h, src/ga_seed.c, docs/gaul_starburst_245x189.jpeg,
+	docs/index.html, src/Makefile.am, src/README, src/SAA_header.h,
+	src/ga_select.c, src/ga_similarity.c, src/ga_similarity.h,
+	src/ga_util.c, src/ga_util.h, docs/TODO, docs/license.html,
+	docs/sf_purpo.txt, docs/sflogo.htm, tests/Makefile.am,
+	tests/README, tests/pingpong, tests/pingpong.c, tests/pingpong.h,
+	tests/pingpong9.c, tests/wildfire, tests/wildfire.c,
+	tests/wildfire.h, util/README, util/avltree.c, util/avltree.h,
+	util/random_util.c, util/compatibility.c, util/compatibility.h,
+	util/Makefile.am, util/dstr_util.c, util/dstr_util.h,
+	util/linkedlist.c, util/linkedlist.h, util/log_util.c,
+	util/log_util.h, util/memory_chunks.c, util/memory_chunks.h,
+	util/memory_util.c, util/memory_util.h, util/SAA_header.h,
+	util/mpi_util.c, util/mpi_util.h, util/random_util.h,
+	util/str_atof.c, util/str_hash.c, util/str_hash.h,
+	util/str_match.c, util/str_match.h, util/str_pcre_tab.c,
+	util/str_perl.c, util/str_perl.h, util/str_util.c, util/str_util.h,
+	util/table.c, util/table.h: [no log message]
 
