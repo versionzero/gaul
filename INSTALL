@@ -16,6 +16,9 @@ Or if you don't have SLang installed:
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
 
+There are several configuration options available for more advanced users.  For details:
+./configure --help
+
 On some systems, including Solaris and IRIX, you need to specify GNU make instead the native make.  In this case substitute 'make' with 'gmake'.
 
 If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
@@ -29,17 +32,6 @@ Potentially supported platforms:
 - Linux and other (mostly) POSIX-compliant UNIX OSs on any sensible hardware.  e.g. *BSD, IRIX, Solaris.
 - Non-toy OSs which are POSIX-compiliant.  e.g. BeOS, QNX.
 
-Platforms on which compilation is confirmed as successful:
-Operating System: Linux   Linux   FreeBSD Solaris Solaris IRIX  IRIX
-Version:          (RH6.2) (RH7.0) (4.3)   (7)     (8)     (5.3) (6.2.2)
-Cpu:
-x86               0.1833  0.1833  0.1833          [*]
-Sparc                                     0.1833
-Alpha EV56        [*]
-MIPS R4K                                                  [*]
-MIPS R10K                                                       [*]
-MIPS R12K                                                       [*]
+An up-to-date list of supported platforms is available at http://gaul.sourceforge.net/platforms.html
 
-[*] = A very old version prior to GPL'ing.
-
-Stewart 20/06/2001.
+Stewart. 25 Jan 2002
