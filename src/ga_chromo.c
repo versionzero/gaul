@@ -319,7 +319,7 @@ void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
   synopsis:	Duplicate a chromosome exactly.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 19 Mar 2002
  **********************************************************************/
 
 void ga_chromosome_boolean_replicate( population *pop,
@@ -332,7 +332,7 @@ void ga_chromosome_boolean_replicate( population *pop,
   if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
 
   memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
-              pop->len_chromosomes * pop->num_chromosomes * sizeof(boolean));
+              pop->len_chromosomes * sizeof(boolean));
 
   return;
   }
@@ -516,7 +516,7 @@ void ga_chromosome_double_replicate( population *pop,
   if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
 
   memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
-              pop->len_chromosomes * pop->num_chromosomes * sizeof(double));
+              pop->len_chromosomes * sizeof(double));
 
   return;
   }
@@ -714,7 +714,7 @@ void ga_chromosome_char_deallocate(population *pop, entity *corpse)
   synopsis:	Duplicate a chromosome exactly.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 19 Mar 2002
  **********************************************************************/
 
 void ga_chromosome_char_replicate( population *pop,
@@ -727,7 +727,7 @@ void ga_chromosome_char_replicate( population *pop,
   if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
 
   memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
-              pop->len_chromosomes * pop->num_chromosomes * sizeof(char));
+              pop->len_chromosomes * sizeof(char));
 
   return;
   }
