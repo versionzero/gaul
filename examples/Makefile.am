@@ -31,7 +31,8 @@ AUTOMAKE_OPTIONS = 1.4
 #EXTRA_PROGRAMS = 
 
 bin_PROGRAMS = diagnostics \
-	fitting fitting_simplex \
+	test test_simplex test_sd \
+	fitting fitting_simplex fitting_sd \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
@@ -42,8 +43,12 @@ bin_PROGRAMS = diagnostics \
 	nnevolve
 
 diagnostics_SOURCES = diagnostics.c
+test_SOURCES = test.c
+test_simplex_SOURCES = test_simplex.c
+test_sd_SOURCES = test_sd.c
 fitting_SOURCES = fitting.c
 fitting_simplex_SOURCES = fitting_simplex.c
+fitting_sd_SOURCES = fitting_sd.c
 pingpong_SOURCES = pingpong.c
 pingpong_tabu_SOURCES = pingpong_tabu.c
 pingpong_tabu2_SOURCES = pingpong_tabu2.c
@@ -85,8 +90,12 @@ EXTRA_DIST = \
 	wine.data wine.names
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
+test_DEPENDENCIES = ${DEPENDENCIES}
+test_simplex_DEPENDENCIES = ${DEPENDENCIES}
+test_sd_DEPENDENCIES = ${DEPENDENCIES}
 fitting_DEPENDENCIES = ${DEPENDENCIES}
 fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
+fitting_sd_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
@@ -114,8 +123,12 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+test_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 fitting_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm

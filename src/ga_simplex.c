@@ -85,9 +85,9 @@ void ga_population_set_simplex_parameters( population		*pop,
 /**********************************************************************
   ga_simplex()
   synopsis:	Performs optimisation on the passed entity by using a
-  		simplistic simplex-search.  The local search and fitness
-	       	evaluations are performed using the standard mutation
-	       	and evaluation callback mechanisms, respectively.
+  		simplistic simplex-search.  The fitness evaluations
+		are performed using the standard and evaluation
+		callback mechanism.
 		The passed entity will have its data overwritten.  The
 		remainder of the population will be let untouched.
 		Note that it is safe to pass a NULL initial structure,
@@ -96,7 +96,7 @@ void ga_population_set_simplex_parameters( population		*pop,
 		available to the caller in any obvious way.
   parameters:
   return:
-  last updated:	30 Oct 2002
+  last updated:	25 Nov 2002
  **********************************************************************/
 
 int ga_simplex(	population		*pop,
@@ -130,7 +130,6 @@ int ga_simplex(	population		*pop,
   if (!pop) die("NULL pointer to population structure passed.");
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
-  if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->simplex_params) die("ga_population_set_simplex_params(), or similar, must be used prior to ga_simplex().");
 
 /* 

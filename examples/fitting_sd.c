@@ -1,8 +1,8 @@
 /**********************************************************************
-  fitting_simplex.c
+  fitting_sd.c
  **********************************************************************
 
-  fitting_simplex - Test/example program for GAUL.
+  fitting_sd - Test/example program for GAUL.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -25,13 +25,13 @@
  **********************************************************************
 
   Synopsis:	Test/example program for GAUL demonstrating use
-		of the simplex algorithm.
+		of the steepest ascent algorithm.
 
 		This program aims to fit a function of the form
 		y = Ax exp{Bx+C} + D
 		through an input dataset.
 
-  Last Updated:	21 Nov 2002 SAA	Based on examples/fitting.c
+  Last Updated:	21 Nov 2002 SAA	Based on examples/fitting_simplex.c
 
  **********************************************************************/
 
@@ -52,7 +52,7 @@ typedef struct
   } fitting_data_t;
 
 /**********************************************************************
-  fitting_to_double()
+  fitting_double_to_double()
   synopsis:     Convert to double array.
   parameters:
   return:
@@ -68,7 +68,6 @@ boolean fitting_to_double(population *pop, entity *entity, double *array)
   array[0] = ((double *)entity->chromosome[0])[0];
   array[1] = ((double *)entity->chromosome[0])[1];
   array[2] = ((double *)entity->chromosome[0])[2];
-  array[3] = ((double *)entity->chromosome[0])[3];
 
   return TRUE;
   }
@@ -93,7 +92,6 @@ boolean fitting_from_double(population *pop, entity *entity, double *array)
   ((double *)entity->chromosome[0])[0] = array[0];
   ((double *)entity->chromosome[0])[1] = array[1];
   ((double *)entity->chromosome[0])[2] = array[2];
-  ((double *)entity->chromosome[0])[3] = array[3];
 
   return TRUE;
   }
@@ -121,12 +119,104 @@ boolean fitting_score(population *pop, entity *entity)
 
   for (i=0; i<data->num_data; i++)
     {
-    score += SQU(data->y[i]-(data->x[i]*params[0]*exp(data->x[i]*params[1]+params[2])+params[3]));
+    score += SQU(data->y[i]-(data->x[i]*params[0]*exp(params[1])+params[2]));
     }
 
   entity->fitness = -score/data->num_data;
   
   return TRUE;
+  }
+
+
+/**********************************************************************
+  fitting_analytical_gradient()
+  synopsis:     Calculate gradients analytically.
+		FIXME: Not correct!
+  parameters:
+  return:
+  last updated: 21 Nov 2002
+ **********************************************************************/
+
+double fitting_analytical_gradient(population *pop, entity *entity, double *params, double *grad)
+  {
+  int			i;		/* Loop variable over training points. */
+  fitting_data_t	*data;		/* Training data. */
+  double		E, F;		/* Intermediate values. */
+  double		grms=0.0;	/* RMS gradient. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!entity) die("Null pointer to entity structure passed.");
+
+  data = (fitting_data_t *)pop->data;
+
+  grad[0] = 0.0;
+  grad[1] = 0.0;
+  grad[2] = 0.0;
+
+  for (i=0; i<data->num_data; i++)
+    {
+    E = data->x[i]*params[0]*exp(params[1]);
+    F = 2*E - 2*data->y[i] - 2*params[2];
+
+    grad[0] += -data->x[i]*exp(data->x[i]*params[1]+params[2])*F;
+
+    grad[1] += data->x[i]*E*F;
+
+    grad[3] += 2*data->y[i] + 2*params[2] - 2*E;
+    }
+
+  grad[0] /= SQU(data->num_data);
+  grad[1] /= SQU(data->num_data);
+  grad[2] /= SQU(data->num_data);
+
+  grms = sqrt(grad[0]*grad[0]+grad[1]*grad[1]+grad[2]*grad[2]);
+
+  return grms;
+  }
+
+
+/**********************************************************************
+  fitting_numerical_gradient()
+  synopsis:     Calculate gradients numerically.
+  parameters:
+  return:
+  last updated: 21 Nov 2002
+ **********************************************************************/
+
+#define DELTA		1.0e-6
+
+double fitting_numerical_gradient(population *pop, entity *entity, double *params, double *grad)
+  {
+  int			i;		/* Loop variable over training points. */
+  fitting_data_t	*data;		/* Training data. */
+  double		grms=0.0;	/* RMS gradient. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!entity) die("Null pointer to entity structure passed.");
+
+  data = (fitting_data_t *)pop->data;
+
+  grad[0] = 0.0;
+  grad[1] = 0.0;
+  grad[2] = 0.0;
+
+  for (i=0; i<data->num_data; i++)
+    {
+    grad[0] += SQU(data->y[i]-(data->x[i]*(params[0]+DELTA)*exp(params[1])+params[2]))
+               - SQU(data->y[i]-(data->x[i]*(params[0]-DELTA)*exp(params[1])+params[2]));
+    grad[1] += SQU(data->y[i]-(data->x[i]*params[0]*exp(params[1]+DELTA)+params[2]))
+               - SQU(data->y[i]-(data->x[i]*params[0]*exp(params[1]-DELTA)+params[2]));
+    grad[2] += SQU(data->y[i]-(data->x[i]*params[0]*exp(params[1])+params[2]+DELTA))
+               - SQU(data->y[i]-(data->x[i]*params[0]*exp(params[1])+params[2]-DELTA));
+    }
+
+  grad[0] /= -2*data->num_data*DELTA;
+  grad[1] /= -2*data->num_data*DELTA;
+  grad[2] /= -2*data->num_data*DELTA;
+
+  grms = sqrt(grad[0]*grad[0]+grad[1]*grad[1]+grad[2]*grad[2]);
+
+  return grms;
   }
 
 
@@ -141,12 +231,11 @@ boolean fitting_score(population *pop, entity *entity)
 boolean fitting_iteration_callback(int iteration, entity *solution)
   {
 
-  printf( "%d: y = %f x exp(%f x + %f) + %f (fitness = %f)\n",
+  printf( "%d: y = %f x exp(%f) + %f (fitness = %f)\n",
             iteration,
             ((double *)solution->chromosome[0])[0],
             ((double *)solution->chromosome[0])[1],
             ((double *)solution->chromosome[0])[2],
-            ((double *)solution->chromosome[0])[3],
             solution->fitness );
 
   return TRUE;
@@ -172,8 +261,7 @@ boolean fitting_seed(population *pop, entity *adam)
 /* Seeding. */
   ((double *)adam->chromosome[0])[0] = random_double(5.0);
   ((double *)adam->chromosome[0])[1] = -random_double(2.0);
-  ((double *)adam->chromosome[0])[2] = random_double(2.0);
-  ((double *)adam->chromosome[0])[3] = random_double(10.0)+10.0;
+  ((double *)adam->chromosome[0])[2] = random_double(10.0)+10.0;
 
   return TRUE;
   }
@@ -254,7 +342,7 @@ int main(int argc, char **argv)
   pop = ga_genesis_double(
        50,				/* const int              population_size */
        1,				/* const int              num_chromo */
-       4,				/* const int              len_chromo */
+       3,				/* const int              len_chromo */
        NULL,				/* GAgeneration_hook      generation_hook */
        fitting_iteration_callback,	/* GAiteration_hook       iteration_hook */
        NULL,				/* GAdata_destructor      data_destructor */
@@ -269,11 +357,16 @@ int main(int argc, char **argv)
        NULL				/* GAreplace              replace */
             );
 
-  ga_population_set_simplex_parameters(
+  ga_population_set_gradient_parameters(
        pop,				/* population		*pop */
        fitting_to_double,		/* const GAto_double	to_double */
        fitting_from_double,		/* const GAfrom_double	from_double */
-       4				/* const int		num_dimensions */
+       fitting_analytical_gradient,	/* const GAgradient	gradient */
+#if 0
+       fitting_numerical_gradient,	/* const GAgradient	gradient */
+#endif
+       3,				/* const int		num_dimensions */
+       0.01				/* const double		step_size */
                        );
 
   get_data(&data);
@@ -285,7 +378,7 @@ int main(int argc, char **argv)
   /* Use the best population member. */
   solution = ga_get_entity_from_rank(pop, 0);
 
-  ga_simplex(
+  ga_steepestascent(
        pop,				/* population		*pop */
        solution,			/* entity		*solution */
        1000				/* const int		max_iterations */

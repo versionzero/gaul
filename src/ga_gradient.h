@@ -45,7 +45,7 @@ void ga_population_set_gradient_parameters( population		*pop,
                                         const GAgradient	gradient,
 					const int		dimensions,
 					const double		step_size);
-int ga_gradient(    population              *pop,
+int ga_steepestascent(    population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );
 

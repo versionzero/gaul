@@ -1,8 +1,8 @@
 /**********************************************************************
-  fitting_simplex.c
+  test_sd.c
  **********************************************************************
 
-  fitting_simplex - Test/example program for GAUL.
+  test_sd - Test/example program for GAUL.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -25,41 +25,26 @@
  **********************************************************************
 
   Synopsis:	Test/example program for GAUL demonstrating use
-		of the simplex algorithm.
+		of the steepest ascent algorithm.
 
-		This program aims to fit a function of the form
-		y = Ax exp{Bx+C} + D
-		through an input dataset.
+		This program aims to solve a function of the form
+		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0
 
-  Last Updated:	21 Nov 2002 SAA	Based on examples/fitting.c
+  Last Updated:	25 Nov 2002 SAA	Based on examples/test_simplex.c
 
  **********************************************************************/
 
 #include "gaul.h"
 
-/*
- * Datastructure used to demonstrate attachment of data to specific
- * populations.
- * It is used to store the training data.
- */
-
-typedef struct
-  {
-  int		num_data;
-  int		max_data;
-  double	*x;
-  double	*y;
-  } fitting_data_t;
-
 /**********************************************************************
-  fitting_to_double()
+  test_to_double()
   synopsis:     Convert to double array.
   parameters:
   return:
-  last updated: 21 Nov 2002
+  last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean fitting_to_double(population *pop, entity *entity, double *array)
+boolean test_to_double(population *pop, entity *entity, double *array)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -75,14 +60,14 @@ boolean fitting_to_double(population *pop, entity *entity, double *array)
 
 
 /**********************************************************************
-  fitting_from_double()
+  test_from_double()
   synopsis:     Convert from double array.
   parameters:
   return:
-  last updated: 21 Nov 2002
+  last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean fitting_from_double(population *pop, entity *entity, double *array)
+boolean test_from_double(population *pop, entity *entity, double *array)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -100,48 +85,72 @@ boolean fitting_from_double(population *pop, entity *entity, double *array)
 
 
 /**********************************************************************
-  fitting_score()
+  test_score()
   synopsis:	Fitness function.
   parameters:
   return:
-  updated:	17 Nov 2002
+  updated:	25 Nov 2002
  **********************************************************************/
 
-boolean fitting_score(population *pop, entity *entity)
+boolean test_score(population *pop, entity *entity)
   {
-  int			i;		/* Loop variable over training points. */
-  double		score=0.0;	/* Mean of squared deviations. */
-  double		*params;	/* Fitting parameters. */
-  fitting_data_t	*data;		/* Training data. */
+  double		A, B, C, D;	/* Parameters. */
 
-  entity->fitness = 0;
+  A = ((double *)entity->chromosome[0])[0];
+  B = ((double *)entity->chromosome[0])[1];
+  C = ((double *)entity->chromosome[0])[2];
+  D = ((double *)entity->chromosome[0])[3];
 
-  data = (fitting_data_t *)pop->data;
-  params = (double *)entity->chromosome[0];
+  entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
 
-  for (i=0; i<data->num_data; i++)
-    {
-    score += SQU(data->y[i]-(data->x[i]*params[0]*exp(data->x[i]*params[1]+params[2])+params[3]));
-    }
-
-  entity->fitness = -score/data->num_data;
-  
   return TRUE;
   }
 
 
 /**********************************************************************
-  fitting_iteration_callback()
+  test_analytical_gradient()
+  synopsis:     Calculate gradients analytically.
+  parameters:
+  return:
+  last updated: 25 Nov 2002
+ **********************************************************************/
+
+double test_analytical_gradient(population *pop, entity *entity, double *params, double *grad)
+  {
+  double		grms=0.0;	/* RMS gradient. */
+  double		A, B, C, D;	/* The parameters. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!entity) die("Null pointer to entity structure passed.");
+
+  A = params[0];
+  B = params[1];
+  C = params[2];
+  D = params[3];
+
+  grad[0] = A > 0.75+TINY ? -1.0 : ( A < 0.75-TINY ? 1.0 : 0.0 );
+  grad[1] = (0.95 - B);
+  grad[2] = C > 0.23 ? -SQU(0.23 - C) : SQU(0.23 - C);
+  grad[3] = CUBE(0.71 - D);
+
+  grms = sqrt(grad[0]*grad[0]+grad[1]*grad[1]+grad[2]*grad[2]+grad[3]*grad[3]);
+
+  return grms;
+  }
+
+
+/**********************************************************************
+  test_iteration_callback()
   synopsis:	Generation callback
   parameters:
   return:
-  updated:	21 Nov 2002
+  updated:	25 Nov 2002
  **********************************************************************/
 
-boolean fitting_iteration_callback(int iteration, entity *solution)
+boolean test_iteration_callback(int iteration, entity *solution)
   {
 
-  printf( "%d: y = %f x exp(%f x + %f) + %f (fitness = %f)\n",
+  printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
             iteration,
             ((double *)solution->chromosome[0])[0],
             ((double *)solution->chromosome[0])[1],
@@ -154,15 +163,15 @@ boolean fitting_iteration_callback(int iteration, entity *solution)
 
 
 /**********************************************************************
-  fitting_seed()
+  test_seed()
   synopsis:	Seed genetic data.
   parameters:	population *pop
 		entity *adam
   return:	success
-  last updated: 21 Nov 2002
+  last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean fitting_seed(population *pop, entity *adam)
+boolean test_seed(population *pop, entity *adam)
   {
 
 /* Checks. */
@@ -170,68 +179,12 @@ boolean fitting_seed(population *pop, entity *adam)
   if (!adam) die("Null pointer to entity structure passed.");
 
 /* Seeding. */
-  ((double *)adam->chromosome[0])[0] = random_double(5.0);
-  ((double *)adam->chromosome[0])[1] = -random_double(2.0);
+  ((double *)adam->chromosome[0])[0] = random_double(2.0);
+  ((double *)adam->chromosome[0])[1] = random_double(2.0);
   ((double *)adam->chromosome[0])[2] = random_double(2.0);
-  ((double *)adam->chromosome[0])[3] = random_double(10.0)+10.0;
+  ((double *)adam->chromosome[0])[3] = random_double(2.0);
 
   return TRUE;
-  }
-
-
-/**********************************************************************
-  get_data()
-  synopsis:	Read training data from standard input.
-  parameters:
-  return:
-  updated:	17 Nov 2002
- **********************************************************************/
-
-void get_data(fitting_data_t *data)
-  {
-  int           line_count=0;                   /* Number of lines read from stdin. */
-  char          buffer[MAX_LINE_LEN], *line;    /* Buffer for input. */
-
-  if (!data) die("Null pointer to data structure passed.");
-
-/*
- * Read lines.  Each specifies one x,y pair except those starting with '#'
- * or '!' which are comment lines and are ignored.  Don't bother parsing
- * blank lines either.
- */
-  while ( !feof(stdin) && fgets(buffer, MAX_LINE_LEN, stdin)!=NULL )
-    {
-    line = buffer;
-
-    /* Skip leading whitespace. */
-    while (*line == ' ' || *line == '\t') line++;
-
-    if (*line == '#' || *line == '!' || *line == '\n')
-      { /* Ignore this line */
-/*    printf("Ignoring line: %s\n", line);*/
-      }
-    else
-      {
-/* Ensure sufficient memory is available. */
-      if (data->num_data == data->max_data)
-        {
-        data->max_data += 256;
-        data->x = s_realloc(data->x, sizeof(double)*data->max_data);
-        data->y = s_realloc(data->y, sizeof(double)*data->max_data);
-        }
-
-      sscanf(line, "%lf %lf", &(data->x[data->num_data]), &(data->y[data->num_data]));
-      printf("Read %d: %f %f\n", data->num_data, data->x[data->num_data], data->y[data->num_data]);
-
-      data->num_data++;
-      }
-
-    line_count++;
-    }
-
-  plog(LOG_NORMAL, "Read %f data points from %d lines.\n", data->num_data, line_count);
-
-  return;
   }
 
 
@@ -240,13 +193,12 @@ void get_data(fitting_data_t *data)
   synopsis:	Main function.
   parameters:
   return:
-  updated:	21 Nov 2002
+  updated:	25 Nov 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
   population		*pop;			/* Population of solutions. */
-  fitting_data_t	data={0,0,NULL,NULL};	/* Training data. */
   entity		*solution;		/* Optimised solution. */
 
   random_seed(23091975);
@@ -256,11 +208,11 @@ int main(int argc, char **argv)
        1,				/* const int              num_chromo */
        4,				/* const int              len_chromo */
        NULL,				/* GAgeneration_hook      generation_hook */
-       fitting_iteration_callback,	/* GAiteration_hook       iteration_hook */
+       test_iteration_callback,	/* GAiteration_hook       iteration_hook */
        NULL,				/* GAdata_destructor      data_destructor */
        NULL,				/* GAdata_ref_incrementor data_ref_incrementor */
-       fitting_score,			/* GAevaluate             evaluate */
-       fitting_seed,			/* GAseed                 seed */
+       test_score,			/* GAevaluate             evaluate */
+       test_seed,			/* GAseed                 seed */
        NULL,				/* GAadapt                adapt */
        NULL,				/* GAselect_one           select_one */
        NULL,				/* GAselect_two           select_two */
@@ -269,15 +221,14 @@ int main(int argc, char **argv)
        NULL				/* GAreplace              replace */
             );
 
-  ga_population_set_simplex_parameters(
+  ga_population_set_gradient_parameters(
        pop,				/* population		*pop */
-       fitting_to_double,		/* const GAto_double	to_double */
-       fitting_from_double,		/* const GAfrom_double	from_double */
-       4				/* const int		num_dimensions */
+       test_to_double,		/* const GAto_double	to_double */
+       test_from_double,		/* const GAfrom_double	from_double */
+       test_analytical_gradient,	/* const GAgradient	gradient */
+       4,				/* const int		num_dimensions */
+       0.1				/* const double		step_size */
                        );
-
-  get_data(&data);
-  pop->data = &data;
 
   /* Evaluate and sort the initial population members (i.e. select best of 50 random solutions. */
   ga_population_score_and_sort(pop);
@@ -285,7 +236,7 @@ int main(int argc, char **argv)
   /* Use the best population member. */
   solution = ga_get_entity_from_rank(pop, 0);
 
-  ga_simplex(
+  ga_steepestascent(
        pop,				/* population		*pop */
        solution,			/* entity		*solution */
        1000				/* const int		max_iterations */
@@ -295,5 +246,4 @@ int main(int argc, char **argv)
 
   exit(EXIT_SUCCESS);
   }
-
 
