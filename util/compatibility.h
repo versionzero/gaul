@@ -245,11 +245,11 @@ void dief(const char *format, ...);
 #endif
 
 #ifndef HAVE_BASENAME
-char *basename (char *path);
+char *basename(char *path);
 #endif
 
 #ifndef HAVE_READLINE
-char *readline (char *prompt);
+char *readline(char *prompt);
 #endif
 
 #ifndef HAVE_STRSPN
@@ -289,7 +289,7 @@ maybeinline void sincos( double radians, double *s, double *c );
 #endif
 
 #ifndef HAVE_ITOA
-void itoa (const int n, char *s);
+void itoa(const int n, char *s);
 #endif
 
 #endif

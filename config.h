@@ -36,17 +36,20 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1837-4"
-#define BUILD_DATE_STRING "18/03/02"
+#define BUILD_DATE_STRING "19/03/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1837
 #define PATCH_VERSION 4
 #define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
-#define PARALLEL 0
+#define PARALLEL 2
 #define V3_QUICK 1
 #define HAVE_SLANG 1
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
+
+/* Kludge required for linking to LAM-MPI */
+#define HAVE_ITOA 1
 
 /* The number of bytes in a char.  */
 #define SIZEOF_CHAR 1
@@ -86,9 +89,6 @@
 
 /* Define if you have the index function.  */
 #define HAVE_INDEX 1
-
-/* Define if you have the itoa function.  */
-/* #undef HAVE_ITOA */
 
 /* Define if you have the max function.  */
 /* #undef HAVE_MAX */

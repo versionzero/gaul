@@ -43,8 +43,6 @@
 #include <stdarg.h>
 #include <time.h>
 
-/*#include <glib.h>*/
-
 #include "mpi_util.h"
 #include "str_util.h"
 

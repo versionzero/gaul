@@ -47,6 +47,9 @@
 #undef HAVE_SLANG
 #undef MPI_NUM_THREADS_ENVVAR_STRING
 
+/* Kludge required for linking to LAM-MPI */
+#undef HAVE_ITOA
+
 /* The number of bytes in a char.  */
 #undef SIZEOF_CHAR
 
@@ -85,9 +88,6 @@
 
 /* Define if you have the index function.  */
 #undef HAVE_INDEX
-
-/* Define if you have the itoa function.  */
-#undef HAVE_ITOA
 
 /* Define if you have the max function.  */
 #undef HAVE_MAX

@@ -36,13 +36,13 @@
 
 #define NO_PARALLEL
 
+#include "SAA_header.h"
+
 /*
  * Forced over-ride of the PARALLEL constant.
  */
 #undef PARALLEL
 #define PARALLEL	0
-
-#include "SAA_header.h"
 
 typedef int *MPI_Comm;
 typedef int *MPI_Datatype;

@@ -27,7 +27,8 @@
   Synopsis:	Header file for some abstract message passing functions
 		using the MPI API.
 
-  Updated:	15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to here from SAA_header.h
+  Updated:	19 Mar 2002 SAA	Moved some stuff from SAA_header.h to here.
+		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to here from SAA_header.h
 		30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
 		23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
 		02/02/01 SAA	Converted from helga_mpi.h to mpi_util.h
@@ -49,6 +50,48 @@
 #include "compatibility.h"
 #include "log_util.h"
 
+/* PARALLEL library to use.
+ * In most cases, we just wish to check whether PARALLEL > 0,
+ * i.e. this is a parallel program.
+ *
+ * PARALLEL==0/undefined        None.
+ * PARALLEL==1                  Pthreads.
+ * PARALLEL==2                  MPI 1.2.x
+ * PARALLEL==3                  PVM
+ * PARALLEL==4                  BSP
+ * PARALLEL==5                  OpenMP
+ *
+ * Transparently include MPI/whatever header in all files if this is parallel
+ * code.
+ * (This is required for the parallel version of die() and dief() macros -
+ *  especially in the case of serial routines used by parallel programs.)
+ */
+#ifdef NO_PARALLEL
+# undef PARALLEL
+# define PARALLEL       0
+#else
+# ifndef PARALLEL
+#  define PARALLEL      0
+# else
+#  if PARALLEL==1
+#   include <pthread.h>
+#   define _REENTRANT
+#  endif
+#  if PARALLEL==2
+#   include <mpi.h>
+#  endif
+#  if PARALLEL==3
+#   include <pvm3.h>
+#  endif
+#  if PARALLEL==4
+#   include <bsp.h>
+#  endif
+#  if PARALLEL==5
+#   include <omp.h>
+#  endif
+# endif
+#endif
+
 /*
  * Some constants.  Should be defined in config.h or equivalent.
  */
@@ -65,7 +108,7 @@
 /*
  * Message datatypes.
  */
-#if PARALLEL == 0 || PARALLEL == 1
+#if PARALLEL == 0 || PARALLEL == 1 || PARALLEL == 2
 typedef int mpi_datatype;
 #define MPI_TYPE_UNKNOWN	0
 #define MPI_TYPE_INT		1
@@ -73,8 +116,7 @@ typedef int mpi_datatype;
 #define MPI_TYPE_CHAR		3
 #define MPI_TYPE_BYTE		4
 
-#else
-#if PARALLEL == 2
+#if 0
 /* Use the MPI datatype definitions. */
 typedef MPI_Datatype mpi_datatype;
 #define MPI_TYPE_UNKNOWN	(MPI_Datatype) 0
@@ -82,6 +124,7 @@ typedef MPI_Datatype mpi_datatype;
 #define MPI_TYPE_DOUBLE		(MPI_Datatype) MPI_DOUBLE
 #define MPI_TYPE_CHAR		(MPI_Datatype) MPI_CHAR
 #define MPI_TYPE_BYTE		(MPI_Datatype) MPI_BYTE
+#endif
 
 #else
 #if PARALLEL == 3 || PARALLEL == 4
@@ -93,7 +136,6 @@ typedef size_t mpi_datatype;
 #define MPI_TYPE_CHAR		SIZEOF_CHAR
 #define MPI_TYPE_BYTE		SIZEOF_BYTE
 
-#endif
 #endif
 #endif
 

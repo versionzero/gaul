@@ -82,6 +82,13 @@
 #include "mpi_util.h"
 
 /*
+ * Type conversion macro for MPI.
+ */
+#if PARALLEL == 2
+#define MPI_TYPE(type)	((MPI_Datatype)((type)==MPI_TYPE_INT?MPI_INT:((type)==MPI_TYPE_DOUBLE?MPI_DOUBLE:((type)==MPI_TYPE_CHAR?MPI_CHAR:((type)==MPI_TYPE_BYTE?MPI_BYTE:(0))))))
+#endif
+
+/*
  * Global variables.
  * Having this stuff stored removes the need for quite a number
  * of MPI calls.
@@ -830,7 +837,7 @@ boolean mpi_synchronous_send(void *buf, const int count,
   die("FIXME: Not implemented.");
 #else
 #if PARALLEL == 2
-  MPI_Ssend( buf, count, type, node, tag, MPI_COMM_WORLD );
+  MPI_Ssend( buf, count, MPI_TYPE(type), node, tag, MPI_COMM_WORLD );
 #else
 #if PARALLEL == 3
   die("PVM send not implemented.");
@@ -872,7 +879,7 @@ boolean mpi_nonblocking_send(void *buf, const int count,
   die("FIXME: Not implemented.");
 #else
 #if PARALLEL == 2
-  MPI_IBsend( buf, count, type, node, tag, MPI_COMM_WORLD );
+  MPI_IBsend( buf, count, MPI_TYPE(type), node, tag, MPI_COMM_WORLD );
 #else
 #if PARALLEL == 3
   die("PVM send not implemented.");
@@ -913,7 +920,7 @@ boolean mpi_send(void *buf, const int count,
   die("FIXME: Pthreads version not implemented.");
 #else
 #if PARALLEL == 2
-  MPI_Send( buf, count, type, node, tag, MPI_COMM_WORLD );
+  MPI_Send( buf, count, MPI_TYPE(type), node, tag, MPI_COMM_WORLD );
 #else
 #if PARALLEL == 3
   die("FIXME: PVM version not implemented.");
@@ -960,7 +967,7 @@ boolean mpi_broadcast(void *buf, const int count,
     {
     if (i!=rank)
       {
-      MPI_Send( buf, count, type, i, tag, MPI_COMM_WORLD );
+      MPI_Send( buf, count, MPI_TYPE(type), i, tag, MPI_COMM_WORLD );
       }
     }
 #else
@@ -1008,7 +1015,7 @@ boolean mpi_distribute(void *buf, const int count,
 #else
 #if PARALLEL == 2
   /* FIXME: Tag is ignored. */
-  MPI_Bcast( buf, count, type, root, MPI_COMM_WORLD );
+  MPI_Bcast( buf, count, MPI_TYPE(type), root, MPI_COMM_WORLD );
 #else
 #if PARALLEL == 3
   die("FIXME: PVM version not implemented.");
@@ -1052,7 +1059,7 @@ boolean mpi_receive(void *buf, const int count,
   die("FIXME: Not implemented.");
 #else
 #if PARALLEL == 2
-  MPI_Recv( buf, count, (MPI_Datatype) type, node, tag, MPI_COMM_WORLD, &status );
+  MPI_Recv( buf, count, MPI_TYPE(type), node, tag, MPI_COMM_WORLD, &status );
 
   /* FIXME: Should check the status structure here! */
 #else
@@ -1100,7 +1107,7 @@ boolean mpi_receive_any(void *buf, const int count,
   die("FIXME: Not implemented.");
 #else
 #if PARALLEL == 2
-  MPI_Recv( buf, count, (MPI_Datatype) type, MPI_SOURCE_ANY, MPI_TAG_ANY, MPI_COMM_WORLD, &status );
+  MPI_Recv( buf, count, MPI_TYPE(type), MPI_SOURCE_ANY, MPI_TAG_ANY, MPI_COMM_WORLD, &status );
   *node = status.MPI_SOURCE;
   *tag = status.MPI_TAG;
 

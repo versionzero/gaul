@@ -1357,7 +1357,7 @@ void dief(const char *format, ...)
 
 
 #ifndef HAVE_BASENAME
-char *basename (char *path)
+char *basename(char *path)
   {
   /* Search for the last directory separator in PATH.  */
   char *basename = strrchr (path, '/');
@@ -1374,7 +1374,7 @@ char *basename (char *path)
 #  define BUFSIZ 256
 #endif
 
-char *readline (char *prompt)
+char *readline(char *prompt)
   {
   int lim = BUFSIZ;
   int i = 0;
@@ -1573,7 +1573,7 @@ maybeinline void sincos( double radians, double *s, double *c )
 /*
  * Convert an integer to a string.
  */
-void itoa (const int n, char *s)
+void itoa(const int n, char *s)
   {
   int   number=n;
   char	c, *end=s;

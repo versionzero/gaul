@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
+  Updated:	19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
+		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
   		26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
 		30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
 		29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
@@ -98,44 +99,6 @@
 #  define HAVE_STRLEN 1
 #  define HAVE_STRNCPY 1
 #  define HAVE_STRNCMP 1
-# endif
-#endif
-
-/* PARALLEL library to use.
- * In most cases, we just wish to check whether PARALLEL > 0,
- * i.e. this is a parallel program.
- *
- * PARALLEL==0/undefined	None.
- * PARALLEL==1			Pthreads.
- * PARALLEL==2			MPI 1.2.x
- * PARALLEL==3			PVM
- * PARALLEL==4			BSP
- * PARALLEL==5			OpenMP
- *
- * Transparently include MPI/whatever header in all files if this is parallel
- * code.
- * (This is required for the parallel version of die() and dief() macros -
- *  especially in the case of serial routines used by parallel programs.)
- */
-#if !defined(PARALLEL) || defined(NO_PARALLEL)
-# undef PARALLEL
-# define PARALLEL	0
-#else
-# if PARALLEL==1
-#  include <pthread.h>
-#  define _REENTRANT
-# endif
-# if PARALLEL==2
-#  include <mpi.h>
-# endif
-# if PARALLEL==3
-#  include <pvm3.h>
-# endif
-# if PARALLEL==4
-#  include <bsp.h>
-# endif
-# if PARALLEL==5
-#  include <omp.h>
 # endif
 #endif
 

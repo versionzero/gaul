@@ -103,8 +103,8 @@ MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1837
-MPICC = echo
-MPIFLAGS = > /dev/null
+MPICC = mpicc
+MPIFLAGS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 4
@@ -147,6 +147,7 @@ noinst_HEADERS = \
 
 DEPENDENCIES = \
 	../util/librandom.a \
+	../util/liblog_util.a \
 	../util/libstuff.a \
 	../util/libmpi_util_fake.a \
 	../util/libnn_util.a \
@@ -178,24 +179,24 @@ struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util_fake -lnn_util -lrandom -lstr_util -ltimer_util -lm 
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm 
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lnn_util -lrandom -lstr_util -ltimer_util -lm 
 
 # Parallel code:
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util -lrandom -lstr_util -lm
-struggle5_mp_LINK = echo $(struggle5_mp_LDADD) -o struggle5_mp > /dev/null
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util_parallel -lmpi_util -lrandom -lstr_util -lm
+struggle5_mp_LINK = mpicc $(struggle5_mp_LDADD) -o struggle5_mp 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

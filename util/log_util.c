@@ -55,6 +55,12 @@
 
  **********************************************************************/
 
+#ifndef LOG_PARALLEL
+#undef PARALLEL
+#define PARALLEL 0
+#define NO_PARALLEL
+#endif
+
 #include "log_util.h"
 
 /*
@@ -66,7 +72,7 @@ THREAD_LOCK_DEFINE_STATIC(log_global_lock);
 THREAD_LOCK_DEFINE_STATIC(log_callback_lock);
 
 static char		*log_filename=NULL;		/* Log filename */
-static log_func	log_callback=NULL;		/* Callback function for log */
+static log_func		log_callback=NULL;		/* Callback function for log */
 static enum log_level_type	log_level=LOG_NONE;	/* Logging level */
 static boolean		log_date=TRUE;			/* Whether to display date in logs */
 

@@ -2880,7 +2880,7 @@ for ac_func in fdopen gethostname getpwuid gettimeofday select \
                 strdup strndup \
 		strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
-                strerror strlcat strlcpy strstr vsnprintf itoa 
+                strerror strlcat strlcpy strstr vsnprintf 
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
 echo "configure:2887: checking for $ac_func" >&5
@@ -2935,6 +2935,10 @@ else
 fi
 done
 
+cat >> confdefs.h <<\EOF
+#define HAVE_ITOA 1
+EOF
+	# Kludge to avoid symbol conflict with LAM-MPI
 
 temp=`make -version -f \dev\null 2>&1 | grep GNU`
 if test "x$temp" = "x"; then

@@ -31,10 +31,12 @@ AUTOMAKE_OPTIONS = 1.4
 
 lib_LIBRARIES = libstuff.a \
 	libnn_util.a librandom.a libstr_util.a libtimer_util.a \
+        liblog_util.a liblog_util_parallel.a \
 	libmpi_util.a libmpi_util_fake.a
 
 lib_LTLIBRARIES = libstuff.la \
 	libnn_util.la librandom.la libstr_util.la libtimer_util.la \
+        liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
 
 bin_PROGRAMS = nn
@@ -45,7 +47,6 @@ nn_SOURCES = \
 libstuff_a_SOURCES = \
 	avltree.c \
 	compatibility.c \
-	log_util.c \
 	linkedlist.c \
 	memory_util.c \
 	table_util.c
@@ -53,10 +54,21 @@ libstuff_a_SOURCES = \
 libstuff_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
-	log_util.c \
 	linkedlist.c \
 	memory_util.c \
 	table_util.c
+
+liblog_util_parallel_a_SOURCES = \
+	log_util_parallel.c
+
+liblog_util_parallel_la_SOURCES = \
+	log_util_parallel.c
+
+liblog_util_a_SOURCES = \
+	log_util.c
+
+liblog_util_la_SOURCES = \
+	log_util.c
 
 libmpi_util_fake_a_SOURCES = \
 	mpi_util_fake.c 
@@ -116,13 +128,19 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstr_util -lstuff -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstr_util -lstuff -llog_util -lrandom -lm
 
 libstuff_a_LIBFLAGS = -lm
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS =
 libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+
+liblog_util_a_LIBFLAGS =
+liblog_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+
+liblog_util_parallel_a_LIBFLAGS =
+liblog_util_parallel_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_a_LIBFLAGS =
 libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0

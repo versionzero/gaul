@@ -45,6 +45,9 @@
 #undef HAVE_UNISTD_H
 #undef HAVE_VALUES_H
 
+/* Kludge required for linking to LAM-MPI */
+#undef HAVE_ITOA
+
 #undef NO_SYS_ERRLIST
 
 #undef SIZEOF_DOUBLE

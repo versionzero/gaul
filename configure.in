@@ -369,7 +369,8 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 strdup strndup \
 		strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
-                strerror strlcat strlcpy strstr vsnprintf itoa )
+                strerror strlcat strlcpy strstr vsnprintf )
+AC_DEFINE(HAVE_ITOA,1)	# Kludge to avoid symbol conflict with LAM-MPI
 
 dnl Give warning if GNU Make is not being used.
 dnl This message is at the bottom so it may be easily spotted!
