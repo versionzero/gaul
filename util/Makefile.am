@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 #######################################################################
-# methods Makefile.am
+# util Makefile.am
 #######################################################################
 #
-# methods - General collection of C-programming utitily routines.
+# util - General collection of C-programming utitily routines.
 # Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:

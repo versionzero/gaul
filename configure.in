@@ -256,6 +256,7 @@ AC_MSG_CHECKING(whether to link SLang scripting engine)
 if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(HAVE_SLANG,1)
+  WILL_USE_SLANG="yes"
   LIBS="$LIBS -lslang"
   INCLUDES="$INCLUDES -I/usr/include/slang/"
   CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
@@ -266,6 +267,7 @@ if test "x$enable_slang" = "xyes"; then
 else
   AC_MSG_RESULT(no)
   AC_DEFINE(HAVE_SLANG,0)
+  WILL_USE_SLANG="no"
 fi
 
 changequote(,)dnl
@@ -385,7 +387,7 @@ echo \
   Compiler flags:           ${CFLAGS}
   Extra include flags:      ${INCLUDE}
   Install path:             ${prefix}
-  Use S-Lang:               $HAVE_SLANG
+  Use S-Lang:               ${WILL_USE_SLANG}
 
 ************************************************************************"
 
