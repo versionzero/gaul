@@ -147,8 +147,8 @@ AC_ARG_ENABLE(memory_chunks,
        [  --enable-memory-chunks=[yes/no] use memory chunk allocation routines. [default=yes]],,
        enable_memory_chunks=yes)
 AC_ARG_ENABLE(num_procs,
-       [  --enable-num-procs=[INT]        default number of processes to spawn in MP code. [default=16]],,
-       enable_num_procs=16)
+       [  --enable-num-procs=[INT]        default number of processes to spawn in MP code. [default=8]],,
+       enable_num_procs=8)
 AC_ARG_ENABLE(num_threads,
        [  --enable-num-threads=[INT]      default number of threads to create in threaded code. [default=4]],,
        enable_num_threads=4)
@@ -196,6 +196,8 @@ if test "x$enable_mpi" != "xyes"; then
   enable_mpi=no
   MPIFLAGS=""
   MPILIBS=""
+  WILL_USE_MPI="no"
+  HAVE_MPI=0
   result=0
 else
   AC_MSG_RESULT(yes)
@@ -242,14 +244,14 @@ else
       AC_MSG_RESULT(yes)
     fi
   fi
-fi
-if test ${result} = 0; then
-  WILL_USE_MPI="no"
-  HAVE_MPI=0
-  AC_MSG_ERROR(Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)
-else
-  WILL_USE_MPI="yes"
-  HAVE_MPI=1
+  if test ${result} = 0; then
+    WILL_USE_MPI="no"
+    HAVE_MPI=0
+    AC_MSG_ERROR(Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)
+  else
+    WILL_USE_MPI="yes"
+    HAVE_MPI=1
+  fi
 fi
 AC_DEFINE_UNQUOTED( HAVE_MPI, ${result}, [Whether to use MPI for parallel code.])
 # Reset CFLAGS and LIBS variables.

@@ -1026,7 +1026,7 @@ Optional Features:
   --enable-efence=yes/no        use Electric Fence for memory debugging. default=no
   --enable-padding=yes/no       use memory padding for overflow detection. default=no
   --enable-memory-chunks=yes/no use memory chunk allocation routines. default=yes
-  --enable-num-procs=INT        default number of processes to spawn in MP code. default=16
+  --enable-num-procs=INT        default number of processes to spawn in MP code. default=8
   --enable-num-threads=INT      default number of threads to create in threaded code. default=4
   --enable-w32-subset=yes/no    compile a subset of GAUL for windows. default=no
 
@@ -8038,7 +8038,7 @@ if test "${enable_num_procs+set}" = set; then
   enableval="$enable_num_procs"
 
 else
-  enable_num_procs=16
+  enable_num_procs=8
 fi;
 # Check whether --enable-num_threads or --disable-num_threads was given.
 if test "${enable_num_threads+set}" = set; then
@@ -8175,6 +8175,8 @@ echo "${ECHO_T}no" >&6
   enable_mpi=no
   MPIFLAGS=""
   MPILIBS=""
+  WILL_USE_MPI="no"
+  HAVE_MPI=0
   result=0
 else
   echo "$as_me:$LINENO: result: yes" >&5
@@ -8424,16 +8426,16 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}yes" >&6
     fi
   fi
-fi
-if test ${result} = 0; then
-  WILL_USE_MPI="no"
-  HAVE_MPI=0
-  { { echo "$as_me:$LINENO: error: Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables" >&5
+  if test ${result} = 0; then
+    WILL_USE_MPI="no"
+    HAVE_MPI=0
+    { { echo "$as_me:$LINENO: error: Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables" >&5
 echo "$as_me: error: Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables" >&2;}
    { (exit or configure with '--enable-mpi=no' to disable MPI use.); exit or configure with '--enable-mpi=no' to disable MPI use.; }; }
-else
-  WILL_USE_MPI="yes"
-  HAVE_MPI=1
+  else
+    WILL_USE_MPI="yes"
+    HAVE_MPI=1
+  fi
 fi
 
 cat >>confdefs.h <<_ACEOF
