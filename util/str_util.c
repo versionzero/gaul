@@ -786,7 +786,7 @@ char *str_sncpy(char *dest, const char *src, const int len)
   
   if (dest == src) die("Destination and source are same.\n");
 
-  while (*src != ' ' && *src != '\0' && dest < end)
+  while (*src != ' ' && *src != '\t' && *src != '\n' && *src != '\0' && dest < end)
     {
     *dest = *src;
     src++;
