@@ -44,7 +44,7 @@ dnl are available for $ac_help expansion.
 #AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1841
-PATCH_VERSION=3
+PATCH_VERSION=4
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 #AC_DIVERT_POP()
 
@@ -260,9 +260,9 @@ dnl Whether we need to cripple GAUL so that it works with windows.
 dnl This is always the case if MingW is being used.
 AC_MSG_CHECKING(whether to cripple GAUL for windows)
 
-if test "x$target" = "x*-*-mingw*"; then
-  enable_w32_subset = "yes"
-fi
+case $target in
+  *-*-mingw*) enable_w32_subset = "yes" ;;
+esac
 
 if test "x$enable_w32_subset" = "xyes"; then
   AC_MSG_RESULT(yes)
