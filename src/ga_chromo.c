@@ -194,7 +194,7 @@ void ga_chromosome_integer_from_bytes(population *pop, entity *joe, byte *bytes)
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 26 Feb 2002
  **********************************************************************/
 
 char *ga_chromosome_integer_to_staticstring(
@@ -231,6 +231,12 @@ char *ga_chromosome_integer_to_staticstring(
     {
     for(j=0; j<pop->len_chromosomes; j++)
       {
+      if (textlen-k<8)
+        {
+        textlen *= 2;   /* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * textlen);
+        }
+
       l = snprintf(&(text[k]), textlen-k, " %d",
                        ((int *)joe->chromosome[i])[j]);
 
@@ -581,7 +587,7 @@ void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 26 Feb 2002
  **********************************************************************/
 
 char *ga_chromosome_double_to_staticstring(
@@ -618,6 +624,12 @@ char *ga_chromosome_double_to_staticstring(
     {
     for(j=0; j<pop->len_chromosomes; j++)
       {
+      if (textlen-k<8)
+        {
+	textlen *= 2;	/* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * textlen);
+        }
+
       l = snprintf(&(text[k]), textlen-k, " %f",
                        ((double *)joe->chromosome[i])[j]);
 
