@@ -360,7 +360,6 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
   }
 
 
-#if 0
 /**********************************************************************
   gaul_ensure_evaluations_threaded()
   synopsis:	Fitness evaluations.
@@ -371,6 +370,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
   last updated:	18 Sep 2002
  **********************************************************************/
 
+#ifdef HAVE_PTHREAD
 static void gaul_ensure_evaluations_threaded(population *pop, const int num_threads,
 			int *eid, pthread_t *tid)
   {
@@ -469,7 +469,7 @@ static void gaul_ensure_evaluations_threaded(population *pop, const int num_thre
 
   return;
   }
-#endif
+#endif /* HAVE_PTHREAD */
 
 
 /**********************************************************************
@@ -717,7 +717,7 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
 		population back to its stable size and rerank entities,
 		as required.
 
-		*** FIXME: incomplete. ***
+		*** FIXME: crowding analysis incomplete. ***
 
   parameters:	population *pop
   return:	none
@@ -1036,7 +1036,6 @@ int ga_evolution_forked(	population		*pop,
   }
 
 
-#if 0
 /**********************************************************************
   ga_evolution_threaded()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
@@ -1055,15 +1054,18 @@ int ga_evolution_forked(	population		*pop,
   last updated:	18 Sep 2002
  **********************************************************************/
 
+#ifdef HAVE_PTHREAD
 int ga_evolution_threaded(	population		*pop,
 				const int		max_generations )
   {
-  int		generation=0;		/* Current generation number. */
-  int		i;			/* Loop over members of population. */
-  pid_t		*tid;			/* Child TIDs. */
-  int		*eid;			/* Entity which forked process is evaluating. */
-  int		max_threads=0;		/* Maximum number of evaluation threads to use at one time. */
-  char		*max_thread_str;	/* Value of enviroment variable. */
+  int			generation=0;		/* Current generation number. */
+  int			i;			/* Loop over members of population. */
+  pthread_t		*tid;			/* Child thread IDs. */
+  pthread_mutex_t	*mid;			/* Child mutex IDs. */
+  pthread_cond_t	*cid;			/* Child condition variable IDs. */
+  int			*eid;			/* Entity which forked process is evaluating. */
+  int			max_threads=0;		/* Maximum number of evaluation threads to use at one time. */
+  char			*max_thread_str;	/* Value of enviroment variable. */
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -1085,13 +1087,37 @@ int ga_evolution_threaded(	population		*pop,
   plog(LOG_VERBOSE, "The evolution has begun!  Upto %d threads will be created", max_threads);
 
 /*
+ * Start with all threads locked.
+ */
+THREAD_LOCK(global_thread_lock);
+
+/*
  * Allocate memory required for handling the threads.
- * Clear eid array.
+ * Initially use eid array to pass thread enumerations.
  */
   tid = s_malloc(max_threads*sizeof(pthread_t));
+  mid = s_malloc(max_threads*sizeof(pthread_mutex_t));
+  cid = s_malloc(max_threads*sizeof(pthread_cond_t));
   eid = s_malloc(max_threads*sizeof(int));
   for (i=0; i<max_threads; i++)
     {
+    eid[i] = i;
+    if ( !pthread_mutex_init(&(mid[i]), NULL) )
+      die("Unable to initialize mutex variable.");
+    if ( !pthread_cond_init(&(cid[i]), NULL) )
+      die("Unable to initialize condition variable.");
+    if ( !pthread_create(&(tid[i]), NULL, (void *(*)(void *)) worker_thread, (void *) &(eid[i])) )
+      die("Unable to create thread.");
+    }
+
+/*
+ * Clear eid array.
+ */
+  for (i=0; i<max_threads; i++)
+    {
+    pthread_mutex_lock(&(mid[i]));
+    pthread_cond_wait(&(cid[i]), &(mid[i]));
+    pthread_mutex_unlock(&(mid[i]));
     eid[i] = -1;
     }
 
@@ -1151,14 +1177,27 @@ int ga_evolution_threaded(	population		*pop,
     }	/* Main generation loop. */
 
 /*
+ * Clean-up threads.
+ */
+  for (i=0; i<max_threads; i++)
+    {
+    pthread_cancel(&(tid[i]));
+    pthread_join(&(tid[i]));
+    pthread_mutex_destroy(&(mid[i]));
+    pthread_cond_destroy(&(cid[i]));
+    }
+  
+/*
  * Free memory.
  */
   s_free(tid);
+  s_free(mid);
+  s_free(cid);
   s_free(eid);
 
   return generation;
   }
-#endif
+#endif /* HAVE_PTHREAD */
 
 
 /**********************************************************************

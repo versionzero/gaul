@@ -192,7 +192,7 @@
 #else
 
 # if !defined(__bool_true_false_are_defined)
-#  if !defined(_Bool) && !defined(__GNUC__) && !defined(__DECC)
+#  if !defined(_Bool)
 typedef short _Bool;
 #  endif
 
