@@ -118,6 +118,7 @@ bin_PROGRAMS = diagnostics \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
+	saveload \
 	nnevolve
 
 
@@ -135,6 +136,7 @@ struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
+saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
 lib_LIBRARIES = libbtree.a
@@ -176,6 +178,7 @@ struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
+saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
@@ -192,6 +195,7 @@ struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -ltimer_util -lm 
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lnn_util -lrandom -lstr_util -ltimer_util -lm 
 
 # Parallel code:
@@ -206,7 +210,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lefence -lslang -lslang
+LIBS =  -lslang -lslang
 libbtree_a_LIBADD = 
 libbtree_a_OBJECTS =  btree.o
 AR = ar
@@ -240,6 +244,8 @@ struggle5_mp_OBJECTS =  struggle5_mp.o
 struggle5_mp_LDFLAGS = 
 struggle_ss_OBJECTS =  struggle_ss.o
 struggle_ss_LDFLAGS = 
+saveload_OBJECTS =  saveload.o
+saveload_LDFLAGS = 
 nnevolve_OBJECTS =  nnevolve.o
 nnevolve_LDFLAGS = 
 CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
@@ -258,11 +264,11 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/btree.P .deps/diagnostics.P .deps/goldberg1.P \
 .deps/goldberg2.P .deps/nnevolve.P .deps/pingpong.P .deps/royalroad.P \
-.deps/royalroad_ss.P .deps/struggle.P .deps/struggle2.P \
-.deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
+.deps/royalroad_ss.P .deps/saveload.P .deps/struggle.P \
+.deps/struggle2.P .deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
 .deps/struggle5_mp.P .deps/struggle_ss.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_mp_SOURCES) $(struggle_ss_SOURCES) $(nnevolve_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle5_mp_OBJECTS) $(struggle_ss_OBJECTS) $(nnevolve_OBJECTS)
+SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_mp_SOURCES) $(struggle_ss_SOURCES) $(saveload_SOURCES) $(nnevolve_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle5_mp_OBJECTS) $(struggle_ss_OBJECTS) $(saveload_OBJECTS) $(nnevolve_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -424,6 +430,10 @@ struggle5_mp: $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES)
 struggle_ss: $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
 	@rm -f struggle_ss
 	$(LINK) $(struggle_ss_LDFLAGS) $(struggle_ss_OBJECTS) $(struggle_ss_LDADD) $(LIBS)
+
+saveload: $(saveload_OBJECTS) $(saveload_DEPENDENCIES)
+	@rm -f saveload
+	$(LINK) $(saveload_LDFLAGS) $(saveload_OBJECTS) $(saveload_LDADD) $(LIBS)
 
 nnevolve: $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
 	@rm -f nnevolve

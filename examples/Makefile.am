@@ -33,6 +33,7 @@ bin_PROGRAMS = diagnostics \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
+	saveload \
 	nnevolve
 
 diagnostics_SOURCES = diagnostics.c
@@ -49,6 +50,7 @@ struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
+saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
 lib_LIBRARIES = libbtree.a
@@ -87,6 +89,7 @@ struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
+saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
@@ -103,6 +106,7 @@ struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -ltimer_util -lm 
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lnn_util -lrandom -lstr_util -ltimer_util -lm 
 
 # Parallel code:

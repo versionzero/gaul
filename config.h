@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1838-2"
-#define BUILD_DATE_STRING "28/05/02"
+#define BUILD_DATE_STRING "30/05/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1838
 #define PATCH_VERSION 2
@@ -66,7 +66,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "28/05/02"
+#define BUILD_DATE_STRING "30/05/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1

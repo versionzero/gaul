@@ -10,6 +10,8 @@ Changes since release 0.1838:
 - Added accessor functions: ga_entity_get_fitness(), ga_entity_set_fitness(), ga_population_get_stablesize(), ga_population_get_size(), ga_population_get_maxsize(), ga_population_set_stablesize().
 - Added ga_population_clone_empty() function.
 - Added ga_mutate_integer_allpoint() mutation function.
+- Added working population and entity reading/writing functions and a new example program to demonstrate them.
+- random_init() no longer needs to be called provided that random_seed() is called before any of the other PRNG functions.
 
 Changes since release 0.1837:
 - Documentation is now maintained in a seperate CVS module, gaul-docs.
