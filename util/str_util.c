@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Last Updated:	28 Oct 2002 SAA Added str_sncpy().
+  Last Updated:	29 Oct 2002 SAA	Enhanced str_sncpy() and str_scmp().
+		28 Oct 2002 SAA Added str_sncpy().
 		15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
 		13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
   		25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
@@ -774,7 +775,7 @@ void str_ncpyt(char *dest, const char *src, const int len)
 		const char	*src	The source string.
 		const int	len	Number of bytes to copy.
   return:	Pointer to final char in src string looked at.
-  last updated: 28 Oct 2002
+  last updated: 29 Oct 2002
  **********************************************************************/
 
 char *str_sncpy(char *dest, const char *src, const int len)
@@ -1222,7 +1223,7 @@ int str_safecopy(char *src, char *dest, const int len)
   synopsis:	Compare strings upto first white-space.
   parameters:	char	*src	The original string.
   return:	int	ret	Number of characters copied.
-  last updated: 13 Aug 2002
+  last updated: 29 Oct 2002
  **********************************************************************/
 
 int str_scmp(const char *s1, const char *s2)
@@ -1234,8 +1235,8 @@ int str_scmp(const char *s1, const char *s2)
     s2++;
     }
 
-  if ( (*s1 == ' ' || *s1 == '\0') && 
-       (*s2 == ' ' || *s2 == '\0') ) return 0;
+  if ( (*s1 == ' ' || *s1 == '\t' || *s1 == '\n' || *s1 == '\0') && 
+       (*s2 == ' ' || *s1 == '\t' || *s1 == '\n' || *s2 == '\0') ) return 0;
 
   return *s1 - *s2;
   }
