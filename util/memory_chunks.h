@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,7 +25,8 @@
 
  **********************************************************************
 
- Last Updated:	21 Nov 2002 SAA	Use void * instead of vpointer.
+  Last updated:	05 Jun 2003 SAA	Memory chunks disabled via header.
+ 		21 Nov 2002 SAA	Use void * instead of vpointer.
  		15 Aug 2002 SAA	Rearranged order of include directives for clarity and consistency.  Also some tidying.
 
  **********************************************************************/
@@ -56,17 +57,63 @@ typedef struct MemChunk_t MemChunk;
  * Prototypes.
  */
 
-MemChunk	*mem_chunk_new(size_t atom_size, unsigned int num_atoms);
-MemChunk	*mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms);
-boolean		mem_chunk_has_freeable_atoms(MemChunk *mem_chunk);
-boolean		mem_chunk_isempty(MemChunk *mem_chunk);
-void		mem_chunk_destroy(MemChunk *mem_chunk);
-void		*mem_chunk_alloc(MemChunk *mem_chunk);
-void		mem_chunk_free(MemChunk *mem_chunk, void *mem);
-void		mem_chunk_clean(MemChunk *mem_chunk);
-void		mem_chunk_reset(MemChunk *mem_chunk);
-boolean		mem_chunk_test(void);
-void		mem_chunk_diagnostics(void);
+MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
+MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
+boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);
+boolean		mem_chunk_isempty_real(MemChunk *mem_chunk);
+void		mem_chunk_destroy_real(MemChunk *mem_chunk);
+void		*mem_chunk_alloc_real(MemChunk *mem_chunk);
+void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
+void		mem_chunk_clean_real(MemChunk *mem_chunk);
+void		mem_chunk_reset_real(MemChunk *mem_chunk);
+boolean		mem_chunk_test_real(void);
+void		mem_chunk_diagnostics_real(void);
+
+MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
+MemChunk	*mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms);
+boolean		mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk);
+boolean		mem_chunk_isempty_mimic(MemChunk *mem_chunk);
+void		mem_chunk_destroy_mimic(MemChunk *mem_chunk);
+void		*mem_chunk_alloc_mimic(MemChunk *mem_chunk);
+void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
+void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
+void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
+boolean		mem_chunk_test_mimic(void);
+void		mem_chunk_diagnostics_mimic(void);
+
+/*
+ * Exposed API.
+ */
+
+#ifndef MEMORY_CHUNKS_MIMIC
+
+#define mem_chunk_new(Y,Z)		mem_chunk_new_real((Y), (Z))
+#define mem_chunk_new_unfreeable(Y,Z)	mem_chunk_new_unfreeable_real((Y), (Z))
+#define mem_chunk_has_freeable_atoms(Z)	mem_chunk_has_freeable_atoms_real((Z))
+#define mem_chunk_isempty(Z)		mem_chunk_isempty_real((Z))
+#define mem_chunk_destroy(Z)		mem_chunk_destroy_real((Z))
+#define mem_chunk_alloc(Z)		mem_chunk_alloc_real((Z))
+#define mem_chunk_free(Y,Z)		mem_chunk_free_real((Y), (Z))
+#define mem_chunk_clean(Z)		mem_chunk_clean_real((Z))
+#define mem_chunk_reset(Z)		mem_chunk_reset_real((Z))
+#define mem_chunk_test			mem_chunk_test_real()
+#define mem_chunk_diagnostics		mem_chunk_diagnostics_real()
+
+#else
+
+#define mem_chunk_new(Y,Z)		mem_chunk_new_mimic((Y), (Z))
+#define mem_chunk_new_unfreeable(Y,Z)	mem_chunk_new_unfreeable_mimic((Y), (Z))
+#define mem_chunk_has_freeable_atoms(Z)	mem_chunk_has_freeable_atoms_mimic((Z))
+#define mem_chunk_isempty(Z)		mem_chunk_isempty_mimic((Z))
+#define mem_chunk_destroy(Z)		mem_chunk_destroy_mimic((Z))
+#define mem_chunk_alloc(Z)		mem_chunk_alloc_mimic((Z))
+#define mem_chunk_free(Y,Z)		mem_chunk_free_mimic((Y), (Z))
+#define mem_chunk_clean(Z)		mem_chunk_clean_mimic((Z))
+#define mem_chunk_reset(Z)		mem_chunk_reset_mimic((Z))
+#define mem_chunk_test			mem_chunk_test_mimic()
+#define mem_chunk_diagnostics		mem_chunk_diagnostics_mimic()
+
+#endif
 
 #endif /* MEMORY_CHUNKS_H_INCLUDED */
 

@@ -48,7 +48,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Last Updated:	08 Jan 2003 SAA	Minor fixes resulting from use of splint ( http://www.splint.org/ ).  Use s_strdup() instead of strdup(), which is a GNU extension.  str_nreadline() optimised slightly, and one parameter changed to const.  New str_rev().
+  Last Updated:	05 Jan 2003 SAA	Added a cast to avoid a compiler warning.
+		08 Jan 2003 SAA	Minor fixes resulting from use of splint ( http://www.splint.org/ ).  Use s_strdup() instead of strdup(), which is a GNU extension.  str_nreadline() optimised slightly, and one parameter changed to const.  New str_rev().
   		29 Oct 2002 SAA	Enhanced str_sncpy() and str_scmp().
 		28 Oct 2002 SAA Added str_sncpy().
 		15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
@@ -1293,7 +1294,7 @@ char **str_split(const char *string,
   if (*string != '\0')
     {
     n++;
-    string_list = slink_prepend(string_list, s_strdup(string));
+    string_list = slink_prepend(string_list, (void *)s_strdup(string));
     }
 
   str_array = s_malloc(sizeof(char*)*n);

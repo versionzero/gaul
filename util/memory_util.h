@@ -27,7 +27,8 @@
 
   Header file for memory_methods
 
-  Updated:	01 May 2003 SAA	Fixed s_strndup() macros.
+  Updated:	05 Jun 2003 SAA	All debug and safe replacements for the system functions are compiled now, irrespective of the defined constants.
+  		01 May 2003 SAA	Fixed s_strndup() macros.
   		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
   		11 Jun 2002 SAA	No longer link the malloc.h header.
   		01/03/01 SAA	Added non-standard strndup() stuff.
@@ -80,8 +81,9 @@ typedef enum memory_alloc_type_t
  * Use "MEMORY_ALLOC_DEBUG" and "MEMORY_ALLOC_SAFE" for selecting between
  * these memory routines and the system memory routines.
  * MEMORY_ALLOC_DEBUG = use my replacement functions for malloc() etc.
- * MEMORY_ALLOC_SAFE = use simple success test wrappers arounf system calls.
+ * MEMORY_ALLOC_SAFE = use simple success test wrappers around system calls.
  * if both are defined, "MEMORY_ALLOC_DEBUG" over-rides.
+ * if neither is defined, standard system functions will be used directly.
  */
 #if MEMORY_ALLOC_DEBUG==1
 /* Use replacement functions with extensive checking, tracing and profiling. */
@@ -172,7 +174,6 @@ void	memory_write_log(const char *text);
 void	memory_display_status(void);
 void	memory_display_table(void);
 
-#if MEMORY_ALLOC_DEBUG==1
 int	memory_total(void);
 void	memory_print_alloc_to(void *pnt);
 int	memory_alloc_to(void *pnt);
@@ -182,31 +183,28 @@ int	memory_check_bounds(void *pnt);
 void	memory_set_strict(int i);
 boolean	memory_set_bounds(int i);
 void	memory_set_verbose(int i);
-#endif /* MEMORY_ALLOC_DEBUG */
 
 /*
  * Prototypes for [unrecommended] direct access to functions.
  */
 
 /*
- * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
+ * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
+ * Debug versions.
  */
-#if MEMORY_ALLOC_SAFE==1
+void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, char*, char*, int, char*);
+void	*s_free_debug(void*, char*, char*, int);
+
+/*
+ * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
+ * Safe versions.
+ */
 void	*s_malloc_safe(size_t, char*, char*, int);
 void	*s_calloc_safe(size_t, size_t, char*, char*, int);
 void	*s_realloc_safe(void*, size_t, char*, char*, int);
 char	*s_strdup_safe(const char*, char*, char*, int);
 char	*s_strndup_safe(const char*, size_t, char*, char*, int);
 void	s_free_safe(void*, char*, char*, int);
-#endif /* MEMORY_ALLOC_SAFE */
-
-/*
- * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
- */
-#if MEMORY_ALLOC_DEBUG==1
-void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, char*, char*, int, char*);
-void	*s_free_debug(void*, char*, char*, int);
-#endif /* MEMORY_ALLOC_DEBUG */
 
 #endif
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -41,7 +41,8 @@
 	       	deallocate all memory atoms (which would normally be
 		a valid thing to do).
  
-  Last updated:	20 Dec 2002 SAA	Added debug mode, intended for use with valgrind/purify/electric fence etc.
+  Last updated:	05 Jun 2003 SAA	Memory chunks disabled via header.  Some more functions are now declared static.
+		20 Dec 2002 SAA	Added debug mode, intended for use with valgrind/purify/electric fence etc.
   		21 Nov 2002 SAA Added cut-down and local version of my tree routines.
 		16 Aug 2002 SAA	Added mem_chunk_isempty().
   		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
@@ -62,9 +63,6 @@
  **********************************************************************/
 
 #include "memory_chunks.h"
-
-/*#define MEMORY_CHUNKS_MIMIC*/
-#ifndef MEMORY_CHUNKS_MIMIC
 
 /* MEMORY_ALIGN_SIZE should have been set in config.h */
 
@@ -111,14 +109,16 @@ struct MemChunk_t
   {
   unsigned int	num_mem_areas;		/* the total number of memory areas */
   unsigned int	num_unused_areas;	/* the number of areas that may be deallocated */
-  size_t	atom_size;		/* the size of an atom */
-  size_t	area_size;	/* the size of a memory area */
-  MemArea	*mem_area;	/* the current memory area */
-  MemArea	*mem_areas;	/* a list of all the mem areas owned by this chunk */
-  MemArea	*free_mem_area;	/* the free area...which is about to be destroyed */
-  FreeAtom	*free_atoms;	/* the free atoms list */
-  tree_t	*mem_tree;	/* tree of mem areas sorted by memory address */
+  size_t	atom_size;		/* the size of an atom (used in mimic routines) */
+  size_t	area_size;		/* the size of a memory area */
+  MemArea	*mem_area;		/* the current memory area */
+  MemArea	*mem_areas;		/* a list of all the mem areas owned by this chunk */
+  MemArea	*free_mem_area;		/* the free area...which is about to be destroyed */
+  FreeAtom	*free_atoms;		/* the free atoms list */
+  tree_t	*mem_tree;		/* tree of mem areas sorted by memory address */
+  long		num_atoms_alloc;	/* The number of allocated atoms (only used in mimic routines) */
   };
+
 
 /*
  * Private function prototypes.
@@ -561,7 +561,7 @@ static node_t *node_rotate_right(node_t *node)
   }
 
 
-tree_t *tree_new(void)
+static tree_t *tree_new(void)
   {
   tree_t *tree;
 
@@ -575,7 +575,7 @@ tree_t *tree_new(void)
   }
 
 
-void delete(tree_t *tree)
+static void delete(tree_t *tree)
   {
   if (!tree) return;
 
@@ -594,7 +594,7 @@ void delete(tree_t *tree)
   }
 
 
-boolean insert(tree_t *tree, void *data)
+static boolean insert(tree_t *tree, void *data)
   {
   boolean	inserted=FALSE;
 
@@ -607,7 +607,7 @@ boolean insert(tree_t *tree, void *data)
   }
 
 
-void *remove_data(tree_t *tree, void *data)
+static void *remove_data(tree_t *tree, void *data)
   {
   void *removed=NULL;
 
@@ -619,7 +619,7 @@ void *remove_data(tree_t *tree, void *data)
   }
 
 
-void *remove_key(tree_t *tree, Key_t key)
+static void *remove_key(tree_t *tree, Key_t key)
   {
   void *removed=NULL;
 
@@ -631,7 +631,7 @@ void *remove_key(tree_t *tree, Key_t key)
   }
 
 
-void *ordered_search(tree_t *tree, void *userdata)
+static void *ordered_search(tree_t *tree, void *userdata)
   {
   if (!tree || !tree->root) return NULL;
 
@@ -680,7 +680,7 @@ static int check_pad_high(MemChunk *mem_chunk, void *mem)
 #endif	/* MEMORY_PADDING==TRUE */
 
 
-boolean mem_chunk_has_freeable_atoms(MemChunk *mem_chunk)
+boolean mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk)
   {
   return mem_chunk->mem_tree?TRUE:FALSE;
   }
@@ -724,7 +724,7 @@ static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
 /*
  * Return TRUE is the memory chunk is empty.
  */
-boolean mem_chunk_isempty(MemChunk *mem_chunk)
+boolean mem_chunk_isempty_real(MemChunk *mem_chunk)
   {
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -736,7 +736,7 @@ boolean mem_chunk_isempty(MemChunk *mem_chunk)
 /*
  * Constricted memory chunks: Atoms may not be individually released.
  */
-MemChunk *mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms)
+MemChunk *mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms)
   {
   MemChunk	*mem_chunk;
 
@@ -749,7 +749,7 @@ MemChunk *mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms)
   }
 
 
-MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
+MemChunk *mem_chunk_new_real(size_t atom_size, unsigned int num_atoms)
   {
   MemChunk	*mem_chunk;
 
@@ -763,7 +763,7 @@ MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
   }
 
 
-void mem_chunk_destroy(MemChunk *mem_chunk)
+void mem_chunk_destroy_real(MemChunk *mem_chunk)
   {
   MemArea *mem_areas;
   MemArea *temp_area;
@@ -786,7 +786,7 @@ void mem_chunk_destroy(MemChunk *mem_chunk)
   }
 
 
-void *mem_chunk_alloc(MemChunk *mem_chunk)
+void *mem_chunk_alloc_real(MemChunk *mem_chunk)
   {
   MemArea *temp_area;
   void *mem;
@@ -930,7 +930,7 @@ void *mem_chunk_alloc(MemChunk *mem_chunk)
   }
 
 
-void mem_chunk_free(MemChunk *mem_chunk, void *mem)
+void mem_chunk_free_real(MemChunk *mem_chunk, void *mem)
   {
   MemArea *temp_area;
   FreeAtom *free_atom;
@@ -969,7 +969,7 @@ void mem_chunk_free(MemChunk *mem_chunk, void *mem)
 
 
 /* This doesn't free the free_area if there is one */
-void mem_chunk_clean(MemChunk *mem_chunk)
+void mem_chunk_clean_real(MemChunk *mem_chunk)
   {
   MemArea *mem_area;
   FreeAtom *prev_free_atom;
@@ -1038,7 +1038,7 @@ void mem_chunk_clean(MemChunk *mem_chunk)
   }
 
 
-void mem_chunk_reset(MemChunk *mem_chunk)
+void mem_chunk_reset_real(MemChunk *mem_chunk)
   {
   MemArea *mem_areas;
   MemArea *temp_area;
@@ -1088,7 +1088,7 @@ static int memarea_check_bounds(MemChunk *mem_chunk, MemArea *mem_area)
   }
 
 
-void mem_chunk_check_all_bounds(MemChunk *mem_chunk)
+boolean mem_chunk_check_all_bounds_real(MemChunk *mem_chunk)
   {
   MemArea	*mem_area;
   int		badcount=0;
@@ -1108,11 +1108,11 @@ void mem_chunk_check_all_bounds(MemChunk *mem_chunk)
 
   printf("%d pads corrupt or free.\n", badcount);
   
-  return;
+  return badcount>0;
   }
 
 
-boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
+boolean mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem)
   {
   mem = BUMP_DOWN(mem);
   if (check_pad_low(mem_chunk, mem)!=0)
@@ -1123,14 +1123,22 @@ boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
   return TRUE;
   }
 #else
-boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
+
+
+boolean mem_chunk_check_all_bounds_real(MemChunk *mem_chunk)
+  {
+  return TRUE;
+  }
+
+
+boolean mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem)
   {
   return TRUE;
   }
 #endif
 
 
-boolean mem_chunk_test(void)
+boolean mem_chunk_test_real(void)
   {
   unsigned char	*tmem[10000];
   MemChunk	*tmem_chunk=NULL;
@@ -1151,7 +1159,7 @@ boolean mem_chunk_test(void)
 
   for (i = 0; i < 1000; i++)
     {
-    mem_chunk_check_bounds(tmem_chunk, tmem[i]);
+    mem_chunk_check_bounds_real(tmem_chunk, tmem[i]);
     }
 
   printf("free*500...\n");
@@ -1162,7 +1170,7 @@ boolean mem_chunk_test(void)
 
   for (i = 500; i < 1000; i++)
     {
-    mem_chunk_check_bounds(tmem_chunk, tmem[i]);
+    mem_chunk_check_bounds_real(tmem_chunk, tmem[i]);
     }
 
   printf("alloc*500...\n");
@@ -1175,7 +1183,7 @@ boolean mem_chunk_test(void)
 
   for (i = 0; i < 1000; i++)
     {
-    mem_chunk_check_bounds(tmem_chunk, tmem[i]);
+    mem_chunk_check_bounds_real(tmem_chunk, tmem[i]);
     }
 
   printf("free*1000...\n");
@@ -1185,7 +1193,7 @@ boolean mem_chunk_test(void)
     if (*tmem[i] != i%254) die("Uh oh.");
 
     for (j = i; j<1000; j++)
-      mem_chunk_check_bounds(tmem_chunk, tmem[j]);
+      mem_chunk_check_bounds_real(tmem_chunk, tmem[j]);
 
     mem_chunk_free(tmem_chunk, tmem[i]);
     }
@@ -1196,7 +1204,7 @@ boolean mem_chunk_test(void)
   }
 
 
-void mem_chunk_diagnostics(void)
+void mem_chunk_diagnostics_real(void)
   {
   printf("=== mem_chunk diagnostics ====================================\n");
   printf("Version:                   %s\n", VERSION_STRING);
@@ -1218,19 +1226,16 @@ void mem_chunk_diagnostics(void)
   return;
   }
 
-#else /* MEMORY_CHUNKS_MIMIC */
 
-struct MemChunk_t
-  {
-  size_t	atom_size;		/* The size of an atom. */
-  long		num_atoms_alloc;	/* The number of allocated atoms. */
-  };
-
+/*
+ * The following functions mimic the Memory chunk API, but are just
+ * wrappers around the system malloc.
+ */
 
 /*
  * Return TRUE is the memory chunk is empty.
  */
-boolean mem_chunk_isempty(MemChunk *mem_chunk)
+boolean mem_chunk_isempty_mimic(MemChunk *mem_chunk)
   {
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -1243,7 +1248,7 @@ boolean mem_chunk_isempty(MemChunk *mem_chunk)
  * Create new memory chunk.
  */
 
-MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
+MemChunk *mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms)
   {
   MemChunk	*mem_chunk;
 
@@ -1258,19 +1263,19 @@ MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
   }
 
 
-MemChunk *mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms)
+MemChunk *mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms)
   {
   return mem_chunk_new(atom_size, num_atoms);
   }
 
 
-boolean mem_chunk_has_freeable_atoms(MemChunk *mem_chunk)
+boolean mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk)
   {
   return TRUE;
   }
 
 
-void mem_chunk_destroy(MemChunk *mem_chunk)
+void mem_chunk_destroy_mimic(MemChunk *mem_chunk)
   {
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -1281,7 +1286,7 @@ void mem_chunk_destroy(MemChunk *mem_chunk)
   }
 
 
-void *mem_chunk_alloc(MemChunk *mem_chunk)
+void *mem_chunk_alloc_mimic(MemChunk *mem_chunk)
   {
   void	*mem;
 
@@ -1297,7 +1302,7 @@ void *mem_chunk_alloc(MemChunk *mem_chunk)
   }
 
 
-void mem_chunk_free(MemChunk *mem_chunk, void *mem)
+void mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem)
   {
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -1311,7 +1316,7 @@ void mem_chunk_free(MemChunk *mem_chunk, void *mem)
   }
 
 
-void mem_chunk_clean(MemChunk *mem_chunk)
+void mem_chunk_clean_mimic(MemChunk *mem_chunk)
   {
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -1322,7 +1327,7 @@ void mem_chunk_clean(MemChunk *mem_chunk)
   }
 
 
-void mem_chunk_reset(MemChunk *mem_chunk)
+void mem_chunk_reset_mimic(MemChunk *mem_chunk)
   {
   
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
@@ -1333,19 +1338,19 @@ void mem_chunk_reset(MemChunk *mem_chunk)
   }
 
 
-boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
+boolean mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem)
   {
   return TRUE;
   }
 
 
-boolean mem_chunk_test(void)
+boolean mem_chunk_test_mimic(void)
   {
   return TRUE;
   }
 
 
-void mem_chunk_diagnostics(void)
+void mem_chunk_diagnostics_mimic(void)
   {
   printf("=== mem_chunk diagnostics *** MIMIC *** ======================\n");
   printf("Version:                   %s\n", VERSION_STRING);
@@ -1359,6 +1364,4 @@ void mem_chunk_diagnostics(void)
 
   return;
   }
-
-#endif /* MEMORY_CHUNKS_MIMIC */
 

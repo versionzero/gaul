@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -62,7 +62,8 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
-  Updated:	03 oct 2002 SAA	Tweaks for clean compilation using the Compaq C compiler.
+  Updated:	05 Jun 2003 SAA	All debug and safe replacements for the system functions are compiled now, irrespective of the defined constants.  exit(1) replaced by exit(EXIT_FAILURE).  Some counts now long ints.
+		03 Oct 2002 SAA	Tweaks for clean compilation using the Compaq C compiler.
 		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
 		09/05/01 SAA	Reimplemented memory_check_bounds_all().
@@ -120,7 +121,7 @@
 
 		s_malloc0() etc. would be useful.
 
-  Bugs:		Padding causes data to become unaligned on alpha processors.
+  Bugs:		Padding causes data to become misaligned on alpha processors.
 
  **********************************************************************/
 
@@ -129,11 +130,10 @@
 /*
  * Integrated chunk handling implementation.
  */
-#if MEMORY_ALLOC_DEBUG==1 || !defined(MEMORY_NO_CHUNKS)
+#if !defined(MEMORY_NO_CHUNKS)
 #include "memory_chunks.c"
 #endif
 
-#if MEMORY_ALLOC_DEBUG==1
 /*
  * The memory table structure.
  */
@@ -178,16 +178,12 @@ static int	memory_count_bv=0;	/* count total number of bounds violations encount
 static int	memory_count_if=0;	/* count total number of invalid free calls. */
 static size_t	memory_size_pad=sizeof(char)*8;	/* Amount of padding to use. */
 
-#endif
-
 static FILE	*memory_log_file=NULL;	/* File handle for log file */
-static int	memory_count_malloc=0;	/* count total number of s_malloc() calls. */
-static int	memory_count_calloc=0;	/* count total number of s_calloc() calls. */
-static int	memory_count_realloc=0;	/* count total number of s_realloc() calls. */
-static int	memory_count_strdup=0;	/* count total number of s_strdup() calls. */
-static int	memory_count_free=0;	/* count total number of s_free() calls. */
-
-#if MEMORY_ALLOC_DEBUG==1
+static long	memory_count_malloc=0;	/* count total number of s_malloc() calls. */
+static long	memory_count_calloc=0;	/* count total number of s_calloc() calls. */
+static long	memory_count_realloc=0;	/* count total number of s_realloc() calls. */
+static long	memory_count_strdup=0;	/* count total number of s_strdup() calls. */
+static long	memory_count_free=0;	/* count total number of s_free() calls. */
 
 static int	node_count=0;		/* counting tree nodes for debugging. */
 
@@ -273,7 +269,6 @@ static void memtree_destroy(void)
   return;
   }
 */
-#endif
 
 
 /**********************************************************************
@@ -357,7 +352,6 @@ void memory_fwrite_log(const char *format, ...)
   }
 
 
-#if MEMORY_ALLOC_DEBUG==1
 static boolean table_traverse(AVLKey key, vpointer data, vpointer userdata)
   {
   mem_record	*mr=data;
@@ -439,7 +433,7 @@ static int check_mptr(void *mptr, mem_record *current)
   if (!mptr)
     {
     printf("ERROR: Pointer is null.  Probably out of memory!\n");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
 /*
@@ -613,7 +607,7 @@ void *s_alloc_debug(memory_alloc_type type, size_t memsize, int numvars, void *m
       break;
     default:
       printf("ERROR: s_alloc_debug(): Unknown type %d.\n", (int) type);
-      exit(1);
+      exit(EXIT_FAILURE);
     }
 
 /*
@@ -657,7 +651,7 @@ void *s_alloc_debug(memory_alloc_type type, size_t memsize, int numvars, void *m
       break;
     default:
       printf("s_alloc_debug(): Unknown memory padding level %d\n", memory_padding);
-      exit(1);
+      exit(EXIT_FAILURE);
     }
 
   if(memory_bounds==1) memory_check_all_bounds();
@@ -737,7 +731,7 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
           dief("Strdup of %lu bytes failed at func=%s file=%s line=%d\n",
                  (unsigned long) memsize, name, file, line);
           }
-        memcpy(mtemp+size_low,mptr,memsize);
+        memcpy((char *)mtemp+size_low,mptr,memsize);
         break;
       case (MEMORY_STRNDUP):
         /* ...and strndup. */
@@ -748,7 +742,7 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
           dief("Strdup of %lu bytes failed at func=%s file=%s line=%d\n",
                  (unsigned long) memsize, name, file, line);
           }
-        memcpy(mtemp+size_low,mptr,memsize);
+        memcpy((char *)mtemp+size_low,mptr,memsize);
         ((char *)mtemp)[memsize-1] = '\0';
         break;
       default:
@@ -816,12 +810,12 @@ printf("mtemp = %p, j = %p, j->mptr = %p\n", mtemp, j, j->mptr);
         case (MEMORY_MALLOC):
 	  /* This case should never happen. */
           printf("s_alloc_debug(): MALLOC with existing pointer requested.  Internal error?\n");
-          exit(1);
+          exit(EXIT_FAILURE);
           break;
         case (MEMORY_CALLOC):
 	  /* This case should never happen. */
           printf("s_alloc_debug(): CALLOC with existing pointer requested.  Internal error?\n");
-          exit(1);
+          exit(EXIT_FAILURE);
           break;
         case (MEMORY_REALLOC):
           mtemp=bump_down(mtemp,j->pad_ls);
@@ -831,22 +825,22 @@ printf("mtemp = %p, j = %p, j->mptr = %p\n", mtemp, j, j->mptr);
             printf("Memory reallocation of %lu bytes failed at func=%s file=%s line=%d\n",
                    (unsigned long) memsize, name, file, line);
             perror("realloc");
-            exit(1);
+            exit(EXIT_FAILURE);
             }
           break;
         case (MEMORY_STRDUP):
 	  /* This case should never happen. */
           printf("s_alloc_debug(): STRDUP call in wrong bit of code.  Internal error!\n");
-          exit(1);
+          exit(EXIT_FAILURE);
           break;
         case (MEMORY_STRNDUP):
 	  /* This case should never happen. */
           printf("s_alloc_debug(): STRNDUP call in wrong bit of code.  Internal error!\n");
-          exit(1);
+          exit(EXIT_FAILURE);
           break;
         default:
           printf("s_alloc_debug(): Unknown type %d.\n", (int) type);
-          exit(1);
+          exit(EXIT_FAILURE);
         }
 
       mtemp=bump_up(mtemp,size_low);
@@ -1121,7 +1115,6 @@ int memory_used_mptr(void *mptr)
 
   return j->rmem;
   }
-#endif
 
 
 /**********************************************************************
@@ -1137,19 +1130,6 @@ void memory_display_status(void)
   {
 
   printf("=== Memory Stats =============================\n");
-#if MEMORY_ALLOC_DEBUG==1
-  printf("Constant MEMORY_ALLOC_DEBUG:        Defined\n");
-#else
-  printf("Constant MEMORY_ALLOC_DEBUG:        Undefined\n");
-#endif
-#if MEMORY_ALLOC_SAFE==1
-  printf("Constant MEMORY_ALLOC_SAFE:         Defined\n");
-#else
-  printf("Constant MEMORY_ALLOC_SAFE:         Undefined\n");
-#endif
-
-#if MEMORY_ALLOC_DEBUG==1
-  printf("----------------------------------------------\n");
   printf("Number of entries in memory table:  %d\n", num_mem);
   printf("Number of entries in memory tree:   %d\n", avltree_num_nodes(memtree));
   printf("Current size of memory table:       %d\n", max_mem);
@@ -1162,18 +1142,15 @@ void memory_display_status(void)
   printf("Size of padding:                    %d\n", memory_size_pad);
   printf("Bounds check level:                 %d\n", memory_bounds);
   printf("Bounds violation reset flag:        %d\n", memory_reset_bv);
-#endif
   printf("----------------------------------------------\n");
-  printf("Total number of malloc() calls:     %d\n", memory_count_malloc);
-  printf("Total number of calloc() calls:     %d\n", memory_count_calloc);
-  printf("Total number of realloc() calls:    %d\n", memory_count_realloc);
-  printf("Total number of strdup() calls:     %d\n", memory_count_strdup);
-  printf("Total number of free() calls:       %d\n", memory_count_free);
-#if MEMORY_ALLOC_DEBUG==1
+  printf("Total number of malloc() calls:     %ld\n", memory_count_malloc);
+  printf("Total number of calloc() calls:     %ld\n", memory_count_calloc);
+  printf("Total number of realloc() calls:    %ld\n", memory_count_realloc);
+  printf("Total number of strdup() calls:     %ld\n", memory_count_strdup);
+  printf("Total number of free() calls:       %ld\n", memory_count_free);
   printf("----------------------------------------------\n");
   printf("Total number of bounds violations:  %d\n", memory_count_bv);
   printf("Total number of invalid 'frees':    %d\n", memory_count_if);
-#endif
   printf("==============================================\n");
 
   return;
@@ -1192,7 +1169,6 @@ void memory_display_status(void)
 void memory_display_table(void)
   {
 
-#if MEMORY_ALLOC_DEBUG==1
   if (num_mem==0)
     {
     printf("Memory allocation table is empty.\n");
@@ -1208,15 +1184,11 @@ void memory_display_table(void)
     printf("==============================================\n");
     printf("Counted %d nodes.\n", node_count);
     }
-#else
-  printf("Memory allocation table is unavailable.\n");
-#endif
 
   return;
   }
 
 
-#if MEMORY_ALLOC_DEBUG==1
 /**********************************************************************
   void memory_set_mptr_label()
   synopsis:	Sets label for a table entry
@@ -1467,7 +1439,6 @@ void memory_set_padding(int i)
 
   return;
   }
-#endif
 
 
 /**********************************************************************
@@ -1499,7 +1470,7 @@ void *s_malloc_safe(	size_t size,
     printf("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
            (unsigned long) size, funcname, filename, linenum);
     perror("malloc");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
   return ptr;
@@ -1535,7 +1506,7 @@ void *s_calloc_safe(	size_t num, size_t size,
     printf("Memory allocation of %lu bytes failed at func=%s file=%s line=%d\n",
            (unsigned long) num*size, funcname, filename, linenum);
     perror("calloc");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
   return ptr;
@@ -1564,7 +1535,7 @@ void *s_realloc_safe(	void *oldptr, size_t size,
     printf("Memory reallocation of %lu bytes failed at func=%s file=%s line=%d\n",
            (unsigned long) size, funcname, filename, linenum);
     perror("realloc");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
   return ptr;
@@ -1604,7 +1575,7 @@ char *s_strdup_safe(	const char *src,
     printf("String duplication of %d chars failed at func=%s file=%s line=%d\n",
            len, funcname, filename, linenum);
     perror("strdup");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 */
   if ( !(dest = malloc(len*sizeof(char))) )
@@ -1612,7 +1583,7 @@ char *s_strdup_safe(	const char *src,
     printf("String duplication of %lu chars failed at func=%s file=%s line=%d\n",
            (unsigned long) len, funcname, filename, linenum);
     perror("strdup");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
   memcpy(dest, src, len*sizeof(char));
@@ -1660,7 +1631,7 @@ char *s_strndup_safe(	const char *src, size_t length,
     printf("String duplication of %lu chars failed at func=%s file=%s line=%d\n",
            (unsigned long) len, funcname, filename, linenum);
     perror("strdup");
-    exit(1);
+    exit(EXIT_FAILURE);
     }
 
   len--;
