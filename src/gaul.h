@@ -256,6 +256,7 @@ population *ga_transcend(unsigned int id);
 unsigned int ga_resurect(population *pop);
 boolean ga_extinction(population *extinct);
 boolean ga_genocide(population *pop, int target_size);
+boolean ga_genocide_by_fitness(population *pop, double target_fitness);
 boolean ga_population_set_data(population *pop, vpointer data);
 vpointer ga_population_get_data(population *pop);
 boolean ga_entity_set_data(population *pop, entity *e, SLList *data);

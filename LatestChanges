@@ -2,6 +2,8 @@ Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.
 - Minor changes to avoid some compiler warnings with the Compaq C/C++ compiler.
 - Minor changes for successful building of RPM for x86_64 architecture.
+- Added ga_genocide_by_fitness() function.
+- Handle invalid entities correctly/cleanly in all evolutionary functions.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

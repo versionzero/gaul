@@ -820,6 +820,20 @@ static int ga_genocide_slang(int *pop, int *target_size)
 
 
 /**********************************************************************
+  ga_genocide_by_fitness_slang()
+  synopsis:	Kill population members.
+  parameters:
+  return:
+  last updated:	01 Jul 2004
+ **********************************************************************/
+
+static int ga_genocide_by_fitness_slang(int *pop, double *target_fitness)
+  {
+  return ga_genocide( ga_get_population_from_id(*pop), *target_fitness );
+  }
+
+
+/**********************************************************************
   ga_allele_search_slang()
   synopsis:	Wrapper around ga_allele_search() for the scripted API.
   parameters:
@@ -1426,6 +1440,9 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_genocide",
             (FVOID_STAR) ga_genocide_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_genocide_by_fitness",
+            (FVOID_STAR) ga_genocide_by_fitness_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_DOUBLE_TYPE)
       || SLadd_intrinsic_function("ga_allele_search",
             (FVOID_STAR) ga_allele_search_slang, SLANG_INT_TYPE, 6,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)

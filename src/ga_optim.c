@@ -337,7 +337,8 @@ void ga_attach_mpi_slave( population *pop )
         entity = ga_get_free_entity(pop);
         MPI_Recv(buffer, buffer_len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         pop->chromosome_from_bytes(pop, entity, buffer);
-        pop->evaluate(pop, entity);
+        if ( pop->evaluate(pop, entity) == FALSE )
+          entity->fitness = GA_MIN_FITNESS;
         MPI_Send(&(entity->fitness), 1, MPI_DOUBLE, 0, GA_TAG_FITNESS, MPI_COMM_WORLD);
         ga_entity_dereference(pop, entity);
         break;
@@ -659,7 +660,8 @@ static void gaul_evaluation_slave_mp(population *pop)
         entity = ga_get_free_entity(pop);
         MPI_Recv(buffer, len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         pop->chromosome_from_bytes(pop, entity, buffer);
-        pop->evaluate(pop, entity);
+        if ( pop->evaluate(pop, entity) == FALSE )
+          entity->fitness = GA_MIN_FITNESS;
         MPI_Send(&(entity->fitness), 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
         break;
       case 1:
@@ -710,7 +712,7 @@ static void gaul_evaluation_slave_mp(population *pop)
 		No adaptation.
   parameters:	population *pop
   return:	none
-  last updated:	11 Jun 2002
+  last updated:	01 Jul 2004
  **********************************************************************/
 
 static void gaul_ensure_evaluations(population *pop)
@@ -724,7 +726,10 @@ static void gaul_ensure_evaluations(population *pop)
     {
 /*printf("DEBUG: gaul_ensure_evaluations() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      {
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
+      }
     }
 
   return;
@@ -751,7 +756,8 @@ static void gaul_ensure_evaluations_mp(population *pop)
   for (i=0; i<pop->size; i++)
     {
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
     }
 
   return;
@@ -907,7 +913,8 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
       }
     else if (pid[fork_num] == 0)
       {       /* This is the child process. */
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+      if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+        pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
       write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -952,7 +959,8 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
         }
       else if (pid[fork_num] == 0)
         {       /* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+        if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+          pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
         write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -1008,7 +1016,8 @@ static void *_evaluation_thread( void *data )
   int		eval_num = ((threaddata_t *)data)->eval_num;
   population	*pop = ((threaddata_t *)data)->pop;
 
-  pop->evaluate(pop, pop->entity_iarray[eval_num]);
+  if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+    pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
 #if GA_DEBUG>2
 printf("DEBUG: Thread %d has evaluated entity %d\n", ((threaddata_t *)data)->thread_num, eval_num);
@@ -1141,7 +1150,8 @@ static void gaul_adapt_and_evaluate(population *pop)
     for (i=pop->orig_size; i<pop->size; i++)
       {
 /*printf("DEBUG: gaul_adapt_and_evaluate() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
 
     return;
@@ -1238,7 +1248,8 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
    schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
 
     return;
@@ -1532,7 +1543,8 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
         }
       else if (pid[fork_num] == 0)
         {	/* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+        if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+          pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
         write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -1573,7 +1585,8 @@ static void gaul_adapt_and_evaluate_forked(population *pop,
           }
         else if (pid[fork_num] == 0)
           {       /* This is the child process. */
-          pop->evaluate(pop, pop->entity_iarray[eval_num]);
+          if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+            pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
           write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -1849,7 +1862,8 @@ static void gaul_survival(population *pop)
    schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
     }
 
@@ -1913,6 +1927,7 @@ static void gaul_survival(population *pop)
  * population size to its stable size.
  */
   ga_genocide(pop, pop->stable_size);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   return;
   }
@@ -1961,7 +1976,8 @@ static void gaul_survival_mp(population *pop)
    schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
     }
 
@@ -1985,6 +2001,7 @@ static void gaul_survival_mp(population *pop)
  * population size to its stable size.
  */
   ga_genocide(pop, pop->stable_size);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   return;
   }
@@ -2033,7 +2050,8 @@ static void gaul_survival_mpi(population *pop)
    schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
-      pop->evaluate(pop, pop->entity_iarray[i]);
+      if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
+        pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
     }
 
@@ -2057,6 +2075,7 @@ static void gaul_survival_mpi(population *pop)
  * population size to its stable size.
  */
   ga_genocide(pop, pop->stable_size);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   return;
   }
@@ -2126,7 +2145,8 @@ static void gaul_survival_forked(population *pop,
       }
     else if (pid[fork_num] == 0)
       {       /* This is the child process. */
-      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+      if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+        pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
       write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -2169,7 +2189,8 @@ static void gaul_survival_forked(population *pop,
         }
       else if (pid[fork_num] == 0)
         {       /* This is the child process. */
-        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+        if ( pop->evaluate(pop, pop->entity_iarray[eval_num]) == FALSE )
+          pop->entity_iarray[eval_num]->fitness = GA_MIN_FITNESS;
 
         write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
 
@@ -2208,6 +2229,7 @@ static void gaul_survival_forked(population *pop,
  * population size to its stable size.
  */
   ga_genocide(pop, pop->stable_size);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   return;
   }
@@ -2348,6 +2370,7 @@ printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num
  * population size to its stable size.
  */
   ga_genocide(pop, pop->stable_size);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   return;
   }
@@ -2390,6 +2413,7 @@ int ga_evolution(	population		*pop,
  */
   gaul_ensure_evaluations(pop);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -2523,6 +2547,7 @@ int ga_evolution_forked(	population		*pop,
  */
   gaul_ensure_evaluations_forked(pop, max_processes, eid, pid, evalpipe);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -2660,6 +2685,7 @@ int ga_evolution_threaded(	population		*pop,
  */
   gaul_ensure_evaluations_threaded(pop, max_threads, threaddata);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -2821,6 +2847,7 @@ int ga_evolution_threaded(	population		*pop,
  */
   gaul_ensure_evaluations_threaded(pop, max_threads, eid, tid);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -2962,6 +2989,7 @@ int ga_evolution_with_stats(	population		*pop,
  */
   gaul_ensure_evaluations(pop);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",
@@ -3018,8 +3046,10 @@ int ga_evolution_with_stats(	population		*pop,
         son = ga_get_free_entity(pop);
         daughter = ga_get_free_entity(pop);
         pop->crossover(pop, mother, father, daughter, son);
-        pop->evaluate(pop, daughter);
-        pop->evaluate(pop, son);
+        if ( pop->evaluate(pop, daughter) == FALSE )
+          daughter->fitness = GA_MIN_FITNESS;
+        if ( pop->evaluate(pop, son) == FALSE )
+          son->fitness = GA_MIN_FITNESS;
 
 /*
  * Collate stats.
@@ -3077,7 +3107,8 @@ int ga_evolution_with_stats(	population		*pop,
 
         daughter = ga_get_free_entity(pop);
         pop->mutate(pop, mother, daughter);
-        pop->evaluate(pop, daughter);
+        if ( pop->evaluate(pop, daughter) == FALSE )
+          daughter->fitness = GA_MIN_FITNESS;
 
 /*
  * Collate stats.
@@ -3231,6 +3262,7 @@ int ga_evolution_steady_state(	population		*pop,
  */
   gaul_ensure_evaluations(pop);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first iteration, population has fitness scores between %f and %f",
@@ -3276,8 +3308,16 @@ int ga_evolution_steady_state(	population		*pop,
       son = ga_get_free_entity(pop);
       daughter = ga_get_free_entity(pop);
       pop->crossover(pop, mother, father, daughter, son);
-      pop->evaluate(pop, daughter);
-      pop->evaluate(pop, son);
+      if ( pop->evaluate(pop, daughter) == FALSE )
+        {
+        ga_entity_dereference(pop, daughter);
+        daughter = NULL;
+        }
+      if ( pop->evaluate(pop, son) == FALSE )
+        {
+        ga_entity_dereference(pop, son);
+        son = NULL;
+        }
       }
     else
       {
@@ -3306,8 +3346,11 @@ int ga_evolution_steady_state(	population		*pop,
 
       child = ga_get_free_entity(pop);
       pop->mutate(pop, mother, child);
-      pop->evaluate(pop, child);
-
+      if ( pop->evaluate(pop, child) == FALSE )
+        {
+        ga_entity_dereference(pop, child);
+        child = NULL;
+        }
       }
     else
       {
@@ -3464,6 +3507,7 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
  */
   gaul_ensure_evaluations(pop);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first iteration, population has fitness scores between %f and %f",
@@ -3520,8 +3564,10 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
       son = ga_get_free_entity(pop);
       daughter = ga_get_free_entity(pop);
       pop->crossover(pop, mother, father, daughter, son);
-      pop->evaluate(pop, daughter);
-      pop->evaluate(pop, son);
+      if ( pop->evaluate(pop, daughter) == FALSE )
+        daughter->fitness = GA_MIN_FITNESS;
+      if ( pop->evaluate(pop, son) == FALSE )
+        son->fitness = GA_MIN_FITNESS;
 
 /*
  * Collate stats.
@@ -3576,7 +3622,8 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
 
       child = ga_get_free_entity(pop);
       pop->mutate(pop, mother, child);
-      pop->evaluate(pop, child);
+      if ( pop->evaluate(pop, child) == FALSE )
+        child->fitness = GA_MIN_FITNESS;
 
 /*
  * Collate stats.
@@ -4347,6 +4394,7 @@ int ga_evolution_archipelago( const int num_pops,
  */
     gaul_ensure_evaluations(pop);
     sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
   
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
@@ -4556,6 +4604,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
  */
     gaul_ensure_evaluations(pop);
     sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
@@ -4830,6 +4879,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
  * ga_population_score_and_sort(pop) is needed if scores may change during migration.
  */
       sort_population(pop);
+      ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -4933,6 +4983,7 @@ int ga_evolution_mp(	population		*pop,
  */
     gaul_ensure_evaluations_mp(pop);
     sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
     plog( LOG_VERBOSE,
           "Prior to the first generation, population has fitness scores between %f and %f",
@@ -5072,6 +5123,7 @@ int ga_evolution_mpi(	population		*pop,
  */
   gaul_ensure_evaluations_mpi(pop, eid, buffer, buffer_len, buffer_max);
   sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
   plog( LOG_VERBOSE,
         "Prior to the first generation, population has fitness scores between %f and %f",

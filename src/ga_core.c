@@ -2570,7 +2570,40 @@ boolean ga_genocide(population *pop, int target_size)
  */
   while (pop->size>target_size)
     {
-/*printf("Dereferencing entity with rank %d\n", pop->size-1);*/
+/*printf("Dereferencing entity with rank %d (fitness = %d)\n",
+         pop->size-1, pop->entity_iarray[pop->size-1]->fitness);*/
+    ga_entity_dereference_by_rank(pop, pop->size-1);
+    }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_genocide_by_fitness()
+  synopsis:	Kill entities with fitness equal to or worse than
+		specified value.
+  parameters:
+  return:
+  last updated:	01 Jul 2004
+ **********************************************************************/
+
+boolean ga_genocide_by_fitness(population *pop, double target_fitness)
+  {
+  if ( !pop ) return FALSE;
+
+  plog(LOG_VERBOSE,
+            "The population is being culled at fitness %f!",
+            pop->size, target_fitness);
+
+/*
+ * Dereference the structures relating to the least
+ * fit population members until the desired population size in reached. 
+ */
+  while (pop->entity_iarray[pop->size-1]->fitness<target_fitness)
+    {
+/*printf("Dereferencing entity with rank %d (fitness = %d)\n",
+         pop->size-1, pop->entity_iarray[pop->size-1]->fitness);*/
     ga_entity_dereference_by_rank(pop, pop->size-1);
     }
 
