@@ -93,7 +93,7 @@ void ga_population_set_simplex_parameters( population		*pop,
 		The passed entity will have its data overwritten.  The
 		remainder of the population will be let untouched.
 		Note that it is safe to pass a NULL initial structure,
-		in which case a random starting structure wil be
+		in which case a random starting structure will be
 		generated, however the final solution will not be
 		available to the caller in any obvious way.
   parameters:
