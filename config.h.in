@@ -12,6 +12,18 @@
 /* Core GAUL debugging level. */
 #undef GA_DEBUG
 
+/* Default number of processes. */
+#undef GA_DEFAULT_NUM_PROCESSES
+
+/* Default number of threads. */
+#undef GA_DEFAULT_NUM_THREADS
+
+/* Environment variable used to request processes. */
+#undef GA_NUM_PROCESSES_ENVVAR_STRING
+
+/* Environment variable used to request threads. */
+#undef GA_NUM_THREADS_ENVVAR_STRING
+
 /* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
 
@@ -297,9 +309,6 @@
 /* Minor version number. */
 #undef MINOR_VERSION
 
-/* Environment variable used to request threads. */
-#undef MPI_NUM_THREADS_ENVVAR_STRING
-
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -348,7 +357,7 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
-/* record compilation platform information. */
+/* Record compilation platform information. */
 #undef UNAME_STRING
 
 /* Whether to skip expensive sanity checking in vector routines. */

@@ -12,6 +12,7 @@ Changes since release 0.1840:
 - Tabu search algorithm completely rewritten.
 - Three new examples added to demonstrate Tabu-searching and Simualted Annealling.
 - Configure script now checks for a working stdbool.h header and a built-in _Bool type.
+- Added configuration option to alter the default numbers of threads and/or processes spawned in multiprocessor code.
 
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().

@@ -13,6 +13,18 @@
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
 
+/* Default number of processes. */
+#define GA_DEFAULT_NUM_PROCESSES 16
+
+/* Default number of threads. */
+#define GA_DEFAULT_NUM_THREADS 4
+
+/* Environment variable used to request processes. */
+#define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
+
+/* Environment variable used to request threads. */
+#define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
+
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
 
@@ -298,9 +310,6 @@
 /* Minor version number. */
 #define MINOR_VERSION 1841
 
-/* Environment variable used to request threads. */
-#define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
 
@@ -349,7 +358,7 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
-/* record compilation platform information. */
+/* Record compilation platform information. */
 #define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */

@@ -999,21 +999,23 @@ Optional Features:
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-maintainer-mode enable make rules and dependencies not useful
                           (and sometimes confusing) to the casual installer
-  --enable-g=yes/no             compile with symbolic debug information default=yes
-  --enable-debug=no/minimum/yes turn on debugging default=$debug_default
-  --enable-memory-debug           turn on memory access debugging default=no
-  --enable-ansi                   turn on strict ansi default=no
-  --enable-missing-prototypes     turn on missing prototype checks default=no
-  --enable-threads                turn on multi-thread support default=no
+  --enable-g=yes/no             compile with symbolic debug information. default=yes
+  --enable-debug=no/minimum/yes turn on debugging. default=$debug_default
+  --enable-memory-debug           turn on memory access debugging. default=no
+  --enable-ansi                   turn on strict ansi. default=no
+  --enable-missing-prototypes     turn on missing prototype checks. default=no
+  --enable-threads                turn on multi-thread support. default=no
                           (=no will override --with-threads)
-  --enable-mpi                    turn on MPI support default=no
+  --enable-mpi                    turn on MPI support. default=no
                           (=no will override --with-mpi)
-  --enable-pvm                    turn on PVM3 support default=no
+  --enable-pvm                    turn on PVM3 support. default=no
                           (=no will override --with-pvm)
-  --enable-slang=yes/no         use S-Lang for scripting default=yes
-  --enable-profile                turn on profiling default=no
-  --enable-efence=yes/no        use Electric Fence for memory debugging default=no
-  --enable-padding=yes/no       use memory padding for overflow detection default=no
+  --enable-slang=yes/no         use S-Lang for scripting. default=yes
+  --enable-profile                turn on profiling. default=no
+  --enable-efence=yes/no        use Electric Fence for memory debugging. default=no
+  --enable-padding=yes/no       use memory padding for overflow detection. default=no
+  --enable-num-procs=INT        default number of processes to spawn in MP code. default=16
+  --enable-num-threads=INT      default number of threads to create in threaded code. default=4
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1883,6 +1885,16 @@ _ACEOF
 
 
 
+cat >>confdefs.h <<_ACEOF
+#define UNAME_STRING "`uname -a`"
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define BUILD_DATE_STRING "`date +%d/%m/%y`"
+_ACEOF
+
+
 cat >>confdefs.h <<\_ACEOF
 #define V3_QUICK 1
 _ACEOF
@@ -1894,22 +1906,18 @@ _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define BUILD_DATE_STRING "`date +%d/%m/%y`"
-_ACEOF
-
-
-cat >>confdefs.h <<_ACEOF
 #define VERSION_STRING "${VERSION}"
 _ACEOF
 
 
+
 cat >>confdefs.h <<\_ACEOF
-#define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
+#define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 _ACEOF
 
 
-cat >>confdefs.h <<_ACEOF
-#define UNAME_STRING "`uname -a`"
+cat >>confdefs.h <<\_ACEOF
+#define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 _ACEOF
 
 
@@ -4347,7 +4355,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4350 "configure"' > conftest.$ac_ext
+  echo '#line 4358 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4883,7 +4891,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4886: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4894: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6676,7 +6684,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6679 "configure"
+#line 6687 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6774,7 +6782,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6777 "configure"
+#line 6785 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7619,6 +7627,40 @@ if test "${enable_padding+set}" = set; then
 else
   enable_padding=no
 fi;
+# Check whether --enable-num_procs or --disable-num_procs was given.
+if test "${enable_num_procs+set}" = set; then
+  enableval="$enable_num_procs"
+
+else
+  enable_num_procs=16
+fi;
+# Check whether --enable-num_threads or --disable-num_threads was given.
+if test "${enable_num_threads+set}" = set; then
+  enableval="$enable_num_threads"
+
+else
+  enable_num_threads=4
+fi;
+
+echo "$as_me:$LINENO: checking for default number of processes to spawn in MP code" >&5
+echo $ECHO_N "checking for default number of processes to spawn in MP code... $ECHO_C" >&6
+
+cat >>confdefs.h <<_ACEOF
+#define GA_DEFAULT_NUM_PROCESSES ${enable_num_procs}
+_ACEOF
+
+echo "$as_me:$LINENO: result: ${enable_num_procs}" >&5
+echo "${ECHO_T}${enable_num_procs}" >&6
+
+echo "$as_me:$LINENO: checking for default number of threads to create in threaded code" >&5
+echo $ECHO_N "checking for default number of threads to create in threaded code... $ECHO_C" >&6
+
+cat >>confdefs.h <<_ACEOF
+#define GA_DEFAULT_NUM_THREADS ${enable_num_threads}
+_ACEOF
+
+echo "$as_me:$LINENO: result: ${enable_num_threads}" >&5
+echo "${ECHO_T}${enable_num_threads}" >&6
 
 echo "$as_me:$LINENO: checking for type of parallisation" >&5
 echo $ECHO_N "checking for type of parallisation... $ECHO_C" >&6

@@ -781,12 +781,13 @@ ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}""${ac_dD}
 ${ac_dA}MAJOR_VERSION${ac_dB}MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1841${ac_dD}
 ${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}0${ac_dD}
+${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_dD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"15/10/02"${ac_dD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"15/10/02"${ac_dD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1841-0"${ac_dD}
-${ac_dA}MPI_NUM_THREADS_ENVVAR_STRING${ac_dB}MPI_NUM_THREADS_ENVVAR_STRING${ac_dC}"GA_NUM_THREADS"${ac_dD}
-${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_dD}
+${ac_dA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dC}"GA_NUM_PROCESSES"${ac_dD}
+${ac_dA}GA_NUM_THREADS_ENVVAR_STRING${ac_dB}GA_NUM_THREADS_ENVVAR_STRING${ac_dC}"GA_NUM_THREADS"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_STAT_H${ac_dB}HAVE_SYS_STAT_H${ac_dC}1${ac_dD}
@@ -798,6 +799,8 @@ ${ac_dA}HAVE_INTTYPES_H${ac_dB}HAVE_INTTYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STDINT_H${ac_dB}HAVE_STDINT_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_UNISTD_H${ac_dB}HAVE_UNISTD_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_DLFCN_H${ac_dB}HAVE_DLFCN_H${ac_dC}1${ac_dD}
+${ac_dA}GA_DEFAULT_NUM_PROCESSES${ac_dB}GA_DEFAULT_NUM_PROCESSES${ac_dC}16${ac_dD}
+${ac_dA}GA_DEFAULT_NUM_THREADS${ac_dB}GA_DEFAULT_NUM_THREADS${ac_dC}4${ac_dD}
 ${ac_dA}PARALLEL${ac_dB}PARALLEL${ac_dC}0${ac_dD}
 ${ac_dA}MEMORY_ALLOC_DEBUG${ac_dB}MEMORY_ALLOC_DEBUG${ac_dC}0${ac_dD}
 ${ac_dA}MEMORY_ALLOC_SAFE${ac_dB}MEMORY_ALLOC_SAFE${ac_dC}1${ac_dD}
@@ -808,9 +811,6 @@ ${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
 ${ac_dA}HAVE_VPRINTF${ac_dB}HAVE_VPRINTF${ac_dC}1${ac_dD}
 ${ac_dA}SIZEOF_DOUBLE${ac_dB}SIZEOF_DOUBLE${ac_dC}8${ac_dD}
 ${ac_dA}SIZEOF_CHAR${ac_dB}SIZEOF_CHAR${ac_dC}1${ac_dD}
-${ac_dA}SIZEOF_LONG${ac_dB}SIZEOF_LONG${ac_dC}4${ac_dD}
-${ac_dA}SIZEOF_INT${ac_dB}SIZEOF_INT${ac_dC}4${ac_dD}
-${ac_dA}SIZEOF_VOID_P${ac_dB}SIZEOF_VOID_P${ac_dC}4${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -820,6 +820,9 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
+${ac_dA}SIZEOF_LONG${ac_dB}SIZEOF_LONG${ac_dC}4${ac_dD}
+${ac_dA}SIZEOF_INT${ac_dB}SIZEOF_INT${ac_dC}4${ac_dD}
+${ac_dA}SIZEOF_VOID_P${ac_dB}SIZEOF_VOID_P${ac_dC}4${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}TIME_WITH_SYS_TIME${ac_dB}TIME_WITH_SYS_TIME${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ARPA_INET_H${ac_dB}HAVE_ARPA_INET_H${ac_dC}1${ac_dD}
@@ -855,9 +858,6 @@ ${ac_dA}HAVE_MEMCMP${ac_dB}HAVE_MEMCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_INDEX${ac_dB}HAVE_INDEX${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_RINDEX${ac_dB}HAVE_RINDEX${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SNPRINTF${ac_dB}HAVE_SNPRINTF${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRCHR${ac_dB}HAVE_STRCHR${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRRCHR${ac_dB}HAVE_STRRCHR${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRCAT${ac_dB}HAVE_STRCAT${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -867,6 +867,9 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
+${ac_dA}HAVE_STRCHR${ac_dB}HAVE_STRCHR${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRRCHR${ac_dB}HAVE_STRRCHR${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRCAT${ac_dB}HAVE_STRCAT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCMP${ac_dB}HAVE_STRCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCPY${ac_dB}HAVE_STRCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRPBRK${ac_dB}HAVE_STRPBRK${ac_dC}1${ac_dD}
@@ -914,12 +917,13 @@ ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}""${ac_uD}
 ${ac_uA}MAJOR_VERSION${ac_uB}MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1841${ac_uD}
 ${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}0${ac_uD}
+${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_uD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"15/10/02"${ac_uD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"15/10/02"${ac_uD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1841-0"${ac_uD}
-${ac_uA}MPI_NUM_THREADS_ENVVAR_STRING${ac_uB}MPI_NUM_THREADS_ENVVAR_STRING${ac_uC}"GA_NUM_THREADS"${ac_uD}
-${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_uD}
+${ac_uA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uC}"GA_NUM_PROCESSES"${ac_uD}
+${ac_uA}GA_NUM_THREADS_ENVVAR_STRING${ac_uB}GA_NUM_THREADS_ENVVAR_STRING${ac_uC}"GA_NUM_THREADS"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_STAT_H${ac_uB}HAVE_SYS_STAT_H${ac_uC}1${ac_uD}
@@ -931,6 +935,8 @@ ${ac_uA}HAVE_INTTYPES_H${ac_uB}HAVE_INTTYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STDINT_H${ac_uB}HAVE_STDINT_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_UNISTD_H${ac_uB}HAVE_UNISTD_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_DLFCN_H${ac_uB}HAVE_DLFCN_H${ac_uC}1${ac_uD}
+${ac_uA}GA_DEFAULT_NUM_PROCESSES${ac_uB}GA_DEFAULT_NUM_PROCESSES${ac_uC}16${ac_uD}
+${ac_uA}GA_DEFAULT_NUM_THREADS${ac_uB}GA_DEFAULT_NUM_THREADS${ac_uC}4${ac_uD}
 ${ac_uA}PARALLEL${ac_uB}PARALLEL${ac_uC}0${ac_uD}
 ${ac_uA}MEMORY_ALLOC_DEBUG${ac_uB}MEMORY_ALLOC_DEBUG${ac_uC}0${ac_uD}
 ${ac_uA}MEMORY_ALLOC_SAFE${ac_uB}MEMORY_ALLOC_SAFE${ac_uC}1${ac_uD}
@@ -941,9 +947,6 @@ ${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
 ${ac_uA}HAVE_VPRINTF${ac_uB}HAVE_VPRINTF${ac_uC}1${ac_uD}
 ${ac_uA}SIZEOF_DOUBLE${ac_uB}SIZEOF_DOUBLE${ac_uC}8${ac_uD}
 ${ac_uA}SIZEOF_CHAR${ac_uB}SIZEOF_CHAR${ac_uC}1${ac_uD}
-${ac_uA}SIZEOF_LONG${ac_uB}SIZEOF_LONG${ac_uC}4${ac_uD}
-${ac_uA}SIZEOF_INT${ac_uB}SIZEOF_INT${ac_uC}4${ac_uD}
-${ac_uA}SIZEOF_VOID_P${ac_uB}SIZEOF_VOID_P${ac_uC}4${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -953,6 +956,9 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
+${ac_uA}SIZEOF_LONG${ac_uB}SIZEOF_LONG${ac_uC}4${ac_uD}
+${ac_uA}SIZEOF_INT${ac_uB}SIZEOF_INT${ac_uC}4${ac_uD}
+${ac_uA}SIZEOF_VOID_P${ac_uB}SIZEOF_VOID_P${ac_uC}4${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}TIME_WITH_SYS_TIME${ac_uB}TIME_WITH_SYS_TIME${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ARPA_INET_H${ac_uB}HAVE_ARPA_INET_H${ac_uC}1${ac_uD}
@@ -988,9 +994,6 @@ ${ac_uA}HAVE_MEMCMP${ac_uB}HAVE_MEMCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_INDEX${ac_uB}HAVE_INDEX${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_RINDEX${ac_uB}HAVE_RINDEX${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SNPRINTF${ac_uB}HAVE_SNPRINTF${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRCHR${ac_uB}HAVE_STRCHR${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRRCHR${ac_uB}HAVE_STRRCHR${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRCAT${ac_uB}HAVE_STRCAT${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1000,6 +1003,9 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
+${ac_uA}HAVE_STRCHR${ac_uB}HAVE_STRCHR${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRRCHR${ac_uB}HAVE_STRRCHR${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRCAT${ac_uB}HAVE_STRCAT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCMP${ac_uB}HAVE_STRCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCPY${ac_uB}HAVE_STRCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRPBRK${ac_uB}HAVE_STRPBRK${ac_uC}1${ac_uD}
