@@ -62,6 +62,7 @@
 
 #include "memory_chunks.h"
 
+/*#define MEMORY_CHUNKS_MIMIC*/
 #ifndef MEMORY_CHUNKS_MIMIC
 
 /* MEMORY_ALIGN_SIZE should have been set in config.h */
@@ -1249,6 +1250,9 @@ MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
 
   if (!mem_chunk) die("Unable to allocate memory.");
 
+  mem_chunk->atom_size = atom_size;
+  mem_chunk->num_atoms_alloc = 0;
+
   return mem_chunk;
   }
 
@@ -1272,12 +1276,17 @@ void mem_chunk_destroy(MemChunk *mem_chunk)
 
 void *mem_chunk_alloc(MemChunk *mem_chunk)
   {
+  void	*mem;
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
   mem_chunk->num_atoms_alloc++;
 
-  return malloc(mem_chunk->atom_size);
+  mem = malloc(mem_chunk->atom_size);
+
+  if (!mem) die("Unable to allocate memory.");
+  
+  return mem;
   }
 
 
