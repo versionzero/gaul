@@ -28,17 +28,8 @@
   Synopsis:	Multi-layer NN trained using backpropagation with
 		momentum.
 
-		Warning: Almost no error checking!
-
-		This code uses neuronal input/response in the range 0.0>=x>=1.0.
-
-		For a standalone version, compile with something like:
-		gcc protnn.c -o protnn -g -O2 \
-			-DNN_STANDALONE \
-			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
-                        -lm -lstr_util -lmethods -lrandom -Wall
-
-  Last Updated:	25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
+  Last Updated:	28 Jan 2002 SAA changes for distribution with GAUL.
+  		25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
 
  **********************************************************************/
 
@@ -131,10 +122,10 @@ typedef struct
 void NN_diagnostics(void);
 void NN_display_summary(network_t *network);
 network_t *NN_new(int num_layers, int *neurons);
-void NN_set_bias(network_t *network, float bias);
-void NN_set_gain(network_t *network, float gain);
-void NN_set_rate(network_t *network, float rate);
-void NN_set_momentum(network_t *network, float momentum);
+void NN_set_bias(network_t *network, const float bias);
+void NN_set_gain(network_t *network, const float gain);
+void NN_set_rate(network_t *network, const float rate);
+void NN_set_momentum(network_t *network, const float momentum);
 void NN_write(network_t *network, char *fname);
 network_t *NN_read(char *fname);
 void NN_destroy(network_t *network);
@@ -151,7 +142,8 @@ void NN_adjust_weights(network_t *network);
 void NN_simulate(network_t *network, float *input, float *target);
 void NN_simulate_with_output(network_t *network, float *input, float *target, float *output);
 void NN_simulate_with_output(network_t *network, float *input, float *output);
-void NN_train(network_t *network, int num_epochs);
+void NN_train_random(network_t *network, const int num_epochs);
+void NN_train_systematic(network_t *network, const int num_epochs);
 void NN_test(network_t *network, float *trainerror, float *testerror);
 void NN_evaluate(network_t *network);
 void NN_predict(network_t *network);

@@ -67,7 +67,7 @@
 #include "limits.h"
 #define RANDOM_RAND_MAX		UINT_MAX
 #else
-#define RANDOM_RAND_MAX          0xFFFFFFFF      /* Max. 32-bit unsigned int */
+#define RANDOM_RAND_MAX         (unsigned int) 0xFFFFFFFF      /* Max. 32-bit unsigned int */
 #endif
 
 /*

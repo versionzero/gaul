@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	25 Jan 2002 SAA Removed residual comment about HelGA.
+  Updated:	29 Jan 2002 SAA Fixed some dodgy typecasting.
+		25 Jan 2002 SAA Removed residual comment about HelGA.
 		07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
 		04 Dec 2001 SAA	Added routines for 'float's.
 		19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
@@ -183,7 +184,7 @@ void random_seed(const unsigned int seed)
 
 void random_tseed(void)
   { 
-  random_seed(time(NULL)%RANDOM_RAND_MAX);
+  random_seed((unsigned int) (time(NULL)%RANDOM_RAND_MAX));
 
   return;
   } 
@@ -333,7 +334,7 @@ boolean random_boolean(void)
 
 boolean random_boolean_prob(const double prob)
   {
-  return (random_rand() <= (int)(prob*(double)RANDOM_RAND_MAX));
+  return (random_rand() <= (unsigned int)(prob*(double)RANDOM_RAND_MAX));
   }
 
 
@@ -825,7 +826,7 @@ void random_diagnostics(void)
     printf("Current state\n");
     printf("j: %d k: %d x: %d v[%d]:\n",
            current_state.j, current_state.k, current_state.x, RANDOM_NUM_STATE_VALS);
-    for (i=0; i<RANDOM_NUM_STATE_VALS; i++) printf("%d ", current_state.v[i]);
+    for (i=0; i<RANDOM_NUM_STATE_VALS; i++) printf("%u ", current_state.v[i]);
     printf("\n");
     }
   else
@@ -853,13 +854,13 @@ void random_diagnostics(void)
 
 boolean random_test(void)
   {
-  int		i, j, k;		/* Loop variables. */
+  unsigned int	i, j, k;		/* Loop variables. */
   double	r;			/* Pseudo-random number. */
   long		bins[NUM_BINS];		/* Bin. */
   double	sum=0,sumsq=0;		/* Stats. */
   int		numtrue=0, numfalse=0;	/* Count booleans. */
-  int		rchi=100;		/* Number of bins in chisq test. */
-  int		nchi=1000;		/* Number of samples in chisq test. */
+  unsigned int	rchi=100;		/* Number of bins in chisq test. */
+  unsigned int	nchi=1000;		/* Number of samples in chisq test. */
   double	chisq;			/* Chisq error. */
   double	elimit = 2*sqrt((double)rchi);	/* Chisq error limit. */
   double	nchi_rchi = (double)nchi / (double)rchi;	/* Speed calculation. */
@@ -981,7 +982,7 @@ boolean random_test(void)
     bins[random_int(NUM_BINS)]++;
 
   for (i=0;i<NUM_BINS;i++)
-    printf("%d %ld\n", i, bins[i]);
+    printf("%u %ld\n", i, bins[i]);
 
 /*
  * Chi squared test.  This is the standard basic test for randomness of a PRNG.
@@ -995,7 +996,7 @@ boolean random_test(void)
 
   for (j=0;j<NUM_CHISQ;j++)
     {
-    printf("Run %d. chisq should be within %f of %d.\n", j, elimit, rchi);
+    printf("Run %u. chisq should be within %f of %u.\n", j, elimit, rchi);
     for(k=0; k<10; k++)
       {
       memset(bins, 0, rchi*sizeof(long));
@@ -1019,10 +1020,10 @@ boolean random_test(void)
 
   for (i=0; i<5000; i++)
     {
-    r = random_rand();
+    r = (double) random_rand();
     fprintf(rfile, "%f %f\n",
             /*i, r,*/
-            (double)i/(double)5000, (double)r/(double)RANDOM_RAND_MAX);
+            (double)i/(double)5000, r/(double)RANDOM_RAND_MAX);
     }
 
   fclose(rfile);

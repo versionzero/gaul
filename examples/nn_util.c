@@ -31,14 +31,17 @@
 		Warning: This code contains almost no error checking!
 
 		This code uses neuronal input/response in the range 0.0>=x>=1.0.
+		Note that best results will be acheived if data is
+		similarly normalized.
 
 		For a standalone version, compile with something like:
-		gcc protnn.c -o protnn -g -O2 \
+		gcc nn_util.c -o nn -g -O2 \
 			-DNN_STANDALONE \
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
+  Last Updated:	28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().
+  		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
 		24 Dec 2002 SAA Removed stupid error calculation from NN_predict().
 		12 Dec 2001 SAA Fixed read_prop() bug.
 		10 Dec 2001 SAA read_prop() now reads data with variable number of fields.  Default behaviour is to initialize weights within the range 0.0-1.0.  Comma delimited data is now usable.
@@ -208,7 +211,7 @@ network_t *NN_new(int num_layers, int *neurons)
   last updated: 3 Dec 2001
  **********************************************************************/
 
-void NN_set_bias(network_t *network, float bias)
+void NN_set_bias(network_t *network, const float bias)
   {
   int l; 	/* Loop variable over layers. */
 
@@ -233,7 +236,7 @@ void NN_set_bias(network_t *network, float bias)
   last updated: 3 Dec 2001
  **********************************************************************/
 
-void NN_set_gain(network_t *network, float gain)
+void NN_set_gain(network_t *network, const float gain)
   {
 
   network->gain = gain;
@@ -251,7 +254,7 @@ void NN_set_gain(network_t *network, float gain)
   last updated: 3 Dec 2001
  **********************************************************************/
 
-void NN_set_rate(network_t *network, float rate)
+void NN_set_rate(network_t *network, const float rate)
   {
 
   network->rate = rate;
@@ -269,7 +272,7 @@ void NN_set_rate(network_t *network, float rate)
   last updated: 3 Dec 2001
  **********************************************************************/
 
-void NN_set_momentum(network_t *network, float momentum)
+void NN_set_momentum(network_t *network, const float momentum)
   {
 
   network->momentum = momentum;
@@ -786,15 +789,15 @@ void NN_simulate_with_output(network_t *network, float *input, float *output)
 
 
 /**********************************************************************
-  NN_train()
+  NN_train_random()
   synopsis:     Train network using back-propagation.
   parameters:   network_t *network
 		int num_epochs
   return:       none
-  last updated:
+  last updated: 28 Jan 2002
  **********************************************************************/
 
-void NN_train(network_t *network, int num_epochs)
+void NN_train_random(network_t *network, const int num_epochs)
   {
   int  item, n;
 
@@ -802,6 +805,31 @@ void NN_train(network_t *network, int num_epochs)
     {
     item = random_int(num_train_data);
     NN_simulate(network, train_data[item], train_property[item]);
+
+    NN_backpropagate(network);
+    NN_adjust_weights(network);
+    }
+ 
+  return;
+  }
+
+
+/**********************************************************************
+  NN_train_systematic()
+  synopsis:     Train network using back-propagation.
+  parameters:   network_t *network
+		int num_epochs
+  return:       none
+  last updated: 28 Jan 2002
+ **********************************************************************/
+
+void NN_train_systematic(network_t *network, const int num_epochs)
+  {
+  int  n;
+
+  for (n=0; n<num_epochs*num_train_data; n++)
+    {
+    NN_simulate(network, train_data[n], train_property[n]);
 
     NN_backpropagate(network);
     NN_adjust_weights(network);
@@ -1160,17 +1188,18 @@ void read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *n
   synopsis:     Display usage details.
   parameters:   none
   return:       none
-  updated:      3 Dec 2001
+  updated:      28 Jan 2002
  **********************************************************************/
 
 void write_usage(void)
   {
 
   printf("\n"
-         "protnn - Neural network thing\n"
-         "Copyright ©2001, \"Stewart Adcock\" <stewart@bellatrix.pcl.ox.ac.uk>\n"
+         "nn_util - Simple Neural Network Stuff\n"
+         "Copyright ©2001-2002, Regents of the Universtity of California.\n"
+         "primary Author: \"Stewart Adcock\" <stewart@linux-domain.com>\n"
          "\n"
-         "protnn switches...\n"
+         "nn_util switches...\n"
          "\n"
          "Available switches are:\n"
          "    --version            Version information.\n"
@@ -1191,6 +1220,8 @@ void write_usage(void)
          "    --predict            Perform prediction with NN.\n"
          "    --random01           NN weights initialized between 0.0 and 1.0. [default]\n"
          "    --random11           NN weights initialized between -1.0 and 1.0.\n"
+         "    --trainrandom        Train with randomly ordered data. [default]\n"
+         "    --trainordered       Train with data ordered as input.\n"
          "    --layers INTEGER     Number of layers (incl. input+output).\n"
          "    --neurons INTEGER... Number of neurons in each layer.\n"
          "    --trainprop FILENAME Training properties file.\n"
@@ -1212,7 +1243,7 @@ void write_usage(void)
   synopsis:     The main function.
   parameters:   int argc, char **argv
   return:       2
-  last updated: 3 Dec 2001
+  last updated: 28 Jan 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -1226,11 +1257,12 @@ int main(int argc, char **argv)
   boolean    do_readnn=FALSE, do_writenn=TRUE;	/* Whether to read/write NN. */
   boolean    do_train=TRUE, do_evaluate=TRUE;	/* Whether to train/evaluate NN. */
   boolean    do_predict=FALSE;			/* Whether to use NN for prediction. */
+  boolean    do_randomize01=TRUE;		/* Initialize weights within range 0.0->1.0. */
+  boolean    do_randomtrain=TRUE;		/* Whether to train using random data selection. */
   int        num_layers=0;			/* Number of layers in NN. */
   int        *neurons=NULL;			/* Number of neurons in each layer. */
   float      stop_ratio=NN_DEFAULT_STOP_RATIO;	/* Stopping criterion. */
   int        max_epochs=NN_DEFAULT_MAX_EPOCHS;	/* Maximum training epochs. */
-  boolean    do_randomize01=TRUE;		/* Initialize weights within range 0.0->1.0. */
   float      rate=NN_DEFAULT_RATE;		/* Network learning rate. */
   float      momentum=NN_DEFAULT_MOMENTUM;	/* Network learning momentum. */
   float      gain=NN_DEFAULT_GAIN;		/* Neuronal gain (sigmodial function gain). */
@@ -1368,6 +1400,16 @@ int main(int argc, char **argv)
       {
       printf("NN weights will be initialized between -1.0 and +1.0.\n");
       do_randomize01 = FALSE;
+      }
+    else if (!strcmp(argv[i],"--trainrandom"))
+      {
+      printf("Training cycle will use data in random order.\n");
+      do_trainrandom = TRUE;
+      }
+    else if (!strcmp(argv[i],"--trainordered"))
+      {
+      printf("Training cycle will use data in order input.\n");
+      do_trainrandom = FALSE;
       }
     else if (!strcmp(argv[i],"--trainprop"))
       {
@@ -1559,7 +1601,11 @@ int main(int argc, char **argv)
                   testerror < stop_ratio * mintesterror &&
                   testerror > TINY; epoch+=teststep)
       {
-      NN_train(network, teststep);
+      if (do_trainrandom)
+	NN_train_random(network, teststep);
+      else
+	NN_train_systematic(network, teststep);
+      
       NN_test(network, &trainerror, &testerror);
       printf("\n%d: error is %f on training set and %f on test set.",
                epoch, trainerror, testerror);

@@ -30,12 +30,14 @@
 		implementation though, so I may claim copyright and
 		therefore release the code under a license of my
 		choice ;)
+
+		MP-safe.
  
-  To do:       Add sorting functions.
-               Functions for inserting/appending lists etc. (i.e. slink_append_list() )
-               Converting slists to dlists, and visa versa.
-               Equivalent of avltree_destroy().
-               ?link_unlink_data() etc like delete functions, except without freeing the element(s).
+  To do:        Add sorting functions.
+                Functions for inserting/appending lists etc. (i.e. slink_append_list() )
+                Converting slists to dlists, and visa versa.
+                Equivalent of avltree_destroy().
+                ?link_unlink_data() etc like delete functions, except without freeing the element(s).
 
   To compile:	gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lmethods
 
@@ -54,8 +56,8 @@
 #endif
 
 
-THREAD_LOCK_DEFINE_STATIC(slist_chunk);
-THREAD_LOCK_DEFINE_STATIC(dlist_chunk);
+THREAD_LOCK_DEFINE_STATIC(slist_chunk_thread);
+THREAD_LOCK_DEFINE_STATIC(dlist_chunk_thread);
 static MemChunk *slist_chunk = NULL;
 static MemChunk *dlist_chunk = NULL;
 
@@ -64,12 +66,12 @@ SLList *slink_new(void)
   {
   SLList *element;
 
-  THREAD_LOCK(slist_chunk);
+  THREAD_LOCK(slist_chunk_thread);
   if (!slist_chunk)
     slist_chunk = mem_chunk_new(sizeof(SLList), 512);
 
   element = mem_chunk_alloc(slist_chunk);
-  THREAD_UNLOCK(slist_chunk);
+  THREAD_UNLOCK(slist_chunk_thread);
 
   element->next = NULL;
   element->data = NULL;
@@ -82,14 +84,14 @@ void slink_free_all(SLList *list)
   {
   SLList	*element;
 
-  THREAD_LOCK(slist_chunk);
+  THREAD_LOCK(slist_chunk_thread);
   while (list)
     {
     element = list->next;
     mem_chunk_free(slist_chunk, list);
     list = element;
     }
-  THREAD_UNLOCK(slist_chunk);
+  THREAD_UNLOCK(slist_chunk_thread);
 
   return;
   }
@@ -99,9 +101,9 @@ void slink_free(SLList *list)
   {
   if (!list) return;
 
-  THREAD_LOCK(slist_chunk);
+  THREAD_LOCK(slist_chunk_thread);
   mem_chunk_free(slist_chunk, list);
-  THREAD_UNLOCK(slist_chunk);
+  THREAD_UNLOCK(slist_chunk_thread);
 
   return;
   }
@@ -447,12 +449,12 @@ DLList *dlink_new(void)
   {
   DLList *element;
 
-  THREAD_LOCK(dlist_chunk);
+  THREAD_LOCK(dlist_chunk_thread);
   if (!dlist_chunk)
     dlist_chunk = mem_chunk_new(sizeof(DLList), 512);
 
   element = mem_chunk_alloc(dlist_chunk);
-  THREAD_UNLOCK(dlist_chunk);
+  THREAD_UNLOCK(dlist_chunk_thread);
 
   element->prev = NULL;
   element->next = NULL;
@@ -466,7 +468,7 @@ void dlink_free_all(DLList *list)
   {
   DLList        *element;
 
-  THREAD_LOCK(dlist_chunk);
+  THREAD_LOCK(dlist_chunk_thread);
   while (list->next)
     {
     element = list->next;
@@ -479,7 +481,7 @@ void dlink_free_all(DLList *list)
     mem_chunk_free(dlist_chunk, list);
     list = element;
     }
-  THREAD_UNLOCK(dlist_chunk);
+  THREAD_UNLOCK(dlist_chunk_thread);
 
   return;
   }
@@ -489,9 +491,9 @@ void dlink_free(DLList *list)
   {
   if (!list) return;
   
-  THREAD_LOCK(dlist_chunk);
+  THREAD_LOCK(dlist_chunk_thread);
   mem_chunk_free(dlist_chunk, list);
-  THREAD_UNLOCK(dlist_chunk);
+  THREAD_UNLOCK(dlist_chunk_thread);
 
   return;
   }
@@ -589,11 +591,16 @@ DLList *dlink_insert_index(DLList *list, vpointer data, int index)
   DLList *this_list;
   
   if (index < 0)
+    {
+/* FIXME: Prehaps I should insert from end of list instead? */
     return dlink_append(list, data);
+    }
   else if (index == 0)
+    {
     return dlink_prepend(list, data);
+    }
   
-  this_list = dlink_nth(list, index);
+  this_list = dlink_nth(list, (unsigned int) index);
   if (!this_list)
     return dlink_append(list, data);
   
@@ -964,9 +971,9 @@ boolean linkedlist_test(void)
   {
   DLList *list, *t;
   SLList *slist, *st;
-  int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-  int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
-  int i;
+  unsigned int sorteddata[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  unsigned int data[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6 };
+  unsigned int i;
 
   printf("Checking doubly linked lists...\n");
 
@@ -998,7 +1005,7 @@ boolean linkedlist_test(void)
   for (i = 0; i < 10; i++)
     {
       t = g_list_nth(list, i);
-      if (*((int*) t->data) != i)
+      if (*((unsigned int*) t->data) != i)
          printf("Sorted insert failed\n");
     }
 

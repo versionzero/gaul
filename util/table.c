@@ -28,7 +28,8 @@
 
   Thread-safe.
  
-  Updated:	28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
+  Updated:	29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
+		28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
 		18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
 		07/08/01 SAA	Added table_remove_data_all().
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
@@ -48,13 +49,12 @@
 
 #include "table.h"
 
-
-THREAD_LOCK_DEFINE_STATIC(table_mem_chunk);
+THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_thread);
 static MemChunk *table_mem_chunk = NULL;
 
-static int next_pow2(int num)
+static unsigned int next_pow2(unsigned int num)
   {
-  int	n = 1;
+  unsigned int	n = 1;
 
   num++;
 
@@ -64,9 +64,9 @@ static int next_pow2(int num)
   }
 
 
-static boolean table_ensure_size(TableStruct *table, int size)
+static boolean table_ensure_size(TableStruct *table, unsigned int size)
   {
-  int		i;
+  unsigned int		i;
 
   if(table->size < size)
     {
@@ -92,12 +92,12 @@ TableStruct *table_new(void)
   {
   TableStruct *table;
 
-  THREAD_LOCK(table_mem_chunk);
+  THREAD_LOCK(table_mem_chunk_thread);
   if(!table_mem_chunk)
     table_mem_chunk = mem_chunk_new(sizeof(TableStruct), 64);
 
   table = mem_chunk_alloc(table_mem_chunk);
-  THREAD_UNLOCK(table_mem_chunk);
+  THREAD_UNLOCK(table_mem_chunk_thread);
 
   table->data = NULL;
   table->unused = NULL;
@@ -121,9 +121,9 @@ void table_destroy(TableStruct *table)
   if (table->data) s_free(table->data);
   if (table->unused) s_free(table->unused);
 
-  THREAD_LOCK(table_mem_chunk);
+  THREAD_LOCK(table_mem_chunk_thread);
   mem_chunk_free(table_mem_chunk, table);
-  THREAD_UNLOCK(table_mem_chunk);
+  THREAD_UNLOCK(table_mem_chunk_thread);
 
   return;
   }
@@ -336,18 +336,18 @@ unsigned int table_count_items(TableStruct *table)
 void table_diagnostics(void)
   {
   printf("=== Table diagnostics ========================================\n");
-  printf("Version:           %s\n", VERSION_STRING);
-  printf("Build date:        %s\n", BUILD_DATE_STRING);
+  printf("Version:             %s\n", VERSION_STRING);
+  printf("Build date:          %s\n", BUILD_DATE_STRING);
 
   printf("--------------------------------------------------------------\n");
-  printf("TABLE_ERROR_INDEX: %d\n", TABLE_ERROR_INDEX);
+  printf("TABLE_ERROR_INDEX:   %u\n", TABLE_ERROR_INDEX);
 
   printf("--------------------------------------------------------------\n");
-  printf("structure          sizeof\n");
+  printf("structure            sizeof\n");
 #ifdef IRIX_MIPSPRO_SOURCE
-  printf("TableStruct        %lu\n", (unsigned long int) sizeof(TableStruct));
+  printf("TableStruct          %lu\n", (unsigned long int) sizeof(TableStruct));
 #else
-  printf("TableStruct        %Zd\n", sizeof(TableStruct));
+  printf("TableStruct          %Zd\n", sizeof(TableStruct));
 #endif
   printf("==============================================================\n");
 

@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
+  Updated:	29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
+		28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
 		17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
 		30 Nov 2001 SAA	The constant DEBUG will always be defined now.
 		29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
@@ -134,13 +135,25 @@
 #endif
 
 #if PARALLEL!=1
-/* If threads are used, these must be properly defined somewhere. */
+/*
+ * If threads are used, these must be properly defined somewhere.
+ * Unfortunately empty macros cause splint parse errors.
+ */
+#ifdef S_SPLINT_S
+#define THREAD_LOCK_DEFINE_STATIC(name)	static int name = 0
+#define THREAD_LOCK_DEFINE(name)	int name = 0
+#define THREAD_LOCK_EXTERN(name)	extern int name = 0
+#define THREAD_LOCK(name)		name = 1
+#define THREAD_UNLOCK(name)		name = 0
+#define THREAD_TRYLOCK(name)		0
+#else
 #define THREAD_LOCK_DEFINE_STATIC(name)
 #define THREAD_LOCK_DEFINE(name)
 #define THREAD_LOCK_EXTERN(name)
 #define THREAD_LOCK(name)
 #define THREAD_UNLOCK(name)
 #define THREAD_TRYLOCK(name)		0
+#endif
 #endif
 
 /*
@@ -208,14 +221,14 @@ typedef bool _Bool;
  * in preprocessor directives and __bool_true_false_are_defined
  * should be true.
  */
-# define false 0
-# define true 1
+# define false (_Bool) 0
+# define true  (_Bool) 1
 # define __bool_true_false_are_defined 1
-
 #endif
+
 #define boolean _Bool
-#define TRUE true
-#define FALSE false
+#define TRUE  1
+#define FALSE 0
 
 /*
  * Additional types.
