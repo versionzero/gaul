@@ -7,34 +7,34 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1839     |  Save/Load populations.
-            |  Save/Load entities.
-------------+--------------------------------------------------------
- 0.1840     |  De Jong - working examples.
-            |  GAmutate and GAadapt should be interchangable.
-            |  Intro to GAs (mostly) finished.
+ 0.1840     |  Similarity routines for continuous chromosome types.
+            |  ga_evolution_forked() and associated example.
+            |  Optimise the evolution functions with respect to fitness evaluations during Lamarkian/Baldwinian schemes.
 ------------+--------------------------------------------------------
  0.1841     |  ga_evolution_mp() and associated example.
-            |  Use MemChunks in chromosome allocation.
+            |  Use MemChunks in chromosome allocation, where appropriate.
+            |  Intro to GAs finished.
 ------------+--------------------------------------------------------
- 0.1843     |  Similarity routines for continuous chromosome types.
-            |  Move prototypes for public functions into src/gaul.h
-------------+--------------------------------------------------------
- 0.1843     |  More replacement operators.
-            |  Replacement operators documentation
-------------+--------------------------------------------------------
- 0.1844     |  Save/Load soup.
-            |  User data in array, not list.
-            |  Return number of generations performed from evolutionary functions.
-------------+--------------------------------------------------------
- 0.1845     |  Linked-list chromosome.
+ 0.1842     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Fully document chromosomes.
+------------+--------------------------------------------------------
+ 0.1843     |  De Jong - working examples.
+            |  Move prototypes for public functions into src/gaul.h
+------------+--------------------------------------------------------
+ 0.1844     |  More replacement operators.
+            |  Replacement operators documentation
+------------+--------------------------------------------------------
+ 0.1845     |  Save/Load soup.
+            |  User data in array, not list.
+            |  Return number of generations performed from the evolutionary functions.
 ------------+--------------------------------------------------------
  0.1846     |  More on-line/off-line statistics options.
             |  Built-in evaluation profiling.
 ------------+--------------------------------------------------------
  0.1847     |  Boolean chromosome example from Mitchell book.
+            |  Fix elitism options.
+            |  Document elitism options.
 ------------+--------------------------------------------------------
  0.1848     |  Tree chromosome.
             |  Genetic programming example.
