@@ -36,7 +36,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1837"
-#define BUILD_DATE_STRING "12/03/02"
+#define BUILD_DATE_STRING "13/03/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1837
 #define PATCH_VERSION 2
@@ -83,6 +83,12 @@
 
 /* Define if you have the gettimeofday function.  */
 #define HAVE_GETTIMEOFDAY 1
+
+/* Define if you have the index function.  */
+#define HAVE_INDEX 1
+
+/* Define if you have the itoa function.  */
+/* #undef HAVE_ITOA */
 
 /* Define if you have the max function.  */
 /* #undef HAVE_MAX */

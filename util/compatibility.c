@@ -102,7 +102,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	13 Mar 2002 SAA	Added itoa().
+  Updated:	13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
 		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
   		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
@@ -167,6 +167,7 @@ void memcpy(char *dest, const char *src, size_t len)
 
 
 #ifndef HAVE_STRCHR
+#ifndef HAVE_INDEX
 /*
  * Find C in STR by searching through the string
  */
@@ -179,6 +180,7 @@ char *strchr(const char *str, int c)
 
   return NULL;
   }
+#endif /* HAVE_INDEX */
 #endif /* HAVE_STRCHR */
 
 
@@ -1572,7 +1574,7 @@ maybeinline void sincos( double radians, double *s, double *c )
  */
 void itoa (const int n, char *s)
   {
-  int   i=0, number=n;
+  int   number=n;
   char	c, *end=s;
 
   if (n < 0) {number = -number;}

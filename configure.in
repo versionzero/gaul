@@ -349,13 +349,14 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 memcpy memset \
                 memmove bcopy \
                 memrev memchr memmem memcmp \
+                min max \
+                sincos \
+                index rindex \
                 strchr strrchr rindex strcat strlen \
                 strcmp strncmp strcpy strncpy strtok \
                 strcasecmp strncasecmp snprintf \
-                sincos \
                 strdup strndup strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
-                min max \
                 strerror strlcat strlcpy strstr vsnprintf itoa )
 
 dnl Give warning if GNU Make is not being used.

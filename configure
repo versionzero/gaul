@@ -2858,22 +2858,23 @@ for ac_func in fdopen gethostname getpwuid gettimeofday select \
                 memcpy memset \
                 memmove bcopy \
                 memrev memchr memmem memcmp \
+                min max \
+                sincos \
+                index rindex \
                 strchr strrchr rindex strcat strlen \
                 strcmp strncmp strcpy strncpy strtok \
                 strcasecmp strncasecmp snprintf \
-                sincos \
                 strdup strndup strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
-                min max \
-                strerror strlcat strlcpy strstr vsnprintf 
+                strerror strlcat strlcpy strstr vsnprintf itoa 
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:2872: checking for $ac_func" >&5
+echo "configure:2873: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2877 "configure"
+#line 2878 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -2896,7 +2897,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:2900: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2901: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else

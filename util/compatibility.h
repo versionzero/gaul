@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
+  Updated:	13 Mar 2002 SAA	Use index() for strchr(), when available.
+		10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
 	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
 		19/03/01 SAA	Removed GNU specific stuff.
@@ -98,7 +99,11 @@ void memcpy(char *dest, const char *src, size_t len);
 #endif
 
 #ifndef HAVE_STRCHR
+# ifdef HAVE_INDEX
+#  define strchr index
+# else
 char *strchr(const char *str, int c);
+# endif
 #endif
 
 #ifndef HAVE_STRRCHR
@@ -285,5 +290,6 @@ maybeinline void sincos( double radians, double *s, double *c );
 
 #ifndef HAVE_ITOA
 void itoa (const int n, char *s);
+#endif
 
 #endif
