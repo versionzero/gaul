@@ -773,11 +773,11 @@ void str_ncpyt(char *dest, const char *src, const int len)
   parameters:   char    	*dest	The destination string.
 		const char	*src	The source string.
 		const int	len	Number of bytes to copy.
-  return:	none
+  return:	Pointer to final char in src string looked at.
   last updated: 28 Oct 2002
  **********************************************************************/
 
-void str_ncpy(char *dest, const char *src, const int len)
+char *str_sncpy(char *dest, const char *src, const int len)
   {
   char	*end=&(dest[len-1]);
 
@@ -795,7 +795,7 @@ void str_ncpy(char *dest, const char *src, const int len)
 
   *dest='\0';
 
-  return;
+  return src;
   }
 
 #if 0
