@@ -294,7 +294,7 @@ int ga_simplex(	population		*pop,
  * Reduce step, alpha, beta and gamma each time this happens.
  */
     restart_needed = TRUE;
-printf("DEBUG: average = ");
+/*printf("DEBUG: average = ");*/
     for (j = 0; j < pop->simplex_params->dimensions; j++)
       {
       /* Finish calculating average here to avoid an extra loop. */
@@ -303,13 +303,13 @@ printf("DEBUG: average = ");
            average[j]+TINY < putative_d[pop->simplex_params->dimensions][j] )
         restart_needed = FALSE;
       
-      printf("%f ", average[j]/pop->simplex_params->dimensions);
+      /*printf("%f ", average[j]/pop->simplex_params->dimensions);*/
       }
-printf("\n");
+/*printf("\n");*/
 
   if (restart_needed != FALSE)
     {
-printf("DEBUG: restarting search.\n");
+/*printf("DEBUG: restarting search.\n");*/
     pop->simplex_params->step *= 0.50;
     pop->simplex_params->alpha *= 0.75;
     pop->simplex_params->beta *= 0.75;
@@ -347,7 +347,7 @@ printf("DEBUG: restarting search.\n");
  * The new solution is fitter than the previously fittest solution, so attempt an 
  * additional extrapolation by a factor alpha.
  */
-printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);
+/*printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);*/
 
       for (j = 0; j < pop->simplex_params->dimensions; j++)
         new2_d[j] = (1.0 + pop->simplex_params->alpha) * new1_d[j] -
@@ -362,7 +362,7 @@ printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]
  * This additional extrapolation succeeded, so replace the least fit solution
  * by inserting new solution in correct position.
  */
-printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);
+/*printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);*/
 
         tmpentity = putative[pop->simplex_params->dimensions];
         tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
@@ -406,7 +406,7 @@ printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]
 /*
  * The reflected point is worse than the second-least fit.  
  */
-printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions-1]->fitness);
+/*printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions-1]->fitness);*/
 
       did_replace = FALSE;
 
@@ -416,7 +416,7 @@ printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putat
  * It is better than the least fit, so use it to replace the
  * least fit.
  */
-printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dimensions]->fitness);
+/*printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dimensions]->fitness);*/
         did_replace = TRUE;
 
         tmpentity = putative[pop->simplex_params->dimensions];
@@ -446,7 +446,7 @@ printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->simplex_params->dim
  */
         did_replace = TRUE;
 
-printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions]->fitness);
+/*printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions]->fitness);*/
         i = 0;
         while (putative[i]->fitness > new1->fitness) i++;
 
@@ -472,7 +472,7 @@ printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness
  * The new solution is worse than the previous worse.  So, contract
  * toward the average point.
  */
-printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);
+/*printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);*/
 
         for (i = 1; i < num_points; i++)
           {
@@ -507,14 +507,15 @@ printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);
  * Replace the old worst solution by inserting the new solution at the
  * correct position.
  */
-printf("DEBUG: new1 (%f) is fitter than worst 2\n", new1->fitness);
+/*printf("DEBUG: new1 (%f) is fitter than worst 2\n", new1->fitness);
       for (j=0; j < pop->simplex_params->dimensions; j++)
         printf("%d fitness = %f\n", j, putative[j]->fitness);
+*/
 
       i = 0;
       while (putative[i]->fitness > new1->fitness) i++;
 
-printf("DEBUG: new1 inserted at position %d\n", i);
+/*printf("DEBUG: new1 inserted at position %d\n", i);*/
 
       tmpentity = putative[pop->simplex_params->dimensions];
       tmpdoubleptr = putative_d[pop->simplex_params->dimensions];
@@ -745,7 +746,7 @@ int ga_simplex_double(	population		*pop,
  * Reduce step, alpha, beta and gamma each time this happens.
  */
     restart_needed = TRUE;
-printf("DEBUG: average = ");
+/*printf("DEBUG: average = ");*/
     for (j = 0; j < pop->len_chromosomes; j++)
       {
       /* Finish calculating average here to avoid an extra loop. */
@@ -754,13 +755,13 @@ printf("DEBUG: average = ");
            average[j]+TINY < putative_d[pop->len_chromosomes][j] )
         restart_needed = FALSE;
       
-      printf("%f ", average[j]/pop->len_chromosomes);
+      /*printf("%f ", average[j]/pop->len_chromosomes);*/
       }
-printf("\n");
+/*printf("\n");*/
 
   if (restart_needed != FALSE)
     {
-printf("DEBUG: restarting search.\n");
+/*printf("DEBUG: restarting search.\n");*/
     pop->simplex_params->step *= 0.50;
     pop->simplex_params->alpha *= 0.75;
     pop->simplex_params->beta *= 0.75;
@@ -798,7 +799,7 @@ printf("DEBUG: restarting search.\n");
  * The new solution is fitter than the previously fittest solution, so attempt an 
  * additional extrapolation by a factor alpha.
  */
-printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);
+/*printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);*/
 
       for (j = 0; j < pop->len_chromosomes; j++)
         new2_d[j] = (1.0 + pop->simplex_params->alpha) * new1_d[j] -
@@ -813,7 +814,7 @@ printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]
  * This additional extrapolation succeeded, so replace the least fit solution
  * by inserting new solution in correct position.
  */
-printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);
+/*printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);*/
 
         tmpentity = putative[pop->len_chromosomes];
         tmpdoubleptr = putative_d[pop->len_chromosomes];
@@ -857,7 +858,7 @@ printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]
 /*
  * The reflected point is worse than the second-least fit.  
  */
-printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putative[pop->len_chromosomes-1]->fitness);
+/*printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putative[pop->len_chromosomes-1]->fitness);*/
 
       did_replace = FALSE;
 
@@ -867,7 +868,7 @@ printf("DEBUG: new1 (%f) is less fit than p(n-1) ( %f )\n", new1->fitness, putat
  * It is better than the least fit, so use it to replace the
  * least fit.
  */
-printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->len_chromosomes]->fitness);
+/*printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->len_chromosomes]->fitness);*/
         did_replace = TRUE;
 
         tmpentity = putative[pop->len_chromosomes];
@@ -897,7 +898,7 @@ printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->len_chromosomes]->f
  */
         did_replace = TRUE;
 
-printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->len_chromosomes]->fitness);
+/*printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->len_chromosomes]->fitness);*/
         i = 0;
         while (putative[i]->fitness > new1->fitness) i++;
 
@@ -923,7 +924,7 @@ printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness
  * The new solution is worse than the previous worse.  So, contract
  * toward the average point.
  */
-printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);
+/*printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);*/
 
         for (i = 1; i < num_points; i++)
           {
@@ -958,14 +959,15 @@ printf("DEBUG: new1 (%f) is worse than all.\n", new1->fitness);
  * Replace the old worst solution by inserting the new solution at the
  * correct position.
  */
-printf("DEBUG: new1 (%f) is fitter than worst 2\n", new1->fitness);
+/*printf("DEBUG: new1 (%f) is fitter than worst 2\n", new1->fitness);
       for (j=0; j < pop->len_chromosomes; j++)
         printf("%d fitness = %f\n", j, putative[j]->fitness);
+*/
 
       i = 0;
       while (putative[i]->fitness > new1->fitness) i++;
 
-printf("DEBUG: new1 inserted at position %d\n", i);
+/*printf("DEBUG: new1 inserted at position %d\n", i);*/
 
       tmpentity = putative[pop->len_chromosomes];
       tmpdoubleptr = putative_d[pop->len_chromosomes];
