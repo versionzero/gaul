@@ -77,7 +77,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	28 May 2002 SAA	Added extra check into random_seed().
+  Updated:	30 May 2002 SAA	random_init() no longer needs to be called so long as random_seed() is called before any of the other functions are called.
+		28 May 2002 SAA	Added extra check into random_seed().
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) with more portable printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Added random_int_permutation().
 		29 Jan 2002 SAA Fixed some dodgy typecasting.
@@ -143,7 +144,7 @@ unsigned int random_rand(void)
   {
   unsigned int val;
 
-  if (!is_initialised) die("random_init() has not been called.");
+  if (!is_initialised) die("Neither random_init() or random_seed() have been called.");
 
   val = (current_state.v[current_state.j]+current_state.v[current_state.k])
         & RANDOM_RAND_MAX;
@@ -164,14 +165,14 @@ unsigned int random_rand(void)
 		state array.
   parameters:	const unsigned int seed		Seed value.
   return:	none
-  last updated:	28 May 2002
+  last updated:	30 May 2002
  **********************************************************************/
 
 void random_seed(const unsigned int seed)
   { 
   int	i; 
 
-  if (!is_initialised) die("random_init() has not been called.");
+  is_initialised = TRUE;
 
   current_state.v[0]=(seed & RANDOM_RAND_MAX);
 
@@ -288,15 +289,14 @@ void random_set_state_str(char *state)
   synopsis:	Initialise random number generators.  Should be
 		called prior to any of these functions being used.
 		Seeds the PRNG with a seed of 1.
-  parameters:
+  parameters:	none
   return:	none
-  last updated:	16/05/00
+  last updated:	30 May 2002
  **********************************************************************/
 
 void random_init(void)
   {
   random_seed(1);
-  is_initialised = TRUE;
 
 #if RANDOM_DEBUG>0
   printf("DEBUG: Random number routines initialised.\n");
