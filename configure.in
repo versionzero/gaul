@@ -233,7 +233,7 @@ fi
 #
 old_LIBS=$LIBS
 old_CFLAGS=$CFLAGS
-AC_MSG_CHECKING(for whether to use MPI)
+AC_MSG_CHECKING(whether to use MPI)
 if test "x$enable_mpi" != "xyes"; then
   AC_MSG_RESULT(no)
   enable_mpi=no
