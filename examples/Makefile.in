@@ -42,7 +42,7 @@
 #######################################################################
 
 
-SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -69,16 +69,16 @@ host_triplet = @host@
 target_triplet = @target@
 bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	fitting$(EXEEXT) fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) \
-	pingpong$(EXEEXT) pingpong_tabu$(EXEEXT) \
+	pingpong$(EXEEXT) pingpong9$(EXEEXT) pingpong_tabu$(EXEEXT) \
 	pingpong_tabu2$(EXEEXT) pingpong_sa$(EXEEXT) wildfire$(EXEEXT) \
 	wildfire_forked$(EXEEXT) wildfire_loadbalancing$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
 	royalroad_mutation_prob_demo$(EXEEXT) onemax$(EXEEXT) \
-	all5s$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
-	struggle_threaded$(EXEEXT) struggle_mp$(EXEEXT) \
-	struggle_mpi$(EXEEXT) struggle_dc$(EXEEXT) \
-	struggle_randomsearch$(EXEEXT) \
+	all5s$(EXEEXT) all5s_allele_ranges$(EXEEXT) struggle$(EXEEXT) \
+	struggle_forked$(EXEEXT) struggle_threaded$(EXEEXT) \
+	struggle_mp$(EXEEXT) struggle_mpi$(EXEEXT) \
+	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -100,6 +100,8 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_all5s_OBJECTS = all5s.$(OBJEXT)
 all5s_OBJECTS = $(am_all5s_OBJECTS)
+am_all5s_allele_ranges_OBJECTS = all5s_allele_ranges.$(OBJEXT)
+all5s_allele_ranges_OBJECTS = $(am_all5s_allele_ranges_OBJECTS)
 am_fitting_OBJECTS = fitting.$(OBJEXT)
 fitting_OBJECTS = $(am_fitting_OBJECTS)
 am_fitting_sd_OBJECTS = fitting_sd.$(OBJEXT)
@@ -118,6 +120,8 @@ am_onemax_OBJECTS = onemax.$(OBJEXT)
 onemax_OBJECTS = $(am_onemax_OBJECTS)
 am_pingpong_OBJECTS = pingpong.$(OBJEXT)
 pingpong_OBJECTS = $(am_pingpong_OBJECTS)
+am_pingpong9_OBJECTS = pingpong9.$(OBJEXT)
+pingpong9_OBJECTS = $(am_pingpong9_OBJECTS)
 am_pingpong_sa_OBJECTS = pingpong_sa.$(OBJEXT)
 pingpong_sa_OBJECTS = $(am_pingpong_sa_OBJECTS)
 am_pingpong_tabu_OBJECTS = pingpong_tabu.$(OBJEXT)
@@ -192,12 +196,14 @@ LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) \
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
+	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
-	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
-	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
-	$(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) \
+	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) \
+	$(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) \
+	$(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) \
+	$(royalroad_bitstring_SOURCES) \
 	$(royalroad_mutation_prob_demo_SOURCES) \
 	$(royalroad_ss_SOURCES) $(saveload_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
@@ -210,10 +216,11 @@ SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
 	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
 	$(wildfire_loadbalancing_SOURCES)
-DIST_SOURCES = $(all5s_SOURCES) $(fitting_SOURCES) \
-	$(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) \
-	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) \
-	$(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) \
+DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
+	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
+	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
+	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
+	$(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) \
 	$(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) \
 	$(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) \
 	$(royalroad_bitstring_SOURCES) \
@@ -375,6 +382,7 @@ fitting_SOURCES = fitting.c
 fitting_simplex_SOURCES = fitting_simplex.c
 fitting_sd_SOURCES = fitting_sd.c
 pingpong_SOURCES = pingpong.c
+pingpong9_SOURCES = pingpong9.c
 pingpong_tabu_SOURCES = pingpong_tabu.c
 pingpong_tabu2_SOURCES = pingpong_tabu2.c
 pingpong_sa_SOURCES = pingpong_sa.c
@@ -389,6 +397,7 @@ royalroad_ss_SOURCES = royalroad_ss.c
 royalroad_mutation_prob_demo_SOURCES = royalroad_mutation_prob_demo.c
 onemax_SOURCES = onemax.c
 all5s_SOURCES = all5s.c
+all5s_allele_ranges_SOURCES = all5s_allele_ranges.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
 struggle_mpi_SOURCES = struggle_mpi.c
@@ -421,6 +430,7 @@ fitting_DEPENDENCIES = ${DEPENDENCIES}
 fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
 fitting_sd_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
+pingpong9_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
@@ -435,6 +445,7 @@ royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_mutation_prob_demo_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
 all5s_DEPENDENCIES = ${DEPENDENCIES}
+all5s_allele_ranges_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -461,6 +472,7 @@ fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong9_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
@@ -475,6 +487,7 @@ royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_mutation_prob_demo_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+all5s_allele_ranges_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
@@ -562,6 +575,9 @@ clean-binPROGRAMS:
 all5s$(EXEEXT): $(all5s_OBJECTS) $(all5s_DEPENDENCIES) 
 	@rm -f all5s$(EXEEXT)
 	$(LINK) $(all5s_LDFLAGS) $(all5s_OBJECTS) $(all5s_LDADD) $(LIBS)
+all5s_allele_ranges$(EXEEXT): $(all5s_allele_ranges_OBJECTS) $(all5s_allele_ranges_DEPENDENCIES) 
+	@rm -f all5s_allele_ranges$(EXEEXT)
+	$(LINK) $(all5s_allele_ranges_LDFLAGS) $(all5s_allele_ranges_OBJECTS) $(all5s_allele_ranges_LDADD) $(LIBS)
 fitting$(EXEEXT): $(fitting_OBJECTS) $(fitting_DEPENDENCIES) 
 	@rm -f fitting$(EXEEXT)
 	$(LINK) $(fitting_LDFLAGS) $(fitting_OBJECTS) $(fitting_LDADD) $(LIBS)
@@ -589,6 +605,9 @@ onemax$(EXEEXT): $(onemax_OBJECTS) $(onemax_DEPENDENCIES)
 pingpong$(EXEEXT): $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES) 
 	@rm -f pingpong$(EXEEXT)
 	$(LINK) $(pingpong_LDFLAGS) $(pingpong_OBJECTS) $(pingpong_LDADD) $(LIBS)
+pingpong9$(EXEEXT): $(pingpong9_OBJECTS) $(pingpong9_DEPENDENCIES) 
+	@rm -f pingpong9$(EXEEXT)
+	$(LINK) $(pingpong9_LDFLAGS) $(pingpong9_OBJECTS) $(pingpong9_LDADD) $(LIBS)
 pingpong_sa$(EXEEXT): $(pingpong_sa_OBJECTS) $(pingpong_sa_DEPENDENCIES) 
 	@rm -f pingpong_sa$(EXEEXT)
 	$(LINK) $(pingpong_sa_LDFLAGS) $(pingpong_sa_OBJECTS) $(pingpong_sa_LDADD) $(LIBS)
@@ -684,6 +703,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/all5s.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/all5s_allele_ranges.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_sd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fitting_simplex.Po@am__quote@
@@ -693,6 +713,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nnevolve.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/onemax.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong9.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong_sa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong_tabu.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pingpong_tabu2.Po@am__quote@

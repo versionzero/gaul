@@ -2386,7 +2386,7 @@ printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num
 		this function.
   parameters:
   return:
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 int ga_evolution(	population		*pop,
@@ -2402,7 +2402,6 @@ int ga_evolution(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -2411,6 +2410,8 @@ int ga_evolution(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations(pop);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -2491,7 +2492,7 @@ int ga_evolution(	population		*pop,
 
   parameters:
   return:	Number of generations performed.
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #if W32_CRIPPLED != 1
@@ -2514,7 +2515,6 @@ int ga_evolution_forked(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of processes to fork.
@@ -2545,6 +2545,8 @@ int ga_evolution_forked(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations_forked(pop, max_processes, eid, pid, evalpipe);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -2639,7 +2641,7 @@ int ga_evolution_forked(	population		*pop,
 
   parameters:
   return:	Number of generations performed.
-  last updated:	15 Apr 2004
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #if HAVE_PTHREADS == 1
@@ -2660,7 +2662,6 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of threads to use.
@@ -2683,6 +2684,8 @@ int ga_evolution_threaded(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations_threaded(pop, max_threads, threaddata);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -2769,7 +2772,7 @@ int ga_evolution_threaded(	population		*pop,
 
   parameters:
   return:	Number of generations performed.
-  last updated:	18 Sep 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #if HAVE_PTHREADS == -2
@@ -2794,7 +2797,6 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of threads to create.
@@ -2845,6 +2847,8 @@ int ga_evolution_threaded(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations_threaded(pop, max_threads, eid, tid);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -2937,7 +2941,7 @@ int ga_evolution_threaded(	population		*pop,
 		*** Should be deprecated. ***
   parameters:
   return:
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
@@ -2967,7 +2971,6 @@ int ga_evolution_with_stats(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_WARNING, "This is a deprecated function!");
 
@@ -2987,6 +2990,8 @@ int ga_evolution_with_stats(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations(pop);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -3229,7 +3234,7 @@ int ga_evolution_with_stats(	population		*pop,
 		this function.
   parameters:
   return:
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 int ga_evolution_steady_state(	population		*pop,
@@ -3251,7 +3256,6 @@ int ga_evolution_steady_state(	population		*pop,
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -3260,6 +3264,8 @@ int ga_evolution_steady_state(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations(pop);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -3456,7 +3462,7 @@ int ga_evolution_steady_state(	population		*pop,
 		this function.
   parameters:
   return:
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
@@ -3485,7 +3491,6 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_WARNING, "This is a deprecated function!");
 
@@ -3505,6 +3510,8 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations(pop);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -4347,7 +4354,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 		population	**pops
 		const int	max_generations
   return:	number of generation performed
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 int ga_evolution_archipelago( const int num_pops,
@@ -4375,7 +4382,6 @@ int ga_evolution_archipelago( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty.");
 
 /* Set current_island property. */
     pop->island = current_island;
@@ -4392,6 +4398,8 @@ int ga_evolution_archipelago( const int num_pops,
 /*
  * Score and sort the initial population members.
  */
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
     gaul_ensure_evaluations(pop);
     sort_population(pop);
     ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -4522,7 +4530,7 @@ int ga_evolution_archipelago_threaded( const int num_pops,
 		population	**pops
 		const int	max_generations
   return:	number of generation performed
-  last updated:	11 Jun 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 #if W32_CRIPPLED != 1
@@ -4565,7 +4573,6 @@ int ga_evolution_archipelago_forked( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty.");
 
 /* Set current_island property. */
     pop->island = current_island;
@@ -4602,6 +4609,8 @@ int ga_evolution_archipelago_forked( const int num_pops,
 /*
  * Score and sort the initial population members.
  */
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
     gaul_ensure_evaluations(pop);
     sort_population(pop);
     ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -4765,7 +4774,6 @@ int ga_evolution_archipelago_mp( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty.");
 
 /* Set current_island property. */
     pop->island = current_island;
@@ -4782,7 +4790,12 @@ int ga_evolution_archipelago_mp( const int num_pops,
 /*
  * Score and sort the initial population members.
  */
-    ga_population_score_and_sort(pop);
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
+    gaul_ensure_evaluations(pop);
+    sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
     plog( LOG_VERBOSE,
           "Prior to the first generation, population on current_island %d (process %d) has fitness scores between %f and %f",
           current_island, mpi_get_rank(),
@@ -4946,7 +4959,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
 		this function.
   parameters:
   return:
-  last updated:	03 Feb 2003
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 int ga_evolution_mp(	population		*pop,
@@ -4963,7 +4976,6 @@ int ga_evolution_mp(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -4981,6 +4993,8 @@ int ga_evolution_mp(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
     gaul_ensure_evaluations_mp(pop);
     sort_population(pop);
     ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
@@ -5066,7 +5080,7 @@ int ga_evolution_mp(	population		*pop,
 		processes.
   parameters:
   return:
-  last updated:	30 Apr 2004
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 int ga_evolution_mpi(	population		*pop,
@@ -5089,7 +5103,6 @@ int ga_evolution_mpi(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty.");
 
 /*
  * Rank zero process is master.  This handles evolution.  Other processes are slaves
@@ -5121,6 +5134,8 @@ int ga_evolution_mpi(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations_mpi(pop, eid, buffer, buffer_len, buffer_max);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);

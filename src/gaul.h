@@ -248,10 +248,22 @@ void	ga_population_set_migration(   population            *pop,
 		                       const double          migration);
 void	ga_population_set_allele_mutation_prob(   population            *pop,
 		                       const double          prob);
+void	ga_population_set_allele_min_integer(   population            *pop,
+		                       const int          value);
+void	ga_population_set_allele_max_integer(   population            *pop,
+		                       const int          value);
+void	ga_population_set_allele_min_double(   population            *pop,
+		                       const double          value);
+void	ga_population_set_allele_max_double(   population            *pop,
+		                       const double          value);
 double ga_population_get_crossover(population       *pop);
 double ga_population_get_mutation(population       *pop);
 double ga_population_get_migration(population       *pop);
 double ga_population_get_allele_mutation_prob(population       *pop);
+int ga_population_get_allele_min_integer(population       *pop);
+int ga_population_get_allele_max_integer(population       *pop);
+double ga_population_get_allele_min_double(population       *pop);
+double ga_population_get_allele_max_double(population       *pop);
 ga_scheme_type ga_population_get_scheme(population       *pop);
 ga_elitism_type ga_population_get_elitism(population       *pop);
 population *ga_transcend(unsigned int id);

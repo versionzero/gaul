@@ -10,7 +10,7 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1849     |  Linked-list chromosome.
+ 0.1849     |  Operator functions for the linked-list chromosome.
             |  Linked-list chromosome example.
             |  More on-line/off-line statistics options.
             |  Use MemChunks in chromosome allocation, where appropriate.

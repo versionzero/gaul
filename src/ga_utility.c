@@ -29,7 +29,6 @@
 
   To do:	Population/entity iterator functions.
 		On-line and off-line performance summaries.
-		The ga_genesis_XXX() functions are bloated junk which duplicate loads of code and are a complete mess.  These need sorting out!
 
  **********************************************************************/
 
@@ -58,10 +57,10 @@ void ga_diagnostics(void)
   printf("GA_MIN_FITNESS:              %e\n", GA_MIN_FITNESS);
   printf("BYTEBITS:                    %d\n", BYTEBITS);
   printf("--- Defaults -------------------------------------------------\n");
-  printf("GA_DEFAULT_CROSSOVER_RATIO:  %d\n", GA_DEFAULT_CROSSOVER_RATIO);
-  printf("GA_DEFAULT_MUTATION_RATIO:   %d\n", GA_DEFAULT_MUTATION_RATIO);
-  printf("GA_DEFAULT_MIGRATION_RATIO:  %d\n", GA_DEFAULT_MIGRATION_RATIO);
-  printf("GA_DEFAULT_ALLELE_MUTATION_PROB: %d\n", GA_DEFAULT_ALLELE_MUTATION_PROB);
+  printf("GA_DEFAULT_CROSSOVER_RATIO:  %f\n", GA_DEFAULT_CROSSOVER_RATIO);
+  printf("GA_DEFAULT_MUTATION_RATIO:   %f\n", GA_DEFAULT_MUTATION_RATIO);
+  printf("GA_DEFAULT_MIGRATION_RATIO:  %f\n", GA_DEFAULT_MIGRATION_RATIO);
+  printf("GA_DEFAULT_ALLELE_MUTATION_PROB: %f\n", GA_DEFAULT_ALLELE_MUTATION_PROB);
   printf("--- Data structures ------------------------------------------\n");
   printf("structure                    sizeof\n");
   printf("population                   %lu\n", (unsigned long) sizeof(population));
@@ -137,7 +136,7 @@ int ga_get_patch_version( void )
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	17 Jan 2003
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 population *ga_genesis_integer(	const int		population_size,
@@ -206,6 +205,7 @@ population *ga_genesis_integer(	const int		population_size,
 /*
  * Seed the population.
  */
+#if 0
   if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
@@ -215,6 +215,7 @@ population *ga_genesis_integer(	const int		population_size,
     ga_population_seed(pop);
     plog(LOG_VERBOSE, "Genesis has occured!");
     }
+#endif
 
   return pop;
   }
@@ -301,7 +302,7 @@ population *ga_genesis_int(	const int		population_size,
 		Character-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13 Feb 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 population *ga_genesis_char(	const int		population_size,
@@ -370,6 +371,7 @@ population *ga_genesis_char(	const int		population_size,
 /*
  * Seed the population.
  */
+#if 0
   if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
@@ -379,6 +381,7 @@ population *ga_genesis_char(	const int		population_size,
     ga_population_seed(pop);
     plog(LOG_VERBOSE, "Genesis has occured!");
     }
+#endif
 
   return pop;
   }
@@ -392,7 +395,7 @@ population *ga_genesis_char(	const int		population_size,
 		Boolean-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13 Feb 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 population *ga_genesis_boolean(	const int		population_size,
@@ -461,6 +464,7 @@ population *ga_genesis_boolean(	const int		population_size,
 /*
  * Seed the population.
  */
+#if 0
   if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
@@ -470,6 +474,7 @@ population *ga_genesis_boolean(	const int		population_size,
     ga_population_seed(pop);
     plog(LOG_VERBOSE, "Genesis has occured!");
     }
+#endif
 
   return pop;
   }
@@ -483,7 +488,7 @@ population *ga_genesis_boolean(	const int		population_size,
 		Double precision real-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13 Feb 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 population *ga_genesis_double(	const int		population_size,
@@ -552,6 +557,7 @@ population *ga_genesis_double(	const int		population_size,
 /*
  * Seed the population.
  */
+#if 0
   if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
@@ -561,6 +567,7 @@ population *ga_genesis_double(	const int		population_size,
     ga_population_seed(pop);
     plog(LOG_VERBOSE, "Genesis has occured!");
     }
+#endif
 
   return pop;
   }
@@ -574,7 +581,7 @@ population *ga_genesis_double(	const int		population_size,
 		Bitstring-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13 Feb 2002
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 population *ga_genesis_bitstring(	const int		population_size,
@@ -643,6 +650,7 @@ population *ga_genesis_bitstring(	const int		population_size,
 /*
  * Seed the population.
  */
+#if 0
   if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
@@ -652,6 +660,7 @@ population *ga_genesis_bitstring(	const int		population_size,
     ga_population_seed(pop);
     plog(LOG_VERBOSE, "Genesis has occured!");
     }
+#endif
 
   return pop;
   }
@@ -759,7 +768,7 @@ entity *ga_allele_search(	population	*pop,
   synopsis:	Dump some statistics about a population.
   parameters:	population	*pop
   return:	none
-  last updated:	16/06/01
+  last updated:	17 Feb 2005
  **********************************************************************/
 
 void ga_population_dump(population	*pop)
@@ -767,6 +776,8 @@ void ga_population_dump(population	*pop)
   printf("Population id %d\n", (int) ga_get_population_id(pop));
   printf("Max size %d Stable size %d Current size %d\n", pop->max_size, pop->stable_size, pop->size);
   printf("Crossover %f Mutation %f Migration %f\n", pop->crossover_ratio, pop->mutation_ratio, pop->migration_ratio);
+  printf("Allele mutation prob %f\n", pop->allele_mutation_prob);
+  printf("Allele ranges %d - %d %f - %f\n", pop->allele_min_integer, pop->allele_max_integer, pop->allele_min_double, pop->allele_max_double);
   printf("Chromosome length %d count %d\n", pop->len_chromosomes, pop->num_chromosomes);
   printf("Best fitness %f\n", pop->entity_iarray[0]->fitness);
 
@@ -784,9 +795,15 @@ void ga_population_dump(population	*pop)
 
 void ga_entity_dump(population *pop, entity *john)
   {
-  printf("Entity id %d rank %d\n", ga_get_entity_id(pop, john), ga_get_entity_rank(pop, john));
-  printf("Fitness %f\n", john->fitness);
-  printf("data <%s> data0 <%s> chromo <%s> chromo0 <%s>\n", john->data?"defined":"undefined", john->data!=NULL&&((SLList *)john->data)->data!=NULL?"defined":"undefined", john->chromosome?"defined":"undefined", john->chromosome!=NULL&&john->chromosome[0]!=NULL?"defined":"undefined");
+  printf( "Entity id %d rank %d\n",
+          ga_get_entity_id(pop, john),
+          ga_get_entity_rank(pop, john) );
+  printf( "Fitness %f\n", john->fitness );
+  printf( "data <%s> data0 <%s> chromo <%s> chromo0 <%s>\n",
+          john->data?"defined":"undefined",
+          john->data!=NULL&&((SLList *)john->data)->data!=NULL?"defined":"undefined",
+          john->chromosome?"defined":"undefined",
+          john->chromosome!=NULL&&john->chromosome[0]!=NULL?"defined":"undefined" );
 
   return;
   }

@@ -121,18 +121,22 @@
 /*
  * MPI message tags.
  */
-#define GA_TAG_NULL		0
+#define GA_TAG_NULL			0
 
-#define GA_TAG_NUMENTITIES	101
-#define GA_TAG_ENTITYLEN	102
-#define GA_TAG_ENTITYFITNESS	103
-#define GA_TAG_ENTITYCHROMOSOME	104
+#define GA_TAG_NUMENTITIES		101
+#define GA_TAG_ENTITYLEN		102
+#define GA_TAG_ENTITYFITNESS		103
+#define GA_TAG_ENTITYCHROMOSOME		104
 
-#define GA_TAG_POPSTABLESIZE	201
-#define GA_TAG_POPCROSSOVER	202
-#define GA_TAG_POPMUTATION	203
-#define GA_TAG_POPMIGRATION	204
-#define GA_TAG_POPALLELEMUTPROB	205
+#define GA_TAG_POPSTABLESIZE		201
+#define GA_TAG_POPCROSSOVER		202
+#define GA_TAG_POPMUTATION		203
+#define GA_TAG_POPMIGRATION		204
+#define GA_TAG_POPALLELEMUTPROB		205
+#define GA_TAG_POPALLELEMININT		206
+#define GA_TAG_POPALLELEMAXINT		207
+#define GA_TAG_POPALLELEMINDOUBLE	208
+#define GA_TAG_POPALLELEMAXDOUBLE	209
 
 /*
  * Entity Structure.
@@ -273,10 +277,19 @@ struct population_t
 
   int		num_chromosomes;	/* Number of chromosomes in genotype.  FIXME: should be an array of lengths. */
   int		len_chromosomes;	/* Maximum length of each chromosome. */
+  
   vpointer	data;			/* User data. */
 
   int		select_state;		/* Available to selection algorithms. */
   ga_selectdata_t	selectdata;	/* State values for built-in selection operators. */
+
+/*
+ * Special parameters for particular built-in GA operators.
+ * FIXME: I don't like how this is currently implemented; need a more
+ * elegant approach.
+ */
+  int		allele_min_integer, allele_max_integer;	/* Range for "integer" alleles. */
+  double	allele_min_double, allele_max_double;	/* Range for "double" alleles. */
 
 /*
  * Evolutionary parameters.
@@ -365,6 +378,11 @@ struct population_t
  * operation (only for certain mutation functions).
  */
 #define GA_DEFAULT_ALLELE_MUTATION_PROB	0.02
+
+/*
+ * A private prototype.
+ */
+boolean gaul_population_fill(population *pop, int num);
 
 /* Final includes. */
 #include "gaul/ga_utility.h"	/* Hmm. */

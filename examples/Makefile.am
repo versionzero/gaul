@@ -35,13 +35,14 @@ INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/
 bin_PROGRAMS = \
 	test_ga test_simplex test_sd \
 	fitting fitting_simplex fitting_sd \
-	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
+	pingpong pingpong9 \
+	pingpong_tabu pingpong_tabu2 pingpong_sa \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	royalroad_mutation_prob_demo \
 	onemax \
-	all5s \
+	all5s all5s_allele_ranges \
 	struggle \
 	struggle_forked struggle_threaded \
 	struggle_mp struggle_mpi \
@@ -60,6 +61,7 @@ fitting_SOURCES = fitting.c
 fitting_simplex_SOURCES = fitting_simplex.c
 fitting_sd_SOURCES = fitting_sd.c
 pingpong_SOURCES = pingpong.c
+pingpong9_SOURCES = pingpong9.c
 pingpong_tabu_SOURCES = pingpong_tabu.c
 pingpong_tabu2_SOURCES = pingpong_tabu2.c
 pingpong_sa_SOURCES = pingpong_sa.c
@@ -74,6 +76,7 @@ royalroad_ss_SOURCES = royalroad_ss.c
 royalroad_mutation_prob_demo_SOURCES = royalroad_mutation_prob_demo.c
 onemax_SOURCES = onemax.c
 all5s_SOURCES = all5s.c
+all5s_allele_ranges_SOURCES = all5s_allele_ranges.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
 struggle_mpi_SOURCES = struggle_mpi.c
@@ -107,6 +110,7 @@ fitting_DEPENDENCIES = ${DEPENDENCIES}
 fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
 fitting_sd_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
+pingpong9_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
@@ -121,6 +125,7 @@ royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_mutation_prob_demo_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
 all5s_DEPENDENCIES = ${DEPENDENCIES}
+all5s_allele_ranges_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -147,6 +152,7 @@ fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong9_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
@@ -161,6 +167,7 @@ royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_mutation_prob_demo_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+all5s_allele_ranges_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@

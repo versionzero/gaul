@@ -24,6 +24,8 @@ Changes since release 0.1847:
 - The default crossover, mutation and migration ratios are now 0.9, 0.1 and 0.1, respectively, instead of all being 1.0.
 - It is no longer essential for ga_population_set_parameters() (or any equivalent) to be called prior to any of the evolution functions.
 - No longer include the obsolete values.h header.
+- Allow user to specify ranges for integer and double-precision chromosomes without creating custom chromosomes, along with example for demonstration examples/all5s_allele_ranges.c.
+- Move location of the actual population seeding process from the genesis routines, to the evolution routines.  This has the benefit of GAUL now automatically seeding populations if user doesn't use the genesis or seed functions.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

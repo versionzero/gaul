@@ -225,6 +225,10 @@ boolean ga_population_write(population *pop, char *fname)
   fwrite(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->migration_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->allele_mutation_prob), sizeof(double), 1, fp);
+  fwrite(&(pop->allele_min_integer), sizeof(int), 1, fp);
+  fwrite(&(pop->allele_max_integer), sizeof(int), 1, fp);
+  fwrite(&(pop->allele_min_double), sizeof(double), 1, fp);
+  fwrite(&(pop->allele_max_double), sizeof(double), 1, fp);
   fwrite(&(pop->scheme), sizeof(int), 1, fp);
   fwrite(&(pop->elitism), sizeof(int), 1, fp);
 
@@ -357,6 +361,14 @@ boolean ga_population_write(population *pop, char *fname)
   if ( WriteFile(file, &(pop->migration_ratio), sizeof(double), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
   if ( WriteFile(file, &(pop->allele_mutation_prob), sizeof(double), &nwrote, NULL)==0 )
+    dief("Error writing %d\n", GetLastError());
+  if ( WriteFile(file, &(pop->allele_min_integer), sizeof(int), &nwrote, NULL)==0 )
+    dief("Error writing %d\n", GetLastError());
+  if ( WriteFile(file, &(pop->allele_max_integer), sizeof(int), &nwrote, NULL)==0 )
+    dief("Error writing %d\n", GetLastError());
+  if ( WriteFile(file, &(pop->allele_min_double), sizeof(double), &nwrote, NULL)==0 )
+    dief("Error writing %d\n", GetLastError());
+  if ( WriteFile(file, &(pop->allele_max_double), sizeof(double), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
   if ( WriteFile(file, &(pop->scheme), sizeof(int), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
@@ -511,6 +523,10 @@ population *ga_population_read(char *fname)
   fread(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fread(&(pop->migration_ratio), sizeof(double), 1, fp);
   fread(&(pop->allele_mutation_prob), sizeof(double), 1, fp);
+  fread(&(pop->allele_min_integer), sizeof(int), 1, fp);
+  fread(&(pop->allele_max_integer), sizeof(int), 1, fp);
+  fread(&(pop->allele_min_double), sizeof(double), 1, fp);
+  fread(&(pop->allele_max_double), sizeof(double), 1, fp);
   fread(&(pop->scheme), sizeof(int), 1, fp);
   fread(&(pop->elitism), sizeof(int), 1, fp);
   fread(&(pop->island), sizeof(int), 1, fp);
@@ -661,7 +677,19 @@ population *ga_population_read(char *fname)
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
   memcpy(&(pop->allele_mutation_prob), buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&(pop->allele_min_integer), buffer, sizeof(int));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&(pop->allele_max_integer), buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&(pop->allele_min_double), buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&(pop->allele_max_double), buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
   memcpy(&(pop->scheme), buffer, sizeof(int));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)

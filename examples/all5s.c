@@ -28,10 +28,13 @@
   Synopsis:	Test/example program for GAUL.
 
 		This searches for a set of values all equalling '5', 
-		with allowed bounds of 0 to 10 inclusive.
+		with allowed bounds of 0 to 10 inclusive as imposed
+		by custom chromosomes.
+
 		It is an example to demonstrate how to impose bounds
 		on the chromosome values by using custom seed and
-		mutation operator functions.
+		mutation operator functions.  Compare this to the
+		accompanying all5s_allele_ranges.c
 
  **********************************************************************/
 

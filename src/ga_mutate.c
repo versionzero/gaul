@@ -40,7 +40,7 @@
 		allele is cycled.
   parameters:
   return:
-  last updated: 01/09/00
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_integer_singlepoint_drift( population *pop,
@@ -79,8 +79,10 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
  */
   ((int *)son->chromosome[chromo])[point] += dir;
 
-  if (((int *)son->chromosome[chromo])[point]==RAND_MAX) ((int *)son->chromosome[chromo])[point]=0;
-  if (((int *)son->chromosome[chromo])[point]==-1) ((int *)son->chromosome[chromo])[point]=RAND_MAX-1;
+  if (((int *)son->chromosome[chromo])[point] > pop->allele_max_integer)
+    ((int *)son->chromosome[chromo])[point] = pop->allele_min_integer;
+  if (((int *)son->chromosome[chromo])[point] < pop->allele_min_integer)
+    ((int *)son->chromosome[chromo])[point] = pop->allele_max_integer;
 
   return;
   }
@@ -92,7 +94,7 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
 		allele is randomized.
   parameters:
   return:
-  last updated: 01/09/00
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_integer_singlepoint_randomize( population *pop,
@@ -123,7 +125,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
       }
     }
 
-  ((int *)son->chromosome[chromo])[point] = (int) random_int(RAND_MAX);
+  ((int *)son->chromosome[chromo])[point] = (int) random_int_range(pop->allele_min_integer,pop->allele_max_integer+1);
 
   return;
   }
@@ -135,7 +137,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
 		to the more common 'bit-drift' mutation.
   parameters:
   return:
-  last updated: 16 Feb 2005
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
@@ -165,10 +167,10 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
         {
         ((int *)son->chromosome[chromo])[point] += dir;
 
-        if (((int *)son->chromosome[chromo])[point]==RAND_MAX)
-          ((int *)son->chromosome[chromo])[point]=0;
-        if (((int *)son->chromosome[chromo])[point]==-1)
-          ((int *)son->chromosome[chromo])[point]=RAND_MAX-1;
+        if (((int *)son->chromosome[chromo])[point] > pop->allele_max_integer)
+          ((int *)son->chromosome[chromo])[point] = pop->allele_min_integer;
+        if (((int *)son->chromosome[chromo])[point] < pop->allele_min_integer)
+          ((int *)son->chromosome[chromo])[point] = pop->allele_max_integer;
         }
       }
     }
@@ -184,7 +186,7 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
 		remaining the same.
   parameters:
   return:
-  last updated: 28 May 2002
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
@@ -214,16 +216,16 @@ void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
         case (1):
           (((int *)son->chromosome[chromo])[point])++;
 
-          if (((int *)son->chromosome[chromo])[point]==RAND_MAX)
-            ((int *)son->chromosome[chromo])[point]=0;
+          if (((int *)son->chromosome[chromo])[point] > pop->allele_max_integer)
+            ((int *)son->chromosome[chromo])[point] = pop->allele_min_integer;
 
           break;
 
         case (2):
           (((int *)son->chromosome[chromo])[point])--;
 
-          if (((int *)son->chromosome[chromo])[point]==-1)
-            ((int *)son->chromosome[chromo])[point]=RAND_MAX-1;
+          if (((int *)son->chromosome[chromo])[point] < pop->allele_min_integer)
+            ((int *)son->chromosome[chromo])[point] = pop->allele_max_integer;
 
           break;
 
@@ -824,7 +826,7 @@ void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son
 		allele is adjusted.  (Unit Gaussian distribution.)
   parameters:
   return:
-  last updated: 19 Apr 2002
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_double_singlepoint_drift( population *pop,
@@ -863,8 +865,10 @@ void ga_mutate_double_singlepoint_drift( population *pop,
  */
   ((double *)son->chromosome[chromo])[point] += amount;
 
-  if (((double *)son->chromosome[chromo])[point]>DBL_MAX-1.0) ((double *)son->chromosome[chromo])[point]=DBL_MIN+1.0;
-  if (((double *)son->chromosome[chromo])[point]<DBL_MIN+1.0) ((double *)son->chromosome[chromo])[point]=DBL_MAX-1.0;
+  if (((double *)son->chromosome[chromo])[point] > pop->allele_max_double)
+    ((double *)son->chromosome[chromo])[point] -= (pop->allele_max_double-pop->allele_min_double);
+  if (((double *)son->chromosome[chromo])[point] < pop->allele_min_double)
+    ((double *)son->chromosome[chromo])[point] += (pop->allele_max_double-pop->allele_min_double);
 
   return;
   }
@@ -920,7 +924,7 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
 		(Unit Gaussian distribution.)
   parameters:
   return:
-  last updated: 16 Feb 2005
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
@@ -928,7 +932,6 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
   int		point;		/* Index of allele to mutate */
-  double	amount=random_unit_gaussian();	/* The amount of drift. */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -948,7 +951,12 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
       {
       if (random_boolean_prob(pop->allele_mutation_prob))
         {
-        ((double *)son->chromosome[chromo])[point] += amount;
+        ((double *)son->chromosome[chromo])[point] += random_unit_gaussian();
+
+        if (((double *)son->chromosome[chromo])[point] > pop->allele_max_double)
+          ((double *)son->chromosome[chromo])[point] -= (pop->allele_max_double-pop->allele_min_double);
+        if (((double *)son->chromosome[chromo])[point] < pop->allele_min_double)
+          ((double *)son->chromosome[chromo])[point] += (pop->allele_max_double-pop->allele_min_double);
         }
       }
     }
@@ -964,7 +972,7 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
 		(Unit Gaussian distribution.)
   parameters:
   return:
-  last updated: 10 Sep 2003
+  last updated: 17 Feb 2005
  **********************************************************************/
 
 void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
@@ -983,13 +991,18 @@ void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
     }
 
 /*
- * Mutate by incrementing or decrementing alleles.
+ * Mutate by adjusting all alleles.
  */
   for (chromo=0; chromo<pop->num_chromosomes; chromo++)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
       (((double *)son->chromosome[chromo])[point]) += random_unit_gaussian();
+
+      if (((double *)son->chromosome[chromo])[point] > pop->allele_max_double)
+        ((double *)son->chromosome[chromo])[point] -= (pop->allele_max_double-pop->allele_min_double);
+      if (((double *)son->chromosome[chromo])[point] < pop->allele_min_double)
+        ((double *)son->chromosome[chromo])[point] += (pop->allele_max_double-pop->allele_min_double);
       }
     }
 

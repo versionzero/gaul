@@ -301,6 +301,10 @@ population *ga_population_new(	const int stable_size,
   newpop->elitism = GA_ELITISM_PARENTS_SURVIVE;
 
   newpop->allele_mutation_prob = GA_DEFAULT_ALLELE_MUTATION_PROB;
+  newpop->allele_min_integer = 0;
+  newpop->allele_max_integer = RAND_MAX-1;	/* this may seem like an odd choice, but it is to maintain compatiability with older versions. */
+  newpop->allele_min_double = DBL_MIN;
+  newpop->allele_max_double = DBL_MAX;
 
   THREAD_LOCK_NEW(newpop->lock);
 #if USE_CHROMO_CHUNKS == 1
@@ -430,6 +434,10 @@ population *ga_population_clone_empty(population *pop)
   newpop->elitism = pop->elitism;
 
   newpop->allele_mutation_prob = pop->allele_mutation_prob;
+  newpop->allele_min_integer = newpop->allele_min_integer;
+  newpop->allele_max_integer = newpop->allele_max_integer;
+  newpop->allele_min_double = newpop->allele_min_double;
+  newpop->allele_max_double = newpop->allele_max_double;
 
   THREAD_LOCK_NEW(newpop->lock);
 #if USE_CHROMO_CHUNKS == 1
@@ -781,15 +789,16 @@ boolean ga_entity_seed(population *pop, entity *adam)
 
 
 /**********************************************************************
-  ga_population_seed()
+  gaul_population_fill()
   synopsis:	Fills all entities in a population structure with
 		genes from a user-specified function.
-  parameters:	none
+  parameters:	population *pop
+		int num			Number of entities to seed.
   return:	boolean success.
-  last updated: 28/02/01
+  last updated: 17 Feb 2005
  **********************************************************************/
 
-boolean ga_population_seed(population *pop)
+boolean gaul_population_fill(population *pop, int num)
   {
   int		i;		/* Loop variables. */
   entity	*adam;		/* New population member. */
@@ -802,9 +811,9 @@ boolean ga_population_seed(population *pop)
 /* NOTE: OpenMP adjusts order of seeding operations here, and therefore alters results. */
 #pragma omp parallel for \
    if (GAUL_DETERMINISTIC_OPENMP==0) \
-   shared(pop) private(i,adam) \
+   shared(pop, num) private(i,adam) \
    schedule(static)
-  for (i=0; i<pop->stable_size; i++)
+  for (i=0; i<num; i++)
     {
 /*printf("DEBUG: ga_population_seed() parallel for %d on %d/%d.\n", i, omp_get_thread_num(), omp_get_num_threads());*/
     adam = ga_get_free_entity(pop);
@@ -812,6 +821,26 @@ boolean ga_population_seed(population *pop)
     }
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_seed()
+  synopsis:	Fills all entities in a population structure with
+		genes from a user-specified function.
+  parameters:	population
+  return:	boolean success.
+  last updated: 17 Feb 2005
+ **********************************************************************/
+
+boolean ga_population_seed(population *pop)
+  {
+  int		i;		/* Loop variables. */
+  entity	*adam;		/* New population member. */
+
+  plog(LOG_DEBUG, "Population seeding by user-defined genesis.");
+
+  return gaul_population_fill(pop, pop->stable_size);
   }
 
 
@@ -1976,6 +2005,10 @@ population *ga_population_new_receive( int src_node )
   mpi_receive(&(pop->mutation_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPMUTATION);
   mpi_receive(&(pop->migration_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPMIGRATION);
   mpi_receive(&(pop->allele_mutation_prob), 1, MPI_DOUBLE, src_node, GA_TAG_POPALLELEMUTPROB);
+  mpi_receive(&(pop->allele_min_integer), 1, MPI_INT, src_node, GA_TAG_POPALLELEMININT);
+  mpi_receive(&(pop->allele_max_integer), 1, MPI_INT, src_node, GA_TAG_POPALLELEMAXINT);
+  mpi_receive(&(pop->allele_min_double), 1, MPI_DOUBLE, src_node, GA_TAG_POPALLELEMINDOUBLE);
+  mpi_receive(&(pop->allele_max_double), 1, MPI_DOUBLE, src_node, GA_TAG_POPALLELEMAXDOUBLE);
 
   return pop;
   }
@@ -2023,6 +2056,10 @@ void ga_population_send( population *pop, int dest_node )
   MPI_Send(&(pop->mutation_ratio), 1, MPI_DOUBLE, dest_node, GA_TAG_POPMUTATION, MPI_COMM_WORLD);
   MPI_Send(&(pop->migration_ratio), 1, MPI_DOUBLE, dest_node, GA_TAG_POPMIGRATION, MPI_COMM_WORLD);
   MPI_Send(&(pop->allele_mutation_prob), 1, MPI_DOUBLE, dest_node, GA_TAG_POPALLELEMUTPROB, MPI_COMM_WORLD);
+  MPI_Send(&(pop->allele_min_integer), 1, MPI_INT, dest_node, GA_TAG_POPALLELEMININT, MPI_COMM_WORLD);
+  MPI_Send(&(pop->allele_max_integer), 1, MPI_INT, dest_node, GA_TAG_POPALLELEMAXINT, MPI_COMM_WORLD);
+  MPI_Send(&(pop->allele_min_double), 1, MPI_DOUBLE, dest_node, GA_TAG_POPALLELEMINDOUBLE, MPI_COMM_WORLD);
+  MPI_Send(&(pop->allele_max_double), 1, MPI_DOUBLE, dest_node, GA_TAG_POPALLELEMAXDOUBLE, MPI_COMM_WORLD);
 
   return;
   }
@@ -2472,6 +2509,98 @@ void ga_population_set_allele_mutation_prob(	population	*pop,
 
 
 /**********************************************************************
+  ga_population_set_allele_min_integer()
+  synopsis:	Sets the minimum value for an integer allele for a
+		population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+void ga_population_set_allele_min_integer(	population	*pop,
+					const int	value)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's minimum integer allele value = %d", value);
+
+  pop->allele_min_integer = value;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_allele_max_integer()
+  synopsis:	Sets the maximum value for an integer allele for a
+		population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+void ga_population_set_allele_max_integer(	population	*pop,
+					const int	value)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's maximum integer allele value = %d", value);
+
+  pop->allele_max_integer = value;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_allele_min_double()
+  synopsis:	Sets the minimum value for a double-precision allele
+		for a population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+void ga_population_set_allele_min_double(	population	*pop,
+					const double	value)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's minimum double allele value = %f", value);
+
+  pop->allele_min_double = value;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_allele_max_double()
+  synopsis:	Sets the maximum value for a doubleprecision allele
+		for a population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+void ga_population_set_allele_max_double(	population	*pop,
+					const double	value)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's maximum double allele value = %f", value);
+
+  pop->allele_max_double = value;
+
+  return;
+  }
+
+
+/**********************************************************************
   ga_transcend()
   synopsis:	Return a population structure to user for analysis or
 		whatever.  But remove it from the population table.
@@ -2901,7 +3030,7 @@ double ga_population_get_crossover(population	*pop)
 
 /**********************************************************************
   ga_population_get_allele_mutation_prob()
-  synopsis:	Gets the crossover rate of a population.
+  synopsis:	Gets the allele mutation rate of a population.
   parameters:
   return:
   last updated:	16 Feb 2005
@@ -2913,6 +3042,76 @@ double ga_population_get_allele_mutation_prob(population	*pop)
   if ( !pop ) die("Null pointer to population structure passed.");
 
   return pop->allele_mutation_prob;
+  }
+
+
+/**********************************************************************
+  ga_population_get_allele_min_integer()
+  synopsis:	Gets the minimum integer allele value for a population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+int ga_population_get_allele_min_integer(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->allele_min_integer;
+  }
+
+
+/**********************************************************************
+  ga_population_get_allele_max_integer()
+  synopsis:	Gets the maximum integer allele value for a population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+int ga_population_get_allele_max_integer(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->allele_max_integer;
+  }
+
+
+/**********************************************************************
+  ga_population_get_allele_min_double()
+  synopsis:	Gets the minimum double-precision allele value for a
+		population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+double ga_population_get_allele_min_double(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->allele_min_double;
+  }
+
+
+/**********************************************************************
+  ga_population_get_allele_max_double()
+  synopsis:	Gets the maximum double-precision allele value for a
+		population.
+  parameters:
+  return:
+  last updated:	17 Feb 2005
+ **********************************************************************/
+
+double ga_population_get_allele_max_double(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->allele_max_double;
   }
 
 

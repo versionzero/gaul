@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_seed - Genetic algorithm genome initialisation operators.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -123,7 +123,8 @@ boolean ga_seed_integer_random(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      ((int *)adam->chromosome[chromo])[point] = random_rand();
+      ((int *)adam->chromosome[chromo])[point] =
+        random_int_range(pop->allele_min_integer,pop->allele_max_integer);
       }
     }
 
@@ -221,7 +222,8 @@ boolean ga_seed_double_random(population *pop, entity *adam)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      ((double *)adam->chromosome[chromo])[point] = random_double_full();
+      ((double *)adam->chromosome[chromo])[point] =
+        random_double_range(pop->allele_min_double,pop->allele_max_double);
       }
     }
 
