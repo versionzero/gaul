@@ -1,5 +1,6 @@
 Changes since release 0.1847:
 - Changes required for compilation with MS VC++ - thanks to Al Cripps.
+- Added support for user defined ranking callback.
 
 Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.

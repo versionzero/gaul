@@ -339,6 +339,7 @@ struct population_t
   GAmutate			mutate;
   GAcrossover			crossover;
   GAreplace			replace;
+  GArank			rank;
 
 /*
  * Memory handling.

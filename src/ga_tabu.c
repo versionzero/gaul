@@ -310,6 +310,7 @@ int ga_tabu(	population		*pop,
   if (!pop) die("NULL pointer to population structure passed.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (!pop->tabu_params) die("ga_population_set_tabu_params(), or similar, must be used prior to ga_tabu().");
   if (!pop->tabu_params->tabu_accept) die("Population's tabu acceptance callback is undefined.");
 
@@ -374,7 +375,7 @@ int ga_tabu(	population		*pop,
       }
 
 /*
- * Sort new solutions (putative[0] will have highest fitness).
+ * Sort new solutions (putative[0] will have highest rank).
  * We assume that there are only a small(ish) number of
  * solutions and, therefore, a simple bubble sort is adequate.
  */
@@ -382,7 +383,7 @@ int ga_tabu(	population		*pop,
       {
       for (j=pop->tabu_params->search_count-1; j>=i; j--)
         {
-        if (putative[j]->fitness > putative[j-1]->fitness)
+        if ( pop->rank(pop, putative[j], pop, putative[j-1]) > 0 )
           {	/* Perform a swap. */
           tmp = putative[j];
           putative[j] = putative[j-1];
@@ -396,7 +397,7 @@ int ga_tabu(	population		*pop,
  * select the best non-tabu solution (if any).
  * If appropriate, update the tabu list.
  */
-  if (putative[0]->fitness > best->fitness)
+  if ( pop->rank(pop, putative[0], pop, best) > 0 )
     {
     tmp = best;
     best = putative[0];
@@ -440,7 +441,7 @@ int ga_tabu(	population		*pop,
  * Save the current best solution in the initial entity, if this
  * is now the best found so far.
  */
-  if ( initial->fitness<best->fitness )
+  if ( pop->rank(pop, best, pop, initial) > 0 )
     {
     ga_entity_blank(pop, initial);
     ga_entity_copy(pop, initial, best);

@@ -2401,6 +2401,7 @@ int ga_evolution(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
@@ -2514,6 +2515,7 @@ int ga_evolution_forked(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   
 /*
@@ -2661,6 +2663,7 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   
 /*
@@ -2796,6 +2799,7 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   
 /*
@@ -2970,6 +2974,7 @@ int ga_evolution_with_stats(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
   plog(LOG_WARNING, "This is a deprecated function!");
@@ -3255,6 +3260,7 @@ int ga_evolution_steady_state(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
@@ -3490,6 +3496,7 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
   plog(LOG_WARNING, "This is a deprecated function!");
@@ -4381,6 +4388,7 @@ int ga_evolution_archipelago( const int num_pops,
     if (!pop->select_two) die("Population's sexual selection callback is undefined.");
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (!pop->rank) die("Population's ranking callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /* Set current_island property. */
@@ -4523,6 +4531,7 @@ int ga_evolution_archipelago_mpi( const int num_pops,
     if (!pop->select_two) die("Population's sexual selection callback is undefined.");
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (!pop->rank) die("Population's ranking callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /* Set current_island property. */
@@ -4725,6 +4734,7 @@ int ga_evolution_archipelago_threaded( const int num_pops,
     if (!pop->select_two) die("Population's sexual selection callback is undefined.");
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (!pop->rank) die("Population's ranking callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /* Set current_island property. */
@@ -4908,6 +4918,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
     if (!pop->select_two) die("Population's sexual selection callback is undefined.");
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (!pop->rank) die("Population's ranking callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /* Set current_island property. */
@@ -5109,6 +5120,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
     if (!pop->select_two) die("Population's sexual selection callback is undefined.");
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (!pop->rank) die("Population's ranking callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /* Set current_island property. */
@@ -5311,6 +5323,7 @@ int ga_evolution_mp(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
@@ -5438,6 +5451,7 @@ int ga_evolution_mpi(	population		*pop,
   if (!pop->select_two) die("Population's sexual selection callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
+  if (!pop->rank) die("Population's ranking callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
 
 /*

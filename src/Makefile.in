@@ -19,7 +19,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -91,7 +91,7 @@ libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 	ga_compare.lo ga_core.lo ga_crossover.lo \
 	ga_deterministiccrowding.lo ga_intrinsics.lo ga_io.lo \
-	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
+	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo ga_rank.lo \
 	ga_replace.lo ga_randomsearch.lo ga_seed.lo ga_select.lo \
 	ga_sa.lo ga_similarity.lo ga_simplex.lo ga_stats.lo \
 	ga_systematicsearch.lo ga_tabu.lo ga_utility.lo
@@ -265,6 +265,7 @@ libgaul_la_SOURCES = \
     ga_mutate.c \
     ga_optim.c \
     ga_qsort.c \
+    ga_rank.c \
     ga_replace.c \
     ga_randomsearch.c \
     ga_seed.c \
@@ -381,6 +382,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_optim.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_qsort.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_randomsearch.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_rank.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_replace.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_sa.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ga_seed.Plo@am__quote@

@@ -19,7 +19,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -91,7 +91,7 @@ libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 	ga_compare.lo ga_core.lo ga_crossover.lo \
 	ga_deterministiccrowding.lo ga_intrinsics.lo ga_io.lo \
-	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
+	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo ga_rank.lo \
 	ga_replace.lo ga_randomsearch.lo ga_seed.lo ga_select.lo \
 	ga_sa.lo ga_similarity.lo ga_simplex.lo ga_stats.lo \
 	ga_systematicsearch.lo ga_tabu.lo ga_utility.lo
@@ -162,7 +162,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS =  -lpthread -lpthread -lslang -lm -lslang -lefence
+LIBS =  -lpthread -lpthread -lslang -lm -lslang
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
@@ -233,7 +233,7 @@ localstatedir = ${prefix}/var
 mandir = ${prefix}/man
 mkdir_p = mkdir -p --
 oldincludedir = /usr/include
-prefix = /usr/local
+prefix = /home/stewart
 program_transform_name = s,x,x,
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -265,6 +265,7 @@ libgaul_la_SOURCES = \
     ga_mutate.c \
     ga_optim.c \
     ga_qsort.c \
+    ga_rank.c \
     ga_replace.c \
     ga_randomsearch.c \
     ga_seed.c \
@@ -381,6 +382,7 @@ include ./$(DEPDIR)/ga_mutate.Plo
 include ./$(DEPDIR)/ga_optim.Plo
 include ./$(DEPDIR)/ga_qsort.Plo
 include ./$(DEPDIR)/ga_randomsearch.Plo
+include ./$(DEPDIR)/ga_rank.Plo
 include ./$(DEPDIR)/ga_replace.Plo
 include ./$(DEPDIR)/ga_sa.Plo
 include ./$(DEPDIR)/ga_seed.Plo

@@ -118,6 +118,15 @@ int main(int argc, char **argv)
        NULL			/* vpointer		User data */
             );
 
+    ga_population_set_parameters(
+       pop,                     /* population      *pop */
+       GA_SCHEME_DARWIN,        /* const ga_scheme_type     scheme */
+       GA_ELITISM_PARENTS_DIE,  /* const ga_elitism_type   elitism */
+       0.9,                     /* double  crossover */
+       0.2,                     /* double  mutation */
+       0.0                      /* double  migration */
+                              );
+
     ga_population_set_deterministiccrowding_parameters(
        pop,				/* population		*pop */
        ga_compare_char_hamming		/* GAcompare		Comparison function */

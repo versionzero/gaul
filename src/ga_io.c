@@ -179,7 +179,7 @@ static entity *gaul_read_entity_win32(HANDLE file, population *pop)
 		any of the userdata.
   parameters:
   return:
-  last updated: 16 Feb 2005
+  last updated: 24 Feb 2005
  **********************************************************************/
 
 #ifndef WIN32
@@ -188,9 +188,9 @@ boolean ga_population_write(population *pop, char *fname)
   FILE          *fp;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[18];			/* Array of hook indices. */
+  int		id[19];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -272,13 +272,14 @@ boolean ga_population_write(population *pop, char *fname)
   id[15] = ga_funclookup_ptr_to_id((void *)pop->mutate);
   id[16] = ga_funclookup_ptr_to_id((void *)pop->crossover);
   id[17] = ga_funclookup_ptr_to_id((void *)pop->replace);
+  id[18] = ga_funclookup_ptr_to_id((void *)pop->rank);
 
-  fwrite(id, sizeof(int), 18, fp);
+  fwrite(id, sizeof(int), 19, fp);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<18; i++)
+  for (i=0; i<19; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -311,9 +312,9 @@ boolean ga_population_write(population *pop, char *fname)
   HANDLE        file;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[18];			/* Array of hook indices. */
+  int		id[19];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
   DWORD		nwrote;			/* Number of bytes written. */
 
 /* Checks. */
@@ -415,14 +416,15 @@ boolean ga_population_write(population *pop, char *fname)
   id[15] = ga_funclookup_ptr_to_id((void *)pop->mutate);
   id[16] = ga_funclookup_ptr_to_id((void *)pop->crossover);
   id[17] = ga_funclookup_ptr_to_id((void *)pop->replace);
+  id[18] = ga_funclookup_ptr_to_id((void *)pop->rank);
 
-  if ( WriteFile(file, id, 18*sizeof(int), &nwrote, NULL)==0 )
+  if ( WriteFile(file, id, 19*sizeof(int), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<18; i++)
+  for (i=0; i<19; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -460,7 +462,7 @@ boolean ga_population_write(population *pop, char *fname)
 		ga_population_write() for details.
   parameters:	char *fname		Filename to read from.
   return:	population *pop		New population structure.
-  last updated: 16 Feb 2005
+  last updated: 24 Feb 2005
  **********************************************************************/
 
 #ifndef WIN32
@@ -471,9 +473,9 @@ population *ga_population_read(char *fname)
   FILE          *fp;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[18];			/* Array of hook indices. */
+  int		id[19];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
   char		format_str_in[32]="";	/* Input format tag. (Empty initialiser to avoid valgrind warning...) */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
 
@@ -561,11 +563,12 @@ population *ga_population_read(char *fname)
   pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
   pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
   pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
+  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[18]);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<18; i++)
+  for (i=0; i<19; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -603,9 +606,9 @@ population *ga_population_read(char *fname)
   HANDLE        file;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[18];			/* Array of hook indices. */
+  int		id[19];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
   DWORD		nread;			/* Number of bytes read. */
 
@@ -731,11 +734,12 @@ population *ga_population_read(char *fname)
   pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
   pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
   pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
+  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[18]);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<18; i++)
+  for (i=0; i<19; i++)
     if (id[i] == -1) count++;
 
   if (count>0)

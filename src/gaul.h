@@ -158,6 +158,9 @@ typedef void    (*GAmutate)(population *pop, entity *mother, entity *daughter);
 typedef void    (*GAcrossover)(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
 /* GAreplace inserts a new entity into the population. */
 typedef void    (*GAreplace)(population *pop, entity *child);
+/* GArank Compare two entities and return 1, 0, or -1, if alpha should rank higher,
+ * they should have equal rank, or beta should rank higher. */
+typedef int	(*GArank)(population *alphapop, entity *alpha, population *betapop, entity *beta);
 
 /*
  * Alternative heuristic search function operations.
@@ -169,7 +172,7 @@ typedef void    (*GAreplace)(population *pop, entity *child);
  * GAfrom_double     - Map chromosomal data from double-precision float array.
  * GAgradient        - Return array of gradients.
  * GAscan_chromosome - Produce next permutation of genome.
- * GAcompare         - Compare two entities (in either genomic or phenomic space) and return distance.
+ * GAcompare         - Compare two entities and return distance.
  */
 typedef boolean	(*GAtabu_accept)(population *pop, entity *putative, entity *tabu);
 typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
@@ -570,7 +573,7 @@ boolean ga_fitness_stats( population *pop,
 
 /*
  * Functions located in ga_compare.c:
- * (Genome comparison functions)
+ * (Entity comparison functions)
  */
 double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
 double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta);
@@ -582,6 +585,12 @@ double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta);
 double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta);
 double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta);
 double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta);
+
+/*
+ * Functions located in ga_rank.c:
+ * (Entity comparison functions)
+ */
+int ga_rank_fitness(population *alphapop, entity *alpha, population *betapop, entity *beta);
 
 /**********************************************************************
  * Include remainder of this library's headers.

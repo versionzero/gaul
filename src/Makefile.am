@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -50,6 +50,7 @@ libgaul_la_SOURCES = \
     ga_mutate.c \
     ga_optim.c \
     ga_qsort.c \
+    ga_rank.c \
     ga_replace.c \
     ga_randomsearch.c \
     ga_seed.c \

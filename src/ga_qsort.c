@@ -270,50 +270,105 @@ void sort_population(population *pop)
   timer_start();
 #endif
 
+  if (pop->rank == ga_rank_fitness)
+    {
+/*
+ * This optimised code for the typical fitness ranking method.
+ * It avoids a function call per comparision that is required in the
+ * general case.
+ */
+
 /*
  * A bi-directional bubble sort (actually called shuffle sort, apparently)
  * algorithm.  We stop when the first pop->stable_size entities are
  * definitely sorted.
- * Don't bother making any swaps when the fitnesses are within GA_TINY_DOUBLE.
  * There's an extra bubble-up at the start.
  */
 /*
-  for (k = 0 ; k < pop->size ; k++)
-    printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
+    for (k = 0 ; k < pop->size ; k++)
+      printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
 */
 
-  for (k = last ; k > first ; k--)
-    {
-    if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness+GA_TINY_DOUBLE )
-      {
-      swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
-      done = FALSE;
-      }
-    }
-  first++;	/* The first one *MUST* be correct now. */
-
-  while (done == FALSE && first <= pop->stable_size)
-    {
     for (k = last ; k > first ; k--)
       {
-      if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness+GA_TINY_DOUBLE )
+      if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness )
         {
         swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
+        done = FALSE;
         }
       }
     first++;	/* The first one *MUST* be correct now. */
 
-    done = TRUE;
-
-    for (k = first ; k < last ; k++)
+    while (done == FALSE && first <= pop->stable_size && first < last)
       {
-      if ( array_of_ptrs[k]->fitness < array_of_ptrs[k+1]->fitness-GA_TINY_DOUBLE )
+      for (k = last ; k > first ; k--)
         {
-        swap_e(array_of_ptrs[k], array_of_ptrs[k+1]);
+        if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness )
+          {
+          swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
+          }
+        }
+      first++;	/* The first one *MUST* be correct now. */
+
+      done = TRUE;
+
+      for (k = first ; k < last ; k++)
+        {
+        if ( array_of_ptrs[k]->fitness < array_of_ptrs[k+1]->fitness )
+          {
+          swap_e(array_of_ptrs[k], array_of_ptrs[k+1]);
+          done = FALSE;
+          }
+        }
+      last--;	/* The last one *MUST* be correct now. */
+      }
+    }
+  else
+    {
+/*
+ * A bi-directional bubble sort (actually called shuffle sort, apparently)
+ * algorithm.  We stop when the first pop->stable_size entities are
+ * definitely sorted.
+ * There's an extra bubble-up at the start.
+ */
+/*
+    for (k = 0 ; k < pop->size ; k++)
+      printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
+*/
+
+    for (k = last ; k > first ; k--)
+      {
+      if ( pop->rank(pop, array_of_ptrs[k], pop, array_of_ptrs[k-1]) > 0 )
+        {
+        swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
         done = FALSE;
         }
       }
-    last--;	/* The last one *MUST* be correct now. */
+    first++;	/* The first one *MUST* be correct now. */
+
+    while (done == FALSE && first <= pop->stable_size && first < last)
+      {
+      for (k = last ; k > first ; k--)
+        {
+        if ( pop->rank(pop, array_of_ptrs[k], pop, array_of_ptrs[k-1]) > 0 )
+          {
+          swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
+          }
+        }
+      first++;	/* The first one *MUST* be correct now. */
+
+      done = TRUE;
+
+      for (k = first ; k < last ; k++)
+        {
+        if ( pop->rank(pop, array_of_ptrs[k], pop, array_of_ptrs[k+1]) < 0 )
+          {
+          swap_e(array_of_ptrs[k], array_of_ptrs[k+1]);
+          done = FALSE;
+          }
+        }
+      last--;	/* The last one *MUST* be correct now. */
+      }
     }
 
 #if GA_QSORT_DEBUG>1
@@ -322,7 +377,7 @@ void sort_population(population *pop)
   for (k = 1 ; k < pop->stable_size ; k++)
     {
     printf("rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
-    if ( array_of_ptrs[k-1]->fitness < array_of_ptrs[k]->fitness )
+    if ( pop->rank(pop, array_of_ptrs[k-1]->fitness, pop, array_of_ptrs[k]->fitness) < 0 )
       {
       plog(LOG_WARNING, "Population is incorrectly ordered.");
       }

@@ -155,6 +155,7 @@ static struct func_lookup lookup[]={
 	{ "ga_seed_bitstring_random",                  (void *) ga_seed_bitstring_random },
 	{ "ga_seed_bitstring_zero",                    (void *) ga_seed_bitstring_zero },
 	{ "ga_replace_by_fitness",                     (void *) ga_replace_by_fitness },
+	{ "ga_rank_fitness",                           (void *) ga_rank_fitness },
 	{ "ga_chromosome_integer_allocate",            (void *) ga_chromosome_integer_allocate },
 	{ "ga_chromosome_integer_deallocate",          (void *) ga_chromosome_integer_deallocate },
 	{ "ga_chromosome_integer_replicate",           (void *) ga_chromosome_integer_replicate },
@@ -365,6 +366,7 @@ population *ga_population_new(	const int stable_size,
   newpop->mutate = NULL;
   newpop->crossover = NULL;
   newpop->replace = NULL;
+  newpop->rank = ga_rank_fitness;
 
 /*
  * Efficient memory chunks for chromosome handling.
@@ -468,6 +470,7 @@ population *ga_population_clone_empty(population *pop)
   newpop->mutate = pop->mutate;
   newpop->crossover = pop->crossover;
   newpop->replace = pop->replace;
+  newpop->rank = pop->rank;
 
 /*
  * Copy optional parameter data.
@@ -830,13 +833,11 @@ boolean gaul_population_fill(population *pop, int num)
 		genes from a user-specified function.
   parameters:	population
   return:	boolean success.
-  last updated: 17 Feb 2005
+  last updated: 24 Feb 2005
  **********************************************************************/
 
 boolean ga_population_seed(population *pop)
   {
-  int		i;		/* Loop variables. */
-  entity	*adam;		/* New population member. */
 
   plog(LOG_DEBUG, "Population seeding by user-defined genesis.");
 

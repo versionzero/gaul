@@ -2,7 +2,7 @@
   ga_compare.c
  **********************************************************************
 
-  ga_compare - genomic comparison routines.
+  ga_compare - Entity comparison routines.
   Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -25,7 +25,9 @@
 
  **********************************************************************
 
-  Synopsis:     Routines for comparing genomes.
+  Synopsis:     Routines for comparing entities.
+
+		These routines return a distance between two entities.
 
  **********************************************************************/
 
