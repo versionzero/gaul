@@ -67,18 +67,18 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h)
 
-AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION)
-AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION)
-AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION)
+AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION, [Major version number])
+AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION, [Minor version number])
+AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION, [Patch count])
 
 dnl Set some defines required to their default values.
 dnl FIXME: allow configuration-time modification.
-AC_DEFINE(V3_QUICK,1)
-AC_DEFINE(AVLTREE_KEY_TYPE,void *)
-AC_DEFINE_UNQUOTED(BUILD_DATE_STRING,"`date +%d/%m/%y`")
-AC_DEFINE_UNQUOTED(VERSION_STRING,"${VERSION}")
-AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS")
-AC_DEFINE_UNQUOTED(UNAME_STRING,"`uname -a`")
+AC_DEFINE(V3_QUICK, 1, [Define to skip error checking in vector routines])
+AC_DEFINE(AVLTREE_KEY_TYPE, void *, [Type of key used by AVL routines])
+AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Date of compilation])
+AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string])
+AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads])
+AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [System information])
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -142,7 +142,7 @@ AC_ARG_WITH(with_padding,
        with_padding=1)
 
 AC_MSG_CHECKING(for type of parallisation)
-AC_DEFINE(PARALLEL, 0)
+AC_DEFINE(PARALLEL, 0, [type of parallisation])
 
 if test "x$enable_threads" != "xyes"; then
   enable_threads=no

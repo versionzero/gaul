@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1838-0"
-#define BUILD_DATE_STRING "11/04/02"
+#define BUILD_DATE_STRING "16/04/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1838
 #define PATCH_VERSION 0
@@ -61,6 +61,12 @@
 
 /* #undef PACKAGE */
 
+
+/* Type of key used by AVL routines */
+#define AVLTREE_KEY_TYPE void *
+
+/* Date of compilation */
+#define BUILD_DATE_STRING "16/04/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -308,8 +314,23 @@
 /* Define if you have the `waitpid' function. */
 #define HAVE_WAITPID 1
 
+/* Major version number */
+#define MAJOR_VERSION 0
+
+/* Minor version number */
+#define MINOR_VERSION 1838
+
+/* Environment variable used to request threads */
+#define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
+
 /* Name of package */
 /* #undef PACKAGE */
+
+/* type of parallisation */
+#define PARALLEL 0
+
+/* Patch count */
+#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -335,8 +356,17 @@
 /* Define if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
+/* System information */
+#define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
+
+/* Define to skip error checking in vector routines */
+#define V3_QUICK 1
+
 /* Version number of package */
 /* #undef VERSION */
+
+/* Version string */
+#define VERSION_STRING "0.1838-0"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

@@ -61,6 +61,12 @@
 /* #undef PACKAGE */
 
 
+/* Type of key used by AVL routines */
+#undef AVLTREE_KEY_TYPE
+
+/* Date of compilation */
+#undef BUILD_DATE_STRING
+
 /* Define if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
 
@@ -307,8 +313,23 @@
 /* Define if you have the `waitpid' function. */
 #undef HAVE_WAITPID
 
+/* Major version number */
+#undef MAJOR_VERSION
+
+/* Minor version number */
+#undef MINOR_VERSION
+
+/* Environment variable used to request threads */
+#undef MPI_NUM_THREADS_ENVVAR_STRING
+
 /* Name of package */
 #undef PACKAGE
+
+/* type of parallisation */
+#undef PARALLEL
+
+/* Patch count */
+#undef PATCH_VERSION
 
 /* The size of a `char', as computed by sizeof. */
 #undef SIZEOF_CHAR
@@ -334,8 +355,17 @@
 /* Define if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
+/* System information */
+#undef UNAME_STRING
+
+/* Define to skip error checking in vector routines */
+#undef V3_QUICK
+
 /* Version number of package */
 #undef VERSION
+
+/* Version string */
+#undef VERSION_STRING
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
