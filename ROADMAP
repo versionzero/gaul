@@ -18,6 +18,7 @@ These milestone requirements are subject to change ;)
             |  Move prototypes for public functions into src/gaul.h
             |  Fully document chromosomes.
             |  Compile a native windows DLL.
+            |  Replace roulette wheel and SUS selection operators with thread-safe alternatives.
 ------------+--------------------------------------------------------
  0.1849     |  More on-line/off-line statistics options.
             |  More replacement operators.

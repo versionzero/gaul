@@ -518,6 +518,7 @@ boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Apr 2002
@@ -576,6 +577,7 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 		negative fitness scores.  The single least fit entity
 		will never be selected, but this is not considered a
 		problem.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Apr 2002
@@ -638,6 +640,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
                 Mother and father may be the same.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Apr 2002
@@ -716,6 +719,7 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 		will never be selected, but this is not considered a
 		problem.
                 Mother and father may be the same.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Apr 2002
@@ -791,6 +795,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Jun 2002
@@ -853,6 +858,7 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 11 Jun 2002
@@ -941,6 +947,7 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 23 Mar 2004
@@ -1003,6 +1010,7 @@ boolean ga_select_one_sussq(population *pop, entity **mother)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
+		FIXME:	Not thread safe.
   parameters:
   return:	
   last updated: 23 Mar 2004
