@@ -151,6 +151,8 @@ static void gaul_crossover(population *pop)
 
   plog(LOG_VERBOSE, "*** Mating cycle ***");
 
+  if (pop->crossover_ratio <= 0.0) return;
+
   pop->select_state = 0;
 
   /* Select pairs of entities to mate via crossover. */
@@ -193,6 +195,8 @@ static void gaul_mutation(population *pop)
   entity	*daughter;		/* Child entities. */
 
   plog(LOG_VERBOSE, "*** Mutation cycle ***");
+
+  if (pop->mutation_ratio <= 0.0) return;
 
   pop->select_state = 0;
 
