@@ -482,7 +482,7 @@ s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t
 s,@AWK@,gawk,;t t
 s,@SET_MAKE@,,;t t
 s,@CC@,gcc,;t t
-s,@CFLAGS@,-g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro,;t t
+s,@CFLAGS@,-g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/,;t t
 s,@LDFLAGS@,,;t t
 s,@CPPFLAGS@,,;t t
 s,@ac_ct_CC@,gcc,;t t

@@ -305,7 +305,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro
+CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(liblog_util_la_SOURCES) \
 	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
 	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \

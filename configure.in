@@ -493,8 +493,7 @@ AC_C_CONST
 AC_STRUCT_TM
 
 dnl Get includes setup correctly.
-INCLUDES="$INCLUDES -I../util/"
-CFLAGS="$CFLAGS -I../util/ -I../src/" # FIXME: Kludge!
+INCLUDE="$INCLUDE -I../util/ -I../src/ -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -670,6 +669,9 @@ temp=`make -version -f \dev\null 2>&1 | grep GNU`
 if test "x$temp" = "x"; then
   AC_MSG_WARN([You are advised to use GNU Make when compiling GAUL])
 fi
+
+# Where the linker must look!
+CFLAGS="$CFLAGS $INCLUDE"
 
 AC_OUTPUT(
            Makefile

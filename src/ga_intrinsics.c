@@ -2,7 +2,7 @@
   ga_intrinsics.c
  **********************************************************************
 
-  ga_intrinics - Genetic algorithm routine slangs.
+  ga_intrinics - Genetic algorithm routine intrinsics.
   Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:

@@ -2,7 +2,7 @@
   ga_intrinsics.h
  **********************************************************************
 
-  ga_intrinsics - Genetic algorithm routine slangs.
+  ga_intrinsics - Genetic algorithm routine intrinsics.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -41,7 +41,7 @@
 #include "ga_utility.h"
 
 #if HAVE_SLANG == 1
-#include <slang/slang.h>
+#include <slang.h>
 #endif
 
 /*

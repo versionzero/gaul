@@ -10373,8 +10373,7 @@ _ACEOF
 fi
 
 
-INCLUDES="$INCLUDES -I../util/"
-CFLAGS="$CFLAGS -I../util/ -I../src/" # FIXME: Kludge!
+INCLUDE="$INCLUDE -I../util/ -I../src/ -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
 # Checks for header files.
 echo "$as_me:$LINENO: checking for ANSI C header files" >&5
@@ -11636,6 +11635,9 @@ if test "x$temp" = "x"; then
   { echo "$as_me:$LINENO: WARNING: You are advised to use GNU Make when compiling GAUL" >&5
 echo "$as_me: WARNING: You are advised to use GNU Make when compiling GAUL" >&2;}
 fi
+
+# Where the linker must look!
+CFLAGS="$CFLAGS $INCLUDE"
 
 ac_config_files="$ac_config_files Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile"
 cat >confcache <<\_ACEOF
