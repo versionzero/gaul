@@ -1,0 +1,263 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="Home of GAUL: Genetic Algorithm Utility Library">
+   <meta name="keywords" content="free, software, unix, linux, GNU, open source, download, genetic algorithm, GA, library, code, C, GPL">
+   <meta name="author" content="Stewart Adcock">
+   <meta name="copyright" content="© Stewart Adcock">
+   <meta name="generator" content="vi">
+   <meta http-equiv="Content-Language" content="en">
+   <title>GAUL: Genetic Algorithm Utility Library</title>
+</head>
+<body text="#000000" bgcolor="#AAAADD" link="#222288" vlink="#222288" alink="#9999FF">
+
+<p><a NAME="top"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr>
+    <td COLSPAN=3 ALIGN=CENTER BGCOLOR="#000000"><font face="Arial,Helvetica" color="#FFFFFF"> [ <a href="#introduction"><font face="Arial,Helvetica" color="#FFFFFF">Intro</font></a> | <a href="#resources"><font face="Arial,Helvetica" color="#FFFFFF">Resources</font></a> | <a href="#bugs"><font face="Arial,Helvetica" color="#FFFFFF">Bugs</font></a> | <a href="#distribution"><font face="Arial,Helvetica" color="#FFFFFF">Download</font></a>] </font></b></td>
+  </tr>
+</table>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr>
+    <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Welcome to the GAUL home page</font></b></td>
+  </tr>
+</table>
+</p>
+
+<p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+  <tr>
+    <td ROWSPAN=7 COLSPAN=1 VALIGN=TOP><img SRC="gaul_starburst_245x189.jpeg" ALT="GAUL logo" height=189 width=245 VALIGN=TOP></td>
+    <td COLSPAN=2><p><center><b><i>GAUL is an open source programming library, released under the GNU General Public License.&nbsp; It is designed to assist in the development of code that requires the use of genetic algorithms.</i></b></center></p></td>
+  </tr>
+
+  <tr><td></td><td></td></tr>
+
+  <tr>
+    <td><font size="-1">Stable Version:&nbsp;</font></td>
+    <td><font size="-1"><b>Sorry, none yet.</b>&nbsp;</font></td>
+  </tr>
+
+  <tr>
+    <td><font size="-1">Distribution License:&nbsp;</font></td>
+    <td><font size="-1"><a href="http://www.gnu.org/">GNU</a> <b><a href="license.html">General Public License</a></b></font></td>
+  </tr>
+
+  <tr>
+    <td><font size="-1">Latest Changes:&nbsp;</font></td>
+    <td><font size="-1"><b><a href="cgi-bin/gaulchanges.pl">ChangeLog</a></b></font></td>
+  </tr>
+
+  <tr>
+    <td><font size="-1">Development home:&nbsp;</font></td>
+    <td><font size="-1"><b><a href="http://sourceforge.net/projects/gaul/">http://souceforge.net/projects/gaul</a></b></font></td>
+  </tr>
+
+  <tr>
+    <td><font size="-1">CVS server:&nbsp;</font></td>
+    <td><font size="-1"><b>cvs.gaul.souceforge.net</b></font></td>
+  </tr>
+
+  <tr><td></td><td></td></tr>
+
+  <tr>
+     <td COLSPAN=3><center>Copyright &copy; 2000-2001 <a href="mailto:gaul@linux-domain.com">Stewart Adcock</a>.</center></td>
+  </tr>
+</table>
+</p>
+
+<!-- Introduction -->
+<p><a NAME="introduction"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+  <tr>
+  <td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Introduction</font></b></td>
+  </tr>
+</table>
+</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+<tr>
+<td VALIGN=TOP>
+<p>The Genetic Algorithm Utility Library (or, GAUL for short) is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms.  It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm.  Additional stochastic algorithms are provided for comparison to the genetic algorithms.  Much of the functionality is also available through a simple SLang interface.</p>
+<p>
+<lu>
+  <li>Darwinian, Lamarckian or Baldwinian evolutionary schemes.</li>
+  <li>Several built-in crossover, mutation and selection operators.</li>
+  <li>Allows user-defined crossover, mutation and selection operators.</li>
+  <li>Additional, non-GA, algorithms for local optimisation or comparitive purposes.</li>
+  <li>Availability of multiple chromosome genomes.</li>
+  <li>Choice of high-level or low-level interface functions.</li>
+  <li>Trivial to extend using external code via the built-in code hooks.</li>
+  <li>May be driven by, or extended by, powerful <a href="http://www.s-lang.org">SLang</a> scripts.</li>
+</lu>
+</p>
+<p>The current primary aims of this project are to produce documentation, examples and test cases for the open-source release of GAUL.  Several new features are also planned for GAUL including wrappers to enable its use with programming languages other than C.  The open-source release of GAUL is currently not parallelised, however this will become a priority development target.</p>
+<p>The main development platform for GAUL is Linux with the gcc compiler, but in the past GAUL or its non open-source predecessor have compiled successfully on Linux using Compaq's ccc compiler, on Solaris 7 with gcc, on SGI's IRIX 6.5 using the MIPSPro C compiler and on FreeBSD with gcc.  It should be fairly trivial to use GAUL on any truely <b>POSIX</b> compliant systems.  Full use is made of the GNU maketools to aid portability issues.</p>
+</td>
+</tr>
+</table>
+</p>
+
+<!-- Resources -->
+<p><a NAME="resources"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+<tr>
+<td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Genetic Algorithm Resources</font></b></td>
+</tr>
+</table>
+</p>
+<p>Here a few few handy genetic algorithm resources:
+</p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+  <tr>
+    <td width="50%">
+      <p><b><font face="Arial,Helvetica" color="#333399">What is a GA? (Simple overviews)</font></b>
+        <lu>
+          <li><a href="http://bellatrix.pcl.ox.ac.uk/~stewart/glossary.html#ga">My glossary</a></li>
+        </lu>
+      </p>
+      <p><b><font face="Arial,Helvetica" color="#333399">What is a GA? (Detailed information)</font></b>
+        <lu>
+          <li><a href="http://bellatrix.pcl.ox.ac.uk/~stewart/gafaq/part1/index.html">The GA FAQ.</a></li>
+        </lu>
+      </p>
+      <p><b><font face="Arial,Helvetica" color="#333399">Other GA codes.</font></b>
+        <lu>
+          <li><a href="http://GARAGe.cps.msu.edu/">Gallops</a> - C code organised in a similar fashion to the code in Goldberg's book.</li>
+          <li><a href="http://www.trajan-software.com/sugal/">Sugal</a></li>
+          <li><a href="http://lancet.mit.edu/ga/">GAlib</a> - A C++ library of genetic algorithm objects.</li>
+        </lu>
+      </p>
+      <p><b><font face="Arial,Helvetica" color="#333399">Other GA Resource lists.</font></b>
+        <lu>
+          <li><a href="http://www.aic.nrl.navy.mil/galist">GA-List</a> - A huge list of GA resources.</li>
+          <li><a href="http://alife.santafe.edu">ALife Online</a> - GA and artifical life information.</li>
+        </lu>
+      </p>
+    </td>
+    <td width="50%">
+      <p><b><font face="Arial,Helvetica" color="#333399">Books about GAs.</font></b>
+        <lu>
+          <li><a href="books.html">Local list of books</a></li>
+          <li>Amazon.com / Amazon.co.uk</li>
+          <li>Bol.com</li>
+        </lu>
+      </p>
+      <p><b><font face="Arial,Helvetica" color="#333399">Applications of GAs.</font></b>
+        <lu>
+          <li>Ludi - <i>De novo</i> molecular design.</li>
+          <li><a href="http://www.scripps.edu/pub/olson-web/doc/autodock/">Autodock</a> - Ligand docking using a Lamarckian genetic algorithm.</li>
+          <li>Gold - More ligand docking.</li>
+          <li><a href="http://garage.cps.msu.edu/projects/biochem/biochem.html">GAs in biochemistry</a> - water site prediction, drug-design, protein folding.</li>
+        </lu>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<!-- Further information -->
+<p><a NAME="information"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+<tr>
+<td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Further Information</font></b></td>
+</tr>
+</table>
+</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+<tr>
+<td VALIGN=TOP>
+<p>A GAUL FAQ is still being written.  In the mean-time you are welcome to join the mailing list, <b>GAUL-devel@sourceforge.net</b>, hosted by SourceForge.</p>
+
+</td>
+</tr>
+</table>
+
+<!-- Bug Submission -->
+<p><a NAME="bugs"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+<tr>
+<td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Bug Submission</font></b></td>
+</tr>
+</table>
+</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+<tr>
+<td VALIGN=TOP>
+<p>GAUL is still under heavy development, and certianly far from bug free.  At the present time, the only bugs we are really interested in are those which cause crashes.  If the stable distribution crashes, then we have done something wrong.  If you find such a bug, please send details of your system, the version of GAUL that you are using and concise instructions for reproducing the crash to <a href="mailto:gaul@linux-domain.com?Subject=GAUL Bug report">gaul@linux-domain.com</a>.</p>
+</td>
+</tr>
+</table>
+
+<!-- Distribution -->
+<p><a NAME="distribution"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+<tr>
+<td ALIGN=CENTER BGCOLOR="#333399"><b><font face="Arial,Helvetica" color="#FFFFFF">Distribution</font></b></td>
+</tr>
+</table>
+</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+<tr>
+<td VALIGN=TOP>
+<p>GAUL is distributed under the terms of the GNU <a href="license.html">General Public License</a>.</p>
+
+<p>A &quot;stable&quot; version has not been released yet.  When GAUL reaches version 1.0, we will make binary and source packages available.  Until then, the latest &quot;bleeding-edge&quot; source code is available through anonymous <a href="http://bellatrix.pcl.ox.ac.uk/~stewart/glossary.html#cvs">CVS</a> hosted by SourceForge.  We wouldn't ever guarantee that this code will work correctly in all cases, but all the newly added features will be present.  To download, follow the commands below:</p>
+
+<ol>
+<li>Set the CVSROOT environment variable:
+<ul>
+<li>Using <tt>csh</tt> or <tt>tcsh</tt>:<br><font size="-1"> <tt>setenv CVSROOT :pserver:anonymous@cvs.gaul.sourceforge.net:/cvsroot/gaul</tt></font></li>
+<li>Using <tt>sh</tt> or <tt>bash</tt>:<br><font size="-1"> <tt>CVSROOT=:pserver:anonymous@cvs.gaul.sourceforge.net:/cvsroot/gaul;<br> export CVSROOT</tt></font></li>
+</ul></li>
+
+<li>Log in to CVS:<br>
+<font size="-1"><tt>cvs login</tt></font> Just press the 'Enter' key when prompted for a password.</li>
+
+<li>Obtain the latest code:<br>
+<font size="-1"><tt>cvs -z3 co gaul</tt></font><br>
+This will update your gaul directory under the current directory with the
+changes to CVS since your last "checkout".</li>
+
+<li><p>To compile:<br> <font size="-1"><tt>./configure ; make</tt></font> whilst in the GAUL directory.</li>
+</ol>
+</p>
+
+</td>
+</tr>
+</table>
+
+<p><a NAME="top"></a>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="95%">
+  <tr>
+  <td ALIGN=CENTER BGCOLOR="#000000"><font face="Arial,Helvetica" color="#FFFFFF"> [ <a href="#introduction"><font face="Arial,Helvetica" color="#FFFFFF">Intro</font></a> | <a href="#resources"><font face="Arial,Helvetica" color="#FFFFFF">Resources</font></a> | <a href="#bugs"><font face="Arial,Helvetica" color="#FFFFFF">Bugs</font></a> | <a href="#distribution"><font face="Arial,Helvetica" color="#FFFFFF">Download</font></a>] </font></b>
+  </tr>
+</table>
+</p>
+
+<!--   Footer, Links etc.  -->
+<table BORDER=0 CELLSPACING=2 CELLPADDING=5 WIDTH="95%">
+  <tr>
+
+    <td ALIGN=CENTER></td>
+
+    <td ALIGN=CENTER>Hosted by:<br><A href="http://sourceforge.net"><IMG src="http://sourceforge.net/sflogo.php?group_id=25766" width="88" height="31" border="0" alt="SourceForge Logo"></A></td>
+
+    <td ALIGN=CENTER></td>
+  </tr>
+</table>
+</p>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="95%">
+  <tr><td><hr noshade width="100%"></td></tr>
+  <tr>
+    <td ALIGN=CENTER><font face="Arial,Helvetica" size=-1>All trademarks on this page are probably owned by their respective companies.  You can insert you own favourite disclaimer here.</font></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

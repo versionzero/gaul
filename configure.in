@@ -1,0 +1,348 @@
+dnl ***************************************************************
+dnl gaul/configure.in
+dnl ***************************************************************
+dnl
+dnl GAUL - Genetic Algorithm Utility Library.
+dnl Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+dnl
+dnl The latest version of this program should be available at:
+dnl http://www.stewart-adcock.co.uk/
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.  Alternatively, if your project
+dnl is incompatiable with the GPL, I will probably agree to requests
+dnl for permission to use the terms of any other license.
+dnl
+dnl This program is distributed in the hope that it will be useful, but
+dnl WITHOUT ANY WARRANTY WHATSOEVER.
+dnl
+dnl A full copy of the GNU General Public License should be in the file
+dnl "COPYING" provided with this distribution; if not, see:
+dnl http://www.gnu.org/
+dnl
+dnl ***************************************************************
+dnl
+dnl Last Updated:	17/05/01 SAA	GAUL now gets it's own configure.in for use on sourceforge.
+dnl			17/04/01 SAA	Preparations for module loading support.
+dnl			02/02/01 SAA	Changes due to reorganisation of ga_util/intrinsics, helga_qsort, helga_log and helga_mpi.
+dnl			29/01/01 SAA	SLang checks.
+dnl			05/01/01 SAA	Debugging ;(.
+dnl			04/01/01 SAA	First configure.in attempt.
+dnl
+dnl To do:	MPI/PVM/thread checks and configuration.
+dnl		Ability to turn off SLang stuff.
+dnl		glib-config stuff sorted in here instead of in the Makefile.am
+dnl
+dnl ***************************************************************
+
+# require autoconf 2.13
+AC_PREREQ(2.13)
+
+# init autoconf (and check for presence of helga.c)
+AC_INIT(src/ga_util.c)
+
+PACKAGE=gaul
+
+AC_CANONICAL_SYSTEM
+
+# Save this value here, since automake will set cflags later
+cflags_set=${CFLAGS+set}
+
+dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
+dnl are available for $ac_help expansion (don't we all *love* autoconf?)
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+MAJOR_VERSION=0
+MINOR_VERSION=1
+PATCH_VERSION=`date +%y%m%d`
+VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
+dnl
+AC_DIVERT_POP()dnl
+
+AC_SUBST(MAJOR_VERSION)
+AC_SUBST(MINOR_VERSION)
+AC_SUBST(PATCH_VERSION)
+AC_SUBST(VERSION)
+
+# libtool versioning
+LT_RELEASE=$MAJOR_VERSION.$MINOR_VERSION
+LT_CURRENT=0
+LT_REVISION=$PATCH_VERSION
+AC_SUBST(LT_RELEASE)
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+
+# Specify a configuration file
+AM_CONFIG_HEADER(config.h)
+
+AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION)
+AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION)
+AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION)
+
+dnl Set some defines required to their default values.
+dnl FIXME: allow configuration-time modification.
+AC_DEFINE(V3_QUICK,1)
+AC_DEFINE(PARALLEL,0)
+AC_DEFINE(AVLTREE_KEY_TYPE,void *)
+AC_DEFINE_UNQUOTED(BUILD_DATE_STRING,"`date +%d/%m/%y`")
+AC_DEFINE_UNQUOTED(VERSION_STRING,"${VERSION}")
+AC_DEFINE(HELGA_USE_SLANG,1)
+AC_DEFINE(HAVE_SLANG,1)
+AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "HELGA_NUM_THREADS")
+
+dnl Initialize libtool with module loading capability.
+AC_LIBTOOL_DLOPEN
+AC_PROG_LIBTOOL
+
+dnl Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+dnl figure debugging default, prior to $ac_help setup
+dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+if test `expr $MINOR_VERSION \% 2` = 1 ; then
+	debug_default=yes
+else
+	debug_default=minimum
+fi
+AC_DIVERT_POP()dnl
+
+dnl declare --enable-* args and collect ac_help strings
+AC_ARG_ENABLE(debug,
+       [  --enable-debug=[no/minimum/yes] turn on debugging [default=$debug_default]],,
+       enable_debug=$debug_default)
+AC_ARG_ENABLE(memory_debug,
+       [  --enable-memory-debug      turn on memory access debugging [default=no]],,
+       enable_memory_debug=no)
+AC_ARG_ENABLE(molstruct_debug,
+       [  --enable-molstruct-debug   turn on molstruct library checking [default=no]],,
+       enable_molstruct_debug=no)
+AC_ARG_ENABLE(ansi,
+       [  --enable-ansi              turn on strict ansi [default=no]],,
+       enable_ansi=no)
+AC_ARG_ENABLE(threads,
+       [  --enable-threads           turn on multi-thread support [default=no]
+                          ([=no] will override --with-threads)],,
+       enable_threads=no)
+AC_ARG_ENABLE(mpi,
+       [  --enable-mpi               turn on MPI support [default=no]
+                          ([=no] will override --with-mpi)],,
+       enable_mpi=no)
+AC_ARG_ENABLE(pvm,
+       [  --enable-pvm               turn on PVM3 support [default=no]
+                          ([=no] will override --with-pvm)],,
+       enable_pvm=no)
+AC_ARG_ENABLE(prof,
+       [  --enable-profile           turn on profiling [default=no]],,
+       enable_prof=no)
+AC_ARG_WITH(efence,
+       [  --with-efence              use Electric Fence for memory debugging ],
+       with_efence=1)
+AC_ARG_WITH(with_padding,
+       [  --with-padding             use memory padding for overflow detection ],
+       with_padding=1)
+
+AC_MSG_CHECKING(for type of parallisation)
+AC_DEFINE(PARALLEL, 0)
+
+if test "x$enable_threads" != "xyes"; then
+  enable_threads=no
+else
+  AC_DEFINE(PARALLEL, 1)
+  AC_MSG_RESULT(pthreads)
+fi
+
+if test "x$enable_mpi" != "xyes"; then
+  enable_mpi=no
+else
+  AC_DEFINE(PARALLEL, 2)
+  AC_MSG_RESULT(MPI)
+fi
+
+if test "x$enable_pvm" != "xyes"; then
+  enable_pvm=no
+else
+  AC_DEFINE(PARALLEL, 3)
+  AC_MSG_RESULT(PVM3)
+fi
+
+if test "x$enable_threads"="xno"; then
+  if test "x$enable_mpi"="xno"; then
+    if test "x$enable_pvm"="xno"; then
+      AC_MSG_RESULT(none)
+    fi
+  fi
+fi
+
+AC_MSG_CHECKING(whether to enable memory access debugging)
+if test "x$enable_memory_debug" = "xyes"; then
+  AC_DEFINE(MEMORY_ALLOC_DEBUG, 1)
+  AC_MSG_RESULT(yes - full profiling)
+else
+  AC_DEFINE(MEMORY_ALLOC_SAFE, 1)
+  AC_MSG_RESULT(no - safe wrappers only)
+fi
+
+AC_MSG_CHECKING(whether to enable general Helga debugging)
+if test "x$enable_debug" = "xyes"; then
+  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
+  AC_DEFINE(HELGA_DEBUG,2)
+  AC_DEFINE(DEBUG,2)
+  AC_MSG_RESULT(yes)
+else
+  if test "x$enable_debug" = "xno"; then
+    AC_DEFINE(HELGA_DEBUG,0)
+    AC_DEFINE(DEBUG,0)
+    AC_MSG_RESULT(no)
+  else
+    AC_DEFINE(HELGA_DEBUG,1)
+    AC_DEFINE(DEBUG,1)
+    AC_MSG_RESULT(partial)
+  fi
+fi
+
+AC_MSG_CHECKING(whether to enable molstruct library debugging)
+if test "x$enable_molstruct_debug" = "xyes"; then
+  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
+  AC_DEFINE(MOLSTRUCT_DEBUG,2)
+  AC_MSG_RESULT(yes)
+else
+  if test "x$enable_molstruct_debug" = "xno"; then
+    AC_DEFINE(MOLSTRUCT_DEBUG,0)
+    AC_MSG_RESULT(no)
+  else
+    AC_DEFINE(MOLSTRUCT_DEBUG,1)
+    AC_MSG_RESULT(partial)
+  fi
+fi
+
+AC_MSG_CHECKING(whether to enable run-time profiling)
+if test "x$enable_prof"="xno"; then
+  test "$cflags_set" = set || CFLAGS="$CFLAGS -pg"
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+dnl Whether to pad memory to detect overflows
+AC_MSG_CHECKING(whether to pad memory to detect overflows)
+if test -n "$with_padding"; then
+  AC_DEFINE(MEMORY_PADDING,1)
+  AC_MSG_RESULT(yes)
+else
+  AC_DEFINE(MEMORY_PADDING,0)
+  AC_MSG_RESULT(no)
+fi
+
+dnl Electric Fence has to be last library.
+AC_MSG_CHECKING(whether to link Electric Fence for memory debugging)
+if test -n "$with_efence"; then
+  AC_MSG_RESULT(yes)
+  AC_CHECK_LIB(efence, malloc, LIBS="$LIBS -lefence")
+else
+  AC_MSG_RESULT(no)
+fi
+
+# Check for SASA data.
+AC_CHECK_FILE(tests/sasadata, sasadata_exists=1, sasadata_exists=0)
+
+# Check for SLang.
+AC_CHECK_LIB(slang, SLang_init_slang,
+  [LIBS="$LIBS -lslang"
+   INCLUDES="$INCLUDES -I/usr/include/slang/"],
+  [AC_MSG_ERROR(HelGA requires the SLang library.  see http://space.mit.edu/pub/davis/slang/)])
+
+# Checks for programs.
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_INSTALL
+
+changequote(,)dnl
+if test "x$GCC" = "xyes"; then
+  case " $CFLAGS " in
+  *[\ \	]-Wall[\ \	]*) ;;
+  *) CFLAGS="$CFLAGS -Wall" ;;
+  esac
+
+  if test "x$enable_ansi" = "xyes"; then
+    case " $CFLAGS " in
+    *[\ \	]-ansi[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -ansi" ;;
+    esac
+
+    case " $CFLAGS " in
+    *[\ \	]-pedantic[\ \	]*) ;;
+    *) CFLAGS="$CFLAGS -pedantic" ;;
+    esac
+  fi
+fi
+changequote([,])dnl
+
+# Checks for library functions.
+AC_FUNC_VPRINTF
+
+AC_CHECK_FUNCS(atexit on_exit)
+
+AC_CHECK_SIZEOF(double, 4)
+AC_CHECK_SIZEOF(char, 1)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(void *, 4)
+
+dnl Stuff.
+AC_C_CONST
+AC_STRUCT_TM
+
+dnl Determine memory alignment characteristics.
+#HELGA_MEMORY_ALIGN
+AC_MSG_CHECKING(memory alignment)
+AC_CACHE_VAL(MEMORY_ALIGN_SIZE,
+[AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+  {
+  FILE *f=fopen("conftestval", "w");
+  if (!f) exit(1);
+  fprintf(f, "%d\n", (unsigned int) sizeof(long)>sizeof(void *)?sizeof(long):sizeof(void *));
+  exit(0);
+  }
+], MEMORY_ALIGN_SIZE=`cat conftestval`, MEMORY_ALIGN_SIZE=0, MEMORY_ALIGN_SIZE=8)])
+AC_MSG_RESULT($MEMORY_ALIGN_SIZE)
+AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, $MEMORY_ALIGN_SIZE)
+undefine([MEMORY_ALIGN_SIZE])
+
+# Checks for header files.
+#dnl header file checks
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
+                 sys/select.h sys/signal.h sys/socket.h sys/termio.h \
+                 sys/time.h sys/types.h sys/uio.h termios.h unistd.h fcntl.h)
+
+# Check for some functions, many of which helga doesn't use, but I
+# haven't gone though checking yet.
+dnl library function checks
+AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
+               memcpy ipow strchr strrchr rindex strcat strlen \
+               strcmp strncmp strcpy strncpy strtok \
+               strcasecmp strncasecmp snprintf memset \
+               memmove bcopy memrev memchr memmem memcmp \
+               strdup memdup \
+               sincos \
+               strndup strnfill strcatv strtod strsignal strrev \
+               basename readline strcspn waitpid \
+               min max \
+               snooze strerror strlcat strlcpy strstr usleep vsnprintf)
+
+AC_OUTPUT(
+           Makefile
+           util/Makefile
+           src/Makefile
+           tests/Makefile
+           docs/Makefile
+         )
+

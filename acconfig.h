@@ -1,0 +1,60 @@
+/* acconfig.h
+
+ Helga's default settings.
+
+ */
+
+@TOP@
+
+/* Other stuff */
+
+#undef MEMORY_ALLOC_DEBUG
+#undef MEMORY_ALLOC_SAFE
+#undef MEMORY_ALIGN_SIZE
+#undef MEMORY_PADDING
+
+#undef DEBUG
+#undef HELGA_DEBUG
+#undef MOLSTRUCT_DEBUG
+
+#undef VERSION
+#undef VERSION_STRING
+#undef BUILD_DATE_STRING
+#undef MAJOR_VERSION
+#undef MINOR_VERSION
+#undef PATCH_VERSION
+
+#undef AVLTREE_KEY_TYPE
+#undef PARALLEL
+#undef V3_QUICK
+#undef HELGA_USE_SLANG
+#undef HAVE_SLANG
+#undef MPI_NUM_THREADS_ENVVAR_STRING
+
+#undef HAVE_FLOAT_H
+#undef HAVE_LIMITS_H
+#undef HAVE_POLL
+#undef HAVE_PWD_H
+#undef HAVE_SYS_PARAM_H
+#undef HAVE_SYS_POLL_H
+#undef HAVE_SYS_SELECT_H
+#undef HAVE_SYS_TIME_H
+#undef HAVE_SYS_TIMES_H
+#undef HAVE_STRERROR
+#undef HAVE_STRSIGNAL
+#undef HAVE_UNISTD_H
+#undef HAVE_VALUES_H
+
+#undef NO_SYS_ERRLIST
+
+#undef SIZEOF_DOUBLE
+#undef SIZEOF_CHAR
+#undef SIZEOF_SHORT
+#undef SIZEOF_LONG
+#undef SIZEOF_INT
+#undef SIZEOF_VOID_P
+
+/* #undef PACKAGE */
+
+@BOTTOM@
+
