@@ -46,22 +46,22 @@ struct strategies_t
   };
 
 static struct strategies_t strategy[]={
-        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.3,  0.5 },
-        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.3,  0.5 },
-        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.3,  0.5 },
-        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.1,  0.4 },
-        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.1,  0.4 },
-        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.1,  0.4 },
-        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.3,  0.5 },
-        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.3,  0.5 },
-        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.3,  0.5 },
-        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.3,  0.5 },
-        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.3,  0.5 },
-        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.1,  0.4 },
-        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.1,  0.4 },
-        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.1,  0.4 },
-        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.3,  0.5 },
-        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.3,  0.5 },
+        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
+        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
+        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.5,  0.8 },
+        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
+        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
+        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.5,  0.8 },
+        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
+        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
+        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
+        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
+        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.5,  0.8 },
+        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
+        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
+        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.5,  0.8 },
+        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
+        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
         { NULL, 0, 0, 0, 0.0, 0.0 } };
 
 
@@ -99,6 +99,26 @@ boolean test_score(population *pop, entity *entity)
 boolean test_generation_callback(int generation, population *pop)
   {
 
+/*
+ * This is a easy method for implementing randomly selected
+ * scaling factor (F in original paper) for each generation, as
+ * suggested in:
+ *
+ * Karaboga D., Okdem, S. "A simple and global optimization algorithm
+ * for engineering problems: differential evolution algorithm",
+ * Elec. Engin. 12:53-60 (2004).
+ *
+ * Uncomment, if desired.
+ */
+/*
+  pop->de_params->weighting_factor = random_double_range(-2.0, 2.0);
+*/
+
+/*
+ * Write rank 1 solution every tenth generation.  Note, that this is
+ * not neccesarily the best solution because DE doesn't require the
+ * population to be sorted, as genetic algorithms usually do.
+ */
   if ( generation%10 == 0)
     printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
             generation,
@@ -180,17 +200,6 @@ int main(int argc, char **argv)
          NULL,			/* GAreplace              replace */
          NULL			/* vpointer               User data */
             );
-
-#if 0
-  ga_population_set_parameters(
-       pop,				/* population      *pop */
-       GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       0.8,				/* double  crossover */
-       0.2,				/* double  mutation */
-       0.0      		        /* double  migration */
-                              );
-#endif
 
     ga_population_set_differentialevolution_parameters(
         pop, strategy[i].strategy, strategy[i].crossover,

@@ -217,9 +217,245 @@ int ga_differentialevolution(	population		*pop,
       tmpentity = ga_entity_clone(pop, pop->entity_iarray[i]);
       n = random_int(pop->len_chromosomes);
 
+/*
+ * Note that the following code may appear bloated due to excessive
+ * extraction of branches from loops.
+ * However, this yields much more efficient code (particularly for larger
+ * chromosomes) on less-than-cutting-edge compilers.
+ */
+
       if (pop->de_params->crossover_method == GA_DE_CROSSOVER_BINOMIAL)
         {
-        die("FIXME: Differential evolution binomial crossover method not implemented.");
+        if (pop->de_params->strategy == GA_DE_STRATEGY_BEST)
+          {
+          if (pop->de_params->num_perturbed == 1)
+            { /* DE/best/1/bin */
+
+            _gaul_pick_random_entities(permutation, 2, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else if (pop->de_params->num_perturbed == 2)
+            { /* DE/best/2/bin */
+
+            _gaul_pick_random_entities(permutation, 4, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else if (pop->de_params->num_perturbed == 3)
+            { /* DE/best/3/exp */
+
+            _gaul_pick_random_entities(permutation, 6, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
+
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else
+            {
+            die("Invalid differential evolution selection number.");
+            }
+          }
+        else if (pop->de_params->strategy == GA_DE_STRATEGY_RAND)
+          {
+          if (pop->de_params->num_perturbed == 1)
+            { /* DE/rand/1/bin */
+            _gaul_pick_random_entities(permutation, 3, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else if (pop->de_params->num_perturbed == 2)
+            { /* DE/rand/2/bin */
+            _gaul_pick_random_entities(permutation, 5, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else if (pop->de_params->num_perturbed == 3)
+            { /* DE/rand/3/bin */
+            _gaul_pick_random_entities(permutation, 7, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] =
+              ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
+                                                - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] =
+                  ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                    + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
+                                                    - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else
+            {
+            die("Invalid differential evolution selection number.");
+            }
+          }
+        else if (pop->de_params->strategy == GA_DE_STRATEGY_RANDTOBEST)
+          {
+          if (pop->de_params->num_perturbed == 1)
+            { /* DE/rand-to-best/1/bin */
+            _gaul_pick_random_entities(permutation, 2, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] +=
+              pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                              - ((double *)tmpentity->chromosome[0])[n]
+                                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                              - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] +=
+                  pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                                  - ((double *)tmpentity->chromosome[0])[n]
+                                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                  - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else if (pop->de_params->num_perturbed == 2)
+            { /* DE/rand-to-best/2/bin */
+            _gaul_pick_random_entities(permutation, 4, pop->orig_size, i);
+
+            ((double *)tmpentity->chromosome[0])[n] +=
+              pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                              - ((double *)tmpentity->chromosome[0])[n]
+                                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                              + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                              - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                              - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+
+            for (L=1; L<pop->len_chromosomes; L++)
+              {
+              if ( random_boolean() )
+                ((double *)tmpentity->chromosome[0])[n] +=
+                  pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                                  - ((double *)tmpentity->chromosome[0])[n]
+                                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+
+              n = (n+1)%pop->len_chromosomes;
+              }
+
+            }
+          else
+            {
+            die("Invalid differential evolution selection number.");
+            }
+          }
+        else
+          {
+          die("Unknown differential evolution strategy.");
+          }
+        
         }
       else
         { /* pop->de_params->crossover_method == GA_DE_CROSSOVER_EXPONENTIAL */
