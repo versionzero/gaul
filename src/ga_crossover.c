@@ -104,8 +104,8 @@ static void ga_doublepoint_crossover_integer_chromosome(population *pop, int *fa
   memcpy(&(son[location1]), &(mother[location1]), (location2-location1)*sizeof(int));
   memcpy(&(daughter[location1]), &(father[location1]), (location2-location1)*sizeof(int));
 
-  memcpy(&(son[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(int));
-  memcpy(&(daughter[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(int));
+  memcpy(&(son[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(int));
+  memcpy(&(daughter[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(int));
 
   return;
   }
@@ -667,10 +667,10 @@ void ga_crossover_char_doublepoints( population *pop,
             (location2-location1)*sizeof(char) );
 
     memcpy( &(((char *)son->chromosome[i])[location2]),
-            &(((char *)mother->chromosome[i])[location2]),
+            &(((char *)father->chromosome[i])[location2]),
             (pop->len_chromosomes-location2)*sizeof(char) );
     memcpy( &(((char *)daughter->chromosome[i])[location2]),
-            &(((char *)father->chromosome[i])[location2]),
+            &(((char *)mother->chromosome[i])[location2]),
             (pop->len_chromosomes-location2)*sizeof(char) );
     }
 
@@ -760,9 +760,9 @@ void ga_crossover_bitstring_doublepoints( population *pop,
     ga_bit_copy(daughter->chromosome[i], father->chromosome[i],
                   0, 0, location1);
 
-    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
-                  location1, location1, location2-location1);
     ga_bit_copy(son->chromosome[i], father->chromosome[i],
+                  location1, location1, location2-location1);
+    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
                   location1, location1, location2-location1);
 
     ga_bit_copy(son->chromosome[i], mother->chromosome[i],
@@ -941,8 +941,8 @@ static void ga_doublepoint_crossover_double_chromosome(population *pop,
   memcpy(&(son[location1]), &(mother[location1]), (location2-location1)*sizeof(double));
   memcpy(&(daughter[location1]), &(father[location1]), (location2-location1)*sizeof(double));
 
-  memcpy(&(son[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(double));
-  memcpy(&(daughter[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(double));
+  memcpy(&(son[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(double));
+  memcpy(&(daughter[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(double));
 
   return;
   }
