@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "21/09/04"
+#define GA_BUILD_DATE_STRING "05/10/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -246,6 +246,9 @@
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
+
+/* Whether to use memory chunk handling for chromosomes. */
+#define USE_CHROMO_CHUNKS 0
 
 /* Whether OpenMP should be used. */
 #define USE_OPENMP 0

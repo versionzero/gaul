@@ -146,9 +146,9 @@ int main(int argc, char **argv)
   random_seed(20092004);
 
   pop = ga_genesis_integer(
-     20,			/* const int              population_size */
+     200,			/* const int              population_size */
      1,				/* const int              num_chromo */
-     10,			/* const int              len_chromo */
+     100,			/* const int              len_chromo */
      NULL,			/* GAgeneration_hook      generation_hook */
      NULL,			/* GAiteration_hook       iteration_hook */
      NULL,			/* GAdata_destructor      data_destructor */
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
      pop,			/* population              *pop */
-     50				/* const int               max_generations */
+     250			/* const int               max_generations */
             );
 
 /* Display final solution. */

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -35,8 +35,8 @@
 
 #include "gaul.h"
 
-boolean ga_chromosome_integer_allocate(const population *pop, entity *embryo);
-void ga_chromosome_integer_deallocate(const population *pop, entity *corpse);
+boolean ga_chromosome_integer_allocate(population *pop, entity *embryo);
+void ga_chromosome_integer_deallocate(population *pop, entity *corpse);
 void ga_chromosome_integer_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid );
@@ -44,8 +44,9 @@ unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
                                      byte **bytes, unsigned int *max_bytes);
 void ga_chromosome_integer_from_bytes(const population *pop, entity *joe, byte *bytes);
 char *ga_chromosome_integer_to_string(const population *pop, const entity *joe, char *text, size_t *textlen);
-boolean ga_chromosome_boolean_allocate(const population *pop, entity *embryo);
-void ga_chromosome_boolean_deallocate(const population *pop, entity *corpse);
+
+boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo);
+void ga_chromosome_boolean_deallocate(population *pop, entity *corpse);
 void ga_chromosome_boolean_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid );
@@ -53,8 +54,9 @@ unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes);
 void ga_chromosome_boolean_from_bytes(const population *pop, entity *joe, byte *bytes);
 char *ga_chromosome_boolean_to_string(const population *pop, const entity *joe, char *text, size_t *textlen);
-boolean ga_chromosome_double_allocate(const population *pop, entity *embryo);
-void ga_chromosome_double_deallocate(const population *pop, entity *corpse);
+
+boolean ga_chromosome_double_allocate(population *pop, entity *embryo);
+void ga_chromosome_double_deallocate(population *pop, entity *corpse);
 void ga_chromosome_double_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid );
@@ -62,8 +64,9 @@ unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes);
 void ga_chromosome_double_from_bytes(const population *pop, entity *joe, byte *bytes);
 char *ga_chromosome_double_to_string(const population *pop, const entity *joe, char *text, size_t *textlen);
-boolean ga_chromosome_char_allocate(const population *pop, entity *embryo);
-void ga_chromosome_char_deallocate(const population *pop, entity *corpse);
+
+boolean ga_chromosome_char_allocate(population *pop, entity *embryo);
+void ga_chromosome_char_deallocate(population *pop, entity *corpse);
 void ga_chromosome_char_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid );
@@ -71,12 +74,20 @@ unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes);
 void ga_chromosome_char_from_bytes(const population *pop, entity *joe, byte *bytes);
 char *ga_chromosome_char_to_string(const population *pop, const entity *joe, char *text, size_t *textlen);
-boolean ga_chromosome_bitstring_allocate(const population *pop, entity *embryo);
-void ga_chromosome_bitstring_deallocate(const population *pop, entity *corpse);
+
+boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo);
+void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse);
 void ga_chromosome_bitstring_replicate( const population *pop, entity *parent, entity *child, const int chromosomeid );
 unsigned int ga_chromosome_bitstring_to_bytes(const population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
 void ga_chromosome_bitstring_from_bytes(const population *pop, entity *joe, byte *bytes);
 char *ga_chromosome_bitstring_to_string(const population *pop, const entity *joe, char *text, size_t *textlen);
+
+boolean ga_chromosome_list_allocate(population *pop, entity *embryo);
+void ga_chromosome_list_deallocate(population *pop, entity *corpse);
+void ga_chromosome_list_replicate( const population *pop, entity *parent, entity *child, const int chromosomeid );
+unsigned int ga_chromosome_list_to_bytes(const population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+void ga_chromosome_list_from_bytes( const population *pop, entity *joe, byte *bytes );
+char *ga_chromosome_list_to_string( const population *pop, const entity *joe, char *text, size_t *textlen);
 
 #endif /* GA_CHROMO_H_INCLUDED */
 

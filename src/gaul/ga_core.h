@@ -323,7 +323,21 @@ struct population_t
   GAcrossover			crossover;
   GAreplace			replace;
 
+/*
+ * Memory handling.
+ */
+#if USE_CHROMO_CHUNKS == 1
+  MemChunk			*chromoarray_chunk;
+  MemChunk			*chromo_chunk;
+#endif
+
+/*
+ * Execution locks.
+ */
   THREAD_LOCK_DECLARE(lock);
+#if USE_CHROMO_CHUNKS == 1
+  THREAD_LOCK_DECLARE(chromo_chunk_lock);
+#endif
   };
 
 /*

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -37,6 +37,14 @@
 		ga_chromosome_XXX_to_string() - Human readable NULL-
 		   terminated string.
 
+		The chromosome types are:
+		integer - C int.
+		boolean - boolean (generally, C _Bool by default).
+		double - C double.
+		char - C char.
+		bitstring - bitstring.
+		list - generic linked-list.
+
   To do:	Will need chromosome comparison functions.
 
  **********************************************************************/
@@ -49,10 +57,10 @@
 		contents are garbage (there is no need to zero them).
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 05 Oct 2004
  **********************************************************************/
 
-boolean ga_chromosome_integer_allocate( const population *pop,
+boolean ga_chromosome_integer_allocate( population *pop,
                                         entity *embryo )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -63,8 +71,21 @@ boolean ga_chromosome_integer_allocate( const population *pop,
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
+#if USE_CHROMO_CHUNKS == 1
+  THREAD_LOCK(pop->chromo_chunk_lock);
+  if (!pop->chromo_chunk)
+    {
+    pop->chromoarray_chunk = mem_chunk_new(pop->num_chromosomes*sizeof(int *), 1024);
+    pop->chromo_chunk = mem_chunk_new(pop->num_chromosomes*pop->len_chromosomes*sizeof(int), 2048); 
+    }
+
+  embryo->chromosome = mem_chunk_alloc(pop->chromoarray_chunk);
+  embryo->chromosome[0] = mem_chunk_alloc(pop->chromo_chunk);
+  THREAD_UNLOCK(pop->chromo_chunk_lock);
+#else
   embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(int *));
   embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(int));
+#endif
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -77,13 +98,13 @@ boolean ga_chromosome_integer_allocate( const population *pop,
 
 /**********************************************************************
   ga_chromosome_integer_deallocate()
-  synopsis:	Dellocate the chromosomes for an entity.
+  synopsis:	Deallocate the chromosomes for an entity.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 05 Oct 2004
  **********************************************************************/
 
-void ga_chromosome_integer_deallocate( const population *pop,
+void ga_chromosome_integer_deallocate( population *pop,
                                        entity *corpse )
   {
 
@@ -93,9 +114,24 @@ void ga_chromosome_integer_deallocate( const population *pop,
   if (corpse->chromosome==NULL)
     die("This entity already contains no chromosomes.");
 
+#if USE_CHROMO_CHUNKS == 1
+  THREAD_LOCK(pop->chromo_chunk_lock);
+  mem_chunk_free(pop->chromo_chunk, corpse->chromosome[0]);
+  mem_chunk_free(pop->chromoarray_chunk, corpse->chromosome);
+  corpse->chromosome=NULL;
+
+  if (mem_chunk_isempty(pop->chromo_chunk))
+    {
+    mem_chunk_destroy(pop->chromo_chunk);
+    mem_chunk_destroy(pop->chromoarray_chunk);
+    pop->chromo_chunk = NULL;
+    }
+  THREAD_UNLOCK(pop->chromo_chunk_lock);
+#else
   s_free(corpse->chromosome[0]);
   s_free(corpse->chromosome);
   corpse->chromosome=NULL;
+#endif
 
   return;
   }
@@ -263,7 +299,7 @@ char *ga_chromosome_integer_to_string(
   last updated: 13/06/01
  **********************************************************************/
 
-boolean ga_chromosome_boolean_allocate(const population *pop, entity *embryo)
+boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -287,13 +323,13 @@ boolean ga_chromosome_boolean_allocate(const population *pop, entity *embryo)
 
 /**********************************************************************
   ga_chromosome_boolean_deallocate()
-  synopsis:	Dellocate the chromosomes for an entity.
+  synopsis:	Deallocate the chromosomes for an entity.
   parameters:
   return:
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_boolean_deallocate(const population *pop, entity *corpse)
+void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -447,7 +483,7 @@ char *ga_chromosome_boolean_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_double_allocate(const population *pop, entity *embryo)
+boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -471,13 +507,13 @@ boolean ga_chromosome_double_allocate(const population *pop, entity *embryo)
 
 /**********************************************************************
   ga_chromosome_double_deallocate()
-  synopsis:	Dellocate the chromosomes for an entity.
+  synopsis:	Deallocate the chromosomes for an entity.
   parameters:
   return:
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_deallocate(const population *pop, entity *corpse)
+void ga_chromosome_double_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -651,7 +687,7 @@ char *ga_chromosome_double_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_char_allocate(const population *pop, entity *embryo)
+boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -675,13 +711,13 @@ boolean ga_chromosome_char_allocate(const population *pop, entity *embryo)
 
 /**********************************************************************
   ga_chromosome_char_deallocate()
-  synopsis:	Dellocate the chromosomes for an entity.
+  synopsis:	Deallocate the chromosomes for an entity.
   parameters:
   return:
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_char_deallocate(const population *pop, entity *corpse)
+void ga_chromosome_char_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -833,7 +869,7 @@ char *ga_chromosome_char_to_string(
   last updated: 30/06/01
  **********************************************************************/
 
-boolean ga_chromosome_bitstring_allocate(const population *pop, entity *embryo)
+boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -854,13 +890,13 @@ boolean ga_chromosome_bitstring_allocate(const population *pop, entity *embryo)
 
 /**********************************************************************
   ga_chromosome_bitstring_deallocate()
-  synopsis:	Dellocate the chromosomes for an entity.
+  synopsis:	Deallocate the chromosomes for an entity.
   parameters:
   return:
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_deallocate(const population *pop, entity *corpse)
+void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -1019,6 +1055,179 @@ char *ga_chromosome_bitstring_to_string(
       }
     text[k] = '\0';
     }
+
+  return text;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_allocate()
+  synopsis:	Allocate the chromosomes for an entity.  Initial
+		contents are set to null.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+boolean ga_chromosome_list_allocate(population *pop, entity *embryo)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!embryo) die("Null pointer to entity structure passed.");
+
+  if (embryo->chromosome!=NULL)
+    die("This entity already contains chromosomes.");
+
+  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(DLList *));
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    embryo->chromosome[i] = NULL;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_deallocate()
+  synopsis:	Deallocate the chromosomes for an entity.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+void ga_chromosome_list_deallocate(population *pop, entity *corpse)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!corpse) die("Null pointer to entity structure passed.");
+
+  if (corpse->chromosome==NULL)
+    die("This entity already contains no chromosomes.");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    dlink_free_all(corpse->chromosome[i]);
+
+  s_free(corpse->chromosome);
+  corpse->chromosome=NULL;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_replicate()
+  synopsis:	Duplicate a chromosome exactly.
+		Currently unimplemented at present.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+void ga_chromosome_list_replicate( const population *pop,
+                                      entity *parent, entity *child,
+                                      const int chromosomeid )
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!parent || !child) die("Null pointer to entity structure passed.");
+  if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
+
+  child->chromosome[chromosomeid] = dlink_clone(
+                parent->chromosome[chromosomeid] );
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_to_bytes()
+  synopsis:	Convert to contiguous form.
+		Currently unimplemented at present.
+		FIXME: Need a user-defined callback to implement this
+		according to contents of the list.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+unsigned int ga_chromosome_list_to_bytes(const population *pop,
+                                    entity *joe,
+                                     byte **bytes, unsigned int *max_bytes)
+  {
+  int		num_bytes=0;	/* Actual size of genes. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  die("ga_chromosome_list_to_bytes() is not implemented.");
+
+  /* Avoid compiler warnings. */
+  **bytes = 0;
+  *max_bytes = 0;
+
+  return num_bytes;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_from_bytes()
+  synopsis:	Convert from contiguous form.  In this case, a trivial
+		process.
+		Currently unimplemented at present.
+		FIXME: Need a user-defined callback to implement this
+		according to contents of the list.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+void ga_chromosome_list_from_bytes( const population *pop,
+                                         entity *joe,
+                                         byte *bytes )
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (!joe->chromosome) die("Entity has no chromsomes.");
+
+  die("ga_chromosome_list_from_bytes() is not implemented.");
+
+  /* Avoid compiler warning. */
+  *bytes = 0;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_chromosome_list_to_string()
+  synopsis:	Convert to human readable form.
+		Currently unimplemented at present.
+		FIXME: Need a user-defined callback to implement this
+		according to contents of the list.
+  parameters:
+  return:
+  last updated: 05 Oct 2004
+ **********************************************************************/
+
+char *ga_chromosome_list_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!joe) die("Null pointer to entity structure passed.");
+
+  if (!text || *textlen < 14)
+    {
+    *textlen = 14;
+    text = s_realloc(text, sizeof(char) * *textlen);
+    }
+
+  strncpy(text, "<unavailable>", 14);
 
   return text;
   }

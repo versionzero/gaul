@@ -185,6 +185,12 @@ static struct func_lookup lookup[]={
 	{ "ga_chromosome_bitstring_to_bytes",          (void *) ga_chromosome_bitstring_to_bytes },
 	{ "ga_chromosome_bitstring_from_bytes",        (void *) ga_chromosome_bitstring_from_bytes },
 	{ "ga_chromosome_bitstring_to_string",         (void *) ga_chromosome_bitstring_to_string },
+	{ "ga_chromosome_list_allocate",               (void *) ga_chromosome_list_allocate },
+	{ "ga_chromosome_list_deallocate",             (void *) ga_chromosome_list_deallocate },
+	{ "ga_chromosome_list_replicate",              (void *) ga_chromosome_list_replicate },
+	{ "ga_chromosome_list_to_bytes",               (void *) ga_chromosome_list_to_bytes },
+	{ "ga_chromosome_list_from_bytes",             (void *) ga_chromosome_list_from_bytes },
+	{ "ga_chromosome_list_to_string",              (void *) ga_chromosome_list_to_string },
 	{ NULL, NULL } };
 
 
@@ -295,6 +301,9 @@ population *ga_population_new(	const int stable_size,
   newpop->elitism = GA_ELITISM_UNKNOWN;
 
   THREAD_LOCK_NEW(newpop->lock);
+#if USE_CHROMO_CHUNKS == 1
+  THREAD_LOCK_NEW(newpop->chromo_chunk_lock);
+#endif
 
   if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
@@ -350,6 +359,14 @@ population *ga_population_new(	const int stable_size,
   newpop->mutate = NULL;
   newpop->crossover = NULL;
   newpop->replace = NULL;
+
+/*
+ * Efficient memory chunks for chromosome handling.
+ */
+#if USE_CHROMO_CHUNKS == 1
+  newpop->chromoarray_chunk = NULL;
+  newpop->chromo_chunk = NULL;
+#endif
 
 /*
  * Add this new population into the population table.
@@ -412,6 +429,9 @@ population *ga_population_clone_empty(population *pop)
   newpop->elitism = pop->elitism;
 
   THREAD_LOCK_NEW(newpop->lock);
+#if USE_CHROMO_CHUNKS == 1
+  THREAD_LOCK_NEW(newpop->chromo_chunk_lock);
+#endif
 
 /*
  * Clone the callback functions.
@@ -2540,6 +2560,11 @@ boolean ga_extinction(population *extinct)
     s_free(extinct->entity_iarray);
     mem_chunk_destroy(extinct->entity_chunk);
 
+#if USE_CHROMO_CHUNKS == 1
+    mem_chunk_destroy(extinct->chromo_chunk);
+    mem_chunk_destroy(extinct->chromoarray_chunk);
+#endif
+
     if (extinct->tabu_params) s_free(extinct->tabu_params);
     if (extinct->sa_params) s_free(extinct->sa_params);
     if (extinct->dc_params) s_free(extinct->dc_params);
@@ -2550,6 +2575,9 @@ boolean ga_extinction(population *extinct)
     if (extinct->sampling_params) s_free(extinct->sampling_params);
 
     THREAD_LOCK_FREE(extinct->lock);
+#if USE_CHROMO_CHUNKS == 1
+    THREAD_LOCK_FREE(extinct->chromo_chunk_lock);
+#endif
 
     s_free(extinct);
     }

@@ -246,6 +246,9 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
+/* Whether to use memory chunk handling for chromosomes. */
+#undef USE_CHROMO_CHUNKS
+
 /* Whether OpenMP should be used. */
 #undef USE_OPENMP
 

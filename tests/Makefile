@@ -64,10 +64,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-2/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-2/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-2/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-2/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -95,7 +95,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-2/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -128,13 +128,14 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
+USE_CHROMO_CHUNKS = 0
 USE_OPENMP = 0
 V3_QUICK = 1
 VERSION = 0.1847-5
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel/gaul-devel-0.1847-2/install-sh
+install_sh = /u1/adcock/gaul-devel/gaul-devel-0.1847-5/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
