@@ -339,7 +339,7 @@ int main(int argc, char **argv)
     ga_tabu(
        pop,			/* population		*pop */
        solution,		/* entity		*initial */
-       50			/* const int		max_iterations */
+       60			/* const int		max_iterations */
            );
 
     printf("The best solution found on attempt %d with fitness %f was:\n", i, solution->fitness);
