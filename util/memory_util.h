@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Header file for memory_methods
 
-  Updated:	11 Jun 2002 SAA	No longer link the malloc.h header.
+  Updated:	18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
+  		11 Jun 2002 SAA	No longer link the malloc.h header.
   		01/03/01 SAA	Added non-standard strndup() stuff.
 		12/01/01 SAA	Tidied.
 		03/01/01 SAA	Changes for integrated memory chunk implementation.  Labels changed from "malloc()" etc. to "malloc" etc.
@@ -46,7 +47,6 @@
 #include "SAA_header.h"
 
 #include <errno.h>
-/*#include <malloc.h>*/
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,7 +58,7 @@
 
 /* Take advantage of the GNU malloc checking features. */
 #ifdef __GNUC__
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 #define	MALLOC_CHECK_	2
 #endif
 #endif
@@ -81,7 +81,7 @@ typedef enum memory_alloc_type_t
  * MEMORY_ALLOC_SAFE = use simple success test wrappers arounf system calls.
  * if both are defined, "MEMORY_ALLOC_DEBUG" over-rides.
  */
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 /* Use replacement functions with extensive checking, tracing and profiling. */
 
 #define s_malloc(X)	s_alloc_debug(		MEMORY_MALLOC,		\
@@ -127,7 +127,7 @@ typedef enum memory_alloc_type_t
                                                 __LINE__)
 
 #else /* MEMORY_ALLOC_DEBUG */
-#ifdef MEMORY_ALLOC_SAFE
+#if MEMORY_ALLOC_SAFE==1
 /* Use simple wrappers around system calls. */
 
 #define s_malloc(X)		s_malloc_safe((X),			\
@@ -168,7 +168,7 @@ void	memory_write_log(const char *text);
 void	memory_display_status(void);
 void	memory_display_table(void);
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 int	memory_total(void);
 void	memory_print_alloc_to(void *pnt);
 int	memory_alloc_to(void *pnt);
@@ -187,7 +187,7 @@ void	memory_set_verbose(int i);
 /*
  * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
  */
-#ifdef MEMORY_ALLOC_SAFE
+#if MEMORY_ALLOC_SAFE==1
 void	*s_malloc_safe(size_t, char*, char*, int);
 void	*s_calloc_safe(size_t, size_t, char*, char*, int);
 void	*s_realloc_safe(void*, size_t, char*, char*, int);
@@ -199,7 +199,7 @@ void	s_free_safe(void*, char*, char*, int);
 /*
  * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
  */
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, char*, char*, int, char*);
 void	*s_free_debug(void*, char*, char*, int);
 #endif /* MEMORY_ALLOC_DEBUG */

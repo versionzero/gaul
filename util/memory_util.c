@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -61,7 +61,8 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
-  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
+  Updated:	18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
 		09/05/01 SAA	Reimplemented memory_check_bounds_all().
 		03/05/01 SAA	Some occurances of printf(); perror(); exit(1); replaced with a dief() call.
 		01/03/01 SAA	A strndup() function added.
@@ -126,11 +127,11 @@
 /*
  * Integrated chunk handling implementation.
  */
-#if defined(MEMORY_ALLOC_DEBUG) || !defined(MEMORY_NO_CHUNKS)
+#if MEMORY_ALLOC_DEBUG==1 || !defined(MEMORY_NO_CHUNKS)
 #include "memory_chunks.c"
 #endif
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 /*
  * The memory table structure.
  */
@@ -184,7 +185,7 @@ static int	memory_count_realloc=0;	/* count total number of s_realloc() calls. *
 static int	memory_count_strdup=0;	/* count total number of s_strdup() calls. */
 static int	memory_count_free=0;	/* count total number of s_free() calls. */
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 
 static int	node_count=0;		/* counting tree nodes for debugging. */
 
@@ -354,7 +355,7 @@ void memory_fwrite_log(const char *format, ...)
   }
 
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 static boolean table_traverse(AVLKey key, vpointer data, vpointer userdata)
   {
   mem_record	*mr=data;
@@ -1134,18 +1135,18 @@ void memory_display_status()
   {
 
   printf("=== Memory Stats =============================\n");
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
   printf("Constant MEMORY_ALLOC_DEBUG:        Defined\n");
 #else
   printf("Constant MEMORY_ALLOC_DEBUG:        Undefined\n");
 #endif
-#ifdef MEMORY_ALLOC_SAFE
+#if MEMORY_ALLOC_SAFE==1
   printf("Constant MEMORY_ALLOC_SAFE:         Defined\n");
 #else
   printf("Constant MEMORY_ALLOC_SAFE:         Undefined\n");
 #endif
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
   printf("----------------------------------------------\n");
   printf("Number of entries in memory table:  %d\n", num_mem);
   printf("Number of entries in memory tree:   %d\n", avltree_num_nodes(memtree));
@@ -1166,7 +1167,7 @@ void memory_display_status()
   printf("Total number of realloc() calls:    %d\n", memory_count_realloc);
   printf("Total number of strdup() calls:     %d\n", memory_count_strdup);
   printf("Total number of free() calls:       %d\n", memory_count_free);
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
   printf("----------------------------------------------\n");
   printf("Total number of bounds violations:  %d\n", memory_count_bv);
   printf("Total number of invalid 'frees':    %d\n", memory_count_if);
@@ -1189,7 +1190,7 @@ void memory_display_status()
 void memory_display_table()
   {
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
   if (num_mem==0)
     {
     printf("Memory allocation table is empty.\n");
@@ -1213,7 +1214,7 @@ void memory_display_table()
   }
 
 
-#ifdef MEMORY_ALLOC_DEBUG
+#if MEMORY_ALLOC_DEBUG==1
 /**********************************************************************
   void memory_set_mptr_label()
   synopsis:	Sets label for a table entry
