@@ -518,17 +518,13 @@ boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Apr 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_one_roulette(population *pop, entity **mother)
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	current_expval;		/* Total of expectancy values. */
-  static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -542,26 +538,27 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    gaul_select_stats(pop, &mean, &stddev, &sum);
-    current_expval=sum/mean;
-    marker = random_int(pop->orig_size);
+    gaul_select_stats(pop, &(pop->selectdata.mean), &(pop->selectdata.stddev), &(pop->selectdata.sum));
+    pop->selectdata.current_expval = pop->selectdata.sum/pop->selectdata.mean;
+    pop->selectdata.marker = random_int(pop->orig_size);
     }
 
-  selectval = random_double(current_expval)*mean;
+  selectval = random_double(pop->selectdata.current_expval)*pop->selectdata.mean;
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= pop->entity_iarray[marker]->fitness;
+    selectval -= pop->entity_iarray[pop->selectdata.marker]->fitness;
 
     } while (selectval>0.0);
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[marker];
+  *mother = pop->entity_iarray[pop->selectdata.marker];
 
   return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
@@ -577,18 +574,13 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 		negative fitness scores.  The single least fit entity
 		will never be selected, but this is not considered a
 		problem.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Apr 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	current_expval;		/* Total of expectancy values. */
-  static double	minval;			/* Worst fitness value. */
-  static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -602,29 +594,30 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    gaul_select_stats(pop, &mean, &stddev, &sum);
-    marker = random_int(pop->orig_size);
-    minval = pop->entity_iarray[pop->orig_size-1]->fitness;
-    mean -= minval;
-    if (ISTINY(mean)) die("Degenerate population?");
-    current_expval = (sum-minval*pop->orig_size)/mean;
+    gaul_select_stats(pop, &(pop->selectdata.mean), &(pop->selectdata.stddev), &(pop->selectdata.sum));
+    pop->selectdata.marker = random_int(pop->orig_size);
+    pop->selectdata.minval = pop->entity_iarray[pop->orig_size-1]->fitness;
+    pop->selectdata.mean -= pop->selectdata.minval;
+    if (ISTINY(pop->selectdata.mean)) die("Degenerate population?");
+    pop->selectdata.current_expval = (pop->selectdata.sum-pop->selectdata.minval*pop->orig_size)/pop->selectdata.mean;
     }
 
-  selectval = random_double(current_expval);
+  selectval = random_double(pop->selectdata.current_expval);
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    selectval -= (pop->entity_iarray[pop->selectdata.marker]->fitness-pop->selectdata.minval)/pop->selectdata.mean;
 
     } while (selectval>0.0);
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[marker];
+  *mother = pop->entity_iarray[pop->selectdata.marker];
 
   return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
@@ -640,18 +633,14 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
                 Mother and father may be the same.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Apr 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_two_roulette( population *pop,
                                 entity **mother, entity **father )
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	current_expval;		/* Total of expectancy values. */
-  static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -666,9 +655,9 @@ boolean ga_select_two_roulette( population *pop,
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    gaul_select_stats(pop, &mean, &stddev, &sum);
-    current_expval=sum/mean;
-    marker = random_int(pop->orig_size);
+    gaul_select_stats(pop, &(pop->selectdata.mean), &(pop->selectdata.stddev), &(pop->selectdata.sum));
+    pop->selectdata.current_expval = pop->selectdata.sum/pop->selectdata.mean;
+    pop->selectdata.marker = random_int(pop->orig_size);
 /*
 printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum, current_expval);
 */
@@ -676,33 +665,35 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 
   pop->select_state++;
 
-  selectval = random_double(current_expval)*mean;
+  selectval = random_double(pop->selectdata.current_expval)*pop->selectdata.mean;
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= pop->entity_iarray[marker]->fitness;
+    selectval -= pop->entity_iarray[pop->selectdata.marker]->fitness;
 
     } while (selectval>0.0);
 
-  *mother = pop->entity_iarray[marker];
+  *mother = pop->entity_iarray[pop->selectdata.marker];
 
-  selectval = random_double(current_expval)*mean;
+  selectval = random_double(pop->selectdata.current_expval)*pop->selectdata.mean;
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= pop->entity_iarray[marker]->fitness;
+    selectval -= pop->entity_iarray[pop->selectdata.marker]->fitness;
 
     } while (selectval>0.0);
 
-  *father = pop->entity_iarray[marker];
+  *father = pop->entity_iarray[pop->selectdata.marker];
 
   return pop->select_state>(pop->orig_size*pop->crossover_ratio);
   }
@@ -719,19 +710,14 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 		will never be selected, but this is not considered a
 		problem.
                 Mother and father may be the same.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Apr 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_two_roulette_rebased( population *pop,
                                         entity **mother, entity **father )
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	current_expval;		/* Total of expectancy values. */
-  static double	minval;			/* Worst fitness value. */
-  static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -745,43 +731,45 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    gaul_select_stats(pop, &mean, &stddev, &sum);
-    marker = random_int(pop->orig_size);
-    minval = pop->entity_iarray[pop->orig_size-1]->fitness;
-    mean -= minval;
-    if (ISTINY(mean)) die("Degenerate population?");
-    current_expval = (sum-minval*pop->orig_size)/mean;
+    gaul_select_stats(pop, &(pop->selectdata.mean), &(pop->selectdata.stddev), &(pop->selectdata.sum));
+    pop->selectdata.marker = random_int(pop->orig_size);
+    pop->selectdata.minval = pop->entity_iarray[pop->orig_size-1]->fitness;
+    pop->selectdata.mean -= pop->selectdata.minval;
+    if (ISTINY(pop->selectdata.mean)) die("Degenerate population?");
+    pop->selectdata.current_expval = (pop->selectdata.sum-pop->selectdata.minval*pop->orig_size)/pop->selectdata.mean;
     }
 
   pop->select_state++;
 
-  selectval = random_double(current_expval);
+  selectval = random_double(pop->selectdata.current_expval);
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    selectval -= (pop->entity_iarray[pop->selectdata.marker]->fitness-pop->selectdata.minval)/pop->selectdata.mean;
 
     } while (selectval>0.0);
 
-  *mother = pop->entity_iarray[marker];
+  *mother = pop->entity_iarray[pop->selectdata.marker];
 
-  selectval = random_double(current_expval);
+  selectval = random_double(pop->selectdata.current_expval);
 
   do
     {
-    marker++;
+    pop->selectdata.marker++;
 
-    if (marker >= pop->orig_size) marker=0;
+    if (pop->selectdata.marker >= pop->orig_size)
+      pop->selectdata.marker=0;
 
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    selectval -= (pop->entity_iarray[pop->selectdata.marker]->fitness-pop->selectdata.minval)/pop->selectdata.mean;
 
     } while (selectval>0.0);
 
-  *father = pop->entity_iarray[marker];
+  *father = pop->entity_iarray[pop->selectdata.marker];
 
   return pop->select_state>(pop->orig_size*pop->crossover_ratio);
   }
@@ -795,18 +783,13 @@ boolean ga_select_two_roulette_rebased( population *pop,
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Jun 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_one_sus(population *pop, entity **mother)
   {
-  static double	offset;			/* Current pointer offset. */
-  static double	step;			/* Distance between each pointer. */
-  static int	current;		/* Currently selected individual. */
-  static int	num_to_select;		/* Number of individuals to select. */
   double	sum;			/* Fitness total. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -820,29 +803,30 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    num_to_select = (pop->orig_size*pop->mutation_ratio);
+    pop->selectdata.num_to_select = (pop->orig_size*pop->mutation_ratio);
     sum = gaul_select_sum_fitness(pop);
-    step = sum/(pop->orig_size*pop->mutation_ratio);
-    offset = random_double(step);
-    current=0;
+    pop->selectdata.step = sum/(pop->orig_size*pop->mutation_ratio);
+    pop->selectdata.offset1 = random_double(pop->selectdata.step);
+    pop->selectdata.current1=0;
     }
-  else if (pop->select_state>num_to_select)
+  else if (pop->select_state>pop->selectdata.num_to_select)
     {
     return TRUE;
     }
   else
     {
-    offset += step;
+    pop->selectdata.offset1 += pop->selectdata.step;
     }
 
-  while (offset > pop->entity_iarray[current]->fitness)
+  while (pop->selectdata.offset1 > pop->entity_iarray[pop->selectdata.current1]->fitness)
     {
-    offset -= pop->entity_iarray[current]->fitness;
-    current++;
-    if (current>=pop->orig_size) current-=pop->orig_size;
+    pop->selectdata.offset1 -= pop->entity_iarray[pop->selectdata.current1]->fitness;
+    pop->selectdata.current1++;
+    if (pop->selectdata.current1 >= pop->orig_size)
+      pop->selectdata.current1-=pop->orig_size;
     }
 
-  *mother = pop->entity_iarray[current];
+  *mother = pop->entity_iarray[pop->selectdata.current1];
 
   pop->select_state++;
 
@@ -858,19 +842,13 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 11 Jun 2002
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
   {
-  static double	offset1, offset2;	/* Current pointer offsets. */
-  static double	step;			/* Distance between each pointer. */
-  static int	current1, current2;	/* Currently selected individuals. */
-  static int	*permutation=NULL;	/* Randomly ordered indices. */
-  static int	num_to_select;		/* Number of individuals to select. */
   double	sum;			/* Fitness total. */
   int		*ordered;		/* Ordered indices. */
   int		i;			/* Loop variable over indices. */
@@ -886,51 +864,54 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    num_to_select = (pop->orig_size*pop->crossover_ratio);
+    pop->selectdata.num_to_select = (pop->orig_size*pop->crossover_ratio);
     sum = gaul_select_sum_fitness(pop);
-    step = sum/num_to_select;
-    offset1 = offset2 = random_double(step);
-    current1=0;
-    current2=0;
+    pop->selectdata.step = sum/pop->selectdata.num_to_select;
+    pop->selectdata.offset1 = pop->selectdata.offset2 = random_double(pop->selectdata.step);
+    pop->selectdata.current1=0;
+    pop->selectdata.current2=0;
+    pop->selectdata.permutation=NULL;
 
-    if (permutation!=NULL)
+/*
+    if (pop->selectdata.permutation!=NULL)
       die("Internal error.  Permutation buffer not NULL.");
+*/
 
-    permutation = s_malloc(sizeof(int)*pop->orig_size);
+    pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size);
     ordered = s_malloc(sizeof(int)*pop->orig_size);
     for (i=0; i<pop->orig_size;i++)
       ordered[i]=i;
-    random_int_permutation(pop->orig_size, ordered, permutation);
+    random_int_permutation(pop->orig_size, ordered, pop->selectdata.permutation);
     s_free(ordered);
     }
-  else if (pop->select_state>num_to_select)
+  else if (pop->select_state > pop->selectdata.num_to_select)
     {
-    s_free(permutation);
-    permutation=NULL;
+    s_free(pop->selectdata.permutation);
+    pop->selectdata.permutation=NULL;
     return TRUE;
     }
   else
     {
-    offset1 += step;
-    offset2 += step;
+    pop->selectdata.offset1 += pop->selectdata.step;
+    pop->selectdata.offset2 += pop->selectdata.step;
     }
 
-  while (offset1 > pop->entity_iarray[current1]->fitness)
+  while (pop->selectdata.offset1 > pop->entity_iarray[pop->selectdata.current1]->fitness)
     {
-    offset1 -= pop->entity_iarray[current1]->fitness;
-    current1++;
-    if (current1>=pop->orig_size) current1-=pop->orig_size;
+    pop->selectdata.offset1 -= pop->entity_iarray[pop->selectdata.current1]->fitness;
+    pop->selectdata.current1++;
+    if (pop->selectdata.current1>=pop->orig_size) pop->selectdata.current1-=pop->orig_size;
     }
 
-  while (offset2 > pop->entity_iarray[permutation[current2]]->fitness)
+  while (pop->selectdata.offset2 > pop->entity_iarray[pop->selectdata.permutation[pop->selectdata.current2]]->fitness)
     {
-    offset2 -= pop->entity_iarray[permutation[current2]]->fitness;
-    current2++;
-    if (current2>=pop->orig_size) current2-=pop->orig_size;
+    pop->selectdata.offset2 -= pop->entity_iarray[pop->selectdata.permutation[pop->selectdata.current2]]->fitness;
+    pop->selectdata.current2++;
+    if (pop->selectdata.current2>=pop->orig_size) pop->selectdata.current2-=pop->orig_size;
     }
 
-  *mother = pop->entity_iarray[current1];
-  *father = pop->entity_iarray[permutation[current2]];
+  *mother = pop->entity_iarray[pop->selectdata.current1];
+  *father = pop->entity_iarray[pop->selectdata.permutation[pop->selectdata.current2]];
 
   pop->select_state++;
 
@@ -947,18 +928,13 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 23 Mar 2004
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_one_sussq(population *pop, entity **mother)
   {
-  static double	offset;			/* Current pointer offset. */
-  static double	step;			/* Distance between each pointer. */
-  static int	current;		/* Currently selected individual. */
-  static int	num_to_select;		/* Number of individuals to select. */
   double	sum;			/* Fitness total. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -972,29 +948,29 @@ boolean ga_select_one_sussq(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    num_to_select = (pop->orig_size*pop->mutation_ratio);
+    pop->selectdata.num_to_select = (pop->orig_size*pop->mutation_ratio);
     sum = gaul_select_sum_sq_fitness(pop);
-    step = sum/(pop->orig_size*pop->mutation_ratio);
-    offset = random_double(step);
-    current=0;
+    pop->selectdata.step = sum/(pop->orig_size*pop->mutation_ratio);
+    pop->selectdata.offset1 = random_double(pop->selectdata.step);
+    pop->selectdata.current1=0;
     }
-  else if (pop->select_state>num_to_select)
+  else if (pop->select_state>pop->selectdata.num_to_select)
     {
     return TRUE;
     }
   else
     {
-    offset += step;
+    pop->selectdata.offset1 += pop->selectdata.step;
     }
 
-  while (offset > pop->entity_iarray[current]->fitness * pop->entity_iarray[current]->fitness)
+  while (pop->selectdata.offset1 > pop->entity_iarray[pop->selectdata.current1]->fitness * pop->entity_iarray[pop->selectdata.current1]->fitness)
     {
-    offset -= (pop->entity_iarray[current]->fitness * pop->entity_iarray[current]->fitness);
-    current++;
-    if (current>=pop->orig_size) current-=pop->orig_size;
+    pop->selectdata.offset1 -= (pop->entity_iarray[pop->selectdata.current1]->fitness * pop->entity_iarray[pop->selectdata.current1]->fitness);
+    pop->selectdata.current1++;
+    if (pop->selectdata.current1>=pop->orig_size) pop->selectdata.current1-=pop->orig_size;
     }
 
-  *mother = pop->entity_iarray[current];
+  *mother = pop->entity_iarray[pop->selectdata.current1];
 
   pop->select_state++;
 
@@ -1010,19 +986,13 @@ boolean ga_select_one_sussq(population *pop, entity **mother)
 		This version is for fitness values where 0.0 is bad and
 		large positive values are good.  Negative values will
 		severely mess-up the algorithm.
-		FIXME:	Not thread safe.
   parameters:
   return:	
-  last updated: 23 Mar 2004
+  last updated: 28 Jun 2004
  **********************************************************************/
 
 boolean ga_select_two_sussq(population *pop, entity **mother, entity **father)
   {
-  static double	offset1, offset2;	/* Current pointer offsets. */
-  static double	step;			/* Distance between each pointer. */
-  static int	current1, current2;	/* Currently selected individuals. */
-  static int	*permutation=NULL;	/* Randomly ordered indices. */
-  static int	num_to_select;		/* Number of individuals to select. */
   double	sum;			/* Fitness total. */
   int		*ordered;		/* Ordered indices. */
   int		i;			/* Loop variable over indices. */
@@ -1038,51 +1008,55 @@ boolean ga_select_two_sussq(population *pop, entity **mother, entity **father)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    num_to_select = (pop->orig_size*pop->crossover_ratio);
+    pop->selectdata.num_to_select = (pop->orig_size*pop->crossover_ratio);
     sum = gaul_select_sum_sq_fitness(pop);
-    step = sum/num_to_select;
-    offset1 = offset2 = random_double(step);
-    current1=0;
-    current2=0;
+    pop->selectdata.step = sum/pop->selectdata.num_to_select;
+    pop->selectdata.offset1 = pop->selectdata.offset2 = random_double(pop->selectdata.step);
+    pop->selectdata.current1=0;
+    pop->selectdata.current2=0;
+    pop->selectdata.permutation=NULL;
 
-    if (permutation!=NULL)
+/*
+    if (pop->selectdata.permutation!=NULL)
       die("Internal error.  Permutation buffer not NULL.");
+*/
 
-    permutation = s_malloc(sizeof(int)*pop->orig_size);
+    pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size);
     ordered = s_malloc(sizeof(int)*pop->orig_size);
     for (i=0; i<pop->orig_size;i++)
       ordered[i]=i;
-    random_int_permutation(pop->orig_size, ordered, permutation);
+    random_int_permutation(pop->orig_size, ordered, pop->selectdata.permutation);
     s_free(ordered);
     }
-  else if (pop->select_state>num_to_select)
+  else if (pop->select_state>pop->selectdata.num_to_select)
     {
-    s_free(permutation);
-    permutation=NULL;
+    s_free(pop->selectdata.permutation);
+    pop->selectdata.permutation=NULL;
     return TRUE;
     }
   else
     {
-    offset1 += step;
-    offset2 += step;
+    pop->selectdata.offset1 += pop->selectdata.step;
+    pop->selectdata.offset2 += pop->selectdata.step;
     }
 
-  while (offset1 > pop->entity_iarray[current1]->fitness * pop->entity_iarray[current1]->fitness)
+  while (pop->selectdata.offset1 > pop->entity_iarray[pop->selectdata.current1]->fitness * pop->entity_iarray[pop->selectdata.current1]->fitness)
     {
-    offset1 -= (pop->entity_iarray[current1]->fitness * pop->entity_iarray[current1]->fitness);
-    current1++;
-    if (current1>=pop->orig_size) current1-=pop->orig_size;
+    pop->selectdata.offset1 -= (pop->entity_iarray[pop->selectdata.current1]->fitness * pop->entity_iarray[pop->selectdata.current1]->fitness);
+    pop->selectdata.current1++;
+    if (pop->selectdata.current1>=pop->orig_size)
+      pop->selectdata.current1-=pop->orig_size;
     }
 
-  while (offset2 > pop->entity_iarray[current2]->fitness * pop->entity_iarray[current2]->fitness)
+  while (pop->selectdata.offset2 > pop->entity_iarray[pop->selectdata.current2]->fitness * pop->entity_iarray[pop->selectdata.current2]->fitness)
     {
-    offset2 -= (pop->entity_iarray[current2]->fitness * pop->entity_iarray[current2]->fitness);
-    current2++;
-    if (current2>=pop->orig_size) current2-=pop->orig_size;
+    pop->selectdata.offset2 -= (pop->entity_iarray[pop->selectdata.current2]->fitness * pop->entity_iarray[pop->selectdata.current2]->fitness);
+    pop->selectdata.current2++;
+    if (pop->selectdata.current2>=pop->orig_size) pop->selectdata.current2-=pop->orig_size;
     }
 
-  *mother = pop->entity_iarray[current1];
-  *father = pop->entity_iarray[permutation[current2]];
+  *mother = pop->entity_iarray[pop->selectdata.current1];
+  *father = pop->entity_iarray[pop->selectdata.permutation[pop->selectdata.current2]];
 
   pop->select_state++;
 

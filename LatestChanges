@@ -1,4 +1,5 @@
 Changes since release 0.1847:
+- Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

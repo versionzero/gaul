@@ -231,6 +231,24 @@ typedef struct
   int			**num_states;		/* Number of states for each allele. */
   } ga_sampling_t;
 
+/* 
+ * Internal state values for built-in selection operators.
+ * Currently used for roulette wheel and SUS selection routines.
+ */
+typedef struct
+  {
+  double	mean, stddev, sum;	/* Fitness statistics. */
+  double	current_expval;		/* Total of expectancy values. */
+  double	minval;			/* Worst fitness value. */
+  double	step;			/* Distance between each pointer. */
+  double	offset1, offset2;	/* Current pointer offsets. */
+  int		marker;			/* The roulette wheel marker. */
+  int		num_to_select;		/* Number of individuals to select. */
+  int		current1, current2;	/* Currently selected individuals. */
+  int		*permutation;		/* Randomly ordered indices. */
+  } ga_selectdata_t;
+
+
 /*
  * Population Structure.
  *
@@ -246,6 +264,7 @@ struct population_t
   int		orig_size;		/* Number of parents (entities at start of generation). */
   int		island;			/* Population's island. */
   int		free_index;		/* Next potentially free entity index. */
+  int		generation;		/* For ga_population_get_generation(). */
 
   MemChunk	*entity_chunk;		/* Buffer for entity structures. */
   entity	**entity_array;		/* The population in id order. */
@@ -255,8 +274,8 @@ struct population_t
   int		len_chromosomes;	/* Maximum length of each chromosome. */
   vpointer	data;			/* User data. */
 
-  int		select_state;		/* Available to selection algorithm. */
-  int		generation;		/* For ga_population_get_generation(). */
+  int		select_state;		/* Available to selection algorithms. */
+  ga_selectdata_t	selectdata;	/* State values for built-in selection operators. */
 
 /*
  * Evolutionary parameters.
