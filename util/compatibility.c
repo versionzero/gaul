@@ -456,11 +456,15 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 #endif /* HAVE_STRNCASECMP */
 
 
+/*
+ * Sleep for a specified number of microseconds.
+ * -- Should replace with the POSIX standard's nanosleep().
+ */
 #ifndef HAVE_USLEEP
 void usleep(unsigned long usec)
 {
 #ifdef HAVE_SNOOZE		/* i.e. BeOS, AtheOS */
-  snooze(usec);
+  snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
 #else
   struct timeval tv;
   tv.tv_sec=0;
