@@ -32,7 +32,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 bin_PROGRAMS = diagnostics \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
-	wildfire wildfire_forked \
+	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
@@ -46,6 +46,7 @@ pingpong_tabu2_SOURCES = pingpong_tabu2.c
 pingpong_sa_SOURCES = pingpong_sa.c
 wildfire_SOURCES = wildfire.c
 wildfire_forked_SOURCES = wildfire_forked.c
+wildfire_loadbalancing_SOURCES = wildfire_loadbalancing.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
@@ -84,6 +85,7 @@ pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_forked_DEPENDENCIES = ${DEPENDENCIES}
+wildfire_loadbalancing_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
@@ -108,6 +110,7 @@ pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util
 pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
