@@ -32,5 +32,5 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
-EXTRA_DIST = gaul.spec
+EXTRA_DIST = gaul-devel.spec
 
