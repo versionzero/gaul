@@ -782,7 +782,7 @@ int ga_funclookup_ptr_to_id(void *func)
          func != lookup[id].func_ptr)
     id++;
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
   printf("Function id is %d\n", id);
 #endif
 
@@ -809,7 +809,7 @@ int ga_funclookup_label_to_id(char *funcname)
          strcmp(funcname, lookup[id].funcname) != 0)
     id++;
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
   printf("Function id is %d\n", id);
 #endif
 
@@ -836,7 +836,7 @@ void *ga_funclookup_label_to_ptr(char *funcname)
          strcmp(funcname, lookup[id].funcname) != 0)
     id++;
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
   printf("Function id is %d\n", id);
 #endif
 
@@ -855,7 +855,7 @@ void *ga_funclookup_label_to_ptr(char *funcname)
 void *ga_funclookup_id_to_ptr(int id)
   {
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
   printf("Looking for function with id %d\n", id);
 #endif
 
@@ -874,7 +874,7 @@ void *ga_funclookup_id_to_ptr(int id)
 char *ga_funclookup_id_to_label(int id)
   {
 
-#if GAUL_DEBUG>2
+#if GA_DEBUG>2
   printf("Looking for function with id %d\n", id);
 #endif
 
