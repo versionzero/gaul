@@ -1,16 +1,15 @@
 Roadmap upto version 1.0 
 ========================
 
-Releases 0.1839 - 0.1856 are preview releases prior to full version 1.0
-
-Release 0.1840 and onwards may be considered to have a stable API. (i.e. code written
-to use these releases should also work with version 1.0)
+Release 0.1840 and onwards may be considered to have a stable API (i.e. code written
+to use these releases should also work with version 1.0) with the possible exception of
+the alternative heuristic search protocols (i.e. simulated annealling).
 
 These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1841     |  ga_evolution_mp() and associated example.
+ 0.1841     |  ga_evolution_mpi() and associated example.
             |  ga_evolution_threaded() and associated example.
             |  Use MemChunks in chromosome allocation, where appropriate.
             |  Intro to GAs finished.
@@ -21,6 +20,7 @@ These milestone requirements are subject to change ;)
  0.1842     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Fully document chromosomes.
+            |  Re-write simulated annealling and monte carlo code.
 ------------+--------------------------------------------------------
  0.1843     |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h
@@ -68,20 +68,24 @@ Additional features needed for version 1.0:
 * GAUL FAQ.
 * S-Lang extension example.
 * S-Lang embedding example.
-* Messy GA example.
 * Run-time control of statistic collection.
 * More run-time checking.
+* Multi-threaded, Hyper-threaded support.
 
 Optional Features for version 1.0, or (more likely) later:
 
+* Messy GA example.
 * Non-cyclic migration topologies (migration operators).
 * Additional local search algorithms.
 * GUI "workbench" interface.
 * Langauge bindings.
 * Similarity function callbacks.
-* Multi-threaded support.
+
+Features to be added if enough interest is demonstrated:
 * DEE algorithm.
 * PVM support.
+* Tabu-search.
+* Replica-exchange SA search.
 
-Stewart Adcock, 17 Jun 2002.
+Stewart Adcock, 09 Oct 2002.
 
