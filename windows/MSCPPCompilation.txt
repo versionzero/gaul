@@ -1,15 +1,19 @@
-
-MS Windows .NET VC++ Readme
-=================
+MS Windows .NET VC++ Instructions
+=================================
 
 Introduction
 ------------
 
+This document contains abbreviated instructions for compiling your own
+GAUL libraries and executables with Microsoft Visual C++ and .NET. They
+were tested with MS VC++ with .NET 1.x, but they should also work with
+other similar setups.
+
+Corresponding instructions for Bloodshed Dev-C++ are provided in a
+separate document.
 
 Compilation
 -----------
-
-The abbreviated instructions for compiling your own gaul executables with .NET are:
 
 Part 0: Create a WinGaul .NET solution as follows:
 
@@ -31,7 +35,6 @@ f) select "Application Setting"
 g) click the "Finish" button.
 
 2) Add all C source files from the GAUL subdirectory "util" to the gaul-util project source files.
-
 a) First, File->Save All so that solution directory and subdirectory will be created.
 b) copy all the files and subdirectories from the GAUL subdirectory util/ to the gaul-util project folder
 b) select gaul-util/Source Files->Add->Add Existing Item and select all the source files
@@ -60,7 +63,6 @@ c) select gaul-devel/Header Files->Add->Add Existing Item and select all the hea
 a) right click on gaul-util project-> Properties->C/C++ and enter ../gaul-util for Additional Include Directories
 b) Click OK
 
-
 PART III: example programs.
 
 These instructions are for the "struggle" example,
@@ -73,16 +75,16 @@ d) type "Struggle" in the "Name:" text box,
 c) click the "OK" button.
 g) click the "Finish" button.
 
-
 2) Remove the Struggle.cpp and replace/Add the relevent C source files from the GAUL subdirectory "examples".
 a) Delete the Struggle.cpp from the project (right click on Struggle.cpp -> Remove)
 b) Copy the relevent C source file from the GAUL subdirectory "examples" to the location of Struggle.cpp
 c) select Struggle/Source Files->Add->Add Existing Item and select the source file copied
 
-
 3) Struggle->Set As StartUp Project
+
 4) Set Struggle project not to use precompiled headers. Right click on Stuggle Project->Properties->C/C++->Precompiled Headers
 and change Create/Use Precompiled Header to "Not Using Precompiled Headers"
+
 5) Right click on Stuggle Project->Properties->C/C++->General->Additional Include Directories and enter ../gaul-devel; ../gaul-util
 6) Set Project Dependencies
 a) Right Click Solution WinGaul -> Properties->Project Dependences
@@ -91,4 +93,10 @@ c) gaul-devel depends upon gaul-util
 
 Compile the .NET solution. 
 
+Acknowledgements
+----------------
+
+These instructions were compiled by Al Cripps, to whom we are grateful.
+
+Stewart Adcock, 23rd February, 2005.
 

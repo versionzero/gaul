@@ -1,19 +1,19 @@
-MS Windows Readme
-=================
+MS Windows / Dev-C++ Instructions
+=================================
 
 Introduction
 ------------
 
-The precompiled static libraries, gaul-devel.a and gaul-util.a, and
-the example program, struggle.exe, were created using Dev-C++
-version 4.9.8.0.  This is available from
+This document contains abbreviated instructions for compiling your own
+GAUL libraries and executables with Dev-C++. They were tested with
+Dev-C++ version 4.9.8.0, as available from
 http://www.bloodshed.org/dev/devcpp.html
+
+Corresponding instructions for MS VC++ are provided in a separate
+document.
 
 Compilation
 -----------
-
-The abbreviated instructions for compiling your own gaul executables
-with Dev-C++ are:
 
 PART I: gaul-util library.
 
@@ -86,8 +86,4 @@ location of the "util" directory and *** by the location of the
 Creating and compiling your own programs that use GAUL should
 require a similar process to that outlined in PART III.
 
-If you should feel the urge to create a MSVC project for GAUL, and
-are successful in the endeavour, then I would be very interested
-in receiving a package for distribution at the GAUL website.
-
-Stewart Adcock, 26th August 2003.
+Stewart Adcock, 23rd February, 2005.
