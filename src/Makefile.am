@@ -37,6 +37,7 @@ libgaul_la_SOURCES = \
     ga_core.c \
     ga_crossover.c \
     ga_intrinsics.c \
+    ga_gradient.c \
     ga_mutate.c \
     ga_optim.c \
     ga_qsort.c \
@@ -57,6 +58,7 @@ include_HEADERS = \
     ga_climbing.h \
     ga_core.h \
     ga_intrinsics.h \
+    ga_gradient.h \
     ga_optim.h \
     ga_qsort.h \
     ga_randomsearch.h \

@@ -157,7 +157,7 @@ void ga_population_set_sa_parameters( population              *pop,
 		standard mutation and evaluation callback mechanisms,
 		respectively.
 
-		The passed entity will have it's data overwritten.  The
+		The passed entity will have its data overwritten.  The
 		remainder of the population will be let untouched.  Note
 		that it is safe to pass a NULL initial structure, in
 		which case a random starting structure wil be generated,

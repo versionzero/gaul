@@ -187,7 +187,7 @@ else
   AC_MSG_RESULT(PVM3)
   result=3
 fi
-AC_DEFINE(PARALLEL, $result, [type of parallelisation])
+AC_DEFINE_UNQUOTED(PARALLEL, ${result}, [type of parallelisation])
 
 if test "x$enable_threads" = "xno"; then
   if test "x$enable_mpi" = "xno"; then
@@ -207,8 +207,8 @@ else
   result1=0
   result2=1
 fi
-  AC_DEFINE( MEMORY_ALLOC_DEBUG, $result1, [Whether to use debugging memory allocation routines.])
-  AC_DEFINE( MEMORY_ALLOC_SAFE, $result2, [Whether to use safe memory allocation routines.])
+  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result}1, [Whether to use debugging memory allocation routines.])
+  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result}2, [Whether to use safe memory allocation routines.])
 
 AC_MSG_CHECKING(whether to enable dumping of statistics)
 if test "x$enable_stats" = "xyes"; then
@@ -218,7 +218,7 @@ else
   AC_MSG_RESULT(no)
   result=0
 fi
-AC_DEFINE(GA_WRITE_STATS, $result, [Whether to dump certian statistics.])
+AC_DEFINE_UNQUOTED(GA_WRITE_STATS, ${result}, [Whether to dump certian statistics.])
 
 AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
@@ -245,7 +245,7 @@ else
   AC_MSG_RESULT(no)
   result=0
 fi
-AC_DEFINE( MEMORY_PADDING, $result, [Whether to pad memory.] )
+AC_DEFINE_UNQUOTED( MEMORY_PADDING, ${result}, [Whether to pad memory.] )
 
 dnl Setup MPI compilation
 AC_MSG_CHECKING(how to compile MPI code)
@@ -275,7 +275,7 @@ else
   AC_MSG_RESULT(no)
   result=0
 fi
-AC_DEFINE(W32_CRIPPLED, $result, [Whether to cripple GAUL so it works on windows.])
+AC_DEFINE_UNQUOTED(W32_CRIPPLED, ${result}, [Whether to cripple GAUL so it works on windows.])
 
 dnl Check for S-Lang.
 AC_MSG_CHECKING(whether to link S-Lang scripting engine)
@@ -292,7 +292,7 @@ else
   WILL_USE_SLANG="no"
   result=0
 fi
-AC_DEFINE(HAVE_SLANG, $result, [Whether S-Lang is installed.])
+AC_DEFINE_UNQUOTED(HAVE_SLANG, ${result}, [Whether S-Lang is installed.])
 
 dnl Electric Fence has to be last library linked.
 AC_MSG_CHECKING(whether to link Electric Fence for memory debugging)

@@ -25,7 +25,8 @@
  **********************************************************************
 
   Synopsis:     Routines for local search and optimisation using
-		non-evolutionary methods.
+		non-evolutionary methods.  These methods are all
+		zer-order, that is, they do not require gradients.
 
   To do:	Add lots of other algorithms.
 		- golden search

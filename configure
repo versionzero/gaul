@@ -7672,47 +7672,36 @@ echo "${ECHO_T}${enable_num_threads}" >&6
 
 echo "$as_me:$LINENO: checking for type of parallelisation" >&5
 echo $ECHO_N "checking for type of parallelisation... $ECHO_C" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define PARALLEL 0
-_ACEOF
-
+result=0
 
 if test "x$enable_threads" != "xyes"; then
   enable_threads=no
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define PARALLEL 1
-_ACEOF
-
   echo "$as_me:$LINENO: result: pthreads" >&5
 echo "${ECHO_T}pthreads" >&6
+  result=1
 fi
 
 if test "x$enable_mpi" != "xyes"; then
   enable_mpi=no
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define PARALLEL 2
-_ACEOF
-
   echo "$as_me:$LINENO: result: MPI" >&5
 echo "${ECHO_T}MPI" >&6
+  result=2
 fi
 
 if test "x$enable_pvm" != "xyes"; then
   enable_pvm=no
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define PARALLEL 3
-_ACEOF
-
   echo "$as_me:$LINENO: result: PVM3" >&5
 echo "${ECHO_T}PVM3" >&6
+  result=3
 fi
+
+cat >>confdefs.h <<_ACEOF
+#define PARALLEL ${result}
+_ACEOF
+
 
 if test "x$enable_threads" = "xno"; then
   if test "x$enable_mpi" = "xno"; then
@@ -7726,54 +7715,43 @@ fi
 echo "$as_me:$LINENO: checking whether to enable memory access debugging" >&5
 echo $ECHO_N "checking whether to enable memory access debugging... $ECHO_C" >&6
 if test "x$enable_memory_debug" = "xyes"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_DEBUG 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_SAFE 0
-_ACEOF
-
-
   echo "$as_me:$LINENO: result: yes - full profiling" >&5
 echo "${ECHO_T}yes - full profiling" >&6
+  result1=1
+  result2=0
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_DEBUG 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_SAFE 1
-_ACEOF
-
-
   echo "$as_me:$LINENO: result: no - safe wrappers only" >&5
 echo "${ECHO_T}no - safe wrappers only" >&6
+  result1=0
+  result2=1
 fi
+
+cat >>confdefs.h <<_ACEOF
+#define MEMORY_ALLOC_DEBUG ${result}1
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define MEMORY_ALLOC_SAFE ${result}2
+_ACEOF
+
 
 echo "$as_me:$LINENO: checking whether to enable dumping of statistics" >&5
 echo $ECHO_N "checking whether to enable dumping of statistics... $ECHO_C" >&6
 if test "x$enable_stats" = "xyes"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define GA_WRITE_STATS 1
-_ACEOF
-
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+  result=1
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define GA_WRITE_STATS 0
-_ACEOF
-
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
+  result=0
 fi
+
+cat >>confdefs.h <<_ACEOF
+#define GA_WRITE_STATS ${result}
+_ACEOF
+
 
 echo "$as_me:$LINENO: checking whether to enable general GAUL debugging" >&5
 echo $ECHO_N "checking whether to enable general GAUL debugging... $ECHO_C" >&6
@@ -7806,22 +7784,19 @@ _ACEOF
 echo "$as_me:$LINENO: checking whether to pad memory to detect overflows" >&5
 echo $ECHO_N "checking whether to pad memory to detect overflows... $ECHO_C" >&6
 if test "x$enable_padding" = "xyes"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_PADDING 1
-_ACEOF
-
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+  result=1
 else
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_PADDING 0
-_ACEOF
-
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
+  result=0
 fi
+
+cat >>confdefs.h <<_ACEOF
+#define MEMORY_PADDING ${result}
+_ACEOF
+
 
 echo "$as_me:$LINENO: checking how to compile MPI code" >&5
 echo $ECHO_N "checking how to compile MPI code... $ECHO_C" >&6
@@ -7841,39 +7816,31 @@ echo "$as_me:$LINENO: checking whether to cripple GAUL for windows" >&5
 echo $ECHO_N "checking whether to cripple GAUL for windows... $ECHO_C" >&6
 
 case $target in
-  *-*-mingw*) enable_w32_subset = "yes" ;;
+  *-*-mingw*) enable_w32_subset="yes" ;;
 esac
 
 if test "x$enable_w32_subset" = "xyes"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define W32_CRIPPLED 1
-_ACEOF
-
   { echo "$as_me:$LINENO: WARNING: GAUL is crippled when compiled for windows.  Please consider upgrading to a proper operating system." >&5
 echo "$as_me: WARNING: GAUL is crippled when compiled for windows.  Please consider upgrading to a proper operating system." >&2;}
+  result=1
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
+  result=0
+fi
 
-cat >>confdefs.h <<\_ACEOF
-#define W32_CRIPPLED 0
+cat >>confdefs.h <<_ACEOF
+#define W32_CRIPPLED ${result}
 _ACEOF
 
-fi
 
 echo "$as_me:$LINENO: checking whether to link S-Lang scripting engine" >&5
 echo $ECHO_N "checking whether to link S-Lang scripting engine... $ECHO_C" >&6
 if test "x$enable_slang" = "xyes"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_SLANG 1
-_ACEOF
-
   WILL_USE_SLANG="yes"
   LIBS="$LIBS -lslang"
   echo "$as_me:$LINENO: checking for SLang_init_slang in -lslang" >&5
@@ -7939,35 +7906,18 @@ echo "$as_me: error: GAUL requires the S-Lang library for full functionality.  s
    { (exit 1); exit 1; }; }
 fi
 
+  result=1
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_SLANG 0
-_ACEOF
-
   WILL_USE_SLANG="no"
+  result=0
 fi
 
-#dnl Check for S-Lang.
-#AC_MSG_CHECKING(whether to link S-Lang scripting engine)
-#if test "x$enable_slang" = "xyes"; then
-#  AC_MSG_RESULT(yes)
-#  AC_DEFINE(HAVE_SLANG, 1, [Whether S-Lang is installed.])
-#  WILL_USE_SLANG="yes"
-#  LIBS="$LIBS -lslang"
-#  INCLUDES="$INCLUDES -I/usr/include/slang/"
-#  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
-#  AC_CHECK_LIB(slang, SLang_init_slang,
-#    [LIBS="$LIBS -lslang"
-#     INCLUDES="$INCLUDES -I/usr/include/slang/"],
-#    [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
-#else
-#  AC_MSG_RESULT(no)
-#  AC_DEFINE(HAVE_SLANG, 0, [Whether S-Lang is installed.])
-#  WILL_USE_SLANG="no"
-#fi
+cat >>confdefs.h <<_ACEOF
+#define HAVE_SLANG ${result}
+_ACEOF
+
 
 echo "$as_me:$LINENO: checking whether to link Electric Fence for memory debugging" >&5
 echo $ECHO_N "checking whether to link Electric Fence for memory debugging... $ECHO_C" >&6

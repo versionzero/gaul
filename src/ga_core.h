@@ -101,6 +101,7 @@
 #include "ga_bitstring.h"
 #include "ga_chromo.h"
 #include "ga_climbing.h"
+#include "ga_gradient.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
 #include "ga_randomsearch.h"
@@ -188,6 +189,18 @@ typedef struct
   } ga_simplex_t;
 
 /*
+ * Gradient methods parameter structure.
+ */
+typedef struct
+  {
+  int		dimensions;	/* Size of double array. */
+  double	step_size;	/* Step size, or initial step size. */
+  GAto_double	to_double;	/* Convert chromosome to double array. */
+  GAfrom_double	from_double;	/* Convert chromosome from double array. */
+  GAgradient	gradient;	/* Return gradients array. */
+  } ga_gradient_t;
+
+/*
  * Search parameter structure.
  */
 typedef struct
@@ -239,6 +252,7 @@ struct population_t
   ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
   ga_climbing_t	*climbing_params;		/* Parameters for hill climbing. */
   ga_simplex_t	*simplex_params;		/* Parameters for simplex search. */
+  ga_gradient_t	*gradient_params;		/* Parameters for gradient methods. */
   ga_search_t	*search_params;			/* Parameters for systematic search. */
 
 /*

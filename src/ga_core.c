@@ -287,6 +287,7 @@ population *ga_population_new(	const int stable_size,
   newpop->sa_params = NULL;
   newpop->climbing_params = NULL;
   newpop->simplex_params = NULL;
+  newpop->gradient_params = NULL;
   newpop->search_params = NULL;
   
 /*
