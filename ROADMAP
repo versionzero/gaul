@@ -10,39 +10,36 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1845     |  Linked-list chromosome.
+ 0.1846     |  Comprehensive test suite.
+------------+--------------------------------------------------------
+ 0.1847     |  ga_evolution_mpi() and associated examples.
+            |  ga_evolution_threaded() and associated example.
+            |  Use MemChunks in chromosome allocation, where appropriate.
+------------+--------------------------------------------------------
+ 0.1848     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Move prototypes for public functions into src/gaul.h
-            |  ga_evolution_mpi() and associated examples.
-            |  ga_evolution_threaded() and associated example.
             |  Fully document chromosomes.
 ------------+--------------------------------------------------------
- 0.1846     |  More on-line/off-line statistics options.
-            |  Built-in evaluation profiling.
-            |  Use MemChunks in chromosome allocation, where appropriate.
+ 0.1849     |  More on-line/off-line statistics options.
             |  More replacement operators.
             |  Replacement operators documentation
             |  User data in array, not list.
+------------+--------------------------------------------------------
+ 0.1850     |  Boolean chromosome example from Mitchell book.
+            |  De Jong - working examples.
             |  Parallel search heuristics (Tabu-search etc.)
 ------------+--------------------------------------------------------
- 0.1847     |  Boolean chromosome example from Mitchell book.
-            |  De Jong - working examples.
-            |  Comprehensive test suite.
-------------+--------------------------------------------------------
- 0.1848     |  Binary tree chromosome.
+ 0.1851     |  Binary tree chromosome.
             |  Genetic programming example.
 ------------+--------------------------------------------------------
- 0.1849     |  Distribution of points on sphere example.
+ 0.1852     |  Distribution of points on sphere example.
+            |  Improve in-code documentation/comments.
 ------------+--------------------------------------------------------
- 0.1850     |  Improve in-code documentation/comments.
-------------+--------------------------------------------------------
- 0.1851     |  Tidy and rationalise S-Lang interface, and provide examples.
-------------+--------------------------------------------------------
- 0.1852     |  Accessor functions for all fields in population structure.
-            |  Accessor functions for all fields in entity structure.
+ 0.1853     |  Tidy and rationalise S-Lang interface, and provide examples.
 ------------+--------------------------------------------------------
  0.1854     |  Replace qsort routines with something more appropriate.
-            |  User-defined population sorting.
+            |  User-defined population sorting/ranking.
 ------------+--------------------------------------------------------
  0.1855     |  Remove feature "FIXME's"
             |  Remove optimisation "FIXME's"
