@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_select - Genetic algorithm selection operators.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -811,6 +811,94 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
   pop->select_state++;
 
   return FALSE;
+  }
+
+
+/**********************************************************************
+  ga_select_one_aggressive()
+  synopsis:	Select an entity using a very aggressive procedure.
+  parameters:
+  return:	
+  last updated: 18 Apr 2003
+ **********************************************************************/
+
+boolean ga_select_one_aggressive(population *pop, entity **mother)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *mother = pop->entity_iarray[random_int(1+pop->select_state%(pop->orig_size-1))];
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_two_aggressive()
+  synopsis:	Select a pair of entities, both by a very aggressive
+		procedure.  The entities may be the same.
+  parameters:
+  return:	
+  last updated: 18 Apr 2003
+ **********************************************************************/
+
+boolean ga_select_two_aggressive(population *pop, entity **mother, entity **father)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *father = pop->entity_iarray[random_int(1+pop->select_state%(pop->orig_size-1))];
+  *mother = pop->entity_iarray[random_int(1+pop->select_state%(pop->orig_size-1))];
+
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_one_best()
+  synopsis:	Select the best entity only.
+  parameters:
+  return:	
+  last updated: 18 Apr 2003
+ **********************************************************************/
+
+boolean ga_select_one_best(population *pop, entity **mother)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *mother = pop->entity_iarray[0];
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_two_best()
+  synopsis:	Select a pair of entities, one of which is random, the
+                other is the best entity.
+  parameters:
+  return:	
+  last updated: 18 Apr 2003
+ **********************************************************************/
+
+boolean ga_select_two_best(population *pop, entity **mother, entity **father)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  *mother = pop->entity_iarray[random_int(pop->orig_size)];
+  *father = pop->entity_iarray[0];
+
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
   }
 
 

@@ -274,6 +274,10 @@ boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
 boolean	ga_select_two_roulette_rebased( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_sus( population *pop, entity **mother );
 boolean	ga_select_two_sus( population *pop, entity **mother, entity **father );
+boolean	ga_select_one_aggressive( population *pop, entity **mother );
+boolean	ga_select_two_aggressive( population *pop, entity **mother, entity **father );
+boolean	ga_select_one_best( population *pop, entity **mother );
+boolean	ga_select_two_best( population *pop, entity **mother, entity **father );
 
 /*
  * Functions located in ga_crossover.c:

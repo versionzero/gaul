@@ -3,6 +3,7 @@ Changes since release 0.1843:
 - Updated the README file.
 - Fixed bug in ga_slang_replace().
 - Better internal support for interfaces to arbitrary scripting engines.
+- Added new selection functions: ga_select_one_best(), ga_select_two_best(), ga_select_one_aggressive(), ga_select_two_aggressive().
 
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
