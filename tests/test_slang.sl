@@ -43,12 +43,12 @@ define test_evolution()
   message( ">> Creating population." );
   population = test_slang_genesis(100);
 
-% Evolution arguments are:
+% Evolutionary parameters are:
 % Type of evolution.
 % Type of elitism.
-% Number of generations
 % Crossover rate
 % Mutation rate
+% Migration rate
   message( ">> Defining evolutionary parameters." );
   ga_population_set_parameters(population, GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_DIE, 0.8, 0.05, 0.25 );
 
