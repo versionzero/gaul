@@ -314,7 +314,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 1
+#define PATCH_VERSION 2
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -350,7 +350,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1840-1"
+#define VERSION_STRING "0.1840-2"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

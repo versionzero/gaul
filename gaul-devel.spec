@@ -26,7 +26,7 @@
 
 %define PACKAGE_VERSION 	0
 %define RELEASE			1840
-%define PATCH			1
+%define PATCH			2
 %define prefix			/usr/local/
 
 Summary:	Genetic Algorithm Utility Library
