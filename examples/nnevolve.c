@@ -3,7 +3,7 @@
  **********************************************************************
 
   nnevolve - GAUL example: Evolve a fixed topology neural network.
-  Copyright ©2002, The Regents of the University of California.
+  Copyright ©2002-2003, The Regents of the University of California.
   All rights reserved.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
@@ -590,7 +590,7 @@ boolean nnevolve_generation_hook(int generation, population *pop)
   updated:	29 Jan 2002
  **********************************************************************/
 
-boolean nnevolve_chromosome_constructor(population *pop, entity *embryo)
+boolean nnevolve_chromosome_constructor(const population *pop, entity *embryo)
   {
   int        num_layers=4;   /* Number of layers in NN. */
   int        neurons[4]={11,20,20,3};  /* Number of neurons in each layer. */
@@ -617,7 +617,7 @@ boolean nnevolve_chromosome_constructor(population *pop, entity *embryo)
   last updated: 29 Jan 2002
  **********************************************************************/
 
-void nnevolve_chromosome_destructor(population *pop, entity *corpse)
+void nnevolve_chromosome_destructor(const population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -642,7 +642,7 @@ void nnevolve_chromosome_destructor(population *pop, entity *corpse)
   last updated: 29 Jan 2002
  **********************************************************************/
 
-void nnevolve_chromosome_replicate( population *pop,
+void nnevolve_chromosome_replicate( const population *pop,
                                     entity *src, entity *dest,
                                     const int chromosomeid )
   {
@@ -669,8 +669,10 @@ void nnevolve_chromosome_replicate( population *pop,
   last updated: 24 Dec 2002
  **********************************************************************/
 
-unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
-                                     byte **bytes, unsigned int *max_bytes)
+unsigned int nnevolve_chromosome_to_bytes( const population *pop,
+                                      entity *joe,
+                                      byte **bytes,
+                                      unsigned int *max_bytes )
   {
   unsigned int	num_bytes;	/* Actual size of genes. */
 
@@ -700,7 +702,7 @@ unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
   last updated: 29 Jan 2002
  **********************************************************************/
 
-void nnevolve_chromosome_from_bytes(population *pop, entity *joe, byte *bytes)
+void nnevolve_chromosome_from_bytes(const population *pop, entity *joe, byte *bytes)
   {
   dief("Function not implemented");
 

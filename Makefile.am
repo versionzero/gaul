@@ -32,6 +32,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 #ACLOCAL_AMFLAGS = -I .
 
+#SUBDIRS = util src tests examples extra .
 SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.

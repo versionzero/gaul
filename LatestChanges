@@ -9,6 +9,7 @@ Changes since release 0.1844:
 - Added royalroad_bitstring example.
 - Added ga_seed_boolean_zero().
 - Chromosome handling functions now all take (const population *) arguments.
+- Added ga_seed_random_unit_gaussian().
 
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.

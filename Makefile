@@ -134,9 +134,10 @@ install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-
 #ACLOCAL_AMFLAGS = -I .
-SUBDIRS = util src tests examples .
+
+#SUBDIRS = util src tests examples .
+SUBDIRS = util src tests examples extra .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec

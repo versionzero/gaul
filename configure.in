@@ -1015,6 +1015,7 @@ GA_NUM_PROCESSES_ENVVAR_STRING=$GA_NUM_PROCESSES_ENVVAR_STRING
 GA_NUM_THREADS_ENVVAR_STRING=$GA_NUM_THREADS_ENVVAR_STRING
 ])
 
+#AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/pp/Makefile],
 AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h.in]
 	)

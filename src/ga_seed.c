@@ -230,6 +230,39 @@ boolean ga_seed_double_random(population *pop, entity *adam)
 
 
 /**********************************************************************
+  ga_seed_double_random_unit_gaussian()
+  synopsis:	Seed genetic data for a single entity with a double-
+		precision floating-point chromosome by randomly
+		setting each allele using a unit gaussian distribution.
+  parameters:	population *pop
+		entity *adam
+  return:	success
+  last updated: 02 Jul 2003
+ **********************************************************************/
+
+boolean ga_seed_double_random_unit_gaussian(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of 'nucleotide' to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((double *)adam->chromosome[chromo])[point] = random_unit_gaussian();
+      }
+    }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_seed_double_zero()
   synopsis:
   parameters:
