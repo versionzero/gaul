@@ -1,0 +1,11 @@
+Source: gaul-devel
+Section: unknown
+Priority: optional
+Maintainer: Stewart Adcock <gaul@linux-domain.com>
+Standards-Version: 3.1.1
+
+Package: gaul-devel
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: GAUL: Genetic Algorithm Utility Library
+  The Genetic Algorithm Utility Library (GAUL) is an open source programming library providing genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are provided for comparison and local search purposes, including simplex method, hill climbing, simulated annealling and steepest ascent.

@@ -1,0 +1,9 @@
+gaul-devel (0.1844-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Stewart Adcock <gaul@linux-domain.com>  Wed,  4 Jun 2003 09:36:58 -0700
+
+Local variables:
+mode: debian-changelog
+End:
