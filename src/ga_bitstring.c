@@ -622,7 +622,7 @@ void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, dou
   synopsis:	Test bitstring conversion routines.
   parameters:	none
   return:	Always TRUE, currently.
-  last updated: 25 Jul 2003
+  last updated: 06 Oct 2004
  **********************************************************************/
 
 boolean ga_bit_test( void )
@@ -635,16 +635,18 @@ boolean ga_bit_test( void )
   if ( !(bstr = (byte *) s_malloc( ga_bit_sizeof( 128 ) )) )
     die("Unable to allocate bitstring.");
 
-  printf("Binary encoding:\n");
+  printf("Binary encoding of integers:\n");
 
   for (i=0; i<10; i++)
     {
-    origint = 23*i;
+    origint = 23*i-30;
     ga_bit_encode_binary_int( bstr, 0, 64, origint );
     newint = ga_bit_decode_binary_int( bstr, 0, 64 );
     printf("Orig val = %d new val = %d %s\n",
            origint, newint, origint==newint?"PASSED":"FAILED");
     }
+
+  printf("Binary encoding of reals:\n");
 
   for (i=0; i<10; i++)
     {
@@ -656,16 +658,18 @@ boolean ga_bit_test( void )
            (origval>newval-TINY&&origval<newval+TINY)?"PASSED":"FAILED");
     }
 
-  printf("Gray encoding:\n");
+  printf("Gray encoding of integers:\n");
 
   for (i=0; i<10; i++)
     {
-    origint = 23*i;
+    origint = 23*i-30;
     ga_bit_encode_gray_int( bstr, 0, 64, origint );
     newint = ga_bit_decode_gray_int( bstr, 0, 64 );
     printf("Orig val = %d new val = %d %s\n",
            origint, newint, origint==newint?"PASSED":"FAILED");
     }
+
+  printf("Gray encoding of reals:\n");
 
   for (i=0; i<10; i++)
     {
