@@ -102,6 +102,7 @@
 #include "ga_bitstring.h"
 #include "ga_chromo.h"
 #include "ga_climbing.h"
+#include "ga_deterministiccrowding.h"
 #include "ga_gradient.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
@@ -190,6 +191,14 @@ typedef struct
   } ga_simplex_t;
 
 /*
+ * Deterministic crowding parameter structure.
+ */
+typedef struct
+  {
+  GAcompare	compare;	/* Compare two entities (either genomic or phenomic space). */
+  } ga_dc_t;
+
+/*
  * Gradient methods parameter structure.
  */
 typedef struct
@@ -250,12 +259,13 @@ struct population_t
 /*
  * Non-evolutionary parameters.
  */
-  ga_tabu_t	*tabu_params;			/* Parameters for tabu-search. */
-  ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
-  ga_climbing_t	*climbing_params;		/* Parameters for hill climbing. */
-  ga_simplex_t	*simplex_params;		/* Parameters for simplex search. */
-  ga_gradient_t	*gradient_params;		/* Parameters for gradient methods. */
-  ga_search_t	*search_params;			/* Parameters for systematic search. */
+  ga_tabu_t		*tabu_params;			/* Parameters for tabu-search. */
+  ga_sa_t		*sa_params;			/* Parameters for simulated annealling. */
+  ga_climbing_t		*climbing_params;		/* Parameters for hill climbing. */
+  ga_simplex_t		*simplex_params;		/* Parameters for simplex search. */
+  ga_dc_t		*dc_params;			/* Parameters for deterministic crowding. */
+  ga_gradient_t		*gradient_params;		/* Parameters for gradient methods. */
+  ga_search_t		*search_params;			/* Parameters for systematic search. */
 
 /*
  * Scoring function and the other callbacks are defined here.

@@ -105,14 +105,14 @@ DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1843
-GA_PATCH_VERSION = 2
-GA_VERSION = 0.1843-2
+GA_PATCH_VERSION = 3
+GA_VERSION = 0.1843-3
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1843
-LT_REVISION = 2
+LT_REVISION = 3
 MAINT = #
 MPIFLAGS = 
 MPILIBS = 
@@ -120,7 +120,7 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1843-2
+VERSION = 0.1843-3
 am__include = include
 am__quote = 
 install_sh = /u1/adcock/gaul-devel-0.1843/install-sh
@@ -134,8 +134,10 @@ libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
     ga_climbing.c \
+    ga_compare.c \
     ga_core.c \
     ga_crossover.c \
+    ga_deterministiccrowding.c \
     ga_intrinsics.c \
     ga_gradient.c \
     ga_mutate.c \
@@ -159,6 +161,7 @@ include_HEADERS = \
     ga_chromo.h \
     ga_climbing.h \
     ga_core.h \
+    ga_deterministiccrowding.h \
     ga_intrinsics.h \
     ga_gradient.h \
     ga_optim.h \
@@ -183,7 +186,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
-	ga_core.lo ga_crossover.lo ga_intrinsics.lo ga_gradient.lo \
+	ga_compare.lo ga_core.lo ga_crossover.lo \
+	ga_deterministiccrowding.lo ga_intrinsics.lo ga_gradient.lo \
 	ga_mutate.lo ga_optim.lo ga_qsort.lo ga_replace.lo \
 	ga_randomsearch.lo ga_seed.lo ga_select.lo ga_sa.lo \
 	ga_similarity.lo ga_simplex.lo ga_stats.lo \
@@ -199,8 +203,10 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
 	./$(DEPDIR)/ga_chromo.Plo \
-	./$(DEPDIR)/ga_climbing.Plo ./$(DEPDIR)/ga_core.Plo \
+	./$(DEPDIR)/ga_climbing.Plo \
+	./$(DEPDIR)/ga_compare.Plo ./$(DEPDIR)/ga_core.Plo \
 	./$(DEPDIR)/ga_crossover.Plo \
+	./$(DEPDIR)/ga_deterministiccrowding.Plo \
 	./$(DEPDIR)/ga_gradient.Plo \
 	./$(DEPDIR)/ga_intrinsics.Plo \
 	./$(DEPDIR)/ga_mutate.Plo ./$(DEPDIR)/ga_optim.Plo \
@@ -275,8 +281,10 @@ distclean-compile:
 include ./$(DEPDIR)/ga_bitstring.Plo
 include ./$(DEPDIR)/ga_chromo.Plo
 include ./$(DEPDIR)/ga_climbing.Plo
+include ./$(DEPDIR)/ga_compare.Plo
 include ./$(DEPDIR)/ga_core.Plo
 include ./$(DEPDIR)/ga_crossover.Plo
+include ./$(DEPDIR)/ga_deterministiccrowding.Plo
 include ./$(DEPDIR)/ga_gradient.Plo
 include ./$(DEPDIR)/ga_intrinsics.Plo
 include ./$(DEPDIR)/ga_mutate.Plo

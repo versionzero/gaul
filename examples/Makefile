@@ -105,14 +105,14 @@ DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1843
-GA_PATCH_VERSION = 2
-GA_VERSION = 0.1843-2
+GA_PATCH_VERSION = 3
+GA_VERSION = 0.1843-3
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1843
-LT_REVISION = 2
+LT_REVISION = 3
 MAINT = #
 MPIFLAGS = 
 MPILIBS = 
@@ -120,7 +120,7 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1843-2
+VERSION = 0.1843-3
 am__include = include
 am__quote = 
 install_sh = /u1/adcock/gaul-devel-0.1843/install-sh
@@ -137,8 +137,10 @@ bin_PROGRAMS = diagnostics \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle_randomsearch struggle_systematicsearch struggle_forked \
-        struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
+	struggle struggle_forked \
+	struggle_dc struggle_randomsearch struggle_systematicsearch struggle_ss \
+        struggle2 struggle3 struggle4 \
+	struggle5 struggle5_mp struggle5_forked \
 	saveload \
 	nnevolve
 
@@ -162,6 +164,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
 struggle_forked_SOURCES = struggle_forked.c
@@ -211,6 +214,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_systematicsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
@@ -244,6 +248,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -273,12 +278,12 @@ bin_PROGRAMS = diagnostics$(EXEEXT) test_ga$(EXEEXT) \
 	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
 	wildfire_loadbalancing$(EXEEXT) goldberg1$(EXEEXT) \
 	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
-	struggle$(EXEEXT) struggle_randomsearch$(EXEEXT) \
-	struggle_systematicsearch$(EXEEXT) struggle_forked$(EXEEXT) \
+	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
+	struggle_randomsearch$(EXEEXT) \
+	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) struggle_ss$(EXEEXT) \
-	saveload$(EXEEXT) nnevolve$(EXEEXT)
+	struggle5_forked$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
 am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
@@ -344,6 +349,9 @@ struggle5_forked_LDFLAGS =
 am_struggle5_mp_OBJECTS = struggle5_mp.$(OBJEXT)
 struggle5_mp_OBJECTS = $(am_struggle5_mp_OBJECTS)
 struggle5_mp_LDFLAGS =
+am_struggle_dc_OBJECTS = struggle_dc.$(OBJEXT)
+struggle_dc_OBJECTS = $(am_struggle_dc_OBJECTS)
+struggle_dc_LDFLAGS =
 am_struggle_forked_OBJECTS = struggle_forked.$(OBJEXT)
 struggle_forked_OBJECTS = $(am_struggle_forked_OBJECTS)
 struggle_forked_LDFLAGS =
@@ -399,6 +407,7 @@ DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
 	./$(DEPDIR)/struggle5.Po \
 	./$(DEPDIR)/struggle5_forked.Po \
 	./$(DEPDIR)/struggle5_mp.Po \
+	./$(DEPDIR)/struggle_dc.Po \
 	./$(DEPDIR)/struggle_forked.Po \
 	./$(DEPDIR)/struggle_randomsearch.Po \
 	./$(DEPDIR)/struggle_ss.Po \
@@ -424,15 +433,16 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
 	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
 	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
-	$(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) \
-	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
+	$(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -546,6 +556,9 @@ struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPEND
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
 	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
+struggle_dc$(EXEEXT): $(struggle_dc_OBJECTS) $(struggle_dc_DEPENDENCIES) 
+	@rm -f struggle_dc$(EXEEXT)
+	$(LINK) $(struggle_dc_LDFLAGS) $(struggle_dc_OBJECTS) $(struggle_dc_LDADD) $(LIBS)
 struggle_forked$(EXEEXT): $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES) 
 	@rm -f struggle_forked$(EXEEXT)
 	$(LINK) $(struggle_forked_LDFLAGS) $(struggle_forked_OBJECTS) $(struggle_forked_LDADD) $(LIBS)
@@ -605,6 +618,7 @@ include ./$(DEPDIR)/struggle4.Po
 include ./$(DEPDIR)/struggle5.Po
 include ./$(DEPDIR)/struggle5_forked.Po
 include ./$(DEPDIR)/struggle5_mp.Po
+include ./$(DEPDIR)/struggle_dc.Po
 include ./$(DEPDIR)/struggle_forked.Po
 include ./$(DEPDIR)/struggle_randomsearch.Po
 include ./$(DEPDIR)/struggle_ss.Po

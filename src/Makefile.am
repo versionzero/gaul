@@ -35,8 +35,10 @@ libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
     ga_climbing.c \
+    ga_compare.c \
     ga_core.c \
     ga_crossover.c \
+    ga_deterministiccrowding.c \
     ga_intrinsics.c \
     ga_gradient.c \
     ga_mutate.c \
@@ -59,6 +61,7 @@ include_HEADERS = \
     ga_chromo.h \
     ga_climbing.h \
     ga_core.h \
+    ga_deterministiccrowding.h \
     ga_intrinsics.h \
     ga_gradient.h \
     ga_optim.h \

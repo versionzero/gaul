@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "15/05/03"
+#define BUILD_DATE_STRING "22/05/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -32,7 +32,7 @@
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* Patch level. */
-#define GA_PATCH_VERSION 2
+#define GA_PATCH_VERSION 3
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -380,7 +380,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1843-2"
+#define VERSION_STRING "0.1843-3"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

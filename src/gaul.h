@@ -147,6 +147,7 @@ typedef void    (*GAreplace)(population *pop, entity *child);
  * GAfrom_double     - Map chromosomal data from double-precision float array.
  * GAgradient        - Return array of gradients.
  * GAscan_chromosome - Produce next permutation of genome.
+ * GAcompare         - Compare two entities (in either genomic or phenomic space) and return distance.
  */
 typedef boolean	(*GAtabu_accept)(population *pop, entity *putative, entity *tabu);
 typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
@@ -155,6 +156,7 @@ typedef boolean	(*GAto_double)(population *pop, entity *entity, double *darray);
 typedef boolean	(*GAfrom_double)(population *pop, entity *entity, double *darray);
 typedef double	(*GAgradient)(population *pop, entity *entity, double *darray, double *varray);
 typedef boolean	(*GAscan_chromosome)(population *pop, entity *entity, int enumeration_num);
+typedef int	(*GAcompare)(population *pop, entity *alpha, entity *beta);
 
 /**********************************************************************
  * Public prototypes.
@@ -490,6 +492,11 @@ boolean ga_fitness_stats( population *pop,
                           double *variance, double *stddev,
                           double *kurtosis, double *skew );
 
+/*
+ * Functions located in ga_compare.c:
+ * (Genome comparison functions)
+ */
+double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
 
 /**********************************************************************
  * Include remainder of this library's headers.

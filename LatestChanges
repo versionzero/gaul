@@ -7,6 +7,7 @@ Changes since release 0.1843:
 - Gave struggle_forked the same GA parameters as struggle.
 - Improved some error messages.
 - Extra assorted sanity checking.
+- Added support for deterministic crowding; ga_deterministiccrowding().
 
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
