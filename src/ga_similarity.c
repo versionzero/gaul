@@ -84,11 +84,6 @@ boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
  * this code should be changed.
 */
     if ( memcmp( alpha->chromosome[i], beta->chromosome[i], pop->len_chromosomes*sizeof(int) ) !=0 )
-
-/* FIXME: This would require a dependance upon helga, need to modify the
- * population structure to hold this data.
-    if ( memcmp( alpha->chromosome[i], beta->chromosome[i], helga_get_sequence_size(i)*sizeof(int) ) !=0 )
- */
       return FALSE;
     }
 
@@ -151,11 +146,6 @@ double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
  * this code should be changed.
 */
     length = pop->len_chromosomes;
-
-/* FIXME: This would require a dependance upon helga, need to modify the
- * population structure to hold this data.
-    length = helga_get_sequence_size(i);
- */
 
     total_length += length;
     match += ga_count_match_alleles(length, alpha->chromosome[i], beta->chromosome[i]);
