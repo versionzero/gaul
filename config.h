@@ -311,13 +311,13 @@
 #define MEMORY_ALLOC_SAFE 1
 
 /* Define to disable memory chunk allocation routines. */
-#define MEMORY_CHUNKS_MIMIC 1
+/* #undef MEMORY_CHUNKS_MIMIC */
 
 /* Whether to pad memory. */
 #define MEMORY_PADDING 0
 
 /* Minor version number. */
-#define MINOR_VERSION 1841
+#define MINOR_VERSION 1842
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
@@ -338,7 +338,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 6
+#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -374,7 +374,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1841-6"
+#define VERSION_STRING "0.1842-0"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

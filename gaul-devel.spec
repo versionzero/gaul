@@ -25,8 +25,8 @@
 #######################################################################
 
 %define PACKAGE_VERSION 	0
-%define RELEASE			1841
-%define PATCH			6
+%define RELEASE			1842
+%define PATCH			0
 %define prefix			/usr/local/
 
 Name:		gaul-devel
@@ -42,7 +42,7 @@ Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}-buildroot
 
 %description
-The Genetic Algorithm Utility Library (GAUL) is an open source programming library designed to assist in the development of code using genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are provided for comparison and local search purposes.  Much of the functionality is also available through a simple S-Lang interface.
+The Genetic Algorithm Utility Library (GAUL) is an open source programming library providing genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are provided for comparison and local search purposes, including simplex method, hill climbing, simulated annealling and steepest ascent.  Much of the functionality is also available through a simple S-Lang interface.
 
 %prep
 %setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
@@ -67,6 +67,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Fri Dec 20 2002 Stewart Adcock <stewart@linux-domain.com>
+- 0.1842-0
+- Improved description.
+
 * Tue Oct 15 2002 Stewart Adcock <stewart@linux-domain.com>
 - 0.1841-0
 - Added some extra info to the description.
