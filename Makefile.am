@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -29,6 +29,8 @@
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
+
+#ACLOCAL_AMFLAGS = -I .
 
 SUBDIRS = util src tests examples .
 

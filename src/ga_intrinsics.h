@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinsics - Genetic algorithm routine intrinsics.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -36,10 +36,7 @@
 /*
  * Includes
  */
-#include "SAA_header.h"
-
-#include "ga_core.h"
-#include "ga_utility.h"
+#include "gaul.h"
 
 #if HAVE_SLANG == 1
 #include <slang.h>

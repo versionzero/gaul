@@ -3,7 +3,7 @@
  **********************************************************************
 
   dejong - The De Jong test suite's functions.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2003, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -38,7 +38,6 @@
 /*
  * Includes.
  */
-#include "SAA_header.h"
 #include "gaul.h"
 
 /*

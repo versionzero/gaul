@@ -99,12 +99,15 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
+BUILD_DATE_STRING = @BUILD_DATE_STRING@
 CC = @CC@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 GA_MAJOR_VERSION = @GA_MAJOR_VERSION@
 GA_MINOR_VERSION = @GA_MINOR_VERSION@
+GA_NUM_PROCESSES_ENVVAR_STRING = @GA_NUM_PROCESSES_ENVVAR_STRING@
+GA_NUM_THREADS_ENVVAR_STRING = @GA_NUM_THREADS_ENVVAR_STRING@
 GA_PATCH_VERSION = @GA_PATCH_VERSION@
 GA_VERSION = @GA_VERSION@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
@@ -113,14 +116,16 @@ LN_S = @LN_S@
 LT_CURRENT = @LT_CURRENT@
 LT_RELEASE = @LT_RELEASE@
 LT_REVISION = @LT_REVISION@
-MAINT = @MAINT@
 MPIFLAGS = @MPIFLAGS@
 MPILIBS = @MPILIBS@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
+UNAME_STRING = @UNAME_STRING@
+V3_QUICK = @V3_QUICK@
 VERSION = @VERSION@
+VERSION_STRING = @VERSION_STRING@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
@@ -183,7 +188,8 @@ libgaul_la_LIBFLAGS = -lm
 libgaul_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_HEADER = $(top_builddir)/config.h \
+	$(top_builddir)/util/gaul_config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
@@ -198,7 +204,7 @@ am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = @DEFS@
-DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
@@ -239,10 +245,10 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  src/Makefile
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 libLTLIBRARIES_INSTALL = $(INSTALL)
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)

@@ -103,7 +103,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	25 Feb 2003 SAA	Tweaked strndup() prototype.
+  Updated:	10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
+		25 Feb 2003 SAA	Tweaked strndup() prototype.
 		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
 		20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
 		25 Oct 2002 SAA	Added gethostname() stub.
@@ -123,7 +124,7 @@
 
 #include "compatibility.h"
 
-#ifndef HAVE_IPOW
+#if HAVE_IPOW != 1
 /*
  * Integer power.
  */
@@ -142,8 +143,8 @@ int ipow(int n, int e)
 #endif	/* HAVE_IPOW */
 
 
-#ifndef HAVE_MEMCPY
-#ifndef HAVE_BCOPY
+#if HAVE_MEMCPY != 1
+#if HAVE_BCOPY != 1
 /*
  * Some systems, such as SunOS do have BCOPY instead.
  * In which case this is defined as a macro in the header.
@@ -181,8 +182,8 @@ void memcpy(char *dest, const char *src, size_t len)
 #endif /* HAVE_MEMCPY */
 
 
-#ifndef HAVE_STRCHR
-#ifndef HAVE_INDEX
+#if HAVE_STRCHR != 1
+#if HAVE_INDEX != 1
 /*
  * Find C in STR by searching through the string
  */
@@ -199,8 +200,8 @@ char *strchr(const char *str, int c)
 #endif /* HAVE_STRCHR */
 
 
-#ifndef HAVE_STRRCHR
-#ifndef HAVE_RINDEX
+#if HAVE_STRRCHR != 1
+#if HAVE_RINDEX != 1
 /*
  * Find C in STR by searching backwards through the string
  */
@@ -218,7 +219,7 @@ char *strrchr(const char *str, int c)
 #endif /* HAVE_STRRCHR */
 
 
-#ifndef HAVE_STRCAT
+#if HAVE_STRCAT != 1
 /*
  * Concatenate STR2 onto the end of STR1
  */
@@ -237,7 +238,7 @@ char *strcat(char *str1, const char *str2)
 #endif /* HAVE_STRCAT */
 
 
-#ifndef HAVE_STRLEN 
+#if HAVE_STRLEN  != 1
 /*
  * Return the length in characters of STR
  */
@@ -256,7 +257,7 @@ size_t strlen(const char *str)
 #endif /* HAVE_STRLEN */
 
 
-#ifndef HAVE_STRCMP
+#if HAVE_STRCMP != 1
 /*
  * Compare str1 and str2.  It returns
  * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
@@ -276,7 +277,7 @@ int strcmp(const char *str1, const char *str2)
 #endif /* HAVE_STRCMP */
 
 
-#ifndef HAVE_STRNCMP
+#if HAVE_STRNCMP != 1
 /*
  * Compare at most len characters of str1 and str2.  It returns
  * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
@@ -297,7 +298,7 @@ int strncmp(const char *str1, const char *str2, size_t len)
 #endif /* HAVE_STRNCMP */
 
 
-#ifndef HAVE_STRCPY
+#if HAVE_STRCPY != 1
 /*
  * Copies STR2 to STR1.  Returns STR1.
  */
@@ -313,7 +314,7 @@ char *strcpy(char *str1, const char *str2)
 #endif /* HAVE_STRCPY */
 
 
-#ifndef HAVE_STRNCPY
+#if HAVE_STRNCPY != 1
 /*
  * Copy STR2 to STR1 until LEN or null character in source.
  */
@@ -337,7 +338,7 @@ char	*strncpy(char *str1, const char *str2, size_t len)
 #endif /* HAVE_STRNCPY */
 
 
-#ifndef HAVE_STRTOK
+#if HAVE_STRTOK != 1
 /*
  * Get the next token from STR (pass in NULL on the 2nd, 3rd,
  * etc. calls), tokens are a list of characters deliminated by a
@@ -396,7 +397,7 @@ char	*strtok(char *str, const char *delim)
 #endif /* HAVE_STRTOK */
 
 
-#ifndef HAVE_STRPBRK
+#if HAVE_STRPBRK != 1
 /*
  * Locate the first occurrence in the string s of any of the characters in the string accept.
  */
@@ -418,7 +419,7 @@ char *strpbrk(const char *s, const char *accept)
 #endif /* HAVE_STRPBRK */
 
 
-#ifndef HAVE_STRSEP
+#if HAVE_STRSEP != 1
 /*
  * If *str is NULL, return NULL.  Otherwise, this find the first token in the string *str, where tokens
  * are delimited by symbols in the string delim.  This token is terminated with a `\0' character (by
@@ -444,7 +445,7 @@ char *strsep(char **str, const char *delim)
 #endif /* HAVE_STRSEP */
 
 
-#ifndef HAVE_STRCASECMP
+#if HAVE_STRCASECMP != 1
 int strcasecmp(const char *str0, const char *str1)
 {
   for(; tolower(*str0)==tolower(*str1); str0++, str1++)
@@ -456,7 +457,7 @@ int strcasecmp(const char *str0, const char *str1)
 #endif /* HAVE_STRCASECMP */
 
 
-#ifndef HAVE_STRNCASECMP
+#if HAVE_STRNCASECMP != 1
 /***************************************************************
   Compare strings like strncmp(), but ignoring case.
   ie, only compares first n chars.
@@ -479,7 +480,7 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
  * Sleep for a specified number of microseconds.
  * -- Should replace with the POSIX standard's nanosleep().
  */
-#ifndef HAVE_USLEEP
+#if HAVE_USLEEP != 1
 void usleep(unsigned long usec)
   {
 #ifdef W32_CRIPPLED
@@ -500,7 +501,7 @@ void usleep(unsigned long usec)
 #endif /* HAVE_USLEEP */
 
 
-#ifndef HAVE_STRLCPY
+#if HAVE_STRLCPY != 1
 /**********************************************************************
  strlcpy() and strlcat() provide (non-standard) functions
  strlcpy() and strlcat(), with semantics following OpenBSD (and
@@ -546,7 +547,7 @@ size_t strlcpy(char *dest, const char *src, size_t n)
 #endif /* HAVE_STRLCPY */
 
 
-#ifndef HAVE_STRLCAT
+#if HAVE_STRLCAT != 1
 size_t strlcat(char *dest, const char *src, size_t n)
   {
   size_t	num_to_copy;
@@ -577,7 +578,7 @@ size_t strlcat(char *dest, const char *src, size_t n)
 #endif /* HAVE_STRLCAT */
 
 
-#ifndef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF != 1
 /**********************************************************************
  Convenience function used by check_native_vsnprintf() below.
  (Can test check_native_vsnprintf() by replacing vsnprintf call
@@ -758,7 +759,7 @@ int my_vsnprintf(char *str, size_t n, const char *format, va_list ap)
 #endif
 
 
-#ifndef HAVE_SNPRINTF
+#if HAVE_SNPRINTF != 1
 int snprintf(char *str, size_t n, const char *format, ...)
   {
   int ret;
@@ -774,7 +775,7 @@ int snprintf(char *str, size_t n, const char *format, ...)
 #endif /* HAVE_SNPRINTF */
 
 
-#ifndef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF != 1
 int vsnprintf(char *str, size_t n, const char *format, va_list ap)
   {
   return my_vsnprintf(str, n, format, ap);
@@ -782,7 +783,7 @@ int vsnprintf(char *str, size_t n, const char *format, va_list ap)
 #endif /* HAVE_VSNPRINTF */
 
 
-#ifndef HAVE_MEMSCAN
+#if HAVE_MEMSCAN != 1
 /*
  * Find a character in an area of memory.
  * Returns the address of the first occurrence of c, or 1 byte past the area if c is not found.
@@ -803,11 +804,11 @@ void *memscan(void *addr, int c, size_t size)
 #endif /* HAVE_MEMSCAN */
 
 
-#ifndef HAVE_MEMSET
+#if HAVE_MEMSET != 1
 /*
  * Set LEN characters in STR to character C
  */
-#ifndef USE_OPTIMISED_MEMSET
+#if USE_OPTIMISED_MEMSET != 1
 /* Original version.  Must use this on Solaris, by the looks of things. */
 void *memset(void *str, int c, size_t len)
   {
@@ -880,8 +881,8 @@ void *memset(void *dst0, int c0, size_t bytes)
 #endif
 #endif /* HAVE_MEMSET */
 
-#ifndef HAVE_MEMMOVE
-#ifndef HAVE_BCOPY
+#if HAVE_MEMMOVE != 1
+#if HAVE_BCOPY != 1
 /*
  * Some systems, such as SunOS do have BCOPY instead.
  * In which case this is defined as a macro in the header.
@@ -912,7 +913,7 @@ void *memmove(void *dst, const void *src, size_t bytes)
 #endif /* HAVE_MEMMOVE */
 
 
-#ifndef HAVE_MEMREV
+#if HAVE_MEMREV != 1
 void *memrev(void *src, size_t bytes)
   {
   unsigned char *p1;
@@ -928,7 +929,7 @@ void *memrev(void *src, size_t bytes)
 #endif /* HAVE_MEMREV */
 
 
-#ifndef HAVE_MEMCHR
+#if HAVE_MEMCHR != 1
 void *memchr(const void *src, int c, size_t bytes)
 {
     const unsigned char *cp;
@@ -946,7 +947,7 @@ void *memchr(const void *src, int c, size_t bytes)
 #endif /* HAVE_MEMCHR */
 
 
-#ifndef HAVE_MEMMEM
+#if HAVE_MEMMEM != 1
 void *memmem(const void *haystack, size_t haystack_len,
            const void *needle,   size_t needle_len)
 {
@@ -968,8 +969,8 @@ void *memmem(const void *haystack, size_t haystack_len,
 #endif /* HAVE_MEMMEM */
 
 
-#ifndef HAVE_MEMCMP
-#ifndef HAVE_BCMP
+#if HAVE_MEMCMP != 1
+#if HAVE_BCMP != 1
 /*
  * Some systems, such as SunOS do have BCMP instead.
  * In which case this is defined as a macro in the header.
@@ -987,7 +988,7 @@ int memcmp(const void *src1, const void *src2, size_t n)
 #endif /* HAVE_MEMCMP */
 
 
-#ifndef HAVE_STRDUP
+#if HAVE_STRDUP != 1
 char *strdup(const char *str)
   {
   char *new_str;
@@ -1002,7 +1003,7 @@ char *strdup(const char *str)
 #endif /* HAVE_STRDUP */
 
 
-#ifndef HAVE_MEMDUP
+#if HAVE_MEMDUP != 1
 void *memdup(const void *mem, int byte_size)
   {
   void *dest;
@@ -1019,7 +1020,7 @@ void *memdup(const void *mem, int byte_size)
 #endif /* HAVE_MEMDUP */
 
 
-#ifndef HAVE_STRNDUP
+#if HAVE_STRNDUP != 1
 char *strndup(const char *str, size_t n)
   {
   char *new_str=NULL;
@@ -1036,7 +1037,7 @@ char *strndup(const char *str, size_t n)
 #endif /* HAVE_STRNDUP */
 
 
-#ifndef HAVE_STRNFILL
+#if HAVE_STRNFILL != 1
 char *strnfill(int length, char fill_char)
   {
   char *str, *s, *end;
@@ -1086,7 +1087,7 @@ strdup_printf(const char *format,
 #endif
 
 
-#ifndef HAVE_STRCATV
+#if HAVE_STRCATV != 1
 char *strcatv(const char *string1, ...)
   {
   int	  l;
@@ -1124,7 +1125,7 @@ char *strcatv(const char *string1, ...)
 #endif /* HAVE_STRCATV */
 
 
-#ifndef HAVE_STRTOD
+#if HAVE_STRTOD != 1
 double strtod(const char *nptr, char **endptr)
   {
   char *fail_pos_1;
@@ -1141,7 +1142,7 @@ double strtod(const char *nptr, char **endptr)
 
   if (fail_pos_1 && fail_pos_1[0] != 0)
     {
-#ifndef HAVE_SETLOCALE
+#if HAVE_SETLOCALE != 1
     val_2 = strtod(nptr, &fail_pos_2);
 #else
     char *old_locale;
@@ -1170,7 +1171,7 @@ double strtod(const char *nptr, char **endptr)
 #endif /* HAVE_STRTOD */
 
 
-#ifndef HAVE_STRSIGNAL
+#if HAVE_STRSIGNAL != 1
 char *strsignal(int signum)
   {
   switch(signum)
@@ -1414,7 +1415,7 @@ int printf_string_upper_bound(const char* format,
 #endif
 
 
-#ifndef HAVE_STRREV
+#if HAVE_STRREV != 1
 void strrev(char *string)
   {
   if (!string) return;
@@ -1443,7 +1444,7 @@ void strrev(char *string)
 #endif /* HAVE_STRREV */
 
 
-#ifndef HAVE_STRERROR
+#if HAVE_STRERROR != 1
 char *strerror(int errnum)
   {
   static char buf[64];
@@ -1453,7 +1454,7 @@ char *strerror(int errnum)
 #endif /* HAVE_STRERROR */
 
 
-#ifndef HAVE_DIEF
+#if HAVE_DIEF != 1
 /*
  * Needed as a function because many compilers don't use vararg macros.
  * HAVE_DIEF is set in "SAA_header.h", not "config.h".
@@ -1473,7 +1474,7 @@ void dief(const char *format, ...)
 #endif /* HAVE_DIEF */
 
 
-#ifndef HAVE_BASENAME
+#if HAVE_BASENAME != 1
 char *basename(char *path)
   {
   /* Search for the last directory separator in PATH.  */
@@ -1486,7 +1487,7 @@ char *basename(char *path)
 #endif /* HAVE_BASENAME */
 
 
-#ifndef HAVE_READLINE
+#if HAVE_READLINE != 1
 #ifndef BUFSIZ
 #  define BUFSIZ 256
 #endif
@@ -1533,7 +1534,7 @@ char *readline(char *prompt)
 #endif /* HAVE_READLINE */
 
 
-#ifndef HAVE_STRSPN
+#if HAVE_STRSPN != 1
 /*
  * The strspn() function calculates the length of the initial segment of s which
  * consists entirely of characters in accept.
@@ -1553,7 +1554,7 @@ size_t strspn(const char *string, const char *accept)
 #endif /* HAVE_STRSPN */
 
 
-#ifndef HAVE_STRCSPN
+#if HAVE_STRCSPN != 1
 /*
  * The  strcspn()  function  calculates  the  length  of the initial segment of s which
  * consists entirely of characters not in reject.
@@ -1573,7 +1574,7 @@ size_t strcspn(const char *string, const char *reject)
 #endif /* HAVE_STRCSPN */
 
 
-#if !defined( HAVE_WAITPID ) && !defined( W32_CRIPPLED )
+#if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )
 pid_t waitpid(pid_t pid, int *pstatus, int options)
   {
   pid_t result;
@@ -1588,7 +1589,7 @@ pid_t waitpid(pid_t pid, int *pstatus, int options)
 #endif /* HAVE_WAITPID */
 
 
-#ifndef HAVE_MIN
+#if HAVE_MIN != 1
 int min( int a, int b )
   {
   return a <= b ? a : b;
@@ -1596,7 +1597,7 @@ int min( int a, int b )
 #endif
 
 
-#ifndef HAVE_MAX
+#if HAVE_MAX != 1
 int max( int a, int b )
   {
   return a >= b ? a : b;
@@ -1613,7 +1614,7 @@ int max( int a, int b )
  * (I believe that these are ANSI-defined functions that were
  * replaced in the POSIX specifications)
  */
-#ifndef HAVE_STRUPR
+#if HAVE_STRUPR != 1
 char *strupr( char *s )
   {
   char    *p = s;
@@ -1629,7 +1630,7 @@ char *strupr( char *s )
 #endif /* HAVE_STRUPR */
 
 
-#ifndef HAVE_STRICMP
+#if HAVE_STRICMP != 1
 int stricmp( char *s1, char *s2 )
 {
         while( *s1 && *s2 ) {
@@ -1649,7 +1650,7 @@ int stricmp( char *s1, char *s2 )
 #endif /* HAVE_STRICMP */
 
 
-#ifndef HAVE_STRNICMP
+#if HAVE_STRNICMP != 1
 int strnicmp( char *s1, char *s2, int n )
 {
         int     i;
@@ -1667,7 +1668,7 @@ int strnicmp( char *s1, char *s2, int n )
 #endif /* HAVE_STRNICMP */
 
 
-#ifndef HAVE_SINCOS
+#if HAVE_SINCOS != 1
 /*
  * This is an undocumented GNU extension, which is actually fairly useful.
  */
@@ -1688,7 +1689,7 @@ void sincos( double radians, double *s, double *c )
 #endif /* HAVE_SINCOS */
 
 
-#ifndef HAVE_ITOA
+#if HAVE_ITOA != 1
 /*
  * Convert an integer to a string.
  */
@@ -1719,7 +1720,7 @@ void itoa(const int n, char *s)
   }
 #endif /* HAVE_ITOA */
 
-#ifndef HAVE_GETHOSTNAME
+#if HAVE_GETHOSTNAME != 1
 /*
  * gethostname() - get host name
 

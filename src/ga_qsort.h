@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_qsort - GA population sorting routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -32,14 +32,12 @@
 #ifndef GA_QSORT_H_INCLUDED
 #define GA_QSORT_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul.h"
 
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "ga_core.h"
 
 /* Activate the timing code with this constant */
 /*#define GA_QSORT_TIME*/

@@ -232,7 +232,7 @@ static void gaul_mutation(population *pop)
 
 static void gaul_evaluation_slave_mp(population *pop)
   {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
   MPI_Status	status;			/* MPI status structure. */
   int		int_single;		/* Receive buffer. */
@@ -345,7 +345,7 @@ static void gaul_ensure_evaluations(population *pop)
 
 static void gaul_ensure_evaluations_mp(population *pop)
   {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
 
   plog(LOG_FIXME, "Need to parallelise this!");
@@ -489,7 +489,7 @@ static void gaul_ensure_evaluations_forked(population *pop, const int num_proces
   last updated:	18 Sep 2002
  **********************************************************************/
 
-#ifdef HAVE_PTHREAD
+#if HAVE_PTHREAD == 1
 static void gaul_ensure_evaluations_threaded(population *pop, const int num_threads,
 			int *eid, pthread_t *tid)
   {
@@ -683,7 +683,7 @@ static void gaul_adapt_and_evaluate(population *pop)
 
 static void gaul_adapt_and_evaluate_mp(population *pop)
   {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
   entity	*adult=NULL;		/* Adapted entity. */
   int		adultrank;		/* Rank of adapted entity. */
@@ -1042,7 +1042,7 @@ static void gaul_survival(population *pop)
 
 static void gaul_survival_mp(population *pop)
   {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
 
   plog(LOG_FIXME, "Need to parallelise this!");
@@ -1263,7 +1263,7 @@ static void gaul_survival_forked(population *pop,
   last updated:	18 Mar 2003
  **********************************************************************/
 
-#ifdef HAVE_PTHREAD
+#if HAVE_PTHREAD == 1
 static void gaul_survival_threaded(population *pop,
 			const int num_threads,
 			int *eid, pthread_t *tid)
@@ -1657,7 +1657,7 @@ int ga_evolution_forked(	population		*pop,
   last updated:	18 Sep 2002
  **********************************************************************/
 
-#ifdef HAVE_PTHREAD
+#if HAVE_PTHREAD == 1
 int ga_evolution_threaded(	population		*pop,
 				const int		max_generations )
   {
@@ -3538,7 +3538,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   int		generation=0;		/* Current generation number. */
   int		island;			/* Current island number. */
   int		i;			/* Loop over members of population. */

@@ -36,9 +36,7 @@
 /*
  * Includes
  */
-#include "SAA_header.h"
-
-#include "ga_core.h"
+#include "gaul.h"
 
 #ifdef HAVE_MPI
 #include <mpi.h>

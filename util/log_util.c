@@ -111,7 +111,7 @@ void log_init(	enum log_level_type	level,
 
   if (oldfname) s_free(oldfname);
 
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
   plog(LOG_VERBOSE, "Log started. (parallel with MPI)");
 #else
   plog(LOG_VERBOSE, "Log started.");
@@ -242,7 +242,7 @@ void log_output(	const enum	log_level_type level,
 
 /* Next few lines could be optimised (in terms of number of 'if' statements) */
 
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
     fprintf(fh, "%d: %s%s%s%s\n",
              mpi_get_rank(),
              log_date?"":ctime(&t), log_date?"":" - ",
@@ -265,7 +265,7 @@ void log_output(	const enum	log_level_type level,
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
     {
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
     if (mpi_get_rank() >= 0)
       fprintf(stdout, "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",
@@ -314,7 +314,7 @@ void plog(const enum log_level_type level, const char *format, ...)
     vsnprintf(message, LOG_MAX_LEN, format, ap);
     va_end(ap);
 
-#ifdef HAVE_MPI
+#if HAVE_MPI == 1
     if (mpi_get_rank() >= 0)
       printf( "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",

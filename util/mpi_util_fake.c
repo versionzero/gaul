@@ -3,7 +3,7 @@
  **********************************************************************
 
   mpi_util_fake - mpi_util compilation kludge.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -36,7 +36,7 @@
 
 #define NO_PARALLEL
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 /*
  * Forced over-ride of the PARALLEL constant.

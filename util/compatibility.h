@@ -27,7 +27,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	25 Feb 2003 SAA	Tweaked strndup() prototype.
+  Updated:	10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
+  		25 Feb 2003 SAA	Tweaked strndup() prototype.
   		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
  		20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
 		09 Oct 2002 SAA	A #if should have been a #ifdef.
@@ -95,233 +96,233 @@
  * Prototypes
  */
 
-#ifndef HAVE_IPOW
+#if HAVE_IPOW != 1
 int ipow(int n, int e);
 #endif
 
-#ifndef HAVE_STRCHR
-# ifdef HAVE_INDEX
+#if HAVE_STRCHR != 1
+# if HAVE_INDEX == 1
 #  define strchr index
 # else
 char *strchr(const char *str, int c);
 # endif
 #endif
 
-#ifndef HAVE_STRRCHR
+#if HAVE_STRRCHR != 1
 /* Some systems have rindex() instead */
-# ifdef HAVE_RINDEX
+# if HAVE_RINDEX == 1
 #  define strrchr rindex
 # else
 char *strrchr(const char *str, int c);
 # endif
 #endif
 
-#ifndef HAVE_STRCAT 
+#if HAVE_STRCAT  != 1
 char *strcat(char *str1, const char *str2);
 #endif
 
-#ifndef HAVE_STRLEN
+#if HAVE_STRLEN != 1
 size_t strlen(const char *str);
 #endif
 
-#ifndef HAVE_STRCMP
+#if HAVE_STRCMP != 1
 int strcmp(const char *str1, const char *str2);
 #endif
 
-#ifndef HAVE_STRNCMP
+#if HAVE_STRNCMP != 1
 int strncmp(const char *str1, const char *str2, size_t len);
 #endif
 
-#ifndef HAVE_STRCPY
+#if HAVE_STRCPY != 1
 char *strcpy(char *str1, const char *str2);
 #endif
 
-#ifndef HAVE_STRNCPY
+#if HAVE_STRNCPY != 1
 char *strncpy(char *str1, const char *str2, size_t len);
 #endif
 
-#ifndef HAVE_STRTOK
+#if HAVE_STRTOK != 1
 char *strtok(char *str, const char *delim);
 #endif
 
-#ifndef HAVE_STRPBRK
+#if HAVE_STRPBRK != 1
 char *strpbrk(const char *s, const char *accept);
 #endif
 
-#ifndef HAVE_STRSEP
+#if HAVE_STRSEP != 1
 char *strsep(char **str, const char *delim);
 #endif
 
-#ifndef HAVE_STRCASECMP
+#if HAVE_STRCASECMP != 1
 int strcasecmp(const char *str0, const char *str1);
 #endif
 
-#ifndef HAVE_STRNCASECMP
+#if HAVE_STRNCASECMP != 1
 int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
 
-#ifndef HAVE_USLEEP
+#if HAVE_USLEEP != 1
 /* FIXME: Need to add Win32 version of this code. */
 void usleep(unsigned long usec);
 #endif
 
-#ifndef HAVE_STRLCPY
+#if HAVE_STRLCPY != 1
 size_t strlcpy(char *dest, const char *src, size_t n);
 #endif
 
-#ifndef HAVE_STRLCAT
+#if HAVE_STRLCAT != 1
 size_t strlcat(char *dest, const char *src, size_t n);
 #endif
 
-#ifndef HAVE_SNPRINTF
+#if HAVE_SNPRINTF != 1
 int snprintf(char *str, size_t n, const char *format, ...);
 #endif
 
-#ifndef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF != 1
 int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 #endif
 
-#ifndef HAVE_MEMCPY
+#if HAVE_MEMCPY != 1
 /* Some systems, such as SunOS do have BCOPY instead. */
-# ifdef HAVE_BCOPY
+# if HAVE_BCOPY == 1
 #  define memcpy(A, B, C) bcopy((B), (A), (C))
 # else
 void memcpy(char *dest, const char *src, size_t len);
 # endif
 #endif
 
-#ifndef HAVE_MEMMOVE
+#if HAVE_MEMMOVE != 1
 /* Some systems, such as SunOS do have BCOPY instead. */
-# ifdef HAVE_BCOPY
+# if HAVE_BCOPY == 1
 #  define memmove(A, B, C) bcopy((B), (A), (C))
 # else
 void *memmove(void *dst, const void *src, size_t bytes);
 # endif
 #endif
 
-#ifndef HAVE_MEMSCAN
+#if HAVE_MEMSCAN != 1
 void *memscan(void *addr, int c, size_t size);
 #endif
 
-#ifndef HAVE_MEMSET
+#if HAVE_MEMSET != 1
 void *memset(void *dst0, int c0, size_t bytes);
 #endif
 
-#ifndef HAVE_MEMREV
+#if HAVE_MEMREV != 1
 void *memrev(void *src, size_t bytes);
 #endif
 
-#ifndef HAVE_MEMCHR
+#if HAVE_MEMCHR != 1
 void *memchr(const void *src, int c, size_t bytes);
 #endif
 
-#ifndef HAVE_MEMMEM
+#if HAVE_MEMMEM != 1
 void *memmem(const void *haystack, size_t haystack_len,
            const void *needle,   size_t needle_len);
 #endif
 
-#ifndef HAVE_MEMCMP
+#if HAVE_MEMCMP != 1
 /* Some systems, such as SunOS do have BCMP instead. */
-# ifdef HAVE_BCMP
+# if HAVE_BCMP == 1
 #  define memcmp(A, B, C) bcmp((B), (A), (C))
 # else
 int memcmp(const void *src1, const void *src2, size_t n);
 # endif
 #endif
 
-#ifndef HAVE_STRDUP
+#if HAVE_STRDUP != 1
 char *strdup(const char *str);
 #endif
 
-#ifndef HAVE_MEMDUP
+#if HAVE_MEMDUP != 1
 void *memdup(const void *mem, int byte_size);
 #endif
 
-#ifndef HAVE_STRNDUP
+#if HAVE_STRNDUP != 1
 char *strndup(const char *str, size_t n);
 #endif
 
-#ifndef HAVE_STRNFILL
+#if HAVE_STRNFILL != 1
 char *strnfill(int length, char fill_char);
 #endif
 
-#ifndef HAVE_STRCATV
+#if HAVE_STRCATV != 1
 char *strcatv(const char *string1, ...);
 #endif
 
-#ifndef HAVE_STRTOD
+#if HAVE_STRTOD != 1
 double strtod(const char *nptr, char **endptr);
 #endif
 
-#ifndef HAVE_STRSIGNAL
+#if HAVE_STRSIGNAL != 1
 char *strsignal(int signum);
 #endif
 
-#ifndef HAVE_STRREV
+#if HAVE_STRREV != 1
 void strrev(char *string);
 #endif
 
-#ifndef HAVE_STRERROR
+#if HAVE_STRERROR != 1
 char *strerror(int errnum);
 #endif
 
-#ifndef HAVE_DIEF
+#if HAVE_DIEF != 1
 /*
  * HAVE_DIEF is set in "SAA_header.h", not "config.h"
  */
 void dief(const char *format, ...);
 #endif
 
-#ifndef HAVE_BASENAME
+#if HAVE_BASENAME != 1
 char *basename(char *path);
 #endif
 
-#ifndef HAVE_READLINE
+#if HAVE_READLINE != 1
 char *readline(char *prompt);
 #endif
 
-#ifndef HAVE_STRSPN
+#if HAVE_STRSPN != 1
 size_t strspn(const char *string, const char *accept);
 #endif
 
-#ifndef HAVE_STRCSPN
+#if HAVE_STRCSPN != 1
 size_t strcspn(const char *string, const char *reject);
 #endif
 
-#if !defined( HAVE_WAITPID ) && !defined( W32_CRIPPLED )
+#if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )
 /* FIXME: Need to add Win32 version of this code. */
 pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
 
-#ifndef HAVE_MIN
+#if HAVE_MIN != 1
 int min(int a, int b);
 #endif
 
-#ifndef HAVE_MAX
+#if HAVE_MAX != 1
 int max(int a, int b);
 #endif
 
-#ifndef HAVE_STRUPR
+#if HAVE_STRUPR != 1
 char *strupr( char *s );
 #endif
 
-#ifndef HAVE_STRICMP
+#if HAVE_STRICMP != 1
 int stricmp( char *s1, char *s2 );
 #endif
 
-#ifndef HAVE_STRNICMP
+#if HAVE_STRNICMP != 1
 int strnicmp( char *s1, char *s2, int n );
 #endif
 
-#ifndef HAVE_SINCOS
+#if HAVE_SINCOS != 1
 void sincos( double radians, double *s, double *c );
 #endif
 
-#ifndef HAVE_ITOA
+#if HAVE_ITOA != 1
 void itoa(const int n, char *s);
 #endif
 
-#ifndef HAVE_GETHOSTNAME
+#if HAVE_GETHOSTNAME != 1
 int gethostname(char *name, size_t len);
 #endif
 

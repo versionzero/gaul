@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_bitstring - GAUL's low-level bitstring routines.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -35,7 +35,7 @@
 /*
  * Includes.
  */
-#include "SAA_header.h"
+#include "gaul.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -44,8 +44,6 @@
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
-
-#include "ga_core.h"
 
 /*
  * Prototypes.

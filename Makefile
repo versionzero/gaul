@@ -19,7 +19,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = .
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,38 +97,45 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+BUILD_DATE_STRING = 
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1844
-GA_PATCH_VERSION = 0
-GA_VERSION = 0.1844-0
+GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
+GA_NUM_THREADS_ENVVAR_STRING = GA_NUM_THREADS
+GA_PATCH_VERSION = 2
+GA_VERSION = 0.1844-2
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1844
-LT_REVISION = 0
-MAINT = #
+LT_REVISION = 2
 MPIFLAGS = 
 MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1844-0
+UNAME_STRING = 
+V3_QUICK = 1
+VERSION = 0.1844-2
+VERSION_STRING = 
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
+
+#ACLOCAL_AMFLAGS = -I .
 SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
@@ -136,7 +143,7 @@ EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = config.h
+CONFIG_HEADER = config.h $(top_builddir)/util/gaul_config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 
@@ -156,18 +163,18 @@ all: config.h
 
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno
-$(srcdir)/Makefile.in: # Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  Makefile
-Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)
 
 $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: # $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure:  $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4): # configure.in 
+$(ACLOCAL_M4):  configure.in 
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.h: stamp-h1
@@ -180,7 +187,7 @@ stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
 
-$(srcdir)/config.h.in: # $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/config.h.in:  $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOHEADER)
 	touch $(srcdir)/config.h.in
 

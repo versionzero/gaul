@@ -39,8 +39,10 @@
  * Include requisite headers.
  **********************************************************************/
 
-#include "SAA_header.h"		/* General header containing commonly
-				   used convenience definitions. */
+#include "gaul_util.h"		/* General header containing commonly
+				   used convenience definitions.
+				   This also include a platform-
+				   specific configuration file. */
 
 /*
  * Programming utilities.

@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,37 +97,44 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+BUILD_DATE_STRING = 
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1844
-GA_PATCH_VERSION = 0
-GA_VERSION = 0.1844-0
+GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
+GA_NUM_THREADS_ENVVAR_STRING = GA_NUM_THREADS
+GA_PATCH_VERSION = 2
+GA_VERSION = 0.1844-2
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1844
-LT_REVISION = 0
-MAINT = #
+LT_REVISION = 2
 MPIFLAGS = 
 MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1844-0
+UNAME_STRING = 
+V3_QUICK = 1
+VERSION = 0.1844-2
+VERSION_STRING = 
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
+
+EXTRA_DIST = gaul_config.h.in
 
 lib_LTLIBRARIES = libgaul_util.la \
 	libnn_util.la
@@ -153,22 +160,23 @@ libnn_util_la_SOURCES = \
 
 
 include_HEADERS = \
-     SAA_header.h \
-     avltree.h \
-     compatibility.h \
-     dstr_util.h \
-     linkedlist.h \
-     log_util.h \
-     memory_chunks.h \
-     memory_util.h \
-     mpi_util.h \
-     nn_util.h \
-     random_util.h \
-     str_match.h \
-     str_util.h \
-     table_util.h \
-     memory_chunks.c \
-     timer_util.h
+	SAA_header.h \
+	gaul_config.h \
+	avltree.h \
+	compatibility.h \
+	dstr_util.h \
+	linkedlist.h \
+	log_util.h \
+	memory_chunks.h \
+	memory_util.h \
+	mpi_util.h \
+	nn_util.h \
+	random_util.h \
+	str_match.h \
+	str_util.h \
+	table_util.h \
+	memory_chunks.c \
+	timer_util.h
 
 
 libgaul_util_a_LIBFLAGS = 
@@ -178,7 +186,7 @@ libnn_util_a_LIBFLAGS =
 libnn_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 subdir = util
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_HEADER = $(top_builddir)/config.h gaul_config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
@@ -192,10 +200,10 @@ am_libnn_util_la_OBJECTS = nn_util.lo
 libnn_util_la_OBJECTS = $(am_libnn_util_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
-DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I.
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
@@ -215,22 +223,35 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
-DIST_COMMON = README $(include_HEADERS) Makefile.am Makefile.in
+DIST_COMMON = README $(include_HEADERS) Makefile.am Makefile.in \
+	gaul_config.h.in
 SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 
-all: all-am
+all: gaul_config.h
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: # Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  util/Makefile
-Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+
+stamp-h2: $(srcdir)/gaul_config.h.in $(top_builddir)/config.status
+	@rm -f stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status util/gaul_config.h
+
+$(srcdir)/gaul_config.h.in:  $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOHEADER)
+	touch $(srcdir)/gaul_config.h.in
+
+distclean-hdr:
+	-rm -f gaul_config.h stamp-h2
 libLTLIBRARIES_INSTALL = $(INSTALL)
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
@@ -348,11 +369,11 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	       END { for (i in files) print i; }'`; \
 	mkid -fID $$unique
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS:  $(HEADERS) $(SOURCES) gaul_config.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS) gaul_config.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -395,9 +416,12 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="${top_distdir}" distdir="$(distdir)" \
+	  dist-hook
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS) gaul_config.h
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
@@ -434,7 +458,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 distclean: distclean-am
 
 distclean-am: clean-am distclean-compile distclean-depend \
-	distclean-generic distclean-libtool distclean-tags
+	distclean-generic distclean-hdr distclean-libtool \
+	distclean-tags
 
 dvi: dvi-am
 
@@ -468,17 +493,30 @@ uninstall-am: uninstall-includeHEADERS uninstall-info-am \
 
 .PHONY: GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
-	distclean-depend distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am info info-am install \
-	install-am install-data install-data-am install-exec \
-	install-exec-am install-includeHEADERS install-info \
-	install-info-am install-libLTLIBRARIES install-man \
+	distclean-depend distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distdir dvi dvi-am info \
+	info-am install install-am install-data install-data-am \
+	install-exec install-exec-am install-includeHEADERS \
+	install-info install-info-am install-libLTLIBRARIES install-man \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	tags uninstall uninstall-am uninstall-includeHEADERS \
 	uninstall-info-am uninstall-libLTLIBRARIES
 
+
+# Regenerate gaul_config.h with config.status whenever gaul_config.h.in changes.
+gaul_config.h: stamp-gaul_config
+	@:
+stamp-common: $(srcdir)/gaul_config.h.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gaul_config.h \
+	$(SHELL) ./config.status
+	echo timestamp > $@
+
+# Don't distribute gaul_config.h, since it is build host dependent!
+dist-hook:
+	rm -f $(distdir)/gaul_config.h
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -30,31 +30,35 @@ dnl		Consider use of AC_TRY_CFLAGS().
 dnl
 dnl ***************************************************************
 
-dnl We require autoconf 2.13 or above
-AC_PREREQ(2.13)
+#
+# We require autoconf 2.5 or above
+#
+AC_PREREQ(2.5)
 
-dnl init autoconf (and check for presence of gaul.h - the public header file)
+#
+# init autoconf (and check for presence of gaul.h - the public header file)
+# Specify a configuration file
+#
 AC_INIT(src/gaul.h)
+AM_CONFIG_HEADER(config.h util/gaul_config.h)
+AC_CANONICAL_SYSTEM
 
 PACKAGE=gaul-devel
 
-AC_CANONICAL_SYSTEM
-
-dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
-dnl are available for $ac_help expansion.
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1844
-GA_PATCH_VERSION=0
+GA_PATCH_VERSION=2
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
-AC_SUBST(GA_MAJOR_VERSION)
-AC_SUBST(GA_MINOR_VERSION)
-AC_SUBST(GA_PATCH_VERSION)
-AC_SUBST(GA_VERSION)
-AC_SUBST(MPIFLAGS)
-AC_SUBST(MPILIBS)
+#
+# Ugly kludge.  What is the proper way to do this?
+#
+#ACLOCAL="$ACLOCAL -I ."
+#ACLOCAL="aclocal -I ."
 
-dnl libtool versioning
+#
+# libtool versioning
+#
 LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 LT_CURRENT=0
 LT_REVISION=$GA_PATCH_VERSION
@@ -62,37 +66,59 @@ AC_SUBST(LT_RELEASE)
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 
-AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, no-define)
+#
+# Set some defines required to their default values.
+# FIXME: should allow configuration-time modification for many of these.
+#
+AC_DEFINE_UNQUOTED(GA_MAJOR_VERSION, ${GA_MAJOR_VERSION}, [Major version number.])
+AC_DEFINE_UNQUOTED(GA_MINOR_VERSION, ${GA_MINOR_VERSION}, [Minor version number.])
+AC_DEFINE_UNQUOTED(GA_PATCH_VERSION, ${GA_PATCH_VERSION}, [Patch level.])
 
-dnl Specify a configuration file
-AM_CONFIG_HEADER(config.h)
-
-AC_DEFINE_UNQUOTED(GA_MAJOR_VERSION, $GA_MAJOR_VERSION, [Major version number.])
-AC_DEFINE_UNQUOTED(GA_MINOR_VERSION, $GA_MINOR_VERSION, [Minor version number.])
-AC_DEFINE_UNQUOTED(GA_PATCH_VERSION, $GA_PATCH_VERSION, [Patch level.])
-
-dnl Set some defines required to their default values.
-dnl FIXME: allow configuration-time modification for many of these.
 AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [Record compilation platform information.])
 AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Record date of compilation.])
-AC_DEFINE(V3_QUICK, 1, [Whether to skip expensive sanity checking in vector routines.])
-AC_DEFINE(AVLTREE_KEY_TYPE, void *, [Type of key used by AVL tree routines.])
+V3_QUICK=1
+AC_DEFINE_UNQUOTED(V3_QUICK, ${V3_QUICK}, [Whether to skip expensive sanity checking in vector routines.])
 AC_DEFINE_UNQUOTED(VERSION_STRING, "${GA_VERSION}", [Version string.])
 
-AC_DEFINE(GA_NUM_PROCESSES_ENVVAR_STRING, "GA_NUM_PROCESSES", [Environment variable used to request processes.])
-AC_DEFINE(GA_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads.])
+GA_NUM_PROCESSES_ENVVAR_STRING="GA_NUM_PROCESSES"
+AC_DEFINE_UNQUOTED(GA_NUM_PROCESSES_ENVVAR_STRING, ${GA_NUM_PROCESSES_ENVVAR_STRING}, [Environment variable used to request processes.])
+GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
+AC_DEFINE_UNQUOTED(GA_NUM_THREADS_ENVVAR_STRING, ${GA_NUM_THREADS_ENVVAR_STRING}, [Environment variable used to request threads.])
 
-dnl Checks for programs.
+AC_SUBST(GA_MAJOR_VERSION)
+AC_SUBST(GA_MINOR_VERSION)
+AC_SUBST(GA_PATCH_VERSION)
+AC_SUBST(GA_VERSION)
+AC_SUBST(VERSION_STRING)
+
+AC_SUBST(MPIFLAGS)
+AC_SUBST(MPILIBS)
+
+AC_SUBST(UNAME_STRING)
+AC_SUBST(BUILD_DATE_STRING)
+AC_SUBST(V3_QUICK)
+
+AC_SUBST(GA_NUM_PROCESSES_ENVVAR_STRING)
+AC_SUBST(GA_NUM_THREADS_ENVVAR_STRING)
+
+# Initialise Automake.
+AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, no-define)
+
+# Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl Initialize libtool.
+# Initialize libtool.
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
-dnl Initialize maintainer mode
-AM_MAINTAINER_MODE
+# Initialize maintainer mode
+#AM_MAINTAINER_MODE
 
-dnl figure debugging default, prior to $ac_help setup
+#
+# figure debugging default, prior to $ac_help setup
+#
+
 #
 #AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 #if test `expr $MINOR_VERSION \% 2` = 1 ; then
@@ -105,7 +131,9 @@ dnl figure debugging default, prior to $ac_help setup
 dnl Debugging default.
 debug_default=no
 
-dnl declare --enable-* args and collect ac_help strings
+#
+# declare --enable-* args and collect ac_help strings
+#
 AC_ARG_ENABLE(g,
        [  --enable-g=[yes/no]             compile with symbolic debug information. [default=yes]],,
        enable_g=yes)
@@ -175,7 +203,9 @@ else
   AC_DEFINE( HAVE_PTHREADS, 1, [Define to use pthreads for parallel code.])
 fi
 
-dnl Setup MPI compilation
+#
+# Setup MPI compilation
+#
 AC_MSG_CHECKING(for MPI use)
 if test "x$enable_mpi" != "xyes"; then
   AC_MSG_RESULT(don't use)
@@ -245,7 +275,9 @@ fi
 AC_DEFINE_UNQUOTED( DEBUG, ${debug}, [Overall debugging level.])
 AC_DEFINE_UNQUOTED( GA_DEBUG, ${debug}, [Core GAUL debugging level.])
 
-dnl Whether to pad memory to detect overflows
+#
+# Whether to pad memory to detect overflows
+#
 AC_MSG_CHECKING(whether to pad memory to detect overflows)
 if test "x$enable_padding" = "xyes"; then
   AC_MSG_RESULT(yes)
@@ -256,8 +288,10 @@ else
 fi
 AC_DEFINE_UNQUOTED( MEMORY_PADDING, ${result}, [Whether to pad memory.] )
 
-dnl Whether we need to cripple GAUL so that it works with windows.
-dnl This is always the case if MingW is being used.
+#
+# Whether we need to cripple GAUL so that it works with windows.
+# This is always the case if MingW is being used.
+#
 AC_MSG_CHECKING(whether to cripple GAUL for windows)
 
 case $target in
@@ -274,7 +308,9 @@ else
 fi
 AC_DEFINE_UNQUOTED(W32_CRIPPLED, ${result}, [Whether to cripple GAUL so it works on windows.])
 
-dnl Check for S-Lang.
+#
+# Check for S-Lang.
+#
 AC_MSG_CHECKING(whether to link S-Lang scripting engine)
 if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
@@ -300,7 +336,9 @@ else
   AC_MSG_RESULT(no)
 fi
 
-dnl Compiler specific switches.
+#
+# Compiler specific switches.
+#
 changequote(,)dnl
 case $CC in
   gcc)
@@ -475,33 +513,44 @@ case $CC in
 esac
 changequote([,])dnl
 
-dnl Checks for standard library functions.
+#
+# Checks for standard library functions.
+#
 AC_FUNC_VPRINTF
 
-dnl Check type sizes.
+#
+# Check type sizes.
+#
 AC_CHECK_SIZEOF(double, 4)
 AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(void *, 4)
 
-dnl Stuff.
+#
+# Stuff.
+#
 AC_C_CONST
 AC_STRUCT_TM
 
 dnl Get includes setup correctly.
 INCLUDE="$INCLUDE -I../util/ -I../src/ -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
-dnl Checks for header files.
+#
+# Checks for header files.
+#
 AC_HEADER_STDC
 AC_HEADER_TIME
-AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
-                 sys/select.h sys/signal.h sys/socket.h sys/termio.h \
-                 sys/time.h sys/types.h sys/uio.h sys/wait.h \
-                 limits.h values.h termios.h unistd.h fcntl.h)
+AC_CHECK_HEADERS(pwd.h \
+                 sys/select.h sys/signal.h \
+                 sys/time.h sys/types.h sys/wait.h \
+                 limits.h values.h unistd.h \
+		 string.h strings.h)
 
-dnl Check for some library functions, many of which GAUL doesn't use, but I
-dnl haven't gone though checking yet.
+#
+# Check for some library functions, many of which GAUL doesn't use, but I
+# haven't gone though checking yet.
+#
 AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                atexit on_exit \
                waitpid snooze \
@@ -522,8 +571,10 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                strspn strcspn \
                strerror strlcat strlcpy strstr vsnprintf)
 
-dnl Some dodgy work-arounds.
-dnl Most of this is a bit kludgy.  Proper fixes would be desirable...
+#
+# Some dodgy work-arounds.
+# Most of this is a bit kludgy.  Proper fixes would be desirable...
+#
 case "$target" in
   *-*-mingw*) is_mingw="yes" ;;
   *-*-nto-qnx*) is_qnx="yes" ;;
@@ -537,13 +588,6 @@ if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qn
 else
   AC_CHECK_FUNC(itoa)
 fi
-
-dnl Only needed for icc < 7.0
-#if test "x$CC" = "xicc"; then
-#  AC_DEFINE(HAVE_SINCOS,1,[Whether sincos() is available])	# I have some problems with implicit definition of sincos() with the Intel C++.
-#else
-#  AC_CHECK_FUNC( sincos )
-#fi
 
 # Fix defines for case that the Sun Forte C compiler is being used on Solaris.
 if test "x$CC" = "xcc"; then
@@ -584,34 +628,9 @@ case "$target" in
     ;;
 esac
 
-dnl Check whether stdbool.h defines bool and true/false correctly.
-AC_CACHE_CHECK([for working stdbool.h],
-	   gaul_header_stdbool_h,
-	   [AC_TRY_COMPILE([#include <stdbool.h>],
-	[bool blah = false;],
-	gaul_header_stdbool_h="yes", gaul_header_stdbool_h="no")])
-if test "x$gaul_header_stdbool_h" = "xyes"; then
-  AC_DEFINE(HAVE_STDBOOL_H, 1, [Define if you have a working <stdbool.h> header file.])
-fi
-
-dnl Check whether compiler has built-in _Bool type.
-dnl Some systems (FreeBSD) seem to only have _Bool defined if stdbool.h
-dnl was included.  This is odd behaviour, but detected here!
-AC_CACHE_CHECK([for built-in _Bool type],
-	      gaul__bool,
-	     [AC_TRY_COMPILE(,
-	     [_Bool blah = (_Bool)0;],
-	     gaul__bool="yes", gaul__bool="no")])
-if test "x$gaul__bool" = "xno" && test "x$gaul_header_stdbool_h" = "xyes"; then
-  AC_TRY_COMPILE([#include <stdbool.h>],
-           [_Bool blah = (_Bool)0;],
-           gaul__bool="yes", gaul__bool="no")
-fi
-if test "x$gaul__bool" = "xyes"; then
-  AC_DEFINE(HAVE__BOOL, 1, [Define if compiler has built-in _Bool type.])
-fi
-
-dnl Some processor specific stuff.
+#
+# Some processor specific stuff.
+#
 AC_MSG_CHECKING(whether to apply processor specific optimisations)
 case "$target" in
   i586-*-*)
@@ -655,6 +674,7 @@ case "$target" in
     ;;
 esac
 
+dnl GAUL_MEMORY_ALIGN_SIZE
 dnl Determine memory alignment characteristics.
 AC_MSG_CHECKING(memory alignment)
 AC_CACHE_VAL(MEMORY_ALIGN_SIZE,
@@ -672,23 +692,315 @@ int main(void)
 AC_MSG_RESULT(${MEM_ALIGN_SIZE})
 AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, ${MEM_ALIGN_SIZE}, [Memory alignment boundry characteristics.])
 
-dnl Give warning if GNU Make is not being used.
-dnl This message is at the bottom so it may be easily spotted!
+dnl GAUL_GNUMAKE_WARN
+dnl Produce warning message if non-GNU make is detected.
 temp=`make -version -f \dev\null 2>&1 | grep GNU`
 if test "x$temp" = "x"; then
   AC_MSG_WARN([You are advised to use GNU Make when compiling GAUL])
 fi
 
+dnl GAUL_DETECT_BOOL
+dnl Determine native boolean stuff.
+dnl 1) Check whether stdbool.h defines bool and true/false correctly.
+dnl 2) Check whether compiler has built-in _Bool type.
+AC_CACHE_CHECK([for working stdbool.h],
+	   gaul_header_stdbool_h,
+	   [AC_TRY_COMPILE([#include <stdbool.h>],
+	[bool blah = false;],
+	gaul_header_stdbool_h="yes", gaul_header_stdbool_h="no")])
+
+if test "x$gaul_header_stdbool_h" = "xyes"; then
+  AC_DEFINE(HAVE_STDBOOL_H, 1, [Define if you have a working <stdbool.h> header file.])
+fi
+
+AC_CACHE_CHECK([for built-in _Bool type],
+	      gaul__bool,
+	     [AC_TRY_COMPILE(,
+	     [_Bool blah = (_Bool)0;],
+	     gaul__bool="yes", gaul__bool="no")])
+
+if test "x$gaul__bool" = "xno" && test "x$gaul_header_stdbool_h" = "xyes"; then
+  AC_TRY_COMPILE([#include <stdbool.h>],
+           [_Bool blah = (_Bool)0;],
+           gaul__bool="yes", gaul__bool="no")
+fi
+
+if test "x$gaul__bool" = "xyes"; then
+  AC_DEFINE(HAVE__BOOL, 1, [Define if compiler has built-in _Bool type.])
+fi
+
 # Where the linker must look!
 CFLAGS="$CFLAGS $INCLUDE"
 
-AC_OUTPUT(
-           Makefile
-           util/Makefile
-           src/Makefile
-           tests/Makefile
-           examples/Makefile
-         )
+#
+# Add code to config.status to generate a platform dependent configuration
+# file for installation.
+#
+AC_OUTPUT_COMMANDS([
+  if ( test -n "$CONFIG_FILES" && test -n "$CONFIG_HEADERS" ); then
+    # If both these vars are non-empty, then config.status wasn't run by
+    # automake rules (which always set one or the other to empty).
+    CONFIG_OTHER=${CONFIG_OTHER-util/gaul_config.h}
+  fi
+  case "$CONFIG_OTHER" in
+  *util/gaul_config.h*)
+    outfile=util/gaul_config.h
+    stampfile=util/stamp-gaul_config
+    tmpfile=${outfile}.tmp
+    dirname="sed s,^.*/,,g"
+
+    echo creating $outfile
+    cat > $tmpfile << _EOF_
+/********************************************************************
+ *
+ * DO NOT EDIT THIS FILE!  It was automatically generated from:
+ *    configure.in and `echo $outfile|$dirname`.in
+ *    on host: `(hostname || uname -n) 2>/dev/null | sed 1q`
+ *
+ ********************************************************************/
+
+#ifndef GAUL_CONFIG_H_INCLUDED
+#define GAUL_CONFIG_H_INCLUDED 1
+
+_EOF_
+
+    cat $outfile.in >> $tmpfile    
+
+    # Add the code to include these headers only if autoconf has
+    # shown them to be present.
+    if test x$ac_cv_header_pwd_h = xyes; then
+      echo '#include <pwd.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_sys_select_h = xyes; then
+      echo '#include <sys/select.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_sys_signal_h = xyes; then
+      echo '#include <sys/signal.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_sys_time_h = xyes; then
+      echo '#include <sys/time.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_sys_types_h = xyes; then
+      echo '#include <sys/types.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_sys_wait_h = xyes; then
+      echo '#include <sys/wait.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_limits_h = xyes; then
+      echo '#include <limits.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_values_h = xyes; then
+      echo '#include <values.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_unistd_h = xyes; then
+      echo '#include <unistd.h>' >> $tmpfile
+    fi
+    if test x$ac_cv_header_string_h = xyes; then
+      echo '#include <string.h>' >> $tmpfile
+    elif test x$ac_cv_header_strings_h = xyes; then
+      echo '#include <strings.h>' >> $tmpfile
+    fi
+
+    cat >> $tmpfile << _EOF_
+
+#ifndef errno
+/* Some sytems #define this! */
+extern int errno;
+#endif
+
+_EOF_
+
+    if test "x$gaul_header_stdbool_h" = "xyes"; then
+      echo '#define HAVE_STDBOOL_H 1' >> $tmpfile
+    fi
+    if test "x$gaul__bool" = "xyes"; then
+      echo '#define HAVE__BOOL 1' >> $tmpfile
+    fi
+
+    cat >> $tmpfile << _EOF_
+/*
+ * Explicitely tested functions for this platform:
+ */
+
+_EOF_
+
+    if test "x$ac_cv_func_memcpy" = "xyes"; then
+      echo '#define HAVE_MEMCPY 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_memmove" = "xyes"; then
+      echo '#define HAVE_MEMMOVE 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_min" = "xyes"; then
+      echo '#define HAVE_MIN 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_max" = "xyes"; then
+      echo '#define HAVE_MAX 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_sincos" = "xyes"; then
+      echo '#define HAVE_SINCOS 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strdup" = "xyes"; then
+      echo '#define HAVE_STRDUP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strndup" = "xyes"; then
+      echo '#define HAVE_STRNDUP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strcpy" = "xyes"; then
+      echo '#define HAVE_STRCPY 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strncpy" = "xyes"; then
+      echo '#define HAVE_STRNCPY 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strcmp" = "xyes"; then
+      echo '#define HAVE_STRCMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strncmp" = "xyes"; then
+      echo '#define HAVE_STRNCMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_stricmp" = "xyes"; then
+      echo '#define HAVE_STRICMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strnicmp" = "xyes"; then
+      echo '#define HAVE_STRNICMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strcasecmp" = "xyes"; then
+      echo '#define HAVE_STRCASECMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strncasecmp" = "xyes"; then
+      echo '#define HAVE_STRNCASECMP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_usleep" = "xyes"; then
+      echo '#define HAVE_USLEEP 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_snooze" = "xyes"; then
+      echo '#define HAVE_SNOOZE 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_index" = "xyes"; then
+      echo '#define HAVE_INDEX 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_rindex" = "xyes"; then
+      echo '#define HAVE_RINDEX 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_waitpid" = "xyes"; then
+      echo '#define HAVE_WAITPID 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_readline" = "xyes"; then
+      echo '#define HAVE_READLINE 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_gettimeofday" = "xyes"; then
+      echo '#define HAVE_GETTIMEOFDAY 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_gethostname" = "xyes"; then
+      echo '#define HAVE_GETHOSTNAME 1' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_basename" = "xyes"; then
+      echo '#define HAVE_BASENAME 1' >> $tmpfile
+    fi
+
+    cat >> $tmpfile << _EOF_
+
+/*
+ * These functions were not explicitely tested.
+ * The probably will be tested in futre versions, but
+ * for now they are not needed.
+ */
+#define HAVE_FDOPEN 1
+#define HAVE_GETPWUID 1
+#define HAVE_SELECT 1
+#define HAVE_ATEXIT 1
+#define HAVE_ON_EXIT 1
+#define HAVE_MEMSCAN 1
+#define HAVE_MEMREV 1
+#define HAVE_MEMCHR 1
+#define HAVE_MEMMEM 1
+#define HAVE_MEMCMP 1
+#define HAVE_SETLOCALE 1
+#define HAVE_STRCHR 1
+#define HAVE_STRRCHR 1
+#define HAVE_STRCAT 1
+#define HAVE_STRCATV 1
+#define HAVE_STRREV 1
+#define HAVE_STRSPN 1
+#define HAVE_STRCSPN 1
+#define HAVE_STRERROR 1
+#define HAVE_STRLCAT 1
+#define HAVE_STRLCPY 1
+#define HAVE_STRSTR 1
+#define HAVE_STRPBRK 1
+#define HAVE_STRSEP 1
+#define HAVE_STRNFILL 1
+#define HAVE_STRSIGNAL 1
+#define HAVE_VSNPRINTF 1
+#define HAVE_SNPRINTF 1
+#define HAVE_ITOA 1
+#define HAVE_BCOPY 1
+#define HAVE_BCMP 1
+#define HAVE_STRLEN 1
+#define HAVE_STRNCPY 1
+#define HAVE_STRTOD 1
+#define HAVE_STRTOK 1
+#define HAVE_MEMSET 1
+
+#define GA_MAJOR_VERSION ${GA_MAJOR_VERSION}
+#define GA_MINOR_VERSION ${GA_MINOR_VERSION}
+#define GA_PATCH_VERSION ${GA_PATCH_VERSION}
+#define VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
+#define UNAME_STRING "`uname -a`"
+#define BUILD_DATE_STRING "`date +%d/%m/%y`"
+#define V3_QUICK ${V3_QUICK}
+#define AVLTREE_KEY_TYPE void *
+#define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
+#define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
+
+#endif /* GAUL_CONFIG_H_INCLUDED */
+
+_EOF_
+
+    if cmp -s $tmpfile $outfile; then
+      echo $outfile is unchanged
+      rm -f $tmpfile
+    else
+      mv $tmpfile $outfile
+      touch $stampfile
+    fi
+    ;;
+  esac
+],[
+ac_cv_header_pwd_h=$ac_cv_header_pwd_h
+ac_cv_header_sys_select_h=$ac_cv_header_sys_select_h
+ac_cv_header_sys_signal_h=$ac_cv_header_sys_signal_h
+ac_cv_header_sys_time_h=$ac_cv_header_sys_time_h
+ac_cv_header_sys_types_h=$ac_cv_header_sys_types_h
+ac_cv_header_sys_wait_h=$ac_cv_header_sys_wait_h
+ac_cv_header_limits_h=$ac_cv_header_limits_h
+ac_cv_header_values_h=$ac_cv_header_values_h
+ac_cv_header_unistd_h=$ac_cv_header_unistd_h
+ac_cv_header_string_h=$ac_cv_header_string_h
+ac_cv_header_strings_h=$ac_cv_header_strings_h
+ac_cv_func_memcpy=$ac_cv_func_memcpy
+ac_cv_func_memmove=$ac_cv_func_memmove
+ac_cv_func_min=$ac_cv_func_min
+ac_cv_func_max=$ac_cv_func_max
+ac_cv_func_sincos=$ac_cv_func_sincos
+ac_cv_func_stricmp=$ac_cv_func_stricmp
+ac_cv_func_strnicmp=$ac_cv_func_strnicmp
+ac_cv_func_strcasecmp=$ac_cv_func_strcasecmp
+ac_cv_func_strncasecmp=$ac_cv_func_strncasecmp
+ac_cv_func_usleep=$ac_cv_func_usleep
+gaul_header_stdbool_h=$gaul_header_stdbool_h
+gaul__bool=$gaul__bool
+GA_MAJOR_VERSION=$GA_MAJOR_VERSION
+GA_MINOR_VERSION=$GA_MINOR_VERSION
+GA_PATCH_VERSION=$GA_PATCH_VERSION
+VERSION_STRING=$VERSION_STRING
+V3_QUICK=$V3_QUICK
+GA_NUM_PROCESSES_ENVVAR_STRING=$GA_NUM_PROCESSES_ENVVAR_STRING
+GA_NUM_THREADS_ENVVAR_STRING=$GA_NUM_THREADS_ENVVAR_STRING
+])
+
+AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile],
+	[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h.in]
+	)
 
 echo \
 "************************************************************************
