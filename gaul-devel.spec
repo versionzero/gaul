@@ -65,15 +65,6 @@ make install
 /usr/local/lib/libmpi_util.a
 /usr/local/lib/libmpi_util_fake.a
 /usr/local/lib/libbtree.a
-/usr/local/lib/libstuff.a
-/usr/local/lib/libnn_util.a
-/usr/local/lib/librandom.a
-/usr/local/lib/libstr_util.a
-/usr/local/lib/libtimer_util.a
-/usr/local/lib/liblog_util.a
-/usr/local/lib/liblog_util_parallel.a
-/usr/local/lib/libmpi_util.a
-/usr/local/lib/libmpi_util_fake.a
 /usr/local/include/ga_bitstring.h
 /usr/local/include/ga_chromo.h
 /usr/local/include/ga_core.h
