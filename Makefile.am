@@ -25,14 +25,11 @@
 #
 #######################################################################
 #
-# Last Updated:	17/05/01 SAA	Modifications for the new GAUL CVS archive on sourceforge.
-#		02/02/01 SAA	Moved ga_util and ga_intrinsics from src directory to ga directory.  renamed src directory to helga.
-#
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = util src tests docs .
+SUBDIRS = util src tests docs examples .
 
 #EXTRA_DIST = gaul.spec.in
 

@@ -36,16 +36,16 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1835"
-#define BUILD_DATE_STRING "23/07/01"
+#define BUILD_DATE_STRING "22/11/01"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1835
-#define PATCH_VERSION 010723
-#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.0-test9 #2 Wed Feb 7 17:02:32 GMT 2001 i586 unknown"
+#define PATCH_VERSION 011122
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.9-13 #1 Tue Oct 30 19:32:27 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
 #define V3_QUICK 1
-#define HAVE_SLANG 0
+#define HAVE_SLANG 1
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* The number of bytes in a char.  */
@@ -130,7 +130,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the sincos function.  */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define if you have the snooze function.  */
 /* #undef HAVE_SNOOZE */

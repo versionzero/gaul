@@ -41,7 +41,7 @@
 #include "ga_utility.h"
 
 #if HAVE_SLANG == 1
-#include "slang/slang.h"
+#include <slang.h>
 #endif
 
 /*

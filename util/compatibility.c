@@ -34,8 +34,8 @@
 		Some of these functions come from or are based on code
 		from the following GPL'd projects:
 
-		freeciv 1.11.0 - www.freeciv.org
-		glib	1.2.8  - www.gtk.org
+		freeciv 1.11.0 - http://www.freeciv.org/
+		glib	1.2.8  - http://www.gtk.org/
 
 		Some functions are based on code from the OPL'd
 		book about autoconf/automake/libtool published by
@@ -44,8 +44,8 @@
 		http://sources.redhat.com/autobook/
 
 		Some of these functions were inspired by code from
-		the Apache project (www.apache.org).  But no code
-		was actually stolen.
+		the Apache project (http://www.apache.org/).  But no
+		code was actually stolen from there.
 
  ----------------------------------------------------------------------
   freeciv 1.11.0 copyright notice:

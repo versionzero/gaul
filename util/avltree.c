@@ -28,45 +28,46 @@
 		(Adel'son-Velskii and Landis Tree, or height-balanced
 		1-tree (!))
 
- * References:	Just about any datastructure text book.
- *		I have stubbs & webre (1985, Wadsworth Inc.)
- *
- * Much of this code comes from the GLIB gtree.c source.
- *
- * Differences to the Balanced Binary Tree code in GLIB:
- * - degenerate keys are stored (I needed this - BUT NOT YET IMPLEMENTED)
- * - opaque key generation (for usability)
- * - primitive key comparison (for rapid comparisons)
- * - traverse in order only (for small footprint)
- * - no search function (a bit useless anyway)
- * - additional avltree_lookup_{lowest|highest}() functions (Useful)
- * - data returned after removing node (Useful - NULL means nothing removed)
- * - avltree_destroy for cleaning+deleteing a tree (useful)
- *
- * By default the keys are unsigned longs, but this may be overridden at
- * compile time by defining the constant AVLTREE_KEY_TYPE.
- *
- * This code should be thread safe.
- *
- * Last Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
- *			18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
- *			03/01/00 SAA	The type of the key may now be changed at compile time.
- *			02/01/00 SAA	avltree_search() added.
- *			30/01/00 SAA	Tidying.  Test function written.  API made more consistent.
- *
- * To do:	rebuilding tree after changing key/hashing function.
- *		remove function return success flag.
- *		convert some recursive functions into iterative functions where sensible (e.g. avltree_node_count)
- *
- * A basic test program may be compiled with something like:
- * gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
+  References:	Just about any datastructure text book.
+ 		I have stubbs & webre (1985, Wadsworth Inc.)
+ 
+		Much of this code comes from the GLIB gtree.c source.
+ 
+		Differences to the Balanced Binary Tree code in GLIB:
+		  - degenerate keys are stored (I needed this - BUT NOT YET IMPLEMENTED)
+		  - opaque key generation (for usability)
+		  - primitive key comparison (for rapid comparisons)
+		  - traverse in order only (for small footprint)
+		  - no search function (a bit useless anyway)
+		  - additional avltree_lookup_{lowest|highest}() functions (Useful)
+		  - data returned after removing node (Useful - NULL means nothing removed)
+		  - avltree_destroy for cleaning+deleteing a tree (useful)
+ 
+		By default the keys are unsigned longs, but this may
+		be overridden at compile time by defining the constant
+		AVLTREE_KEY_TYPE.
+ 
+		This code should be thread safe.
+
+		A basic test program may be compiled with something like:
+		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
+ 
+  Last Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
+ 			18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
+ 			03/01/00 SAA	The type of the key may now be changed at compile time.
+ 			02/01/00 SAA	avltree_search() added.
+ 			30/01/00 SAA	Tidying.  Test function written.  API made more consistent.
+
+  To do:	rebuilding tree after changing key/hashing function.
+ 		remove function return success flag.
+ 		convert some recursive functions into iterative functions where sensible (e.g. avltree_node_count)
 
  **********************************************************************/
 
 #include "avltree.h"
 
 /*
- * Node data structure.
+ * Private node data structure.
  */
 typedef struct AVLTreeNode_t
   {

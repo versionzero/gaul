@@ -38,8 +38,9 @@ PACKAGE=gaul-devel
 
 AC_CANONICAL_SYSTEM
 
-# Save this value here, since automake will set cflags later
-cflags_set=${CFLAGS+set}
+# Save these values here, since automake will set these later
+#cflags_set=${CFLAGS+set}
+#includes_set=${INCLUDES+set}
 
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
@@ -89,8 +90,6 @@ AC_PROG_LIBTOOL
 
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
-
-CFLAGS = -O
 
 dnl figure debugging default, prior to $ac_help setup
 dnl
@@ -183,7 +182,8 @@ fi
 
 AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
+#  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
+  CFLAGS="$CFLAGS -g"
   AC_DEFINE(GA_DEBUG,2)
   AC_DEFINE(DEBUG,2)
   AC_MSG_RESULT(yes)
@@ -201,7 +201,8 @@ fi
 
 AC_MSG_CHECKING(whether to enable run-time profiling)
 if test "x$enable_prof" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="$CFLAGS -pg"
+#  test "$cflags_set" = set || CFLAGS="$CFLAGS -pg"
+  CFLAGS="$CFLAGS -pg"
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
@@ -251,7 +252,7 @@ changequote(,)dnl
 if test "x$GCC" = "xyes"; then
   case " $CFLAGS " in
   *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
+  *) CFLAGS="$CFLAGS -Wall -O2" ;;
   esac
 
   if test "x$enable_missing_prototypes" = "xyes"; then
@@ -308,6 +309,11 @@ AC_MSG_RESULT($MEMORY_ALIGN_SIZE)
 AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, $MEMORY_ALIGN_SIZE)
 undefine([MEMORY_ALIGN_SIZE])
 
+# Some header files need to be found.
+#test "$includes_set" = set || INCLUDES="$INCLUDES -I../util/ -I../src/"
+INCLUDES="$INCLUDES -I../util/ -I../src/"
+CFLAGS="$CFLAGS $INCLUDES"
+
 # Checks for header files.
 #dnl header file checks
 AC_HEADER_STDC
@@ -342,6 +348,7 @@ AC_OUTPUT(
            Makefile
            util/Makefile
            src/Makefile
+           examples/Makefile
            tests/Makefile
            docs/Makefile
          )

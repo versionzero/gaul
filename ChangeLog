@@ -1,3 +1,252 @@
+2001-12-05 19:31  stewartadcock
+
+	* docs/html/tutorial5.html: Added another tutorial file.
+
+2001-12-05 18:54  stewartadcock
+
+	* docs/TODO, src/ga_core.c, util/SAA_header.h: Ready for release
+	0.1836
+
+2001-12-05 18:53  stewartadcock
+
+	* util/: random_util.c, random_util.h: Updated version of
+	random_util.
+
+2001-11-30 00:44  stewartadcock
+
+	* docs/html/platforms.html, examples/Makefile.am,
+	util/SAA_header.h, util/linkedlist.c, util/linkedlist.h,
+	util/memory_util.c, util/memory_util.h, util/random_util.c: Clean
+	compilation on Solaris2.7
+
+2001-11-29 23:57  stewartadcock
+
+	* docs/html/examples.html, docs/html/platforms.html,
+	docs/html/selection.html, docs/html/tutorial4.html,
+	examples/struggle5.c, src/ga_select.c: Applied some tutorial fixes.
+
+2001-11-29 22:33  stewartadcock
+
+	* src/: ga_chromo.c, ga_core.h, ga_intrinsics.c, ga_intrinsics.h,
+	ga_utility.c, gaul.h: clean compilation.
+
+2001-11-29 21:39  stewartadcock
+
+	* docs/Makefile.am, docs/Makefile.in, docs/html/index.html,
+	src/Makefile.am, src/Makefile.in, src/ga_intrinsics.h,
+	tests/Makefile.in, util/Makefile.in: configure.in/Makefile.am fixes
+	for clean compilation with SLang
+
+2001-11-23 02:11  stewartadcock
+
+	* src/: README, ga_core.c, ga_intrinsics.c, ga_seed.c,
+	ga_utility.c: Miscellaneous code tidying.
+
+2001-11-23 01:26  stewartadcock
+
+	* docs/why_GA_work.ps.gz: Added a useful short report about the
+	schema theorem.
+
+2001-11-23 01:20  stewartadcock
+
+	* docs/html/: chromosomes.html, contribute.html, examples.html,
+	simpletutorial.html, tutorial1.html, tutorial2.html,
+	tutorial3.html, tutorial4.html: Fixed some links in the
+	documentation/webpages.
+
+2001-11-23 00:58  stewartadcock
+
+	* examples/: Makefile.am, README, btree.c, btree.h, chromostubs.c,
+	chromostubs.h, dejong.c, dejong.h, diagnostics.c, g_dejong.c,
+	goldberg1.c, goldberg1.h, goldberg2.c, goldberg2.h, pingpong.c,
+	pingpong.h, pingpong9.c, royalroad.c, royalroad_ss.c, struggle.c,
+	struggle2.c, struggle3.c, struggle4.c, struggle5.c, struggle_ss.c,
+	wildfire.c, wildfire.h: Added missing files to Archive (whoops!)
+
+2001-11-06 22:20  stewartadcock
+
+	* tests/: Makefile.am, README, btree.c, btree.h, chromostubs.c,
+	chromostubs.h, dejong.c, dejong.h, diagnostics.c, g_dejong.c,
+	goldberg1.c, goldberg1.h, goldberg2.c, goldberg2.h, pingpong.c,
+	pingpong.h, pingpong9.c, royalroad.c, royalroad_ss.c, struggle.c,
+	struggle2.c, struggle3.c, struggle4.c, struggle5.c, struggle_ss.c,
+	wildfire.c, wildfire.h: Moved many files from the test directory
+	into a new examples directory.	This seems like a much more
+	sensible directory layout.
+
+2001-11-06 22:08  stewartadcock
+
+	* docs/Makefile.am, src/Makefile.am, src/Makefile.in,
+	src/ga_core.c, src/ga_intrinsics.c, src/ga_similarity.c,
+	tests/Makefile.am, tests/Makefile.in, util/Makefile.am,
+	util/Makefile.in, util/log_util.c, util/log_util.h,
+	util/mpi_util.c, util/mpi_util.h, util/random_util.c,
+	util/random_util.h, util/str_perl.c: Corrected spelling errors!
+	Tidied Makefiles.
+
+2001-11-06 21:50  stewartadcock
+
+	* src/ga_bitstring.o, tests/royalroad_ss.o, tests/struggle_ss.o:
+	Removed some object files from the repository.
+
+2001-11-06 21:48  stewartadcock
+
+	* gaul.spec: Tweaked spec file after rpm experimentation.
+
+2001-08-11 18:47  stewartadcock
+
+	* src/ga_bitstring.o, src/ga_core.h, src/ga_utility.c,
+	src/ga_utility.h, tests/royalroad_ss.o, tests/struggle_ss.o: Fixed
+	calculation of skew and jurtosis in ga_fitness_stats().
+
+2001-08-08 18:38  stewartadcock
+
+	* LatestChanges, README, docs/TODO, docs/html/documentation.html,
+	docs/html/index.html, docs/html/licence.html,
+	docs/html/license.html, src/ga_core.c, src/ga_core.h,
+	src/ga_utility.c, src/ga_utility.h, tests/struggle3.c,
+	tests/wildfire.c, util/table.c: Prepare for release 0.1835
+
+2001-08-07 20:05  stewartadcock
+
+	* LatestChanges, src/ga_bitstring.o, src/ga_core.c,
+	tests/royalroad_ss.o, tests/struggle5.c, tests/struggle_ss.o,
+	util/table.c, util/table.h: Fixed multi-population extinction bug.
+
+2001-07-23 13:13  stewartadcock
+
+	* INSTALL, LatestChanges, README, acconfig.h, config.h,
+	config.h.in, config.status, configure, configure.in, docs/JOBS,
+	docs/html/contribute.html, docs/html/tutorial3.html,
+	src/ga_bitstring.o, src/ga_chromo.c, src/ga_core.h, src/ga_optim.c,
+	src/ga_qsort.c, src/ga_similarity.c, src/ga_utility.c,
+	src/ga_utility.h, src/gaul.h, tests/Makefile.am, tests/Makefile.in,
+	tests/diagnostics.c, tests/royalroad_ss.o, tests/struggle3.c,
+	tests/struggle4.c, tests/struggle5.c, tests/struggle_ss.o,
+	util/SAA_header.h, util/table.c: Added tests/diagnostics.c
+
+2001-07-22 14:00  stewartadcock
+
+	* LatestChanges, docs/html/documentation.html,
+	docs/html/index.html, docs/html/intro.html,
+	docs/html/tutorial4.html, tests/Makefile.am, tests/Makefile.in,
+	tests/struggle5.c: Website updates
+
+2001-07-22 12:30  stewartadcock
+
+	* LatestChanges, config.h, config.status, configure, configure.in,
+	src/ga_bitstring.o, src/ga_core.h, src/gaul.h, tests/Makefile.am,
+	tests/Makefile.in, tests/royalroad_ss.o, tests/struggle_ss.o: -
+	Moved some type definitions into the public header, gaul.h - Some
+	additional checks performed by the configure script.  - All
+	required files will now be distributed.  Why people didn't tell me
+	the recent distribution didn't compile, I don't know...
+
+2001-07-11 10:56  stewartadcock
+
+	* LatestChanges, config.h, config.status, docs/html/index.html,
+	src/ga_bitstring.o, src/ga_core.c, src/ga_core.h, src/ga_optim.c,
+	src/ga_optim.h, src/ga_utility.c, tests/Makefile.am,
+	tests/Makefile.in, tests/royalroad_ss.o, tests/struggle4.c,
+	tests/struggle_ss.o: Tidied some miscellaneous comments.
+
+2001-07-08 12:40  stewartadcock
+
+	* LatestChanges, config.h, config.status,
+	docs/html/documentation.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/tutorial1.html,
+	docs/html/tutorial2.html, docs/html/tutorial3.html,
+	docs/html/tutorial4.html, src/ga_bitstring.c, src/ga_bitstring.o,
+	src/ga_core.c, src/ga_core.h, src/ga_intrinsics.c,
+	src/ga_intrinsics.h, src/ga_optim.c, src/ga_utility.c, src/gaul.h,
+	tests/Makefile.am, tests/Makefile.in, tests/struggle.c,
+	tests/struggle2.c, tests/struggle3.c, tests/struggle4.c: - Added
+	version of the struggle example for comparison of the alternative
+	evolutionary schemes: tests/struggle2.c - Added version of the
+	struggle example to show custom termination criteria and some
+	simple statistics: tests/struggle3.c - Added version of the
+	struggle example to show usage of custom operators:
+	tests/struggle4.c - Renamed the SLang intrinsic ga_entity_clone()
+	to ga_entity_clone_wrapper(), and added new, C-callable
+	ga_entity_clone().  - Renamed all ga_copy_entity[_XXX]() functions
+	to ga_entity_copy[_XXX]() for consistency.  - For convenience,
+	added ga_population_clone().  - GA_UTIL_MIN_FITNESS renamed to
+	GA_MIN_FITNESS, and is correctly used everywhere now.  - Fixed
+	chromosome replication bug (I was copying destination to source,
+	doh!).	- Some tutorial-style documentation about the "struggle"
+	examples added.
+
+2001-07-04 23:01  uid51382
+
+	* LatestChanges, config.h, config.status,
+	docs/html/simpletutorial.html, src/ga_optim.h, src/ga_replace.c,
+	tests/Makefile.am, tests/Makefile.in, tests/pingpong.c,
+	tests/royalroad.c, tests/royalroad_ss.c, tests/royalroad_ss.o,
+	tests/struggle_ss.c, tests/struggle_ss.o: - Tidied pingpong.c -
+	Added missing ga_evolution_steady_state() prototype.  - Added
+	version of the royalroad example which uses a steady state GA
+	instead: tests/royalroad_ss.c
+
+2001-07-01 14:52  stewartadcock
+
+	* LatestChanges, config.h, config.status, configure, configure.in,
+	tests/g_dejong.c, tests/goldberg1.c, tests/goldberg2.c,
+	tests/royalroad.c, tests/wildfire.c: In many of the examples,
+	ga_get_entity_from_rank(pop,0) is now used.
+
+2001-07-01 14:36  stewartadcock
+
+	* LatestChanges, README, config.h, config.status, cvsignore,
+	diff.ignore, docs/html/chromosomes.html,
+	docs/html/documentation.html, docs/html/examples.html,
+	docs/html/index.html, docs/html/platforms.html,
+	docs/html/selection.html, docs/html/simpletutorial.html,
+	src/ga_chromo.c, tests/Makefile.am, tests/Makefile.in,
+	tests/chromostubs.c, tests/chromostubs.h, tests/struggle.c: - Some
+	more documentation.  - examples/chromostubs.c added.  - .cvsignore
+	updated, thn renamed to cvsignore.
+
+2001-06-30 23:57  stewartadcock
+
+	* LatestChanges, config.h, config.status, docs/html/index.html,
+	src/Makefile.am, src/Makefile.in, src/README, src/ga_bitstring.c,
+	src/ga_bitstring.h, src/ga_bitstring.o, src/ga_chromo.c,
+	src/ga_chromo.h, src/ga_core.h, src/ga_crossover.c,
+	src/ga_mutate.c, src/ga_seed.c, src/ga_similarity.c,
+	src/ga_utility.c, src/ga_utility.h, tests/Makefile.in,
+	tests/dejong.c, tests/dejong.h, tests/g_dejong.c,
+	tests/goldberg1.c, tests/goldberg1.h, tests/goldberg2.c,
+	tests/goldberg2.h, tests/pingpong.h, tests/royalroad.c,
+	tests/wildfire.h, util/Makefile.in, util/SAA_header.h: - Added
+	bitstring chromosomes (incl. the necessary handling routines).	-
+	Added De Jong files.
+
+2001-06-24 14:28  stewartadcock
+
+	* docs/html/platforms.html: docs/html/platforms.html updated.
+
+2001-06-24 14:12  stewartadcock
+
+	* docs/html/index.html, src/ga_select.c: - ga_select_every_one()
+	and ga_select_every_two() really do selct every single/pair of
+	entities.  - Fixed some links on website.
+
+2001-06-22 15:51  stewartadcock
+
+	* LatestChanges: Modifications for native SGI compilation.
+
+2001-06-22 15:47  stewartadcock
+
+	* src/Makefile.in, tests/Makefile.am, tests/Makefile.in,
+	tests/royalroad.c, tests/struggle.c, tests/wildfire.c,
+	util/Makefile.in: Modifications for successful compilation under
+	IRIX using the MIPSPro C compiler.
+
+2001-06-20 22:56  stewartadcock
+
+	* ChangeLog, LatestChanges, config.h, config.status, configure,
+	docs/html/books.html: ChangeLog created with cvs2cl.pl
+
 2001-06-20 22:03  stewartadcock
 
 	* INSTALL, LatestChanges, Makefile.am, Makefile.in, README,

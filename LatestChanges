@@ -1,3 +1,12 @@
+Changes since release 0.1836:
+- More documentation added.
+- ga_bit_copy() now safely handles overlapping sequences of bits.
+
+Changes since release 0.1835:
+- Many documentation fixes.
+- Example files now in example directory.  Test code will be located in the test directory instead.
+- Some miscellaneous code tidying.
+
 Changes since release 0.1834:
 - Tidied pingpong.c
 - Added missing ga_evolution_steady_state() prototype.
