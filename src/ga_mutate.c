@@ -672,6 +672,67 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
 
 
 /**********************************************************************
+  ga_mutate_printable_allpoint()
+  synopsis:	Cause a number of mutation events.  Each allele has
+		equal probability of being incremented, decremented, or
+		remaining the same.
+  parameters:
+  return:
+  last updated: 10 Sep 2003
+ **********************************************************************/
+
+void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(char));
+    }
+
+/*
+ * Mutate by incrementing or decrementing alleles.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      switch (random_int(3))
+        {
+        case (1):
+          (((char *)son->chromosome[chromo])[point])++;
+
+          if (((char *)son->chromosome[chromo])[point]>'~')
+            ((char *)son->chromosome[chromo])[point]=' ';
+
+          break;
+
+        case (2):
+          (((char *)son->chromosome[chromo])[point])--;
+
+          if (((char *)son->chromosome[chromo])[point]<' ')
+            ((char *)son->chromosome[chromo])[point]='~';
+
+          break;
+
+        default:
+          /* Do nothing. */
+          break;
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
   ga_mutate_bitstring_singlepoint()
   synopsis:	Cause a single mutation event in which a single
 		nucleotide is flipped.
@@ -711,6 +772,47 @@ void ga_mutate_bitstring_singlepoint( population *pop,
 
 /* The singlepoint mutation. */
   ga_bit_invert(son->chromosome[chromo],point);
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_bitstring_multipoint()
+  synopsis:	Cause a number of mutation events.
+  parameters:
+  return:
+  last updated: 10 Sep 2003
+ **********************************************************************/
+
+void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_bit_clone(son->chromosome[i], father->chromosome[i], pop->len_chromosomes);
+    }
+
+/*
+ * Mutate by flipping random bits.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+        {
+        ga_bit_invert(son->chromosome[chromo],point);
+        }
+      }
+    }
 
   return;
   }
@@ -806,6 +908,93 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
     }
 
   ((double *)son->chromosome[chromo])[point] = random_unit_gaussian();
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_double_multipoint()
+  synopsis:	Cause a number of mutation events.  This is equivalent
+		to the more common 'bit-drift' mutation.
+		(Unit Gaussian distribution.)
+  parameters:
+  return:
+  last updated: 10 Sep 2003
+ **********************************************************************/
+
+void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+  double	amount=random_unit_gaussian();	/* The amount of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(double));
+    }
+
+/*
+ * Mutate by tweaking nucleotides.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+        {
+        ((double *)son->chromosome[chromo])[point] += amount;
+
+/* FIXME: We are ignoring overflow/underflow. */
+
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_double_allpoint()
+  synopsis:	Cause a number of mutation events.  Each allele's
+		value will drift.
+		(Unit Gaussian distribution.)
+  parameters:
+  return:
+  last updated: 10 Sep 2003
+ **********************************************************************/
+
+void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(double));
+    }
+
+/*
+ * Mutate by incrementing or decrementing alleles.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      (((double *)son->chromosome[chromo])[point]) += random_unit_gaussian();
+      }
+    }
 
   return;
   }

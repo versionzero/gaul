@@ -381,12 +381,16 @@ void	ga_mutate_char_allpoint(population *pop, entity *father, entity *son);
 void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
+void	ga_mutate_printable_allpoint(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_bitstring_singlepoint(population *pop, entity *father, entity *son);
-void	ga_mutate_double_singlepoint_randomize( population *pop,
-                                              entity *father, entity *son );
+void	ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_double_singlepoint_drift( population *pop,
                                           entity *father, entity *son );
+void	ga_mutate_double_singlepoint_randomize( population *pop,
+                                              entity *father, entity *son );
+void	ga_mutate_double_multipoint(population *pop, entity *father, entity *son);
+void	ga_mutate_double_allpoint(population *pop, entity *father, entity *son);
 
 /*
  * Functions located in ga_seed.c:

@@ -1,6 +1,10 @@
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
 - Tweaked the bitstring code.
+- Added ga_mutate_printable_allpoint() mutation function.
+- Added ga_mutate_bitstring_multipoint() mutation function.
+- Added ga_mutate_double_allpoint() mutation function.
+- Added ga_mutate_double_multipoint() mutation function.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
