@@ -9,11 +9,9 @@
   http://www.stewart-adcock.co.uk/
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.  Alternatively, if your project
-  is incompatible with the GPL, I will probably agree to requests
-  for permission to use the terms of any other license.
+  it either under the terms of version 2 of the GNU General Public
+  License as published by the Free Software Foundation, or (at your
+  option) any license approved by the Open Source Initiative.
 
   This program is distributed in the hope that it will be useful, but
   WITHOUT ANY WARRANTY WHATSOEVER.
@@ -22,9 +20,13 @@
   "COPYING" provided with this distribution; if not, see:
   http://www.gnu.org/
 
+  The list of OSI approved licenses is available at
+  http://opensource.org/licenses/
+
  **********************************************************************
 
-  Updated:	20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
+  Updated:	10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
+		20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
 		19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
 		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
   		26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
