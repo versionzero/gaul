@@ -57,6 +57,8 @@
 #undef SIZEOF_INT
 #undef SIZEOF_VOID_P
 
+#undef SUN_FORTE_C
+
 /* #undef PACKAGE */
 
 @BOTTOM@

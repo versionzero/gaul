@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_similarity - Genetic algorithm genome comparison routines.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -39,11 +39,25 @@
 #include "ga_core.h"
 
 /*
- * Prototypes
+ * Deprecated Prototypes
  */
 boolean	ga_compare_genome(population *pop, entity *alpha, entity *beta);
 double	ga_genome_euclidean_similarity(population *pop, entity *alpha, entity *beta);
 int	ga_count_match_alleles(const int length, const int *alpha, const int *beta);
 double	ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta);
+
+/*
+ * Prototypes.
+ */
+double	ga_similarity_bitstring_tanimoto(const population *pop,
+                                  const entity *alpha, const entity *beta);
+double	ga_similarity_bitstring_dice(const population *pop,
+                                  const entity *alpha, const entity *beta);
+double	ga_similarity_bitstring_hamming(const population *pop,
+                                  const entity *alpha, const entity *beta);
+double	ga_similarity_bitstring_euclidean(const population *pop,
+                                  const entity *alpha, const entity *beta);
+double	ga_similarity_bitstring_cosine(const population *pop,
+                                  const entity *alpha, const entity *beta);
 
 #endif	/* GA_SIMILARITY_H_INCLUDED */

@@ -367,6 +367,8 @@
 /* Version string */
 #undef VERSION_STRING
 
+#undef SUN_FORTE_C
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
