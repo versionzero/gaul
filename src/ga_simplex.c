@@ -121,10 +121,10 @@ int ga_simplex(	population		*pop,
   boolean	restart_needed;		/* Whether the search needs restarting. */
 
 /* Make these parameters: */
-  double alpha = 1.0;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
-  double beta = 0.5;	/* range: 0=no contraction, 1=full contraction. */
-  double gamma = 0.5;	/* range: 0=no contraction, 1=full contraction. */
-  double step = 0.5;	/* range: >0, 1=unit step randomisation, higher OK. */
+  double alpha = 1.50;	/* range: 0=no extrap, 1=unit step extrap, higher OK. */
+  double beta = 0.75;	/* range: 0=no contraction, 1=full contraction. */
+  double gamma = 0.25;	/* range: 0=no contraction, 1=full contraction. */
+  double step = 1.00;	/* range: >0, 1=unit step randomisation, higher OK. */
 
 /*
  * Checks.
@@ -180,9 +180,9 @@ int ga_simplex(	population		*pop,
  * Generate sample points.
  * Ensure that these initial solutions are scored.
  *
- * NOTE: Only perturb each solution by one dimension, by a unit
- * amount; it might be better to perturb all dimensions and/or
- * by a randomized amount.
+ * NOTE: Only perturb each solution by one dimension, by an
+ * amount specified by the step parameter; it might be better to perturb
+ * all dimensions and/or by a randomized amount.
  */
   pop->simplex_params->to_double(pop, putative[0], putative_d[0]);
   pop->evaluate(pop, putative[0]);
@@ -193,6 +193,7 @@ int ga_simplex(	population		*pop,
       putative_d[i][j] = putative_d[0][j] + random_double_range(-step,step);
 
 /*
+ * Alternative is to perturb by unit step in one dimension:
     if (random_boolean())
       putative_d[i][i-1] -= 1.0;
     else
@@ -298,10 +299,10 @@ printf("\n");
   if (restart_needed != FALSE)
     {
 printf("DEBUG: restarting search.\n");
-    step /= 2.0;
-    alpha /= 2.0;
-    beta /= 2.0;
-    gamma /= 2.0;
+    step *= 0.50;
+    alpha *= 0.75;
+    beta *= 0.75;
+    gamma *= 0.75;
 
     for (i=1; i<num_points; i++)
       {
@@ -454,10 +455,21 @@ printf("DEBUG: contracted new (%f) is fitter than p(n) ( %f )\n", new->fitness, 
         {
 /*
  * The new solution is worse than the previous worse.  So, contract
- * toward the most fit point.
+ * toward the average point.
  */
 printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
 
+        for (i = 1; i < num_points; i++)
+          {
+          for (j = 0; j < pop->simplex_params->dimensions; j++)
+            putative_d[i][j] = average[j] + gamma * (putative_d[i][j] - average[j]);
+
+          pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
+          pop->evaluate(pop, putative[i]);
+          }
+
+/*
+ * Alternative is to contact toward the most fit point.
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->simplex_params->dimensions; j++)
@@ -466,6 +478,8 @@ printf("DEBUG: new (%f) is worse than all.\n", new->fitness);
           pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
           pop->evaluate(pop, putative[i]);
           }
+*/
+
         }
       }
     else

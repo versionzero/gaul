@@ -3,7 +3,7 @@
  **********************************************************************
 
   fitting - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -31,7 +31,8 @@
 		y = Ax exp{Bx+C} + D
 		through an input dataset.
 
-  Last Updated:	21 Nov 2002 SAA	New seeding function.
+  Last Updated:	19 Mar 2004 SAA	Custom mutation function since existing function produced mutations that were far too significant.
+		21 Nov 2002 SAA	New seeding function.
 		17 Nov 2002 SAA	Initial version.
 
  **********************************************************************/
@@ -57,7 +58,7 @@ typedef struct
   synopsis:	Fitness function.
   parameters:
   return:
-  updated:	17 Nov 2002
+  updated:	19 Mar 2004
  **********************************************************************/
 
 boolean fitting_score(population *pop, entity *entity)
@@ -76,9 +77,8 @@ boolean fitting_score(population *pop, entity *entity)
     {
     score += SQU(data->y[i]-(data->x[i]*params[0]*exp(data->x[i]*params[1]+params[2])+params[3]));
     }
-  score /= data->num_data;
 
-  entity->fitness = -sqrt(score);
+  entity->fitness = -sqrt(score / data->num_data);
   
   return TRUE;
   }
@@ -127,9 +127,61 @@ boolean fitting_seed(population *pop, entity *adam)
   ((double *)adam->chromosome[0])[0] = random_double(2.0);
   ((double *)adam->chromosome[0])[1] = random_double(2.0);
   ((double *)adam->chromosome[0])[2] = random_double(2.0);
-  ((double *)adam->chromosome[0])[3] = random_double(10.0)-5.0;
+  ((double *)adam->chromosome[0])[3] = random_double(4.0)-2.0;
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_mutate_double_singlepoint_drift()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is adjusted.  (0.1*Unit Gaussian distribution.)
+  parameters:
+  return:
+  last updated: 19 Mar 2004
+ **********************************************************************/
+
+void fitting_mutate_double_singlepoint_drift( population *pop,
+                                          entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+  double	amount=random_unit_gaussian()*0.1;	/* The amount of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
+
+/*
+ * Copy unchanged data.
+ */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(double));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+/*
+ * Mutate by tweaking a single nucleotide.
+ */
+  ((double *)son->chromosome[chromo])[point] += amount;
+
+  if (((double *)son->chromosome[chromo])[point]>DBL_MAX-1.0) ((double *)son->chromosome[chromo])[point]=DBL_MIN+1.0;
+  if (((double *)son->chromosome[chromo])[point]<DBL_MIN+1.0) ((double *)son->chromosome[chromo])[point]=DBL_MAX-1.0;
+
+  return;
   }
 
 
@@ -205,7 +257,7 @@ int main(int argc, char **argv)
   random_seed(23091975);
 
   pop = ga_genesis_double(
-       250,				/* const int              population_size */
+       200,				/* const int              population_size */
        1,				/* const int              num_chromo */
        4,				/* const int              len_chromo */
        fitting_generation_callback,	/* GAgeneration_hook      generation_hook */
@@ -217,7 +269,7 @@ int main(int argc, char **argv)
        NULL,				/* GAadapt                adapt */
        ga_select_one_linearrank,	/* GAselect_one           select_one */
        ga_select_two_linearrank,	/* GAselect_two           select_two */
-       ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
+       fitting_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_double_allele_mixing,	/* GAcrossover            crossover */
        NULL,				/* GAreplace              replace */
        NULL				/* vpointer	User data */
@@ -227,8 +279,8 @@ int main(int argc, char **argv)
        pop,				/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
        GA_ELITISM_PARENTS_DIE,		/* const ga_elitism_type   elitism */
-       0.7,				/* double  crossover */
-       0.7,				/* double  mutation */
+       0.8,				/* double  crossover */
+       0.8,				/* double  mutation */
        0.0      		        /* double  migration */
                               );
 
@@ -237,7 +289,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
        pop,				/* population	*pop */
-       500				/* const int	max_generations */
+       200				/* const int	max_generations */
               );
 
   ga_extinction(pop);

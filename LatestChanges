@@ -18,6 +18,7 @@ Changes since release 0.1846:
 - Fixed incorrect inclusion of stdbool.h on FreeBSD.  -- patch submitted by Ying-Chieh Liao.
 - Changes for clean compilation with gcc 3.2
 - AMD64 fixes.
+- Tweaked fitting, fitting_sd and fitting_simplex examples.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

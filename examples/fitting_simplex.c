@@ -125,7 +125,7 @@ boolean fitting_score(population *pop, entity *entity)
     score += SQU(data->y[i]-(data->x[i]*params[0]*exp(data->x[i]*params[1]+params[2])+params[3]));
     }
 
-  entity->fitness = -score/data->num_data;
+  entity->fitness = -sqrt(score / data->num_data);
   
   return TRUE;
   }
@@ -171,10 +171,10 @@ boolean fitting_seed(population *pop, entity *adam)
   if (!adam) die("Null pointer to entity structure passed.");
 
 /* Seeding. */
-  ((double *)adam->chromosome[0])[0] = random_double(5.0);
-  ((double *)adam->chromosome[0])[1] = -random_double(2.0);
+  ((double *)adam->chromosome[0])[0] = random_double(2.0);
+  ((double *)adam->chromosome[0])[1] = random_double(2.0);
   ((double *)adam->chromosome[0])[2] = random_double(2.0);
-  ((double *)adam->chromosome[0])[3] = random_double(10.0)+10.0;
+  ((double *)adam->chromosome[0])[3] = random_double(4.0)-2.0;
 
   return TRUE;
   }

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_select - Genetic algorithm selection operators.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -910,7 +910,7 @@ boolean ga_select_two_best(population *pop, entity **mother, entity **father)
 		distribution with respect to rank.
   parameters:
   return:	
-  last updated: 20 Oct 2003
+  last updated: 19 Mar 2004
  **********************************************************************/
 
 boolean ga_select_one_linearrank(population *pop, entity **mother)
@@ -920,7 +920,7 @@ boolean ga_select_one_linearrank(population *pop, entity **mother)
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
+  *mother = pop->entity_iarray[(int)((1.0-sqrt(random_unit_uniform()))*pop->orig_size)];
 
   return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
@@ -932,20 +932,21 @@ boolean ga_select_one_linearrank(population *pop, entity **mother)
 		distribution with respect to rank.
   parameters:
   return:	
-  last updated: 20 Oct 2003
+  last updated: 19 Mar 2004
  **********************************************************************/
 
 boolean ga_select_two_linearrank(population *pop, entity **mother, entity **father)
   {
+  int m, f;
 
   if (!pop) die("Null pointer to population structure passed.");
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
+  *mother = pop->entity_iarray[(int)((1.0-sqrt(random_unit_uniform()))*pop->orig_size)];
   do
     {
-    *father = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
+    *father = pop->entity_iarray[(int)((1.0-sqrt(random_unit_uniform()))*pop->orig_size)];
     } while (*mother == *father);
 
   return pop->select_state>(pop->orig_size*pop->crossover_ratio);
