@@ -704,11 +704,14 @@ boolean ga_fitness_mean_stddev( population *pop,
 
 boolean ga_fitness_stats( population *pop,
                           double *max, double *min,
-                          double *mean, double *variance, double *stddev,
+                          double *mean, double *median,
+                          double *variance, double *stddev,
                           double *kurtosis, double *skew )
   {
   int           i;                      /* Loop over all entities. */
   double	sum=0.0,sum2=0.0,sum3=0.0,sum4=0.0;	/* Sum and stuff. */
+  double	m2=0.0,m3=0.0,m4=0.0;	/* Distribution moments. */
+  double	tmp;			/* Used to save some lookups. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
@@ -728,16 +731,30 @@ boolean ga_fitness_stats( population *pop,
 
   *max = tmp;
 
+  *median = *min + (*max - *min)/2;
+
   *mean = sum/pop->size;
   *stddev = (sum2/pop->size - (*mean)*(*mean));	/* Cleverly avoid a sqrt() calc. */
   *variance = (sum2/pop->size - sum*sum);
 
 /* Check. */
   if ( sqrt(*variance) != *stddev )
-    die("stddev = %f, sqrt(variance) = %f", *stddev, sqrt(variance));
+    dief("stddev = %f, sqrt(*variance) = %f", *stddev, sqrt(*variance));
 
-  *kurtosis = (sum3/pop->size - sum*sum*sum);	/* Wrong? */
-  *skew = (sum4/pop->size - sum*sum*sum*sum);	/* Wrong? */
+  for (i=0; i<pop->size; i++)
+    {
+    tmp = pop->entity_iarray[i]->fitness - *mean;
+    m2 += tmp*tmp;
+    m3 += tmp*tmp*tmp;
+    m4 += tmp*tmp*tmp*tmp;
+    }
+
+  m2 /= pop->size;
+  m3 /= pop->size;
+  m4 /= pop->size;
+
+  *skew = m3/pow(m2,3.0/2.0);
+  *kurtosis = m4/(m2*m2);
 
   return TRUE;
   }
