@@ -127,7 +127,7 @@ int ga_get_patch_version( void )
 
 
 /**********************************************************************
-  ga_genesis_int()
+  ga_genesis_integer()
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
@@ -138,7 +138,7 @@ int ga_get_patch_version( void )
   last updated:	17 Jan 2003
  **********************************************************************/
 
-population *ga_genesis_int(	const int		population_size,
+population *ga_genesis_integer(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -214,7 +214,8 @@ population *ga_genesis_int(	const int		population_size,
 
 
 /**********************************************************************
-  ga_genesis()
+  ga_genesis() and ga_genesis_int()
+  *** DEPRECATED FUNCTIONS! ***
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
@@ -224,7 +225,7 @@ population *ga_genesis_int(	const int		population_size,
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	18 Jan 2003
+  last updated:	25 Mar 2004
  **********************************************************************/
 
 #ifndef COMPILE_DEPRECATED_FUNCTIONS
@@ -246,12 +247,41 @@ population *ga_genesis(	const int		population_size,
 			GAreplace		replace,
 			vpointer		userdata )
   {
-  plog(LOG_FIXME, "Use of ga_genesis() should be deprecated.");
+  plog(LOG_FIXME, "Use of ga_genesis() is deprecated.  Modify code to use ga_genesis_integer() instead.");
 
-  return ga_genesis_int( population_size, num_chromo, len_chromo, generation_hook, iteration_hook,
-                         data_destructor, data_ref_incrementor, evaluate,
-                         seed, adapt, select_one, select_two, mutate, crossover, replace,
-                         userdata );
+  return ga_genesis_integer( population_size, num_chromo, len_chromo,
+                             generation_hook, iteration_hook,
+                             data_destructor, data_ref_incrementor,
+                             evaluate, seed, adapt,
+                             select_one, select_two, mutate, crossover, replace,
+                             userdata );
+  }
+
+population *ga_genesis_int(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace,
+			vpointer		userdata )
+  {
+  plog(LOG_FIXME, "Use of ga_genesis_int() is deprecated.  Modify code to use ga_genesis_integer() instead.");
+
+  return ga_genesis_integer( population_size, num_chromo, len_chromo,
+                             generation_hook, iteration_hook,
+                             data_destructor, data_ref_incrementor,
+                             evaluate, seed, adapt,
+                             select_one, select_two, mutate, crossover, replace,
+                             userdata );
   }
 #endif
 

@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 
     random_seed(i);
 
-    pop = ga_genesis_int(
+    pop = ga_genesis_integer(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        30,			/* const int              len_chromo */

@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     random_seed(230975*i);
 
     /* Note that most of the population data is not required for a tabu-search. */
-    pop = ga_genesis_int(
+    pop = ga_genesis_integer(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        25,			/* const int              len_chromo */

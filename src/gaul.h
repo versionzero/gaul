@@ -423,6 +423,7 @@ void    ga_diagnostics( void );
 int	ga_get_major_version( void );
 int	ga_get_minor_version( void );
 int	ga_get_patch_version( void );
+/* ga_genesis() is deprecated! Use ga_genesis_integer() instead. */
 population *ga_genesis( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
@@ -439,7 +440,24 @@ population *ga_genesis( const int               population_size,
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
+/* ga_genesis() is deprecated! Use ga_genesis_integer() instead. */
 population *ga_genesis_int( const int           population_size,
+                        const int               num_chromo,
+                        const int               len_chromo,
+                        GAgeneration_hook       generation_hook,
+                        GAiteration_hook        iteration_hook,
+                        GAdata_destructor       data_destructor,
+                        GAdata_ref_incrementor  data_ref_incrementor,
+                        GAevaluate              evaluate,
+                        GAseed                  seed,
+                        GAadapt                 adapt,
+                        GAselect_one            select_one,
+                        GAselect_two            select_two,
+                        GAmutate                mutate,
+                        GAcrossover             crossover,
+                        GAreplace               replace,
+			vpointer		userdata );
+population *ga_genesis_integer( const int           population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
