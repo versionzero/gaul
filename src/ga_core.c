@@ -927,16 +927,17 @@ int ga_get_entity_id_from_rank(population *pop, int rank)
   ga_get_entity_id()
   synopsis:	Gets an entity's internal index (subscript into the
 		entity_array buffer).
-		FIXME: Add some more error checking.
-  parameters:
-  return:
-  last updated: 22/01/01
+  parameters:	population *pop
+		entity *e
+  return:	entity id
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 int ga_get_entity_id(population *pop, entity *e)
   {
   int	id=0;	/* The index. */
 
+  if (!pop) die("Null pointer to population structure passed.");
   if (!e) die("Null pointer to entity structure passed.");
 
   while (id < pop->max_size)
@@ -946,9 +947,6 @@ int ga_get_entity_id(population *pop, entity *e)
     }
 
   return -1;
-
-/*  return (&(pop->entity_array[0]) - &(e[0]))/sizeof(entity);*/
-/*  return (pop->entity_array - e)/sizeof(entity);*/
   }
 
 
@@ -1149,9 +1147,9 @@ void ga_entity_blank(population *p, entity *entity)
   synopsis:	Returns pointer to an unused entity structure from the
 		population's entity pool.  Increments population size
 		too.
-  parameters:
-  return:
-  last updated: 13 Feb 2002
+  parameters:	population *pop
+  return:	entity *entity
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 entity *ga_get_free_entity(population *pop)
@@ -1229,6 +1227,86 @@ entity *ga_get_free_entity(population *pop)
 
   return &(pop->entity_array[index]);
   }
+
+
+#if 0
+/* This version is slow and buggy: */
+entity *ga_get_free_entity(population *pop)
+  {
+  static int	index=0;	/* Current position in entity array. */
+  int		new_max_size;	/* Increased maximum number of entities. */
+  int		i;
+  int		*entity_indices;	/* Offsets within entity buffer. */
+
+/*
+  plog(LOG_DEBUG, "Locating free entity structure.");
+*/
+
+/*
+ * Do we have any free structures?
+ */
+  if (pop->max_size == (pop->size+1))
+    {	/* No. */
+    plog(LOG_VERBOSE, "No unused entities available -- allocating additional structures.");
+
+/*
+ * Note that doing this offset calculation stuff may seem overly expensive, but
+ * it the only available techinique that is guarenteed to be portable.
+ * Memory is freed as soon as possible to reduce page faults with large populations.
+ */
+    entity_indices = s_malloc(pop->max_size*sizeof(int));
+    for (i=0; i<pop->max_size; i++)
+      {
+      entity_indices[i] = pop->entity_iarray[i]-pop->entity_array;
+      }
+
+    s_free(pop->entity_iarray);
+
+    new_max_size = (pop->size * 3)/2;
+    pop->entity_array = s_realloc(pop->entity_array, new_max_size*sizeof(entity));
+    pop->entity_iarray = s_malloc(new_max_size*sizeof(entity*));
+
+    for (i=0; i<pop->max_size; i++)
+      {
+      pop->entity_iarray[i] = pop->entity_array+entity_indices[i];
+      }
+
+    s_free(entity_indices);
+
+    for (i=pop->max_size; i<new_max_size; i++)
+      {
+      pop->entity_array[i].allocated=FALSE;
+      pop->entity_array[i].data=NULL;
+      pop->entity_array[i].fitness=GA_MIN_FITNESS;
+      pop->entity_array[i].chromosome=NULL;
+      }
+
+    pop->max_size = new_max_size;
+    }
+
+/* Find unused entity structure */
+  while (pop->entity_array[index].allocated==TRUE)
+    {
+    if (index == 0) index=pop->max_size;
+    index--;
+    }
+
+/* Prepare it */
+  ga_entity_setup(pop, &(pop->entity_array[index]));
+
+/* Store in lowest free slot in entity_iarray */
+  pop->entity_iarray[pop->size] = &(pop->entity_array[index]);
+
+/* Population is bigger now! */
+  pop->size++;
+
+/*
+  printf("ENTITY %d ALLOCATED.\n", index);
+*/
+
+  return &(pop->entity_array[index]);
+  }
+#endif
 
 
 /**********************************************************************
