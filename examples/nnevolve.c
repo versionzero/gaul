@@ -7,8 +7,8 @@
   All rights reserved.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
-  http://gaul.sourceforge.net/
-  http://www.stewart-adcock.co.uk/
+  The latest version of this program should be available at:
+  http://www.linux-domain.com/
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
