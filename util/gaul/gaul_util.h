@@ -102,7 +102,7 @@
 /*
  * Define boolean type sensibly.
  */
-#if HAVE_STDBOOL_H != 1
+#if HAVE_STDBOOL_H == 1
 # include <stdbool.h>
 #else
 
