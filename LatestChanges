@@ -16,6 +16,8 @@ Changes since release 0.1839:
 - Reduced number of dynamic libraries created.
 - ga_evolution_forked() added, along with examples.
 - Modified configure.in to enhance performance of Intel C/C++ compiler optimisations.
+- Fixes for clean compilation with gcc 3.2 and the latest autotools.
+- Example programs will no longer be installed in binary directory by 'make install'
 
 Changes since release 0.1838:
 - Added Stochastic Universal Sampling selection functions ga_select_one_sus() and ga_select_two_sus().

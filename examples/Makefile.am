@@ -28,7 +28,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = diagnostics \
+EXTRA_PROGRAMS = diagnostics \
 	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
@@ -55,7 +55,7 @@ struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
 
-lib_LTLIBRARIES = libbtree.la
+noinst_LTLIBRARIES = libbtree.la
 
 libbtree_la_SOURCES = btree.c
 
