@@ -2600,7 +2600,8 @@ boolean ga_genocide_by_fitness(population *pop, double target_fitness)
  * Dereference the structures relating to the least
  * fit population members until the desired population size in reached. 
  */
-  while (pop->entity_iarray[pop->size-1]->fitness<target_fitness)
+  while ( pop->size>0 &&
+          pop->entity_iarray[pop->size-1]->fitness<target_fitness )
     {
 /*printf("Dereferencing entity with rank %d (fitness = %d)\n",
          pop->size-1, pop->entity_iarray[pop->size-1]->fitness);*/
