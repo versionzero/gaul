@@ -326,7 +326,7 @@ void sort_population(population *pop)
     {
     for (k = last ; k > first ; k--)
       {
-      if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness )
+      if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness+GA_TINY_DOUBLE )
         {
         swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
         }
@@ -337,7 +337,7 @@ void sort_population(population *pop)
 
     for (k = first ; k < last ; k++)
       {
-      if ( array_of_ptrs[k]->fitness < array_of_ptrs[k+1]->fitness )
+      if ( array_of_ptrs[k]->fitness < array_of_ptrs[k+1]->fitness-GA_TINY_DOUBLE )
         {
         swap_e(array_of_ptrs[k], array_of_ptrs[k+1]);
         done = FALSE;

@@ -228,6 +228,7 @@ void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
 
         default:
           /* Do nothing. */
+          break;
         }
       }
     }

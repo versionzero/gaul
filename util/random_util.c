@@ -278,6 +278,7 @@ unsigned int random_get_state_str_len(void)
 
 void random_set_state_str(char *state)
   {
+  /* This causes potential unaligned trap on Alpha CPUs. */
   current_state = *((random_state *)state);
 
   return;

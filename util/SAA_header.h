@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
+  Updated:	31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
+		14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
 		10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
 		20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
 		19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
@@ -110,21 +111,22 @@
 /*
  * If threads are used, these must be properly defined somewhere.
  * Unfortunately empty macros cause splint parse errors.  They
- * also cause lots of warnings when using Sun's compilers.
+ * also cause lots of warnings when using Sun's and Compaq's
+ * compilers.
  */
-#if defined(S_SPLINT_S) || defined(SUN_FORTE_C)
-#define THREAD_LOCK_DEFINE_STATIC(name)	static int name = 0
-#define THREAD_LOCK_DEFINE(name)	int name = 0
-#define THREAD_LOCK_EXTERN(name)	extern int name = 0
-#define THREAD_LOCK(name)		name = 1
-#define THREAD_UNLOCK(name)		name = 0
-#define THREAD_TRYLOCK(name)		0
-#else
+#if defined(__GNUC__)
 #define THREAD_LOCK_DEFINE_STATIC(name)
 #define THREAD_LOCK_DEFINE(name)
 #define THREAD_LOCK_EXTERN(name)
 #define THREAD_LOCK(name)
 #define THREAD_UNLOCK(name)
+#define THREAD_TRYLOCK(name)		0
+#else
+#define THREAD_LOCK_DEFINE_STATIC(name)	static int name = 0
+#define THREAD_LOCK_DEFINE(name)	int name = 0
+#define THREAD_LOCK_EXTERN(name)	extern int name
+#define THREAD_LOCK(name)		name = 1
+#define THREAD_UNLOCK(name)		name = 0
 #define THREAD_TRYLOCK(name)		0
 #endif
 #endif
@@ -190,7 +192,7 @@
 #  undef true
 # endif
 
-# if defined(__cplusplus)
+# if defined(__cplusplus) || defined(__DECC)
 typedef bool _Bool;
 typedef boolean _Bool;
 # else

@@ -941,27 +941,27 @@ population *ga_population_read(char *fname)
  */
   fread(id, sizeof(int), 18, fp);
 
-  pop->generation_hook = gaul_lookup_hook(id[0]);
-  pop->iteration_hook = gaul_lookup_hook(id[1]);
+  pop->generation_hook        = (GAgeneration_hook)  gaul_lookup_hook(id[0]);
+  pop->iteration_hook         = (GAiteration_hook)   gaul_lookup_hook(id[1]);
 
-  pop->data_destructor = gaul_lookup_hook(id[2]);
-  pop->data_ref_incrementor = gaul_lookup_hook(id[3]);
+  pop->data_destructor        = (GAdata_destructor)      gaul_lookup_hook(id[2]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) gaul_lookup_hook(id[3]);
 
-  pop->chromosome_constructor = gaul_lookup_hook(id[4]);
-  pop->chromosome_destructor = gaul_lookup_hook(id[5]);
-  pop->chromosome_replicate = gaul_lookup_hook(id[6]);
-  pop->chromosome_to_bytes = gaul_lookup_hook(id[7]);
-  pop->chromosome_from_bytes = gaul_lookup_hook(id[8]);
-  pop->chromosome_to_string = gaul_lookup_hook(id[9]);
+  pop->chromosome_constructor = (GAchromosome_constructor) gaul_lookup_hook(id[4]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  gaul_lookup_hook(id[5]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   gaul_lookup_hook(id[6]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    gaul_lookup_hook(id[7]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  gaul_lookup_hook(id[8]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   gaul_lookup_hook(id[9]);
 
-  pop->evaluate = gaul_lookup_hook(id[10]);
-  pop->seed = gaul_lookup_hook(id[11]);
-  pop->adapt = gaul_lookup_hook(id[12]);
-  pop->select_one = gaul_lookup_hook(id[13]);
-  pop->select_two = gaul_lookup_hook(id[14]);
-  pop->mutate = gaul_lookup_hook(id[15]);
-  pop->crossover = gaul_lookup_hook(id[16]);
-  pop->replace = gaul_lookup_hook(id[17]);
+  pop->evaluate               = (GAevaluate)       gaul_lookup_hook(id[10]);
+  pop->seed                   = (GAseed)           gaul_lookup_hook(id[11]);
+  pop->adapt                  = (GAadapt)          gaul_lookup_hook(id[12]);
+  pop->select_one             = (GAselect_one)     gaul_lookup_hook(id[13]);
+  pop->select_two             = (GAselect_two)     gaul_lookup_hook(id[14]);
+  pop->mutate                 = (GAmutate)         gaul_lookup_hook(id[15]);
+  pop->crossover              = (GAcrossover)      gaul_lookup_hook(id[16]);
+  pop->replace                = (GAreplace)        gaul_lookup_hook(id[17]);
 
 /*
  * Warn user of any unhandled data.

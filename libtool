@@ -36,11 +36,11 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 ### BEGIN LIBTOOL CONFIG
 # Libtool was configured as follows, on host chemcca0:
 #
-# CC="gcc" CFLAGS="-g -O2" CPPFLAGS="" \
+# CC="icc" CFLAGS="-g" CPPFLAGS="" \
 # LD="/usr/bin/ld" LDFLAGS="" LIBS="" \
 # NM="/usr/bin/nm -B" RANLIB="ranlib" LN_S="ln -s" \
 # DLLTOOL="" OBJDUMP="" AS="" \
-#   ./ltconfig --with-gcc --with-gnu-ld --enable-dlopen --no-verify ./ltmain.sh i686-pc-linux-gnu
+#   ./ltconfig --with-gnu-ld --enable-dlopen --no-verify ./ltmain.sh i686-pc-linux-gnu
 #
 # Compiler and other test output produced by ltconfig, useful for
 # debugging ltconfig, is in ./config.log if it exists.
@@ -52,13 +52,13 @@ LTCONFIG_VERSION="1.3.5"
 SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
-build_libtool_libs=yes
+build_libtool_libs=no
 
 # Whether or not to build static libraries.
 build_old_libs=yes
 
 # Whether or not to optimize for fast installation.
-fast_install=yes
+fast_install=needless
 
 # The host system.
 host_alias=i686-pc-linux-gnu
@@ -71,7 +71,7 @@ echo="echo"
 AR="ar"
 
 # The default C compiler.
-CC="gcc"
+CC="icc"
 
 # The linker used to build libraries.
 LD="/usr/bin/ld"
@@ -99,7 +99,7 @@ reload_flag=" -r"
 reload_cmds="\$LD\$reload_flag -o \$output\$reload_objs"
 
 # How to pass a linker flag through the compiler.
-wl="-Wl,"
+wl=""
 
 # Object file suffix (normally "o").
 objext="o"
@@ -111,16 +111,16 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -fPIC"
+pic_flag=""
 
 # Does compiler simultaneously support -c and -o options?
-compiler_c_o="yes"
+compiler_c_o="no"
 
 # Can we write directly to a .lo ?
-compiler_o_lo="yes"
+compiler_o_lo="no"
 
 # Must we lock files when doing compilation ?
-need_locks="no"
+need_locks="yes"
 
 # Do we need the lib prefix for modules?
 need_lib_prefix=no
@@ -132,16 +132,16 @@ need_version=no
 dlopen=yes
 
 # Whether dlopen of programs is supported.
-dlopen_self=yes
+dlopen_self=no
 
 # Whether dlopen of statically linked programs is supported.
-dlopen_self_static=no
+dlopen_self_static=unknown
 
 # Compiler flag to prevent dynamic linking.
-link_static_flag="-static"
+link_static_flag=""
 
 # Compiler flag to turn off builtin functions.
-no_builtin_flag=" -fno-builtin -fno-rtti -fno-exceptions"
+no_builtin_flag=""
 
 # Compiler flag to allow reflexive dlopens.
 export_dynamic_flag_spec="\${wl}--export-dynamic"
