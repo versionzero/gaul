@@ -44,6 +44,37 @@
 #include "SAA_header.h"
 
 /*
+ * Forward declarations.
+ */
+typedef struct entity_t entity;
+typedef struct population_t population;
+
+/*
+ * Enumerated types, used to define varients of the GA algorithms.
+ */
+typedef enum ga_genesis_type_t
+  {
+  GA_GENESIS_UNKNOWN = 0,
+  GA_GENESIS_RANDOM, GA_GENESIS_PDB, GA_GENESIS_SOUP, GA_GENESIS_USER
+  } ga_genesis_type;
+
+typedef enum ga_class_type_t
+  {
+  GA_CLASS_UNKNOWN = 0,
+  GA_CLASS_DARWIN,
+  GA_CLASS_LAMARCK, GA_CLASS_LAMARCK_ALL,
+  GA_CLASS_BALDWIN, GA_CLASS_BALDWIN_ALL
+  } ga_class_type;
+
+typedef enum ga_elitism_type_t
+  {
+  GA_ELITISM_UNKNOWN = 0,
+  GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ROUGH, GA_ELITISM_ROUGH_COMP,
+  GA_ELITISM_EXACT, GA_ELITISM_EXACT_COMP,
+  GA_ELITISM_PARENTS_DIE
+  } ga_elitism_type;
+
+/*
  * Include remainder of this library's headers.
  */
 #include "ga_core.h"

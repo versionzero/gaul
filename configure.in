@@ -29,7 +29,7 @@ dnl		Ability to turn off SLang stuff.
 dnl
 dnl ***************************************************************
 
-# require autoconf 2.13
+# require autoconf 2.13 or above
 AC_PREREQ(2.13)
 
 # init autoconf (and check for presence of gaul.h - the public header file)
@@ -251,6 +251,11 @@ if test "x$GCC" = "xyes"; then
   *) CFLAGS="$CFLAGS -Wall" ;;
   esac
 
+  case " $CFLAGS " in
+  *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
+  *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
+  esac
+
   if test "x$enable_ansi" = "xyes"; then
     case " $CFLAGS " in
     *[\ \	]-ansi[\ \	]*) ;;
@@ -320,6 +325,13 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                basename readline strcspn waitpid \
                min max \
                snooze strerror strlcat strlcpy strstr usleep vsnprintf)
+
+dnl Give warning if GNU Make is not being used.
+dnl This message is at the bottom so it may be easily spotted!
+temp=`make -version -f \dev\null 2>&1 | grep GNU`
+if test "x$temp" = "x"; then
+  AC_MSG_WARN([You are advised to use GNU Make when compiling GAUL])
+fi
 
 AC_OUTPUT(
            Makefile

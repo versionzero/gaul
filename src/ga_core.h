@@ -55,39 +55,9 @@
 #endif
 
 /*
- * Forward declarations.
+ * Include remainder of this library's headers.
  */
-typedef struct entity_t	entity;
-typedef struct population_t population;
-
-/*
- * Enumerated types.
- */
-typedef enum ga_genesis_type_t
-  {
-  GA_GENESIS_UNKNOWN = 0,
-  GA_GENESIS_RANDOM, GA_GENESIS_PDB, GA_GENESIS_SOUP, GA_GENESIS_USER
-  } ga_genesis_type;
-
-typedef enum ga_class_type_t
-  {
-  GA_CLASS_UNKNOWN = 0,
-  GA_CLASS_DARWIN,
-  GA_CLASS_LAMARCK, GA_CLASS_LAMARCK_ALL,
-  GA_CLASS_BALDWIN, GA_CLASS_BALDWIN_ALL
-  } ga_class_type;
-
-typedef enum ga_elitism_type_t
-  {
-  GA_ELITISM_UNKNOWN = 0,
-  GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ROUGH, GA_ELITISM_ROUGH_COMP,
-  GA_ELITISM_EXACT, GA_ELITISM_EXACT_COMP,
-  GA_ELITISM_PARENTS_DIE
-  } ga_elitism_type;
-
-/*
- * Include remainder of this libraries headers.
- */
+#include "gaul.h"
 #include "ga_bitstring.h"
 #include "ga_chromo.h"
 #include "ga_optim.h"
