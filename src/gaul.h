@@ -359,6 +359,9 @@ void	ga_replace_by_fitness(population *pop, entity *child);
  * (Miscellaneous support functions)
  */
 void    ga_diagnostics( void ); 
+int	ga_get_major_version( void );
+int	ga_get_minor_version( void );
+int	ga_get_patch_version( void );
 population *ga_genesis( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,

@@ -35,6 +35,7 @@
 
 #include "ga_utility.h"
 
+
 /**********************************************************************
   ga_diagnostics()
   synopsis:	Diagnostics.
@@ -78,6 +79,50 @@ void ga_diagnostics(void)
   printf("==============================================================\n");
 
   return;
+  }
+
+/**********************************************************************
+  ga_get_major_version()
+  synopsis:	Return major version number.
+  parameters:	none
+  return:	none
+  last updated:	06 Apr 2003
+ **********************************************************************/
+
+int ga_get_major_version( void )
+  {
+
+  return GA_MAJOR_VERSION;
+  }
+
+
+/**********************************************************************
+  ga_get_minor_version()
+  synopsis:	Return major version number.
+  parameters:	none
+  return:	none
+  last updated:	06 Apr 2003
+ **********************************************************************/
+
+int ga_get_minor_version( void )
+  {
+
+  return GA_MINOR_VERSION;
+  }
+
+
+/**********************************************************************
+  ga_get_patch_version()
+  synopsis:	Return patch level (version) number.
+  parameters:	none
+  return:	none
+  last updated:	06 Apr 2003
+ **********************************************************************/
+
+int ga_get_patch_version( void )
+  {
+
+  return GA_PATCH_VERSION;
   }
 
 

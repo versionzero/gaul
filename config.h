@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "05/04/03"
+#define BUILD_DATE_STRING "06/04/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -19,11 +19,20 @@
 /* Default number of threads. */
 #define GA_DEFAULT_NUM_THREADS 4
 
+/* Major version number. */
+#define GA_MAJOR_VERSION 0
+
+/* Minor version number. */
+#define GA_MINOR_VERSION 1843
+
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 
 /* Environment variable used to request threads. */
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
+
+/* Patch level. */
+#define GA_PATCH_VERSION 1
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -307,9 +316,6 @@
 /* Define if compiler has built-in _Bool type. */
 #define HAVE__BOOL 1
 
-/* Major version number. */
-#define MAJOR_VERSION 0
-
 /* Memory alignment boundry characteristics. */
 #define MEMORY_ALIGN_SIZE 4
 
@@ -325,9 +331,6 @@
 /* Whether to pad memory. */
 #define MEMORY_PADDING 0
 
-/* Minor version number. */
-#define MINOR_VERSION 1843
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
 
@@ -342,9 +345,6 @@
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
-
-/* Patch level. */
-#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -380,7 +380,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1843-0"
+#define VERSION_STRING "0.1843-1"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

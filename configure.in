@@ -42,34 +42,34 @@ AC_CANONICAL_SYSTEM
 
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
-MAJOR_VERSION=0
-MINOR_VERSION=1843
-PATCH_VERSION=1
-VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
+GA_MAJOR_VERSION=0
+GA_MINOR_VERSION=1843
+GA_PATCH_VERSION=1
+GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
-AC_SUBST(MAJOR_VERSION)
-AC_SUBST(MINOR_VERSION)
-AC_SUBST(PATCH_VERSION)
-AC_SUBST(VERSION)
+AC_SUBST(GA_MAJOR_VERSION)
+AC_SUBST(GA_MINOR_VERSION)
+AC_SUBST(GA_PATCH_VERSION)
+AC_SUBST(GA_VERSION)
 AC_SUBST(MPIFLAGS)
 AC_SUBST(MPILIBS)
 
 dnl libtool versioning
-LT_RELEASE=$MAJOR_VERSION.$MINOR_VERSION
+LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 LT_CURRENT=0
-LT_REVISION=$PATCH_VERSION
+LT_REVISION=$GA_PATCH_VERSION
 AC_SUBST(LT_RELEASE)
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, no-define)
 
 dnl Specify a configuration file
 AM_CONFIG_HEADER(config.h)
 
-AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION, [Major version number.])
-AC_DEFINE_UNQUOTED(MINOR_VERSION, $MINOR_VERSION, [Minor version number.])
-AC_DEFINE_UNQUOTED(PATCH_VERSION, $PATCH_VERSION, [Patch level.])
+AC_DEFINE_UNQUOTED(GA_MAJOR_VERSION, $GA_MAJOR_VERSION, [Major version number.])
+AC_DEFINE_UNQUOTED(GA_MINOR_VERSION, $GA_MINOR_VERSION, [Minor version number.])
+AC_DEFINE_UNQUOTED(GA_PATCH_VERSION, $GA_PATCH_VERSION, [Patch level.])
 
 dnl Set some defines required to their default values.
 dnl FIXME: allow configuration-time modification for many of these.
@@ -77,7 +77,7 @@ AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [Record compilation platform info
 AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Record date of compilation.])
 AC_DEFINE(V3_QUICK, 1, [Whether to skip expensive sanity checking in vector routines.])
 AC_DEFINE(AVLTREE_KEY_TYPE, void *, [Type of key used by AVL tree routines.])
-AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string.])
+AC_DEFINE_UNQUOTED(VERSION_STRING, "${GA_VERSION}", [Version string.])
 
 AC_DEFINE(GA_NUM_PROCESSES_ENVVAR_STRING, "GA_NUM_PROCESSES", [Environment variable used to request processes.])
 AC_DEFINE(GA_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads.])
@@ -694,7 +694,7 @@ echo \
 "************************************************************************
   GAUL has been configured successfully.  In summary:
 
-  Version:                    ${VERSION}
+  Version:                    ${GA_VERSION}
   Source code location:       ${srcdir}
   Host system type:           ${host}
   Target system type:         ${target}

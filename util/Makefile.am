@@ -69,8 +69,8 @@ include_HEADERS = \
      timer_util.h
 
 libgaul_util_a_LIBFLAGS =
-libgaul_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libgaul_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS =
-libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libnn_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 

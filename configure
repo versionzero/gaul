@@ -1493,10 +1493,10 @@ test -n "$target_alias" &&
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
 
-MAJOR_VERSION=0
-MINOR_VERSION=1843
-PATCH_VERSION=0
-VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
+GA_MAJOR_VERSION=0
+GA_MINOR_VERSION=1843
+GA_PATCH_VERSION=1
+GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 
 
@@ -1505,9 +1505,9 @@ VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 
 
 
-LT_RELEASE=$MAJOR_VERSION.$MINOR_VERSION
+LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 LT_CURRENT=0
-LT_REVISION=$PATCH_VERSION
+LT_REVISION=$GA_PATCH_VERSION
 
 
 
@@ -1741,7 +1741,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=$PACKAGE
- VERSION=$VERSION
+ VERSION=$GA_VERSION
 
 
 # Some tools Automake needs.
@@ -1868,17 +1868,17 @@ ac_config_headers="$ac_config_headers config.h"
 
 
 cat >>confdefs.h <<_ACEOF
-#define MAJOR_VERSION $MAJOR_VERSION
+#define GA_MAJOR_VERSION $GA_MAJOR_VERSION
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define MINOR_VERSION $MINOR_VERSION
+#define GA_MINOR_VERSION $GA_MINOR_VERSION
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define PATCH_VERSION $PATCH_VERSION
+#define GA_PATCH_VERSION $GA_PATCH_VERSION
 _ACEOF
 
 
@@ -1904,7 +1904,7 @@ _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define VERSION_STRING "${VERSION}"
+#define VERSION_STRING "${GA_VERSION}"
 _ACEOF
 
 
@@ -12225,10 +12225,10 @@ s,@target@,$target,;t t
 s,@target_cpu@,$target_cpu,;t t
 s,@target_vendor@,$target_vendor,;t t
 s,@target_os@,$target_os,;t t
-s,@MAJOR_VERSION@,$MAJOR_VERSION,;t t
-s,@MINOR_VERSION@,$MINOR_VERSION,;t t
-s,@PATCH_VERSION@,$PATCH_VERSION,;t t
-s,@VERSION@,$VERSION,;t t
+s,@GA_MAJOR_VERSION@,$GA_MAJOR_VERSION,;t t
+s,@GA_MINOR_VERSION@,$GA_MINOR_VERSION,;t t
+s,@GA_PATCH_VERSION@,$GA_PATCH_VERSION,;t t
+s,@GA_VERSION@,$GA_VERSION,;t t
 s,@MPIFLAGS@,$MPIFLAGS,;t t
 s,@MPILIBS@,$MPILIBS,;t t
 s,@LT_RELEASE@,$LT_RELEASE,;t t
@@ -12238,6 +12238,7 @@ s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@PACKAGE@,$PACKAGE,;t t
+s,@VERSION@,$VERSION,;t t
 s,@ACLOCAL@,$ACLOCAL,;t t
 s,@AUTOCONF@,$AUTOCONF,;t t
 s,@AUTOMAKE@,$AUTOMAKE,;t t
@@ -12873,7 +12874,7 @@ echo \
 "************************************************************************
   GAUL has been configured successfully.  In summary:
 
-  Version:                    ${VERSION}
+  Version:                    ${GA_VERSION}
   Source code location:       ${srcdir}
   Host system type:           ${host}
   Target system type:         ${target}

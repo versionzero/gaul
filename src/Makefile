@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /home/stewart
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,33 +96,34 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1843/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
+GA_MAJOR_VERSION = 0
+GA_MINOR_VERSION = 1843
+GA_PATCH_VERSION = 1
+GA_VERSION = 0.1843-1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1843
-LT_REVISION = 0
+LT_REVISION = 1
 MAINT = #
-MAJOR_VERSION = 0
-MINOR_VERSION = 1843
 MPIFLAGS = 
 MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 0
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1843-0
+VERSION = 0.1843-1
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1842/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1843/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -173,7 +174,7 @@ include_HEADERS = \
 
 
 libgaul_la_LIBFLAGS = -lm
-libgaul_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libgaul_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h

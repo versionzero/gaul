@@ -1,3 +1,6 @@
+Changes since release 0.1843:
+- Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.
+
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
 - Changed name of test example to test_ga to avoid name clash with file from binutils package.

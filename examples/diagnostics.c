@@ -67,6 +67,10 @@ int main(int argc, char **argv)
 /*
  * Output GAUL's diagnostic info.
  */
+  printf("This program is linked against GAUL %d.%d-%d\n",
+         ga_get_major_version(), ga_get_minor_version(), ga_get_patch_version());
+  printf("This program was compiled with the GAUL %d.%d-%d headers.\n",
+         GA_MAJOR_VERSION, GA_MINOR_VERSION, GA_PATCH_VERSION);
   ga_diagnostics();
 
 /*

@@ -73,5 +73,5 @@ include_HEADERS = \
     gaul.h
 
 libgaul_la_LIBFLAGS = -lm
-libgaul_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libgaul_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 
