@@ -1,3 +1,6 @@
+Changes since release 0.1846:
+- Removed the unused string handling and manipulation functions.
+
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
 - Removed presence of ophan ';'s to make source (closer to being) ISO C99 compliant.
