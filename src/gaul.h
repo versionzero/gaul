@@ -120,9 +120,9 @@ typedef void    (*GAdata_ref_incrementor)(vpointer data);
  * Genome handling.
  */
 /* GAchromosome_constructor is used to allocate single chromosomes. */
-typedef boolean (*GAchromosome_constructor)(const population *pop, entity *entity);
+typedef boolean (*GAchromosome_constructor)(population *pop, entity *entity);
 /* GAchromosome_destructor is used to deallocate single chromosomes. */
-typedef void    (*GAchromosome_destructor)(const population *pop, entity *entity);
+typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
 /* GAchromosome_replicate is used to clone single chromosomes. */
 typedef void    (*GAchromosome_replicate)(const population *pop, entity *parent, entity *child, const int chromosomeid);
 /* GAchromosome_to_bytes is used to pack genomic data into a

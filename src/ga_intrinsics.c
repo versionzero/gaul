@@ -1115,6 +1115,7 @@ static int ga_population_sort_slang(int *pop_id)
   }
 
 
+#if 0
 /**********************************************************************
   ga_slang_seed()
   synopsis:	Handle S-Lang based seeding operator.
@@ -1280,6 +1281,7 @@ static void ga_slang_replace(population *pop, entity *child)
 
   return;
   }
+#endif
 #endif
 
 
