@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      15 Oct 2002 SAA	Avoid warning when using Compaq's ccc compiler.
+  Updated:      15 Nov 2002 SAA	Added dstr_copy().
+		15 Oct 2002 SAA	Avoid warning when using Compaq's ccc compiler.
 		13 Aug 2002 SAA	Improved dstr_scmp_str().
   		11 Apr 2002 SAA	Added dstr_fromstr() convenience function.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
@@ -659,12 +660,12 @@ dstr_subcreate (const char *str, int first, int last)
 }
 #endif
 
+
 /**********************************************************************
   dstring *dstr_clone()
   synopsis:	Create a new copy of the given dstring.
   parameters:   dstring	*src		The dynamic string.
-		const int max_size	The new max_size.
-  return:	none
+  return:	The new dynamic string.
   last updated: 09/03/99
  **********************************************************************/
 
@@ -679,7 +680,31 @@ dstring *dstr_clone(dstring *src)
   strncpy(dest->string, src->string, src->size);
   dest->string[dest->size]='\0';
 
-  return(dest);
+  return dest;
+  }
+
+
+/**********************************************************************
+  dstring *dstr_copy()
+  synopsis:	Create a new copy of the given dstring.
+  parameters:   dstring	*dest		The destination dynamic string.
+  		dstring	*src		The source dynamic string.
+  return:	none
+  last updated: 15 Nov 2002
+ **********************************************************************/
+
+void dstr_copy(dstring *dest, dstring *src)
+  {
+
+  if (!dstr_isvalid(src)) die("Invalid dstring passed.");
+  if (!dstr_isvalid(dest)) die("Invalid dstring passed.");
+
+  dstr_realloc(dest, src->size);
+  dest->size = src->size;
+  strncpy(dest->string, src->string, src->size);
+  dest->string[dest->size]='\0';
+
+  return;
   }
 
 
@@ -818,6 +843,7 @@ void dstr_setf(dstring *ds, const char *format, ...)
     }
 
 /* Should never get here. */
+  return;
   }
 
 
@@ -844,6 +870,8 @@ void dstr_subset(dstring *ds, const char *str, const int first, const int last)
   dstr_realloc(ds, ds->size);
   strncpy(ds->string, str + first, ds->size);
   ds->string[ds->size] = '\0';
+
+  return;
   }
 
 
@@ -870,6 +898,8 @@ void dstr_append_str(dstring *ds, const char *str)
   ds->size += size;
 
   s_assert(dstr_isvalid(ds));
+
+  return;
   }
 
 
@@ -903,6 +933,8 @@ void dstr_subcat(dstring *ds, const char *str, int first, int last)
   ds->string[ds->size] = '\0';
 
   s_assert(dstr_isvalid(ds));
+
+  return;
   }
 
 
@@ -921,6 +953,8 @@ void dstr_append_char(dstring *ds, const char c)
   ds->string[ds->size] = '\0';
 
   s_assert(dstr_isvalid(ds));
+
+  return;
   }
 
 
@@ -936,6 +970,8 @@ void dstr_append_int(dstring *ds, int i)
 
   sprintf(str, "%i", i);
   dstr_append_str(ds, str);
+
+  return;
   }
 
 
@@ -953,6 +989,8 @@ void dstr_append(dstring *ds1, const dstring *ds2)
   ds1->size += ds2->size;
 
   s_assert(dstr_isvalid(ds1));
+
+  return;
   }
 
 

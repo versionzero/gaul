@@ -92,6 +92,7 @@ dstring	*dstr_fromstr(char *str);
 void	dstr_reallocate(dstring *ds, const int max_size);
 int	dstr_cmp(const dstring *dstr1, const dstring *dstr2);
 dstring	*dstr_clone(dstring *src);
+void	dstr_copy(dstring *dest, dstring *src);
 void	dstr_set(dstring *ds, const char *str);
 void	dstr_setn(dstring *ds, const int len, const char *str);
 void	dstr_subset(dstring *ds, const char *str, const int first, const int last);
