@@ -89,6 +89,8 @@ boolean	random_isinit(void);
 char	*random_get_state_str(void);
 unsigned int random_get_state_str_len(void);
 void	random_set_state_str(char *state);
+random_state	random_get_state(void);
+void	random_set_state(random_state state);
 boolean	random_boolean(void);
 boolean	random_boolean_prob(const double prob);
 unsigned int	random_int(const unsigned int max);
