@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,11 +96,11 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_DATE_STRING = 
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -128,7 +128,7 @@ VERSION = 0.1844-3
 VERSION_STRING = 
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -144,7 +144,7 @@ bin_PROGRAMS = diagnostics \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
-	royalroad royalroad_ss \
+	royalroad royalroad_ss royalroad_bitstring \
 	struggle struggle_forked \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
@@ -171,6 +171,7 @@ wildfire_loadbalancing_SOURCES = wildfire_loadbalancing.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
+royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
 struggle_dc_SOURCES = struggle_dc.c
@@ -221,6 +222,7 @@ wildfire_loadbalancing_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -255,6 +257,7 @@ wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -288,7 +291,8 @@ bin_PROGRAMS = diagnostics$(EXEEXT) test_ga$(EXEEXT) \
 	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
 	wildfire_loadbalancing$(EXEEXT) goldberg1$(EXEEXT) \
 	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
-	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
+	royalroad_bitstring$(EXEEXT) struggle$(EXEEXT) \
+	struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
 	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
@@ -332,6 +336,9 @@ pingpong_tabu2_LDFLAGS =
 am_royalroad_OBJECTS = royalroad.$(OBJEXT)
 royalroad_OBJECTS = $(am_royalroad_OBJECTS)
 royalroad_LDFLAGS =
+am_royalroad_bitstring_OBJECTS = royalroad_bitstring.$(OBJEXT)
+royalroad_bitstring_OBJECTS = $(am_royalroad_bitstring_OBJECTS)
+royalroad_bitstring_LDFLAGS =
 am_royalroad_ss_OBJECTS = royalroad_ss.$(OBJEXT)
 royalroad_ss_OBJECTS = $(am_royalroad_ss_OBJECTS)
 royalroad_ss_LDFLAGS =
@@ -399,7 +406,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lslang -lslang
+LIBS = -L/home/stewart/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
@@ -411,6 +418,7 @@ DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
 	./$(DEPDIR)/pingpong_tabu.Po \
 	./$(DEPDIR)/pingpong_tabu2.Po \
 	./$(DEPDIR)/royalroad.Po \
+	./$(DEPDIR)/royalroad_bitstring.Po \
 	./$(DEPDIR)/royalroad_ss.Po ./$(DEPDIR)/saveload.Po \
 	./$(DEPDIR)/struggle.Po ./$(DEPDIR)/struggle2.Po \
 	./$(DEPDIR)/struggle3.Po ./$(DEPDIR)/struggle4.Po \
@@ -433,26 +441,26 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) \
 	$(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) \
 	$(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) \
-	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
-	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
-	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
-	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) \
+	$(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) \
+	$(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) \
+	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
+	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) \
+	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
-DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -539,6 +547,9 @@ pingpong_tabu2$(EXEEXT): $(pingpong_tabu2_OBJECTS) $(pingpong_tabu2_DEPENDENCIES
 royalroad$(EXEEXT): $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES) 
 	@rm -f royalroad$(EXEEXT)
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
+royalroad_bitstring$(EXEEXT): $(royalroad_bitstring_OBJECTS) $(royalroad_bitstring_DEPENDENCIES) 
+	@rm -f royalroad_bitstring$(EXEEXT)
+	$(LINK) $(royalroad_bitstring_LDFLAGS) $(royalroad_bitstring_OBJECTS) $(royalroad_bitstring_LDADD) $(LIBS)
 royalroad_ss$(EXEEXT): $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES) 
 	@rm -f royalroad_ss$(EXEEXT)
 	$(LINK) $(royalroad_ss_LDFLAGS) $(royalroad_ss_OBJECTS) $(royalroad_ss_LDADD) $(LIBS)
@@ -619,6 +630,7 @@ include ./$(DEPDIR)/pingpong_sa.Po
 include ./$(DEPDIR)/pingpong_tabu.Po
 include ./$(DEPDIR)/pingpong_tabu2.Po
 include ./$(DEPDIR)/royalroad.Po
+include ./$(DEPDIR)/royalroad_bitstring.Po
 include ./$(DEPDIR)/royalroad_ss.Po
 include ./$(DEPDIR)/saveload.Po
 include ./$(DEPDIR)/struggle.Po

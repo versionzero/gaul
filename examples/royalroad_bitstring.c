@@ -1,8 +1,8 @@
 /**********************************************************************
-  royalroad.c
+  royalroad_bitstring.c
  **********************************************************************
 
-  royalroad - Test/example program for GAUL.
+  royalroad_bitstring - Test/example program for GAUL.
   Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -61,8 +61,8 @@
 
 		where K = 1,2,3, or 4.  Holland used K = 4.
 
-		This implementation uses a GAUL boolean chromosome
-		with a standard steady-state GA.
+		This implementation uses a GAUL bitstring chromosome
+		with a standard generational GA.
 
  **********************************************************************/
 
@@ -75,7 +75,7 @@
  * Hard-coded parameter settings.
  * FIXME: Should make these user options.
  */
-#define NBLOCKS 16	/* this number is 2^K */
+#define NBLOCKS		16	/* this number is 2^K */
 
 #define BLOCKSIZE	8	/* block size - length of target schemata */
 #define GAPSIZE		7	/* gap size - number of bits between target schemata */
@@ -94,7 +94,7 @@ int highestlevel=0;
   synopsis:	Score solution.
   parameters:
   return:
-  updated:	31/05/01
+  updated:	29 Jun 2003
  **********************************************************************/
 
 boolean royalroad_score(population *pop, entity *entity)
@@ -110,7 +110,7 @@ boolean royalroad_score(population *pop, entity *entity)
   for(i=0; i<NBLOCKS; i++) {
     total = 0;
     for(j=i*(BLOCKSIZE + GAPSIZE); j<i*(BLOCKSIZE+GAPSIZE)+BLOCKSIZE; j++)
-      if(((boolean *)entity->chromosome[0])[j] == 1) total++;  /* count the bits in the block. */
+      if(ga_bit_get((byte *)entity->chromosome[0], j) == 1) total++;  /* count the bits in the block. */
     if(total > MSTAR && total < BLOCKSIZE)
       score -= (total-MSTAR)*RR_V;
     else if(total <= MSTAR)
@@ -148,14 +148,14 @@ boolean royalroad_score(population *pop, entity *entity)
 	blockarray[index] = 0;
       }
     }
-    if(total > 0){
+    if (total > 0){
       score += USTAR + (total-1)*RR_U;
       level++;
     }
     n /= 2;
   }
 
-  if(highestlevel < level) highestlevel = level;
+  if (highestlevel < level) highestlevel = level;
 
   entity->fitness = score;
 
@@ -174,13 +174,10 @@ boolean royalroad_score(population *pop, entity *entity)
 boolean royalroad_ga_callback(int generation, population *pop)
   {
 
-  if (generation % 1000 == 0)
-    {
-    printf( "generation = %d best score = %f highestlevel = %d\n",
-            generation,
-            ga_get_entity_from_rank(pop,0)->fitness,
-            highestlevel );
-    }
+  printf( "generation = %d best score = %f highestlevel = %d\n",
+          generation,
+          ga_get_entity_from_rank(pop,0)->fitness,
+          highestlevel );
 
   return TRUE;
   }
@@ -191,13 +188,13 @@ boolean royalroad_ga_callback(int generation, population *pop)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	29 Jun 2003
+  updated:	31/05/01
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
   population	*pop=NULL;	/* Population of solutions. */
-  int		seed=1234;	/* Random number seed. */
+  int		seed=12345678;	/* Random number seed. */
   int		i;		/* Loop over alleles. */
 
   printf("Running Holland's Royal Road test problem with a genome that\n");
@@ -223,33 +220,33 @@ int main(int argc, char **argv)
      NULL,			/* GAdata_destructor      data_destructor */
      NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
      royalroad_score,		/* GAevaluate             evaluate */
-     ga_seed_boolean_random,	/* GAseed                 seed */
+     ga_seed_bitstring_random,	/* GAseed                 seed */
      NULL,			/* GAadapt                adapt */
      ga_select_one_bestof2,	/* GAselect_one           select_one */
      ga_select_two_bestof2,	/* GAselect_two           select_two */
-     ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
-     ga_crossover_boolean_doublepoints,	/* GAcrossover            crossover */
-     ga_replace_by_fitness,		/* GAreplace              replace */
+     ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
+     ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
+     NULL,			/* GAreplace              replace */
      NULL			/* vpointer	User data */
             );
 
   ga_population_set_parameters(
        pop,			/* population      *pop */
        GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type    elitism */
+       GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
        0.9,			/* double  crossover */
        0.1,			/* double  mutation */
        0.0              	/* double  migration */
                               );
 
-  ga_evolution_steady_state(
+  ga_evolution(
        pop,		/* population              *pop */
-       500000		/* const int               max_iterations */
+       100		/* const int               max_generations */
               );
 
   printf("The final solution with seed = %d was: \n", seed);
   for (i=0; i<NBITS; i++)
-    printf("%d", ((boolean *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i]?1:0);
+    printf("%d", ga_bit_get((byte *)ga_get_entity_from_rank(pop,0)->chromosome[0],i)?1:0);
   printf("\nscore = %f highestlevel = %d\n",
          ga_get_entity_from_rank(pop,0)->fitness,
          highestlevel);

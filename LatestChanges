@@ -3,8 +3,10 @@ Changes since release 0.1844:
 - Reorganisation of installed header files to avoid config.h clashes, along with configuration improvements.
 - Improved timer code.
 - Portability improvements through addition of feature checks in the configure script to replace in code checks.
-- Fixed bug in ga_crossover_bitstring_doublepoints(), was only performing single point crossover. -- bug reported by Henk van Lingen.
-- Tweaked royalroad examples to use a different type of elitism.
+- Fixed bug in ga_crossover_bitstring_doublepoints().  It was only performing single point crossover. -- bug reported by Henk van Lingen.
+- Fixed bug in ga_bit_copy().  It was copying dest to src! -- bug reported by Henk van Lingen.
+- Tweaked royalroad examples to use a different type of elitism.  Also, tidied their output.
+- Added royalroad_bitstring example.
 
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.

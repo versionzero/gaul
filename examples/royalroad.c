@@ -30,13 +30,14 @@
 		The scoring function was adapted from GAlib 2.45,
 		which states:
 
-		This is the objective function for computing Holland's 1993 ICGA version
-		of the Royal Road problem.  It has been corrected per GAList volume 7
-		number 23, 8/26/93.  No bonus points are awarded for a given level until 
-		it has been achieved (this fixes Holland's coding error in GAList).
-		  Holland posed this problem as a challenge to test the 
-		performance of genetic algorithms.  He indicated that, with the parameter 
-		settings of
+		This is the objective function for computing Holland's
+		1993 ICGA version of the Royal Road problem.  It has
+		been corrected per GAList volume 7 number 23, 8/26/93.
+		No bonus points are awarded for a given level until it
+		has been achieved (this fixes Holland's coding error in
+		GAList).  Holland posed this problem as a challenge to
+		test the performance of genetic algorithms.  He
+		indicated that, with the parameter settings of:
 
 		schemata size = 8
 		bits between schemata = 7
@@ -45,16 +46,23 @@
 		u = 0.3
 		v = 0.02
 
-		he could attain royal_road_level 3 most of the time within
-		10,000 function evaluations.  He challenged other GA users to match or beat
-		that performance.  He indicated that he used a population size of 512 to
-		obtain his solutions, and did NOT use a "simple genetic algorithm."
-		  The genome for this problem is a single-dimension bit string with length
-		defined by the block size and gap size as:
+		Holland could attain royal_road_level 3 most of the time
+		within 10,000 function evaluations.  He challenged other
+		GA users to match or beat that performance.  He
+		indicated that he used a population size of 512 to
+		obtain his solutions, and did NOT use a "simple genetic
+		algorithm."
+
+		The genome for this problem is a single-dimension
+		bitstring with length defined by the block size and gap
+		size as:
 
 		    length = (blocksize+gapsize) * (2^K)
 
 		where K = 1,2,3, or 4.  Holland used K = 4.
+
+		This implementation uses a GAUL boolean chromosome
+		with a standard generational GA.
 
  **********************************************************************/
 
@@ -180,7 +188,7 @@ boolean royalroad_ga_callback(int generation, population *pop)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	31/05/01
+  updated:	29 Jun 2003
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -201,7 +209,6 @@ int main(int argc, char **argv)
   printf("Random number seed is %d\n", seed);
   printf("\n");
 
-  random_init();
   random_seed(seed);
 
   pop = ga_genesis(
@@ -239,8 +246,11 @@ int main(int argc, char **argv)
               );
 
   printf("The final solution with seed = %d was: \n", seed);
-  for (i=0; i<NBITS; i++) printf("%d", ((boolean *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i]?1:0);
-  printf(" score = %f highestlevel = %d\n", ga_get_entity_from_rank(pop,0)->fitness, highestlevel);
+  for (i=0; i<NBITS; i++)
+    printf("%d", ((boolean *)ga_get_entity_from_rank(pop,0)->chromosome[0])[i]?1:0);
+  printf("\nscore = %f highestlevel = %d\n",
+         ga_get_entity_from_rank(pop,0)->fitness,
+         highestlevel);
 
   ga_extinction(pop);
 

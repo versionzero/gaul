@@ -40,7 +40,7 @@ bin_PROGRAMS = diagnostics \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
-	royalroad royalroad_ss \
+	royalroad royalroad_ss royalroad_bitstring \
 	struggle struggle_forked \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
@@ -66,6 +66,7 @@ wildfire_loadbalancing_SOURCES = wildfire_loadbalancing.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
+royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
 struggle_dc_SOURCES = struggle_dc.c
@@ -114,6 +115,7 @@ wildfire_loadbalancing_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
@@ -148,6 +150,7 @@ wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
