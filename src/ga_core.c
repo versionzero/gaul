@@ -76,92 +76,92 @@ struct func_lookup {char *funcname; void *func_ptr;};
 
 static struct func_lookup lookup[90]={
 	{ NULL, NULL },
-	{ "ga_select_one_random", ga_select_one_random },
-	{ "ga_select_two_random", ga_select_two_random },
-	{ "ga_select_one_every", ga_select_one_every },
-	{ "ga_select_two_every", ga_select_two_every },
-	{ "ga_select_one_randomrank", ga_select_one_randomrank },
-	{ "ga_select_two_randomrank", ga_select_two_randomrank },
-	{ "ga_select_one_bestof2", ga_select_one_bestof2 },
-	{ "ga_select_two_bestof2", ga_select_two_bestof2 },
-	{ "ga_select_one_roulette", ga_select_one_roulette },
-	{ "ga_select_two_roulette", ga_select_two_roulette },
-	{ "ga_select_one_roulette_rebased", ga_select_one_roulette_rebased },
-	{ "ga_select_two_roulette_rebased", ga_select_two_roulette_rebased },
-	{ "ga_select_one_sus", ga_select_one_sus },
-	{ "ga_select_two_sus", ga_select_two_sus },
-	{ "ga_crossover_integer_singlepoints", ga_crossover_integer_singlepoints },
-	{ "ga_crossover_integer_doublepoints", ga_crossover_integer_doublepoints },
-	{ "ga_crossover_integer_mixing", ga_crossover_integer_mixing },
-	{ "ga_crossover_integer_allele_mixing", ga_crossover_integer_allele_mixing },
-	{ "ga_crossover_boolean_singlepoints", ga_crossover_boolean_singlepoints },
-	{ "ga_crossover_boolean_doublepoints", ga_crossover_boolean_doublepoints },
-	{ "ga_crossover_boolean_mixing", ga_crossover_boolean_mixing },
-	{ "ga_crossover_boolean_allele_mixing", ga_crossover_boolean_allele_mixing },
-	{ "ga_crossover_char_mixing", ga_crossover_char_mixing },
-	{ "ga_crossover_char_allele_mixing", ga_crossover_char_allele_mixing },
-	{ "ga_crossover_double_mixing", ga_crossover_double_mixing },
-	{ "ga_crossover_double_allele_mixing", ga_crossover_double_allele_mixing },
-	{ "ga_crossover_char_singlepoints", ga_crossover_char_singlepoints },
-	{ "ga_crossover_char_doublepoints", ga_crossover_char_doublepoints },
-	{ "ga_crossover_bitstring_singlepoints", ga_crossover_bitstring_singlepoints },
-	{ "ga_crossover_bitstring_doublepoints", ga_crossover_bitstring_doublepoints },
-	{ "ga_crossover_bitstring_mixing", ga_crossover_bitstring_mixing },
-	{ "ga_crossover_bitstring_allele_mixing", ga_crossover_bitstring_allele_mixing },
-	{ "ga_mutate_integer_singlepoint_drift", ga_mutate_integer_singlepoint_drift },
-	{ "ga_mutate_integer_singlepoint_randomize", ga_mutate_integer_singlepoint_randomize },
-	{ "ga_mutate_integer_multipoint", ga_mutate_integer_multipoint },
-	{ "ga_mutate_integer_allpoint", ga_mutate_integer_allpoint },
-	{ "ga_mutate_boolean_singlepoint", ga_mutate_boolean_singlepoint },
-	{ "ga_mutate_boolean_multipoint", ga_mutate_boolean_multipoint },
-	{ "ga_mutate_char_singlepoint_drift", ga_mutate_char_singlepoint_drift },
-	{ "ga_mutate_char_singlepoint_randomize", ga_mutate_char_singlepoint_randomize },
-	{ "ga_mutate_char_multipoint", ga_mutate_char_multipoint },
-	{ "ga_mutate_printable_singlepoint_drift", ga_mutate_printable_singlepoint_drift },
-	{ "ga_mutate_printable_singlepoint_randomize", ga_mutate_printable_singlepoint_randomize },
-	{ "ga_mutate_printable_multipoint", ga_mutate_printable_multipoint },
-	{ "ga_mutate_bitstring_singlepoint", ga_mutate_bitstring_singlepoint },
-	{ "ga_mutate_double_singlepoint_randomize", ga_mutate_double_singlepoint_randomize },
-	{ "ga_mutate_double_singlepoint_drift", ga_mutate_double_singlepoint_drift },
-	{ "ga_seed_boolean_random", ga_seed_boolean_random },
-	{ "ga_seed_integer_random", ga_seed_integer_random },
-	{ "ga_seed_integer_zero", ga_seed_integer_zero },
-	{ "ga_seed_double_random", ga_seed_double_random },
-	{ "ga_seed_double_zero", ga_seed_double_zero },
-	{ "ga_seed_char_random", ga_seed_char_random },
-	{ "ga_seed_printable_random", ga_seed_printable_random },
-	{ "ga_seed_bitstring_random", ga_seed_bitstring_random },
-	{ "ga_replace_by_fitness", ga_replace_by_fitness },
-	{ "ga_chromosome_integer_allocate", ga_chromosome_integer_allocate },
-	{ "ga_chromosome_integer_deallocate", ga_chromosome_integer_deallocate },
-	{ "ga_chromosome_integer_replicate", ga_chromosome_integer_replicate },
-	{ "ga_chromosome_integer_to_bytes", ga_chromosome_integer_to_bytes },
-	{ "ga_chromosome_integer_from_bytes", ga_chromosome_integer_from_bytes },
-	{ "ga_chromosome_integer_to_staticstring", ga_chromosome_integer_to_staticstring },
-	{ "ga_chromosome_boolean_allocate", ga_chromosome_boolean_allocate },
-	{ "ga_chromosome_boolean_deallocate", ga_chromosome_boolean_deallocate },
-	{ "ga_chromosome_boolean_replicate", ga_chromosome_boolean_replicate },
-	{ "ga_chromosome_boolean_to_bytes", ga_chromosome_boolean_to_bytes },
-	{ "ga_chromosome_boolean_from_bytes", ga_chromosome_boolean_from_bytes },
-	{ "ga_chromosome_boolean_to_staticstring", ga_chromosome_boolean_to_staticstring },
-	{ "ga_chromosome_double_allocate", ga_chromosome_double_allocate },
-	{ "ga_chromosome_double_deallocate", ga_chromosome_double_deallocate },
-	{ "ga_chromosome_double_replicate", ga_chromosome_double_replicate },
-	{ "ga_chromosome_double_to_bytes", ga_chromosome_double_to_bytes },
-	{ "ga_chromosome_double_from_bytes", ga_chromosome_double_from_bytes },
-	{ "ga_chromosome_double_to_staticstring", ga_chromosome_double_to_staticstring },
-	{ "ga_chromosome_char_allocate", ga_chromosome_char_allocate },
-	{ "ga_chromosome_char_deallocate", ga_chromosome_char_deallocate },
-	{ "ga_chromosome_char_replicate", ga_chromosome_char_replicate },
-	{ "ga_chromosome_char_to_bytes", ga_chromosome_char_to_bytes },
-	{ "ga_chromosome_char_from_bytes", ga_chromosome_char_from_bytes },
-	{ "ga_chromosome_char_to_staticstring", ga_chromosome_char_to_staticstring },
-	{ "ga_chromosome_bitstring_allocate", ga_chromosome_bitstring_allocate },
-	{ "ga_chromosome_bitstring_deallocate", ga_chromosome_bitstring_deallocate },
-	{ "ga_chromosome_bitstring_replicate", ga_chromosome_bitstring_replicate },
-	{ "ga_chromosome_bitstring_to_bytes", ga_chromosome_bitstring_to_bytes },
-	{ "ga_chromosome_bitstring_from_bytes", ga_chromosome_bitstring_from_bytes },
-	{ "ga_chromosome_bitstring_to_staticstring", ga_chromosome_bitstring_to_staticstring },
+	{ "ga_select_one_random", (void *) ga_select_one_random },
+	{ "ga_select_two_random", (void *) ga_select_two_random },
+	{ "ga_select_one_every", (void *) ga_select_one_every },
+	{ "ga_select_two_every", (void *) ga_select_two_every },
+	{ "ga_select_one_randomrank", (void *) ga_select_one_randomrank },
+	{ "ga_select_two_randomrank", (void *) ga_select_two_randomrank },
+	{ "ga_select_one_bestof2", (void *) ga_select_one_bestof2 },
+	{ "ga_select_two_bestof2", (void *) ga_select_two_bestof2 },
+	{ "ga_select_one_roulette", (void *) ga_select_one_roulette },
+	{ "ga_select_two_roulette", (void *) ga_select_two_roulette },
+	{ "ga_select_one_roulette_rebased", (void *) ga_select_one_roulette_rebased },
+	{ "ga_select_two_roulette_rebased", (void *) ga_select_two_roulette_rebased },
+	{ "ga_select_one_sus", (void *) ga_select_one_sus },
+	{ "ga_select_two_sus", (void *) ga_select_two_sus },
+	{ "ga_crossover_integer_singlepoints", (void *) ga_crossover_integer_singlepoints },
+	{ "ga_crossover_integer_doublepoints", (void *) ga_crossover_integer_doublepoints },
+	{ "ga_crossover_integer_mixing", (void *) ga_crossover_integer_mixing },
+	{ "ga_crossover_integer_allele_mixing", (void *) ga_crossover_integer_allele_mixing },
+	{ "ga_crossover_boolean_singlepoints", (void *) ga_crossover_boolean_singlepoints },
+	{ "ga_crossover_boolean_doublepoints", (void *) ga_crossover_boolean_doublepoints },
+	{ "ga_crossover_boolean_mixing", (void *) ga_crossover_boolean_mixing },
+	{ "ga_crossover_boolean_allele_mixing", (void *) ga_crossover_boolean_allele_mixing },
+	{ "ga_crossover_char_mixing", (void *) ga_crossover_char_mixing },
+	{ "ga_crossover_char_allele_mixing", (void *) ga_crossover_char_allele_mixing },
+	{ "ga_crossover_double_mixing", (void *) ga_crossover_double_mixing },
+	{ "ga_crossover_double_allele_mixing", (void *) ga_crossover_double_allele_mixing },
+	{ "ga_crossover_char_singlepoints", (void *) ga_crossover_char_singlepoints },
+	{ "ga_crossover_char_doublepoints", (void *) ga_crossover_char_doublepoints },
+	{ "ga_crossover_bitstring_singlepoints", (void *) ga_crossover_bitstring_singlepoints },
+	{ "ga_crossover_bitstring_doublepoints", (void *) ga_crossover_bitstring_doublepoints },
+	{ "ga_crossover_bitstring_mixing", (void *) ga_crossover_bitstring_mixing },
+	{ "ga_crossover_bitstring_allele_mixing", (void *) ga_crossover_bitstring_allele_mixing },
+	{ "ga_mutate_integer_singlepoint_drift", (void *) ga_mutate_integer_singlepoint_drift },
+	{ "ga_mutate_integer_singlepoint_randomize", (void *) ga_mutate_integer_singlepoint_randomize },
+	{ "ga_mutate_integer_multipoint", (void *) ga_mutate_integer_multipoint },
+	{ "ga_mutate_integer_allpoint", (void *) ga_mutate_integer_allpoint },
+	{ "ga_mutate_boolean_singlepoint", (void *) ga_mutate_boolean_singlepoint },
+	{ "ga_mutate_boolean_multipoint", (void *) ga_mutate_boolean_multipoint },
+	{ "ga_mutate_char_singlepoint_drift", (void *) ga_mutate_char_singlepoint_drift },
+	{ "ga_mutate_char_singlepoint_randomize", (void *) ga_mutate_char_singlepoint_randomize },
+	{ "ga_mutate_char_multipoint", (void *) ga_mutate_char_multipoint },
+	{ "ga_mutate_printable_singlepoint_drift", (void *) ga_mutate_printable_singlepoint_drift },
+	{ "ga_mutate_printable_singlepoint_randomize", (void *) ga_mutate_printable_singlepoint_randomize },
+	{ "ga_mutate_printable_multipoint", (void *) ga_mutate_printable_multipoint },
+	{ "ga_mutate_bitstring_singlepoint", (void *) ga_mutate_bitstring_singlepoint },
+	{ "ga_mutate_double_singlepoint_randomize", (void *) ga_mutate_double_singlepoint_randomize },
+	{ "ga_mutate_double_singlepoint_drift", (void *) ga_mutate_double_singlepoint_drift },
+	{ "ga_seed_boolean_random", (void *) ga_seed_boolean_random },
+	{ "ga_seed_integer_random", (void *) ga_seed_integer_random },
+	{ "ga_seed_integer_zero", (void *) ga_seed_integer_zero },
+	{ "ga_seed_double_random", (void *) ga_seed_double_random },
+	{ "ga_seed_double_zero", (void *) ga_seed_double_zero },
+	{ "ga_seed_char_random", (void *) ga_seed_char_random },
+	{ "ga_seed_printable_random", (void *) ga_seed_printable_random },
+	{ "ga_seed_bitstring_random", (void *) ga_seed_bitstring_random },
+	{ "ga_replace_by_fitness", (void *) ga_replace_by_fitness },
+	{ "ga_chromosome_integer_allocate", (void *) ga_chromosome_integer_allocate },
+	{ "ga_chromosome_integer_deallocate", (void *) ga_chromosome_integer_deallocate },
+	{ "ga_chromosome_integer_replicate", (void *) ga_chromosome_integer_replicate },
+	{ "ga_chromosome_integer_to_bytes", (void *) ga_chromosome_integer_to_bytes },
+	{ "ga_chromosome_integer_from_bytes", (void *) ga_chromosome_integer_from_bytes },
+	{ "ga_chromosome_integer_to_staticstring", (void *) ga_chromosome_integer_to_staticstring },
+	{ "ga_chromosome_boolean_allocate", (void *) ga_chromosome_boolean_allocate },
+	{ "ga_chromosome_boolean_deallocate", (void *) ga_chromosome_boolean_deallocate },
+	{ "ga_chromosome_boolean_replicate", (void *) ga_chromosome_boolean_replicate },
+	{ "ga_chromosome_boolean_to_bytes", (void *) ga_chromosome_boolean_to_bytes },
+	{ "ga_chromosome_boolean_from_bytes", (void *) ga_chromosome_boolean_from_bytes },
+	{ "ga_chromosome_boolean_to_staticstring", (void *) ga_chromosome_boolean_to_staticstring },
+	{ "ga_chromosome_double_allocate", (void *) ga_chromosome_double_allocate },
+	{ "ga_chromosome_double_deallocate", (void *) ga_chromosome_double_deallocate },
+	{ "ga_chromosome_double_replicate", (void *) ga_chromosome_double_replicate },
+	{ "ga_chromosome_double_to_bytes", (void *) ga_chromosome_double_to_bytes },
+	{ "ga_chromosome_double_from_bytes", (void *) ga_chromosome_double_from_bytes },
+	{ "ga_chromosome_double_to_staticstring", (void *) ga_chromosome_double_to_staticstring },
+	{ "ga_chromosome_char_allocate", (void *) ga_chromosome_char_allocate },
+	{ "ga_chromosome_char_deallocate", (void *) ga_chromosome_char_deallocate },
+	{ "ga_chromosome_char_replicate", (void *) ga_chromosome_char_replicate },
+	{ "ga_chromosome_char_to_bytes", (void *) ga_chromosome_char_to_bytes },
+	{ "ga_chromosome_char_from_bytes", (void *) ga_chromosome_char_from_bytes },
+	{ "ga_chromosome_char_to_staticstring", (void *) ga_chromosome_char_to_staticstring },
+	{ "ga_chromosome_bitstring_allocate", (void *) ga_chromosome_bitstring_allocate },
+	{ "ga_chromosome_bitstring_deallocate", (void *) ga_chromosome_bitstring_deallocate },
+	{ "ga_chromosome_bitstring_replicate", (void *) ga_chromosome_bitstring_replicate },
+	{ "ga_chromosome_bitstring_to_bytes", (void *) ga_chromosome_bitstring_to_bytes },
+	{ "ga_chromosome_bitstring_from_bytes", (void *) ga_chromosome_bitstring_from_bytes },
+	{ "ga_chromosome_bitstring_to_staticstring", (void *) ga_chromosome_bitstring_to_staticstring },
 	{ NULL, NULL } };
 
 
@@ -672,7 +672,7 @@ static void gaul_write_entity(FILE *fp, population *pop, entity *entity)
   fwrite(&len, sizeof(unsigned int), 1, fp);
   fwrite(buffer, sizeof(byte), len, fp);
 
-  if (max_len>0) s_free(buffer);
+  if (max_len!=0) s_free(buffer);
 
   return;
   }
@@ -807,11 +807,11 @@ boolean ga_population_write(population *pop, char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  id[0] = gaul_lookup_hook_id(pop->generation_hook);
-  id[1] = gaul_lookup_hook_id(pop->iteration_hook);
+  id[0] = gaul_lookup_hook_id((void *)pop->generation_hook);
+  id[1] = gaul_lookup_hook_id((void *)pop->iteration_hook);
 
-  /*gaul_lookup_hook_id(pop->data_destructor);*/
-  /*gaul_lookup_hook_id(pop->data_ref_incrementor);*/
+  /*gaul_lookup_hook_id((void *)pop->data_destructor);*/
+  /*gaul_lookup_hook_id((void *)pop->data_ref_incrementor);*/
   /* GAUL doesn't define any functions for either of these. */
   if (pop->data_destructor)
     id[2] = -1;
@@ -823,21 +823,21 @@ boolean ga_population_write(population *pop, char *fname)
   else
     id[3] = 0;
 
-  id[4] = gaul_lookup_hook_id(pop->chromosome_constructor);
-  id[5] = gaul_lookup_hook_id(pop->chromosome_destructor);
-  id[6] = gaul_lookup_hook_id(pop->chromosome_replicate);
-  id[7] = gaul_lookup_hook_id(pop->chromosome_to_bytes);
-  id[8] = gaul_lookup_hook_id(pop->chromosome_from_bytes);
-  id[9] = gaul_lookup_hook_id(pop->chromosome_to_string);
+  id[4] = gaul_lookup_hook_id((void *)pop->chromosome_constructor);
+  id[5] = gaul_lookup_hook_id((void *)pop->chromosome_destructor);
+  id[6] = gaul_lookup_hook_id((void *)pop->chromosome_replicate);
+  id[7] = gaul_lookup_hook_id((void *)pop->chromosome_to_bytes);
+  id[8] = gaul_lookup_hook_id((void *)pop->chromosome_from_bytes);
+  id[9] = gaul_lookup_hook_id((void *)pop->chromosome_to_string);
 
-  id[10] = gaul_lookup_hook_id(pop->evaluate);
-  id[11] = gaul_lookup_hook_id(pop->seed);
-  id[12] = gaul_lookup_hook_id(pop->adapt);
-  id[13] = gaul_lookup_hook_id(pop->select_one);
-  id[14] = gaul_lookup_hook_id(pop->select_two);
-  id[15] = gaul_lookup_hook_id(pop->mutate);
-  id[16] = gaul_lookup_hook_id(pop->crossover);
-  id[17] = gaul_lookup_hook_id(pop->replace);
+  id[10] = gaul_lookup_hook_id((void *)pop->evaluate);
+  id[11] = gaul_lookup_hook_id((void *)pop->seed);
+  id[12] = gaul_lookup_hook_id((void *)pop->adapt);
+  id[13] = gaul_lookup_hook_id((void *)pop->select_one);
+  id[14] = gaul_lookup_hook_id((void *)pop->select_two);
+  id[15] = gaul_lookup_hook_id((void *)pop->mutate);
+  id[16] = gaul_lookup_hook_id((void *)pop->crossover);
+  id[17] = gaul_lookup_hook_id((void *)pop->replace);
 
   fwrite(id, sizeof(int), 18, fp);
 
@@ -1931,7 +1931,7 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
  * We only need to deallocate the buffer if it was allocated (i.e. if
  * the "chromosome_to_bytes" callback set max_len).
  */
-  if (max_len>0) s_free(buffer);
+  if (max_len!=0) s_free(buffer);
 
 /*  printf("DEBUG: Node %d finished sending\n", mpi_get_rank());*/
 
@@ -1985,7 +1985,7 @@ void ga_population_send_every( population *pop, int dest_node )
  * We only need to deallocate the buffer if it was allocated (i.e. if
  * the "chromosome_to_bytes" callback set max_len).
  */
-  if (max_len>0) s_free(buffer);
+  if (max_len!=0) s_free(buffer);
 
   return;
   }

@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	16 Mar 2002 SAA	Check whether we have limits.h on this system.
+  Updated:	31 May 2002 SAA	Fixed empty parameter declaration.
+		16 Mar 2002 SAA	Check whether we have limits.h on this system.
 		25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
 		4 Dec 2001 SAA	New 'float' functions.
 		20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
@@ -101,7 +102,7 @@ boolean	random_boolean(void);
 boolean	random_boolean_prob(const double prob);
 unsigned int	random_int(const unsigned int max);
 int	random_int_range(const int min, const int max);
-double	random_double_full();
+double	random_double_full(void);
 double	random_double(const double max);
 double	random_double_range(const double min, const double max);
 double	random_double_1(void);

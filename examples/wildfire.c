@@ -85,8 +85,7 @@ double wildfire_simulation(int map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION], b
       else
         dir++;
       }
-    else if ( WILDFIRE_WIND_CHANGE_PROB == 1.0 ||
-         random_boolean_prob(WILDFIRE_WIND_CHANGE_PROB) )
+    else if ( random_boolean_prob(WILDFIRE_WIND_CHANGE_PROB) )
       {
       dir = random_int(4);
       }

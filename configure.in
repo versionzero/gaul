@@ -369,6 +369,26 @@ else
           esac
         fi
       fi
+
+# Kludges etc. for the Compaq C Compiler
+    else
+      if test "x$CC" = "xccc"; then
+
+         case " $CFLAGS " in
+        *[\ \	]-Wall[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -Wall" ;;
+        esac
+
+        case " $CFLAGS " in
+        *[\ \	]-O2[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -O2" ;;
+        esac
+
+        case " $CFLAGS " in
+        *[\ \	]-misalign[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -misalign" ;;
+        esac
+      fi
     fi
   fi
 fi

@@ -27,7 +27,8 @@
   Synopsis:	Header file for some abstract message passing functions
 		using the MPI API.
 
-  Updated:	19 Mar 2002 SAA	Moved some stuff from SAA_header.h to here.
+  Updated:	31 May 2002 SAA	Fixed some empty parameter declarations.
+		19 Mar 2002 SAA	Moved some stuff from SAA_header.h to here.
 		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to here from SAA_header.h
 		30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
 		23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
@@ -180,13 +181,13 @@ boolean mpi_setup(int *argc, char ***argv, void *(*master_func)(void *), void *(
 boolean mpi_init(int *argc, char ***argv);
 void mpi_exit(void);
 void mpi_abort(int errcode);
-boolean mpi_isinit();
-boolean mpi_ismaster();
-int mpi_get_num_processes();
-int mpi_get_rank();
-int mpi_get_next_rank();
-int mpi_get_prev_rank();
-boolean mpi_sync();
+boolean mpi_isinit(void);
+boolean mpi_ismaster(void);
+int mpi_get_num_processes(void);
+int mpi_get_rank(void);
+int mpi_get_next_rank(void);
+int mpi_get_prev_rank(void);
+boolean mpi_sync(void);
 int mpi_find_global_max(const double local, double *global);
 boolean mpi_synchronous_send(void *buf, const int count,
                                const mpi_datatype type, const int node,
@@ -206,9 +207,9 @@ boolean mpi_receive(void *buf, const int count,
 #ifndef MPI_UTIL_COMPILE_MAIN
 /*
 boolean mpi_send_test(int node);
-boolean mpi_recv_test();
-boolean mpi_send_test_all();
-boolean mpi_send_test_next();
+boolean mpi_recv_test(void);
+boolean mpi_send_test_all(void);
+boolean mpi_send_test_next(void);
 
 boolean	mpi_test(void);
 */
