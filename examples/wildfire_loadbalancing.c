@@ -628,7 +628,7 @@ int main(int argc, char **argv)
     random_seed(i);
 
     pop = ga_genesis(
-       80,			/* const int              population_size */
+       100,			/* const int              population_size */
        1,			/* const int              num_chromo */
        WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION,/* const int      len_chromo */
        wildfire_ga_callback,	/* GAgeneration_hook      generation_hook */
@@ -649,14 +649,14 @@ int main(int argc, char **argv)
        pop,			/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type    scheme */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       0.9,			/* double  crossover */
-       0.2,			/* double  mutation */
+       0.8,			/* double  crossover */
+       0.1,			/* double  mutation */
        0.0              	/* double  migration */
                               );
 
     ga_evolution(
        pop,		/* population              *pop */
-       2000		/* const int               max_generations */
+       5000		/* const int               max_generations */
               );
 
     printf( "Solution %d, with score %d, was:\n",
