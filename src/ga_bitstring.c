@@ -87,7 +87,7 @@ void ga_bit_free( byte *bstr )
 
 void ga_bit_set( byte *bstr, int n )
   {
-  bstr[n/BYTEBITS] |= 1 << ( (BYTEBITS-1)-n%BYTEBITS );
+  bstr[n/BYTEBITS] |= 1 << ( n%BYTEBITS );
 
   return;
   }
@@ -99,12 +99,12 @@ void ga_bit_set( byte *bstr, int n )
   parameters:	byte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
-  last updated:	30/06/01
+  last updated:	07 Sep 2003
  **********************************************************************/
 
 void ga_bit_clear( byte *bstr, int n )
   {
-  bstr[n/BYTEBITS] &= ~(1 << ((BYTEBITS-1)-n%BYTEBITS));
+  bstr[n/BYTEBITS] &= ~(1 << ( n%BYTEBITS ));
 
   return;
   }
@@ -116,23 +116,12 @@ void ga_bit_clear( byte *bstr, int n )
   parameters:	byte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
-  last updated:	30/06/01
+  last updated:	07 Sep 2003
  **********************************************************************/
 
 void ga_bit_invert( byte *bstr, int n )
   {
-/*
- * FIXME: If I spent longer thinking about the logic, I am sure
- * that I could remove the use of the 'if' statement.
- */
-  if ( ga_bit_get( bstr, n ) )
-    {
-    ga_bit_clear( bstr, n );
-    }
-  else
-    {
-    ga_bit_set( bstr, n );
-    }
+  bstr[n/BYTEBITS] ^= 1 << (n % BYTEBITS);
 
   return;
   }
@@ -149,7 +138,7 @@ void ga_bit_invert( byte *bstr, int n )
 
 boolean ga_bit_get( byte *bstr, int n )
   {
-  return (boolean) (( bstr[n/BYTEBITS] >> ((BYTEBITS-1)-n%BYTEBITS) ) & 1);
+  return (boolean) ( (bstr[n/BYTEBITS] & (1 << (n % BYTEBITS))) != 0 );
   }
 
 
