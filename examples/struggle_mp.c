@@ -109,7 +109,11 @@ int main(int argc, char **argv)
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
 
+  printf("Process %d running\n", getpid());
+
   MPI_Init(&argc, &argv);
+
+  printf("Process %d initialised\n", getpid());
 
   for (i=0; i<50; i++)
     {

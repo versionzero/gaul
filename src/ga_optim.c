@@ -75,7 +75,7 @@ static int	namelen;				/* Length of processor name. */
 static char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name. */
 
 /**********************************************************************
-  mpi_ismaster()
+  mpi_init()
   synopsis:	Ensure that MPI is initialised and prepare some global
 		variables.
   parameters:
@@ -89,7 +89,7 @@ static void mpi_init(void)
   if (rank==-1)
     {
 /*
- * FIXME: Test for proir MPI_Init() call here.
+ * FIXME: Test for prior MPI_Init() call here.
  */
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -369,12 +369,16 @@ static void gaul_evaluation_slave_mp(population *pop)
   MPI_Recv(&len, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
   buffer = s_malloc(len*sizeof(byte));
 
+printf("DEBUG: slave %d recieved %d (len)\n", rank, len);
+
 /*
  * Instruction packet.
  */
   do
     {
     MPI_Recv(&int_single, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
+printf("DEBUG: slave %d recieved %d (instruction)\n", rank, len);
 
     switch (int_single)
       {
@@ -3753,6 +3757,45 @@ int ga_evolution_archipelago( const int num_pops,
   return generation;
   }
 
+
+/**********************************************************************
+  ga_evolution_archipelago_threaded()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given populations using a simple
+		island model.  Migration occurs around a cyclic
+		topology only.  Migration causes a duplication of the
+		respective entities.  This is a generation-based GA.
+		ga_genesis(), or equivalent, must be called prior to
+		this function.
+		This is a multiprocess version, using a thread
+		for each island.
+  parameters:	const int	num_pops
+		population	**pops
+		const int	max_generations
+  return:	number of generation performed
+  last updated:	21 Apr 2004
+ **********************************************************************/
+
+#if HAVE_PTHREADS != 1
+int ga_evolution_archipelago_threaded( const int num_pops,
+			population		**pops,
+			const int		max_generations )
+  {
+  int		generation=0;		/* Current generation number. */
+
+  plog(LOG_FIXME, "Code incomplete.");
+
+  return generation;
+  }
+#else
+int ga_evolution_archipelago_threaded( const int num_pops,
+			population		**pops,
+			const int		max_generations )
+  {
+  die("Support for ga_evolution_archipelago_threaded() not compiled.");
+  return 0;
+  }
+#endif
 
 /**********************************************************************
   ga_evolution_archipelago_forked()

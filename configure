@@ -8257,9 +8257,10 @@ fi
 
   else
 	  # User didn't define the additional LIBS and CFLAGS stuff, so we must try to guess it :-(
-    { echo "$as_me:$LINENO: WARNING: You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables." >&5
-echo "$as_me: WARNING: You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables." >&2;}
+#    AC_MSG_WARN([You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables.])
     # Try LAM
+    echo "$as_me:$LINENO: checking for LAM-MPI" >&5
+echo $ECHO_N "checking for LAM-MPI... $ECHO_C" >&6
     MPIFLAGS="-D_REENTRANT"
     MPILIBS="-llammpio -llamf77mpi -lmpi -llam -lutil -lpthread"
     LIBS="$old_LIBS $MPILIBS"
@@ -8331,8 +8332,13 @@ else
   result=0
 fi
 
+
     if test result = 0; then
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
       # Try MPICH
+      echo "$as_me:$LINENO: checking for MPICH" >&5
+echo $ECHO_N "checking for MPICH... $ECHO_C" >&6
       result=1
       MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1"
       MPILIBS="-lmpich"
@@ -8405,12 +8411,26 @@ else
   result=0
 fi
 
+
+      if test result = 0; then
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+      else
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+      fi
+    else
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
     fi
   fi
 fi
 if test ${result} = 0; then
   WILL_USE_MPI="no"
   HAVE_MPI=0
+  { { echo "$as_me:$LINENO: error: Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables" >&5
+echo "$as_me: error: Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables" >&2;}
+   { (exit or configure with '--enable-mpi=no' to disable MPI use.); exit or configure with '--enable-mpi=no' to disable MPI use.; }; }
 else
   WILL_USE_MPI="yes"
   HAVE_MPI=1
@@ -12047,7 +12067,8 @@ fi
 
 # Where the linker must look!
 CFLAGS="$CFLAGS $MPIFLAGS $INCLUDE"
-LIBS="$LIBS $MPILIBS"
+LIBS="$LIBS"
+#LIBS="$LIBS $MPILIBS"
 
 #
 # Add code to config.status to generate a platform dependent configuration

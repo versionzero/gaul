@@ -211,31 +211,42 @@ else
       [AC_MSG_ERROR(Unable to compile with specified MPI implementation.  Check MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)])
   else
 	  # User didn't define the additional LIBS and CFLAGS stuff, so we must try to guess it :-(
-    AC_MSG_WARN([You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables.])
+#    AC_MSG_WARN([You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables.])
     # Try LAM
+    AC_MSG_CHECKING(for LAM-MPI)
     MPIFLAGS="-D_REENTRANT"
     MPILIBS="-llammpio -llamf77mpi -lmpi -llam -lutil -lpthread"
     LIBS="$old_LIBS $MPILIBS"
     CFLAGS="$old_CFLAGS $MPIFLAGS"
 
-    AC_CHECK_LIB(mpi, MPI_Init,,
-      [result=0])
+    AC_CHECK_LIB(mpi, MPI_Init,, [result=0])
+
     if test result = 0; then
+      AC_MSG_RESULT(no)
       # Try MPICH
+      AC_MSG_CHECKING(for MPICH)
       result=1
       MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1"
       MPILIBS="-lmpich"
       LIBS="$old_LIBS $MPILIBS"
       CFLAGS="$old_CFLAGS $MPIFLAGS"
     
-      AC_CHECK_LIB(mpi, MPI_Init,,
-        [result=0])
+      AC_CHECK_LIB(mpi, MPI_Init,, [result=0])
+
+      if test result = 0; then
+        AC_MSG_RESULT(no)
+      else
+        AC_MSG_RESULT(yes)
+      fi
+    else
+      AC_MSG_RESULT(yes)
     fi
   fi
 fi
 if test ${result} = 0; then
   WILL_USE_MPI="no"
   HAVE_MPI=0
+  AC_MSG_ERROR(Unable to locate an installed MPI implementation.  Manually set the MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)
 else
   WILL_USE_MPI="yes"
   HAVE_MPI=1
@@ -754,7 +765,8 @@ fi
 
 # Where the linker must look!
 CFLAGS="$CFLAGS $MPIFLAGS $INCLUDE"
-LIBS="$LIBS $MPILIBS"
+LIBS="$LIBS"
+#LIBS="$LIBS $MPILIBS"
 
 #
 # Add code to config.status to generate a platform dependent configuration

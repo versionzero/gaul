@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://gaul.sourceforge.net/
@@ -35,9 +35,9 @@ bin_PROGRAMS = diagnostics
 
 noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 

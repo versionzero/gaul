@@ -245,46 +245,46 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
-mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm @MPILIBS@
+mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm @MPILIBS@
 
 # Parallel code:
-struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
@@ -883,11 +883,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	mostlyclean-libtool tags uninstall uninstall-am \
 	uninstall-binPROGRAMS uninstall-info-am
 
-
-#struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPIFLAGS@
-#struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
-#struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPIFLAGS@
-#struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
