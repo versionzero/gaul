@@ -102,7 +102,7 @@ LT_RELEASE = 0.1837
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
+MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1837
 MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
@@ -113,7 +113,7 @@ VERSION = 0.1837
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = util src tests docs examples .
+SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul.spec
