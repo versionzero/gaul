@@ -1,9 +1,9 @@
 /**********************************************************************
-  royalroad.c
+  royalroad_mutation_prob_demo.c
  **********************************************************************
 
-  royalroad - Test/example program for GAUL.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  royalroad_mutation_prob_demo - Test/example program for GAUL.
+  Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -238,6 +238,8 @@ int main(int argc, char **argv)
        0.1,			/* double  mutation */
        0.0              	/* double  migration */
                               );
+
+  ga_population_set_allele_mutation_prob( pop, 0.6 );
 
   ga_evolution(
        pop,		/* population              *pop */

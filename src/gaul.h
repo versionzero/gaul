@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul - Genetic Algorithm Utility Library.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -246,9 +246,12 @@ void	ga_population_set_mutation(    population            *pop,
 		                       const double          mutation);
 void	ga_population_set_migration(   population            *pop,
 		                       const double          migration);
+void	ga_population_set_allele_mutation_prob(   population            *pop,
+		                       const double          prob);
 double ga_population_get_crossover(population       *pop);
 double ga_population_get_mutation(population       *pop);
 double ga_population_get_migration(population       *pop);
+double ga_population_get_allele_mutation_prob(population       *pop);
 ga_scheme_type ga_population_get_scheme(population       *pop);
 ga_elitism_type ga_population_get_elitism(population       *pop);
 population *ga_transcend(unsigned int id);

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -287,6 +287,11 @@ struct population_t
   ga_elitism_type	elitism;		/* Elitism mode. */
 
 /*
+ * Special (aka miscellaneous) parameters.
+ */
+  double		allele_mutation_prob;	/* Chance for individual alleles to mutate in certain mutation operators. */
+
+/*
  * Non-evolutionary parameters.
  */
   ga_tabu_t		*tabu_params;		/* Parameters for tabu-search. */
@@ -299,7 +304,7 @@ struct population_t
   ga_sampling_t		*sampling_params;	/* Parameters for probabilistic sampling. */
 
 /*
- * Scoring function and the other callbacks are defined here.
+ * The scoring function and the other callbacks are defined here.
  */
   GAgeneration_hook		generation_hook;
   GAiteration_hook		iteration_hook;
@@ -342,14 +347,16 @@ struct population_t
 
 /*
  * Constant definitions.
- * FIXME: There should be no purpose for this constant.  I'd say
- * it results from an inflexibility in the GAUL library.  Consider
- * it as marked for removal!
  */
-#define GA_MULTI_BIT_CHANCE	(0.02)
 
 /* Define lower bound on fitness. */
-#define GA_MIN_FITNESS		DBL_MIN
+#define GA_MIN_FITNESS			DBL_MIN
+
+/*
+ * Define chance of any given allele being mutated in one mutation
+ * operation (only for certain mutation functions).
+ */
+#define DEFAULT_ALLELE_MUTATION_PROB	0.02
 
 /* Final includes. */
 #include "gaul/ga_utility.h"	/* Hmm. */

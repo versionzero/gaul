@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "07/02/05"
+#define GA_BUILD_DATE_STRING "16/02/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,7 +32,7 @@
 #define GA_PATCH_VERSION 5
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.760_FC3 #1 Wed Feb 2 00:12:56 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
+#define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
 #define GA_VERSION_STRING "0.1847-5"

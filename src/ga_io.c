@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_io - Disk I/O routines.
-  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -179,7 +179,7 @@ static entity *gaul_read_entity_win32(HANDLE file, population *pop)
 		any of the userdata.
   parameters:
   return:
-  last updated: 29 May 2002
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 #ifndef WIN32
@@ -224,6 +224,7 @@ boolean ga_population_write(population *pop, char *fname)
   fwrite(&(pop->crossover_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->migration_ratio), sizeof(double), 1, fp);
+  fwrite(&(pop->allele_mutation_prob), sizeof(double), 1, fp);
   fwrite(&(pop->scheme), sizeof(int), 1, fp);
   fwrite(&(pop->elitism), sizeof(int), 1, fp);
 
@@ -355,6 +356,8 @@ boolean ga_population_write(population *pop, char *fname)
     dief("Error writing %d\n", GetLastError());
   if ( WriteFile(file, &(pop->migration_ratio), sizeof(double), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
+  if ( WriteFile(file, &(pop->allele_mutation_prob), sizeof(double), &nwrote, NULL)==0 )
+    dief("Error writing %d\n", GetLastError());
   if ( WriteFile(file, &(pop->scheme), sizeof(int), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
   if ( WriteFile(file, &(pop->elitism), sizeof(int), &nwrote, NULL)==0 )
@@ -445,7 +448,7 @@ boolean ga_population_write(population *pop, char *fname)
 		ga_population_write() for details.
   parameters:	char *fname		Filename to read from.
   return:	population *pop		New population structure.
-  last updated: 07 Nov 2002
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 #ifndef WIN32
@@ -507,6 +510,7 @@ population *ga_population_read(char *fname)
   fread(&(pop->crossover_ratio), sizeof(double), 1, fp);
   fread(&(pop->mutation_ratio), sizeof(double), 1, fp);
   fread(&(pop->migration_ratio), sizeof(double), 1, fp);
+  fread(&(pop->allele_mutation_prob), sizeof(double), 1, fp);
   fread(&(pop->scheme), sizeof(int), 1, fp);
   fread(&(pop->elitism), sizeof(int), 1, fp);
   fread(&(pop->island), sizeof(int), 1, fp);
@@ -654,6 +658,9 @@ population *ga_population_read(char *fname)
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
   memcpy(&(pop->migration_ratio), buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&(pop->allele_mutation_prob), buffer, sizeof(double));
   if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
   memcpy(&(pop->scheme), buffer, sizeof(int));

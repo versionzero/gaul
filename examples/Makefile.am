@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -39,6 +39,7 @@ bin_PROGRAMS = \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
+	royalroad_mutation_prob_demo \
 	onemax \
 	all5s \
 	struggle \
@@ -70,6 +71,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
+royalroad_mutation_prob_demo_SOURCES = royalroad_mutation_prob_demo.c
 onemax_SOURCES = onemax.c
 all5s_SOURCES = all5s.c
 struggle_SOURCES = struggle.c
@@ -116,6 +118,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_mutation_prob_demo_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
 all5s_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
@@ -155,6 +158,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+royalroad_mutation_prob_demo_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@

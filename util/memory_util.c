@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -1636,10 +1636,13 @@ char *s_strndup_safe(	const char *src, size_t length,
 		check the return value.
   parameters:
   return:
-  last updated:	12/01/01
+  last updated:	10/02/05
  **********************************************************************/
 
-void s_free_safe(void *ptr, char *funcname, char *filename, int linenum)
+void s_free_safe(void *ptr,
+                 const char *funcname,
+                 const char *filename,
+                 const int linenum)
   {
   memory_count_free++;
 

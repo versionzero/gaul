@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_utility - High-level genetic algorithm routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -56,7 +56,6 @@ void ga_diagnostics(void)
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
   printf("GA_BOLTZMANN_FACTOR:       %e\n", GA_BOLTZMANN_FACTOR);
   printf("GA_MIN_FITNESS:            %e\n", GA_MIN_FITNESS);
-  printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
   printf("BYTEBITS:                  %d\n", BYTEBITS);
   printf("--- Data structures ------------------------------------------\n");
   printf("structure                  sizeof\n");

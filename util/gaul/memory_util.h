@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -218,7 +218,7 @@ void	*s_calloc_safe(size_t, size_t, char*, char*, int);
 void	*s_realloc_safe(void*, size_t, char*, char*, int);
 char	*s_strdup_safe(const char*, char*, char*, int);
 char	*s_strndup_safe(const char*, size_t, char*, char*, int);
-void	s_free_safe(void*, char*, char*, int);
+void	s_free_safe(void*, const char*, const char*, const int);
 
 #endif
 

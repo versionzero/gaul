@@ -20,6 +20,7 @@ Changes since release 0.1847:
 - All mentions of the outdated V3_QUICK preprocessor constant removed.
 - Added autogen.sh script to distribution.
 - Probable bug in memory_chunks.c fixed -- thanks to Al Cripps.
+- Support for adjustable allele mutation probabilities; added ga_population_set_allele_mutation_prob() and ga_population_get_allele_mutation_prob() functions and examples/royalroad_mutation_prob_demo demonstration program.  Default behaviour is unchanged.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

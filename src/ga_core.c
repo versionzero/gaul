@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -269,7 +269,7 @@ static void destruct_list(population *pop, SLList *list)
 		const int num_chromosome	Num. of chromosomes.
 		const int len_chromosome	Size of chromosomes (may be ignored).
   return:	population *	new population structure.
-  last updated: 07 Nov 2002
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 population *ga_population_new(	const int stable_size,
@@ -299,6 +299,8 @@ population *ga_population_new(	const int stable_size,
   newpop->migration_ratio = 1.0;
   newpop->scheme = GA_SCHEME_DARWIN;
   newpop->elitism = GA_ELITISM_UNKNOWN;
+
+  newpop->allele_mutation_prob = DEFAULT_ALLELE_MUTATION_PROB;
 
   THREAD_LOCK_NEW(newpop->lock);
 #if USE_CHROMO_CHUNKS == 1
@@ -392,7 +394,7 @@ population *ga_population_new(	const int stable_size,
 		field is referenced.
   parameters:	population *	original population structure.
   return:	population *	new population structure.
-  last updated: 06 Jul 2003
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 population *ga_population_clone_empty(population *pop)
@@ -424,9 +426,10 @@ population *ga_population_clone_empty(population *pop)
   newpop->crossover_ratio = pop->crossover_ratio;
   newpop->mutation_ratio = pop->mutation_ratio;
   newpop->migration_ratio = pop->migration_ratio;
-
   newpop->scheme = pop->scheme;
   newpop->elitism = pop->elitism;
+
+  newpop->allele_mutation_prob = pop->allele_mutation_prob;
 
   THREAD_LOCK_NEW(newpop->lock);
 #if USE_CHROMO_CHUNKS == 1
@@ -1959,7 +1962,7 @@ void ga_population_append_receive( population *pop, int src_node )
 		defined by the user.
   parameters:
   return:
-  last updated: 24 May 2002
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 population *ga_population_new_receive( int src_node )
@@ -1972,6 +1975,7 @@ population *ga_population_new_receive( int src_node )
   mpi_receive(&(pop->crossover_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPCROSSOVER);
   mpi_receive(&(pop->mutation_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPMUTATION);
   mpi_receive(&(pop->migration_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPMIGRATION);
+  mpi_receive(&(pop->allele_mutation_prob), 1, MPI_DOUBLE, src_node, GA_TAG_POPALLELEMUTPROB);
 
   return pop;
   }
@@ -2006,7 +2010,7 @@ population *ga_population_receive( int src_node )
 		Some other less useful data is also not transfered.
   parameters:
   return:
-  last updated: 24 May 2002
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_population_send( population *pop, int dest_node )
@@ -2018,6 +2022,7 @@ void ga_population_send( population *pop, int dest_node )
   MPI_Send(&(pop->crossover_ratio), 1, MPI_DOUBLE, dest_node, GA_TAG_POPCROSSOVER, MPI_COMM_WORLD);
   MPI_Send(&(pop->mutation_ratio), 1, MPI_DOUBLE, dest_node, GA_TAG_POPMUTATION, MPI_COMM_WORLD);
   MPI_Send(&(pop->migration_ratio), 1, MPI_DOUBLE, dest_node, GA_TAG_POPMIGRATION, MPI_COMM_WORLD);
+  MPI_Send(&(pop->allele_mutation_prob), 1, MPI_DOUBLE, dest_node, GA_TAG_POPALLELEMUTPROB, MPI_COMM_WORLD);
 
   return;
   }
@@ -2438,6 +2443,29 @@ void ga_population_set_crossover(	population	*pop,
   plog( LOG_VERBOSE, "Population's crossover rate = %f", crossover);
 
   pop->crossover_ratio = crossover;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_population_set_allele_mutation_prob()
+  synopsis:	Sets the allele mutation rate (e.g. bitwise mutation
+		probability) for a population.
+  parameters:
+  return:
+  last updated:	16 Feb 2005
+ **********************************************************************/
+
+void ga_population_set_allele_mutation_prob(	population	*pop,
+					const double	prob)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  plog( LOG_VERBOSE, "Population's allele mutation probability = %f", prob);
+
+  pop->allele_mutation_prob = prob;
 
   return;
   }
@@ -2868,6 +2896,23 @@ double ga_population_get_crossover(population	*pop)
   if ( !pop ) die("Null pointer to population structure passed.");
 
   return pop->crossover_ratio;
+  }
+
+
+/**********************************************************************
+  ga_population_get_allele_mutation_prob()
+  synopsis:	Gets the crossover rate of a population.
+  parameters:
+  return:
+  last updated:	16 Feb 2005
+ **********************************************************************/
+
+double ga_population_get_allele_mutation_prob(population	*pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->allele_mutation_prob;
   }
 
 

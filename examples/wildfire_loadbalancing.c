@@ -332,7 +332,7 @@ boolean wildfire_score(population *pop, entity *entity)
 
   while (load1>0.99*NUM_PROC || load15>1.5*NUM_PROC)
     {
-    if (str!=NULL)usleep(2500000/NUM_PROC);
+    if (str!=NULL) usleep(2500000/NUM_PROC);
 
     pf = popen("uptime", "r");
 

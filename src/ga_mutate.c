@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_mutate - Genetic algorithm mutation operators.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -135,7 +135,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
 		to the more common 'bit-drift' mutation.
   parameters:
   return:
-  last updated: 21/07/00
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
@@ -161,7 +161,7 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ((int *)son->chromosome[chromo])[point] += dir;
 
@@ -285,7 +285,7 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
   synopsis:	Cause a number of mutation events.
   parameters:
   return:
-  last updated: 31/05/01
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
@@ -310,7 +310,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ((boolean *)son->chromosome[chromo])[point] = !((boolean *)son->chromosome[chromo])[point];
         }
@@ -482,7 +482,7 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
 		to the more common 'bit-drift' mutation.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
@@ -508,7 +508,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ((char *)son->chromosome[chromo])[point] += dir;
 
@@ -629,7 +629,7 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
 		to the more common 'bit-drift' mutation.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son)
@@ -655,7 +655,7 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ((char *)son->chromosome[chromo])[point] += dir;
 
@@ -782,7 +782,7 @@ void ga_mutate_bitstring_singlepoint( population *pop,
   synopsis:	Cause a number of mutation events.
   parameters:
   return:
-  last updated: 10 Sep 2003
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son)
@@ -807,7 +807,7 @@ void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ga_bit_invert(son->chromosome[chromo],point);
         }
@@ -920,7 +920,7 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
 		(Unit Gaussian distribution.)
   parameters:
   return:
-  last updated: 10 Sep 2003
+  last updated: 16 Feb 2005
  **********************************************************************/
 
 void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
@@ -946,7 +946,7 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
     {
     for (point=0; point<pop->len_chromosomes; point++)
       {
-      if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
+      if (random_boolean_prob(pop->allele_mutation_prob))
         {
         ((double *)son->chromosome[chromo])[point] += amount;
         }
