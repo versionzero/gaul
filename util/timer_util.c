@@ -97,15 +97,15 @@ void timer_start(chrono_t *t)
 double timer_check(chrono_t *t)
   {
   double        user_time, real_time;
-  clock_t	*clock = clock();
-  time_t	*time = time();
+  clock_t	c = clock();
+  time_t	t = time();
 
-  plog(LOG_NORMAL, "Timer checked: %d", clock);
+  plog(LOG_NORMAL, "Timer checked: %d", c);
 
-  user_time = (clock - t->save_clock) / (double) CLOCKS_PER_SEC;
-  real_time = difftime(time, t->save_time);
-  t->save_clock = clock;
-  t->save_time = time;
+  user_time = (c - t->save_clock) / (double) CLOCKS_PER_SEC;
+  real_time = difftime(t, t->save_time);
+  t->save_clock = c;
+  t->save_time = t;
 
   plog(LOG_NORMAL, "User time: %f seconds.", user_time);
   plog(LOG_NORMAL, "Real time: %f seconds.", real_time);
