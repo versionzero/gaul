@@ -477,12 +477,10 @@ static int node_height(node_t *node)
 
 static node_t *node_rotate_left(node_t *node)
   {
-  node_t *left;
   node_t *right;
   int a_bal;
   int b_bal;
 
-  left = node->left;
   right = node->right;
 
   node->right = right->left;
@@ -513,12 +511,10 @@ static node_t *node_rotate_left(node_t *node)
 static node_t *node_rotate_right(node_t *node)
   {
   node_t *left;
-  node_t *right;
   int a_bal;
   int b_bal;
 
   left = node->left;
-  right = node->right;
 
   node->left = left->right;
   left->right = node;

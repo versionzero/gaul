@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul_util.h - General header to define a few useful things
-  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -102,14 +102,19 @@
 /*
  * Define boolean type sensibly.
  */
+#ifndef HAVE__BOOL
+# define HAVE__BOOL 0
+#endif
+ 
 #if HAVE_STDBOOL_H == 1
 # include <stdbool.h>
 #else
-
+ 
 # if !defined(__bool_true_false_are_defined)
 #  if HAVE__BOOL != 1
 typedef short _Bool;
-#   define HAVE__BOOL
+#   undef HAVE__BOOL
+#   define HAVE__BOOL 1
 #  endif
 
 #  if !defined(true)

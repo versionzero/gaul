@@ -607,12 +607,10 @@ static int avltree_node_height(AVLNode *node)
 
 static AVLNode *avltree_node_rotate_left(AVLNode *node)
   {
-  AVLNode *left;
   AVLNode *right;
   int a_bal;
   int b_bal;
 
-  left = node->left;
   right = node->right;
 
   node->right = right->left;
@@ -643,12 +641,10 @@ static AVLNode *avltree_node_rotate_left(AVLNode *node)
 static AVLNode *avltree_node_rotate_right(AVLNode *node)
   {
   AVLNode *left;
-  AVLNode *right;
   int a_bal;
   int b_bal;
 
   left = node->left;
-  right = node->right;
 
   node->left = left->right;
   left->right = node;

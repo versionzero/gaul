@@ -438,11 +438,10 @@ static int check_mptr(void *mptr, mem_record *current)
 
 static void pad_mptr_low(mem_record *mr)
   {
-  void	*m;
 
   if (mr->pad_ls == 0) return;	/* There's nothing to do here. */
 
-  m = memcpy(((unsigned char *) mr->mptr)-mr->pad_ls,mr->pad_low,mr->pad_ls);
+  (void *)memcpy(((unsigned char *) mr->mptr)-mr->pad_ls,mr->pad_low,mr->pad_ls);
 
   return;
   }
@@ -451,13 +450,12 @@ static void pad_mptr_low(mem_record *mr)
 static void pad_mptr_high(mem_record *mr)
   {
   unsigned char	*cmptr;
-  void		*m;
 
   if (mr->pad_hs==0) return;	/* There's nothing to do here. */
 
   cmptr=(unsigned char *) mr->mptr; 
 
-  m=memcpy(cmptr+mr->rmem,mr->pad_high,mr->pad_hs);
+  (void *)memcpy(cmptr+mr->rmem,mr->pad_high,mr->pad_hs);
 
   return;
   }

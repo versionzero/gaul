@@ -99,7 +99,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -452,7 +452,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7   -I/usr/include/slang/
+CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
 DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
