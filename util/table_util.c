@@ -28,7 +28,8 @@
 
   Thread-safe.
  
-  Updated:	07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
+  Updated:	13 Mar 2002 SAA	table_diagnostics() modified.
+		07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
 		29 Jan 2002 SAA	Modifications to avoid some splint (http://www.splint.org/) warnings.
 		28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
 		18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
@@ -337,18 +338,19 @@ unsigned int table_count_items(TableStruct *table)
 void table_diagnostics(void)
   {
   printf("=== Table diagnostics ========================================\n");
-  printf("Version:             %s\n", VERSION_STRING);
-  printf("Build date:          %s\n", BUILD_DATE_STRING);
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
-  printf("TABLE_ERROR_INDEX:   %u\n", TABLE_ERROR_INDEX);
+  printf("TABLE_ERROR_INDEX:         %u\n", TABLE_ERROR_INDEX);
 
   printf("--------------------------------------------------------------\n");
-  printf("structure            sizeof\n");
+  printf("structure                  sizeof\n");
 #ifdef IRIX_MIPSPRO_SOURCE
-  printf("TableStruct          %lu\n", (unsigned long int) sizeof(TableStruct));
+  printf("TableStruct                %lu\n", (unsigned long int) sizeof(TableStruct));
 #else
-  printf("TableStruct          %Zd\n", sizeof(TableStruct));
+  printf("TableStruct                %Zd\n", sizeof(TableStruct));
 #endif
   printf("==============================================================\n");
 

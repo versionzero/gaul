@@ -768,8 +768,8 @@ double random_unit_gaussian(void)
 /**********************************************************************
   random_cauchy()
   synopsis:	Random number with a Cauchy/Lorentzian distribution.
-  parameters:
-  return:
+  parameters:	none
+  return:	double	Random value.
   last updated:	30/04/01
  **********************************************************************/
 
@@ -783,8 +783,8 @@ double random_cauchy(void)
   random_exponential()
   synopsis:	Random number with an exponential distribution, mean
 		of 1.0.
-  parameters:
-  return:
+  parameters:	none
+  return:	double	Random value.
   last updated:	30/04/01
  **********************************************************************/
 
@@ -797,9 +797,9 @@ double random_exponential(void)
 /**********************************************************************
   random_diagnostics()
   synopsis:	Diagnostics.
-  parameters:
+  parameters:	none
   return:	none
-  last updated:	25 Jan 2002
+  last updated:	13 Mar 2002
  **********************************************************************/
 
 void random_diagnostics(void)
@@ -807,7 +807,10 @@ void random_diagnostics(void)
   int	i;	/* Loop over PRNG array. */
 
   printf("=== PRNG routines diagnostic information =====================\n");
+  printf("Version:                   %s\n", VERSION_STRING);
   printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("--------------------------------------------------------------\n");
   printf("RANDOM_DEBUG:              %d\n", RANDOM_DEBUG);
   printf("RANDOM_RAND_MAX:           %u\n", RANDOM_RAND_MAX);
   printf("RANDOM_NUM_STATE_VALS:     %d\n", RANDOM_NUM_STATE_VALS);

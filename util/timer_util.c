@@ -29,12 +29,37 @@
 
 		These functions are thread-safe.
 
-  Updated:	07 Feb 2002 SAA	Rewrote S-Lang stuff.
+  Updated:	13 Mar 2002 timer_diagnostics() added.
+		07 Feb 2002 SAA	Rewrote S-Lang stuff.
 		06 Feb 2002 SAA	First version.
 
  **********************************************************************/
 
 #include "timer_util.h"
+
+/**********************************************************************
+  timer_diagnostics()
+  synopsis:	Display diagnostic information.
+  parameters:	none
+  return:	none
+  last updated:	13 Mar 2002
+ **********************************************************************/
+
+void timer_diagnostics(void)
+  {
+  printf("=== Table diagnostics ========================================\n");
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+
+  printf("--------------------------------------------------------------\n");
+  printf("structure                  sizeof\n");
+  printf("chrono_t                   %Zd\n", sizeof(chrono_t));
+  printf("==============================================================\n");
+
+  return;
+  }
+
 
 /**********************************************************************
   timer_start()

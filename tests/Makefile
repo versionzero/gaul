@@ -108,7 +108,7 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 2
 RANLIB = ranlib
-VERSION = 0.1837
+VERSION = 0.1837-2
 
 AUTOMAKE_OPTIONS = 1.4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

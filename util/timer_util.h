@@ -27,7 +27,8 @@
   Synopsis:     Timer routines with S-Lang intrinsics which are
                 helpful for code analysis.
 
-  Updated:      06 Feb 2002 SAA First version.
+  Updated:      13 Mar 2002 SAA	timer_diagnostics() added.
+		06 Feb 2002 SAA First version.
 
  **********************************************************************/
 
@@ -55,17 +56,18 @@ typedef struct
 /*
  * Prototypes.
  */
-void timer_start(chrono_t *t);
-double timer_check(chrono_t *t);
+void	timer_diagnostics(void);
+void	timer_start(chrono_t *t);
+double	timer_check(chrono_t *t);
 
 /*
  * SLang intrinsic function with equivalent functionality.
  */
 #if HAVE_SLANG==1
-int timer_new_slang(void);
-void timer_free_slang(int *t_handle);
-void timer_start_slang(int *t_handle);
-double timer_check_slang(int *t_handle);
+int	timer_new_slang(void);
+void	timer_free_slang(int *t_handle);
+void	timer_start_slang(int *t_handle);
+double	timer_check_slang(int *t_handle);
 #endif
 
 #endif /* TIMER_UTIL_H_INCLUDED */

@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
+  Last Updated:	13 Mar 2002 SAA Added version info to NN_diagnostics.
+		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
   		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
 		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
@@ -94,14 +95,17 @@ static char       **predict_labels=NULL;   /* Labels for prediction data. */
   synopsis:     Display diagnostic information. 
   parameters:   none
   return:       none
-  last updated: 01 Mar 2002
+  last updated: 13 Mar 2002
  **********************************************************************/
 
 void NN_diagnostics(void)
   {
 
   printf("=== nn_util diagnostic information ===========================\n");
+  printf("Version:                   %s\n", VERSION_STRING);
   printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("--------------------------------------------------------------\n");
   printf("NN_DEBUG:                  %d\n", NN_DEBUG);
   printf("NN_MAX_FNAME_LEN:          %d\n", NN_MAX_FNAME_LEN);
   printf("NN_DATA_ALLOC_SIZE:        %d\n", NN_DATA_ALLOC_SIZE);

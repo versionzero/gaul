@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
+  Updated:      13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
+		20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
 		27/02/01 SAA	G_LOCK etc. replaced with THREAD_LOCK etc..
 		16/01/01 SAA	Defining the constant DSTR_NO_CHUNKS will disable the use of chunks for memory handling.
 		03/01/01 SAA	Adapated to use my efficient memory chunk memory allocation routines.
@@ -65,7 +66,7 @@
 /*
  * Global variables.
  */
-THREAD_LOCK_DEFINE_STATIC(dstr_global);
+THREAD_LOCK_DEFINE_STATIC(dstr_global_lock);
 static MemChunk         *dstr_mem_chunk = NULL;
 MemChunk	*dstr_get_memchunk() { return dstr_mem_chunk; }
 
@@ -75,27 +76,20 @@ MemChunk	*dstr_get_memchunk() { return dstr_mem_chunk; }
   synopsis:	Displays diagnostic information about these routines.
   parameters:   none
   return:	none
-  last updated: 09/10/99
+  last updated: 13 Mar 2002
  **********************************************************************/
 
 void dstr_diagnostics(void)
   {
 
   printf("=== dynamic string (dstr) routines diagnostic information ====\n");
-  printf("Build date:\t%s\n", BUILD_DATE_STRING);
-  printf("DSTR_DEBUG:\t%d\n", DSTR_DEBUG);
-#ifdef PLATFORM_LINUX_ALPHA
-  printf("Platform:\tLinux on Alpha\n");
-#endif
-#ifdef PLATFORM_LINUX_INTEL
-  printf("Platform:\tLinux on Intel\n");
-#endif
-#ifdef PLATFORM_IRIX_SG
-  printf("Platform:\tIRIX on SG\n");
-#endif
-#if !PLATFORM_LINUX_ALPHA && !PLATFORM_LINUX_INTEL && !PLATFORM_IRIX_SG
-  printf("Platform:\t<unknown>\n");
-#endif
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+
+  printf("--------------------------------------------------------------\n");
+  printf("DSTR_DEBUG:                %d\n", DSTR_DEBUG);
+  printf("DSTR_NO_CHUNKS:            %d\n", DSTR_NO_CHUNKS);
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
@@ -104,6 +98,7 @@ void dstr_diagnostics(void)
 #else
   printf("dstring            %Zd\n", sizeof(dstring));
 #endif
+
   printf("==============================================================\n");
 
   return;
@@ -133,9 +128,9 @@ boolean dstr_free(dstring *ds)
   if(ds->string) s_free(ds->string);
 
 #ifndef DSTR_NO_CHUNKS
-  THREAD_LOCK(dstr_global);
+  THREAD_LOCK(dstr_global_lock);
   mem_chunk_free(dstr_mem_chunk, ds);
-  THREAD_UNLOCK(dstr_global);
+  THREAD_UNLOCK(dstr_global_lock);
 #else
   s_free(ds);
 #endif
@@ -265,12 +260,12 @@ dstring *dstr_create(const int max_size)
   if (max_size < 0) die("Stupid dstring maximum length requested.\n");
 
 #ifndef DSTR_NO_CHUNKS
-  THREAD_LOCK(dstr_global);
+  THREAD_LOCK(dstr_global_lock);
   if (!dstr_mem_chunk)
     dstr_mem_chunk = mem_chunk_new(sizeof(dstring), 1024);
 
   ds = mem_chunk_alloc(dstr_mem_chunk);
-  THREAD_UNLOCK(dstr_global);
+  THREAD_UNLOCK(dstr_global_lock);
 #else
   if ( !(ds = s_malloc(sizeof(dstring))) ) die("Unable to allocate memory.");
 #endif
@@ -299,12 +294,12 @@ dstring *dstr_allocate(void)
   dstring	*ds;
 
 #ifndef DSTR_NO_CHUNKS
-  THREAD_LOCK(dstr_global);
+  THREAD_LOCK(dstr_global_lock);
   if (!dstr_mem_chunk)
     dstr_mem_chunk = mem_chunk_new(sizeof(dstring), 1024);
 
   ds = mem_chunk_alloc(dstr_mem_chunk);
-  THREAD_UNLOCK(dstr_global);
+  THREAD_UNLOCK(dstr_global_lock);
 #else
   if ( !(ds = s_malloc(sizeof(dstring))) ) die("Unable to allocate memory.");
 #endif
@@ -339,12 +334,12 @@ dstring *dstr_convertstr(char *str)
   dstring	*ds;
 
 #ifndef DSTR_NO_CHUNKS
-  THREAD_LOCK(dstr_global);
+  THREAD_LOCK(dstr_global_lock);
   if (!dstr_mem_chunk)
     dstr_mem_chunk = mem_chunk_new(sizeof(dstring), 1024);
 
   ds = mem_chunk_alloc(dstr_mem_chunk);
-  THREAD_UNLOCK(dstr_global);
+  THREAD_UNLOCK(dstr_global_lock);
 #else
   if ( !(ds = s_malloc(sizeof(dstring))) ) die("Unable to allocate memory.");
 #endif

@@ -35,7 +35,7 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1837"
+#define VERSION_STRING "0.1837-2"
 #define BUILD_DATE_STRING "13/03/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1837

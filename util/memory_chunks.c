@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -24,27 +24,29 @@
 
  **********************************************************************
 
- *
- * Mostly stolen from glib's gmem.c
- *
- * This code is part of memory_util.c - it's own integrated implementation
- * of memory chunks.	It may be used independantly if you feel brave.
- *
- * Last updated:	27/02/01 SAA	gpointer replaced with vpointer.
- *		18/01/01 SAA	Default compiler constant definition moved out to header file.
- *			17/01/01 SAA	Fixed the severe bug causing corruption of data when other data is freed - but I don't know how ;(
-			16/01/01 SAA	Some simple padding support added.  Must be configured at compile-time.
- *			04/01/01 SAA	MemChunks with unreleasable atoms available, which doesn't use my AVLTree implementation added.
- *
- * This is thread safe.
- *
- * To do:	Padding for array under/overflow checking.
- *		Observe contents of atoms in the FreeAtom list.
- *
- * Known bugs:	High padding may be offset from the real end of the data - so some
- *		overflows will be missed.
- *
- */
+  Synopsis:	Efficient bulk memory allocation.  Mostly stolen from
+		glib's gmem.c
+ 
+		This code is part of memory_util.c - its own
+		integrated implementation of memory chunks.
+		It may be used independantly if you feel very brave.
+
+		This is thread safe.
+ 
+  Last updated:	13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
+		27/02/01 SAA	gpointer replaced with vpointer.
+ 		18/01/01 SAA	Default compiler constant definition moved out to header file.
+ 		17/01/01 SAA	Fixed the severe bug causing corruption of data when other data is freed - but I don't know how ;(
+		16/01/01 SAA	Some simple padding support added.  Must be configured at compile-time.
+ 		04/01/01 SAA	MemChunks with unreleasable atoms available, which doesn't use my AVLTree implementation added.
+ 
+  To do:	Padding for array under/overflow checking.
+ 		Observe contents of atoms in the FreeAtom list.
+ 
+  Known bugs:	High padding may be offset from the real end of the data - so some
+ 		overflows will be missed.
+ 
+ **********************************************************************/
 
 #include "memory_chunks.h"
 
@@ -911,8 +913,11 @@ boolean mem_chunk_test(void)
 void mem_chunk_diagnostics(void)
   {
   printf("=== mem_chunk diagnostics ====================================\n");
-  printf("Version:           %s\n", VERSION_STRING);
-  printf("Build date:        %s\n", BUILD_DATE_STRING);
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+
+  printf("--------------------------------------------------------------\n");
   printf("MEMORY_PADDING:    %s\n", MEMORY_PADDING?"TRUE":"FALSE");
   printf("MEMORY_ALIGN_SIZE  %d\n", MEMORY_ALIGN_SIZE);
   printf("MEMORY_AREA_SIZE   %ld\n", MEMORY_AREA_SIZE);

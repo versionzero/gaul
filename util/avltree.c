@@ -52,7 +52,8 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
+  Last Updated:	13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
+		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
  			18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
  			03/01/00 SAA	The type of the key may now be changed at compile time.
  			02/01/00 SAA	avltree_search() added.
@@ -823,8 +824,9 @@ int avltree_num_nodes(AVLTree *tree)
 void avltree_diagnostics(void)
   {
   printf("=== AVLTree diagnostics ======================================\n");
-  printf("Version:           %s\n", VERSION_STRING);
-  printf("Build date:        %s\n", BUILD_DATE_STRING);
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
