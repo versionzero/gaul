@@ -118,6 +118,8 @@ float	random_float_unit_gaussian(void);
 float	random_float_cauchy(void);
 float	random_float_exponential(void);
 
+void	random_int_permutation(const int size, int *iarray, int *oarray);
+
 #define random_int_full	random_rand
 
 #if HAVE_SLANG==1

@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	29 Jan 2002 SAA Fixed some dodgy typecasting.
+  Updated:	14 Mar 2002 SAA	Added random_int_permutation().
+		29 Jan 2002 SAA Fixed some dodgy typecasting.
 		25 Jan 2002 SAA Removed residual comment about HelGA.
 		07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
 		04 Dec 2001 SAA	Added routines for 'float's.
@@ -791,6 +792,35 @@ double random_cauchy(void)
 double random_exponential(void)
   {
   return -log(random_unit_uniform());
+  }
+
+
+/**********************************************************************
+  random_int_permutation()
+  synopsis:	Randomize an array of integers.
+  parameters:	int	size
+		int	*iarray		Source array.
+		int	*oarray		Destination array.
+  return:	none
+  last updated:	14 Mar 2002
+ **********************************************************************/
+
+void random_int_permutation(const int size, int *iarray, int *oarray)
+  {
+  int		i,j=0;		/* Loop variables over arrays. */
+  
+  if (!iarray || !oarray) die("NULL pointer of int array passed.");
+
+  for (i=size-1; i>0; i--)
+    {
+    pos = random_int(i);
+    oarray[j++] = iarray[pos];
+    iarray[pos] = iarray[i];
+    }
+
+  oarray[j] = iarray[0];
+
+  return;
   }
 
 
