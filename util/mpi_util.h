@@ -128,12 +128,14 @@ boolean mpi_receive(void *buf, const int count,
                                const mpi_datatype type, const int node,
                                int tag);
 #ifndef MPI_UTIL_COMPILE_MAIN
+/*
 boolean mpi_send_test(int node);
 boolean mpi_recv_test();
 boolean mpi_send_test_all();
 boolean mpi_send_test_next();
 
 boolean	mpi_test(void);
+*/
 #endif
 
 #endif
