@@ -429,8 +429,6 @@ fi
 #
 USE_CHROMO_CHUNKS=0
 AC_DEFINE_UNQUOTED(USE_CHROMO_CHUNKS, ${USE_CHROMO_CHUNKS}, [Whether to use memory chunk handling for chromosomes.])
-V3_QUICK=1
-AC_DEFINE_UNQUOTED(V3_QUICK, ${V3_QUICK}, [Whether to skip expensive sanity checking in vector routines.])
 GA_NUM_PROCESSES_ENVVAR_STRING="GA_NUM_PROCESSES"
 AC_DEFINE_UNQUOTED(GA_NUM_PROCESSES_ENVVAR_STRING, ${GA_NUM_PROCESSES_ENVVAR_STRING}, [Environment variable used to request processes.])
 GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
@@ -703,13 +701,13 @@ if test "x$CC" = "xcc"; then
 # Compiler is possibly Sun's Forte C, so check platform.
   if test "x$target" = "xsparc-sun-solaris2.7"; then
     AC_DEFINE( SUN_FORTE_C, 2.7, [Define if using Sun's Forte C Compiler] )
-    AC_DEFINE(HAVE_BCOPY,1,[Whether bcopy() is available])      # Big problems!!!
-    AC_DEFINE(HAVE_BCMP,1,[Whether bcmp() is available])
-    AC_DEFINE(HAVE_STRLEN,1,[Whether strlen() is available])
-    AC_DEFINE(HAVE_STRNCMP,1,[Whether strncmp() is available])
-    AC_DEFINE(HAVE_STRNCPY,1,[Whether strncpy() is available])
-    AC_DEFINE(HAVE_MEMSET,1,[Whether memset() is available])
-    AC_DEFINE(HAVE_USLEEP,1,[Whether usleep() is available])
+    AC_DEFINE( HAVE_BCOPY,1,[Whether bcopy() is available] )      # Big problems!!!
+    AC_DEFINE( HAVE_BCMP,1,[Whether bcmp() is available] )
+    AC_DEFINE( HAVE_STRLEN,1,[Whether strlen() is available] )
+    AC_DEFINE( HAVE_STRNCMP,1,[Whether strncmp() is available] )
+    AC_DEFINE( HAVE_STRNCPY,1,[Whether strncpy() is available] )
+    AC_DEFINE( HAVE_MEMSET,1,[Whether memset() is available] )
+    AC_DEFINE( HAVE_USLEEP,1,[Whether usleep() is available] )
   elif test "x$target" = "xsparc-sun-solaris2.8"; then
     AC_DEFINE( SUN_FORTE_C, 2.8, [Define if using Sun's Forte C Compiler] )
     AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
@@ -1117,7 +1115,7 @@ _EOF_
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
 #define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
-#define USE_CHROMO_CHUNKS "${USE_CHROMO_CHUNKS}"
+#define USE_CHROMO_CHUNKS ${USE_CHROMO_CHUNKS}
 
 #define MEMORY_ALLOC_SAFE ${MEMORY_ALLOC_SAFE}
 #define MEMORY_ALLOC_DEBUG ${MEMORY_ALLOC_DEBUG}

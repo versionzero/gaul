@@ -252,9 +252,6 @@
 /* Whether OpenMP should be used. */
 #undef USE_OPENMP
 
-/* Whether to skip expensive sanity checking in vector routines. */
-#undef V3_QUICK
-
 /* Whether to cripple GAUL so it works on windows. */
 #undef W32_CRIPPLED
 

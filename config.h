@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "05/10/04"
+#define GA_BUILD_DATE_STRING "06/10/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -252,9 +252,6 @@
 
 /* Whether OpenMP should be used. */
 #define USE_OPENMP 0
-
-/* Whether to skip expensive sanity checking in vector routines. */
-#define V3_QUICK 1
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

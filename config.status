@@ -435,7 +435,7 @@ GA_MINOR_VERSION=1847
 GA_PATCH_VERSION=5
 GA_VERSION_STRING=
 
-V3_QUICK=1
+V3_QUICK=
 W32_CRIPPLED=0
 HAVE_SLANG=1
 HAVE_MPI=0
@@ -609,7 +609,7 @@ s,@MPIFLAGS@,,;t t
 s,@MPILIBS@,,;t t
 s,@GA_UNAME_STRING@,,;t t
 s,@GA_BUILD_DATE_STRING@,,;t t
-s,@V3_QUICK@,1,;t t
+s,@V3_QUICK@,,;t t
 s,@W32_CRIPPLED@,0,;t t
 s,@HAVE_SLANG@,1,;t t
 s,@HAVE_MPI@,0,;t t
@@ -905,7 +905,7 @@ ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1847${ac_dD}
 ${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}5${ac_dD}
 ${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
-${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"05/10/04"${ac_dD}
+${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"06/10/04"${ac_dD}
 ${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1847-5"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
@@ -932,8 +932,8 @@ ${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
 ${ac_dA}W32_CRIPPLED${ac_dB}W32_CRIPPLED${ac_dC}0${ac_dD}
 ${ac_dA}HAVE_SLANG${ac_dB}HAVE_SLANG${ac_dC}1${ac_dD}
 ${ac_dA}USE_CHROMO_CHUNKS${ac_dB}USE_CHROMO_CHUNKS${ac_dC}0${ac_dD}
-${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_dA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dC}GA_NUM_PROCESSES${ac_dD}
+${ac_dA}GA_NUM_THREADS_ENVVAR_STRING${ac_dB}GA_NUM_THREADS_ENVVAR_STRING${ac_dC}GA_NUM_THREADS${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -943,7 +943,6 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
-${ac_dA}GA_NUM_THREADS_ENVVAR_STRING${ac_dB}GA_NUM_THREADS_ENVVAR_STRING${ac_dC}GA_NUM_THREADS${ac_dD}
 ${ac_dA}SIZEOF_DOUBLE${ac_dB}SIZEOF_DOUBLE${ac_dC}8${ac_dD}
 ${ac_dA}SIZEOF_CHAR${ac_dB}SIZEOF_CHAR${ac_dC}1${ac_dD}
 ${ac_dA}SIZEOF_LONG${ac_dB}SIZEOF_LONG${ac_dC}4${ac_dD}
@@ -981,6 +980,7 @@ ${ac_dA}SUN_FORTE_C${ac_dB}SUN_FORTE_C${ac_dC}0${ac_dD}
 ${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_BCMP${ac_dB}HAVE_BCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRLEN${ac_dB}HAVE_STRLEN${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRNCMP${ac_dB}HAVE_STRNCMP${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -990,7 +990,6 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
-${ac_dA}HAVE_STRNCMP${ac_dB}HAVE_STRNCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMSET${ac_dB}HAVE_MEMSET${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_USLEEP${ac_dB}HAVE_USLEEP${ac_dC}1${ac_dD}
@@ -1018,7 +1017,7 @@ ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1847${ac_uD}
 ${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}5${ac_uD}
 ${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
-${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"05/10/04"${ac_uD}
+${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"06/10/04"${ac_uD}
 ${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1847-5"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
@@ -1045,8 +1044,8 @@ ${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
 ${ac_uA}W32_CRIPPLED${ac_uB}W32_CRIPPLED${ac_uC}0${ac_uD}
 ${ac_uA}HAVE_SLANG${ac_uB}HAVE_SLANG${ac_uC}1${ac_uD}
 ${ac_uA}USE_CHROMO_CHUNKS${ac_uB}USE_CHROMO_CHUNKS${ac_uC}0${ac_uD}
-${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_uA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uC}GA_NUM_PROCESSES${ac_uD}
+${ac_uA}GA_NUM_THREADS_ENVVAR_STRING${ac_uB}GA_NUM_THREADS_ENVVAR_STRING${ac_uC}GA_NUM_THREADS${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1056,7 +1055,6 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
-${ac_uA}GA_NUM_THREADS_ENVVAR_STRING${ac_uB}GA_NUM_THREADS_ENVVAR_STRING${ac_uC}GA_NUM_THREADS${ac_uD}
 ${ac_uA}SIZEOF_DOUBLE${ac_uB}SIZEOF_DOUBLE${ac_uC}8${ac_uD}
 ${ac_uA}SIZEOF_CHAR${ac_uB}SIZEOF_CHAR${ac_uC}1${ac_uD}
 ${ac_uA}SIZEOF_LONG${ac_uB}SIZEOF_LONG${ac_uC}4${ac_uD}
@@ -1094,6 +1092,7 @@ ${ac_uA}SUN_FORTE_C${ac_uB}SUN_FORTE_C${ac_uC}0${ac_uD}
 ${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_BCMP${ac_uB}HAVE_BCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRLEN${ac_uB}HAVE_STRLEN${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRNCMP${ac_uB}HAVE_STRNCMP${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1103,7 +1102,6 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
-${ac_uA}HAVE_STRNCMP${ac_uB}HAVE_STRNCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMSET${ac_uB}HAVE_MEMSET${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_USLEEP${ac_uB}HAVE_USLEEP${ac_uC}1${ac_uD}
@@ -1611,7 +1609,7 @@ _EOF_
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
 #define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
-#define USE_CHROMO_CHUNKS "${USE_CHROMO_CHUNKS}"
+#define USE_CHROMO_CHUNKS ${USE_CHROMO_CHUNKS}
 
 #define MEMORY_ALLOC_SAFE ${MEMORY_ALLOC_SAFE}
 #define MEMORY_ALLOC_DEBUG ${MEMORY_ALLOC_DEBUG}

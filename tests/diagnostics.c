@@ -126,11 +126,11 @@
 #if !defined(HAVE_SLANG)
 # define HAVE_SLANG	0
 #endif
-#if !defined(V3_QUICK)
-# define V3_QUICK	0
-#endif
 #if !defined(W32_CRIPPLED)
 # define W32_CRIPPLED	0
+#endif
+#if !defined(USE_CHROMO_CHUNKS)
+# define USE_CHROMO_CHUNKS	0
 #endif
 
 /**********************************************************************
@@ -207,8 +207,8 @@ int main(int argc, char **argv)
   printf("HAVE_MPI:                       %s\n", HAVE_MPI?"true":"false");
   printf("HAVE_PTHREADS:                  %s\n", HAVE_PTHREADS?"true":"false");
   printf("HAVE_SLANG:                     %s\n", HAVE_SLANG?"true":"false");
-  printf("V3_QUICK:                       %s\n", V3_QUICK?"true":"false");
   printf("W32_CRIPPLED:                   %s\n", W32_CRIPPLED?"true":"false");
+  printf("USE_CHROMO_CHUNKS:              %s\n", USE_CHROMO_CHUNKS?"true":"false");
 
   exit(EXIT_SUCCESS);
   }

@@ -120,7 +120,6 @@ extern int errno;
  * Default constants:
  */
 
-#define V3_QUICK 1
 #define W32_CRIPPLED 1
 #define HAVE_SLANG 0
 #define AVLTREE_KEY_TYPE void *
