@@ -33,7 +33,7 @@
 #ifndef GA_CHROMO_H_INCLUDED
 #define GA_CHROMO_H_INCLUDED
 
-#include "ga_core.h"
+#include "gaul.h"
 
 boolean ga_chromosome_integer_allocate(const population *pop, entity *embryo);
 void ga_chromosome_integer_deallocate(const population *pop, entity *corpse);
