@@ -24,6 +24,9 @@ On some systems, including Solaris and IRIX, you need to specify GNU make instea
 If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
 automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake
 
+If you plan to use the Intel C/C++ compiler, use:
+./configure --disable-cvs-deps ; automake -i ; make
+
 Email me if:
 - You have tried the GNU tools, which you know normally work on your system, but GAUL still doesn't compile (preferably with patches to fix it ;))
 - You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").

@@ -16,7 +16,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -25,7 +25,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.  Alternatively, if your project
-# is incompatiable with the GPL, I will probably agree to requests
+# is incompatible with the GPL, I will probably agree to requests
 # for permission to use the terms of any other license.
 #
 # This program is distributed in the hope that it will be useful, but
@@ -98,17 +98,17 @@ DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
-LT_RELEASE = 0.1835
-LT_REVISION = 020127
+LT_RELEASE = 0.1836
+LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = makeinfo
-MINOR_VERSION = 1835
+MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
+MINOR_VERSION = 1836
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 020127
+PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1835
+VERSION = 0.1836
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -398,20 +398,6 @@ install uninstall-am uninstall all-redirect all-am all installdirs-am \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
-
-#EXTRA_DIST = gaul.spec.in
-
-#m4datadir = $(datadir)/aclocal
-#m4data_DATA = gaul.m4
-
-#dist-hook: gaul.spec
-#	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
-#	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
-#	     CONFIG_HEADERS= \
-#	     $(SHELL) config.status \
-#	     && cp INSTALL README $(distdir) ; \
-#	fi \
-#	&& cp gaul.spec $(distdir)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -2,7 +2,7 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 /* acconfig.h
 
- Helga's default settings.
+ GAUL's default settings.
 
  */
 
@@ -31,16 +31,16 @@
 #define MEMORY_PADDING 0
 
 #define DEBUG 0
-/* #undef HELGA_DEBUG */
-/* #undef MOLSTRUCT_DEBUG */
+#define GA_DEBUG 0
+#define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1835"
-#define BUILD_DATE_STRING "27/01/02"
+#define VERSION_STRING "0.1836"
+#define BUILD_DATE_STRING "29/01/02"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1835
-#define PATCH_VERSION 020127
-#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.9-13 #1 Tue Oct 30 19:32:27 EST 2001 i686 unknown"
+#define MINOR_VERSION 1836
+#define PATCH_VERSION 1
+#define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
@@ -84,9 +84,6 @@
 /* Define if you have the gettimeofday function.  */
 #define HAVE_GETTIMEOFDAY 1
 
-/* Define if you have the ipow function.  */
-/* #undef HAVE_IPOW */
-
 /* Define if you have the max function.  */
 /* #undef HAVE_MAX */
 
@@ -98,9 +95,6 @@
 
 /* Define if you have the memcpy function.  */
 #define HAVE_MEMCPY 1
-
-/* Define if you have the memdup function.  */
-/* #undef HAVE_MEMDUP */
 
 /* Define if you have the memmem function.  */
 #define HAVE_MEMMEM 1
@@ -158,9 +152,6 @@
 
 /* Define if you have the strcspn function.  */
 #define HAVE_STRCSPN 1
-
-/* Define if you have the strdup function.  */
-#define HAVE_STRDUP 1
 
 /* Define if you have the strerror function.  */
 #define HAVE_STRERROR 1

@@ -10,6 +10,7 @@ Changes since release 0.1836:
 - By default dumping of statistics is now disabled at compile time.
 - Updated utility routines to sync with other projects.
 - GNU Libtool is now used for library handling.
+- Minor alterations required for clean compilation using Intel C/C++.
 
 Changes since release 0.1835:
 - Lots of little bugfixes.
@@ -55,7 +56,6 @@ Changes since release 0.1833:
 - In many of the examples, ga_get_entity_from_rank(pop,0) is now used.
 
 Changes since release 0.1832:
-
 - Added 'GPL'd header' to source files which were missing it.
 - Changes for compilation under FreeBSD. (There are still lots of warnings about the use of the deprecated header file "malloc.h")
 - Changes for compilation under Solaris.
@@ -67,7 +67,6 @@ Changes since release 0.1832:
 - Supported platform info added to web-pages.
 
 Changes since release 0.1831:
-
 - Fixed minor bug in ./configure.in, message said "--with-slang=no", but should have said "--enable-slang=no".
 - Added files tests/btree.c and tests/btree.h - code doesn't compile without them!
 - Some more, really suspect, functions added to src/ga_utility.c.  ga_entity_dump() and ga_population_dump() also added.

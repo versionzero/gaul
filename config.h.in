@@ -1,7 +1,7 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 /* acconfig.h
 
- Helga's default settings.
+ GAUL's default settings.
 
  */
 
@@ -30,8 +30,8 @@
 #undef MEMORY_PADDING
 
 #undef DEBUG
-#undef HELGA_DEBUG
-#undef MOLSTRUCT_DEBUG
+#undef GA_DEBUG
+#undef GA_WRITE_STATS
 
 #undef VERSION
 #undef VERSION_STRING
@@ -83,9 +83,6 @@
 /* Define if you have the gettimeofday function.  */
 #undef HAVE_GETTIMEOFDAY
 
-/* Define if you have the ipow function.  */
-#undef HAVE_IPOW
-
 /* Define if you have the max function.  */
 #undef HAVE_MAX
 
@@ -97,9 +94,6 @@
 
 /* Define if you have the memcpy function.  */
 #undef HAVE_MEMCPY
-
-/* Define if you have the memdup function.  */
-#undef HAVE_MEMDUP
 
 /* Define if you have the memmem function.  */
 #undef HAVE_MEMMEM
@@ -157,9 +151,6 @@
 
 /* Define if you have the strcspn function.  */
 #undef HAVE_STRCSPN
-
-/* Define if you have the strdup function.  */
-#undef HAVE_STRDUP
 
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR

@@ -61,6 +61,7 @@ DEPENDENCIES = \
 	../util/librandom.a \
 	../util/libmethods.a \
 	../util/libstr_util.a \
+	../util/libnn_util.a \
 	../src/libgaul.la
 
 EXTRA_DIST = \
@@ -97,5 +98,5 @@ struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lnn_util -lm
 

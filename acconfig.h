@@ -1,6 +1,6 @@
 /* acconfig.h
 
- Helga's default settings.
+ GAUL's default settings.
 
  */
 
@@ -14,8 +14,8 @@
 #undef MEMORY_PADDING
 
 #undef DEBUG
-#undef HELGA_DEBUG
-#undef MOLSTRUCT_DEBUG
+#undef GA_DEBUG
+#undef GA_WRITE_STATS
 
 #undef VERSION
 #undef VERSION_STRING

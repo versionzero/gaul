@@ -4,7 +4,7 @@
 #######################################################################
 #
 # methods - General collection of c-programming utitily routines.
-# Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+# Copyright ©2000-2001, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -25,17 +25,13 @@
 #
 #######################################################################
 #
-# Updated:	17/05/01 SAA	This is a highly cut-down version for use in the GAUL CVS archive.
-#
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-# CFLAGS = -g -Wall -O
-
 INCLUDES =
 
-lib_LIBRARIES = libmethods.a libstr_util.a librandom.a
+lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a
 
 libmethods_a_SOURCES = \
 	avltree.c \
@@ -54,6 +50,9 @@ libstr_util_a_SOURCES = \
 librandom_a_SOURCES = \
 	random_util.c
 
+libnn_util_a_SOURCES = \
+	nn_util.c
+
 include_HEADERS = \
      SAA_header.h \
      avltree.h \
@@ -64,6 +63,7 @@ include_HEADERS = \
      memory_chunks.h \
      memory_util.h \
      mpi_util.h \
+     nn_util.h \
      random_util.h \
      str_hash.h \
      str_match.h \
@@ -80,4 +80,6 @@ libmethods_a_LIBFLAGS = -lm
 librandom_a_LIBFLAGS = -lm
 
 libstr_util_a_LIBFLAGS =
+
+libnn_util_a_LIBFLAGS =
 

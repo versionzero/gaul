@@ -16,7 +16,7 @@
 #######################################################################
 #
 # methods - General collection of c-programming utitily routines.
-# Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+# Copyright ©2000-2001, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -36,8 +36,6 @@
 # http://www.gnu.org/
 #
 #######################################################################
-#
-# Updated:	17/05/01 SAA	This is a highly cut-down version for use in the GAUL CVS archive.
 #
 
 # require automake 1.4
@@ -114,11 +112,9 @@ VERSION = 0.1836
 
 AUTOMAKE_OPTIONS = 1.4
 
-# CFLAGS = -g -Wall -O
-
 INCLUDES = 
 
-lib_LIBRARIES = libmethods.a libstr_util.a librandom.a
+lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a
 
 libmethods_a_SOURCES = \
 	avltree.c \
@@ -140,6 +136,10 @@ librandom_a_SOURCES = \
 	random_util.c
 
 
+libnn_util_a_SOURCES = \
+	nn_util.c
+
+
 include_HEADERS = \
      SAA_header.h \
      avltree.h \
@@ -150,6 +150,7 @@ include_HEADERS = \
      memory_chunks.h \
      memory_util.h \
      mpi_util.h \
+     nn_util.h \
      random_util.h \
      str_hash.h \
      str_match.h \
@@ -167,6 +168,8 @@ libmethods_a_LIBFLAGS = -lm
 librandom_a_LIBFLAGS = -lm
 
 libstr_util_a_LIBFLAGS = 
+
+libnn_util_a_LIBFLAGS = 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -184,6 +187,8 @@ libstr_util_a_LIBADD =
 libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
 librandom_a_LIBADD = 
 librandom_a_OBJECTS =  random_util.o
+libnn_util_a_LIBADD = 
+libnn_util_a_OBJECTS =  nn_util.o
 AR = ar
 CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -201,10 +206,10 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/linkedlist.P .deps/log_util.P .deps/memory_util.P \
-.deps/mpi_util.P .deps/random_util.P .deps/str_match.P .deps/str_util.P \
-.deps/table.P
-SOURCES = $(libmethods_a_SOURCES) $(libstr_util_a_SOURCES) $(librandom_a_SOURCES)
-OBJECTS = $(libmethods_a_OBJECTS) $(libstr_util_a_OBJECTS) $(librandom_a_OBJECTS)
+.deps/mpi_util.P .deps/nn_util.P .deps/random_util.P .deps/str_match.P \
+.deps/str_util.P .deps/table.P
+SOURCES = $(libmethods_a_SOURCES) $(libstr_util_a_SOURCES) $(librandom_a_SOURCES) $(libnn_util_a_SOURCES)
+OBJECTS = $(libmethods_a_OBJECTS) $(libstr_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libnn_util_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -295,6 +300,11 @@ librandom.a: $(librandom_a_OBJECTS) $(librandom_a_DEPENDENCIES)
 	-rm -f librandom.a
 	$(AR) cru librandom.a $(librandom_a_OBJECTS) $(librandom_a_LIBADD)
 	$(RANLIB) librandom.a
+
+libnn_util.a: $(libnn_util_a_OBJECTS) $(libnn_util_a_DEPENDENCIES)
+	-rm -f libnn_util.a
+	$(AR) cru libnn_util.a $(libnn_util_a_OBJECTS) $(libnn_util_a_LIBADD)
+	$(RANLIB) libnn_util.a
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

@@ -3,7 +3,7 @@ dnl gaul/configure.in
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
-dnl Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+dnl Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 dnl
 dnl The latest version of this program should be available at:
 dnl http://www.stewart-adcock.co.uk/
@@ -12,7 +12,7 @@ dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2 of the License, or
 dnl (at your option) any later version.  Alternatively, if your project
-dnl is incompatiable with the GPL, I will probably agree to requests
+dnl is incompatible with the GPL, I will probably agree to requests
 dnl for permission to use the terms of any other license.
 dnl
 dnl This program is distributed in the hope that it will be useful, but
@@ -28,10 +28,10 @@ dnl To do:	MPI/PVM/thread checks and configuration.
 dnl
 dnl ***************************************************************
 
-# require autoconf 2.13 or above
+dnl We require autoconf 2.13 or above
 AC_PREREQ(2.13)
 
-# init autoconf (and check for presence of gaul.h - the public header file)
+dnl init autoconf (and check for presence of gaul.h - the public header file)
 AC_INIT(src/gaul.h)
 
 PACKAGE=gaul-devel
@@ -46,8 +46,8 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
-MINOR_VERSION=1835
-PATCH_VERSION=`date +%y%m%d`
+MINOR_VERSION=1836
+PATCH_VERSION=1
 #VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 VERSION=$MAJOR_VERSION.$MINOR_VERSION
 AC_DIVERT_POP()
@@ -83,6 +83,11 @@ AC_DEFINE_UNQUOTED(BUILD_DATE_STRING,"`date +%d/%m/%y`")
 AC_DEFINE_UNQUOTED(VERSION_STRING,"${VERSION}")
 AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS")
 AC_DEFINE_UNQUOTED(UNAME_STRING,"`uname -a`")
+
+dnl Checks for programs.
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_INSTALL
 
 dnl Initialize libtool with module loading capability.
 AC_LIBTOOL_DLOPEN
@@ -182,6 +187,15 @@ else
   AC_MSG_RESULT(no - safe wrappers only)
 fi
 
+AC_MSG_CHECKING(whether to enable dumping of statistics)
+if test "x$enable_stats" = "xyes"; then
+  AC_DEFINE(GA_WRITE_STATS,1)
+  AC_MSG_RESULT(yes)
+else
+  AC_DEFINE(GA_WRITE_STATS,0)
+  AC_MSG_RESULT(no)
+fi
+
 AC_MSG_CHECKING(whether to enable general GAUL debugging)
 if test "x$enable_debug" = "xyes"; then
   AC_DEFINE(GA_DEBUG,2)
@@ -234,6 +248,7 @@ if test "x$enable_slang" = "xyes"; then
   AC_DEFINE(HAVE_SLANG,1)
   LIBS="$LIBS -lslang"
   INCLUDES="$INCLUDES -I/usr/include/slang/"
+  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
   AC_CHECK_LIB(slang, SLang_init_slang,
     [LIBS="$LIBS -lslang"
      INCLUDES="$INCLUDES -I/usr/include/slang/"],
@@ -242,11 +257,6 @@ else
   AC_MSG_RESULT(no)
   AC_DEFINE(HAVE_SLANG,0)
 fi
-
-# Checks for programs.
-AC_PROG_CC
-AM_PROG_CC_STDC
-AC_PROG_INSTALL
 
 changequote(,)dnl
 if test "x$GCC" = "xyes"; then
@@ -276,7 +286,7 @@ if test "x$GCC" = "xyes"; then
 fi
 changequote([,])dnl
 
-# Checks for library functions.
+dnl Checks for standard library functions.
 AC_FUNC_VPRINTF
 
 AC_CHECK_FUNCS(atexit on_exit)
@@ -307,36 +317,36 @@ int main(void)
 ], MEMORY_ALIGN_SIZE=`cat conftestval`, MEMORY_ALIGN_SIZE=0, MEMORY_ALIGN_SIZE=8)])
 AC_MSG_RESULT($MEMORY_ALIGN_SIZE)
 AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, $MEMORY_ALIGN_SIZE)
-undefine([MEMORY_ALIGN_SIZE])
+# undefine([MEMORY_ALIGN_SIZE])
 
-# Some header files need to be found.
-#test "$includes_set" = set || INCLUDES="$INCLUDES -I../util/ -I../src/"
-INCLUDES="$INCLUDES -I../util/ -I../src/"
-CFLAGS="$CFLAGS $INCLUDES"
+dnl Get includes setup correctly.
+INCLUDES="$INCLUDES -I../util/"
+CFLAGS="$CFLAGS -I../util/ -I../src/" # FIXME: Kludge!
 
 # Checks for header files.
-#dnl header file checks
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
                  sys/select.h sys/signal.h sys/socket.h sys/termio.h \
                  sys/time.h sys/types.h sys/uio.h termios.h unistd.h fcntl.h)
 
-# Check for some functions, many of which helga doesn't use, but I
-# haven't gone though checking yet.
-dnl library function checks
-AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
-               memcpy ipow strchr strrchr rindex strcat strlen \
-               strcmp strncmp strcpy strncpy strtok \
-               strcasecmp strncasecmp snprintf memset \
-               memmove bcopy memrev memchr memmem memcmp \
-               strdup memdup \
-               sincos \
-               strndup strnfill strcatv strtod strsignal strrev \
-               strspn strcspn \
-               basename readline waitpid \
-               min max \
-               snooze strerror strlcat strlcpy strstr usleep vsnprintf)
+dnl Check for some ilibrary functions, many of which GAUL doesn't use, but I
+dnl haven't gone though checking yet.
+AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
+                waitpid usleep snooze \
+                basename \
+                readline \
+                memcpy memset \
+                memmove bcopy \
+                memrev memchr memmem memcmp \
+                strchr strrchr rindex strcat strlen \
+                strcmp strncmp strcpy strncpy strtok \
+                strcasecmp strncasecmp snprintf \
+                sincos \
+                strndup strnfill strcatv strtod strsignal strrev \
+                strspn strcspn \
+                min max \
+                strerror strlcat strlcpy strstr vsnprintf )
 
 dnl Give warning if GNU Make is not being used.
 dnl This message is at the bottom so it may be easily spotted!
@@ -349,8 +359,8 @@ AC_OUTPUT(
            Makefile
            util/Makefile
            src/Makefile
-           examples/Makefile
            tests/Makefile
+           examples/Makefile
            docs/Makefile
          )
 
