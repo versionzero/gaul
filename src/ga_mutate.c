@@ -37,7 +37,7 @@
 /**********************************************************************
   ga_mutate_integer_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is cycled.
+		allele is cycled.
   parameters:
   return:
   last updated: 01/09/00
@@ -48,7 +48,7 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -75,7 +75,7 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((int *)son->chromosome[chromo])[point] += dir;
 
@@ -89,7 +89,7 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
 /**********************************************************************
   ga_mutate_integer_singlepoint_randomize()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is randomized.
+		allele is randomized.
   parameters:
   return:
   last updated: 01/09/00
@@ -100,7 +100,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -142,7 +142,7 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -155,7 +155,7 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
     }
 
 /*
- * Mutate by tweaking nucleotides.
+ * Mutate by tweaking alleles.
  */
   for (chromo=0; chromo<pop->num_chromosomes; chromo++)
     {
@@ -191,7 +191,7 @@ void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -241,7 +241,7 @@ void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
 /**********************************************************************
   ga_mutate_boolean_singlepoint()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is inverted.
+		allele is inverted.
   parameters:
   return:
   last updated: 31/05/01
@@ -251,7 +251,7 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -292,7 +292,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -324,7 +324,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
 /**********************************************************************
   ga_mutate_char_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is cycled.
+		allele is cycled.
   parameters:
   return:
   last updated: 16/06/01
@@ -335,7 +335,7 @@ void ga_mutate_char_singlepoint_drift( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -362,7 +362,7 @@ void ga_mutate_char_singlepoint_drift( population *pop,
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((char *)son->chromosome[chromo])[point] += dir;
 
@@ -391,7 +391,7 @@ void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -436,7 +436,7 @@ void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
 /**********************************************************************
   ga_mutate_char_singlepoint_randomize()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is randomized.
+		allele is randomized.
   parameters:
   return:
   last updated: 16/06/01
@@ -447,7 +447,7 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -489,7 +489,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -502,7 +502,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
     }
 
 /*
- * Mutate by tweaking nucleotides.
+ * Mutate by tweaking alleles.
  */
   for (chromo=0; chromo<pop->num_chromosomes; chromo++)
     {
@@ -529,7 +529,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
 /**********************************************************************
   ga_mutate_printable_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is cycled.
+		allele is cycled.
   parameters:
   return:
   last updated: 16/06/01
@@ -540,7 +540,7 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -567,7 +567,7 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((char *)son->chromosome[chromo])[point] += dir;
 
@@ -583,7 +583,7 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
 /**********************************************************************
   ga_mutate_printable_singlepoint_randomize()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is randomized.
+		allele is randomized.
   parameters:
   return:
   last updated: 16/06/01
@@ -594,7 +594,7 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -636,7 +636,7 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   int		dir=random_boolean()?-1:1;	/* The direction of drift. */
 
 /* Checks */
@@ -649,7 +649,7 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
     }
 
 /*
- * Mutate by tweaking nucleotides.
+ * Mutate by tweaking alleles.
  */
   for (chromo=0; chromo<pop->num_chromosomes; chromo++)
     {
@@ -685,7 +685,7 @@ void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -735,7 +735,7 @@ void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
 /**********************************************************************
   ga_mutate_bitstring_singlepoint()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is flipped.
+		allele is flipped.
   parameters:
   return:
   last updated: 30/06/01
@@ -746,7 +746,7 @@ void ga_mutate_bitstring_singlepoint( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -789,7 +789,7 @@ void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -821,7 +821,7 @@ void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son
 /**********************************************************************
   ga_mutate_double_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is adjusted.  (Unit Gaussian distribution.)
+		allele is adjusted.  (Unit Gaussian distribution.)
   parameters:
   return:
   last updated: 19 Apr 2002
@@ -832,8 +832,8 @@ void ga_mutate_double_singlepoint_drift( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
-  double	amount=random_unit_gaussian();	/* The amount of drift. */
+  int		point;		/* Index of allele to mutate */
+  double	amount=random_unit_gaussian();	/* The amount of drift. (FIXME: variance should be user-definable) */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -859,7 +859,7 @@ void ga_mutate_double_singlepoint_drift( population *pop,
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((double *)son->chromosome[chromo])[point] += amount;
 
@@ -873,7 +873,7 @@ void ga_mutate_double_singlepoint_drift( population *pop,
 /**********************************************************************
   ga_mutate_double_singlepoint_randomize()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is randomized.  (Unit Gaussian distribution.)
+		allele is randomized.  (Unit Gaussian distribution.)
   parameters:
   return:
   last updated: 19 Apr 2002
@@ -884,7 +884,7 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");
@@ -927,7 +927,7 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   double	amount=random_unit_gaussian();	/* The amount of drift. */
 
 /* Checks */
@@ -940,7 +940,7 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
     }
 
 /*
- * Mutate by tweaking nucleotides.
+ * Mutate by tweaking alleles.
  */
   for (chromo=0; chromo<pop->num_chromosomes; chromo++)
     {
@@ -971,7 +971,7 @@ void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
 
 /* Checks */
   if (!father || !son) die("Null pointer to entity structure passed");

@@ -135,7 +135,7 @@ entity *struggle_adaptation(population *pop, entity *child)
 boolean struggle_seed(population *pop, entity *adam)
   {
   int           chromo;         /* Index of chromosome to seed */
-  int           point;          /* Index of 'nucleotide' to seed */
+  int           point;          /* Index of allele to seed */
 
 /* Checks (Not really necessary here). */
   if (!pop) die("Null pointer to population structure passed.");
@@ -167,7 +167,7 @@ void struggle_mutate(population *pop, entity *father, entity *son)
   {
   int           i;              /* Loop variable over all chromosomes */
   int           chromo;         /* Index of chromosome to mutate */
-  int           point;          /* Index of 'nucleotide' to mutate */
+  int           point;          /* Index of allele to mutate */
   int           dir=random_boolean()?-1:1;      /* The direction of drift. */
 
 /* Checks */
@@ -194,7 +194,7 @@ void struggle_mutate(population *pop, entity *father, entity *son)
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((char *)son->chromosome[chromo])[point] += dir;
 

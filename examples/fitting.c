@@ -136,7 +136,7 @@ boolean fitting_seed(population *pop, entity *adam)
 /**********************************************************************
   ga_mutate_double_singlepoint_drift()
   synopsis:	Cause a single mutation event in which a single
-		nucleotide is adjusted.  (0.1*Unit Gaussian distribution.)
+		allele is adjusted.  (0.1*Unit Gaussian distribution.)
   parameters:
   return:
   last updated: 19 Mar 2004
@@ -147,7 +147,7 @@ void fitting_mutate_double_singlepoint_drift( population *pop,
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
-  int		point;		/* Index of 'nucleotide' to mutate */
+  int		point;		/* Index of allele to mutate */
   double	amount=random_unit_gaussian()*0.1;	/* The amount of drift. */
 
 /* Checks */
@@ -174,7 +174,7 @@ void fitting_mutate_double_singlepoint_drift( population *pop,
     }
 
 /*
- * Mutate by tweaking a single nucleotide.
+ * Mutate by tweaking a single allele.
  */
   ((double *)son->chromosome[chromo])[point] += amount;
 
