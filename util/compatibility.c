@@ -33,13 +33,11 @@
 		tidied and rationalised.
 
 		Some of these functions come from or are based on code
-		from the following GPL'd projects:
+		from the following GPL'd project:
 
-		freeciv 1.11.0 - http://www.freeciv.org/
-		glib	1.2.8  - http://www.gtk.org/
+		freeciv 1.11.0 http://www.freeciv.org/ copyright notice:
 
  ----------------------------------------------------------------------
-  freeciv 1.11.0 copyright notice:
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,49 +49,6 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
  ----------------------------------------------------------------------
-  glib 1.2.8 copyright notice:
- * GLIB - Library of useful routines for C programming
- * Copyright (C) 1995-1997  Peter Mattis, Spencer Kimball and Josh MacDonald
-
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
-
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
-
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
-
- * Modified by the GLib Team and others 1997-1999.  See the AUTHORS
- * file for a list of people on the GLib Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GLib at ftp://ftp.gtk.org/pub/gtk/.
- ----------------------------------------------------------------------
-
-  Updated:	22 Jul 2003 Removed some unused code and applied my prefered indentation style.
-		07 Jul 2003 SAA Added dpow().
-		10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
-		25 Feb 2003 SAA	Tweaked strndup() prototype.
-		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
-		20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
-		25 Oct 2002 SAA	Added gethostname() stub.
-		02 Oct 2002 SAA A #ifndef HAVE_STRCASECMP should have been #ifndef HAVE_STRSEP
-		12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
-		09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
-		14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
-		13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
-		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
-  		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
-		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
-		17/12/00 SAA	Added ipow().
-		16/11/00 SAA	Use rindex() for strrchr() where available.  Added a few routines from the autobook examples, I don't actually use any of these at the moment, but I thought that they might be useful now that I'm spending some time converting my code to alternative platforms.  Added dief() version because I can't think of anywhere better to put it (I use a macro version of it all the time but it's varargs cause problems for me on some systems, i.e. all non-GNU compilers)
-		15/11/00 SAA	Code brought together from various places.
 
  **********************************************************************/
 
@@ -146,7 +101,7 @@ double dpow(double n, int e)
  * In which case this is defined as a macro in the header.
  */
 void memcpy(char *dest, const char *src, size_t len)
-{
+  {
   char		*dest_p;
   const	char	*src_p;
   int		byte_c;
@@ -164,7 +119,6 @@ void memcpy(char *dest, const char *src, size_t len)
     dest_p += len - 1;
     for (byte_c = 0; byte_c < len; byte_c++)
       *dest_p-- = *src_p--;
-
     }
   else
     {
@@ -315,8 +269,14 @@ int strncmp(const char *str1, const char *str2, size_t len)
 char *strcpy(char *str1, const char *str2)
   {
   char	*str_p;
-  
-  for (str_p = str1; *str2 != '\0'; str_p++, str2++) *str_p = *str2;
+
+  str_p = str1;
+  while (*str2 != '\0')
+    {
+    *str_p = *str2;
+    str_p++;
+    str2++;
+    }
 
   *str_p = '\0';
   
@@ -334,7 +294,7 @@ char	*strncpy(char *str1, const char *str2, size_t len)
   char		*str1_p, null_reached = FALSE;
   int		len_c;
   
-  for (len_c = 0, str1_p = str1; len_c < len; len_c++, str1_p++, str2++)
+  for (len_c = 0, str1_p = str1; len_c < len && !null_reached; len_c++, str1_p++, str2++)
     {
     if (null_reached || *str2 == '\0')
       {
@@ -468,6 +428,9 @@ char *strsep(char **str, const char *delim)
 
 
 #if HAVE_STRCASECMP != 1
+/*
+ * Compare strings like strncmp(), but ignoring case.
+ */
 int strcasecmp(const char *str0, const char *str1)
   {
 
@@ -485,10 +448,10 @@ int strcasecmp(const char *str0, const char *str1)
 
 
 #if HAVE_STRNCASECMP != 1
-/***************************************************************
-  Compare strings like strncmp(), but ignoring case.
-  ie, only compares first n chars.
-***************************************************************/
+/*
+ * Compare strings like strncmp(), but ignoring case.
+ * ie, only compares first n chars.
+ */
 
 int strncasecmp(const char *str0, const char *str1, size_t n)
   {
@@ -503,11 +466,12 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 #endif /* HAVE_STRNCASECMP */
 
 
+#if HAVE_USLEEP != 1
 /*
  * Sleep for a specified number of microseconds.
  * -- Should replace with the POSIX standard's nanosleep().
  */
-#if HAVE_USLEEP != 1
+
 void usleep(unsigned long usec)
   {
 #ifdef W32_CRIPPLED
@@ -956,46 +920,6 @@ void *memrev(void *src, size_t bytes)
 #endif /* HAVE_MEMREV */
 
 
-#if HAVE_MEMCHR != 1
-void *memchr(const void *src, int c, size_t bytes)
-{
-    const unsigned char *cp;
-
-    if (bytes != 0) {
-        cp = src;
-        do {
-            if (*cp++ == (unsigned char)c)
-                return ((void *)(cp - 1));
-        } while (--bytes != 0);
-    }
-
-    return NULL;
-}
-#endif /* HAVE_MEMCHR */
-
-
-#if HAVE_MEMMEM != 1
-void *memmem(const void *haystack, size_t haystack_len,
-           const void *needle,   size_t needle_len)
-{
-    register const char *begin;
-    register const char *last_possible;
-    
-    if (needle_len == 0) 
-        /* The first occurrence of the empty string is deemed to occur at
-           the end of the string. */
-        return (void *)&((const char *)haystack)[haystack_len - 1];
-    last_possible = (const char *)haystack + haystack_len - needle_len;
-    for (begin = (const char *)haystack; begin <= last_possible; begin++)
-        if (*begin == *((const char *)needle) &&
-            memcmp(&begin[1], (const char *)needle + 1, needle_len - 1) == 0)
-        return (void *)begin;
-
-    return NULL;
-}
-#endif /* HAVE_MEMMEM */
-
-
 #if HAVE_MEMCMP != 1
 #if HAVE_BCMP != 1
 /*
@@ -1073,45 +997,14 @@ char *strnfill(int length, char fill_char)
 
   s = str;
   end = str + length;
-  while(s < end) *(s++) = fill_char;
-  *s = 0;
+  while(s < end)
+    *(s++) = fill_char;
+
+  *s = '\0';
 
   return str;
   }
 #endif /* HAVE_STRNFILL */
-
-
-#if 0
-char* strdup_vprintf(const char *format,
-		  va_list      args1)
-  {
-  char *buffer;
-  va_list args2;
-
-  VA_COPY(args2, args1);
-
-  buffer = s_malloc(sizeof(char)*(printf_string_upper_bound(format, args1)));
-
-  vsprintf(buffer, format, args2);
-  va_end(args2);
-
-  return buffer;
-  }
-
-char*
-strdup_printf(const char *format,
-		 ...)
-  {
-  char *buffer;
-  va_list args;
-
-  va_start(args, format);
-  buffer = strdup_vprintf(format, args);
-  va_end(args);
-
-  return buffer;
-  }
-#endif
 
 
 #if HAVE_STRCATV != 1
@@ -1152,296 +1045,6 @@ char *strcatv(const char *string1, ...)
 #endif /* HAVE_STRCATV */
 
 
-#if HAVE_STRTOD != 1
-double strtod(const char *nptr, char **endptr)
-  {
-  char *fail_pos_1;
-  char *fail_pos_2;
-  double val_1;
-  double val_2 = 0;
-
-  if (!nptr) return 0;
-
-  fail_pos_1 = NULL;
-  fail_pos_2 = NULL;
-
-  val_1 = strtod(nptr, &fail_pos_1);
-
-  if (fail_pos_1 && fail_pos_1[0] != 0)
-    {
-#if HAVE_SETLOCALE != 1
-    val_2 = strtod(nptr, &fail_pos_2);
-#else
-    char *old_locale;
-
-    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
-    setlocale(LC_NUMERIC, "C");
-    val_2 = strtod(nptr, &fail_pos_2);
-    setlocale(LC_NUMERIC, old_locale);
-    s_free(old_locale);
-#endif
-    }
-
-  if (!fail_pos_1 || fail_pos_1[0] == 0 || fail_pos_1 >= fail_pos_2)
-    {
-    if (endptr) *endptr = fail_pos_1;
-    return val_1;
-    }
-  else
-    {
-    if (endptr) *endptr = fail_pos_2;
-    return val_2;
-    }
-
-/* Should never get here! */
-  }
-#endif /* HAVE_STRTOD */
-
-
-#if HAVE_STRSIGNAL != 1
-char *strsignal(int signum)
-  {
-  switch(signum)
-    {
-#ifdef SIGHUP
-    case SIGHUP: return "Hangup";
-#endif
-#ifdef SIint
-    case SIint: return "Interrupt";
-#endif
-#ifdef SIGQUIT
-    case SIGQUIT: return "Quit";
-#endif
-#ifdef SIGILL
-    case SIGILL: return "Illegal instruction";
-#endif
-#ifdef SIGTRAP
-    case SIGTRAP: return "Trace/breakpoint trap";
-#endif
-#ifdef SIGABRT
-    case SIGABRT: return "IOT trap/Abort";
-#endif
-#ifdef SIGBUS
-    case SIGBUS: return "Bus error";
-#endif
-#ifdef SIGFPE
-    case SIGFPE: return "Floating point exception";
-#endif
-#ifdef SIGKILL
-    case SIGKILL: return "Killed";
-#endif
-#ifdef SIGUSR1
-    case SIGUSR1: return "User defined signal 1";
-#endif
-#ifdef SIGSEGV
-    case SIGSEGV: return "Segmentation fault";
-#endif
-#ifdef SIGUSR2
-    case SIGUSR2: return "User defined signal 2";
-#endif
-#ifdef SIGPIPE
-    case SIGPIPE: return "Broken pipe";
-#endif
-#ifdef SIGALRM
-    case SIGALRM: return "Alarm clock";
-#endif
-#ifdef SIGTERM
-    case SIGTERM: return "Terminated";
-#endif
-#ifdef SIGSTKFLT
-    case SIGSTKFLT: return "Stack fault";
-#endif
-#ifdef SIGCHLD
-    case SIGCHLD: return "Child exited";
-#endif
-#ifdef SIGCONT
-    case SIGCONT: return "Continued";
-#endif
-#ifdef SIGSTOP
-    case SIGSTOP: return "Stopped(signal)";
-#endif
-#ifdef SIGTSTP
-    case SIGTSTP: return "Stopped";
-#endif
-#ifdef SIGTTIN
-    case SIGTTIN: return "Stopped(tty input)";
-#endif
-#ifdef SIGTTOU
-    case SIGTTOU: return "Stopped(tty output)";
-#endif
-#ifdef SIGURG
-    case SIGURG: return "Urgent condition";
-#endif
-#ifdef SIGXCPU
-    case SIGXCPU: return "CPU time limit exceeded";
-#endif
-#ifdef SIGXFSZ
-    case SIGXFSZ: return "File size limit exceeded";
-#endif
-#ifdef SIGVTALRM
-    case SIGVTALRM: return "Virtual time alarm";
-#endif
-#ifdef SIGPROF
-    case SIGPROF: return "Profile signal";
-#endif
-#ifdef SIGWINCH
-    case SIGWINCH: return "Window size changed";
-#endif
-#ifdef SIGIO
-    case SIGIO: return "Possible I/O";
-#endif
-#ifdef SIGPWR
-    case SIGPWR: return "Power failure";
-#endif
-#ifdef SIGUNUSED
-    case SIGUNUSED: return "Unused signal";
-#endif
-    }
-
-  return "Unknown signal";
-  }
-#endif
-
-
-#if 0
-int printf_string_upper_bound(const char* format,
-			     va_list      args)
-  {
-  int len = 1;
-
-  while(*format)
-    {
-      gboolean long_int = FALSE;
-      gboolean extra_long = FALSE;
-      char c;
-
-      c = *format++;
-
-      if (c == '%')
-	{
-	  gboolean done = FALSE;
-
-	  while(*format && !done)
-	    {
-	      switch(*format++)
-		{
-		  char *string_arg;
-
-		case '*':
-		  len += va_arg(args, int);
-		  break;
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		  /* add specified format length, since it might exceed the
-		   * size we assume it to have.
-		   */
-		  format -= 1;
-		  len += strtol(format,(char**) &format, 10);
-		  break;
-		case 'h':
-		  /* ignore short int flag, since all args have at least the
-		   * same size as an int
-		   */
-		  break;
-		case 'l':
-		  if (long_int)
-		    extra_long = TRUE; /* linux specific */
-		  else
-		    long_int = TRUE;
-		  break;
-		case 'q':
-		case 'L':
-		  long_int = TRUE;
-		  extra_long = TRUE;
-		  break;
-		case 's':
-		  string_arg = va_arg(args, char *);
-		  if (string_arg)
-		    len += strlen(string_arg);
-		  else
-		    {
-		      /* add enough padding to hold "(null)" identifier */
-		      len += 16;
-		    }
-		  done = TRUE;
-		  break;
-		case 'd':
-		case 'i':
-		case 'o':
-		case 'u':
-		case 'x':
-		case 'X':
-#ifdef	G_HAVE_int64
-		  if (extra_long)
-		   (void) va_arg(args, int64);
-		  else
-#endif	/* HAVE_int64 */
-		    {
-		      if (long_int)
-			(void) va_arg(args, long);
-		      else
-			(void) va_arg(args, int);
-		    }
-		  len += extra_long ? 64 : 32;
-		  done = TRUE;
-		  break;
-		case 'D':
-		case 'O':
-		case 'U':
-		 (void) va_arg(args, long);
-		  len += 32;
-		  done = TRUE;
-		  break;
-		case 'e':
-		case 'E':
-		case 'f':
-		case 'g':
-#ifdef HAVE_LONG_DOUBLE
-		  if (extra_long)
-		   (void) va_arg(args, long double);
-		  else
-#endif	/* HAVE_LONG_DOUBLE */
-		   (void) va_arg(args, double);
-		  len += extra_long ? 128 : 64;
-		  done = TRUE;
-		  break;
-		case 'c':
-		 (void) va_arg(args, int);
-		  len += 1;
-		  done = TRUE;
-		  break;
-		case 'p':
-		case 'n':
-		 (void) va_arg(args, void*);
-		  len += 32;
-		  done = TRUE;
-		  break;
-		case '%':
-		  len += 1;
-		  done = TRUE;
-		  break;
-		default:
-		  /* ignore unknow/invalid flags */
-		  break;
-		}
-	    }
-	}
-      else
-	len += 1;
-    }
-
-  return len;
-  }
-#endif
-
-
 #if HAVE_STRREV != 1
 void strrev(char *string)
   {
@@ -1469,16 +1072,6 @@ void strrev(char *string)
   return;
   }
 #endif /* HAVE_STRREV */
-
-
-#if HAVE_STRERROR != 1
-char *strerror(int errnum)
-  {
-  static char buf[64];
-  snprintf(buf, sizeof(buf), "error %d (compiled without strerror)", errnum);
-  return buf;
-  }
-#endif /* HAVE_STRERROR */
 
 
 #if HAVE_DIEF != 1
@@ -1572,69 +1165,6 @@ int max( int a, int b )
 #endif
 
 
-/*
- * The next 3 functions are commented out because they are
- * identical to other functions, with the exception of their
- * names.  FIXME: Should create sensible macros and/or check
- * for native versions to these to use instead of the above
- * replacement functions.
- * (I believe that these are ANSI-defined functions that were
- * replaced in the POSIX specifications)
- */
-#if HAVE_STRUPR != 1
-char *strupr( char *s )
-  {
-  char    *p = s;
-
-  while( *s )
-    {
-    *s = toupper( *s );
-    s++;
-    }
-
-  return p;
-  }
-#endif /* HAVE_STRUPR */
-
-
-#if HAVE_STRICMP != 1
-int stricmp( char *s1, char *s2 )
-{
-        while( *s1 && *s2 ) {
-                if( toupper( *s1 ) < toupper( *s2 ) )
-                        return -1;
-                else if( toupper( *s1 ) > toupper( *s2 ) )
-                        return 1;
-                s1++; s2++;
-        }
-        if( *s1 < *s2 )
-                return -1;
-        else if( *s1 > *s2 )
-                return 1;
-        else
-                return 0;
-}
-#endif /* HAVE_STRICMP */
-
-
-#if HAVE_STRNICMP != 1
-int strnicmp( char *s1, char *s2, int n )
-{
-        int     i;
-
-        for( i=0; i<n; i++ ) {
-                if( toupper( *s1 ) < toupper( *s2 ) )
-                        return -1;
-                else if( toupper( *s1 ) > toupper( *s2 ) )
-                        return 1;
-                s1++; s2++;
-        }
-
-        return 0;
-}
-#endif /* HAVE_STRNICMP */
-
-
 #if HAVE_SINCOS != 1
 /*
  * This is an undocumented GNU extension, which is actually fairly useful.
@@ -1655,37 +1185,6 @@ void sincos( double radians, double *s, double *c )
   }
 #endif /* HAVE_SINCOS */
 
-
-#if HAVE_ITOA != 1
-/*
- * Convert an integer to a string.
- */
-void itoa(const int n, char *s)
-  {
-  int   number=n;
-  char	c, *end=s;
-
-  if (n < 0) {number = -number;}
-
-  do
-    {
-    *end++ = (number % 10) + '0';
-    } while ((number /= 10) > 0);
-
-  if (n < 0) {*end++ = '-';}
-
-  *end-- = '\0';
-
-  while ( *s < *end )
-    {
-    c = *s;
-    *s++ = *end;
-    *end++ = c;
-    }
-
-  return;
-  }
-#endif /* HAVE_ITOA */
 
 #if HAVE_GETHOSTNAME != 1
 /*

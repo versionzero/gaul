@@ -252,20 +252,8 @@ char *strnfill(int length, char fill_char);
 char *strcatv(const char *string1, ...);
 #endif
 
-#if HAVE_STRTOD != 1
-double strtod(const char *nptr, char **endptr);
-#endif
-
-#if HAVE_STRSIGNAL != 1
-char *strsignal(int signum);
-#endif
-
 #if HAVE_STRREV != 1
 void strrev(char *string);
-#endif
-
-#if HAVE_STRERROR != 1
-char *strerror(int errnum);
 #endif
 
 #if HAVE_DIEF != 1
@@ -296,24 +284,8 @@ int min(int a, int b);
 int max(int a, int b);
 #endif
 
-#if HAVE_STRUPR != 1
-char *strupr( char *s );
-#endif
-
-#if HAVE_STRICMP != 1
-int stricmp( char *s1, char *s2 );
-#endif
-
-#if HAVE_STRNICMP != 1
-int strnicmp( char *s1, char *s2, int n );
-#endif
-
 #if HAVE_SINCOS != 1
 void sincos( double radians, double *s, double *c );
-#endif
-
-#if HAVE_ITOA != 1
-void itoa(const int n, char *s);
 #endif
 
 #if HAVE_GETHOSTNAME != 1
