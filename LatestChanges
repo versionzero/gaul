@@ -8,6 +8,8 @@ Changes since release 0.1843:
 - Improved some error messages.
 - Extra assorted sanity checking.
 - Added support for deterministic crowding; ga_deterministiccrowding().
+- Fixed silly bug in ga_steepestdescent() sanity checks.
+- RPM package improvements.
 
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
