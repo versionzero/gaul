@@ -36,7 +36,7 @@
 #ifndef TABLE_UTIL_H_INCLUDED
 #define TABLE_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>

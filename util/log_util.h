@@ -39,7 +39,7 @@
 #ifndef LOG_UTIL_H_INCLUDED
 #define LOG_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>

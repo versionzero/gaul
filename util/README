@@ -8,7 +8,7 @@ occur in this CVS archive.
 
 For information, these files are required for these reasons:
 
-SAA_header.h            Specification of general definitins and macros.
+gaul_util.h             Specification of general definitins and macros.
 
 avltree.{c,h}           Adel'son-Velskii and Landis tree implementation.
 
@@ -38,5 +38,5 @@ table.{c,h}             Indexed table implementation.
 
 timer_util.{c,h}        General timers.
 
-Stewart Adcock, 04 June 2002
+Stewart Adcock, 09 July 2003.
 

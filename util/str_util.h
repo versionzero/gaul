@@ -43,7 +43,7 @@
 #ifndef STR_UTIL_H_INCLUDED
 #define STR_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <ctype.h>
 #ifdef HAVE_LIMITS_H

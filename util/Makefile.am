@@ -39,6 +39,7 @@ libgaul_util_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
+	memory_chunks.c \
 	memory_util.c \
 	table_util.c \
 	random_util.c \
@@ -53,8 +54,8 @@ libnn_util_la_SOURCES = \
 	nn_util.c
 
 include_HEADERS = \
-	SAA_header.h \
 	gaul_config.h \
+	gaul_util.h \
 	avltree.h \
 	compatibility.h \
 	dstr_util.h \
@@ -68,7 +69,6 @@ include_HEADERS = \
 	str_match.h \
 	str_util.h \
 	table_util.h \
-	memory_chunks.c \
 	timer_util.h
 
 libgaul_util_a_LIBFLAGS =

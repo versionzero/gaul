@@ -76,30 +76,7 @@ AC_DEFINE_UNQUOTED(GA_PATCH_VERSION, ${GA_PATCH_VERSION}, [Patch level.])
 
 AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [Record compilation platform information.])
 AC_DEFINE_UNQUOTED(BUILD_DATE_STRING, "`date +%d/%m/%y`", [Record date of compilation.])
-V3_QUICK=1
-AC_DEFINE_UNQUOTED(V3_QUICK, ${V3_QUICK}, [Whether to skip expensive sanity checking in vector routines.])
 AC_DEFINE_UNQUOTED(VERSION_STRING, "${GA_VERSION}", [Version string.])
-
-GA_NUM_PROCESSES_ENVVAR_STRING="GA_NUM_PROCESSES"
-AC_DEFINE_UNQUOTED(GA_NUM_PROCESSES_ENVVAR_STRING, ${GA_NUM_PROCESSES_ENVVAR_STRING}, [Environment variable used to request processes.])
-GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
-AC_DEFINE_UNQUOTED(GA_NUM_THREADS_ENVVAR_STRING, ${GA_NUM_THREADS_ENVVAR_STRING}, [Environment variable used to request threads.])
-
-AC_SUBST(GA_MAJOR_VERSION)
-AC_SUBST(GA_MINOR_VERSION)
-AC_SUBST(GA_PATCH_VERSION)
-AC_SUBST(GA_VERSION)
-AC_SUBST(VERSION_STRING)
-
-AC_SUBST(MPIFLAGS)
-AC_SUBST(MPILIBS)
-
-AC_SUBST(UNAME_STRING)
-AC_SUBST(BUILD_DATE_STRING)
-AC_SUBST(V3_QUICK)
-
-AC_SUBST(GA_NUM_PROCESSES_ENVVAR_STRING)
-AC_SUBST(GA_NUM_THREADS_ENVVAR_STRING)
 
 # Initialise Automake.
 AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, no-define)
@@ -231,8 +208,10 @@ fi
 AC_MSG_CHECKING(whether to disable memory chunk allocation)
 if test "x$enable_memory_chunks" = "xyes"; then
   AC_MSG_RESULT(no)
+  MEMORY_CHUNKS_MIMIC=0
 else
   AC_MSG_RESULT(yes)
+  MEMORY_CHUNKS_MIMIC=1
   AC_DEFINE( MEMORY_CHUNKS_MIMIC, 1, [Define to disable memory chunk allocation routines.])
 fi
 
@@ -241,10 +220,14 @@ if test "x$enable_memory_debug" = "xyes"; then
   AC_MSG_RESULT(yes - full profiling)
   result1=1
   result2=0
+  MEMORY_ALLOC_DEBUG=1
+  MEMORY_ALLOC_SAFE=0
 else
   AC_MSG_RESULT(no - safe wrappers only)
   result1=0
   result2=1
+  MEMORY_ALLOC_DEBUG=0
+  MEMORY_ALLOC_SAFE=1
 fi
 AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result1}, [Whether to use debugging memory allocation routines.])
 AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result2}, [Whether to use safe memory allocation routines.])
@@ -302,9 +285,11 @@ if test "x$enable_w32_subset" = "xyes"; then
   AC_MSG_RESULT(yes)
   AC_MSG_WARN([GAUL is crippled when compiled for windows.  Please consider upgrading to a proper operating system.])
   result=1
+  W32_CRIPPLED=1
 else
   AC_MSG_RESULT(no)
   result=0
+  W32_CRIPPLED=0
 fi
 AC_DEFINE_UNQUOTED(W32_CRIPPLED, ${result}, [Whether to cripple GAUL so it works on windows.])
 
@@ -315,6 +300,7 @@ AC_MSG_CHECKING(whether to link S-Lang scripting engine)
 if test "x$enable_slang" = "xyes"; then
   AC_MSG_RESULT(yes)
   WILL_USE_SLANG="yes"
+  HAVE_SLANG=1
   LIBS="$LIBS -lslang"
   AC_CHECK_LIB(slang, SLang_init_slang,
     [LIBS="$LIBS -lslang"],
@@ -324,6 +310,7 @@ else
   AC_MSG_RESULT(no)
   WILL_USE_SLANG="no"
   result=0
+  HAVE_SLANG=0
 fi
 AC_DEFINE_UNQUOTED(HAVE_SLANG, ${result}, [Whether S-Lang is installed.])
 
@@ -335,6 +322,34 @@ if test "x$enable_efence" = "xyes"; then
 else
   AC_MSG_RESULT(no)
 fi
+
+V3_QUICK=1
+AC_DEFINE_UNQUOTED(V3_QUICK, ${V3_QUICK}, [Whether to skip expensive sanity checking in vector routines.])
+GA_NUM_PROCESSES_ENVVAR_STRING="GA_NUM_PROCESSES"
+AC_DEFINE_UNQUOTED(GA_NUM_PROCESSES_ENVVAR_STRING, ${GA_NUM_PROCESSES_ENVVAR_STRING}, [Environment variable used to request processes.])
+GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
+AC_DEFINE_UNQUOTED(GA_NUM_THREADS_ENVVAR_STRING, ${GA_NUM_THREADS_ENVVAR_STRING}, [Environment variable used to request threads.])
+
+AC_SUBST(GA_MAJOR_VERSION)
+AC_SUBST(GA_MINOR_VERSION)
+AC_SUBST(GA_PATCH_VERSION)
+AC_SUBST(GA_VERSION)
+AC_SUBST(VERSION_STRING)
+
+AC_SUBST(MPIFLAGS)
+AC_SUBST(MPILIBS)
+
+AC_SUBST(UNAME_STRING)
+AC_SUBST(BUILD_DATE_STRING)
+AC_SUBST(V3_QUICK)
+AC_SUBST(W32_CRIPPLED)
+AC_SUBST(HAVE_SLANG)
+
+AC_SUBST(GA_NUM_PROCESSES_ENVVAR_STRING)
+
+AC_SUBST(MEMORY_ALLOC_DEBUG)
+AC_SUBST(MEMORY_ALLOC_SAFE)
+AC_SUBST(MEMORY_CHUNKS_MIMIC)
 
 #
 # Compiler specific switches.
@@ -897,6 +912,10 @@ _EOF_
       echo '#define HAVE_BASENAME 1' >> $tmpfile
     fi
 
+    if test "x$MEMORY_CHUNKS_MIMIC" = "x1"; then
+      echo '#define MEMORY_CHUNKS_MIMIC 1' >> $tmpfile
+    fi
+
     cat >> $tmpfile << _EOF_
 
 /*
@@ -947,10 +966,16 @@ _EOF_
 #define VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
 #define UNAME_STRING "`uname -a`"
 #define BUILD_DATE_STRING "`date +%d/%m/%y`"
+
 #define V3_QUICK ${V3_QUICK}
+#define W32_CRIPPLED ${W32_CRIPPLED}
+#define HAVE_SLANG ${HAVE_SLANG}
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
 #define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
+
+#define MEMORY_ALLOC_SAFE ${MEMORY_ALLOC_SAFE}
+#define MEMORY_ALLOC_DEBUG ${MEMORY_ALLOC_DEBUG}
 
 #endif /* GAUL_CONFIG_H_INCLUDED */
 
@@ -1010,9 +1035,16 @@ GA_MAJOR_VERSION=$GA_MAJOR_VERSION
 GA_MINOR_VERSION=$GA_MINOR_VERSION
 GA_PATCH_VERSION=$GA_PATCH_VERSION
 VERSION_STRING=$VERSION_STRING
+
 V3_QUICK=$V3_QUICK
+W32_CRIPPLED=$W32_CRIPPLED
+HAVE_SLANG=$HAVE_SLANG
 GA_NUM_PROCESSES_ENVVAR_STRING=$GA_NUM_PROCESSES_ENVVAR_STRING
 GA_NUM_THREADS_ENVVAR_STRING=$GA_NUM_THREADS_ENVVAR_STRING
+
+MEMORY_ALLOC_SAFE=$MEMORY_ALLOC_SAFE
+MEMORY_ALLOC_DEBUG=$MEMORY_ALLOC_DEBUG
+MEMORY_CHUNKS_MIMIC=$MEMORY_CHUNKS_MIMIC
 ])
 
 #AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/pp/Makefile],

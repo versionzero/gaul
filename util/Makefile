@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,26 +97,29 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_DATE_STRING = 
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1844
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_NUM_THREADS_ENVVAR_STRING = GA_NUM_THREADS
 GA_PATCH_VERSION = 5
 GA_VERSION = 0.1844-5
+HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1844
 LT_REVISION = 5
+MEMORY_ALLOC_DEBUG = 0
+MEMORY_ALLOC_SAFE = 1
+MEMORY_CHUNKS_MIMIC = 0
 MPIFLAGS = 
 MPILIBS = 
 OBJDUMP = @OBJDUMP@
@@ -127,9 +130,10 @@ UNAME_STRING =
 V3_QUICK = 1
 VERSION = 0.1844-5
 VERSION_STRING = 
+W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -144,6 +148,7 @@ libgaul_util_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
+	memory_chunks.c \
 	memory_util.c \
 	table_util.c \
 	random_util.c \
@@ -160,8 +165,8 @@ libnn_util_la_SOURCES = \
 
 
 include_HEADERS = \
-	SAA_header.h \
 	gaul_config.h \
+	gaul_util.h \
 	avltree.h \
 	compatibility.h \
 	dstr_util.h \
@@ -175,7 +180,6 @@ include_HEADERS = \
 	str_match.h \
 	str_util.h \
 	table_util.h \
-	memory_chunks.c \
 	timer_util.h
 
 
@@ -192,8 +196,9 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
-	memory_util.lo table_util.lo random_util.lo str_util.lo \
-	dstr_util.lo str_match.lo timer_util.lo log_util.lo mpi_util.lo
+	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
+	str_util.lo dstr_util.lo str_match.lo timer_util.lo log_util.lo \
+	mpi_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -203,13 +208,14 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I.
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/compatibility.Plo \
 	./$(DEPDIR)/dstr_util.Plo \
 	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
+	./$(DEPDIR)/memory_chunks.Plo \
 	./$(DEPDIR)/memory_util.Plo \
 	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
 	./$(DEPDIR)/random_util.Plo \
@@ -223,7 +229,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -parallel -w1 -g -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
@@ -296,6 +302,7 @@ include ./$(DEPDIR)/compatibility.Plo
 include ./$(DEPDIR)/dstr_util.Plo
 include ./$(DEPDIR)/linkedlist.Plo
 include ./$(DEPDIR)/log_util.Plo
+include ./$(DEPDIR)/memory_chunks.Plo
 include ./$(DEPDIR)/memory_util.Plo
 include ./$(DEPDIR)/mpi_util.Plo
 include ./$(DEPDIR)/nn_util.Plo

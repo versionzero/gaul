@@ -47,7 +47,7 @@
 #ifndef COMPATIBILITY_H_INCLUDED
 #define COMPATIBILITY_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 /* Includes */
 #include <assert.h>
@@ -80,8 +80,6 @@
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
-
-#include "SAA_header.h"
 
 #include "memory_util.h"
 

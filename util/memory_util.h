@@ -47,7 +47,7 @@
 #ifndef MEMORY_UTIL_H_INCLUDED
 #define MEMORY_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <errno.h>
 #include <stdarg.h>
@@ -64,6 +64,22 @@
 #if MEMORY_ALLOC_DEBUG==1
 #define	MALLOC_CHECK_	2
 #endif
+#endif
+
+/*
+ * Set some defaults.
+ */
+#ifndef MEMORY_ALLOC_DEBUG
+# ifndef MEMORY_ALLOC_SAFE
+#  define MEMORY_ALLOC_DEBUG	0
+#  define MEMORY_ALLOC_SAFE	1
+# else
+#  define MEMORY_ALLOC_DEBUG	(0==MEMORY_ALLOC_SAFE)
+# endif
+#else
+# ifndef MEMORY_ALLOC_SAFE
+#  define MEMORY_ALLOC_SAFE	(0==MEMORY_ALLOC_DEBUG)
+# endif
 #endif
 
 /*

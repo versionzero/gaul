@@ -3,7 +3,7 @@
  **********************************************************************
 
   dstr_util - Dynamic string library.
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2003, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -34,7 +34,7 @@
 #ifndef DYNAMIC_STRING_H_INCLUDED
 #define DYNAMIC_STRING_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <stdarg.h>
 #include <stdio.h>

@@ -36,7 +36,7 @@
 #ifndef TIMER_UTIL_H_INCLUDED
 #define TIMER_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>

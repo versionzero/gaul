@@ -38,7 +38,7 @@
 #ifndef LINKEDLIST_H_INCLUDED
 #define LINKEDLIST_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include "memory_util.h"
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   str_match - String matching with wildcards
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -34,7 +34,8 @@
 #ifndef STR_MATCH_INCLUDED
 #define STR_MATCH_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
+
 #include "str_util.h"
 
 /* Prototypes */

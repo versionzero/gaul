@@ -34,10 +34,12 @@
 #ifndef MEMORY_CHUNKS_H_INCLUDED
 #define MEMORY_CHUNKS_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+#include "memory_util.h"
 
 #ifndef MEMORY_ALIGN_SIZE
 #define MEMORY_ALIGN_SIZE       MAX(sizeof(void *), sizeof(long))

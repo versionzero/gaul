@@ -219,10 +219,10 @@ boolean nnevolve_evaluate1(population *pop, entity *entity)
 /**********************************************************************
   nnevolve_evaluate2()
   synopsis:	Score solution via alternative method - count incorrect
-  		assignments.
+  		assignments in addition to the network error.
   parameters:
   return:
-  updated:	11 Jun 2002
+  updated:	07 Jul 2003
  **********************************************************************/
 
 boolean nnevolve_evaluate2(population *pop, entity *entity)
@@ -231,6 +231,7 @@ boolean nnevolve_evaluate2(population *pop, entity *entity)
   network_t	*nn=(network_t *)entity->chromosome[0];
   float		property[4];	/* Prediction from NN. */
   double	fitness=0.0;	/* Fitness score. */
+  float		error=0.0;	/* Summed network errors. */
 
   fitness = 0.0;
 
@@ -244,9 +245,10 @@ boolean nnevolve_evaluate2(population *pop, entity *entity)
     if (NN_IS_OFF(property[1]) != NN_IS_OFF(train_property[item][1])) fitness += 1.0;
     if (NN_IS_ON(property[2])  != NN_IS_ON(train_property[item][2]))  fitness += 1.0;
     if (NN_IS_OFF(property[2]) != NN_IS_OFF(train_property[item][2])) fitness += 1.0;
+    error += nn->error;
     }
 
-  entity->fitness = 1.0/(1.0+fitness/NNEVOLVE_NUM_SCORE);
+  entity->fitness = 1.0/(1.0+(error+fitness)/NNEVOLVE_NUM_SCORE);
 
   return TRUE;
   }
@@ -311,7 +313,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
     }
 #endif
 
-  NN_train_random(nn, 100);
+  NN_train_random(nn, 2000);
 
   ga_entity_evaluate(pop, adult);
 
@@ -814,7 +816,7 @@ void nnevolve_display_message(void)
   {
 
   printf("nnevolve - GAUL example: Evolve a fixed topology neural network.\n");
-  printf("Copyright ©2002, The Regents of the University of California.\n");
+  printf("Copyright ©2002-2003, The Regents of the University of California.\n");
   printf("Primary author: \"Stewart Adcock\" <stewart@linux-domain.com>\n");
   printf("\n");
   printf("This program is distributed under the terms of the GNU General\n");
@@ -856,11 +858,11 @@ int main(int argc, char **argv)
 
 /*
  * Allocate a new popuation structure.
- * stable num. individuals = 20
+ * stable num. individuals = 50
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 20, 1, 0 );
+  pop = ga_population_new( 50, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -884,9 +886,9 @@ int main(int argc, char **argv)
 
 /*
   pop->evaluate = nnevolve_evaluate_all;
-  pop->evaluate = nnevolve_evaluate2;
-*/
   pop->evaluate = nnevolve_evaluate1;
+*/
+  pop->evaluate = nnevolve_evaluate2;
   pop->seed = nnevolve_seed;
   pop->adapt = nnevolve_adapt;
 /*
@@ -913,10 +915,10 @@ int main(int argc, char **argv)
  * Evolutionary scheme = Lamarckian adaptation on entire population.
  * Elitism scheme      = Parents may pass to next generation.
  * Crossover ratio     = 0.20
- * Mutation ratio      = 0.01
+ * Mutation ratio      = 0.10
  * Migration ration    = 0.0
  */
-  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 0.20, 0.01, 0.0 );
+  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_ALL, GA_ELITISM_PARENTS_DIE, 0.20, 0.10, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -925,10 +927,10 @@ int main(int argc, char **argv)
   NN_define_train_data(num_train_data, train_data, train_property);
 
 /*
- * Perform the Lamarckian evolution for 500 generations.
+ * Perform the Lamarckian evolution for 100 generations.
  */
   timer_start(&lga_timer);
-  ga_evolution( pop, 500 );
+  ga_evolution( pop, 100 );
   timer_check(&lga_timer);
 
   printf("The fitness of the final solution found was: %f\n",

@@ -108,15 +108,18 @@ ECHO = @ECHO@
 GA_MAJOR_VERSION = @GA_MAJOR_VERSION@
 GA_MINOR_VERSION = @GA_MINOR_VERSION@
 GA_NUM_PROCESSES_ENVVAR_STRING = @GA_NUM_PROCESSES_ENVVAR_STRING@
-GA_NUM_THREADS_ENVVAR_STRING = @GA_NUM_THREADS_ENVVAR_STRING@
 GA_PATCH_VERSION = @GA_PATCH_VERSION@
 GA_VERSION = @GA_VERSION@
+HAVE_SLANG = @HAVE_SLANG@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LT_CURRENT = @LT_CURRENT@
 LT_RELEASE = @LT_RELEASE@
 LT_REVISION = @LT_REVISION@
+MEMORY_ALLOC_DEBUG = @MEMORY_ALLOC_DEBUG@
+MEMORY_ALLOC_SAFE = @MEMORY_ALLOC_SAFE@
+MEMORY_CHUNKS_MIMIC = @MEMORY_CHUNKS_MIMIC@
 MPIFLAGS = @MPIFLAGS@
 MPILIBS = @MPILIBS@
 OBJDUMP = @OBJDUMP@
@@ -127,6 +130,7 @@ UNAME_STRING = @UNAME_STRING@
 V3_QUICK = @V3_QUICK@
 VERSION = @VERSION@
 VERSION_STRING = @VERSION_STRING@
+W32_CRIPPLED = @W32_CRIPPLED@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
@@ -144,6 +148,7 @@ libgaul_util_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
+	memory_chunks.c \
 	memory_util.c \
 	table_util.c \
 	random_util.c \
@@ -160,8 +165,8 @@ libnn_util_la_SOURCES = \
 
 
 include_HEADERS = \
-	SAA_header.h \
 	gaul_config.h \
+	gaul_util.h \
 	avltree.h \
 	compatibility.h \
 	dstr_util.h \
@@ -175,7 +180,6 @@ include_HEADERS = \
 	str_match.h \
 	str_util.h \
 	table_util.h \
-	memory_chunks.c \
 	timer_util.h
 
 
@@ -192,8 +196,9 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
-	memory_util.lo table_util.lo random_util.lo str_util.lo \
-	dstr_util.lo str_match.lo timer_util.lo log_util.lo mpi_util.lo
+	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
+	str_util.lo dstr_util.lo str_match.lo timer_util.lo log_util.lo \
+	mpi_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -210,6 +215,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/compatibility.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/dstr_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/memory_chunks.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/memory_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/random_util.Plo \
@@ -296,6 +302,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dstr_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/linkedlist.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log_util.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory_chunks.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mpi_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nn_util.Plo@am__quote@

@@ -41,7 +41,7 @@
 #ifndef RANDOM_UTIL_H_INCLUDED
 #define RANDOM_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <float.h>
 #if HAVE_LIMITS_H==1

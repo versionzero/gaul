@@ -43,7 +43,7 @@
 #ifndef MPI_UTIL_H_INCLUDED
 #define MPI_UTIL_H_INCLUDED
 
-#include "SAA_header.h"
+#include "gaul_util.h"
 
 #include <math.h>
 #include <stdio.h>

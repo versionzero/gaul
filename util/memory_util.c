@@ -130,8 +130,10 @@
 /*
  * Integrated chunk handling implementation.
  */
+#if 0
 #if !defined(MEMORY_NO_CHUNKS)
 #include "memory_chunks.c"
+#endif
 #endif
 
 /*
