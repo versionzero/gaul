@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
+  Updated:	01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
+		14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
 		31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
 		14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
 		10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
@@ -338,7 +339,7 @@ typedef unsigned char byte;
 #define LERP(x,l,h)	((l)+(((h)-(l))*(x)))
 
 /* Is this a GNU system? */
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__INTEL_COMPILER)
 /* No. */
 #define __PRETTY_FUNCTION__ "<unavailable>"
 #endif
@@ -371,7 +372,7 @@ typedef unsigned char byte;
 /*
  * Handy 'portable' version of inline.
  */
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define maybeinline     inline
 #else
 #define maybeinline     /* Oh well. */

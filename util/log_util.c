@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
+  Updated:	01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
+		28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
 		26 Feb 2002 SAA Removed s_strdup() warning from log_init().
 		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
@@ -217,7 +218,7 @@ void log_output(	const enum	log_level_type level,
  * This test is only required if this function was called without the macro
  * wrapper - i.e. this is a non-GNU compiler.
  */
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__INTEL_COMPILER)
   if (level > log_level) return;
 #endif
 
@@ -289,7 +290,7 @@ void log_output(	const enum	log_level_type level,
   }
 
 
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__INTEL_COMPILER)
 /*
  * This is a reduced form of the above function for non-GNU systems.
  */

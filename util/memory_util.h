@@ -56,7 +56,7 @@
 #include "memory_chunks.h"
 #include "avltree.h"
 
-/* Take advantage of the GNU memory facilities */
+/* Take advantage of the GNU malloc checking features. */
 #ifdef __GNUC__
 #ifdef MEMORY_ALLOC_DEBUG
 #define	MALLOC_CHECK_	2

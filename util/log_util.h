@@ -78,7 +78,7 @@ typedef void	(*log_func)(const enum log_level_type level,
 void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
 void	log_set_level(enum log_level_type level);
 void	log_set_file(const char *fname);
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 extern	inline enum log_level_type	log_get_level(void);
 #else
 extern	enum log_level_type	log_get_level(void);
@@ -101,14 +101,14 @@ void	log_output( const enum log_level_type level,
  * Unfortunately, this nice macro will only work on GNU systems.
  * We have a less-functional replacement for other systems.
  */
-#ifndef __GNUC__
-void plog( const enum log_level_type level, const char *format, ... );
-#else
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define	plog( level, format, args... ) do { 	\
 	if ( (level) <= log_get_level() ) 	\
 	  log_output(level, __PRETTY_FUNCTION__,	\
 	                   __FILE__, __LINE__,		\
 	                   format, ##args); } while(0)
+#else
+void plog( const enum log_level_type level, const char *format, ... );
 #endif
 
 /*

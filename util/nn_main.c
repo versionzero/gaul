@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	04 Apr 2002 SAA write_usage() tweaked slightly.
+  Last Updated:	26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
+		04 Apr 2002 SAA write_usage() tweaked slightly.
 		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  Added some new options.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
   		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
@@ -189,6 +190,7 @@ void write_usage(void)
          "    --bias REAL            Network bias.\n"
          "    --gain REAL            Neuronal gain.\n"
          "    --decay REAL           Weight decay factor.\n"
+         "    --history FILENAME     Write training and testing errors to file after every epoch.\n"
          "    --readnn FILENAME      Read NN from file.\n"
          "    --writenn FILENAME     Write NN to file.\n"
          "    --nowritenn            Do not write NN to file.\n"
@@ -289,6 +291,8 @@ int main(int argc, char **argv)
   char       **eval_labels=NULL;      /* Labels for evaluation data. */
   char       **predict_labels=NULL;   /* Labels for prediction data. */
 
+  FILE		*historyfp=NULL;	/* Training history data file. */
+
   printf("Stewart's simple standalone neural network utility.\n");
 
   for(i=1;i<argc;i++)
@@ -378,6 +382,13 @@ int main(int argc, char **argv)
       gain = atof(argv[i]);
       printf("The neuronal weight decay will be: %f\n", decay);
       }
+    else if (!strcmp(argv[i],"--history"))
+      {
+      i++;
+      printf("NN will be written to file: \"%s\"\n", argv[i]);
+      if (!(historyfp=fopen(argv[i], "w")))
+        dief("Unable to open file \"%s\" for output.", argv[i]);
+      }
     else if (!strcmp(argv[i],"--readnn"))
       {
       i++;
@@ -409,12 +420,12 @@ int main(int argc, char **argv)
       }
     else if (!strcmp(argv[i],"--trainrandombatch"))
       {
-      printf("NN will be trained using singular randomly-ordered data.\n");
+      printf("NN will be trained using batched randomly-ordered data.\n");
       training_func = NN_train_batch_random;
       }
     else if (!strcmp(argv[i],"--trainsystematicbatch"))
       {
-      printf("NN will be trained using singular ordered data.\n");
+      printf("NN will be trained using batched ordered data.\n");
       training_func = NN_train_batch_systematic;
       }
     else if (!strcmp(argv[i],"--notrain"))
@@ -645,21 +656,30 @@ int main(int argc, char **argv)
              trainerror, testerror);
     mintesterror = testerror;
 
+    if (historyfp) fprintf(historyfp, "0 %f %f\n", trainerror, testerror);
+
 /*
  * Stop if:
  * (a) Max. epochs done.
  * (b) Over training is likely.
  * (c) Convergence.
  */
-    for (epoch=0; epoch<max_epochs &&
-                  testerror < stop_ratio * mintesterror &&
-                  testerror > TINY; epoch+=teststep)
+    epoch = 0;
+    while ( epoch<max_epochs &&
+            testerror < stop_ratio * mintesterror &&
+            testerror > TINY )
       {
-      training_func(network, teststep);
+      for (i=0; i<teststep; i++)
+        {
+        epoch++;
+        training_func(network, 1);
+        NN_test(network, &trainerror, &testerror);
+        if (historyfp) fprintf(historyfp, "%d %f %f\n", epoch, trainerror, testerror);
+        }
       
-      NN_test(network, &trainerror, &testerror);
       printf("\n%d: error is %f on training set and %f on test set.",
                epoch, trainerror, testerror);
+
       if (testerror < mintesterror)
         {
         printf(" - saving weights.");
@@ -692,6 +712,8 @@ int main(int argc, char **argv)
     }
 
   NN_destroy(network);
+
+  if (historyfp) fclose(historyfp);
 
   exit(2);
   }
