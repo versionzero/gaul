@@ -615,7 +615,7 @@ AC_CACHE_CHECK([for built-in _Bool type],
 	     [AC_TRY_COMPILE(,
 	     [_Bool blah = (_Bool)0;],
 	     gaul__bool="yes", gaul__bool="no")])
-if test "x$gaul__bool" = "xno" && "x$gaul_header_stdbool_h" = "xyes"; then
+if test "x$gaul__bool" = "xno" && test "x$gaul_header_stdbool_h" = "xyes"; then
   AC_TRY_COMPILE([#include <stdbool.h>],
            [_Bool blah = (_Bool)0;],
            gaul__bool="yes", gaul__bool="no")

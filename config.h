@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "28/01/03"
+#define BUILD_DATE_STRING "03/02/03"
 
 /* Overall debugging level. */
 #define DEBUG 0

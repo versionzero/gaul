@@ -11475,7 +11475,7 @@ rm -f conftest.$ac_objext conftest.$ac_ext
 fi
 echo "$as_me:$LINENO: result: $gaul__bool" >&5
 echo "${ECHO_T}$gaul__bool" >&6
-if test "x$gaul__bool" = "xno" && "x$gaul_header_stdbool_h" = "xyes"; then
+if test "x$gaul__bool" = "xno" && test "x$gaul_header_stdbool_h" = "xyes"; then
   cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
