@@ -511,6 +511,7 @@ size_t strlcpy(char *dest, const char *src, size_t n)
   if (num_to_copy>0)
     memcpy(dest, src, num_to_copy);
   dest[num_to_copy] = '\0';
+
   return len;
   }
 #endif /* HAVE_STRLCPY */
@@ -541,6 +542,7 @@ size_t strlcat(char *dest, const char *src, size_t n)
   if (num_to_copy>0)
     memcpy(dest, src, num_to_copy);
   dest[num_to_copy] = '\0';
+
   return len_dest + len_src;
   }
 #endif /* HAVE_STRLCAT */

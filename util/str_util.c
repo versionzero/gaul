@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Updated:	13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
+  Last Updated:	15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
+		13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
   		25 Mar 2002 SAA Introduced STR_MAX_TOKENS.
   		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
 		20/06/01 SAA	Added a few casts for clean compilation on Solaris.
@@ -483,13 +484,14 @@ int str_tr(char *str, int len, char find, char replace)
 
   if (!str) die("Null string pointer passed.\n");
 
-  while (len-- > 0)
+  while (len > 0)
     {
     if (*str == find)
       {
       *str = replace;
       count++;
       }
+    len--;
     str++;
     }
 

@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      13 Aug 2002 SAA	Improved dstr_scmp_str().
+  Updated:      15 Oct 2002 SAA	Avoid warning when using Compaq's ccc compiler.
+		13 Aug 2002 SAA	Improved dstr_scmp_str().
   		11 Apr 2002 SAA	Added dstr_fromstr() convenience function.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Changes for clean compilation under AIX.
@@ -72,7 +73,7 @@
  */
 THREAD_LOCK_DEFINE_STATIC(dstr_global_lock);
 static MemChunk         *dstr_mem_chunk = NULL;
-MemChunk	*dstr_get_memchunk() { return dstr_mem_chunk; }
+MemChunk	*dstr_get_memchunk(void) { return dstr_mem_chunk; }
 
 
 /**********************************************************************

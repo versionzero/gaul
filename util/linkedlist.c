@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
+  Last Updated:	15 Oct 2002 SAA Avoid some unsigned comparison warnings when using Compaq's ccc.
+		22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
   		16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
   		14 Jun 2002 SAA	GList emulation not relied upon in this file now.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
@@ -325,7 +326,11 @@ SLList *slink_reverse(SLList *list)
 
 SLList *slink_nth(SLList *list, unsigned int index)
   {
-  while ((index-- > 0) && list) list = list->next;
+  while (index > 0 && list)
+    {
+    list = list->next;
+    index--;
+    }
 
   return list;
   }
@@ -763,7 +768,11 @@ DLList *dlink_reverse(DLList *list)
 
 DLList *dlink_nth(DLList *list, unsigned int index)
   {
-  while ((index-- > 0) && list) list = list->next;
+  while (index > 0 && list)
+    {
+    list = list->next;
+    index++;
+    }
   
   return list;
   }
@@ -771,7 +780,11 @@ DLList *dlink_nth(DLList *list, unsigned int index)
 
 DLList *dlink_pth(DLList *list, unsigned int index)
   {
-  while ((index-- > 0) && list) list = list->prev;
+  while (index > 0 && list)
+    {
+    list = list->prev;
+    index--;
+    }
   
   return list;
   }
