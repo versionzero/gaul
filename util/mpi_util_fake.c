@@ -28,15 +28,14 @@
 		of mixed MPI and non-MPI code via automake and
 		friends.
 
-  Updated:      15 Mar 2002 SAA	Nasty hack implemented.
+  Updated:      03 Oct 2002 SAA	Removed unneeded #include <stdlib.h>
+		15 Mar 2002 SAA	Nasty hack implemented.
 
  **********************************************************************/
 
 #define NO_PARALLEL
 
 #include "SAA_header.h"
-
-#include <stdlib.h>
 
 /*
  * Forced over-ride of the PARALLEL constant.

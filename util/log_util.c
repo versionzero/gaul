@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
+  Updated:	03 Oct 2002 SAA	Increased dimensions of log_text arrays to avoid warnings on the Compaq C compiler.
+		01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
 		28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
 		26 Feb 2002 SAA Removed s_strdup() warning from log_init().
 		04 Feb 2002 SAA	All global variables are now decleared static.
@@ -205,7 +206,7 @@ void log_output(	const enum	log_level_type level,
   char		message[LOG_MAX_LEN];	/* The text to write */
   FILE		*fh;				/* File handle */
 /* FIXME: Needs to be more general */
-  const char	log_text[7][9] = {"?????: ", "FATAL: ", "WARNING: ",
+  const char	log_text[7][10] = {"?????: ", "FATAL: ", "WARNING: ",
                                   "",        "",
                                   "FIXME: ", "DEBUG: " };
   time_t	t;				/* Time structure */
@@ -298,7 +299,7 @@ void plog(const enum log_level_type level, const char *format, ...)
   {
   va_list       ap;                             /* variable args structure */
   char          message[LOG_MAX_LEN];     /* The text to write */
-  const char    log_text[7][9] = {"?????: ", "FATAL: ", "WARNING: ",
+  const char    log_text[7][10] = {"?????: ", "FATAL: ", "WARNING: ",
                                   "",        "",
                                   "FIXME: ", "DEBUG: " };
   time_t        t;                              /* Time structure */
@@ -340,7 +341,7 @@ void log_wrapper(int *level, char *message)
 /*
   unsigned int	num = SLang_Num_Function_Args;
 */
-  const char	log_text[7][9] = {"?????: ", "FATAL: ", "WARNING: ",
+  const char	log_text[7][10] = {"?????: ", "FATAL: ", "WARNING: ",
                                   "",        "",
                                   "FIXME: ", "DEBUG: " };
   time_t	t;				/* Time structure. */

@@ -61,7 +61,8 @@
 		Q. Well, ElectricFence is free - so why not use that?
 		A. It is horrendously slow, and a huge memory hog.
 
-  Updated:	18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
+  Updated:	03 oct 2002 SAA	Tweaks for clean compilation using the Compaq C compiler.
+		18 Sep 2002 SAA	Replace #ifdef X checks with #if X==1.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).  Also removed some IRIX specific code by making alternative more portable.
 		09/05/01 SAA	Reimplemented memory_check_bounds_all().
 		03/05/01 SAA	Some occurances of printf(); perror(); exit(1); replaced with a dief() call.
@@ -200,7 +201,7 @@ static AVLKey key_func(constvpointer data)
   }
 
 /*
-static AVLTree *replacement_avltree_new()
+static AVLTree *replacement_avltree_new(void)
   {
   AVLTree	*tree;
 
@@ -218,7 +219,7 @@ static AVLTree *replacement_avltree_new()
  * Allocating/Deallocating mem_record structures.
  */
 
-static mem_record *mem_record_new()
+static mem_record *mem_record_new(void)
   {
   mem_record *mr;
 
@@ -244,7 +245,7 @@ static void mem_record_free(mem_record *mr)
   }
 
 
-static void memtree_new()
+static void memtree_new(void)
   {
   if (memtree) die("Memory tree already exists.");
 
@@ -260,7 +261,7 @@ static void memtree_new()
 
 
 /*
-static void memtree_destroy()
+static void memtree_destroy(void)
   {
   if (!memtree) die("Unable to destroy non-existant tree.");
 
@@ -1029,7 +1030,7 @@ printf("REMOVING mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
   last updated: 07/12/98
  **********************************************************************/
 
-int memory_total()
+int memory_total(void)
   {
   if (memory_verbose>0)
     printf("Total memory allocated:\t%d bytes.\n", total_mem);
@@ -1131,7 +1132,7 @@ int memory_used_mptr(void *mptr)
   last updated: 14/08/00
  **********************************************************************/
 
-void memory_display_status()
+void memory_display_status(void)
   {
 
   printf("=== Memory Stats =============================\n");
@@ -1187,7 +1188,7 @@ void memory_display_status()
   last updated: 03/12/98
  **********************************************************************/
 
-void memory_display_table()
+void memory_display_table(void)
   {
 
 #if MEMORY_ALLOC_DEBUG==1
@@ -1337,7 +1338,7 @@ void memory_set_strict(int i)
   last updated: 03/12/98
  **********************************************************************/
 
-int memory_check_all_bounds()
+int memory_check_all_bounds(void)
   {
   int	k=0;
 /*

@@ -370,14 +370,23 @@ else
     else
       if test "x$CC" = "xccc"; then
 
-         case " $CFLAGS " in
-          *[\ \	]-Wall[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -Wall" ;;
-        esac
+        if test "x$enable_g" = "xyes"; then
+          case " $CFLAGS " in
+            *[\ \	]-g[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -g3" ;;
+          esac
+
+        else
+          case " $CFLAGS " in
+            *[\ \	]-O3[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -O3" ;;
+          esac
+
+        fi
 
         case " $CFLAGS " in
-          *[\ \	]-O2[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -O2" ;;
+          *[\ \	]-Wall[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -Wall" ;;
         esac
 
         case " $CFLAGS " in

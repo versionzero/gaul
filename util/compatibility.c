@@ -500,50 +500,49 @@ void usleep(unsigned long usec)
  must at least be room for a nul); could consider other options.
 ***********************************************************************/
 size_t strlcpy(char *dest, const char *src, size_t n)
-{
+  {
+  size_t	len = strlen(src);
+  size_t	num_to_copy = (len >= n) ? n-1 : len;
+
   assert(dest);
   assert(src);
   assert(n>0);
-  {
-    size_t len = strlen(src);
-    size_t num_to_copy = (len >= n) ? n-1 : len;
-    if (num_to_copy>0)
-      memcpy(dest, src, num_to_copy);
-    dest[num_to_copy] = '\0';
-    return len;
+
+  if (num_to_copy>0)
+    memcpy(dest, src, num_to_copy);
+  dest[num_to_copy] = '\0';
+  return len;
   }
-}
 #endif /* HAVE_STRLCPY */
 
 
 #ifndef HAVE_STRLCAT
 size_t strlcat(char *dest, const char *src, size_t n)
-{
+  {
+  size_t	num_to_copy;
+  size_t	len_src;
+  size_t	len_dest = strlen(dest);
+
   assert(dest);
   assert(src);
   assert(n>0);
-  {
-    size_t num_to_copy, len_dest, len_src;
-    
-    len_dest = strlen(dest);
-    assert(len_dest<n);
-    /* Otherwise have bad choice of leaving dest not null-terminated
-     * within the specified length n (which should be assumable as
-     * a post-condition of mystrlcat), or modifying dest before end
-     * of existing string (which breaks strcat semantics).
-     */
+  assert(len_dest<n);
+  /* Otherwise have bad choice of leaving dest not null-terminated
+   * within the specified length n (which should be assumable as
+   * a post-condition of mystrlcat), or modifying dest before end
+   * of existing string (which breaks strcat semantics).
+   */
        
-    dest += len_dest;
-    n -= len_dest;
+  dest += len_dest;
+  n -= len_dest;
     
-    len_src = strlen(src);
-    num_to_copy = (len_src >= n) ? n-1 : len_src;
-    if (num_to_copy>0)
-      memcpy(dest, src, num_to_copy);
-    dest[num_to_copy] = '\0';
-    return len_dest + len_src;
+  len_src = strlen(src);
+  num_to_copy = (len_src >= n) ? n-1 : len_src;
+  if (num_to_copy>0)
+    memcpy(dest, src, num_to_copy);
+  dest[num_to_copy] = '\0';
+  return len_dest + len_src;
   }
-}
 #endif /* HAVE_STRLCAT */
 
 
@@ -554,7 +553,7 @@ size_t strlcat(char *dest, const char *src, size_t n)
  below with vsprintf(), or by changing return value to eg -1.)
 ***********************************************************************/
 static int test_snprintf(char *str, size_t n, const char *format, ...)
-{
+  {
   int ret;
   va_list ap;
 
@@ -562,7 +561,7 @@ static int test_snprintf(char *str, size_t n, const char *format, ...)
   ret = vsnprintf(str, n, format, ap);
   va_end(ap);
   return ret;
-}
+  }
 
 /**********************************************************************
  This function checks, at runtime, whether a native vsnprintf() meets
@@ -580,7 +579,7 @@ static int test_snprintf(char *str, size_t n, const char *format, ...)
  do at runtime on first call...
 ***********************************************************************/
 static int check_native_vsnprintf(void)
-{
+  {
   char buf[20]   = "abcdefghijkl";   /* 12 + null */
   char *test_str = "0123456789";
   const int ntrunc = 5;
@@ -602,7 +601,7 @@ static int check_native_vsnprintf(void)
 #endif
 
   return (buf[ntrunc]==one_past && ret==test_len);
-}
+  }
 
 
 /**********************************************************************

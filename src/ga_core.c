@@ -515,7 +515,7 @@ population *ga_get_population_from_id(unsigned int id)
 
 unsigned int ga_get_population_id(population *pop)
   {
-  unsigned int	id=-1;	/* Internal population id. */
+  unsigned int	id=TABLE_ERROR_INDEX;	/* Internal population id. */
 
   THREAD_LOCK(pop_table_lock);
   if (pop_table && pop)
@@ -2628,7 +2628,7 @@ population *ga_transcend(unsigned int id)
 
 unsigned int ga_resurect(population *pop)
   {
-  unsigned int	id=-1;	/* New internal id code. */
+  unsigned int	id=TABLE_ERROR_INDEX;	/* Internal population id. */
 
   if (!pop) die("Null pointer to population structure passed.");
 

@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	22 Jul 2002 SAA	Renamed NN_randomize_weights() to NN_randomize_weights_11() and added a new NN_randomize_weights() which takes a range for the random values.
+  Last Updated:	03 Oct 2002 SAA	Changed fread()>0 check to fread()!=0 to avoid warning on Compaq C compiler.
+		22 Jul 2002 SAA	Renamed NN_randomize_weights() to NN_randomize_weights_11() and added a new NN_randomize_weights() which takes a range for the random values.
   		18 Jul 2002 SAA	Modified NN_read_prop().
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA Added version info to NN_diagnostics.
@@ -1583,7 +1584,7 @@ int NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int 
 
   size = NN_read_fingerprint_binary_header(fp);	/* Check validity of file. */
 
-  while (fread(&label_len, sizeof(int), 1, fp) > 0)
+  while (fread(&label_len, sizeof(int), 1, fp) != 0)
     {
     if (*num_data == *max_data)
       {

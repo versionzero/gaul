@@ -4,6 +4,7 @@ Changes since release 0.1840:
 - Fixed configuration bug causing shared dynamic object librarys to not be installed under UNIX.
 - Fixed minor bug in ga_evolution_forked() causing incorrect number of forked processes to be reported.  -- thanks to Daniel Pick.
 - Fixed strsep() bug in compatibility.c
+- Fixed stricmp()/strnicmp() problem on Cygwin platform.
 - Updated configuration files for successful compilation on RedHat 8.0
 - Improved configuration with respect to some simple platform specific optimisations.
 - RPM spec file improved considerably.

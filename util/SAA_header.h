@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
+  Updated:	03 Oct 2002 SAA	Compaq ccc compiler fix.
+  		18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
   		09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
   		07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
   		01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
@@ -191,7 +192,7 @@
 #else
 
 # if !defined(__bool_true_false_are_defined)
-#  if !defined(_Bool) && !defined(__GNUC__)
+#  if !defined(_Bool) && !defined(__GNUC__) && !defined(__DECC)
 typedef short _Bool;
 #  endif
 

@@ -51,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	11 Feb 2002 SAA	Sequential version of mpi_setup() now defines namelen.  Arguments for mpi_setup modified to match pthread_create().
+  Updated:	03 Oct 2002 SAA	Tweaks to avoid warnings when using the Compaq C compiler.
+		11 Feb 2002 SAA	Sequential version of mpi_setup() now defines namelen.  Arguments for mpi_setup modified to match pthread_create().
 		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
 		30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
@@ -546,7 +547,7 @@ void mpi_abort(int errcode)
   last updated:	05/05/00
  **********************************************************************/
 
-boolean mpi_isinit()
+boolean mpi_isinit(void)
   {
   return (size!=0);
   }
@@ -560,7 +561,7 @@ boolean mpi_isinit()
   last updated:	05/05/00
  **********************************************************************/
 
-boolean mpi_ismaster()
+boolean mpi_ismaster(void)
   {
   return (rank==0);
   }
@@ -574,7 +575,7 @@ boolean mpi_ismaster()
   last updated:	05/05/00
  **********************************************************************/
 
-int mpi_get_num_processes()
+int mpi_get_num_processes(void)
   {
   return (size);
   }
@@ -588,7 +589,7 @@ int mpi_get_num_processes()
   last updated:	05/05/00
 **********************************************************************/
 
-int mpi_get_rank()
+int mpi_get_rank(void)
   {
   return (rank);
   }
@@ -603,7 +604,7 @@ int mpi_get_rank()
   last updated:	05/05/00
  **********************************************************************/
 
-int mpi_get_next_rank()
+int mpi_get_next_rank(void)
   {
   int	next=rank+1;		/* The rank of the next process */
 
@@ -622,7 +623,7 @@ int mpi_get_next_rank()
   last updated:	22/09/00
  **********************************************************************/
 
-int mpi_get_prev_rank()
+int mpi_get_prev_rank(void)
   {
   int	prev=rank;		/* The rank of the previous process */
 
@@ -641,7 +642,7 @@ int mpi_get_prev_rank()
   last updated:	06/05/00
  **********************************************************************/
 
-boolean mpi_sync()
+boolean mpi_sync(void)
   {
 
 #if PARALLEL == 0
@@ -765,7 +766,7 @@ boolean mpi_send_test(int node)
   last updated:	05/05/00
  **********************************************************************/
 
-boolean mpi_recv_test()
+boolean mpi_recv_test(void)
   {
   char		msg[255];	/* Message */
   MPI_Status	status;		/* MPI status struct */
@@ -788,7 +789,7 @@ boolean mpi_recv_test()
   last updated:	05/05/00
  **********************************************************************/
 
-boolean mpi_send_test_all()
+boolean mpi_send_test_all(void)
   {
   return( mpi_send_test(-1) );
   }
@@ -802,7 +803,7 @@ boolean mpi_send_test_all()
   last updated:	05/05/00
  **********************************************************************/
 
-boolean mpi_send_test_next()
+boolean mpi_send_test_next(void)
   {
   int	next=rank+1;		/* The rank of the next process */
 
