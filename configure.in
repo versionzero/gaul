@@ -46,7 +46,7 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
-MINOR_VERSION=1836
+MINOR_VERSION=1837
 PATCH_VERSION=1
 #VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 VERSION=$MAJOR_VERSION.$MINOR_VERSION
@@ -373,4 +373,18 @@ AC_OUTPUT(
            examples/Makefile
            docs/Makefile
          )
+
+echo \
+"************************************************************************
+  GAUL has been configured successfully.  In summary:
+
+  Version:                  ${VERSION}
+  Source code location:     ${srcdir}
+  Host System Type:         ${host}
+  Compiler:	            ${CC}
+  Compiler flags:           ${CFLAGS}
+  Extra include flags:      ${INCLUDE}
+  Install path:             ${prefix}
+
+************************************************************************"
 
