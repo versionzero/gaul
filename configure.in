@@ -46,7 +46,7 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion (don't we all *love* autoconf?)
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 MAJOR_VERSION=0
-MINOR_VERSION=1831
+MINOR_VERSION=1832
 PATCH_VERSION=`date +%y%m%d`
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 dnl
