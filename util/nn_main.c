@@ -34,7 +34,7 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	24 Dec 2002 SAA Use standard exit value.
+  Last Updated:	24 Dec 2002 SAA Minor changes based on splint warnings; Use standard exit value, boolean comparisions, static keyword for non-exported functions, some explicit typecasts.
   		22 Jul 2002 SAA	Added new '--random' option.
   		18 Jul 2002 SAA	Fixed typo causing erronerous data dimension mismatches.
 		17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
@@ -73,7 +73,7 @@
   last updated: 10 Dec 2001
  **********************************************************************/
 
-void split_data(float ***data1, float ***prop1, char ***labels1, int *num_data1, int *max_data1,
+static void split_data(float ***data1, float ***prop1, char ***labels1, int *num_data1, int *max_data1,
                 float ***data2, float ***prop2, char ***labels2, int *num_data2, int *max_data2,
                 float ***data3, float ***prop3, char ***labels3, int *num_data3, int *max_data3,
                 int num2, int num3)
@@ -96,7 +96,7 @@ void split_data(float ***data1, float ***prop1, char ***labels1, int *num_data1,
   last updated: 10 Dec 2001
  **********************************************************************/
 
-void read_comma_delimited_data(char *fname, float ***data, float ***prop, char ***labels, int *num_data, int *max_data)
+static void read_comma_delimited_data(char *fname, float ***data, float ***prop, char ***labels, int *num_data, int *max_data)
   {
   FILE  *fp;    			/* Filehandle. */
   char  line_buffer[MAX_LINE_LEN];	/* Line buffer. */
@@ -149,7 +149,7 @@ void read_comma_delimited_data(char *fname, float ***data, float ***prop, char *
 
     for (data_count=0; data_count<data_size && (line = strtok(NULL, ","))!=NULL; data_count++ )
       {
-      (*data)[*num_data][data_count] = atof(line);
+      (*data)[*num_data][data_count] = (float) atof(line);
       }
 
     if (data_count!=data_size) die("Data size mismatch");
@@ -171,7 +171,7 @@ void read_comma_delimited_data(char *fname, float ***data, float ***prop, char *
   updated:      12 Mar 2002
  **********************************************************************/
 
-void write_usage(void)
+static void write_usage(void)
   {
 
   printf("\n"
@@ -304,33 +304,33 @@ int main(int argc, char **argv)
 
   for(i=1;i<argc;i++)
     {
-    if (!strcmp(argv[i],"--version"))
+    if (strcmp(argv[i],"--version")==0)
       {
       printf("Prototype version.\n");
       exit(EXIT_SUCCESS);
       }
-    else if (!strcmp(argv[i],"--help") || !strcmp(argv[i],"-usage"))
+    else if (strcmp(argv[i],"--help")==0 || strcmp(argv[i],"-usage")==0)
       {
       write_usage();
       exit(EXIT_SUCCESS);
       }
-    else if (!strcmp(argv[i],"--diagnostics"))
+    else if (strcmp(argv[i],"--diagnostics")==0)
       {
       NN_diagnostics();
       }
-    else if (!strcmp(argv[i],"--seed"))
+    else if (strcmp(argv[i],"--seed")==0)
       {
       i++;
       seed = atoi(argv[i]);
       printf("The random number generator seed value will be: %d\n", seed);
       }
-    else if (!strcmp(argv[i],"--layers"))
+    else if (strcmp(argv[i],"--layers")==0)
       {
       i++;
       num_layers = atoi(argv[i]);
       printf("The number of layers (incl. input+output) will be: %d\n", num_layers);
       }
-    else if (!strcmp(argv[i],"--neurons"))
+    else if (strcmp(argv[i],"--neurons")==0)
       {
       if (num_layers==0) die("Must specify number of layers prior to number of neurons");
       neurons = (int *) s_malloc(sizeof(int)*num_layers);
@@ -343,184 +343,184 @@ int main(int argc, char **argv)
       input_layer_dim = neurons[0];
       output_layer_dim = neurons[num_layers-1];
       }
-    else if (!strcmp(argv[i],"--epochs"))
+    else if (strcmp(argv[i],"--epochs")==0)
       {
       i++;
       max_epochs = atoi(argv[i]);
       printf("The maximum number of training epochs will be: %d\n", max_epochs);
       }
-    else if (!strcmp(argv[i],"--teststep"))
+    else if (strcmp(argv[i],"--teststep")==0)
       {
       i++;
       teststep = atoi(argv[i]);
       printf("The number of epochs per testing step will be: %d\n", teststep);
       }
-    else if (!strcmp(argv[i],"--stopfactor"))
+    else if (strcmp(argv[i],"--stopfactor")==0)
       {
       i++;
-      stop_ratio = atof(argv[i]);
+      stop_ratio = (float) atof(argv[i]);
       printf("The stopped training factor will be: %f\n", stop_ratio);
       }
-    else if (!strcmp(argv[i],"--rate"))
+    else if (strcmp(argv[i],"--rate")==0)
       {
       i++;
-      rate = atof(argv[i]);
+      rate = (float) atof(argv[i]);
       printf("The learning rate will be: %f\n", rate);
       }
-    else if (!strcmp(argv[i],"--momentum"))
+    else if (strcmp(argv[i],"--momentum")==0)
       {
       i++;
-      momentum = atof(argv[i]);
+      momentum = (float) atof(argv[i]);
       printf("The learning momentum will be: %f\n", momentum);
       }
-    else if (!strcmp(argv[i],"--bias"))
+    else if (strcmp(argv[i],"--bias")==0)
       {
       i++;
-      bias = atof(argv[i]);
+      bias = (float) atof(argv[i]);
       printf("The network bias will be: %f\n", bias);
       }
-    else if (!strcmp(argv[i],"--gain"))
+    else if (strcmp(argv[i],"--gain")==0)
       {
       i++;
-      gain = atof(argv[i]);
+      gain = (float) atof(argv[i]);
       printf("The neuronal gain will be: %f\n", gain);
       }
-    else if (!strcmp(argv[i],"--decay"))
+    else if (strcmp(argv[i],"--decay")==0)
       {
       i++;
-      gain = atof(argv[i]);
+      decay = (float) atof(argv[i]);
       printf("The neuronal weight decay will be: %f\n", decay);
       }
-    else if (!strcmp(argv[i],"--history"))
+    else if (strcmp(argv[i],"--history")==0)
       {
       i++;
       printf("NN will be written to file: \"%s\"\n", argv[i]);
       if (!(historyfp=fopen(argv[i], "w")))
         dief("Unable to open file \"%s\" for output.", argv[i]);
       }
-    else if (!strcmp(argv[i],"--readnn"))
+    else if (strcmp(argv[i],"--readnn")==0)
       {
       i++;
       strncpy(nn_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("NN will be read from file: \"%s\"\n", nn_infname);
       do_readnn = TRUE;
       }
-    else if (!strcmp(argv[i],"--writenn"))
+    else if (strcmp(argv[i],"--writenn")==0)
       {
       i++;
       strncpy(nn_outfname, argv[i], NN_MAX_FNAME_LEN);
       printf("NN will be written to file: \"%s\"\n", nn_outfname);
       do_writenn = TRUE;
       }
-    else if (!strcmp(argv[i],"--nowritenn"))
+    else if (strcmp(argv[i],"--nowritenn")==0)
       {
       printf("NN will not be written a file.\n");
       do_writenn = FALSE;
       }
-    else if (!strcmp(argv[i],"--trainrandom"))
+    else if (strcmp(argv[i],"--trainrandom")==0)
       {
       printf("NN will be trained using singular randomly-ordered data.\n");
       training_func = NN_train_random;
       }
-    else if (!strcmp(argv[i],"--trainsystematic"))
+    else if (strcmp(argv[i],"--trainsystematic")==0)
       {
       printf("NN will be trained using singular ordered data.\n");
       training_func = NN_train_systematic;
       }
-    else if (!strcmp(argv[i],"--trainrandombatch"))
+    else if (strcmp(argv[i],"--trainrandombatch")==0)
       {
       printf("NN will be trained using batched randomly-ordered data.\n");
       training_func = NN_train_batch_random;
       }
-    else if (!strcmp(argv[i],"--trainsystematicbatch"))
+    else if (strcmp(argv[i],"--trainsystematicbatch")==0)
       {
       printf("NN will be trained using batched ordered data.\n");
       training_func = NN_train_batch_systematic;
       }
-    else if (!strcmp(argv[i],"--notrain"))
+    else if (strcmp(argv[i],"--notrain")==0)
       {
       printf("NN will not be trained.\n");
       do_train = FALSE;
       }
-    else if (!strcmp(argv[i],"--noevaluate"))
+    else if (strcmp(argv[i],"--noevaluate")==0)
       {
       printf("NN will not be evaluated.\n");
       do_evaluate = FALSE;
       }
-    else if (!strcmp(argv[i],"--predict"))
+    else if (strcmp(argv[i],"--predict")==0)
       {
       printf("NN will used for prediction.\n");
       do_predict = TRUE;
       }
-    else if (!strcmp(argv[i],"--random01"))
+    else if (strcmp(argv[i],"--random01")==0)
       {
       printf("NN weights will be initialized between 0.0 and 1.0.\n");
       initmode = randomize01;
       }
-    else if (!strcmp(argv[i],"--random11"))
+    else if (strcmp(argv[i],"--random11")==0)
       {
       printf("NN weights will be initialized between -1.0 and +1.0.\n");
       initmode = randomize11;
       }
-    else if (!strcmp(argv[i],"--random"))
+    else if (strcmp(argv[i],"--random")==0)
       {
       i++;
-      initval1 = atof(argv[i]);
+      initval1 = (float) atof(argv[i]);
       i++;
-      initval2 = atof(argv[i]);
+      initval2 = (float) atof(argv[i]);
       printf("NN weights will be initialized using random values in range %f to %f.\n", initval1, initval2);
       initmode = randomize;
       }
-    else if (!strcmp(argv[i],"--fixed"))
+    else if (strcmp(argv[i],"--fixed")==0)
       {
       i++;
-      initval = atof(argv[i]);
+      initval = (float) atof(argv[i]);
       printf("NN weights will be initialized to %f.\n", initval);
       initmode = fixed;
       }
-    else if (!strcmp(argv[i],"--trainprop"))
+    else if (strcmp(argv[i],"--trainprop")==0)
       {
       i++;
       strncpy(train_prop_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Training properties will be read from file: \"%s\"\n", train_prop_infname);
       }
-    else if (!strcmp(argv[i],"--testprop"))
+    else if (strcmp(argv[i],"--testprop")==0)
       {
       i++;
       strncpy(test_prop_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Testing properties will be read from file: \"%s\"\n", test_prop_infname);
       }
-    else if (!strcmp(argv[i],"--evalprop"))
+    else if (strcmp(argv[i],"--evalprop")==0)
       {
       i++;
       strncpy(eval_prop_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Evaluation proprties will be read from file: \"%s\"\n", eval_prop_infname);
       }
-    else if (!strcmp(argv[i],"--trainfp"))
+    else if (strcmp(argv[i],"--trainfp")==0)
       {
       i++;
       strncpy(train_fp_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Training fingerprints will be read from file: \"%s\"\n", train_fp_infname);
       }
-    else if (!strcmp(argv[i],"--testfp"))
+    else if (strcmp(argv[i],"--testfp")==0)
       {
       i++;
       strncpy(test_fp_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Testing fingerprints will be read from file: \"%s\"\n", test_fp_infname);
       }
-    else if (!strcmp(argv[i],"--evalfp"))
+    else if (strcmp(argv[i],"--evalfp")==0)
       {
       i++;
       strncpy(eval_fp_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Evaluation fingerprints will be read from file: \"%s\"\n", eval_fp_infname);
       }
-    else if (!strcmp(argv[i],"--predictfp"))
+    else if (strcmp(argv[i],"--predictfp")==0)
       {
       i++;
       strncpy(predict_fp_infname, argv[i], NN_MAX_FNAME_LEN);
       printf("Prediction fingerprints will be read from file: \"%s\"\n", predict_fp_infname);
       }
-    else if (!strcmp(argv[i],"--comma"))
+    else if (strcmp(argv[i],"--comma")==0)
       {
       i++;
       strncpy(comma_infname, argv[i], NN_MAX_FNAME_LEN);

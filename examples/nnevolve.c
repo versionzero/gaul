@@ -51,9 +51,9 @@
 /*
  * Global data storage.
  */
-float      **train_data=NULL;       /* Input data for training. */
-float      **train_property=NULL;   /* Training properties. */
-int        num_train_data=0;        /* Number of training items. */
+static float        **train_data=NULL;       /* Input data for training. */
+static float        **train_property=NULL;   /* Training properties. */
+static unsigned int num_train_data=0;        /* Number of training items. */
 
 /*
  * Compilation constants.
@@ -204,7 +204,7 @@ boolean nnevolve_evaluate1(population *pop, entity *entity)
 
   for (n=0; n<NNEVOLVE_NUM_SCORE; n++)
     {
-    item = random_int(num_train_data);
+    item = (int) random_int(num_train_data);
     NN_simulate(nn, train_data[item], train_property[item]);
     error += nn->error;
     }
@@ -235,7 +235,7 @@ boolean nnevolve_evaluate2(population *pop, entity *entity)
 
   for (n=0; n<NNEVOLVE_NUM_SCORE; n++)
     {
-    item = random_int(num_train_data);
+    item = (int) random_int(num_train_data);
     NN_run(nn, train_data[item], property);
     if (NN_IS_ON(property[0])  != NN_IS_ON(train_property[item][0]))  fitness += 1.0;
     if (NN_IS_OFF(property[0]) != NN_IS_OFF(train_property[item][0])) fitness += 1.0;
@@ -302,7 +302,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
 #if 0
   for (n=0; n<NNEVOLVE_NUM_TRAIN; n++)
     {
-    item = random_int(num_train_data);
+    item = (int) random_int(num_train_data);
     NN_simulate(nn, train_data[item], train_property[item]);
 
     NN_backpropagate(nn);
@@ -326,7 +326,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
 		Note that this doesn't work particularly well.
   parameters:
   return:
-  updated:	28 Jan 2002
+  updated:	24 Dec 2002
  **********************************************************************/
 
 void nnevolve_crossover_layerwise(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
@@ -358,8 +358,8 @@ void nnevolve_crossover_layerwise(population *pop, entity *mother, entity *fathe
       {
       for (i=1; i<=nn1->layer[l].neurons; i++)
         {
-        memcpy(nn1->layer[l].weight[i], ((network_t *)father->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
-        memcpy(nn2->layer[l].weight[i], ((network_t *)mother->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
+        memcpy(nn1->layer[l].weight[i], ((network_t *)father->chromosome[0])->layer[l].weight[i], sizeof(float)*nn1->layer[l-1].neurons+1);
+        memcpy(nn2->layer[l].weight[i], ((network_t *)mother->chromosome[0])->layer[l].weight[i], sizeof(float)*nn1->layer[l-1].neurons+1);
         }
       }
     }
@@ -406,7 +406,7 @@ void nnevolve_crossover_out(population *pop, entity *mother, entity *father, ent
  * This algorithm would naturally be recursive, but unrolled for the sake
  * of speed.  I assume four layers in total.
  */
-  h=random_int(nn1->layer[3].neurons)+1;
+  h = (int) random_int(nn1->layer[3].neurons)+1;
   
   for (i=1; i<=nn1->layer[2].neurons; i++)
     {
@@ -474,7 +474,7 @@ void nnevolve_crossover_in(population *pop, entity *mother, entity *father, enti
  * This algorithm would naturally be recursive, but unrolled for the sake
  * of speed.  I assume four layers in total.
  */
-  h=random_int(nn1->layer[0].neurons+1);
+  h = (int) random_int(nn1->layer[0].neurons+1);
   
   for (i=1; i<=nn1->layer[1].neurons; i++)
     {
@@ -528,7 +528,7 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
  * Chance for tweaking either momentum or decay equals
  * the chance for randomly tweaking one weight.
  */
-  event = random_int(4);
+  event = (int) random_int(4);
 
   switch (event)
     {
@@ -544,9 +544,9 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
  * (a) only 1 random number should be needed.
  * (b) currently weights are not selected with equal probability.
  */
-      l = random_int(nn->num_layers-1)+1;
-      i = random_int(nn->layer[l].neurons)+1;
-      j = random_int(nn->layer[l-1].neurons+1);
+      l = (int) random_int(nn->num_layers-1)+1;
+      i = (int) random_int(nn->layer[l].neurons)+1;
+      j = (int) random_int(nn->layer[l-1].neurons+1);
 
       nn->layer[l].weight[i][j] += random_float_range(-0.7,0.7);
     }
@@ -665,13 +665,13 @@ void nnevolve_chromosome_replicate( population *pop,
   		FIXME: incorrect.
   parameters:
   return:       Number of bytes processed.
-  last updated: 04 Feb 2002
+  last updated: 24 Dec 2002
  **********************************************************************/
 
 unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
                                      byte **bytes, unsigned int *max_bytes)
   {
-  int           num_bytes;      /* Actual size of genes. */
+  unsigned int	num_bytes;	/* Actual size of genes. */
 
   dief("Function not implemented");
 
@@ -682,11 +682,11 @@ unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
 
   if (!joe->chromosome || !joe->chromosome[0]) die("Entity has no chromosome.");
 
-  num_bytes = sizeof(network_t);
+  num_bytes = (unsigned int) sizeof(network_t);
 
   *bytes = (byte *)joe->chromosome[0];
 
-  return (unsigned int) num_bytes;
+  return num_bytes;
   }
 
 
