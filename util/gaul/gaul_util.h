@@ -378,22 +378,6 @@ typedef unsigned char byte;
                 s_breakpoint;				\
 		} MWRAP_END
 
-/* Idea: Decrement warn() in favour of helga_log functionality? */
-#define warn(X)         MWRAP_BEGIN {					\
-                        printf("NON-FATAL ERROR: %s\n in %s at \"%s\" line %d\n",	\
-				(X),					\
-                               __PRETTY_FUNCTION__,			\
-                               __FILE__,				\
-                               __LINE__);				\
-                        } MWRAP_END
-
-/* #define helga_log(level, format, ...) MWRAP_BEGIN {          \
-        if ( (level) <= helga_log_get_level() )         \
-          helga_log_output(level, __PRETTY_FUNCTION__,  \
-                           __FILE__, __LINE__,          \
-                           format , ##__VA_ARGS__); } MWRAP_END
-*/
-
 /*
  * Implement my dief macro where possible.
  */
