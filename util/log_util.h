@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - MT safe, MP aware, general logging functions.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -27,7 +27,8 @@
 
   Synopsis:	Header file for my general logging functions.
 
-  Updated:	29 Jul 2002 SAA	Avoid a warning from the Intel C/C++ compiler.
+  Updated:	03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
+  		29 Jul 2002 SAA	Avoid a warning from the Intel C/C++ compiler.
 		02/02/01 SAA	Converted from helga_log.  Use mpi_util stuff instead of helga_mpi stuff.
 		19/09/00 SAA	Put a 'do{}while(0)' loop around contents of the helga_log() macro to avoid some tricky problems.
 		28/05/00 SAA	'enum helga_log_type' used properly now.  Renaming stuff so that helga_log() is now a macro.
@@ -109,7 +110,7 @@ void	log_output( const enum log_level_type level,
  * Unfortunately, this nice macro will only work on GNU systems.
  * We have a less-functional replacement for other systems.
  */
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#if ( defined(__GNUC__) || defined(__INTEL_COMPILER) ) && !defined(__APPLE_CPP__) && !defined(__APPLE_CC__)
 #define	plog( level, format, args... ) do { 	\
 	if ( (level) <= log_get_level() ) 	\
 	  log_output(level, __PRETTY_FUNCTION__,	\

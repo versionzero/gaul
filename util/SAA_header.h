@@ -26,7 +26,8 @@
 
  **********************************************************************
 
-  Updated:	03 Feb 2003 SAA	Replaced if PARALLEL!=1 directive with ifndef HAVE_PTHREADS.
+  Updated:	03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
+  		03 Feb 2003 SAA	Replaced if PARALLEL!=1 directive with ifndef HAVE_PTHREADS.
  		07 Jan 2003 SAA	Added wrappers for multi-statement macros, MWRAP_BEGIN and MWRAP_END.
   		24 Dec 2002 SAA	Prevented double declaration of _Bool.  Changed definitions of TRUE and FALSE to avoid splint warnings.
   		17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
@@ -457,7 +458,7 @@ typedef unsigned char byte;
 /*
  * Implement my dief macro where possible.
  */
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#if ( defined(__GNUC__) || defined(__INTEL_COMPILER) ) && !defined(__APPLE_CPP__) && !defined(__APPLE_CC__)
 #  define dief(format, args...)	MWRAP_BEGIN {			\
 			printf("FATAL ERROR: ");		\
 			printf(format, ##args);			\

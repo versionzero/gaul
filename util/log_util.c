@@ -33,7 +33,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	03 Feb 2003 SAA	Tweaks relating to changes in mpi_util.c
+  Updated:	03 Jun 2003 SAA	Work around lack of vararg macros on Mac OS X, despite using gcc 3.1.
+		03 Feb 2003 SAA	Tweaks relating to changes in mpi_util.c
 		03 Oct 2002 SAA	Increased dimensions of log_text arrays to avoid warnings on the Compaq C compiler.
 		01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
 		28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
@@ -287,7 +288,7 @@ void log_output(	const enum	log_level_type level,
   }
 
 
-#if !defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#if !( ( defined(__GNUC__) || defined(__INTEL_COMPILER) ) && !defined(__APPLE_CPP__) && !defined(__APPLE_CC__) )
 /*
  * This is a reduced form of the above function for non-GNU systems.
  */
