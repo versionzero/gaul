@@ -2,6 +2,9 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1841:
+Daniel Pick - Bug reports and fix.
+
 Prior to release 0.1840:
 Antti Akonniemi - MacOS X compilation report.
 Mark T. Richardson - QNX V6 compilation report.
@@ -11,4 +14,5 @@ Syrrx, Inc. - Dollars :-)
 
 Prior to release 0.1838:
 Stepan Harbek - Cygwin compilation reports and tips.
+Sourceforge (http://sourceforge.net/) - Hosting services.
 

@@ -1,4 +1,6 @@
 Changes since release 0.1840:
+- Fixed configuration bug causing shared dynamic object libarys to not be installed under UNIX.
+- Fixed minor bug in ga_evolution_forked() causing incorrect number of forked processes to be reported.  -- thanks to Daniel Pick.
 
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().

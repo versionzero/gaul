@@ -94,7 +94,7 @@
  * This has to be defined prior to the inclusion of any of the 
  * standard C headers.
  */
-#ifdef __GNUC__
+#if defined(__GNUC__)
 # define _GNU_SOURCE
 #endif
 
@@ -180,52 +180,28 @@
 # include <stdbool.h>
 #else
 
-#if defined(SUN_FORTE_C)
-/*
- * Sun's handling of _Bool causes lots of warnings unless
- * the following stuff is skipped.
- */
-# define boolean int
-#else
-/*
- * Some platforms already define true and false.  To the
- * best of my knowledge, it is always safe to zap these.
- */
-# if defined(false)
-#  undef false
-#  undef true
-# endif
-
 # if !defined(__bool_true_false_are_defined)
-/*#  if defined(__cplusplus) || defined(__DECC) || defined(_ISOC99_SOURCE)*/
-#  if defined(_Bool)
-typedef _Bool bool;
-typedef _Bool boolean;
-#  else
-/* By defining _Bool as an enum type we get to see symbolic
- * names in gdb.
- */
-typedef enum { false, true } _Bool;
+#  if !defined(_Bool) && !defined(__GNUC__)
+typedef short _Bool;
 #  endif
-# endif
 
-# define bool _Bool
-# define boolean _Bool
+#  if !defined(true)
+#   define true  (_Bool) 1
+#   define false (_Bool) 0
+#  endif
 
 /* According to ISO C99, the boolean stuff must be available
  * in preprocessor directives and __bool_true_false_are_defined
  * should be true.
  */
-# if !defined(false) 
-#   define false (_Bool) 0
-#   define true  (_Bool) 1
+#  define __bool_true_false_are_defined 1
 # endif
-# define __bool_true_false_are_defined 1
 #endif
 
-#endif
+#define bool _Bool
+#define boolean _Bool
 
-#ifndef TRUE
+#if !defined(TRUE)
 #define TRUE  1
 #define FALSE 0
 #endif
