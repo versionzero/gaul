@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "02/12/02"
+#define BUILD_DATE_STRING "20/12/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -362,7 +362,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-18.8.0smp #1 SMP Wed Nov 13 23:11:20 EST 2002 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux dhcp-506-475 2.4.18-18.8.0 #1 Wed Nov 13 22:52:09 EST 2002 i686 athlon i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
