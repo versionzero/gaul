@@ -28,7 +28,8 @@
   Synopsis:	Multi-layer NN trained using backpropagation with
 		momentum.
 
-  Last Updated:	01 Mar 2002 SAA	Added stuff for weight decay.
+  Last Updated:	12 Mar 2002 SAA	Stuff for built-in standalone program code removed.
+		01 Mar 2002 SAA	Added stuff for weight decay.
   		05 Feb 2002 SAA	Added NN_IS_ON() and NN_IS_OFF() macros.
 		28 Jan 2002 SAA changes for distribution with GAUL.
   		25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
@@ -173,11 +174,6 @@ void	NN_define_eval_data(int ndata, float **data, float **prop);
 void	NN_define_predict_data(int ndata, float **data);
 int	read_fingerprint_binary_header(FILE *fp);
 void	read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions);
-
-#ifdef NN_STANDALONE
-void	write_usage(void);
-int	main(int argc, char **argv);
-#endif /* NN_STANDALONE */
 
 #endif /* NN_UTIL_H_INCLUDED */
 

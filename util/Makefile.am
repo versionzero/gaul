@@ -32,6 +32,11 @@ AUTOMAKE_OPTIONS = 1.4
 lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
+bin_PROGRAMS = nn
+
+nn_SOURCES = \
+	nn_main.c
+
 libstuff_a_SOURCES = \
 	avltree.c \
 	compatibility.c \
@@ -75,6 +80,8 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
+nn_LDADD = -L../src/ -lnn_util -lmethods -lrandom -lstr_util -lm
+
 libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
 
 libnn_util_a_LIBFLAGS = @MPIFLAGS@
@@ -86,4 +93,5 @@ librandom_a_LIBFLAGS = -lm @MPIFLAGS@
 libstr_util_a_LIBFLAGS = @MPIFLAGS@
 
 libtimer_util_a_LIBFLAGS = @MPIFLAGS@
+
 
