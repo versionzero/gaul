@@ -4,7 +4,6 @@
 
   memory_util - Usage control wrapper around standard malloc() etc.
   Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
-  All rights reserved.
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -139,7 +138,7 @@ typedef enum memory_alloc_type_t
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #define s_malloc_labelled(X, Y)	s_malloc_safe((X),			\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
-#define s_strndup(X)		s_strndup_safe((X), (Y),		\
+#define s_strndup(X, Y)		s_strndup_safe((X), (Y),		\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #define s_strdup(X)		s_strdup_safe((X),			\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
@@ -154,7 +153,9 @@ typedef enum memory_alloc_type_t
 #define s_realloc(X,Y)		realloc((X),(Y))
 #define s_malloc_labelled(X, Y)	malloc((X))
 #define s_strdup(X)		strdup((X))
-#define s_strndup(X, Y)		s_strndup_safe((X), (Y))
+/* Many systems don't have a strndup() function, so we just avoid the problem completely! */
+#define s_strndup(X, Y)		s_strndup_safe((X), (Y),		\
+				__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #define s_free(X)		free((X))
 
 #endif /* MEMORY_ALLOC_SAFE */
