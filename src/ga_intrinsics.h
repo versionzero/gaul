@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinsics - Genetic algorithm routine wrappers.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -51,9 +51,6 @@
 int	ga_population_new_wrapper(int *stable_size,
 				int *num_chromosome,
 				int *len_chromosome);
-#if 0
-int	ga_set_active_population_wrapper(int *id);
-#endif
 int	ga_entity_seed_wrapper(int *pop, int *id);
 int	ga_entity_id_from_rank(int *pop, int *rank);
 int	ga_entity_rank_from_id(int *pop, int *id);

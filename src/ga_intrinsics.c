@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinics - Genetic algorithm routine wrappers.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -71,11 +71,11 @@ int ga_population_new_wrapper(	int *stable_size,
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_seed_wrapper(int *popid, int *id)
+int ga_entity_seed_wrapper(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   return ga_entity_seed(pop, ga_get_entity_from_id(pop, *id));
   }
@@ -89,10 +89,10 @@ int ga_entity_seed_wrapper(int *popid, int *id)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_id_from_rank(int *popid, int *rank)
+int ga_entity_id_from_rank(int *pop_id, int *rank)
   {
   return ga_get_entity_id_from_rank(
-               ga_get_population_from_id(*popid), *rank );
+               ga_get_population_from_id(*pop_id), *rank );
   }
 
 
@@ -104,10 +104,10 @@ int ga_entity_id_from_rank(int *popid, int *rank)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_rank_from_id(int *popid, int *id)
+int ga_entity_rank_from_id(int *pop_id, int *id)
   {
   return ga_get_entity_rank_from_id(
-               ga_get_population_from_id(*popid), *id );
+               ga_get_population_from_id(*pop_id), *id );
   }
 
 
@@ -121,9 +121,9 @@ int ga_entity_rank_from_id(int *popid, int *id)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_population_seed_wrapper(int *popid)
+int ga_population_seed_wrapper(int *pop_id)
   {
-  return ga_population_seed(ga_get_population_from_id(*popid));
+  return ga_population_seed(ga_get_population_from_id(*pop_id));
   }
 
 
@@ -137,9 +137,9 @@ int ga_population_seed_wrapper(int *popid)
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_population_save_wrapper(int *popid, char *fname)
+int ga_population_save_wrapper(int *pop_id, char *fname)
   {
-  return ga_population_save(ga_get_population_from_id(*popid), fname);
+  return ga_population_save(ga_get_population_from_id(*pop_id), fname);
   }
 
 
@@ -166,11 +166,11 @@ int ga_population_read_wrapper(char *fname)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_compare_genome_wrapper(int *popid, int *jack, int *jill)
+int ga_entity_compare_genome_wrapper(int *pop_id, int *jack, int *jill)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
 /* Are Jack and Jill genetic twins? */
   return ga_compare_genome(pop,
@@ -189,13 +189,13 @@ int ga_entity_compare_genome_wrapper(int *popid, int *jack, int *jill)
   last updated:	07/02/01
  **********************************************************************/
 
-int ga_entity_cross_compare_genome_wrapper(int *jackpopid, int *jack,
-                                           int *jillpopid, int *jill)
+int ga_entity_cross_compare_genome_wrapper(int *jackpop_id, int *jack,
+                                           int *jillpop_id, int *jill)
   {
   population	*jackpop, *jillpop;	/* Population structures. */
 
-  jackpop = ga_get_population_from_id(*jackpopid);
-  jillpop = ga_get_population_from_id(*jillpopid);
+  jackpop = ga_get_population_from_id(*jackpop_id);
+  jillpop = ga_get_population_from_id(*jillpop_id);
 
 /* Are Jack and Jill genetic twins? */
   return ga_compare_genome(jackpop,
@@ -213,11 +213,11 @@ int ga_entity_cross_compare_genome_wrapper(int *jackpopid, int *jack,
   last updated: 22/01/01
  **********************************************************************/
 
-int ga_entity_kill(int *popid, int *id)
+int ga_entity_kill(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   return ga_entity_dereference_by_rank(
                 pop, ga_get_entity_rank_from_id(pop, *id) );
@@ -237,11 +237,11 @@ int ga_entity_kill(int *popid, int *id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_erase(int *popid, int *id)
+int ga_entity_erase(int *pop_id, int *id)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   ga_entity_blank(pop, ga_get_entity_from_id(pop, *id));
 
@@ -258,11 +258,11 @@ int ga_entity_erase(int *popid, int *id)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_new(int *popid)
+int ga_entity_new(int *pop_id)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   return ga_get_entity_id(pop, ga_get_free_entity(pop));
   }
@@ -278,10 +278,10 @@ int ga_entity_new(int *popid)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_entity_clone_wrapper(int *popid, int *parent)
+int ga_entity_clone_wrapper(int *pop_id, int *parent)
   {
   entity	*child;						/* Destination entity. */
-  population	*pop = ga_get_population_from_id(*popid);	/* Population. */
+  population	*pop = ga_get_population_from_id(*pop_id);	/* Population. */
 
   child = ga_get_free_entity(pop);
   ga_entity_copy(pop, child, ga_get_entity_from_id(pop, *parent));
@@ -298,11 +298,11 @@ int ga_entity_clone_wrapper(int *popid, int *parent)
   last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_chromosome_wrapper(int *popid, int *parent, int *child, int *chromosome)
+int ga_entity_copy_chromosome_wrapper(int *pop_id, int *parent, int *child, int *chromosome)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   return ga_entity_copy_chromosome(pop,
                                    ga_get_entity_from_id(pop, *child),
@@ -319,11 +319,11 @@ int ga_entity_copy_chromosome_wrapper(int *popid, int *parent, int *child, int *
   last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_all_chromosomes_wrapper(int *popid, int *parent, int *child)
+int ga_entity_copy_all_chromosomes_wrapper(int *pop_id, int *parent, int *child)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   return ga_entity_copy_all_chromosomes(pop,
                                         ga_get_entity_from_id(pop, *child),
@@ -343,14 +343,14 @@ int ga_entity_copy_all_chromosomes_wrapper(int *popid, int *parent, int *child)
   last updated:	14/02/01
  **********************************************************************/
 
-int ga_entity_migrate(int *srcpopid, int *destpopid, int *jacques)
+int ga_entity_migrate(int *srcpop_id, int *destpop_id, int *jacques)
   {
   population	*srcpop;	/* Original population. */
   population	*destpop;	/* Destination population. */
   entity	*jack;		/* Migrated entity. */
 
-  srcpop = ga_get_population_from_id(*srcpopid);
-  destpop = ga_get_population_from_id(*destpopid);
+  srcpop = ga_get_population_from_id(*srcpop_id);
+  destpop = ga_get_population_from_id(*destpop_id);
 
   jack = ga_get_free_entity(destpop);
   ga_entity_copy(srcpop, jack, ga_get_entity_from_id(srcpop, *jacques));
@@ -382,12 +382,12 @@ boolean ga_singlepoint_crossover_chromosome(int *father, int *mother, int *son, 
   last updated: 14/02/01
  **********************************************************************/
 
-int ga_crossover_chromosome_singlepoints_wrapper(int *popid,
+int ga_crossover_chromosome_singlepoints_wrapper(int *pop_id,
                      int *father, int *mother, int *son, int *daughter)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   ga_crossover_chromosome_singlepoints(pop,
                       ga_get_entity_from_id(pop, *father),
@@ -409,12 +409,12 @@ int ga_crossover_chromosome_singlepoints_wrapper(int *popid,
   last updated:	14/02/01
  **********************************************************************/
 
-int ga_crossover_chromosome_mixing_wrapper(int *popid,
+int ga_crossover_chromosome_mixing_wrapper(int *pop_id,
                      int *father, int *mother, int *son, int *daughter)
   {
   population    *pop;                   /* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   ga_crossover_chromosome_mixing(pop,
                       ga_get_entity_from_id(pop, *father),
@@ -435,11 +435,11 @@ int ga_crossover_chromosome_mixing_wrapper(int *popid,
   last updated: 07/02/01
  **********************************************************************/
 
-int ga_entity_score(int *popid, int *joe)
+int ga_entity_score(int *pop_id, int *joe)
   {
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   if (!pop->evaluate) die("Scoring function not defined.");
 
@@ -713,7 +713,7 @@ int ga_genocide_wrapper(int *pop, int *target_size)
   last updated:	24/03/01
  **********************************************************************/
 
-int ga_allele_search_wrapper(	int	*popid,
+int ga_allele_search_wrapper(	int	*pop_id,
 				int	*chromosomeid,
 				int 	*point,
 				int	*min_val,
@@ -723,7 +723,7 @@ int ga_allele_search_wrapper(	int	*popid,
   entity	*initial, *final;	/* Initial and final solutions. */
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   initial = &(pop->entity_array[*entity_id]);
 
@@ -744,7 +744,7 @@ int ga_allele_search_wrapper(	int	*popid,
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_metropolis_wrapper(	int	*popid,
+int ga_metropolis_wrapper(	int	*pop_id,
 				int	*entity_id,
 				int	*num_iterations,
 				int 	*temperature)
@@ -752,7 +752,7 @@ int ga_metropolis_wrapper(	int	*popid,
   entity	*initial, *final;	/* Initial and final solutions. */
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   initial = &(pop->entity_array[*entity_id]);
 
@@ -772,7 +772,7 @@ int ga_metropolis_wrapper(	int	*popid,
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_sa_wrapper(	int	*popid,
+int ga_sa_wrapper(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations,
 			int 	*initial_temperature,
@@ -781,7 +781,7 @@ int ga_sa_wrapper(	int	*popid,
   entity	*initial, *final;	/* Initial and final solutions. */
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   initial = &(pop->entity_array[*entity_id]);
 
@@ -790,71 +790,6 @@ int ga_sa_wrapper(	int	*popid,
 
   return ga_get_entity_id(pop, final);
   }
-
-
-/*
- * FIXME: This is a temporary function.  The hard-coded values are probably
- * not suitable for your particular task.
- */
-void temporary_nahc_mutation(int chromosome, int point, int *data)
-  {
-  int           orig=data[point];       /* The original data */
-
-  do
-    {
-    data[point] = random_int(RAND_MAX)-(RAND_MAX/2);
-    } while (data[point]==orig);
-
-  return;
-  }
-
-#if 0
-/*
- * FIXME: This is a temporary function.  The hard-coded values are specific to
- * the HelGA application.
- */
-void temporary_nahc_mutation(int chromosome, int point, int *data)
-  {
-  int           orig=data[point];       /* The original data */
-
-/*
- * Mutate.
- * FIXME: Currently very simple!  Should use the
- * algorithm in Leach for quaternions.
- */
-  if (point < 3)
-    {   /* Mutation in region of chromosome which encodes position. */
-    do
-      {
-      data[point] = helga_coord_to_int( random_double_range(-25.0, 25.0) );
-      } while (data[point]==orig);
-    }
-  else if (point < 7)
-    {   /* Mutation in region of chromosome which encodes orientation. */
-/* FIXME: Should I normalize quaternions here? */
-    do
-      {
-      data[point] = helga_quaternion_to_int( random_double_range(-1.0, 1.0) );
-      } while (data[point]==orig);
-    }
-  else if (point < 7+helga_get_sequence_size(chromosome))
-    {   /* Mutation in region of chromosome which encodes sidechain conformations. */
-    do
-      {
-      data[point] = random_int(helga_get_avail_conformations(chromosome, point-7));
-      } while (data[point]==orig && helga_get_avail_conformations(chromosome, point-7)>1);
-    }
-  else
-    {   /* Mutation in region of chromosome which encodes backbone conformation. */
-    do
-      {
-      data[point] = random_int(RAND_MAX);     /* FIXME: Use gaussian distribution. */
-      } while (data[point]==orig);
-    }
-
-  return;
-  }
-#endif
 
 
 /**********************************************************************
@@ -866,7 +801,24 @@ void temporary_nahc_mutation(int chromosome, int point, int *data)
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_nahc_wrapper(	int	*popid,
+/*
+ * FIXME: This is a temporary function.  The hard-coded values are probably
+ * not suitable for your particular task.
+ */
+static void _temporary_nahc_mutation(int chromosome, int point, int *data)
+  {
+  int           orig=data[point];       /* The original data */
+
+  do
+    {
+    data[point] = random_int(RAND_MAX)-(RAND_MAX/2);
+    } while (data[point]==orig);
+
+  return;
+  }
+
+
+int ga_nahc_wrapper(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
@@ -875,12 +827,13 @@ int ga_nahc_wrapper(	int	*popid,
 
   plog( LOG_FIXME, "Selection of optimisation function is currently unavailable from the script interface.");
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   initial = &(pop->entity_array[*entity_id]);
 
   final = ga_next_ascent_hill_climbing( pop, initial,
-                                        *num_iterations, temporary_nahc_mutation );
+                                        *num_iterations,
+					_temporary_nahc_mutation );
 
   return ga_get_entity_id(pop, final);
   }
@@ -895,14 +848,14 @@ int ga_nahc_wrapper(	int	*popid,
   last updated:	22/01/01
  **********************************************************************/
 
-int ga_rmhc_wrapper(	int	*popid,
+int ga_rmhc_wrapper(	int	*pop_id,
 			int	*entity_id,
 			int	*num_iterations )
   {
   entity	*initial, *final;	/* Initial and final solutions. */
   population	*pop;			/* Active population structure. */
 
-  pop = ga_get_population_from_id(*popid);
+  pop = ga_get_population_from_id(*pop_id);
 
   initial = &(pop->entity_array[*entity_id]);
 
@@ -923,9 +876,9 @@ int ga_rmhc_wrapper(	int	*popid,
   last updated:	28/02/01
  **********************************************************************/
 
-int ga_population_score_and_sort_wrapper(int *popid)
+int ga_population_score_and_sort_wrapper(int *pop_id)
   {
-  return ga_population_score_and_sort(ga_get_population_from_id(*popid));
+  return ga_population_score_and_sort(ga_get_population_from_id(*pop_id));
   }
 
 
@@ -1246,6 +1199,7 @@ boolean ga_intrinsic_sladd(void)
 */
      );
   }
+
 #endif
 
 
