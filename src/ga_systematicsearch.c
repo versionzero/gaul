@@ -87,6 +87,7 @@ int ga_search(	population		*pop,
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->search_params) die("ga_population_set_search_params(), or similar, must be used prior to ga_search().");
+  if (!pop->search_params->evaluate) die("Population's chromosome scan callback is undefined.");
 
 /* Prepare working entity. */
   putative = ga_get_free_entity(pop);

@@ -311,6 +311,7 @@ int ga_tabu(	population		*pop,
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->tabu_params) die("ga_population_set_tabu_params(), or similar, must be used prior to ga_tabu().");
+  if (!pop->tabu_params->mutate) die("Population's tabu acceptance callback is undefined.");
 
 /* Prepare working entities. */
   best = ga_get_free_entity(pop);	/* The best solution so far. */
