@@ -53,11 +53,14 @@ See file ./INSTALL
 Bug Submission
 --------------
 
-GAUL is still under heavy development, and certainly far from bug free. At the present time, the only bugs we are really interested in are those which cause crashes. If the stable distribution crashes, then we have done something wrong. If you find such a bug, please send details of your system, the version of GAUL that you are using and concise instructions for reproducing the crash to gaul@linux-domain.com.
+If you find a bug, please send details of your system, the version of
+GAUL that you are using and concise instructions for reproducing the
+crash to gaul@linux-domain.com.
 
 The GAUL 'Button'
 -----------------
-If you use GAUL in your application, please consider adding the miniature GAUL logo to your web page:
+If you use GAUL in your application, please consider adding the
+miniature GAUL logo to your web page:
 
 <a href="http://gaul.sourceforge.net/">
   <IMG src="gaul_button.png" width="88" height="31" border="0" alt="GAUL Button">
