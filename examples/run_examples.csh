@@ -44,7 +44,8 @@
 #
 # Adjust this path:
 #
-setenv GAUL_TEST_DIR /net/home/adcock/Code_development/gaul-devel/examples
+#setenv GAUL_TEST_DIR /net/home/adcock/Code_development/gaul-devel/examples
+setenv GAUL_TEST_DIR /u1/gaul-devel/examples
 
 #
 # Comment this to squash the core dumps:
