@@ -68,7 +68,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	04 Dec 2001 SAA	Added routines for 'float's.
+  Updated:	07 Jan 2002 SAA	random_unit_gaussian() and random_float_unit_gaussian() re-optimised.
+		04 Dec 2001 SAA	Added routines for 'float's.
 		19 Nov 2001 SAA	HELGA_USE_SLANG constant replaced by HAVE_SLANG.
 		16/06/01 SAA	Added random_double_full().
 		12/06/01 SAA	Added chi squared test to random_test().
@@ -556,9 +557,36 @@ float random_float_gaussian(const float mean, const float stddev)
 		deviation 1.0
   parameters:
   return:
-  last updated:	4 Dec 2001
+  last updated:	07 Jan 2002
  **********************************************************************/
 
+float random_float_unit_gaussian(void)
+  {
+  float			r, u, v, fac;
+  static boolean	set = FALSE;
+  static float		dset;
+
+  if (set)
+    {
+    set = FALSE;
+    return dset;
+    }
+
+  do
+    {
+    u = 2.0 * random_float_unit_uniform() - 1.0;
+    v = 2.0 * random_float_unit_uniform() - 1.0;
+    r = u*u + v*v;
+    } while (r >= 1.0);
+
+  fac = sqrt(-2.0 * log(r) / r);
+  dset = v*fac;
+
+  return u*fac;
+  }
+
+/* The original (thread-safe) version was this: */
+#if 0
 float random_float_unit_gaussian(void)
   {
   float	r, u, v;
@@ -572,6 +600,7 @@ float random_float_unit_gaussian(void)
 
   return u*sqrt(-2.0 * log(r) / r);
   }
+#endif
 
 
 /**********************************************************************
@@ -688,9 +717,36 @@ double random_unit_gaussian(void)
 		deviation 1.0
   parameters:
   return:
-  last updated:	11/01/01
+  last updated:	07 Jan 2002
  **********************************************************************/
 
+double random_unit_gaussian(void)
+  {
+  double		r, u, v, fac;
+  static boolean	set = FALSE;
+  static double		dset;
+
+  if (set)
+    {
+    set = FALSE;
+    return dset;
+    }
+
+  do
+    {
+    u = 2.0 * random_unit_uniform() - 1.0;
+    v = 2.0 * random_unit_uniform() - 1.0;
+    r = u*u + v*v;
+    } while (r >= 1.0);
+
+  fac = sqrt(-2.0 * log(r) / r);
+  dset = v*fac;
+
+  return u*fac;
+  }
+
+/* The original (thread-safe) version was this: */
+#if 0
 double random_unit_gaussian(void)
   {
   double	r, u, v;
@@ -704,6 +760,7 @@ double random_unit_gaussian(void)
 
   return u*sqrt(-2.0 * log(r) / r);
   }
+#endif
 
 
 /**********************************************************************
