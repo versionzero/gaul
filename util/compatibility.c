@@ -1426,7 +1426,6 @@ char *strerror(int errnum)
 void dief(const char *format, ...)
   {
   va_list       ap;                        /* variable args structure */
-  char          message[MAX_LINE_LEN];     /* The text to write */
 
   printf("FATAL ERROR: ");
   va_start(ap, format);
