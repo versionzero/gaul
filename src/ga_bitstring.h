@@ -40,8 +40,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_VALUES_H
-#include <values.h>
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
 #endif
 
 #include "ga_core.h"

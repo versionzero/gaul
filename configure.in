@@ -593,11 +593,18 @@ if test $gaul_header_stdbool_h = yes; then
 fi
 
 dnl Check whether compiler has built-in _Bool type.
+dnl Some systems (FreeBSD) seem to only have _Bool defined if stdbool.h
+dnl was included.  This is odd behaviour, but detected here!
 AC_CACHE_CHECK([for built-in _Bool type],
 	      gaul__bool,
 	     [AC_TRY_COMPILE(,
 	     [_Bool blah = (_Bool)0;],
 	     gaul__bool=yes, gaul__bool=no)])
+if test $gaul__bool = no && $gaul_header_stdbool_h = yes; then
+  AC_TRY_COMPILE([#include <stdbool.h>],
+           [_Bool blah = (_Bool)0;],
+           gaul__bool=yes, gaul__bool=no)
+fi
 if test $gaul__bool = yes; then
   AC_DEFINE(HAVE__BOOL, 1, [Define if compiler has built-in _Bool type.])
 fi
