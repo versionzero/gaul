@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_replace - Genetic algorithm replacement operators.
-  Copyright ©2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright Â©2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
