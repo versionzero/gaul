@@ -121,6 +121,8 @@ typedef struct
 #define NN_IS_ON(x)	((x)>=NN_SIGNAL_ON)
 #define NN_IS_OFF(x)	((x)<=NN_SIGNAL_OFF)
 
+typedef void	(*NN_training_func)(network_t *network, const int num_epochs);
+
 /*
  * Prototypes.
  *
@@ -172,8 +174,9 @@ void	NN_define_train_data(int ndata, float **data, float **prop);
 void	NN_define_test_data(int ndata, float **data, float **prop);
 void	NN_define_eval_data(int ndata, float **data, float **prop);
 void	NN_define_predict_data(int ndata, float **data);
-int	read_fingerprint_binary_header(FILE *fp);
-void	read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions);
+int	NN_read_fingerprint_binary_header(FILE *fp);
+int	NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data);
+void	NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions);
 
 #endif /* NN_UTIL_H_INCLUDED */
 

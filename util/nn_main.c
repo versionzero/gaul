@@ -60,6 +60,104 @@
 #include "nn_util.h"
 
 /**********************************************************************
+  split_data()
+  synopsis:     Split a single dataset into several datasets.
+  parameters:
+  return:       none.
+  last updated: 10 Dec 2001
+ **********************************************************************/
+
+void split_data(float ***data1, float ***prop1, char ***labels1, int *num_data1, int *max_data1,
+                float ***data2, float ***prop2, char ***labels2, int *num_data2, int *max_data2,
+                float ***data3, float ***prop3, char ***labels3, int *num_data3, int *max_data3,
+                int num2, int num3)
+  {
+
+  die("Function incomplete");
+
+  return;
+  }
+
+
+/**********************************************************************
+  read_comma_delimited_data()
+  synopsis:     Read non-fuzzy data with no labels from given ASCII
+		file.  First line specifies number of classes and
+		number of parameters.
+  parameters:   filename
+                data
+  return:       none.
+  last updated: 10 Dec 2001
+ **********************************************************************/
+
+void read_comma_delimited_data(char *fname, float ***data, float ***prop, char ***labels, int *num_data, int *max_data)
+  {
+  FILE  *fp;    			/* Filehandle. */
+  char  line_buffer[MAX_LINE_LEN];	/* Line buffer. */
+  char  *line;                          /* Line pointer. */
+  int   num_class=0;        		/* Dimensions of output data. */
+  int   data_size=0;	        	/* Dimensions of input data. */
+  int   label_len=4;		        /* Default label length. */
+  int   data_count;	        	/* Current data field. */
+  int   class;                          /* Current classification. */
+
+  if ( !(fp = fopen(fname, "r")) )
+    dief("Unable to open file \"%s\" for input.\n", fname);
+
+  if (str_nreadline(fp, MAX_LINE_LEN, line_buffer)<1)
+    dief("Unable to read from file \"%s\" for input.\n", fname);
+
+  sscanf(line_buffer, "%d %d\n", &num_class, &data_size);
+
+  while (str_nreadline(fp, MAX_LINE_LEN, line_buffer)>0)
+    {
+    line = line_buffer;
+
+    if (*num_data == *max_data)
+      {
+      *max_data += NN_DATA_ALLOC_SIZE;
+      *data = (float **) s_realloc(*data, sizeof(float *)*(*max_data));
+      *prop = (float **) s_realloc(*prop, sizeof(float *)*(*max_data));
+      *labels = (char **) s_realloc(*labels, sizeof(char *)*(*max_data));
+      }
+
+    (*labels)[*num_data] = (char *) s_malloc(sizeof(char)*label_len+1);
+    (*data)[*num_data] = (float *) s_malloc(sizeof(float)*data_size);
+    (*prop)[*num_data] = (float *) s_malloc(sizeof(float)*num_class);
+
+    line = strtok(line, ",");
+    class = atoi(line);
+
+    snprintf((*labels)[*num_data], label_len, "%d", *num_data);
+    (*labels)[*num_data][label_len] = '\0';
+
+    for (data_count=0; data_count<num_class; data_count++ )
+      {
+      if (data_count == class)
+        (*prop)[*num_data][data_count] = 1.0;
+      else
+        (*prop)[*num_data][data_count] = 0.0;
+      }
+
+    if (data_count!=num_class) die("Property size mismatch");
+
+    for (data_count=0; data_count<data_size && (line = strtok(NULL, ","))!=NULL; data_count++ )
+      {
+      (*data)[*num_data][data_count] = atof(line);
+      }
+
+    if (data_count!=data_size) die("Data size mismatch");
+
+    (*num_data)++;
+    }
+
+  fclose(fp);
+
+  return;
+  }
+
+
+/**********************************************************************
   write_usage()
   synopsis:     Display usage details.
   parameters:   none
@@ -129,7 +227,7 @@ void write_usage(void)
   last updated: 12 Mar 2002
  **********************************************************************/
 
-typedef enum initmode_enum = {fixed, randomize01, randomize11};
+typedef enum initmode_enum {fixed, randomize01, randomize11} initmode_t;
 
 int main(int argc, char **argv)
   {
@@ -142,8 +240,8 @@ int main(int argc, char **argv)
   boolean    do_readnn=FALSE, do_writenn=TRUE;	/* Whether to read/write NN. */
   boolean    do_train=TRUE, do_evaluate=TRUE;	/* Whether to train/evaluate NN. */
   boolean    do_predict=FALSE;			/* Whether to use NN for prediction. */
-  void       training_func=NN_train_random;	/* Function to use for training. */
-  initmode_enum	init_mode=do_randomize01;	/* How to initialize weights */
+  NN_training_func training_func=NN_train_random;	/* Function to use for training. */
+  initmode_t initmode=randomize01;		/* How to initialize weights */
   float      initval=0.5;			/* Value for weight initialization. */
   int        num_layers=0;			/* Number of layers in NN. */
   int        *neurons=NULL;			/* Number of neurons in each layer. */
@@ -350,16 +448,6 @@ int main(int argc, char **argv)
       printf("NN weights will be initialized to %f.\n", initval);
       initmode = fixed;
       }
-    else if (!strcmp(argv[i],"--trainrandom"))
-      {
-      printf("Training cycle will use data in random order.\n");
-      do_trainrandom = TRUE;
-      }
-    else if (!strcmp(argv[i],"--trainordered"))
-      {
-      printf("Training cycle will use data in order input.\n");
-      do_trainrandom = FALSE;
-      }
     else if (!strcmp(argv[i],"--trainprop"))
       {
       i++;
@@ -459,14 +547,14 @@ int main(int argc, char **argv)
 
     switch (initmode)
       {
-      case randomize:
+      case randomize11:
         NN_randomize_weights(network);
 	break;
       case randomize01:
-        NN_randomize_weights01(network);
+        NN_randomize_weights_01(network);
 	break;
       case fixed:
-	NN_set_all_weights(initval);
+	NN_set_all_weights(network, initval);
 	break;
       default:
 	die("Unknown weight initialization mode.");
@@ -492,17 +580,17 @@ int main(int argc, char **argv)
     if (do_train)
       {
       if ( network->layer[0].neurons !=
-           read_data(train_fp_infname, &train_data, &train_labels,
+           NN_read_data(train_fp_infname, &train_data, &train_labels,
                      &num_train_data, &max_train_data) )
         die("Input data dimension mismatch");
       if ( network->layer[0].neurons !=
-           read_data(test_fp_infname, &test_data, &test_labels,
+           NN_read_data(test_fp_infname, &test_data, &test_labels,
                      &num_test_data, &max_test_data) )
         die("Input data dimension mismatch");
-      read_prop(train_prop_infname, &train_property, &train_labels,
+      NN_read_prop(train_prop_infname, &train_property, &train_labels,
                     &num_train_prop, &num_train_data,
                     network->layer[network->num_layers-1].neurons);
-      read_prop(test_prop_infname, &test_property, &test_labels,
+      NN_read_prop(test_prop_infname, &test_property, &test_labels,
                     &num_test_prop, &num_test_data,
                     network->layer[network->num_layers-1].neurons);
       }
@@ -510,10 +598,10 @@ int main(int argc, char **argv)
     if (do_evaluate)
       {
       if ( network->layer[0].neurons !=
-           read_data(eval_fp_infname, &eval_data, &eval_labels,
+           NN_read_data(eval_fp_infname, &eval_data, &eval_labels,
                      &num_eval_data, &max_eval_data) )
         die("Input data dimension mismatch");
-      read_prop(eval_prop_infname, &eval_property, &eval_labels,
+      NN_read_prop(eval_prop_infname, &eval_property, &eval_labels,
                     &num_eval_prop, &num_eval_data,
                     network->layer[network->num_layers-1].neurons);
       }
@@ -521,7 +609,7 @@ int main(int argc, char **argv)
     if (do_predict)
       {
       if ( network->layer[0].neurons !=
-           read_data(predict_fp_infname, &predict_data, &predict_labels,
+           NN_read_data(predict_fp_infname, &predict_data, &predict_labels,
                      &num_predict_data, &max_predict_data) )
         die("Input data dimension mismatch");
       }
@@ -529,7 +617,7 @@ int main(int argc, char **argv)
 
   NN_define_train_data(num_train_data, train_data, train_property);
   NN_define_test_data(num_test_data, test_data, test_property);
-  NN_define_evaluate_data(num_eval_data, eval_data, eval_property);
+  NN_define_eval_data(num_eval_data, eval_data, eval_property);
   NN_define_predict_data(num_predict_data, predict_data);
 
   printf("\n");

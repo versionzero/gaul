@@ -117,6 +117,12 @@ lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
 
+bin_PROGRAMS = nn
+
+nn_SOURCES = \
+	nn_main.c
+
+
 libstuff_a_SOURCES = \
 	avltree.c \
 	compatibility.c \
@@ -167,6 +173,8 @@ include_HEADERS = \
      timer_util.h
 
 
+nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lmethods -lrandom -lm
+
 libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
 
 libnn_util_a_LIBFLAGS = @MPIFLAGS@
@@ -202,6 +210,11 @@ libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
 libtimer_util_a_LIBADD = 
 libtimer_util_a_OBJECTS =  timer_util.o
 AR = ar
+PROGRAMS =  $(bin_PROGRAMS)
+
+nn_OBJECTS =  nn_main.o
+nn_DEPENDENCIES = 
+nn_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -218,10 +231,11 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/linkedlist.P .deps/log_util.P .deps/memory_util.P \
-.deps/mpi_util.P .deps/nn_util.P .deps/random_util.P .deps/str_match.P \
-.deps/str_util.P .deps/table_util.P .deps/timer_util.P
-SOURCES = $(libstuff_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES)
-OBJECTS = $(libstuff_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS)
+.deps/mpi_util.P .deps/nn_main.P .deps/nn_util.P .deps/random_util.P \
+.deps/str_match.P .deps/str_util.P .deps/table_util.P \
+.deps/timer_util.P
+SOURCES = $(libstuff_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES) $(nn_SOURCES)
+OBJECTS = $(libstuff_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS) $(nn_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -328,6 +342,35 @@ libtimer_util.a: $(libtimer_util_a_OBJECTS) $(libtimer_util_a_DEPENDENCIES)
 	$(AR) cru libtimer_util.a $(libtimer_util_a_OBJECTS) $(libtimer_util_a_LIBADD)
 	$(RANLIB) libtimer_util.a
 
+mostlyclean-binPROGRAMS:
+
+clean-binPROGRAMS:
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+
+distclean-binPROGRAMS:
+
+maintainer-clean-binPROGRAMS:
+
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	done
+
+nn: $(nn_OBJECTS) $(nn_DEPENDENCIES)
+	@rm -f nn
+	$(LINK) $(nn_LDFLAGS) $(nn_OBJECTS) $(nn_LDADD) $(LIBS)
+
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(includedir)
@@ -432,7 +475,7 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-libLIBRARIES
+install-exec-am: install-libLIBRARIES install-binPROGRAMS
 install-exec: install-exec-am
 
 install-data-am: install-includeHEADERS
@@ -441,14 +484,16 @@ install-data: install-data-am
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-libLIBRARIES uninstall-includeHEADERS
+uninstall-am: uninstall-libLIBRARIES uninstall-binPROGRAMS \
+		uninstall-includeHEADERS
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
+	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) \
+		$(DESTDIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -461,27 +506,29 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
-		mostlyclean-generic
+		mostlyclean-libtool mostlyclean-binPROGRAMS \
+		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-libLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
+clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
+		clean-binPROGRAMS clean-tags clean-depend clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-libLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-depend \
-		distclean-generic clean-am
+		distclean-libtool distclean-binPROGRAMS distclean-tags \
+		distclean-depend distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-libLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-binPROGRAMS maintainer-clean-tags \
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -492,6 +539,8 @@ clean-libLIBRARIES maintainer-clean-libLIBRARIES uninstall-libLIBRARIES \
 install-libLIBRARIES mostlyclean-compile distclean-compile \
 clean-compile maintainer-clean-compile mostlyclean-libtool \
 distclean-libtool clean-libtool maintainer-clean-libtool \
+mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
+maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir \
 mostlyclean-depend distclean-depend clean-depend \

@@ -34,7 +34,7 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c
+  Last Updated:	12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
 		01 Mar 2002 SAA	Added weight decay functionality.  Added NN_set_layer_bias().  Broken compatibility in NN_write() and modified argument passing filename to const.  NN_read() renamed to NN_read_compat(), and new NN_read() implemented.  Per-layer bias is now available.  Added NN_adjust_weights_momentum() and NN_adjust_weights_decay().  Modified NN_adjust_weights() to perform classic back-propagation only.
   		25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
 		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
@@ -1491,7 +1491,7 @@ void NN_define_predict_data(int ndata, float **data)
 
 
 /**********************************************************************
-  read_fingerprint_binary_header()
+  NN_read_fingerprint_binary_header()
   synopsis:     Read binary fingerprint info from given filehandle.
                 Designed for future expansion rather than current
                 utility.
@@ -1500,7 +1500,7 @@ void NN_define_predict_data(int ndata, float **data)
   last updated: 28 Nov 2001
  **********************************************************************/
 
-int read_fingerprint_binary_header(FILE *fp)
+int NN_read_fingerprint_binary_header(FILE *fp)
   {
   char *fmt_str="FORMAT FP: 001\n";
   char fmt_str_in[16];
@@ -1518,7 +1518,7 @@ int read_fingerprint_binary_header(FILE *fp)
 
 
 /**********************************************************************
-  read_data()
+  NN_read_data()
   synopsis:     Read binary fingerprint with label from given file.
   parameters:   filename
                 data
@@ -1526,7 +1526,7 @@ int read_fingerprint_binary_header(FILE *fp)
   last updated: 3 Dec 2001
  **********************************************************************/
 
-int read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data)
+int NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data)
   {
   FILE  *fp;		/* Filehandle. */
   int   label_len;	/* Label length. */
@@ -1534,7 +1534,7 @@ int read_data(char *fname, float ***data, char ***labels, int *num_data, int *ma
 
   if ( !(fp = fopen(fname, "r")) ) dief("Unable to open file \"%s\" for input.\n", fname);
 
-  size = read_fingerprint_binary_header(fp);	/* Check validity of file. */
+  size = NN_read_fingerprint_binary_header(fp);	/* Check validity of file. */
 
   while (fread(&label_len, sizeof(int), 1, fp) > 0)
     {
@@ -1561,108 +1561,8 @@ int read_data(char *fname, float ***data, char ***labels, int *num_data, int *ma
   }
 
 
-#if 0
 /**********************************************************************
-  split_data()
-  synopsis:     Split a single dataset into several datasets.
-  parameters:
-  return:       none.
-  last updated: 10 Dec 2001
- **********************************************************************/
-
-void split_data(float ***data1, float ***prop1, char ***labels1, int *num_data1, int *max_data1,
-                float ***data2, float ***prop2, char ***labels2, int *num_data2, int *max_data2,
-                float ***data3, float ***prop3, char ***labels3, int *num_data3, int *max_data3,
-                int num2, int num3)
-  {
-
-  die("Function incomplete");
-
-  return;
-  }
-
-
-/**********************************************************************
-  read_comma_delimited_data()
-  synopsis:     Read non-fuzzy data with no labels from given ASCII
-		file.  First line specifies number of classes and
-		number of parameters.
-  parameters:   filename
-                data
-  return:       none.
-  last updated: 10 Dec 2001
- **********************************************************************/
-
-void read_comma_delimited_data(char *fname, float ***data, float ***prop, char ***labels, int *num_data, int *max_data)
-  {
-  FILE  *fp;    			/* Filehandle. */
-  char  line_buffer[MAX_LINE_LEN];	/* Line buffer. */
-  char  *line;                          /* Line pointer. */
-  int   num_class=0;        		/* Dimensions of output data. */
-  int   data_size=0;	        	/* Dimensions of input data. */
-  int   label_len=4;		        /* Default label length. */
-  int   data_count;	        	/* Current data field. */
-  int   class;                          /* Current classification. */
-
-  if ( !(fp = fopen(fname, "r")) )
-    dief("Unable to open file \"%s\" for input.\n", fname);
-
-  if (str_nreadline(fp, MAX_LINE_LEN, line_buffer)<1)
-    dief("Unable to read from file \"%s\" for input.\n", fname);
-
-  sscanf(line_buffer, "%d %d\n", &num_class, &data_size);
-
-  while (str_nreadline(fp, MAX_LINE_LEN, line_buffer)>0)
-    {
-    line = line_buffer;
-
-    if (*num_data == *max_data)
-      {
-      *max_data += NN_DATA_ALLOC_SIZE;
-      *data = (float **) s_realloc(*data, sizeof(float *)*(*max_data));
-      *prop = (float **) s_realloc(*prop, sizeof(float *)*(*max_data));
-      *labels = (char **) s_realloc(*labels, sizeof(char *)*(*max_data));
-      }
-
-    (*labels)[*num_data] = (char *) s_malloc(sizeof(char)*label_len+1);
-    (*data)[*num_data] = (float *) s_malloc(sizeof(float)*data_size);
-    (*prop)[*num_data] = (float *) s_malloc(sizeof(float)*num_class);
-
-    line = strtok(line, ",");
-    class = atoi(line);
-
-    snprintf((*labels)[*num_data], label_len, "%d", *num_data);
-    (*labels)[*num_data][label_len] = '\0';
-
-    for (data_count=0; data_count<num_class; data_count++ )
-      {
-      if (data_count == class)
-        (*prop)[*num_data][data_count] = 1.0;
-      else
-        (*prop)[*num_data][data_count] = 0.0;
-      }
-
-    if (data_count!=num_class) die("Property size mismatch");
-
-    for (data_count=0; data_count<data_size && (line = strtok(NULL, ","))!=NULL; data_count++ )
-      {
-      (*data)[*num_data][data_count] = atof(line);
-      }
-
-    if (data_count!=data_size) die("Data size mismatch");
-
-    (*num_data)++;
-    }
-
-  fclose(fp);
-
-  return;
-  }
-#endif
-
-
-/**********************************************************************
-  read_prop()
+  NN_read_prop()
   synopsis:     Read properties from given file.
   parameters:   filename
                 data
@@ -1670,7 +1570,7 @@ void read_comma_delimited_data(char *fname, float ***data, float ***prop, char *
   last updated: 10 Dec 2001
  **********************************************************************/
 
-void read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions)
+void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions)
   {
   FILE  *fp;		        	/* Filehandle. */
   char  line_buffer[MAX_LINE_LEN];	/* Line buffer. */

@@ -80,7 +80,7 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-nn_LDADD = -L../src/ -lnn_util -lmethods -lrandom -lstr_util -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lmethods -lrandom -lm
 
 libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
 
