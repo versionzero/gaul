@@ -76,8 +76,7 @@ gaul_config.h: gaul/stamp-gaul_config
 stamp-common: $(srcdir)/gaul/gaul_config.h.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gaul/gaul_config.h \
-	$(SHELL) ./config.status
-	echo timestamp > $@
+	$(SHELL) ./config.status && echo timestamp > $@
 
 # Don't distribute gaul_config.h, since it is build host dependent!
 # -- Currently, we do distribute this for easier compilation on
