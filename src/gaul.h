@@ -338,32 +338,32 @@ void	ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother
 void	ga_crossover_boolean_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                   entity *son, entity *daughter );
-void	ga_crossover_char_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_char_allele_mixing( population *pop,
-	                                 entity *father, entity *mother,
-                                  entity *son, entity *daughter );
-void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_double_allele_mixing( population *pop,
-                                entity *father, entity *mother,
-                                 entity *son, entity *daughter );
 void	ga_crossover_char_singlepoints( population *pop,
                                      entity *father, entity *mother,
                                           entity *son, entity *daughter );
 void	ga_crossover_char_doublepoints( population *pop,
                                     entity *father, entity *mother,
                                     entity *son, entity *daughter );
-void	ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_bitstring_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-void	ga_crossover_bitstring_allele_mixing( population *pop,
-                                entity *father, entity *mother,
-                                entity *son, entity *daughter );
+void	ga_crossover_char_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_char_allele_mixing( population *pop,
+	                                 entity *father, entity *mother,
+                                  entity *son, entity *daughter );
 void	ga_crossover_double_singlepoints( population *pop,
                                        entity *father, entity *mother,
                                        entity *son, entity *daughter );
 void	ga_crossover_double_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                        entity *son, entity *daughter );
+void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_double_allele_mixing( population *pop,
+                                entity *father, entity *mother,
+                                 entity *son, entity *daughter );
+void	ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_bitstring_allele_mixing( population *pop,
+                                entity *father, entity *mother,
+                                entity *son, entity *daughter );
 
 /*
  * Functions located in ga_mutate.c:
