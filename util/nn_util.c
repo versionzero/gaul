@@ -40,7 +40,8 @@
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
+  Last Updated:	06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
+		04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
 		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
   		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
 		24 Dec 2002 SAA Removed stupid error calculation from NN_predict().
@@ -929,19 +930,22 @@ void NN_train_random(network_t *network, const int num_epochs)
   parameters:   network_t *network
 		int num_epochs
   return:       none
-  last updated: 28 Jan 2002
+  last updated: 06 Feb 2002
  **********************************************************************/
 
 void NN_train_systematic(network_t *network, const int num_epochs)
   {
-  int  n;
+  int  i, n;
 
-  for (n=0; n<num_epochs*num_train_data; n++)
+  for (i=0; i<num_epochs; i++)
     {
-    NN_simulate(network, train_data[n], train_property[n]);
+    for (n=0; n<num_train_data; n++)
+      {
+      NN_simulate(network, train_data[n], train_property[n]);
 
-    NN_backpropagate(network);
-    NN_adjust_weights(network);
+      NN_backpropagate(network);
+      NN_adjust_weights(network);
+      }
     }
  
   return;
