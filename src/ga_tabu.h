@@ -42,6 +42,18 @@
 boolean ga_tabu_check_integer(  population      *pop,
                   entity          *putative,
                   entity          *tabu);
+boolean ga_tabu_check_boolean(  population      *pop,
+                  entity          *putative,
+                  entity          *tabu);
+boolean ga_tabu_check_char(  population      *pop,
+                  entity          *putative,
+                  entity          *tabu);
+boolean ga_tabu_check_double(  population      *pop,
+                  entity          *putative,
+                  entity          *tabu);
+boolean ga_tabu_check_bitstring(  population      *pop,
+                  entity          *putative,
+                  entity          *tabu);
 void ga_population_set_tabu_parameters( population              *pop,
                       GAtabu_accept           tabu_accept,
                       const int               list_length,
