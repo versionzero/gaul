@@ -138,7 +138,6 @@ int main(int argc, char **argv)
   population	*popb=NULL;	/* Population for Baldwinian evolution. */
   population	*popl=NULL;	/* Population for Lamarckian evolution. */
 
-  random_init();
   random_seed(42);
 
   popd = ga_genesis_char(

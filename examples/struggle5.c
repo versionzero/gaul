@@ -96,7 +96,6 @@ int main(int argc, char **argv)
   int		i;				/* Loop over populations. */
   population	*pop[GA_STRUGGLE_NUM_POPS];	/* Array of populations. */
 
-  random_init();
   random_seed(42);
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)

@@ -58,8 +58,8 @@ int        num_train_data=0;        /* Number of training items. */
 /*
  * Compilation constants.
  */
-#define NNEVOLVE_NUM_SCORE	100
-#define NNEVOLVE_NUM_TRAIN	200
+#define NNEVOLVE_NUM_SCORE	500
+#define NNEVOLVE_NUM_TRAIN	5000
 
 
 /**********************************************************************
@@ -180,7 +180,9 @@ boolean nnevolve_evaluate_all(population *pop, entity *entity)
       }
     }
 
-  entity->fitness = 1.0/(1.0+(error+wrong_count)/num_train_data);
+  /*entity->fitness = 1.0/(1.0+(5*error+wrong_count)/(num_train_data*5));*/
+/* Added contribution to keep gain close to 1.0 */
+  entity->fitness = 1.0/(1.0+(10*error+wrong_count+1000*SQU(1.0-nn->gain)));
 
   return TRUE;
   }
@@ -207,7 +209,7 @@ boolean nnevolve_evaluate1(population *pop, entity *entity)
     error += nn->error;
     }
 
-  entity->fitness = 1.0/(1.0+error/NNEVOLVE_NUM_SCORE);
+  entity->fitness = 1.0/(1.0+error);
 
   return TRUE;
   }
@@ -263,10 +265,10 @@ boolean nnevolve_seed(population *pop, entity *adam)
 
   NN_randomize_weights_01(nn);
 
-  NN_set_momentum(nn, random_float_range(0.40,0.90));
-  NN_set_rate(nn, random_float_range(0.05,0.35));
-  NN_set_gain(nn, random_float_range(0.95,1.05));
-  NN_set_bias(nn, random_float_range(0.95,1.05));
+  NN_set_momentum(nn, random_float_range(0.4,0.9));
+  NN_set_rate(nn, random_float_range(0.1,0.4));
+  NN_set_gain(nn, 1.0);
+  NN_set_bias(nn, 1.0);
 
   return TRUE;
   }
@@ -295,8 +297,9 @@ entity *nnevolve_adapt(population *pop, entity *child)
 
 /*
  * Train network using back-propagation with momentum using
- * randomly selected training data.  (10 items)
+ * randomly selected training data.  (NNEVOLVE_NUM_TRAIN items)
  */
+#if 0
   for (n=0; n<NNEVOLVE_NUM_TRAIN; n++)
     {
     item = random_int(num_train_data);
@@ -305,10 +308,13 @@ entity *nnevolve_adapt(population *pop, entity *child)
     NN_backpropagate(nn);
     NN_adjust_weights(nn);
     }
+#endif
+
+  NN_train_random(nn, 100);
 
   ga_entity_evaluate(pop, adult);
 
-/*  printf("DEBUG: Fitness %f -> %f\n", child->fitness, adult->fitness);*/
+  printf("DEBUG: Fitness %f -> %f\n", child->fitness, adult->fitness);
 
   return adult;
   }
@@ -344,20 +350,6 @@ void nnevolve_crossover_layerwise(population *pop, entity *mother, entity *fathe
     temp = nn1->rate;
     nn1->rate = nn2->rate;
     nn2->rate = temp;
-    }
-
-  if (random_boolean())
-    {
-    temp = nn1->gain;
-    nn1->gain = nn2->gain;
-    nn2->gain = temp;
-    }
-
-  if (random_boolean())
-    {
-    temp = nn1->bias;
-    nn1->bias = nn2->bias;
-    nn2->bias = temp;
     }
 
   for (l=1; l<nn1->num_layers; l++)
@@ -408,20 +400,6 @@ void nnevolve_crossover_out(population *pop, entity *mother, entity *father, ent
     temp = nn1->rate;
     nn1->rate = nn2->rate;
     nn2->rate = temp;
-    }
-
-  if (random_boolean())
-    {
-    temp = nn1->gain;
-    nn1->gain = nn2->gain;
-    nn2->gain = temp;
-    }
-
-  if (random_boolean())
-    {
-    temp = nn1->bias;
-    nn1->bias = nn2->bias;
-    nn2->bias = temp;
     }
 
 /*
@@ -492,20 +470,6 @@ void nnevolve_crossover_in(population *pop, entity *mother, entity *father, enti
     nn2->rate = temp;
     }
 
-  if (random_boolean())
-    {
-    temp = nn1->gain;
-    nn1->gain = nn2->gain;
-    nn2->gain = temp;
-    }
-
-  if (random_boolean())
-    {
-    temp = nn1->bias;
-    nn1->bias = nn2->bias;
-    nn2->bias = temp;
-    }
-
 /*
  * This algorithm would naturally be recursive, but unrolled for the sake
  * of speed.  I assume four layers in total.
@@ -561,24 +525,18 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
   NN_copy((network_t *)mother->chromosome[0], nn);
 
 /*
- * Equal chance for tweaking momentum, gain, rate, bias, or
- * randomly setting one weight.
+ * Chance for tweaking either momentum or decay equals
+ * the chance for randomly tweaking one weight.
  */
-  event = random_int(5);
+  event = random_int(4);
 
   switch (event)
     {
     case 0:
-      nn->momentum += random_float_range(-0.1,0.1);
+      nn->momentum += random_float_range(-0.05,0.05);
       break;
     case 1:
-      nn->gain += random_float_range(-0.1,0.1);
-      break;
-    case 2:
-      nn->rate += random_float_range(-0.1,0.1);
-      break;
-    case 3:
-      NN_set_bias(nn, nn->bias+random_float_range(-0.1,0.1));
+      nn->rate += random_float_range(-0.05,0.05);
       break;
     default:
 /*
@@ -590,7 +548,7 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
       i = random_int(nn->layer[l].neurons)+1;
       j = random_int(nn->layer[l-1].neurons+1);
 
-      nn->layer[l].weight[i][j] = random_float(1.0);
+      nn->layer[l].weight[i][j] += random_float_range(-0.5,0.5);
     }
 
 /*  printf("DEBUG: Mutate: rate = %f -> %f momentum = %f -> %f\n", ((network_t *)mother->chromosome[0])->rate, nn->rate, ((network_t *)mother->chromosome[0])->momentum, nn->momentum);*/
@@ -613,13 +571,11 @@ boolean nnevolve_generation_hook(int generation, population *pop)
 
   best = ga_get_entity_from_rank(pop, 0);
 
-  printf( "%d: fitness = %f momentum = %f gain = %f rate = %f bias = %f\n",
+  printf( "%d: fitness = %f momentum = %f rate = %f\n",
             generation,
             best->fitness,
             ((network_t *)best->chromosome[0])->momentum,
-            ((network_t *)best->chromosome[0])->gain,
-            ((network_t *)best->chromosome[0])->rate,
-            ((network_t *)best->chromosome[0])->bias );
+            ((network_t *)best->chromosome[0])->rate );
 
   return TRUE;
   }
@@ -761,7 +717,7 @@ void nnevolve_chromosome_from_bytes(population *pop, entity *joe, byte *bytes)
 /**********************************************************************
   nnevolve_chromosome_to_string()
   synopsis:     Chromosome conversion to human readable static string.
-  		FIXME: incorrect.
+  		FIXME: incorrect, but not needed in this application.
   parameters:
   return:
   last updated: 29 Jan 2002
@@ -847,7 +803,7 @@ void nnevolve_setup_data(void)
   synopsis:	Evolve a fixed topology neural network.
   parameters:
   return:	2, on success.
-  updated:	28 Jan 2002
+  updated:	11 Jun 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -861,15 +817,15 @@ int main(int argc, char **argv)
 /*
  * Initialize random number generator.
  */
-  random_seed(2002002);
+  random_seed(20022002);
 
 /*
  * Allocate a new popuation structure.
- * stable num. individuals = 30
+ * stable num. individuals = 20
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 30, 1, 0 );
+  pop = ga_population_new( 20, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -892,10 +848,10 @@ int main(int argc, char **argv)
   pop->data_ref_incrementor = NULL;
 
 /*
-  pop->evaluate = nnevolve_evaluate1;
+  pop->evaluate = nnevolve_evaluate_all;
   pop->evaluate = nnevolve_evaluate2;
 */
-  pop->evaluate = nnevolve_evaluate_all;
+  pop->evaluate = nnevolve_evaluate1;
   pop->seed = nnevolve_seed;
   pop->adapt = nnevolve_adapt;
 /*
@@ -921,16 +877,17 @@ int main(int argc, char **argv)
  * Set the GA parameters:
  * Evolutionary scheme = Lamarckian adaptation on entire population.
  * Elitism scheme      = Parents may pass to next generation.
- * Crossover ratio     = 0.40
+ * Crossover ratio     = 0.20
  * Mutation ratio      = 0.01
  * Migration ration    = 0.0
  */
-  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 0.40, 0.01, 0.0 );
+  ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 0.20, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
  */
   nnevolve_setup_data();
+  NN_define_train_data(num_train_data, train_data, train_property);
 
 /*
  * Perform the Lamarckian evolution for 500 generations.
@@ -952,7 +909,6 @@ int main(int argc, char **argv)
 /*
  * For comparison, try standard back-propagation.
  */
-  NN_define_train_data(num_train_data, train_data, train_property);
   entity = ga_get_free_entity(pop);
   NN_randomize_weights_01((network_t *)entity->chromosome[0]);
   NN_set_momentum((network_t *)entity->chromosome[0], 0.5);

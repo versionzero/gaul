@@ -1,9 +1,9 @@
 /**********************************************************************
-  struggle5_mp.c
+  struggle5_forked.c
  **********************************************************************
 
-  struggle5_mp - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  struggle5_forked - Test/example program for GAUL.
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -28,21 +28,14 @@
 
 		This example shows the use of multiple populations
 		with GAUL's so called "archipelago" scheme.  This is
-		the basic island model of evolution, with the islands'
-		populations distributed over several processors.
+		the basic island model of evolution, but using the
+		forked process version of the algorithm.
 
 		This program aims to generate the final sentence from
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is discussed in docs/html/tutorial9.html
-
-		It is likely that you have problems to compile and/or
-		execute this example.  Isuggest the following:
-		1) Download and _correctly_ install a MPI implementation.
-		2) Confirm that MPI programs work okay.
-		3) Use "./configure --enable-mpi=yes" to build GAUL.
-		4) Execute this example with something like "mpirum -v -np 4 ./struggle5_mp"
+		This example is explained in docs/html/tutorial9.html
 
  **********************************************************************/
 
@@ -51,11 +44,8 @@
  */
 #include "gaul.h"
 
-/*
- * Specify the number of populations (islands) to use on each processor.
- * (This value doesn't need to be constant across all processors.)
- */
-#define GA_STRUGGLE_NUM_POPS_PER_PROC	2
+/* Specify the number of populations (islands) to use. */
+#define GA_STRUGGLE_NUM_POPS	5
 
 /*
  * The solution string.
@@ -95,25 +85,22 @@ boolean struggle_score(population *pop, entity *entity)
 
 /**********************************************************************
   main()
-  synopsis:	The "struggle5" example modified slightly to use
-		multiple processors.
+  synopsis:	Erm?
   parameters:
   return:
-  updated:	29 Jan 2002
+  updated:	20/06/01
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  int		i;					/* Loop over populations. */
-  population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of population pointers. */
+  int		i;				/* Loop over populations. */
+  population	*pop[GA_STRUGGLE_NUM_POPS];	/* Array of populations. */
 
-  mpi_init(&argc, &argv);
+  random_seed(42);
 
-  random_seed(42*mpi_get_rank());
-
-  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
+  for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
     {
-    pops[i] = ga_genesis_char(
+    pop[i] = ga_genesis_char(
        80,			/* const int              population_size */
        1,			/* const int              num_chromo */
        strlen(target_text),	/* const int              len_chromo */
@@ -131,46 +118,21 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
+    ga_population_set_parameters( pop[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
     }
 
-/*
- * Test chromosome packing.
- * FIXME: Move to test suite.
- */
-#if 0
-  for (i=0; i<pops[0]->size; i++)
+  ga_evolution_archipelago_forked( GA_STRUGGLE_NUM_POPS, pop, 250 );
+
+  for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
     {
-    int len;
-    byte *buffer1=NULL, *buffer2=NULL;
-    unsigned int max_len=0;
+    printf( "The best solution on island %d with score %f was:\n",
+            i, ga_get_entity_from_rank(pop[i],0)->fitness );
+    printf( "%s\n",
+            ga_chromosome_char_to_staticstring(pop[i],
+                               ga_get_entity_from_rank(pop[i],0)) );
 
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer2, &max_len);
-    pops[0]->chromosome_from_bytes(pops[0], pops[0]->entity_iarray[i], buffer1);
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
-    
-    printf("E %d len %d match %d\n", i, len, memcmp(buffer1, buffer2, len));
+    ga_extinction(pop[i]);
     }
-#endif
-
-/*
- * The only significant difference between "examples/struggle5" and
- * "examples/struggle5_mp" is in the following statement.
- */
-  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS_PER_PROC, pops, 250 );
-
-  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
-    {
-    printf( "The best solution on processor %d, island %d with score %f was:\n%s\n",
-            mpi_get_rank(), i,
-            ga_get_entity_from_rank(pops[i],0)->fitness,
-            ga_chromosome_char_to_staticstring(pops[i], ga_get_entity_from_rank(pops[i],0)) );
-
-    ga_extinction(pops[i]);
-    }
-
-  mpi_exit();
 
   exit(2);
   }

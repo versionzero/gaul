@@ -194,7 +194,6 @@ int main(int argc, char **argv)
   {
   population	*pop=NULL;	/* Population structure. */
 
-  random_init();
   random_seed(42);
 
   pop = ga_genesis_char(
