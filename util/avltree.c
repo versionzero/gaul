@@ -52,7 +52,8 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Last Updated:	24 Apr 2002 SAA	Some renaming for consistency.
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
  		18/01/01 SAA	Test function renamed to avltree_test(), and avltree_diagnostics() added.
@@ -71,55 +72,55 @@
 /*
  * Private node data structure.
  */
-typedef struct AVLTreeNode_t
+typedef struct AVLNode_t
   {
-  struct AVLTreeNode_t *left;	/* Left subtree. */
-  struct AVLTreeNode_t *right;	/* Right subtree. */
+  struct AVLNode_t *left;	/* Left subtree. */
+  struct AVLNode_t *right;	/* Right subtree. */
   int		balance;	/* Height (left) - height (right). */
   AVLKey	key;		/* The key for this node. */
   vpointer	data;		/* Data stored at this node. */
-  } AVLTreeNode;
+  } AVLNode;
 
 /*
  * Private function prototypes.
  */
-static AVLTreeNode	*avltree_node_new(AVLKey key, vpointer data);
-static void		avltree_node_free(AVLTreeNode *node);
-static void		avltree_node_delete(AVLTreeNode *node);
-static AVLTreeNode	*avltree_node_insert(AVLTreeNode *node, AVLKey key,
+static AVLNode	*avltree_node_new(AVLKey key, vpointer data);
+static void		avltree_node_free(AVLNode *node);
+static void		avltree_node_delete(AVLNode *node);
+static AVLNode	*avltree_node_insert(AVLNode *node, AVLKey key,
 					     vpointer data, boolean *inserted);
-static AVLTreeNode	*avltree_node_remove(AVLTreeNode *node,
+static AVLNode	*avltree_node_remove(AVLNode *node,
                                              AVLKey key, vpointer *removed_data);
-static AVLTreeNode	*avltree_node_balance(AVLTreeNode *node);
-static AVLTreeNode	*avltree_node_remove_leftmost(AVLTreeNode *node,
-						     AVLTreeNode **leftmost);
-static AVLTreeNode	*avltree_node_restore_left_balance(AVLTreeNode *node,
+static AVLNode	*avltree_node_balance(AVLNode *node);
+static AVLNode	*avltree_node_remove_leftmost(AVLNode *node,
+						     AVLNode **leftmost);
+static AVLNode	*avltree_node_restore_left_balance(AVLNode *node,
 						     int old_balance);
-static AVLTreeNode	*avltree_node_restore_right_balance(AVLTreeNode *node,
+static AVLNode	*avltree_node_restore_right_balance(AVLNode *node,
 						     int old_balance);
-static vpointer		avltree_node_lookup(AVLTreeNode *node, AVLKey key);
-static int		avltree_node_count(AVLTreeNode *node);
-static boolean		avltree_node_traverse(AVLTreeNode *node,
+static vpointer		avltree_node_lookup(AVLNode *node, AVLKey key);
+static int		avltree_node_count(AVLNode *node);
+static boolean		avltree_node_traverse(AVLNode *node,
 				AVLTraverseFunc traverse_func, vpointer userdata);
-static int		avltree_node_height(AVLTreeNode *node);
-static AVLTreeNode	*avltree_node_rotate_left(AVLTreeNode *node);
-static AVLTreeNode	*avltree_node_rotate_right(AVLTreeNode *node);
-static void		avltree_node_check(AVLTreeNode *node);
+static int		avltree_node_height(AVLNode *node);
+static AVLNode	*avltree_node_rotate_left(AVLNode *node);
+static AVLNode	*avltree_node_rotate_right(AVLNode *node);
+static void		avltree_node_check(AVLNode *node);
 
 /*
  * Global variables.
  */
 THREAD_LOCK_DEFINE_STATIC(avltree_global_lock);
 static MemChunk		*node_mem_chunk = NULL;
-static AVLTreeNode	*node_free_list = NULL;
+static AVLNode		*node_free_list = NULL;
 
 /*
  * Private functions.
  */
 
-static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
+static AVLNode *avltree_node_new(AVLKey key, vpointer data)
   {
-  AVLTreeNode *node;
+  AVLNode *node;
 
   THREAD_LOCK(avltree_global_lock);
 /*
@@ -134,7 +135,7 @@ static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
   else
     {
     if (!node_mem_chunk)
-      node_mem_chunk = mem_chunk_new_unfreeable(sizeof(AVLTreeNode), 1024);
+      node_mem_chunk = mem_chunk_new_unfreeable(sizeof(AVLNode), 1024);
 
     node = mem_chunk_alloc(node_mem_chunk);
     }
@@ -150,7 +151,7 @@ static AVLTreeNode *avltree_node_new(AVLKey key, vpointer data)
   }
 
 
-static void avltree_node_free(AVLTreeNode *node)
+static void avltree_node_free(AVLNode *node)
   {
   THREAD_LOCK(avltree_global_lock);
   node->right = node_free_list;
@@ -161,7 +162,7 @@ static void avltree_node_free(AVLTreeNode *node)
   }
 
 
-static void avltree_node_delete(AVLTreeNode *node)
+static void avltree_node_delete(AVLNode *node)
   {
   if (node)
     {
@@ -177,7 +178,7 @@ static void avltree_node_delete(AVLTreeNode *node)
 /*
  * Actually, an iterative version would be preferable...
  */
-static void avltree_node_destroy(AVLTreeNode *node, AVLDestructorFunc free_func)
+static void avltree_node_destroy(AVLNode *node, AVLDestructorFunc free_func)
   {
   if (node)
     {
@@ -196,7 +197,7 @@ static void avltree_node_destroy(AVLTreeNode *node, AVLDestructorFunc free_func)
  * same ordering as the tree.
  * This iterative version is much faster than the equivalent recursive version.
  */
-static vpointer avltree_node_ordered_search(AVLTreeNode *node,
+static vpointer avltree_node_ordered_search(AVLNode *node,
                      AVLSearchFunc search_func, vpointer userdata)
   {
   int dir = 1;
@@ -218,10 +219,10 @@ static vpointer avltree_node_ordered_search(AVLTreeNode *node,
 
 
 /*
- * Systemmatically search tree until AVLMatchFunc returns TRUE.
+ * Systematically search tree until AVLMatchFunc returns TRUE.
  * This can be fairly slow!  Don't say I didn't warn you.
  */
-static boolean avltree_node_search(AVLTreeNode *node,
+static boolean avltree_node_search(AVLNode *node,
                      AVLMatchFunc search_func, vpointer userdata, vpointer *node_data)
   {
   *node_data=node->data;
@@ -240,7 +241,7 @@ static boolean avltree_node_search(AVLTreeNode *node,
   }
 
 
-static AVLTreeNode *avltree_node_insert(AVLTreeNode *node,
+static AVLNode *avltree_node_insert(AVLNode *node,
 		    AVLKey key, vpointer data, boolean *inserted)
   {
   int old_balance;
@@ -303,10 +304,10 @@ static AVLTreeNode *avltree_node_insert(AVLTreeNode *node,
   }
 
 
-static AVLTreeNode *avltree_node_remove(AVLTreeNode *node,
+static AVLNode *avltree_node_remove(AVLNode *node,
                             AVLKey key, vpointer *removed_data)
   {
-  AVLTreeNode	*new_root;
+  AVLNode	*new_root;
   int		old_balance;
 
   if (!node) return NULL;
@@ -331,7 +332,7 @@ static AVLTreeNode *avltree_node_remove(AVLTreeNode *node,
     }
   else if (key == node->key)
     {
-    AVLTreeNode *removed_node;
+    AVLNode *removed_node;
 
     removed_node = node;
 
@@ -357,7 +358,7 @@ static AVLTreeNode *avltree_node_remove(AVLTreeNode *node,
   }
 
 
-static AVLTreeNode *avltree_node_balance(AVLTreeNode *node)
+static AVLNode *avltree_node_balance(AVLNode *node)
   {
   if (node->balance < -1)
     {
@@ -376,8 +377,8 @@ static AVLTreeNode *avltree_node_balance(AVLTreeNode *node)
   }
 
 
-static AVLTreeNode *avltree_node_remove_leftmost(AVLTreeNode  *node,
-			     AVLTreeNode **leftmost)
+static AVLNode *avltree_node_remove_leftmost(AVLNode  *node,
+			     AVLNode **leftmost)
   {
   int old_balance;
 
@@ -393,7 +394,7 @@ static AVLTreeNode *avltree_node_remove_leftmost(AVLTreeNode  *node,
   }
 
 
-static AVLTreeNode *avltree_node_lookup_leftmost(AVLTreeNode *node)
+static AVLNode *avltree_node_lookup_leftmost(AVLNode *node)
   {
 /* Recursive version:
   if (!node->left) return node;
@@ -406,7 +407,7 @@ static AVLTreeNode *avltree_node_lookup_leftmost(AVLTreeNode *node)
   }
 
 
-static AVLTreeNode *avltree_node_lookup_rightmost(AVLTreeNode *node)
+static AVLNode *avltree_node_lookup_rightmost(AVLNode *node)
   {
 /* Recursive version:
   if (!node->right) return node;
@@ -419,7 +420,7 @@ static AVLTreeNode *avltree_node_lookup_rightmost(AVLTreeNode *node)
   }
 
 
-static AVLTreeNode *avltree_node_restore_left_balance(AVLTreeNode	*node,
+static AVLNode *avltree_node_restore_left_balance(AVLNode	*node,
 				  int		old_balance)
   {
   if ( (!node->left) || ((node->left->balance != old_balance) &&
@@ -434,7 +435,7 @@ static AVLTreeNode *avltree_node_restore_left_balance(AVLTreeNode	*node,
   }
 
 
-static AVLTreeNode *avltree_node_restore_right_balance(AVLTreeNode	*node,
+static AVLNode *avltree_node_restore_right_balance(AVLNode	*node,
 				   int		old_balance)
   {
   if ( (!node->right) || ((node->right->balance != old_balance) &&
@@ -451,7 +452,7 @@ static AVLTreeNode *avltree_node_restore_right_balance(AVLTreeNode	*node,
 
 #if 0
 /* Recursive version */
-static vpointer avltree_node_lookup(AVLTreeNode *node, AVLKey key)
+static vpointer avltree_node_lookup(AVLNode *node, AVLKey key)
   {
   if (!node) return NULL;
 
@@ -476,7 +477,7 @@ static vpointer avltree_node_lookup(AVLTreeNode *node, AVLKey key)
 /*
  * Iterative version -- much more efficient than the recursive version.
  */
-static vpointer avltree_node_lookup(AVLTreeNode *node, AVLKey key)
+static vpointer avltree_node_lookup(AVLNode *node, AVLKey key)
   {
   while (node && key != node->key)
     {
@@ -493,7 +494,7 @@ if (node) printf("Found key %p >", node->data); else printf("Not found key >");
   }
 
 
-static int avltree_node_count(AVLTreeNode *node)
+static int avltree_node_count(AVLNode *node)
   {
   int count=1;
 
@@ -507,7 +508,7 @@ static int avltree_node_count(AVLTreeNode *node)
 /*
  * Stops when an AVLTraverseFunc() callback returns TRUE.
  */
-static boolean avltree_node_traverse(AVLTreeNode *node,
+static boolean avltree_node_traverse(AVLNode *node,
                      AVLTraverseFunc traverse_func, vpointer userdata)
   {
   if (node->left)
@@ -526,7 +527,7 @@ static boolean avltree_node_traverse(AVLTreeNode *node,
   }
 
 
-static int avltree_node_height(AVLTreeNode *node)
+static int avltree_node_height(AVLNode *node)
   {
   int left_height;
   int right_height;
@@ -547,10 +548,10 @@ static int avltree_node_height(AVLTreeNode *node)
   }
 
 
-static AVLTreeNode *avltree_node_rotate_left(AVLTreeNode *node)
+static AVLNode *avltree_node_rotate_left(AVLNode *node)
   {
-  AVLTreeNode *left;
-  AVLTreeNode *right;
+  AVLNode *left;
+  AVLNode *right;
   int a_bal;
   int b_bal;
 
@@ -582,10 +583,10 @@ static AVLTreeNode *avltree_node_rotate_left(AVLTreeNode *node)
   }
 
 
-static AVLTreeNode *avltree_node_rotate_right(AVLTreeNode *node)
+static AVLNode *avltree_node_rotate_right(AVLNode *node)
   {
-  AVLTreeNode *left;
-  AVLTreeNode *right;
+  AVLNode *left;
+  AVLNode *right;
   int a_bal;
   int b_bal;
 
@@ -617,7 +618,7 @@ static AVLTreeNode *avltree_node_rotate_right(AVLTreeNode *node)
   }
 
 
-static void avltree_node_check(AVLTreeNode *node)
+static void avltree_node_check(AVLNode *node)
   {
   int left_height;
   int right_height;
@@ -735,7 +736,7 @@ vpointer avltree_remove_key(AVLTree *tree, AVLKey key)
 
 vpointer avltree_lookup(AVLTree *tree, vpointer data)
   {
-  AVLTreeNode	*node;
+  AVLNode	*node;
 
   if (!tree || !tree->root) return NULL;
 
@@ -746,7 +747,7 @@ vpointer avltree_lookup(AVLTree *tree, vpointer data)
 
 vpointer avltree_lookup_key(AVLTree *tree, AVLKey key)
   {
-  AVLTreeNode	*node;
+  AVLNode	*node;
 
   if (!tree || !tree->root) return NULL;
 
@@ -757,7 +758,7 @@ vpointer avltree_lookup_key(AVLTree *tree, AVLKey key)
 
 vpointer avltree_lookup_lowest(AVLTree *tree)
   {
-  AVLTreeNode	*node;
+  AVLNode	*node;
 
   if (!tree || !tree->root) return NULL;
 
@@ -768,7 +769,7 @@ vpointer avltree_lookup_lowest(AVLTree *tree)
 
 vpointer avltree_lookup_highest(AVLTree *tree)
   {
-  AVLTreeNode	*node;
+  AVLNode	*node;
 
   if (!tree || !tree->root) return NULL;
 
@@ -830,9 +831,9 @@ void avltree_diagnostics(void)
   printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
-  printf("structure          sizeof\n");
-  printf("AVLTree            %lu\n", (unsigned long) sizeof(AVLTree));
-  printf("AVLTreeNode        %lu\n", (unsigned long) sizeof(AVLTreeNode));
+  printf("structure                  sizeof\n");
+  printf("AVLTree                    %lu\n", (unsigned long) sizeof(AVLTree));
+  printf("AVLNode                    %lu\n", (unsigned long) sizeof(AVLNode));
   printf("==============================================================\n");
 
   return;

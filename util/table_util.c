@@ -26,7 +26,9 @@
 
   Synopsis:	Table data structure. (basically a growable table)
 
-  Thread-safe.
+		*** THIS IS NOT A HASH TABLE IMPLEMENTATION! ***
+
+		Thread-safe.
  
   Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	table_diagnostics() modified.
@@ -55,7 +57,7 @@
 THREAD_LOCK_DEFINE_STATIC(table_mem_chunk_lock);
 static MemChunk *table_mem_chunk = NULL;
 
-static unsigned int next_pow2(unsigned int num)
+static unsigned int _next_pow2(unsigned int num)
   {
   unsigned int	n = 1;
 
@@ -73,7 +75,7 @@ static boolean table_ensure_size(TableStruct *table, unsigned int size)
 
   if(table->size < size)
     {
-    size = next_pow2(size);
+    size = _next_pow2(size);
     table->data = s_realloc(table->data, sizeof(vpointer)*size);
     table->unused = s_realloc(table->unused, sizeof(unsigned int)*size);
 

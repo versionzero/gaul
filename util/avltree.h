@@ -39,7 +39,7 @@
 #include "memory_util.h"
 
 /*
- * 
+ * Define datatype for AVL keys.
  */
 #ifdef AVLTREE_KEY_TYPE
 typedef AVLTREE_KEY_TYPE AVLKey;
