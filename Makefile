@@ -132,7 +132,7 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = util src tests examples .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
-EXTRA_DIST = gaul-devel.spec
+EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
