@@ -524,6 +524,7 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                min max \
                index rindex \
                setlocale \
+	       sincos \
                snprintf \
                strchr strrchr strcat \
                strcmp strcpy strpbrk strsep \
@@ -543,17 +544,18 @@ case "$target" in
     is_mingw="no" ;;
 esac
 if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qnx" = "xyes" ); then
-  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
+  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW/QNX Neutrino.
   AC_DEFINE(HAVE_ITOA,1,[Whether itoa() is available])
 else
   AC_CHECK_FUNC(itoa)
 fi
 
-if test "x$CC" = "xicc"; then
-  AC_DEFINE(HAVE_SINCOS,1,[Whether sincos() is available])	# I have some problems with implicit definition of sincos() with the Intel C++.
-else
-  AC_CHECK_FUNC( sincos )
-fi
+dnl Only needed for icc < 7.0
+#if test "x$CC" = "xicc"; then
+#  AC_DEFINE(HAVE_SINCOS,1,[Whether sincos() is available])	# I have some problems with implicit definition of sincos() with the Intel C++.
+#else
+#  AC_CHECK_FUNC( sincos )
+#fi
 
 # Fix defines for case that the Sun Forte C compiler is being used on Solaris.
 if test "x$CC" = "xcc"; then

@@ -198,7 +198,7 @@
 # if !defined(__bool_true_false_are_defined)
 #  if !defined(HAVE__BOOL)
 typedef short _Bool;
-#define HAVE__BOOL
+#   define HAVE__BOOL
 #  endif
 
 #  if !defined(true)
