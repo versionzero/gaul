@@ -142,6 +142,7 @@ typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
 typedef boolean	(*GAmutate_allele)(population *pop, entity *parent, entity *child, const int chromosomeid, const int alleleid);
 typedef boolean	(*GAto_double)(population *pop, entity *entity, double *darray);
 typedef boolean	(*GAfrom_double)(population *pop, entity *entity, double *darray);
+typedef boolean	(*GAscan_chromosome)(population *pop, entity *entity, int enumeration_num);
 
 /*
  * Include remainder of this library's headers.

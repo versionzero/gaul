@@ -193,6 +193,8 @@ typedef struct
 typedef struct
   {
   GAscan_chromosome	scan_chromosome;	/* Allele searching function. */
+  int			chromosome_state;	/* Permutation counter. */
+  int			allele_state;		/* Permutation counter. */
   } ga_search_t;
 
 /*
@@ -237,6 +239,7 @@ struct population_t
   ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
   ga_climbing_t	*climbing_params;		/* Parameters for hill climbing. */
   ga_simplex_t	*simplex_params;		/* Parameters for simplex search. */
+  ga_search_t	*search_params;			/* Parameters for systematic search. */
 
 /*
  * Scoring function and the other callbacks are defined here.
@@ -356,8 +359,8 @@ boolean ga_extinction(population *extinct);
 boolean ga_genocide(population *pop, int target_size);
 boolean ga_population_set_data(population *pop, vpointer data);
 vpointer ga_population_get_data(population *pop);
-boolean ga_entity_set_data(population *pop, entity *e, vpointer data);
-vpointer ga_entity_get_data(population *pop, entity *e);
+boolean ga_entity_set_data(population *pop, entity *e, SLList *data);
+SLList *ga_entity_get_data(population *pop, entity *e);
 
 
 boolean ga_select_one_random(population *pop, entity **mother);

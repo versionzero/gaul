@@ -272,7 +272,7 @@
 #define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-17.8.0smp #1 SMP Tue Oct 8 12:39:01 EDT 2002 i686 i686 i386 GNU/Linux"
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "07/11/02"
+#define BUILD_DATE_STRING "11/11/02"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

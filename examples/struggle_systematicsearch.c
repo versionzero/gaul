@@ -1,5 +1,5 @@
 /**********************************************************************
-  struggle_randomsearch.c
+  struggle_systematicsearch.c
  **********************************************************************
 
   struggle - Test/example program for GAUL.
@@ -26,7 +26,7 @@
 
   Synopsis:	Test/example program for GAUL.
 
-		This program uses the monkeys on typewriters approach
+		This program uses a systematic searching approach
 		to solving the problem tackled by all of the struggle*
 		examples.
 
@@ -80,11 +80,79 @@ boolean struggle_score(population *pop, entity *entity)
 
 
 /**********************************************************************
+  struggle_scan_chromosome()
+  synopsis:	Allele combination enumeration function.
+  parameters:
+  return:
+  updated:	12 Nov 2002
+ **********************************************************************/
+
+boolean struggle_scan_chromosome(population *pop, entity *entity, int enumeration)
+  {
+  int		i=0, j=0;	/* Loop variables over all chromosomes, alleles. */
+
+  (((char *)entity->chromosome[0])[0])++;
+  
+  while (((char *)entity->chromosome[i])[j]>'~')
+    {
+    ((char *)entity->chromosome[i])[j] = ' ';
+    j++;
+
+    if (j == pop->len_chromosomes)
+      {
+      j = 0;
+      i++;
+
+      if (i == pop->num_chromosomes)
+        {
+        return TRUE;	/* Enumeration is now complete! */
+        }
+      }
+
+    (((char *)entity->chromosome[i])[j])++;
+    }
+
+/* Enumeration is not complete. */
+  return FALSE;
+  }
+
+
+/**********************************************************************
+  struggle_seed()
+  synopsis:	Need to seed with first allele permutation.
+  parameters:
+  return:
+  updated:      12 Nov 2002
+ **********************************************************************/
+
+boolean struggle_seed(population *pop, entity *entity)
+  {
+  int           i=0, j=0;       /* Loop variables over all chromosomes, alleles. */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!entity) die("Null pointer to entity structure passed.");
+
+  while (i<pop->num_chromosomes)
+    {
+    while (j<pop->len_chromosomes)
+      {
+      ((char *)entity->chromosome[i])[j] = ' ';
+      j++;
+      }
+    i++;
+    }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
   main()
   synopsis:	Erm?
   parameters:
   return:
-  updated:	06 Nov 2002
+  updated:	12 Nov 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -93,6 +161,7 @@ int main(int argc, char **argv)
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
   entity	*solution;		/* Solution to problem. */
+  int		num_iterations;		/* Number of iterations required. */
 
   random_seed(23091975);
 
@@ -105,7 +174,7 @@ int main(int argc, char **argv)
        NULL,			/* GAdata_destructor      data_destructor */
        NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
        struggle_score,		/* GAevaluate             evaluate */
-       ga_seed_printable_random,	/* GAseed                 seed */
+       struggle_seed,		/* GAseed                 seed */
        NULL,			/* GAadapt                adapt */
        NULL,			/* GAselect_one           select_one */
        NULL,			/* GAselect_two           select_two */
@@ -114,18 +183,20 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
+  ga_population_set_search_parameters(pop, struggle_scan_chromosome);
+
   solution = ga_get_free_entity(pop);
 
-  ga_random_search(
-       pop,			/* population      *pop */
-       solution,		/* entity          *entity */
-       1000000			/* const int       max_iterations */
-              );
+  num_iterations = ga_search(
+       pop,		/* population      *pop */
+       solution		/* entity          *entity */
+            );
 
   printf( "The final solution was:\n");
   beststring = ga_chromosome_char_to_string(pop, solution, beststring, &beststrlen);
   printf("%s\n", beststring);
   printf( "With score = %f\n", ga_entity_get_fitness(solution) );
+  printf( "This required %d iterations\n", num_iterations);
 
   ga_extinction(pop);
   s_free(beststring);

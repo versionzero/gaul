@@ -3040,13 +3040,26 @@ vpointer ga_population_get_data(population *pop)
   last updated: 08 Nov 2002
  **********************************************************************/
 
-boolean ga_entity_set_data(population *pop, entity *e, vpointer data)
+boolean ga_entity_set_data(population *pop, entity *e, SLList *data)
   {
+  SLList	*this;		/* Current list element. */
+
   if (!pop) return FALSE;
   if (!e) return FALSE;
 
-  if (e->data && pop->data_destructor)
-    pop->data_destructor(pop, e);
+  if (e->data)
+    {
+    if (pop->data_destructor)
+      {
+      this = data;
+      while (this)
+        {
+        pop->data_destructor(slink_data(this));
+        this = slink_next(this);
+        }
+      }
+    slink_free_all(e->data);
+    }
 
   e->data = data;
 
@@ -3062,7 +3075,7 @@ boolean ga_entity_set_data(population *pop, entity *e, vpointer data)
   last updated: 08 Nov 2002
  **********************************************************************/
 
-vpointer ga_entity_get_data(population *pop, entity *e)
+SLList *ga_entity_get_data(population *pop, entity *e)
   {
   if (!pop) return FALSE;
   if (!e) return FALSE;

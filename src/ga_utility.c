@@ -231,7 +231,6 @@ population *ga_genesis_char(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
 
 /*
  * Allocate and initialise a new population.
@@ -312,7 +311,6 @@ population *ga_genesis_boolean(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
 
 /*
  * Allocate and initialise a new population.
@@ -393,7 +391,6 @@ population *ga_genesis_double(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
 
 /*
  * Allocate and initialise a new population.
@@ -474,7 +471,6 @@ population *ga_genesis_bitstring(	const int		population_size,
   population	*pop;	/* The new population structure. */
 
   plog(LOG_VERBOSE, "Genesis is beginning!");
-  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
 
 /*
  * Allocate and initialise a new population.
@@ -557,7 +553,7 @@ entity *ga_allele_search(	population	*pop,
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
   best = ga_get_free_entity(pop);	/* The best solution so far. */
 
-  plog(LOG_FIXME, "Systematic allele search algorithm is not parallelised.");
+  plog(LOG_WARNING, "ga_allele_search() is a deprecated function!");
 
 /* Do we need to generate a random solution? */
   if (!initial)

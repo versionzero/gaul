@@ -955,6 +955,32 @@ int ga_random_search_slang(	int	*pop_id,
 
 
 /**********************************************************************
+  ga_search_slang()
+  synopsis:	Wrapper around ga_search()
+		for the scripted API.
+  parameters:
+  return:	Index of best solution found (A new entity).
+  last updated:	08 Nov 2002
+ **********************************************************************/
+
+int ga_search_slang(	int	*pop_id,
+			int	*entity_id )
+  {
+  entity	*initial;	/* Solution to optimise. */
+  population	*pop;		/* Active population structure. */
+  int		num_iter;	/* Number of iterations performed. */
+
+  pop = ga_get_population_from_id(*pop_id);
+
+  initial = ga_get_entity_from_id(pop, *entity_id);
+
+  num_iter = ga_search( pop, initial );
+
+  return num_iter;
+  }
+
+
+/**********************************************************************
   ga_nahc_slang()
   synopsis:	Wrapper around ga_next_ascent_hillclimbing() for
 		scripted API.
@@ -1376,6 +1402,9 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_random_search",
             (FVOID_STAR) ga_random_search_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_search",
+            (FVOID_STAR) ga_random_search_slang, SLANG_INT_TYPE, 2,
+            SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_sort",
             (FVOID_STAR) ga_population_sort_slang, SLANG_INT_TYPE, 1,
             SLANG_INT_TYPE)

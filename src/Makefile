@@ -145,6 +145,7 @@ libgaul_la_SOURCES = \
     ga_sa.c \
     ga_similarity.c \
     ga_simplex.c \
+    ga_systematicsearch.c \
     ga_tabu.c \
     ga_utility.c
 
@@ -161,6 +162,7 @@ include_HEADERS = \
     ga_sa.h \
     ga_similarity.h \
     ga_simplex.h \
+    ga_systematicsearch.h \
     ga_tabu.h \
     ga_utility.h \
     gaul.h
@@ -179,7 +181,7 @@ am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 	ga_core.lo ga_crossover.lo ga_intrinsics.lo ga_mutate.lo \
 	ga_optim.lo ga_qsort.lo ga_replace.lo ga_randomsearch.lo \
 	ga_seed.lo ga_select.lo ga_sa.lo ga_similarity.lo ga_simplex.lo \
-	ga_tabu.lo ga_utility.lo
+	ga_systematicsearch.lo ga_tabu.lo ga_utility.lo
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
@@ -200,8 +202,9 @@ DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
 	./$(DEPDIR)/ga_replace.Plo ./$(DEPDIR)/ga_sa.Plo \
 	./$(DEPDIR)/ga_seed.Plo ./$(DEPDIR)/ga_select.Plo \
 	./$(DEPDIR)/ga_similarity.Plo \
-	./$(DEPDIR)/ga_simplex.Plo ./$(DEPDIR)/ga_tabu.Plo \
-	./$(DEPDIR)/ga_utility.Plo
+	./$(DEPDIR)/ga_simplex.Plo \
+	./$(DEPDIR)/ga_systematicsearch.Plo \
+	./$(DEPDIR)/ga_tabu.Plo ./$(DEPDIR)/ga_utility.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -278,6 +281,7 @@ include ./$(DEPDIR)/ga_seed.Plo
 include ./$(DEPDIR)/ga_select.Plo
 include ./$(DEPDIR)/ga_similarity.Plo
 include ./$(DEPDIR)/ga_simplex.Plo
+include ./$(DEPDIR)/ga_systematicsearch.Plo
 include ./$(DEPDIR)/ga_tabu.Plo
 include ./$(DEPDIR)/ga_utility.Plo
 

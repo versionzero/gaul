@@ -48,7 +48,6 @@
   last updated:	06 Nov 2002
  **********************************************************************/
 
-
 int ga_random_search(	population		*pop,
 			entity			*best,
 			const int		max_iterations )
