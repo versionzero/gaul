@@ -169,7 +169,7 @@
 #define HAVE_SELECT 1
 
 /* Define to 1 if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */

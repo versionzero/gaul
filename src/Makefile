@@ -98,7 +98,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -211,7 +211,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -ipo -ipo_obj -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
@@ -298,7 +298,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo

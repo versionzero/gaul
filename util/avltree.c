@@ -52,7 +52,8 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	24 Apr 2002 SAA	Some renaming for consistency.
+  Last Updated:	16 Aug 2002 SAA	Free the node memory chunks when no avltrees remain.
+		24 Apr 2002 SAA	Some renaming for consistency.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	avltree_diagnostics() modified slightly.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc..  If avltree_destroy() is called with a NULL AVLDestructorFunc, the avltree_delete() stuff will be automatically called instead.  Renamed avltree_destroy() to avltree_delete() and visa versa for consistency.
@@ -110,9 +111,10 @@ static void		avltree_node_check(AVLNode *node);
 /*
  * Global variables.
  */
-THREAD_LOCK_DEFINE_STATIC(avltree_global_lock);
+THREAD_LOCK_DEFINE_STATIC(avltree_chunk_lock);
 static MemChunk		*node_mem_chunk = NULL;
 static AVLNode		*node_free_list = NULL;
+static int		AVLnum_trees = 0;	/* Count number of trees in use. */
 
 /*
  * Private functions.
@@ -122,7 +124,7 @@ static AVLNode *avltree_node_new(AVLKey key, vpointer data)
   {
   AVLNode *node;
 
-  THREAD_LOCK(avltree_global_lock);
+  THREAD_LOCK(avltree_chunk_lock);
 /*
  * We must handle our own atom re-use because the memory chunk implementation
  * uses avltrees to record atom usage.
@@ -139,7 +141,7 @@ static AVLNode *avltree_node_new(AVLKey key, vpointer data)
 
     node = mem_chunk_alloc(node_mem_chunk);
     }
-  THREAD_UNLOCK(avltree_global_lock);
+  THREAD_UNLOCK(avltree_chunk_lock);
 
   node->balance = 0;
   node->left = NULL;
@@ -153,10 +155,10 @@ static AVLNode *avltree_node_new(AVLKey key, vpointer data)
 
 static void avltree_node_free(AVLNode *node)
   {
-  THREAD_LOCK(avltree_global_lock);
+  THREAD_LOCK(avltree_chunk_lock);
   node->right = node_free_list;
   node_free_list = node;
-  THREAD_UNLOCK(avltree_global_lock);
+  THREAD_UNLOCK(avltree_chunk_lock);
 
   return;
   }
@@ -660,6 +662,8 @@ AVLTree *avltree_new(AVLKeyFunc key_generate_func)
 
   if (!key_generate_func) return NULL;
 
+  AVLnum_trees++;
+
   if (!(tree = malloc(sizeof(AVLTree))) ) die("Unable to allocate memory.");
 
   tree->root = NULL;
@@ -677,6 +681,16 @@ void avltree_delete(AVLTree *tree)
 
   free(tree);
 
+  AVLnum_trees--;
+
+  THREAD_LOCK(avltree_chunk_lock);
+  if (AVLnum_trees == 0)
+    {
+    mem_chunk_destroy(node_mem_chunk);
+    node_mem_chunk = NULL;
+    }
+  THREAD_UNLOCK(avltree_chunk_lock);
+
   return;
   }
 
@@ -691,6 +705,16 @@ void avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func)
     avltree_node_delete(tree->root);
 
   free(tree);
+
+  AVLnum_trees--;
+
+  THREAD_LOCK(avltree_chunk_lock);
+  if (AVLnum_trees == 0)
+    {
+    mem_chunk_destroy(node_mem_chunk);
+    node_mem_chunk = NULL;
+    }
+  THREAD_UNLOCK(avltree_chunk_lock);
 
   return;
   }
@@ -834,6 +858,8 @@ void avltree_diagnostics(void)
   printf("structure                  sizeof\n");
   printf("AVLTree                    %lu\n", (unsigned long) sizeof(AVLTree));
   printf("AVLNode                    %lu\n", (unsigned long) sizeof(AVLNode));
+  printf("--------------------------------------------------------------\n");
+  printf("Trees in use:              %d\n", AVLnum_trees);
   printf("==============================================================\n");
 
   return;

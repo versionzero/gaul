@@ -98,7 +98,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -127,7 +127,7 @@ install_sh = /u1/gaul-devel/install-sh
 AUTOMAKE_OPTIONS = 1.4
 
 EXTRA_PROGRAMS = diagnostics \
-	pingpong wildfire \
+	pingpong wildfire wildfire_forked \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
@@ -138,6 +138,7 @@ EXTRA_PROGRAMS = diagnostics \
 diagnostics_SOURCES = diagnostics.c
 pingpong_SOURCES = pingpong.c
 wildfire_SOURCES = wildfire.c
+wildfire_forked_SOURCES = wildfire_forked.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
@@ -181,6 +182,7 @@ EXTRA_DIST = \
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
+wildfire_forked_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
@@ -201,6 +203,7 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
@@ -230,12 +233,12 @@ libbtree_la_LIBADD =
 am_libbtree_la_OBJECTS = btree.lo
 libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
 EXTRA_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) \
-	wildfire$(EXEEXT) goldberg1$(EXEEXT) goldberg2$(EXEEXT) \
-	royalroad$(EXEEXT) royalroad_ss$(EXEEXT) struggle$(EXEEXT) \
-	struggle_forked$(EXEEXT) struggle2$(EXEEXT) struggle3$(EXEEXT) \
-	struggle4$(EXEEXT) struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) struggle_ss$(EXEEXT) \
-	saveload$(EXEEXT) nnevolve$(EXEEXT)
+	wildfire$(EXEEXT) wildfire_forked$(EXEEXT) goldberg1$(EXEEXT) \
+	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
+	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle2$(EXEEXT) \
+	struggle3$(EXEEXT) struggle4$(EXEEXT) struggle5$(EXEEXT) \
+	struggle5_mp$(EXEEXT) struggle5_forked$(EXEEXT) \
+	struggle_ss$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
 am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
 diagnostics_OBJECTS = $(am_diagnostics_OBJECTS)
 diagnostics_LDFLAGS =
@@ -290,6 +293,9 @@ struggle_ss_LDFLAGS =
 am_wildfire_OBJECTS = wildfire.$(OBJEXT)
 wildfire_OBJECTS = $(am_wildfire_OBJECTS)
 wildfire_LDFLAGS =
+am_wildfire_forked_OBJECTS = wildfire_forked.$(OBJEXT)
+wildfire_forked_OBJECTS = $(am_wildfire_forked_OBJECTS)
+wildfire_forked_LDFLAGS =
 
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -309,7 +315,8 @@ DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
 	./$(DEPDIR)/struggle5_forked.Po \
 	./$(DEPDIR)/struggle5_mp.Po \
 	./$(DEPDIR)/struggle_forked.Po \
-	./$(DEPDIR)/struggle_ss.Po ./$(DEPDIR)/wildfire.Po
+	./$(DEPDIR)/struggle_ss.Po ./$(DEPDIR)/wildfire.Po \
+	./$(DEPDIR)/wildfire_forked.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -317,7 +324,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -ipo -ipo_obj -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
 	$(pingpong_SOURCES) $(royalroad_SOURCES) \
@@ -325,11 +332,12 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
 	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
 	$(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_ss_SOURCES) $(wildfire_SOURCES)
+	$(struggle_ss_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES)
 
 all: all-am
 
@@ -405,6 +413,9 @@ struggle_ss$(EXEEXT): $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
 wildfire$(EXEEXT): $(wildfire_OBJECTS) $(wildfire_DEPENDENCIES) 
 	@rm -f wildfire$(EXEEXT)
 	$(LINK) $(wildfire_LDFLAGS) $(wildfire_OBJECTS) $(wildfire_LDADD) $(LIBS)
+wildfire_forked$(EXEEXT): $(wildfire_forked_OBJECTS) $(wildfire_forked_DEPENDENCIES) 
+	@rm -f wildfire_forked$(EXEEXT)
+	$(LINK) $(wildfire_forked_LDFLAGS) $(wildfire_forked_OBJECTS) $(wildfire_forked_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -431,6 +442,7 @@ include ./$(DEPDIR)/struggle5_mp.Po
 include ./$(DEPDIR)/struggle_forked.Po
 include ./$(DEPDIR)/struggle_ss.Po
 include ./$(DEPDIR)/wildfire.Po
+include ./$(DEPDIR)/wildfire_forked.Po
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)
@@ -452,7 +464,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	14 Jun 2002 SAA	GList emulation not relied upon in this file now.
+  Last Updated:	16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
+  		14 Jun 2002 SAA	GList emulation not relied upon in this file now.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
  
   To do:        Add sorting functions.
@@ -94,6 +95,12 @@ void slink_free_all(SLList *list)
     mem_chunk_free(slist_chunk, list);
     list = element;
     }
+
+  if (mem_chunk_isempty(slist_chunk))
+    {
+    mem_chunk_destroy(slist_chunk);
+    slist_chunk = NULL;
+    }
   THREAD_UNLOCK(slist_chunk_lock);
 
   return;
@@ -106,6 +113,12 @@ void slink_free(SLList *list)
 
   THREAD_LOCK(slist_chunk_lock);
   mem_chunk_free(slist_chunk, list);
+
+  if (mem_chunk_isempty(slist_chunk))
+    {
+    mem_chunk_destroy(slist_chunk);
+    slist_chunk = NULL;
+    }
   THREAD_UNLOCK(slist_chunk_lock);
 
   return;
@@ -478,11 +491,18 @@ void dlink_free_all(DLList *list)
     mem_chunk_free(dlist_chunk, list);
     list = element;
     }
+
   while (list)
     {
     element = list->prev;
     mem_chunk_free(dlist_chunk, list);
     list = element;
+    }
+
+  if (mem_chunk_isempty(dlist_chunk))
+    {
+    mem_chunk_destroy(dlist_chunk);
+    dlist_chunk = NULL;
     }
   THREAD_UNLOCK(dlist_chunk_lock);
 
@@ -496,6 +516,12 @@ void dlink_free(DLList *list)
   
   THREAD_LOCK(dlist_chunk_lock);
   mem_chunk_free(dlist_chunk, list);
+
+  if (mem_chunk_isempty(dlist_chunk))
+    {
+    mem_chunk_destroy(dlist_chunk);
+    dlist_chunk = NULL;
+    }
   THREAD_UNLOCK(dlist_chunk_lock);
 
   return;

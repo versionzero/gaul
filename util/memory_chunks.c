@@ -33,7 +33,8 @@
 
 		This is thread safe.
  
-  Last updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Last updated:	16 Aug 2002 SAA	Added mem_chunk_isempty().
+  		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
 		27/02/01 SAA	gpointer replaced with vpointer.
  		18/01/01 SAA	Default compiler constant definition moved out to header file.
@@ -205,6 +206,18 @@ static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
   mem_chunk->mem_tree = NULL;
   
   return mem_chunk;
+  }
+
+
+/*
+ * Return TRUE is the memory chunk is empty.
+ */
+boolean mem_chunk_isempty(MemChunk *mem_chunk)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+
+  return mem_chunk->num_mem_areas==mem_chunk->num_unused_areas;
   }
 
 

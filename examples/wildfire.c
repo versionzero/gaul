@@ -346,7 +346,7 @@ boolean wildfire_score(population *pop, entity *entity)
 		for the remainder.
   parameters:
   return:
-  updated:	12/05/01
+  updated:	16 Aug 2002
  **********************************************************************/
 
 boolean wildfire_seed(population *pop, entity *adam)
@@ -363,6 +363,11 @@ boolean wildfire_seed(population *pop, entity *adam)
     }
   else
     {
+    for(i=0; i<WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION; i++)
+      {
+      ((int *)adam->chromosome[0])[i] = 0;
+      }
+
     /* Deliberately places slightly fewer cisterns than allowed. */
     i = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);
     j = random_int(WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION);

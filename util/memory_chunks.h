@@ -59,6 +59,7 @@ typedef struct MemChunk_t MemChunk;
 boolean		mem_chunk_has_freeable_atoms(MemChunk *mem_chunk);
 MemChunk	*mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms);
 MemChunk	*mem_chunk_new(size_t atom_size, unsigned int num_atoms);
+boolean		mem_chunk_isempty(MemChunk *mem_chunk);
 void		mem_chunk_destroy(MemChunk *mem_chunk);
 vpointer	mem_chunk_alloc(MemChunk *mem_chunk);
 void		mem_chunk_free(MemChunk *mem_chunk, vpointer mem);

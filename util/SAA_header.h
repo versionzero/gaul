@@ -196,9 +196,8 @@
 #  undef true
 # endif
 
-/*# if !defined(_ISOC99_SOURCE) */
 # if !defined(__bool_true_false_are_defined)
-#  if defined(__cplusplus) || defined(__DECC)
+#  if defined(__cplusplus) || defined(__DECC) || defined(_ISOC99_SOURCE)
 typedef _Bool bool;
 typedef _Bool boolean;
 #  else
