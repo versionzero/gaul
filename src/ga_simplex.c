@@ -295,7 +295,7 @@ printf("DEBUG: average = ");
       }
 printf("\n");
 
-  if (restart_needed == TRUE)
+  if (restart_needed != FALSE)
     {
 printf("DEBUG: restarting search.\n");
     step /= 2.0;

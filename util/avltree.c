@@ -360,7 +360,7 @@ static AVLNode *avltree_node_insert(AVLNode *node,
     return node;
     }
 
-  if (*inserted==TRUE && (node->balance < -1 || node->balance > 1))
+  if (*inserted!=FALSE && (node->balance < -1 || node->balance > 1))
     node = avltree_node_balance(node);
 
   return node;

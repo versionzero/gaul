@@ -199,7 +199,7 @@ population *ga_genesis_int(	const int		population_size,
 /*
  * Seed the population.
  */
-  if (!seed)
+  if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
     }
@@ -325,7 +325,7 @@ population *ga_genesis_char(	const int		population_size,
 /*
  * Seed the population.
  */
-  if (!seed)
+  if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
     }
@@ -411,7 +411,7 @@ population *ga_genesis_boolean(	const int		population_size,
 /*
  * Seed the population.
  */
-  if (!seed)
+  if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
     }
@@ -497,7 +497,7 @@ population *ga_genesis_double(	const int		population_size,
 /*
  * Seed the population.
  */
-  if (!seed)
+  if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
     }
@@ -583,7 +583,7 @@ population *ga_genesis_bitstring(	const int		population_size,
 /*
  * Seed the population.
  */
-  if (!seed)
+  if (seed==NULL)
     {
     plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
     }
@@ -632,7 +632,7 @@ entity *ga_allele_search(	population	*pop,
   plog(LOG_WARNING, "ga_allele_search() is a deprecated function!");
 
 /* Do we need to generate a random solution? */
-  if (!initial)
+  if (initial==NULL)
     {
     plog(LOG_VERBOSE, "Will perform systematic allele search with random starting solution.");
 

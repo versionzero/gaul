@@ -139,7 +139,7 @@ int timer_new_slang(void)
   int		t_handle;
 
   THREAD_LOCK(chrono_table_lock);
-  if (!chrono_table) chrono_table=table_new();
+  if (chrono_table==NULL) chrono_table=table_new();
 
   t_handle = table_add(chrono_table, (vpointer) t);
   THREAD_UNLOCK(chrono_table_lock);

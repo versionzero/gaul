@@ -139,7 +139,7 @@ int ga_steepestascent(	population	*pop,
   new = ga_get_free_entity(pop);
 
 /* Do we need to generate a random starting solution? */
-  if (!current)
+  if (current==NULL)
     {
     plog(LOG_VERBOSE, "Will perform gradient search with random starting solution.");
 
