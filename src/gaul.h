@@ -383,6 +383,7 @@ void	ga_mutate_double_singlepoint_drift( population *pop,
  * (Genesis operators)
  */
 boolean	ga_seed_boolean_random(population *pop, entity *adam);
+boolean ga_seed_boolean_zero(population *pop, entity *adam);
 boolean	ga_seed_integer_random(population *pop, entity *adam);
 boolean	ga_seed_integer_zero(population *pop, entity *adam);
 boolean	ga_seed_double_random(population *pop, entity *adam);

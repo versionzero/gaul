@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_seed - Genetic algorithm genome initialisation operators.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -60,6 +60,38 @@ boolean ga_seed_boolean_random(population *pop, entity *adam)
     for (point=0; point<pop->len_chromosomes; point++)
       {
       ((boolean *)adam->chromosome[chromo])[point] = random_boolean();
+      }
+    }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_seed_boolean_zero()
+  synopsis:	Seed genetic data for a single entity with a boolean
+		chromosome by setting each bit to zero.
+  parameters:	population *pop
+		entity *adam
+  return:	success
+  last updated: 30 Jun 2003
+ **********************************************************************/
+
+boolean ga_seed_boolean_zero(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of 'nucleotide' to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ((boolean *)adam->chromosome[chromo])[point] = 0;
       }
     }
 
