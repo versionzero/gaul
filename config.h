@@ -338,7 +338,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 0
+#define PATCH_VERSION 1
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -374,7 +374,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1842-0"
+#define VERSION_STRING "0.1842-1"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
