@@ -85,8 +85,8 @@
 #  define THREAD_LOCK(name)             omp_set_lock(&(name))
 #  define THREAD_UNLOCK(name)           omp_unset_lock(&(name))
 #  define THREAD_TRYLOCK(name)          omp_test_lock(&(name))
-#  define thread_mutex_new(name)	omp_lock_init(&(name))
-#  define thread_mutex_free(name)	omp_lock_destroy(&(name))
+#  define thread_mutex_new(name)	omp_init_lock(&(name))
+#  define thread_mutex_free(name)	omp_destroy_lock(&(name))
 /*
  * If threads are used, these must be properly defined somewhere.
  * Unfortunately empty macros cause splint parse errors.  They

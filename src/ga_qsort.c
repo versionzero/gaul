@@ -49,6 +49,7 @@
  */
 #define swap_e(x, y)	{entity *t; t = x; x = y; y = t; }
 
+#if 0
 /**********************************************************************
   quicksort_population()
   Synopsis:	Sorts an array of pointers to compound objects by
@@ -249,6 +250,7 @@ void quicksort_population(population *pop)
 
   return;
   }
+#endif
 
 
 /*
@@ -361,17 +363,17 @@ boolean ga_qsort_test(void)
   pop->size=50000;
 
   plog(LOG_NORMAL, "Sorting random list.");
-  quicksort_population(pop);
+  sort_population(pop);
 
   plog(LOG_NORMAL, "Sorting ordered list.");
-  quicksort_population(pop);
+  sort_population(pop);
 
 /* Reverse population */
   for (i=0; i<50000/2; i++)
     swap_e(pop->entity_iarray[i],pop->entity_iarray[24999-i]);
 
   plog(LOG_NORMAL, "Sorting reverse-ordered list.");
-  quicksort_population(pop);
+  sort_population(pop);
 
 /* Write list */
 /*

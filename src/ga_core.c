@@ -284,6 +284,8 @@ population *ga_population_new(	const int stable_size,
   newpop->scheme = GA_SCHEME_DARWIN;
   newpop->elitism = GA_ELITISM_UNKNOWN;
 
+  thread_mutex_new(newpop->lock);
+
   if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
 
@@ -398,6 +400,8 @@ population *ga_population_clone_empty(population *pop)
 
   newpop->scheme = pop->scheme;
   newpop->elitism = pop->elitism;
+
+  thread_mutex_new(newpop->lock);
 
 /*
  * Clone the callback functions.
@@ -592,6 +596,9 @@ population *ga_population_clone(population *pop)
 /*
  * Clone each of the constituent entities.
  */
+#pragma omp parallel for \
+   shared(pop,newpop) private(i,newentity) \
+   schedule(static)
   for (i=0; i<pop->size; i++)
     {
     newentity = ga_get_free_entity(newpop);
@@ -945,6 +952,9 @@ boolean ga_population_score_and_sort(population *pop)
  * Each chromosome is decoded separately, whereas originally many
  * degenerate chromosomes would share their userdata elements.
  */
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
   for (i=0; i<pop->size; i++)
     {
 #if GA_DEBUG>2
@@ -1289,6 +1299,8 @@ boolean ga_entity_dereference_by_rank(population *pop, int rank)
     dying->data=NULL;
     }
 
+  THREAD_LOCK(pop->lock);
+
 /* Population size is one less now! */
   pop->size--;
 
@@ -1304,6 +1316,8 @@ boolean ga_entity_dereference_by_rank(population *pop, int rank)
 /* Release index. */
   i = ga_get_entity_id(pop, dying);
   pop->entity_array[ga_get_entity_id(pop, dying)] = NULL;
+
+  THREAD_UNLOCK(pop->lock);
 
 /* Release memory. */
   mem_chunk_free(pop->entity_chunk, dying);
@@ -1343,6 +1357,8 @@ boolean ga_entity_dereference_by_id(population *pop, int id)
     dying->data=NULL;
     }
 
+  THREAD_LOCK(pop->lock);
+
 /* Population size is one less now! */
   pop->size--;
 
@@ -1354,6 +1370,8 @@ boolean ga_entity_dereference_by_id(population *pop, int id)
 
 /* Deallocate chromosomes. */
   if (dying->chromosome) pop->chromosome_destructor(pop, dying);
+
+  THREAD_UNLOCK(pop->lock);
 
 /* Release index. */
   pop->entity_array[id] = NULL;
@@ -1464,6 +1482,7 @@ entity *ga_get_free_entity(population *pop)
 /*
   plog(LOG_DEBUG, "Locating free entity structure.");
 */
+  THREAD_LOCK(pop->lock);
 
 /*
  * Do we have room for any new structures?
@@ -1504,6 +1523,8 @@ entity *ga_get_free_entity(population *pop)
 
 /* Population is bigger now! */
   pop->size++;
+
+  THREAD_UNLOCK(pop->lock);
 
 /*  printf("ENTITY %d ALLOCATED.\n", pop->free_index);*/
 
@@ -2516,6 +2537,8 @@ boolean ga_extinction(population *extinct)
     if (extinct->gradient_params) s_free(extinct->gradient_params);
     if (extinct->search_params) s_free(extinct->search_params);
     if (extinct->sampling_params) s_free(extinct->sampling_params);
+
+    thread_mutex_free(extinct->lock);
 
     s_free(extinct);
     }

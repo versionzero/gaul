@@ -129,6 +129,12 @@ extern int errno;
 #define HAVE_MEMSET 1
 
 /*
+ * Functions not available.
+ */
+#define HAVE_IPOW	0
+#define HAVE_DPOW	0
+
+/*
  * These are defined if windows.h is included:
  */
 #if USE_WINDOWS_H == 1

@@ -303,6 +303,14 @@ struct population_t
   GAmutate			mutate;
   GAcrossover			crossover;
   GAreplace			replace;
+
+#if HAVE_PTHREADS == 1
+  pthread_mutex_t		lock;
+#else
+# if USE_OPENMP == 1
+  omp_lock_t			lock;
+# endif
+#endif
   };
 
 /*

@@ -141,6 +141,9 @@ extern int errno;
 #define HAVE_STRTOK 1
 #define HAVE_MEMSET 1
 
+#define HAVE_IPOW 0
+#define HAVE_DPOW 0
+
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1846
 #define GA_PATCH_VERSION 7

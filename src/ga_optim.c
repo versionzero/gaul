@@ -861,6 +861,9 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
 
     plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
 
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
       pop->evaluate(pop, pop->entity_iarray[i]);
@@ -875,6 +878,9 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
 
     if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
       for (i=0; i<pop->orig_size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -884,6 +890,9 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
       }
     else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
       for (i=0; i<pop->orig_size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -895,6 +904,9 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
 
     if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
       { 
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
       for (i=pop->orig_size; i<pop->size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -904,6 +916,9 @@ static void gaul_adapt_and_evaluate_mp(population *pop)
       }
     else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
       {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
       for (i=pop->orig_size; i<pop->size; i++)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
@@ -1286,6 +1301,9 @@ static void gaul_survival(population *pop)
     {
     plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
 
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
       pop->evaluate(pop, pop->entity_iarray[i]);
@@ -1395,6 +1413,9 @@ static void gaul_survival_mp(population *pop)
     {
     plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
 
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
     for (i=pop->orig_size; i<pop->size; i++)
       {
       pop->evaluate(pop, pop->entity_iarray[i]);
@@ -2309,7 +2330,7 @@ int ga_evolution_with_stats(	population		*pop,
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   if (pop->size < 1) die("Population is empty.");
 
-  plog(LOG_WARNING, "This should be a deprecated function!");
+  plog(LOG_WARNING, "This is a deprecated function!");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -2811,6 +2832,8 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   if (pop->size < 1) die("Population is empty.");
 
+  plog(LOG_WARNING, "This is a deprecated function!");
+
   plog(LOG_VERBOSE, "The evolution has begun!");
 
   pop->generation = 0;
@@ -3092,6 +3115,8 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   if ( !pop ) die("NULL pointer to population structure passed.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
+
+  plog(LOG_WARNING, "This is a deprecated function!");
 
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
   best = ga_get_free_entity(pop);	/* The best solution so far. */
