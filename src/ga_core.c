@@ -907,7 +907,7 @@ char *ga_funclookup_id_to_label(int id)
   parameters:	population *pop
 		entity *entity
   return:	double			the fitness
-  last updated: 06 Feb 2002
+  last updated: 01 Jul 2004
  **********************************************************************/
 
 double ga_entity_evaluate(population *pop, entity *entity)
@@ -917,7 +917,8 @@ double ga_entity_evaluate(population *pop, entity *entity)
   if ( !entity ) die("Null pointer to entity structure passed.");
   if ( !pop->evaluate ) die("Evaluation callback not defined.");
 
-  pop->evaluate(pop, entity);
+  if (pop->evaluate(pop, entity) == FALSE)
+    entity->fitness = GA_MIN_FITNESS;
 
   return entity->fitness;
   }

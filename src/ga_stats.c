@@ -37,26 +37,26 @@
   ga_fitness_mean()
   synopsis:     Determine mean of the fitness scores.
   parameters:	population *pop		The population to evaluate.
-  		double *average		Returns the average fitness.
+  		double *mean		Returns the mean fitness.
   return:	TRUE on success.
-  last updated: 31 Dec 2002
+  last updated: 07 Jul 2004
  **********************************************************************/
 
-boolean ga_fitness_mean( population *pop, double *average )
+boolean ga_fitness_mean( population *pop, double *mean )
   {
   int           i;           /* Loop over all entities. */
   double        sum=0.0;     /* Sum of fitnesses. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
-  if (!average) die("Null pointer to double passed.");
+  if (!mean) die("Null pointer to double passed.");
 
   for (i=0; i<pop->size; i++)
     {
     sum += pop->entity_iarray[i]->fitness;
     }
 
-  *average = sum / pop->size;
+  *mean = sum / pop->size;
 
   return TRUE;
   }
@@ -67,30 +67,37 @@ boolean ga_fitness_mean( population *pop, double *average )
   synopsis:     Determine mean and standard deviation of the fitness
                 scores.
   parameters:	population *pop		The population to evaluate.
-  		double *average		Returns the average fitness.
+  		double *mean		Returns the mean fitness.
 		double *stddev		Returns the standard deviation of the fitnesses.
   return:	TRUE on success.
-  last updated: 30/04/01
+  last updated: 07 Jul 2004
  **********************************************************************/
 
 boolean ga_fitness_mean_stddev( population *pop,
-                             double *average, double *stddev )
+                             double *mean, double *stddev )
   {
   int           i;                      /* Loop over all entities. */
   double        sum=0.0, sumsq=0.0;     /* Sum and sum squared. */
+  double	deviation;		/* Distance to mean. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
-  if (!stddev || !average) die("Null pointer to double passed.");
+  if (!stddev || !mean) die("Null pointer to double passed.");
 
   for (i=0; i<pop->size; i++)
     {
     sum += pop->entity_iarray[i]->fitness;
-    sumsq += SQU(pop->entity_iarray[i]->fitness);
     }
 
-  *average = sum / pop->size;
-  *stddev = (sumsq - sum*sum/pop->size)/pop->size;
+  *mean = sum / pop->size;
+
+  for (i=0; i<pop->size; i++)
+    {
+    deviation = pop->entity_iarray[i]->fitness - *mean;
+    sumsq += deviation*deviation;
+    }
+
+  *stddev = sqrt(sumsq/pop->size);
 
   return TRUE;
   }
@@ -107,7 +114,7 @@ boolean ga_fitness_mean_stddev( population *pop,
 		double *kurtosis	Returns the kurtosis of the fitnesses.
 		double *skew		Returns the skew of the fitnesses.
   return:	TRUE on success.
-  last updated: 24 Dec 2002
+  last updated: 17 Jul 2004
  **********************************************************************/
 
 boolean ga_fitness_stats( population *pop,
@@ -117,8 +124,7 @@ boolean ga_fitness_stats( population *pop,
                           double *kurtosis, double *skew )
   {
   int           i;                      /* Loop over all entities. */
-  double	sum=0.0,sum2=0.0,sum3=0.0,sum4=0.0;	/* Sum and stuff. */
-  double	m2=0.0,m3=0.0,m4=0.0;	/* Distribution moments. */
+  double	sum2=0.0,sum3=0.0,sum4=0.0;	/* Distribution moments (x pop->size). */
   double	tmp=0.0;		/* Used to save some lookups. */
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -127,42 +133,28 @@ boolean ga_fitness_stats( population *pop,
     die("Null pointer to double passed.");
 
   *min = pop->entity_iarray[0]->fitness;
+  *max = pop->entity_iarray[pop->size-1]->fitness;
+  *median = *min + (*max - *min)/2;
 
   for (i=0; i<pop->size; i++)
     {
-    tmp = pop->entity_iarray[i]->fitness;
-    sum += tmp;
+    tmp += pop->entity_iarray[i]->fitness;
+    }
+
+  *mean = tmp / pop->size;
+
+  for (i=0; i<pop->size; i++)
+    {
+    tmp = pop->entity_iarray[i]->fitness - *mean;
     sum2 += tmp*tmp;
     sum3 += tmp*tmp*tmp;	/* I hope my compiler optimises this... */
     sum4 += tmp*tmp*tmp*tmp;
     }
 
-  *max = tmp;
-
-  *median = *min + (*max - *min)/2;
-
-  *mean = sum/pop->size;
-  *stddev = (sum2/pop->size - (*mean)*(*mean));	/* Cleverly avoid a sqrt() calc. */
-  *variance = (sum2/pop->size - sum*sum);
-
-/* Sanity check. */
-  if ( fabs(sqrt(*variance)-*stddev) > DBL_EPSILON )
-    dief("stddev = %f, sqrt(*variance) = %f", *stddev, sqrt(*variance));
-
-  for (i=0; i<pop->size; i++)
-    {
-    tmp = pop->entity_iarray[i]->fitness - *mean;
-    m2 += tmp*tmp;		/* I rely upon the compiler to optimise these three lines! */
-    m3 += tmp*tmp*tmp;
-    m4 += tmp*tmp*tmp*tmp;
-    }
-
-  m2 /= pop->size;
-  m3 /= pop->size;
-  m4 /= pop->size;
-
-  *skew = m3/pow(m2,3.0/2.0);
-  *kurtosis = m4/(m2*m2);
+  *variance = sum2/pop->size;
+  *skew = (sum3/pop->size)/pow(*variance,3.0/2.0);
+  *kurtosis = (sum4/pop->size)/(*variance * *variance);
+  *stddev = sqrt(*variance);
 
   return TRUE;
   }

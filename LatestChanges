@@ -4,6 +4,8 @@ Changes since release 0.1847:
 - Minor changes for successful building of RPM for x86_64 architecture.
 - Added ga_genocide_by_fitness() function.
 - Handle invalid entities correctly/cleanly in all evolutionary functions.
+- Fixed bug in configuration to use certian MPI implementations, including MPICH.
+- Fixed bug that assumed fitness mean was always zero in some statistics functions.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
