@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 
   ga_evolution_steady_state(
        pop,		/* population              *pop */
-       500000		/* const int               max_iterations */
+       50000		/* const int               max_iterations */
               );
 
   printf("The final solution with seed = %d was: \n", seed);
