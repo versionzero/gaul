@@ -34,6 +34,8 @@
 #ifndef GAUL_CONFIG_WIN_H_INCLUDED
 #define GAUL_CONFIG_WIN_H_INCLUDED 1
 
+#define USE_WINDOWS_H 0
+
 #if defined __CYGWIN32__ && !defined __CYGWIN__
 #  define __CYGWIN__ __CYGWIN32__
 #endif
@@ -44,8 +46,11 @@
 #include <values.h>
 #include <unistd.h>
 #include <string.h>
-#include <windows.h>
 #include <io.h>
+
+#if USE_WINDOWS_H == 1
+#include <windows.h>
+#endif
 
 #ifndef errno
 /* Some sytems #define this! */
@@ -59,11 +64,11 @@ extern int errno;
  * These need to be modified for each release:
  */
 #define GA_MAJOR_VERSION 0
-#define GA_MINOR_VERSION 1845
-#define GA_PATCH_VERSION 3
-#define GA_VERSION_STRING "0.1845-3"
+#define GA_MINOR_VERSION 1846
+#define GA_PATCH_VERSION 0
+#define GA_VERSION_STRING "0.1846-0"
 #define GA_UNAME_STRING "<Unknown windows machine>"
-#define GA_BUILD_DATE_STRING "13/08/03"
+#define GA_BUILD_DATE_STRING "26/08/03"
 
 /*
  * Functions available on this platform:
@@ -86,7 +91,6 @@ extern int errno;
 #define HAVE_INDEX 1
 #define HAVE_RINDEX 1
 #define HAVE_WAITPID 1
-#define HAVE_GETHOSTNAME 0
 #define HAVE_FDOPEN 1
 #define HAVE_GETPWUID 1
 #define HAVE_SELECT 1
@@ -123,6 +127,19 @@ extern int errno;
 #define HAVE_STRTOD 1
 #define HAVE_STRTOK 1
 #define HAVE_MEMSET 1
+
+/*
+ * These are defined if windows.h is included:
+ */
+#if USE_WINDOWS_H == 1
+#define HAVE_MIN 1
+#define HAVE_MAX 1
+#define HAVE_GETHOSTNAME 1
+#else
+#define HAVE_MIN 0
+#define HAVE_MAX 0
+#define HAVE_GETHOSTNAME 0
+#endif
 
 /*
  * Default constants:
