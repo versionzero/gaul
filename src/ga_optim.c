@@ -1065,6 +1065,13 @@ int ga_evolution_forked(	population		*pop,
 
   return generation;
   }
+#else
+int ga_evolution_forked(	population		*pop,
+				const int		max_generations )
+  {
+  die("Sorry, the ga_evolution_forked() function isn't available for Windows.");
+  return 0;
+  }
 #endif
 
 
@@ -2911,6 +2918,14 @@ int ga_evolution_archipelago_forked( const int num_pops,
 #endif
 
   return generation;
+  }
+#else
+int ga_evolution_archipelago_forked( const int num_pops,
+			population		**pops,
+			const int		max_generations )
+  {
+  die("Sorry, the ga_evolution_archipelago_forked() function isn't available for Windows.");
+  return 0;
   }
 #endif
 
