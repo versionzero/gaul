@@ -122,6 +122,36 @@ entity *struggle_adaptation(population *pop, entity *child)
 
 
 /**********************************************************************
+  struggle_seed()
+  synopsis:	Entity initialisation.
+  parameters:
+  return:
+  updated:	08/07/01
+ **********************************************************************/
+
+void struggle_seed(population *pop, entity *adam)
+  {
+
+  return;
+  }
+
+
+/**********************************************************************
+  struggle_mutate()
+  synopsis:	Mutation.
+  parameters:
+  return:
+  updated:	08/07/01
+ **********************************************************************/
+
+void struggle_mutate(population *pop, entity *mother, entity *daughter)
+  {
+
+  return;
+  }
+
+
+/**********************************************************************
   struggle_crossover()
   synopsis:	A pair of crossover operators which will be called
 		alternately through the use of cross definitions.
@@ -129,6 +159,10 @@ entity *struggle_adaptation(population *pop, entity *child)
   return:
   updated:	07/07/01
  **********************************************************************/
+
+void struggle_crossover( population *pop,
+                        entity *father, entity *mother,
+                        entity *son, entity *daughter );
 
 void the_other_struggle_crossover( population *pop,
                         entity *father, entity *mother,

@@ -12,6 +12,7 @@ Changes since release 0.1834:
 - GA_UTIL_MIN_FITNESS renamed to GA_MIN_FITNESS, and is correctly used everywhere now.
 - Fixed chromosome replication bug (I was copying destination to source, doh!).
 - Some tutorial-style documentation about the "struggle" examples added.
+- Tidied some miscellaneous comments.
 
 Changes since release 0.1833:
 - Changes for docs/html/books.html to validate.

@@ -37,7 +37,7 @@
 /**********************************************************************
   ga_diagnostics()
   synopsis:	Diagnostics.
-  parameters:
+  parameters:	none
   return:	none
   last updated:	13/06/01
  **********************************************************************/

@@ -70,5 +70,10 @@ entity	*ga_simulated_annealling_mutation(population      *pop,
                                 const int       num_iterations,
                                 const int       initial_temperature,
                                 const int       final_temperature);
+boolean	ga_evolution_archipelago( const int num_pops,
+                        population              **pops,
+                        const ga_class_type     class,
+                        const ga_elitism_type   elitism,
+                        const int               max_generations );
 
 #endif	/* GA_OPTIM_H */

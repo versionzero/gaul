@@ -91,8 +91,9 @@ TableStruct	*pop_table=NULL;	/* The population table. */
 		many applications, the destructor callback will just
 		be free() or similar.  This callback may safely be
 		NULL.
-  parameters:
-  return:
+  parameters:	population *pop	Population.
+		SLList *list	Phenomic data.
+  return:	none
   last updated:	20/12/00
  **********************************************************************/
 
@@ -143,7 +144,10 @@ static void destruct_list(population *pop, SLList *list)
   ga_population_new()
   synopsis:	Allocates and initialises a new population structure,
 		and assigns a new population id to it.
-  parameters:
+  parameters:	const int max_size		Max. num. individuals.
+		const int stable_size		Num. individuals carried into next generation.
+		const int num_chromosome	Num. of chromosomes.
+		const int len_chromosome	Size of chromosomes (may be ignored).
   return:	population *	new population structure.
   last updated: 19/01/01
  **********************************************************************/
@@ -1348,6 +1352,8 @@ boolean ga_entity_copy(population *pop, entity *dest, entity *src)
 /**********************************************************************
   ga_entity_clone()
   synopsis:	Clone an entity structure.
+		Safe for cloning into a different population, provided
+		that the populations are compatiable.
   parameters:	population	*pop	Population.
 		entity	*parent		The original entity.
   return:	entity	*dolly		The new entity.

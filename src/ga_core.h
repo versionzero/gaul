@@ -170,6 +170,7 @@ struct population_t
   int		stable_size;		/* Requested population size. */
   int		size;			/* Actual population size. */
   int		orig_size;		/* Number of parents (entities at start of generation). */
+  int		island;			/* Population's island. */
 
 /*  int		max_entity;*/		/* Number of allocated entities. */
   entity	*entity_array;		/* The population as an array
@@ -217,7 +218,8 @@ struct population_t
 #define GA_ELITISM_MULTIPLIER	0.05
 #define GA_ELITISM_CONSTANT	2.0
 
-#define GA_MIN_FITNESS		-999999999.0
+/* Define lower bound on fitness. */
+#define GA_MIN_FITNESS		DBL_MIN
 
 /*
  * Prototypes
