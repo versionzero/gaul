@@ -57,7 +57,7 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the `itoa' function. */
+/* Whether itoa() is available */
 #undef HAVE_ITOA
 
 /* Define to 1 if you have the <limits.h> header file. */
@@ -117,7 +117,7 @@
 /* Define to 1 if you have the `select' function. */
 #undef HAVE_SELECT
 
-/* Define to 1 if you have the `sincos' function. */
+/* Whether sincos() is available */
 #undef HAVE_SINCOS
 
 /* Whether S-Lang is installed. */

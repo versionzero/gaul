@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "02/10/02"
+#define BUILD_DATE_STRING "03/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -58,7 +58,7 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the `itoa' function. */
+/* Whether itoa() is available */
 /* #undef HAVE_ITOA */
 
 /* Define to 1 if you have the <limits.h> header file. */
@@ -118,7 +118,7 @@
 /* Define to 1 if you have the `select' function. */
 #define HAVE_SELECT 1
 
-/* Define to 1 if you have the `sincos' function. */
+/* Whether sincos() is available */
 /* #undef HAVE_SINCOS */
 
 /* Whether S-Lang is installed. */
@@ -335,7 +335,7 @@
 #define STDC_HEADERS 1
 
 /* Define if using Sun's Forte C Compiler */
-#define SUN_FORTE_C 0
+/* #undef SUN_FORTE_C */
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #define TIME_WITH_SYS_TIME 1

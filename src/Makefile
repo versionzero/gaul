@@ -64,10 +64,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = aclocal-1.6
-AUTOCONF = autoconf
-AUTOMAKE = automake-1.6
-AUTOHEADER = autoheader
+ACLOCAL = ${SHELL} /u1/gaul-devel/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/gaul-devel/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/gaul-devel/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/gaul-devel/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -95,7 +95,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = tar
+AMTAR = ${SHELL} /u1/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -211,7 +211,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -O3 -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -march=pentiumpro -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(include_HEADERS)
 

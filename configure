@@ -1913,27 +1913,6 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-
-cat >>confdefs.h <<\_ACEOF
-#define GA_WRITE_STATS 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_DEBUG 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define MEMORY_ALLOC_SAFE 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define SUN_FORTE_C 0
-_ACEOF
-
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4368,7 +4347,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4371 "configure"' > conftest.$ac_ext
+  echo '#line 4350 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4904,7 +4883,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4907: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4886: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6697,7 +6676,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6700 "configure"
+#line 6679 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6795,7 +6774,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6798 "configure"
+#line 6777 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7561,7 +7540,7 @@ if test "${enable_g+set}" = set; then
   enableval="$enable_g"
 
 else
-  enable_g=no
+  enable_g=yes
 fi;
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
@@ -7694,16 +7673,28 @@ fi
 echo "$as_me:$LINENO: checking whether to enable memory access debugging" >&5
 echo $ECHO_N "checking whether to enable memory access debugging... $ECHO_C" >&6
 if test "x$enable_memory_debug" = "xyes"; then
-  cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define MEMORY_ALLOC_DEBUG 1
 _ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define MEMORY_ALLOC_SAFE 0
+_ACEOF
+
 
   echo "$as_me:$LINENO: result: yes - full profiling" >&5
 echo "${ECHO_T}yes - full profiling" >&6
 else
   cat >>confdefs.h <<\_ACEOF
+#define MEMORY_ALLOC_DEBUG 0
+_ACEOF
+
+  cat >>confdefs.h <<\_ACEOF
 #define MEMORY_ALLOC_SAFE 1
 _ACEOF
+
 
   echo "$as_me:$LINENO: result: no - safe wrappers only" >&5
 echo "${ECHO_T}no - safe wrappers only" >&6
@@ -7712,7 +7703,8 @@ fi
 echo "$as_me:$LINENO: checking whether to enable dumping of statistics" >&5
 echo $ECHO_N "checking whether to enable dumping of statistics... $ECHO_C" >&6
 if test "x$enable_stats" = "xyes"; then
-  cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define GA_WRITE_STATS 1
 _ACEOF
 
@@ -7998,18 +7990,6 @@ else
   fi
 fi
 
-if test "x$target" = "xsparc-sun-solaris2.7"; then
-  cat >>confdefs.h <<\_ACEOF
-#define SUN_FORTE_C 2.7
-_ACEOF
-
-elif test "x$target" = "xsparc-sun-solaris2.8"; then
-  cat >>confdefs.h <<\_ACEOF
-#define SUN_FORTE_C 2.8
-_ACEOF
-
-fi
-
 
 for ac_func in vprintf
 do
@@ -8158,84 +8138,6 @@ fi
 fi
 done
 
-
-
-
-
-for ac_func in atexit on_exit
-do
-as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $ac_func" >&5
-echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
-if eval "test \"\${$as_ac_var+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-#include "confdefs.h"
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $ac_func (); below.  */
-#include <assert.h>
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $ac_func ();
-char (*f) ();
-
-#ifdef F77_DUMMY_MAIN
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-#endif
-int
-main ()
-{
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
-choke me
-#else
-f = $ac_func;
-#endif
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  eval "$as_ac_var=yes"
-else
-  echo "$as_me: failed program was:" >&5
-cat conftest.$ac_ext >&5
-eval "$as_ac_var=no"
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
-if test `eval echo '${'$as_ac_var'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
 
 
 echo "$as_me:$LINENO: checking for double" >&5
@@ -10680,33 +10582,23 @@ done
 
 
 
-
-
-
-
-
-
-
-
-
-
 for ac_func in fdopen gethostname getpwuid gettimeofday select \
-                waitpid usleep snooze \
-                basename \
-                readline \
-                memcpy memset memmove bcopy memscan \
-                memrev memchr memmem memcmp bcmp \
-                min max \
-                itoa \
-                index rindex \
-	       	snprintf \
-                strchr strrchr strcat strlen \
-                strcmp strncmp strcpy strncpy strtok strpbrk strsep \
-		strcasecmp strncasecmp stricmp strnicmp \
-                strdup strndup \
-		strnfill strcatv strtod strsignal strrev \
-                strspn strcspn \
-                strerror strlcat strlcpy strstr vsnprintf
+               atexit on_exit \
+               waitpid snooze \
+               basename \
+               readline \
+               memcpy memmove memscan \
+               memrev memchr memmem memcmp \
+               min max \
+               index rindex \
+               snprintf \
+               strchr strrchr strcat \
+               strcmp strcpy strpbrk strsep \
+               strcasecmp strncasecmp \
+               strdup strndup \
+               strnfill strcatv strsignal strrev \
+               strspn strcspn \
+               strerror strlcat strlcpy strstr vsnprintf
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -10783,15 +10675,219 @@ done
 
 
 if test "x$enable_mpi" = "xyes"; then
-  cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_ITOA 1
 _ACEOF
 	# Avoid symbol conflict with LAM-MPI
+else
+  echo "$as_me:$LINENO: checking for itoa" >&5
+echo $ECHO_N "checking for itoa... $ECHO_C" >&6
+if test "${ac_cv_func_itoa+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char itoa (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char itoa ();
+char (*f) ();
+
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_itoa) || defined (__stub___itoa)
+choke me
+#else
+f = itoa;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_itoa=yes
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+ac_cv_func_itoa=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_itoa" >&5
+echo "${ECHO_T}$ac_cv_func_itoa" >&6
+
 fi
 
-if test "x$CC" != "xicc"; then
+if test "x$CC" = "xicc"; then
 
-for ac_func in sincos
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_SINCOS 1
+_ACEOF
+	# I have some problems with implicit definition of sincos() with the Intel C++.
+else
+  echo "$as_me:$LINENO: checking for sincos " >&5
+echo $ECHO_N "checking for sincos ... $ECHO_C" >&6
+if test "${ac_cv_func_sincos_+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char sincos  (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char sincos  ();
+char (*f) ();
+
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_sincos ) || defined (__stub___sincos )
+choke me
+#else
+f = sincos ;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_sincos_=yes
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+ac_cv_func_sincos_=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_sincos_" >&5
+echo "${ECHO_T}$ac_cv_func_sincos_" >&6
+
+fi
+
+if test "x$target" = "xsparc-sun-solaris2.7"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define SUN_FORTE_C 2.7
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_BCOPY 1
+_ACEOF
+	# Big problems!!!
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_BCMP 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRLEN 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRNCMP 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRNCPY 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRTOD 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRTOK 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MEMSET 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_USLEEP 1
+_ACEOF
+
+elif test "x$target" = "xsparc-sun-solaris2.8"; then
+  cat >>confdefs.h <<\_ACEOF
+#define SUN_FORTE_C 2.8
+_ACEOF
+
+
+
+
+
+
+
+
+
+
+for ac_func in bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -10865,69 +10961,187 @@ _ACEOF
 
 fi
 done
-	# I have some problems with implicit definition of sincos() with the Intel C++.
+
+else
+
+
+
+
+
+
+
+
+
+for ac_func in bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $ac_func ();
+char (*f) ();
+
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
+choke me
+#else
+f = $ac_func;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+eval "$as_ac_var=no"
 fi
-
-if test "x$target" = "xsparc-sun-solaris2.7"; then
-  cat >>confdefs.h <<\_ACEOF
-#define SUN_FORTE_C 2.7
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_BCOPY 1
-_ACEOF
-	# Big problems!!!
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_BCMP 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRLEN 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRNCMP 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRNCPY 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOD 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOK 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_MEMSET 1
-_ACEOF
-
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_USLEEP 1
-_ACEOF
-
-elif test "x$target" = "xsparc-sun-solaris2.8"; then
-  cat >>confdefs.h <<\_ACEOF
-#define SUN_FORTE_C 2.8
-_ACEOF
+fi
+done
 
 fi
 
 case "$target" in
   *-*-cygwin*)
-    cat >>confdefs.h <<\_ACEOF
+# stricmp() and strnicmp() are defined as macros by Cygwin, therefore the
+# AC_CHECK_FUNCS tests give incorrect result.
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_STRICMP 1
 _ACEOF
-	# stricmp() and strnicmp() are defined as macros by Cygwin, therefore
-    cat >>confdefs.h <<\_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_STRNICMP 1
 _ACEOF
-	# the above tests give incorrect result.
+
     ;;
   *)
+
+
+for ac_func in stricmp strnicmp
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $ac_func ();
+char (*f) ();
+
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
+choke me
+#else
+f = $ac_func;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+eval "$as_ac_var=no"
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
     ;;
 esac
 
@@ -10937,24 +11151,38 @@ case "$target" in
   i586-*-*)
     echo "$as_me:$LINENO: result: yes - i586" >&5
 echo "${ECHO_T}yes - i586" >&6
-    if test "x$CC" = "xicc"; then
-
-      case " $CFLAGS " in
-        *\ \	-tpp1-9\ \	*) ;;
-        *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
-      esac
-    fi
+    case "$CC" in
+      icc)
+        case " $CFLAGS " in
+          *\ \	-tpp1-9\ \	*) ;;
+          *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+        esac
+        ;;
+      gcc)
+        case " $CFLAGS " in
+          *\ \	-march=*) ;;
+          *) CFLAGS="$CFLAGS -march=pentium" ;;
+        esac
+        ;;
+    esac
     ;;
   i686-*-*)
     echo "$as_me:$LINENO: result: yes - i686" >&5
 echo "${ECHO_T}yes - i686" >&6
-    if test "x$CC" = "xicc"; then
-
-      case " $CFLAGS " in
-        *\ \	-tpp1-9\ \	*) ;;
-        *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
-      esac
-    fi
+    case "$CC" in
+      icc)
+        case " $CFLAGS " in
+          *\ \	-tpp1-9\ \	*) ;;
+          *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+        esac
+        ;;
+      gcc)
+        case " $CFLAGS " in
+          *\ \	-march=*) ;;
+          *) CFLAGS="$CFLAGS -march=pentiumpro" ;;
+        esac
+        ;;
+    esac
     ;;
   *)
     echo "$as_me:$LINENO: result: no - none defined for ${target}" >&5
@@ -12358,8 +12586,8 @@ echo \
 
   Version:                    ${VERSION}
   Source code location:       ${srcdir}
-  Host system Type:           ${host}
-  Target system Type:         ${target}
+  Host system type:           ${host}
+  Target system type:         ${target}
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}

@@ -34,29 +34,3 @@ SUBDIRS = util src tests examples .
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec
 
-#
-# Automatically update the configuration stuff when the configuration files are modified.
-#
-$(srcdir)/configure: configure.ac aclocal.m4
-	cd $(srcdir) && autoconf
-
-# It is possible that autoheader doesn't change config.h.in, so touch stamp file.
-# I use echo instead of touch to avoid uneccessary differences... CVS modifications.
-$(srcdir)/config.h.in: stamp-h.in
-
-$(srcdir)/stamp-h.in: configure.ac aclocal.m4
-	cd $(srcdir) && autoheader
-	echo timestamp > $(srcdir)/stamp-h.in
-
-config.h: stamp-h
-
-stamp-h: config.h.in config.status
-	./config.status
-
-Makefile: Makefile.in config.status
-	./config.status
-
-config.status: configure
-	./config.status --recheck
-
-

@@ -81,11 +81,6 @@ AC_DEFINE_UNQUOTED(VERSION_STRING, "${VERSION}", [Version string.])
 AC_DEFINE(MPI_NUM_THREADS_ENVVAR_STRING, "GA_NUM_THREADS", [Environment variable used to request threads.])
 AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [record compilation platform information.])
 
-AC_DEFINE( GA_WRITE_STATS, 0, [Whether to dump certian statistics.])
-AC_DEFINE( MEMORY_ALLOC_DEBUG, 0, [Whether to use debugging memory allocation routines.])
-AC_DEFINE( MEMORY_ALLOC_SAFE, 1, [Whether to use safe memory allocation routines.])
-AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler])
-
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -112,7 +107,7 @@ debug_default=no
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(g,
        [  --enable-g=[yes/no]             compile with symbolic debug information [default=yes]],,
-       enable_g=no)
+       enable_g=yes)
 AC_ARG_ENABLE(debug,
        [  --enable-debug=[no/minimum/yes] turn on debugging [default=$debug_default]],,
        enable_debug=$debug_default)
@@ -184,19 +179,23 @@ fi
 
 AC_MSG_CHECKING(whether to enable memory access debugging)
 if test "x$enable_memory_debug" = "xyes"; then
-  AC_DEFINE(MEMORY_ALLOC_DEBUG, 1)
+  AC_DEFINE( MEMORY_ALLOC_DEBUG, 1, [Whether to use debugging memory allocation routines.])
+  AC_DEFINE( MEMORY_ALLOC_SAFE, 0, [Whether to use safe memory allocation routines.])
+
   AC_MSG_RESULT(yes - full profiling)
 else
+  AC_DEFINE(MEMORY_ALLOC_DEBUG, 0)
   AC_DEFINE(MEMORY_ALLOC_SAFE, 1)
+
   AC_MSG_RESULT(no - safe wrappers only)
 fi
 
 AC_MSG_CHECKING(whether to enable dumping of statistics)
 if test "x$enable_stats" = "xyes"; then
-  AC_DEFINE(GA_WRITE_STATS,1)
+  AC_DEFINE( GA_WRITE_STATS, 1, [Whether to dump certian statistics.])
   AC_MSG_RESULT(yes)
 else
-  AC_DEFINE(GA_WRITE_STATS,0)
+  AC_DEFINE(GA_WRITE_STATS, 0)
   AC_MSG_RESULT(no)
 fi
 
@@ -391,17 +390,8 @@ else
 fi
 changequote([,])dnl
 
-dnl SunOS fixes.
-if test "x$target" = "xsparc-sun-solaris2.7"; then
-  AC_DEFINE(SUN_FORTE_C,2.7)
-elif test "x$target" = "xsparc-sun-solaris2.8"; then
-  AC_DEFINE(SUN_FORTE_C,2.8)
-fi
-
 dnl Checks for standard library functions.
 AC_FUNC_VPRINTF
-
-AC_CHECK_FUNCS(atexit on_exit)
 
 dnl Check type sizes.
 AC_CHECK_SIZEOF(double, 4)
@@ -428,54 +418,64 @@ AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
 
 dnl Check for some library functions, many of which GAUL doesn't use, but I
 dnl haven't gone though checking yet.
-AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
-                waitpid usleep snooze \
-                basename \
-                readline \
-                memcpy memset memmove bcopy memscan \
-                memrev memchr memmem memcmp bcmp \
-                min max \
-                itoa \
-                index rindex \
-	       	snprintf \
-                strchr strrchr strcat strlen \
-                strcmp strncmp strcpy strncpy strtok strpbrk strsep \
-		strcasecmp strncasecmp stricmp strnicmp \
-                strdup strndup \
-		strnfill strcatv strtod strsignal strrev \
-                strspn strcspn \
-                strerror strlcat strlcpy strstr vsnprintf )
+AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
+               atexit on_exit \
+               waitpid snooze \
+               basename \
+               readline \
+               memcpy memmove memscan \
+               memrev memchr memmem memcmp \
+               min max \
+               index rindex \
+               snprintf \
+               strchr strrchr strcat \
+               strcmp strcpy strpbrk strsep \
+               strcasecmp strncasecmp \
+               strdup strndup \
+               strnfill strcatv strsignal strrev \
+               strspn strcspn \
+               strerror strlcat strlcpy strstr vsnprintf)
 
 dnl Some dodgy work-arounds.
 if test "x$enable_mpi" = "xyes"; then
-  AC_DEFINE(HAVE_ITOA,1)	# Avoid symbol conflict with LAM-MPI
+  AC_DEFINE(HAVE_ITOA,1,[Whether itoa() is available])	# Avoid symbol conflict with LAM-MPI
+else
+  AC_CHECK_FUNC(itoa)
 fi
 
-if test "x$CC" != "xicc"; then
-  AC_CHECK_FUNCS( sincos )	# I have some problems with implicit definition of sincos() with the Intel C++.
+if test "x$CC" = "xicc"; then
+  AC_DEFINE(HAVE_SINCOS,1,[Whether sincos() is available])	# I have some problems with implicit definition of sincos() with the Intel C++.
+else
+  AC_CHECK_FUNC( sincos )
 fi
 
 if test "x$target" = "xsparc-sun-solaris2.7"; then
-  AC_DEFINE(SUN_FORTE_C,2.7)
-  AC_DEFINE(HAVE_BCOPY,1)	# Big problems!!!
-  AC_DEFINE(HAVE_BCMP,1)
-  AC_DEFINE(HAVE_STRLEN,1)
-  AC_DEFINE(HAVE_STRNCMP,1)
-  AC_DEFINE(HAVE_STRNCPY,1)
-  AC_DEFINE(HAVE_STRTOD,1)
-  AC_DEFINE(HAVE_STRTOK,1)
-  AC_DEFINE(HAVE_MEMSET,1)
-  AC_DEFINE(HAVE_USLEEP,1)
+  AC_DEFINE( SUN_FORTE_C, 2.7, [Define if using Sun's Forte C Compiler] )
+  AC_DEFINE(HAVE_BCOPY,1,[Whether bcopy() is available])	# Big problems!!!
+  AC_DEFINE(HAVE_BCMP,1,[Whether bcmp() is available])
+  AC_DEFINE(HAVE_STRLEN,1,[Whether strlen() is available])
+  AC_DEFINE(HAVE_STRNCMP,1,[Whether strncmp() is available])
+  AC_DEFINE(HAVE_STRNCPY,1,[Whether strncpy() is available])
+  AC_DEFINE(HAVE_STRTOD,1,[Whether strtod() is available])
+  AC_DEFINE(HAVE_STRTOK,1,[Whether strtok() is available])
+  AC_DEFINE(HAVE_MEMSET,1,[Whether memset() is available])
+  AC_DEFINE(HAVE_USLEEP,1,[Whether usleep() is available])
 elif test "x$target" = "xsparc-sun-solaris2.8"; then
-  AC_DEFINE(SUN_FORTE_C,2.8)
+  AC_DEFINE( SUN_FORTE_C, 2.8 )
+  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+else
+  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
 fi
 
 case "$target" in
   *-*-cygwin*)
-    AC_DEFINE(HAVE_STRICMP,1)	# stricmp() and strnicmp() are defined as macros by Cygwin, therefore
-    AC_DEFINE(HAVE_STRNICMP,1)	# the above tests give incorrect result.
+# stricmp() and strnicmp() are defined as macros by Cygwin, therefore the
+# AC_CHECK_FUNCS tests give incorrect result.
+    AC_DEFINE(HAVE_STRICMP,1,[Whether stricmp() is available])
+    AC_DEFINE(HAVE_STRNICMP,1,[Whether strnicmp() is available])
     ;;
   *)
+    AC_CHECK_FUNCS(stricmp strnicmp)
     ;;
 esac
 
@@ -484,23 +484,37 @@ AC_MSG_CHECKING(whether to apply processor specific optimisations)
 case "$target" in
   i586-*-*)
     AC_MSG_RESULT(yes - i586)
-    if test "x$CC" = "xicc"; then
-
-      case " $CFLAGS " in
-        *[\ \	]-tpp[1-9\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
-      esac
-    fi
+    case "$CC" in
+      icc)
+        case " $CFLAGS " in
+          *[\ \	]-tpp[1-9\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -tpp6 -axK" ;;
+        esac
+        ;;
+      gcc)
+        case " $CFLAGS " in
+          *[\ \	]-march=*) ;;
+          *) CFLAGS="$CFLAGS -march=pentium" ;;
+        esac
+        ;;
+    esac
     ;;
   i686-*-*)
     AC_MSG_RESULT(yes - i686)
-    if test "x$CC" = "xicc"; then
-
-      case " $CFLAGS " in
-        *[\ \	]-tpp[1-9\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
-      esac
-    fi
+    case "$CC" in
+      icc)
+        case " $CFLAGS " in
+          *[\ \	]-tpp[1-9\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -tpp7 -axW" ;;
+        esac
+        ;;
+      gcc)
+        case " $CFLAGS " in
+          *[\ \	]-march=*) ;;
+          *) CFLAGS="$CFLAGS -march=pentiumpro" ;;
+        esac
+        ;;
+    esac
     ;;
   *)
     AC_MSG_RESULT(no - none defined for ${target})
@@ -564,8 +578,8 @@ echo \
 
   Version:                    ${VERSION}
   Source code location:       ${srcdir}
-  Host system Type:           ${host}
-  Target system Type:         ${target}
+  Host system type:           ${host}
+  Target system type:         ${target}
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}
