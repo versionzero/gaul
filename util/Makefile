@@ -93,7 +93,7 @@ host_triplet = i686-pc-linux-gnu
 target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = icc
+CC = gcc
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
@@ -221,7 +221,8 @@ include_HEADERS = \
      timer_util.h
 
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
+#nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
+nn_LDADD = -L./ -L../src/ libnn_util.a libmpi_util_fake.a libstuff.a liblog_util.a -lm
 
 libstuff_a_LIBFLAGS = 
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
@@ -286,9 +287,10 @@ bin_PROGRAMS =  nn$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 nn_OBJECTS =  nn_main.$(OBJEXT)
-nn_DEPENDENCIES = 
+nn_DEPENDENCIES =  libnn_util.a libmpi_util_fake.a libstuff.a \
+liblog_util.a
 nn_LDFLAGS = 
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -ipo -ipo_obj -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

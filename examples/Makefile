@@ -92,7 +92,7 @@ host_triplet = i686-pc-linux-gnu
 target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = icc
+CC = gcc
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
@@ -264,7 +264,7 @@ saveload_OBJECTS =  saveload.$(OBJEXT)
 saveload_LDFLAGS = 
 nnevolve_OBJECTS =  nnevolve.$(OBJEXT)
 nnevolve_LDFLAGS = 
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -ipo -ipo_obj -O2 -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
