@@ -23,7 +23,7 @@
 #define GA_MAJOR_VERSION 0
 
 /* Minor version number. */
-#define GA_MINOR_VERSION 1843
+#define GA_MINOR_VERSION 1844
 
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
@@ -32,7 +32,7 @@
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* Patch level. */
-#define GA_PATCH_VERSION 4
+#define GA_PATCH_VERSION 0
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -374,13 +374,13 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0 2.4.20-9smp #1 SMP Wed Apr 2 13:28:49 EST 2003 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.20-13.8 #1 Mon May 12 11:48:50 EDT 2003 i686 athlon i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1843-4"
+#define VERSION_STRING "0.1844-0"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
