@@ -78,27 +78,27 @@ typedef struct AVLNode_t
  * Private function prototypes.
  */
 static AVLNode	*avltree_node_new(AVLKey key, vpointer data);
-static void		avltree_node_free(AVLNode *node);
-static void		avltree_node_delete(AVLNode *node);
+static void	avltree_node_free(AVLNode *node);
+static void	avltree_node_delete(AVLNode *node);
 static AVLNode	*avltree_node_insert(AVLNode *node, AVLKey key,
-					     vpointer data, boolean *inserted);
+				     vpointer data, boolean *inserted);
 static AVLNode	*avltree_node_remove(AVLNode *node,
-                                             AVLKey key, vpointer *removed_data);
+                                     AVLKey key, vpointer *removed_data);
 static AVLNode	*avltree_node_balance(AVLNode *node);
 static AVLNode	*avltree_node_remove_leftmost(AVLNode *node,
-						     AVLNode **leftmost);
+					     AVLNode **leftmost);
 static AVLNode	*avltree_node_restore_left_balance(AVLNode *node,
 						     int old_balance);
 static AVLNode	*avltree_node_restore_right_balance(AVLNode *node,
 						     int old_balance);
-static vpointer		avltree_node_lookup(AVLNode *node, AVLKey key);
-static int		avltree_node_count(AVLNode *node);
-static boolean		avltree_node_traverse(AVLNode *node,
+static vpointer	avltree_node_lookup(AVLNode *node, AVLKey key);
+static int	avltree_node_count(AVLNode *node);
+static boolean	avltree_node_traverse(AVLNode *node,
 				AVLTraverseFunc traverse_func, vpointer userdata);
-static int		avltree_node_height(AVLNode *node);
+static int	avltree_node_height(AVLNode *node);
 static AVLNode	*avltree_node_rotate_left(AVLNode *node);
 static AVLNode	*avltree_node_rotate_right(AVLNode *node);
-static void		avltree_node_check(AVLNode *node);
+static void	avltree_node_check(AVLNode *node);
 
 /*
  * Compilation constants.
