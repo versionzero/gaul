@@ -41,11 +41,11 @@
 
 #include "gaul_util.h"		/* General header containing commonly
 				   used convenience definitions.
-				   This also include a platform-
+				   This also includes a platform-
 				   specific configuration file. */
 
 /*
- * Programming utilities.
+ * Portable programming utilities.
  */
 #include "compatibility.h"      /* For portability stuff. */
 #include "linkedlist.h"         /* For linked lists. */
@@ -60,7 +60,9 @@
  * Forward declarations.
  **********************************************************************/
 
+/* The entity datatype stores single individuals. */
 typedef struct entity_t entity;
+/* The population datatype stores single populations. */
 typedef struct population_t population;
 
 /**********************************************************************
@@ -81,8 +83,12 @@ typedef enum ga_genesis_type_t
 typedef enum ga_scheme_type_t
   {
   GA_SCHEME_DARWIN = 0,
-  GA_SCHEME_LAMARCK_PARENTS = 1, GA_SCHEME_LAMARCK_CHILDREN = 2, GA_SCHEME_LAMARCK_ALL = 3,
-  GA_SCHEME_BALDWIN_PARENTS = 4, GA_SCHEME_BALDWIN_CHILDREN = 8, GA_SCHEME_BALDWIN_ALL = 12
+  GA_SCHEME_LAMARCK_PARENTS = 1,
+  GA_SCHEME_LAMARCK_CHILDREN = 2,
+  GA_SCHEME_LAMARCK_ALL = 3,
+  GA_SCHEME_BALDWIN_PARENTS = 4,
+  GA_SCHEME_BALDWIN_CHILDREN = 8,
+  GA_SCHEME_BALDWIN_ALL = 12
   } ga_scheme_type;
 
 /*
@@ -104,23 +110,38 @@ typedef enum ga_elitism_type_t
 /*
  * Analysis and termination.
  */
+/* GAgeneration_hook is called at the beginning of each generation by
+ * all evolutionary functions. */
 typedef boolean (*GAgeneration_hook)(const int generation, population *pop);
+/* GAiteration_hook is called at the beginning of each iteration by
+ * all non-evolutionary functions. */
 typedef boolean (*GAiteration_hook)(const int iteration, entity *entity);
 
 /*
  * Phenome (A general purpose data cache) handling.
  */
+/* GAdata_destructor is used to deallocate phenomic data. */
 typedef void    (*GAdata_destructor)(vpointer data);
+/* GAdata_ref_incrementor is used for reference counting of phenomic data. */
 typedef void    (*GAdata_ref_incrementor)(vpointer data);
 
 /*
  * Genome handling.
  */
+/* GAchromosome_constructor is used to allocate single chromosomes. */
 typedef boolean (*GAchromosome_constructor)(population *pop, entity *entity);
+/* GAchromosome_destructor is used to deallocate single chromosomes. */
 typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
+/* GAchromosome_replicate is used to clone single chromosomes. */
 typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
+/* GAchromosome_to_bytes is used to pack genomic data into a
+ * contiguous block of memory. */
 typedef unsigned int    (*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+/* GAchromosome_from_bytes is used to unpack genomic data from a
+ * contiguous block of memory. */
 typedef void    (*GAchromosome_from_bytes)(population *pop, entity *joe, byte *bytes);
+/* GAchromosome_to_string is used to generate a human readable
+ * representation of genomic data. */
 typedef char    *(*GAchromosome_to_string)(const population *pop, const entity *joe, char *text, size_t *textlen);
 
 /*
@@ -130,13 +151,21 @@ typedef char    *(*GAchromosome_to_string)(const population *pop, const entity *
  * the adaptation local optimisation algorithms may be used as mutation
  * operators.
  */
+/* GAevaluate determines the fitness of an entity. */
 typedef boolean (*GAevaluate)(population *pop, entity *entity);
+/* GAseed initialises the genomic contents of an entity. */
 typedef boolean	(*GAseed)(population *pop, entity *adam);
+/* GAadapt optimises/performs learning for an entity. */
 typedef entity *(*GAadapt)(population *pop, entity *child);
+/* GAselect_one selects a single entity from the population. */
 typedef boolean (*GAselect_one)(population *pop, entity **mother);
+/* GAselect_one selects a pair of entities from the population. */
 typedef boolean (*GAselect_two)(population *pop, entity **mother, entity **father);
+/* GAmutate introduces a mutation into an entity. */
 typedef void    (*GAmutate)(population *pop, entity *mother, entity *daughter);
+/* GAcrossover produces two new sets of chromosomes from two parent sets. */
 typedef void    (*GAcrossover)(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
+/* GAreplace inserts a new entity into the population. */
 typedef void    (*GAreplace)(population *pop, entity *child);
 
 /*
