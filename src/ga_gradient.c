@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_gradient - Gradient methods for comparison and local search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -70,7 +70,8 @@ void ga_population_set_gradient_parameters( population		*pop,
 
   plog( LOG_VERBOSE, "Population's gradient methods parameters set" );
 
-  pop->gradient_params = s_malloc(sizeof(ga_gradient_t));
+  if (pop->gradient_params == NULL)
+    pop->gradient_params = s_malloc(sizeof(ga_gradient_t));
 
   pop->gradient_params->to_double = to_double;
   pop->gradient_params->from_double = from_double;

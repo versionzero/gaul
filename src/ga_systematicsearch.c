@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_systematicsearch - Random search algorithm for comparison and search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -49,7 +49,8 @@ void ga_population_set_search_parameters( population              *pop,
   if ( !pop ) die("Null pointer to population structure passed.");
   if ( !scan_chromosome ) die("Null pointer to GAscan_chromosome callback passed.");
 
-  pop->search_params = s_malloc(sizeof(ga_search_t));
+  if (pop->search_params == NULL)
+    pop->search_params = s_malloc(sizeof(ga_search_t));
 
   pop->search_params->scan_chromosome = scan_chromosome;
   pop->search_params->chromosome_state = 0;

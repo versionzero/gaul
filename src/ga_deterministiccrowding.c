@@ -50,7 +50,8 @@ void ga_population_set_deterministiccrowding_parameters( population		*pop,
 
   plog( LOG_VERBOSE, "Population's deterministic crowding parameters set" );
 
-  pop->dc_params = s_malloc(sizeof(ga_dc_t));
+  if (pop->dc_params == NULL)
+    pop->dc_params = s_malloc(sizeof(ga_dc_t));
 
   pop->dc_params->compare = compare;
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_tabu - A tabu-search algorithm for comparison and local search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -266,7 +266,8 @@ void ga_population_set_tabu_parameters( population              *pop,
         "Population's tabu-search parameters: list_length = %d search_count = %d",
         list_length, search_count );
 
-  pop->tabu_params = s_malloc(sizeof(ga_tabu_t));
+  if (pop->tabu_params == NULL)
+    pop->tabu_params = s_malloc(sizeof(ga_tabu_t));
 
   pop->tabu_params->tabu_accept = tabu_accept;
   pop->tabu_params->list_length = list_length;

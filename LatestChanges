@@ -11,6 +11,7 @@ Changes since release 0.1844:
 - Chromosome handling functions now all take (const population *) arguments.
 - Added ga_seed_random_unit_gaussian().
 - All parameters are now copied in ga_population_clone() and ga_population_clone_empty().
+- Removed some minor memory leaks from the stochastic optimisation methods code.
 
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.

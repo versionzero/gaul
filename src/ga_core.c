@@ -3041,8 +3041,14 @@ boolean ga_extinction(population *extinct)
     s_free(extinct->entity_array);
     s_free(extinct->entity_iarray);
     mem_chunk_destroy(extinct->entity_chunk);
+
     if (extinct->tabu_params) s_free(extinct->tabu_params);
     if (extinct->sa_params) s_free(extinct->sa_params);
+    if (extinct->climbing_params) s_free(extinct->climbing_params);
+    if (extinct->simplex_params) s_free(extinct->simplex_params);
+    if (extinct->gradient_params) s_free(extinct->gradient_params);
+    if (extinct->search_params) s_free(extinct->search_params);
+
     s_free(extinct);
     }
 

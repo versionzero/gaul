@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_randomsearch - Random search algorithm for comparison and search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:

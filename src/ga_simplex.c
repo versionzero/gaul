@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_simplex - A simplex search algorithm for comparison and local search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -73,7 +73,8 @@ void ga_population_set_simplex_parameters( population		*pop,
 
   plog( LOG_VERBOSE, "Population's simplex-search parameters set" );
 
-  pop->simplex_params = s_malloc(sizeof(ga_simplex_t));
+  if (pop->simplex_params == NULL)
+    pop->simplex_params = s_malloc(sizeof(ga_simplex_t));
 
   pop->simplex_params->to_double = to_double;
   pop->simplex_params->from_double = from_double;

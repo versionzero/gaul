@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_climbing - Hill climbing algorithms for comparison and search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -54,7 +54,8 @@ void ga_population_set_hillclimbing_parameters( population              *pop,
   plog( LOG_VERBOSE,
         "Population's hill-climbing parameters: " );
 
-  pop->climbing_params = s_malloc(sizeof(ga_climbing_t));
+  if (pop->climbing_params == NULL)
+    pop->climbing_params = s_malloc(sizeof(ga_climbing_t));
 
   pop->climbing_params->mutate_allele = mutate_allele;
 
