@@ -140,16 +140,14 @@ static void destruct_list(population *pop, SLList *list)
   ga_population_new()
   synopsis:	Allocates and initialises a new population structure,
 		and assigns a new population id to it.
-  parameters:	const int max_size		Max. num. individuals.
-		const int stable_size		Num. individuals carried into next generation.
+  parameters:	const int stable_size		Num. individuals carried into next generation.
 		const int num_chromosome	Num. of chromosomes.
 		const int len_chromosome	Size of chromosomes (may be ignored).
   return:	population *	new population structure.
-  last updated: 19/01/01
+  last updated: 13 Feb 2002
  **********************************************************************/
 
-population *ga_population_new(	const int max_size,
-				const int stable_size,
+population *ga_population_new(	const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome)
   {
@@ -162,7 +160,7 @@ population *ga_population_new(	const int max_size,
 
   newpop->size = 0;
   newpop->stable_size = stable_size;
-  newpop->max_size = max_size;
+  newpop->max_size = stable_size*3;
   newpop->orig_size = 0;
   newpop->num_chromosomes = num_chromosome;
   newpop->len_chromosomes = len_chromosome;
@@ -172,13 +170,13 @@ population *ga_population_new(	const int max_size,
   newpop->mutation_ratio = 1.0;
   newpop->migration_ratio = 1.0;
 
-  if ( !(newpop->entity_array = s_malloc(max_size*sizeof(entity))) )
+  if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity))) )
     die("Unable to allocate memory");
 
-  if ( !(newpop->entity_iarray = s_malloc(max_size*sizeof(entity*))) )
+  if ( !(newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
   
-  for (i=0; i<max_size; i++)
+  for (i=0; i<newpop->max_size; i++)
     {
     newpop->entity_array[i].allocated=FALSE;
     newpop->entity_array[i].data=NULL;
@@ -559,7 +557,7 @@ boolean ga_population_save(population *pop, char *fname)
 /*
  * Population info.
  */
-  fprintf(fp, "%d %d %d %d %d\n", pop->max_size, pop->size, pop->stable_size,
+  fprintf(fp, "%d %d %d %d\n", pop->size, pop->stable_size,
                   pop->num_chromosomes, pop->len_chromosomes);
 
 /*
@@ -611,7 +609,7 @@ population *ga_population_read(char *fname)
   char		origfname[MAX_LINE_LEN];	/* Original filename. */
   char		version_str[MAX_LINE_LEN], build_str[MAX_LINE_LEN];	/* Version details. */
   char  	test_str[MAX_LINE_LEN];	/* Test string. */
-  int		max_size, size, stable_size, num_chromosomes, len_chromosomes;
+  int		size, stable_size, num_chromosomes, len_chromosomes;
   entity	*newentity;		/* New entity in new population. */
 
   plog(LOG_DEBUG, "Reading population from disk.");
@@ -636,14 +634,13 @@ population *ga_population_read(char *fname)
 /*
  * Population info.
  */
-  fscanf(fp, "%d %d %d %d %d", &max_size, &size, &stable_size,
+  fscanf(fp, "%d %d %d %d", &size, &stable_size,
                   &num_chromosomes, &len_chromosomes);
 
 /*
  * Allocate a new population structure.
  */
-  pop = ga_population_new(max_size, stable_size,
-                    num_chromosomes, len_chromosomes);
+  pop = ga_population_new(stable_size, num_chromosomes, len_chromosomes);
 
 /*
  * Got a population structure?
@@ -1150,16 +1147,19 @@ void ga_entity_blank(population *p, entity *entity)
 /**********************************************************************
   ga_get_free_entity()
   synopsis:	Returns pointer to an unused entity structure from the
-		population's entity pool.
-		Increments population size also.
+		population's entity pool.  Increments population size
+		too.
   parameters:
   return:
-  last updated: 17/05/00
+  last updated: 13 Feb 2002
  **********************************************************************/
 
 entity *ga_get_free_entity(population *pop)
   {
-  static int index=0;
+  static int	index=0;	/* Current position in entity array. */
+  int		new_max_size;	/* Increased maximum number of entities. */
+  int		i;
+  int		*entity_indices;	/* Offsets within entity buffer. */
 
 /*
   plog(LOG_DEBUG, "Locating free entity structure.");
@@ -1169,9 +1169,42 @@ entity *ga_get_free_entity(population *pop)
  * Do we have any free structures?
  */
   if (pop->max_size == (pop->size+1))
-    {
-    plog(LOG_FIXME, "Should reallocate data structures here.\n");
-    die("Whoops, no free structures.");
+    {	/* No. */
+    plog(LOG_VERBOSE, "No unused entities available -- allocating additional structures.");
+
+/*
+ * Note that doing this offset calculation stuff may seem overly expensive, but
+ * it the only available techinique that is guarenteed to be portable.
+ * Memory is freed as soon as possible to reduce page faults with large populations.
+ */
+    entity_indices = s_malloc(pop->max_size*sizeof(int));
+    for (i=0; i<pop->max_size; i++)
+      {
+      entity_indices[i] = pop->entity_iarray[i]-pop->entity_array;
+      }
+
+    s_free(pop->entity_iarray);
+
+    new_max_size = (pop->size * 3)/2;
+    pop->entity_array = s_realloc(pop->entity_array, new_max_size*sizeof(entity));
+    pop->entity_iarray = s_malloc(new_max_size*sizeof(entity*));
+
+    for (i=0; i<pop->max_size; i++)
+      {
+      pop->entity_iarray[i] = pop->entity_array+entity_indices[i];
+      }
+
+    s_free(entity_indices);
+
+    for (i=pop->max_size; i<new_max_size; i++)
+      {
+      pop->entity_array[i].allocated=FALSE;
+      pop->entity_array[i].data=NULL;
+      pop->entity_array[i].fitness=GA_MIN_FITNESS;
+      pop->entity_array[i].chromosome=NULL;
+      }
+
+    pop->max_size = new_max_size;
     }
 
 /* Find unused entity structure */

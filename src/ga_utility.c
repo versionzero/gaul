@@ -91,7 +91,7 @@ void ga_diagnostics(void)
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	18 Dec 2001
+  last updated:	13 Feb 2002
  **********************************************************************/
 
 population *ga_genesis_int(	const int		population_size,
@@ -117,15 +117,9 @@ population *ga_genesis_int(	const int		population_size,
 /*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
  */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
+  if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
+    return NULL;
 
 /*
  * Define some callback functions.
@@ -215,7 +209,7 @@ population *ga_genesis(	const int		population_size,
 		Character-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	16/06/01
+  last updated:	13 Feb 2002
  **********************************************************************/
 
 population *ga_genesis_char(	const int		population_size,
@@ -242,15 +236,9 @@ population *ga_genesis_char(	const int		population_size,
 /*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
  */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
+  if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
+    return NULL;
 
 /*
  * Define some callback functions.
@@ -302,7 +290,7 @@ population *ga_genesis_char(	const int		population_size,
 		Boolean-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	16/06/01
+  last updated:	13 Feb 2002
  **********************************************************************/
 
 population *ga_genesis_boolean(	const int		population_size,
@@ -329,15 +317,9 @@ population *ga_genesis_boolean(	const int		population_size,
 /*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
  */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
+  if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
+    return NULL;
 
 /*
  * Define some callback functions.
@@ -389,7 +371,7 @@ population *ga_genesis_boolean(	const int		population_size,
 		Double precision real-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	16/06/01
+  last updated:	13 Feb 2002
  **********************************************************************/
 
 population *ga_genesis_double(	const int		population_size,
@@ -416,15 +398,9 @@ population *ga_genesis_double(	const int		population_size,
 /*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
  */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
+  if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
+    return NULL;
 
 /*
  * Define some callback functions.
@@ -476,7 +452,7 @@ population *ga_genesis_double(	const int		population_size,
 		Bitstring-valued chromosomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	30/06/01
+  last updated:	13 Feb 2002
  **********************************************************************/
 
 population *ga_genesis_bitstring(	const int		population_size,
@@ -503,15 +479,9 @@ population *ga_genesis_bitstring(	const int		population_size,
 /*
  * Allocate and initialise a new population.
  * This call also sets this as the active population.
- *
- * FIXME:
- * The hard-coded value below "4(N+2)" should be determined based on the
- * actual mutation and crossover rates to be used.
  */
-  if ( !(pop = ga_population_new( 4*(population_size+2),
-                              population_size,
-                              num_chromo,
-                              len_chromo )) ) return NULL;
+  if ( !(pop = ga_population_new( population_size, num_chromo, len_chromo )) )
+    return NULL;
 
 /*
  * Define some callback functions.

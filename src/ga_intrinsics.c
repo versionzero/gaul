@@ -50,15 +50,14 @@
 		and assigns a new population id to it.
   parameters:
   return:	unsigned int	population id for this new structure.
-  last updated: 22/01/01
+  last updated: 13 Feb 2002
  **********************************************************************/
 
-int ga_population_new_wrapper(	int *max_size,
-				int *stable_size,
+int ga_population_new_wrapper(	int *stable_size,
 				int *num_chromosome,
 				int *len_chromosome)
   {
-  return ga_get_population_id(ga_population_new(*max_size, *stable_size, *num_chromosome, *len_chromosome));
+  return ga_get_population_id(ga_population_new(*stable_size, *num_chromosome, *len_chromosome));
   }
 
 
@@ -1118,8 +1117,8 @@ boolean ga_intrinsic_sladd(void)
   {
   return (
          SLadd_intrinsic_function("ga_population_new",
-            (FVOID_STAR) ga_population_new_wrapper, SLANG_INT_TYPE, 4,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+            (FVOID_STAR) ga_population_new_wrapper, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_seed",
             (FVOID_STAR) ga_entity_seed_wrapper, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)

@@ -290,7 +290,7 @@ boolean ga_qsort_test(void)
   int		i;		/* Loop variable */
   population	*pop=NULL;	/* Test population */
 
-  pop = ga_population_new(50000, 50000, 4, 32);
+  pop = ga_population_new(50000, 4, 32);
 
 /* Randomly assigned fitnesses */
   for (i=0; i<50000; i++)

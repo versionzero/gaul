@@ -285,12 +285,11 @@ int main(int argc, char **argv)
 
 /*
  * Allocate a new popuation structure.
- * max. individuals = 400.
  * stable num. individuals = 100.
  * num. chromosomes = 1.
  * length of chromosomes = strlen(target_text);
  */
-  pop = ga_population_new( 400, 100, 1, strlen(target_text) );
+  pop = ga_population_new( 100, 1, strlen(target_text) );
 
   if ( !pop ) die("Unable to allocate population.");
 

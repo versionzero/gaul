@@ -180,8 +180,7 @@ struct population_t
  * Prototypes
  */
 
-population *ga_population_new(	const int max_size,
-				const int stable_size,
+population *ga_population_new(	const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome);
 population *ga_population_clone( population *pop );

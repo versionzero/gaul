@@ -865,12 +865,11 @@ int main(int argc, char **argv)
 
 /*
  * Allocate a new popuation structure.
- * max. individuals        = 200
  * stable num. individuals = 30
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 200, 30, 1, 0 );
+  pop = ga_population_new( 30, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*

@@ -48,8 +48,7 @@
  * Function prototypes.
  */
 
-int	ga_population_new_wrapper(int *max_size,
-				int *stable_size,
+int	ga_population_new_wrapper(int *stable_size,
 				int *num_chromosome,
 				int *len_chromosome);
 #if 0
