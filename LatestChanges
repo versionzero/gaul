@@ -12,6 +12,7 @@ Changes since release 0.1837:
 - Internal changes to entity and population structures.
 - Relaxed licensing conditions for util/SAA_header.h.
 - Added dstr_fromstr() function to util/dstr_util.c.
+- Roulette wheel now starts spinning from random position.
 
 Changes since release 0.1836:
 - Added ga_get_all_populations() which returns array of all currently allocated populations.

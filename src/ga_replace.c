@@ -44,14 +44,13 @@
 		entity dies.)
   parameters:
   return:
-  last updated: 31/05/01
+  last updated: 11 Apr 2002
  **********************************************************************/
 
 void ga_replace_by_fitness(population *pop, entity *child)
   {
   int		i, j;		/* Loop over entities. */
   entity	*tmp;		/* For swapping. */
-  boolean	finished=FALSE;	/* Shuffling finished. */
 
   /* Find child's current rank, which will be somewhere near the bottom. */
   i=pop->size;
@@ -60,33 +59,29 @@ void ga_replace_by_fitness(population *pop, entity *child)
     i--;
     } while (i>=pop->orig_size && !(child == pop->entity_iarray[i]));
 
-  if (i<pop->orig_size) die("Dodgy replacement.");
+  if (i<pop->orig_size) die("Dodgy replacement requested.");
 
   if (child->fitness >= pop->entity_iarray[pop->orig_size-1]->fitness)
     {
     tmp = pop->entity_iarray[pop->orig_size-1];
-    pop->entity_iarray[pop->orig_size-1] = child;
-    child = tmp;
+    pop->entity_iarray[pop->orig_size-1] = pop->entity_iarray[i];
+    pop->entity_iarray[i] = tmp;
 
     /* Shuffle entity to rightful location. */
     j = pop->orig_size-1;
-    while (j>0 && finished==FALSE)
+    while (j>0 && pop->entity_iarray[j]->fitness > pop->entity_iarray[j-1]->fitness)
       {
-      if (pop->entity_iarray[j]->fitness > pop->entity_iarray[j-1]->fitness)
-        {
-        tmp = pop->entity_iarray[j];
-        pop->entity_iarray[j] = pop->entity_iarray[j-1];
-        pop->entity_iarray[j-1] = tmp;
-        }
-      else
-        {
-        finished=TRUE;
-        }
+      tmp = pop->entity_iarray[j];
+      pop->entity_iarray[j] = pop->entity_iarray[j-1];
+      pop->entity_iarray[j-1] = tmp;
+      j--;
       }
+
+    /* Rank of replaced entity. */
     i = pop->orig_size-1;
     }
 
-  /* Kill off an entity. */
+  /* Kill off child/replaced entity. */
   ga_entity_dereference_by_rank(pop, i);
 
   return;

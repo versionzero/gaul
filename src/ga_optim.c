@@ -608,6 +608,9 @@ boolean ga_evolution_steady_state(	population		*pop,
  * Maybe, could reoptimise all structures at each generation.  This would allow
  * a reduced optimisation protocol and only those structures which are
  * reasonable would survive for further optimisation.
+ *
+ * FIXME: This is wrong for GA_CLASS_BALDWIN, GA_CLASS_LAMARCK and may be
+ * optimised for GA_CLASS_BALDWIN_ALL, GA_CLASS_LAMARCK_ALL. 
  */
   if (class != GA_CLASS_DARWIN)
     {
