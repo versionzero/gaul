@@ -3013,6 +3013,24 @@ int ga_population_get_generation(population *pop)
 
 
 /**********************************************************************
+  ga_population_get_island()
+  synopsis:	Gets the current island number.  Intended for use
+		within fitness evaluation callbacks only.
+  parameters:
+  return:
+  last updated: 28 Feb 2005
+ **********************************************************************/
+
+int ga_population_get_island(population *pop)
+  {
+
+  if ( !pop ) return 0;
+
+  return pop->island;
+  }
+
+
+/**********************************************************************
   ga_population_get_crossover()
   synopsis:	Gets the crossover rate of a population.
   parameters:
