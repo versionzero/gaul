@@ -2,7 +2,7 @@
   ga_intrinsics.h
  **********************************************************************
 
-  ga_intrinsics - Genetic algorithm routine wrappers.
+  ga_intrinsics - Genetic algorithm routine slangs.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
@@ -48,71 +48,71 @@
  * Function prototypes.
  */
 
-int	ga_population_new_wrapper(int *stable_size,
+int	ga_population_new_slang(int *stable_size,
 				int *num_chromosome,
 				int *len_chromosome);
-int	ga_entity_seed_wrapper(int *pop, int *id);
-int	ga_entity_id_from_rank(int *pop, int *rank);
-int	ga_entity_rank_from_id(int *pop, int *id);
-int	ga_population_seed_wrapper(int *pop);
-int	ga_population_save_wrapper(int *pop, char *fname);
-int	ga_population_read_wrapper(char *fname);
-int	ga_entity_compare_genome_wrapper(int *pop, int *joe, int *fred);
-int	ga_entity_cross_compare_genome_wrapper(int *jackpopid, int *jack, 
+int	ga_entity_seed_slang(int *pop, int *id);
+int	ga_entity_id_from_rank_slang(int *pop, int *rank);
+int	ga_entity_rank_from_id_slang(int *pop, int *id);
+int	ga_population_seed_slang(int *pop);
+int	ga_population_save_slang(int *pop, char *fname);
+int	ga_population_read_slang(char *fname);
+int	ga_entity_compare_genome_slang(int *pop, int *joe, int *fred);
+int	ga_entity_cross_compare_genome_slang(int *jackpopid, int *jack, 
                                            int *jillpopid, int *jill);
-int	ga_entity_kill(int *pop, int *id);
-int	ga_entity_erase(int *pop, int *id);
-int	ga_entity_new(int *pop);
-int	ga_entity_clone_wrapper(int *pop, int *parent);
-int	ga_entity_copy_chromosome_wrapper(int *pop, int *parent, int *child, int *chromosome);
-int	ga_entity_copy_all_chromosomes_wrapper(int *pop, int *parent, int *child);
-int	ga_entity_migrate(int *srcpopid, int *destpopid, int *jacques);
-int	ga_crossover_chromosome_singlepoints_wrapper(int *popid,
+int	ga_entity_kill_slang(int *pop, int *id);
+int	ga_entity_erase_slang(int *pop, int *id);
+int	ga_entity_new_slang(int *pop);
+int	ga_entity_clone_slang(int *pop, int *parent);
+int	ga_entity_copy_chromosome_slang(int *pop, int *parent, int *child, int *chromosome);
+int	ga_entity_copy_all_chromosomes_slang(int *pop, int *parent, int *child);
+int	ga_entity_migrate_slang(int *srcpopid, int *destpopid, int *jacques);
+int	ga_crossover_chromosome_singlepoints_slang(int *popid,
                      int *father, int *mother, int *son, int *daughter);
-int	ga_crossover_chromosome_mixing_wrapper(int *popid,
+int	ga_crossover_chromosome_mixing_slang(int *popid,
                      int *father, int *mother, int *son, int *daughter);
 /*
 boolean	ga_singlepoint_drift_mutation(entity *father, entity *son);
 boolean	ga_singlepoint_randomize_mutation(entity *father, entity *son);
 boolean	ga_multipoint_mutation(entity *father, entity *son);
 */
-int	ga_entity_score(int *popid, int *joe);
-int ga_evolution_wrapper(       int     *pop,
+int	ga_entity_score_slang(int *popid, int *joe);
+int	ga_evolution_slang(       int     *pop,
                                 int     *class,
                                 int     *elitism,
                                 int     *max_generations );
-int	ga_population_get_size(int *pop);
-int	ga_population_get_maxsize(int *pop);
-int	ga_population_get_stablesize(int *pop);
-int	ga_population_set_stablesize(int *pop, int *size);
-int	ga_population_get_chromosomenum(int *pop);
-int	ga_population_get_chromosomelen(int *pop);
-double	ga_entity_get_fitness(int *pop, int *id);
-int	ga_entity_isallocated(int *pop, int *id);
-int	ga_extinction_wrapper(int *pop);
-int	ga_genocide_wrapper(int *pop, int *target_size);
-int	ga_allele_search_wrapper(   int     *popid,
+int	ga_population_get_size_slang(int *pop);
+int	ga_population_get_maxsize_slang(int *pop);
+int	ga_population_get_stablesize_slang(int *pop);
+int	ga_population_set_stablesize_slang(int *pop, int *size);
+int	ga_population_get_chromosomenum_slang(int *pop);
+int	ga_population_get_chromosomelen_slang(int *pop);
+double	ga_entity_get_fitness_slang(int *pop, int *id);
+int	ga_entity_isallocated_slang(int *pop, int *id);
+int	ga_extinction_slang(int *pop);
+int	ga_genocide_slang(int *pop, int *target_size);
+int	ga_allele_search_slang(   int     *popid,
                                 int     *chromosomeid,
                                 int     *point,
                                 int     *min_val,
                                 int     *max_val,
                                 int     *entity_id );
-int	ga_metropolis_wrapper(	int	*pop,
+int	ga_metropolis_slang(	int	*pop,
 				int	*entity_id,
 				int	*num_iterations,
 				int 	*temperature);
-int	ga_sa_wrapper(int	*popid,
+int	ga_sa_slang(int	*popid,
 			int	*entity_id,
 			int	*num_iterations,
 			int	*initial_temperature,
 			int	*final_temperature);
-int	ga_nahc_wrapper(	int	*pop,
+int	ga_nahc_slang(	int	*pop,
 				int	*entity_id,
 				int	*num_iterations);
-int	ga_rmhc_wrapper(	int	*pop,
+int	ga_rmhc_slang(	int	*pop,
 				int	*entity_id,
 				int	*num_iterations);
-int	ga_population_score_and_sort_wrapper(int *popid);
+int	ga_population_score_and_sort_slang(int *popid);
 
 void	ga_slang_seed(population *pop, entity *adam);
 boolean	ga_slang_select_one(population *pop, entity **mother);
@@ -124,3 +124,4 @@ void	ga_slang_replace(population *pop, entity *child);
 boolean	ga_intrinsic_sladd(void);
 
 #endif	/* GA_INTRINSICS_H_INCLUDED */
+

@@ -326,14 +326,4 @@ boolean ga_qsort_test(void)
 #endif
   }
 
-/*
- * SLang intrinsic wrapper.
- */
-#if HAVE_SLANG==1
-void ga_population_sort(int *id)
-  {
-  quicksort_population(ga_get_population_from_id(*id));
-  return;
-  }
-#endif
 
