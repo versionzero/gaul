@@ -1,9 +1,9 @@
 /**********************************************************************
-  test_ga.c
+  test_de.c
  **********************************************************************
 
-  test_ga - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  test_de - Test/example program for GAUL.
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -34,7 +34,6 @@
  **********************************************************************/
 
 #include "gaul.h"
-
 
 /**********************************************************************
   test_score()
@@ -122,8 +121,10 @@ int main(int argc, char **argv)
 
   random_seed(23091975);
 
+  log_init(LOG_NORMAL, NULL, NULL, FALSE);
+
   pop = ga_genesis_double(
-       200,			/* const int              population_size */
+       40,			/* const int              population_size */
        1,			/* const int              num_chromo */
        4,			/* const int              len_chromo */
        test_generation_callback,/* GAgeneration_hook      generation_hook */
@@ -150,10 +151,19 @@ int main(int argc, char **argv)
        0.0      		        /* double  migration */
                               );
 
-  ga_evolution(
+  ga_population_set_differentialevolution_parameters(pop);
+
+  ga_differentialevolution(
        pop,				/* population	*pop */
        500				/* const int	max_generations */
               );
+
+  printf( "Final: A = %f B = %f C = %f D = %f (fitness = %f)\n",
+            ((double *)pop->entity_iarray[0]->chromosome[0])[0],
+            ((double *)pop->entity_iarray[0]->chromosome[0])[1],
+            ((double *)pop->entity_iarray[0]->chromosome[0])[2],
+            ((double *)pop->entity_iarray[0]->chromosome[0])[3],
+            pop->entity_iarray[0]->fitness );
 
   ga_extinction(pop);
 

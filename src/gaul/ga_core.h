@@ -99,6 +99,7 @@
 #include "gaul/ga_bitstring.h"
 #include "gaul/ga_chromo.h"
 #include "gaul/ga_climbing.h"
+#include "gaul/ga_de.h"
 #include "gaul/ga_deterministiccrowding.h"
 #include "gaul/ga_gradient.h"
 #include "gaul/ga_optim.h"
@@ -203,6 +204,18 @@ typedef struct
   {
   GAcompare	compare;	/* Compare two entities (either genomic or phenomic space). */
   } ga_dc_t;
+
+/*
+ * Differential evolution parameter structure.
+ */
+typedef struct
+  {
+  boolean	perturb_random;		/* Whether to perturb random rather than best. */
+  int		num_perturbed;		/* Number to perturb. */
+  int		crossover_method;	/* Crossover strategy. */
+  double	weighting_factor;	/* Crossover weighting factor. */
+  double	crossover_factor;	/* Crossover ratio. */
+  } ga_de_t;
 
 /*
  * Gradient methods parameter structure.
@@ -311,6 +324,7 @@ struct population_t
   ga_climbing_t		*climbing_params;	/* Parameters for hill climbing. */
   ga_simplex_t		*simplex_params;	/* Parameters for simplex search. */
   ga_dc_t		*dc_params;		/* Parameters for deterministic crowding. */
+  ga_de_t		*de_params;		/* Parameters for differential evolution. */
   ga_gradient_t		*gradient_params;	/* Parameters for gradient methods. */
   ga_search_t		*search_params;		/* Parameters for systematic search. */
   ga_sampling_t		*sampling_params;	/* Parameters for probabilistic sampling. */

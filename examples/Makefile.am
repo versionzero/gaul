@@ -33,7 +33,7 @@ AUTOMAKE_OPTIONS = 1.4
 INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/
 
 bin_PROGRAMS = \
-	test_ga test_simplex test_sd \
+	test_ga test_simplex test_sd test_de \
 	fitting fitting_simplex fitting_sd \
 	pingpong pingpong9 \
 	pingpong_tabu pingpong_tabu2 pingpong_sa \
@@ -57,6 +57,7 @@ bin_PROGRAMS = \
 test_ga_SOURCES = test_ga.c
 test_simplex_SOURCES = test_simplex.c
 test_sd_SOURCES = test_sd.c
+test_de_SOURCES = test_de.c
 fitting_SOURCES = fitting.c
 fitting_simplex_SOURCES = fitting_simplex.c
 fitting_sd_SOURCES = fitting_sd.c
@@ -109,6 +110,7 @@ EXTRA_DIST = \
 test_ga_DEPENDENCIES = ${DEPENDENCIES}
 test_simplex_DEPENDENCIES = ${DEPENDENCIES}
 test_sd_DEPENDENCIES = ${DEPENDENCIES}
+test_de_DEPENDENCIES = ${DEPENDENCIES}
 fitting_DEPENDENCIES = ${DEPENDENCIES}
 fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
 fitting_sd_DEPENDENCIES = ${DEPENDENCIES}
@@ -151,8 +153,9 @@ mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@

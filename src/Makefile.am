@@ -43,6 +43,7 @@ libgaul_la_SOURCES = \
     ga_compare.c \
     ga_core.c \
     ga_crossover.c \
+    ga_de.c \
     ga_deterministiccrowding.c \
     ga_intrinsics.c \
     ga_io.c \
@@ -68,6 +69,7 @@ nobase_include_HEADERS = \
     gaul/ga_chromo.h \
     gaul/ga_climbing.h \
     gaul/ga_core.h \
+    gaul/ga_de.h \
     gaul/ga_deterministiccrowding.h \
     gaul/ga_intrinsics.h \
     gaul/ga_gradient.h \

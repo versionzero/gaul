@@ -89,7 +89,7 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
-	ga_compare.lo ga_core.lo ga_crossover.lo \
+	ga_compare.lo ga_core.lo ga_crossover.lo ga_de.lo \
 	ga_deterministiccrowding.lo ga_intrinsics.lo ga_io.lo \
 	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo ga_rank.lo \
 	ga_replace.lo ga_randomsearch.lo ga_seed.lo ga_select.lo \
@@ -162,7 +162,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS =  -lpthread -lpthread -lslang -lm -lslang
+LIBS =  -lpthread -lpthread -lslang -lm -lslang -lefence
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
@@ -233,7 +233,7 @@ localstatedir = ${prefix}/var
 mandir = ${prefix}/man
 mkdir_p = mkdir -p --
 oldincludedir = /usr/include
-prefix = /home/stewart
+prefix = /usr/local
 program_transform_name = s,x,x,
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -258,6 +258,7 @@ libgaul_la_SOURCES = \
     ga_compare.c \
     ga_core.c \
     ga_crossover.c \
+    ga_de.c \
     ga_deterministiccrowding.c \
     ga_intrinsics.c \
     ga_io.c \
@@ -283,6 +284,7 @@ nobase_include_HEADERS = \
     gaul/ga_chromo.h \
     gaul/ga_climbing.h \
     gaul/ga_core.h \
+    gaul/ga_de.h \
     gaul/ga_deterministiccrowding.h \
     gaul/ga_intrinsics.h \
     gaul/ga_gradient.h \
@@ -374,6 +376,7 @@ include ./$(DEPDIR)/ga_climbing.Plo
 include ./$(DEPDIR)/ga_compare.Plo
 include ./$(DEPDIR)/ga_core.Plo
 include ./$(DEPDIR)/ga_crossover.Plo
+include ./$(DEPDIR)/ga_de.Plo
 include ./$(DEPDIR)/ga_deterministiccrowding.Plo
 include ./$(DEPDIR)/ga_gradient.Plo
 include ./$(DEPDIR)/ga_intrinsics.Plo

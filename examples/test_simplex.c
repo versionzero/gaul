@@ -31,8 +31,6 @@
 		This program aims to solve a function of the form
 		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0
 
-  Last Updated:	25 Nov 2002 SAA	Based on examples/fitting_simplex.c
-
  **********************************************************************/
 
 #include "gaul.h"

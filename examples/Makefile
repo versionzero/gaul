@@ -42,7 +42,7 @@
 #######################################################################
 
 
-SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_de_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 srcdir = .
 top_srcdir = ..
@@ -68,9 +68,10 @@ build_triplet = x86_64-redhat-linux-gnu
 host_triplet = x86_64-redhat-linux-gnu
 target_triplet = x86_64-redhat-linux-gnu
 bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
-	fitting$(EXEEXT) fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) \
-	pingpong$(EXEEXT) pingpong9$(EXEEXT) pingpong_tabu$(EXEEXT) \
-	pingpong_tabu2$(EXEEXT) pingpong_sa$(EXEEXT) wildfire$(EXEEXT) \
+	test_de$(EXEEXT) fitting$(EXEEXT) fitting_simplex$(EXEEXT) \
+	fitting_sd$(EXEEXT) pingpong$(EXEEXT) pingpong9$(EXEEXT) \
+	pingpong_tabu$(EXEEXT) pingpong_tabu2$(EXEEXT) \
+	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) \
 	wildfire_forked$(EXEEXT) wildfire_loadbalancing$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
@@ -178,6 +179,8 @@ struggle_systematicsearch_OBJECTS =  \
 	$(am_struggle_systematicsearch_OBJECTS)
 am_struggle_threaded_OBJECTS = struggle_threaded.$(OBJEXT)
 struggle_threaded_OBJECTS = $(am_struggle_threaded_OBJECTS)
+am_test_de_OBJECTS = test_de.$(OBJEXT)
+test_de_OBJECTS = $(am_test_de_OBJECTS)
 am_test_ga_OBJECTS = test_ga.$(OBJEXT)
 test_ga_OBJECTS = $(am_test_ga_OBJECTS)
 am_test_sd_OBJECTS = test_sd.$(OBJEXT)
@@ -219,9 +222,10 @@ SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
 	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
 	$(struggle_systematicsearch_SOURCES) \
-	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
-	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+	$(struggle_threaded_SOURCES) $(test_de_SOURCES) \
+	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
@@ -240,9 +244,10 @@ DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
 	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
 	$(struggle_systematicsearch_SOURCES) \
-	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
-	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+	$(struggle_threaded_SOURCES) $(test_de_SOURCES) \
+	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -295,7 +300,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS =  -lpthread -lpthread -lslang -lm -lslang
+LIBS =  -lpthread -lpthread -lslang -lm -lslang -lefence
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
@@ -366,7 +371,7 @@ localstatedir = ${prefix}/var
 mandir = ${prefix}/man
 mkdir_p = mkdir -p --
 oldincludedir = /usr/include
-prefix = /home/stewart
+prefix = /usr/local
 program_transform_name = s,x,x,
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
@@ -385,6 +390,7 @@ INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/
 test_ga_SOURCES = test_ga.c
 test_simplex_SOURCES = test_simplex.c
 test_sd_SOURCES = test_sd.c
+test_de_SOURCES = test_de.c
 fitting_SOURCES = fitting.c
 fitting_simplex_SOURCES = fitting_simplex.c
 fitting_sd_SOURCES = fitting_sd.c
@@ -436,6 +442,7 @@ EXTRA_DIST = \
 test_ga_DEPENDENCIES = ${DEPENDENCIES}
 test_simplex_DEPENDENCIES = ${DEPENDENCIES}
 test_sd_DEPENDENCIES = ${DEPENDENCIES}
+test_de_DEPENDENCIES = ${DEPENDENCIES}
 fitting_DEPENDENCIES = ${DEPENDENCIES}
 fitting_simplex_DEPENDENCIES = ${DEPENDENCIES}
 fitting_sd_DEPENDENCIES = ${DEPENDENCIES}
@@ -478,8 +485,9 @@ mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
@@ -698,6 +706,9 @@ struggle_systematicsearch$(EXEEXT): $(struggle_systematicsearch_OBJECTS) $(strug
 struggle_threaded$(EXEEXT): $(struggle_threaded_OBJECTS) $(struggle_threaded_DEPENDENCIES) 
 	@rm -f struggle_threaded$(EXEEXT)
 	$(LINK) $(struggle_threaded_LDFLAGS) $(struggle_threaded_OBJECTS) $(struggle_threaded_LDADD) $(LIBS)
+test_de$(EXEEXT): $(test_de_OBJECTS) $(test_de_DEPENDENCIES) 
+	@rm -f test_de$(EXEEXT)
+	$(LINK) $(test_de_LDFLAGS) $(test_de_OBJECTS) $(test_de_LDADD) $(LIBS)
 test_ga$(EXEEXT): $(test_ga_OBJECTS) $(test_ga_DEPENDENCIES) 
 	@rm -f test_ga$(EXEEXT)
 	$(LINK) $(test_ga_LDFLAGS) $(test_ga_OBJECTS) $(test_ga_LDADD) $(LIBS)
@@ -760,6 +771,7 @@ include ./$(DEPDIR)/struggle_randomsearch.Po
 include ./$(DEPDIR)/struggle_ss.Po
 include ./$(DEPDIR)/struggle_systematicsearch.Po
 include ./$(DEPDIR)/struggle_threaded.Po
+include ./$(DEPDIR)/test_de.Po
 include ./$(DEPDIR)/test_ga.Po
 include ./$(DEPDIR)/test_sd.Po
 include ./$(DEPDIR)/test_simplex.Po
