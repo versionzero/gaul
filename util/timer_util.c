@@ -97,8 +97,8 @@ void timer_start(chrono_t *t)
 double timer_check(chrono_t *t)
   {
   double        user_time, real_time;
-  clock_t	clock = clock();
-  time_t	time = time();
+  clock_t	*clock = clock();
+  time_t	*time = time();
 
   plog(LOG_NORMAL, "Timer checked: %d", clock);
 
