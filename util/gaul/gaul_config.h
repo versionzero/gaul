@@ -131,8 +131,8 @@ extern int errno;
 
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1845
-#define GA_PATCH_VERSION 0
-#define VERSION_STRING "0.1845-0"
+#define GA_PATCH_VERSION 1
+#define VERSION_STRING "0.1845-1"
 #define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.20-18.8 #1 Thu May 29 07:20:39 EDT 2003 i686 athlon i386 GNU/Linux"
 #define BUILD_DATE_STRING "24/07/03"
 
