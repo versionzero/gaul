@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "24/06/04"
+#define GA_BUILD_DATE_STRING "27/06/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -20,7 +20,7 @@
 #define GA_MAJOR_VERSION 0
 
 /* Minor version number. */
-#define GA_MINOR_VERSION 1846
+#define GA_MINOR_VERSION 1847
 
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING GA_NUM_PROCESSES
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 9
+#define GA_PATCH_VERSION 0
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1846-9"
+#define GA_VERSION_STRING "0.1847-0"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -59,7 +59,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
-#define HAVE_LIBMPI 1
+/* #undef HAVE_LIBMPI */
 
 /* Define to 1 if you have the `mpich' library (-lmpich). */
 /* #undef HAVE_LIBMPICH */
@@ -86,7 +86,7 @@
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 1
+#define HAVE_MPI 0
 
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1

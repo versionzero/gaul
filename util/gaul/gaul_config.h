@@ -143,16 +143,16 @@ extern int errno;
 #define HAVE_DPOW 0
 
 #define GA_MAJOR_VERSION 0
-#define GA_MINOR_VERSION 1846
-#define GA_PATCH_VERSION 9
-#define GA_VERSION_STRING "0.1846-9"
+#define GA_MINOR_VERSION 1847
+#define GA_PATCH_VERSION 0
+#define GA_VERSION_STRING "0.1847-0"
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
-#define GA_BUILD_DATE_STRING "24/06/04"
+#define GA_BUILD_DATE_STRING "27/06/04"
 
 #define V3_QUICK 1
 #define W32_CRIPPLED 0
 #define HAVE_SLANG 1
-#define HAVE_MPI 1
+#define HAVE_MPI 0
 #define HAVE_PTHREADS 1
 #define USE_OPENMP 0
 #define GAUL_DETERMINISTIC_OPENMP 1

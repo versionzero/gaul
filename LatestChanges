@@ -1,3 +1,5 @@
+Changes since release 0.1847:
+
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
 - Tweaked the bitstring code.
@@ -38,7 +40,6 @@ Changes since release 0.1846:
 - Removed all references to the deprecated constants GA_ELITISM_CONSTANT and GA_ELITISM_MULTIPLIER.
 - Renamed the "diagnostics" test execuatable to "gaul_diagnostics" to avoid potential name clash.
 - Added two new crossover operators: ga_crossover_double_mean() and ga_crossover_integer_mean().
-
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
