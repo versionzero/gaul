@@ -85,7 +85,7 @@ static boolean mixed_score(population *pop, entity *entity)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-static boolean mixed_chromosome_allocate(const population *pop, entity *embryo)
+static boolean mixed_chromosome_allocate(population *pop, entity *embryo)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -110,7 +110,7 @@ static boolean mixed_chromosome_allocate(const population *pop, entity *embryo)
   last updated: 20 Aug 2003
  **********************************************************************/
 
-static void mixed_chromosome_deallocate(const population *pop, entity *corpse)
+static void mixed_chromosome_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
