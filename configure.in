@@ -247,9 +247,10 @@ else
 #
   if test "x$MPIFLAGS" != "x" || test "x$MPILIBS" != "x"; then
     # User defined the additional LIBS and CFLAGS stuff :-).
+    # "-lm" used in AC_CHECK_LIB as dummy library.
     LIBS="$old_LIBS $MPILIBS"
     CFLAGS="$old_CFLAGS $MPIFLAGS"
-    AC_CHECK_LIB(mpi, MPI_Init,,
+    AC_CHECK_LIB(m, MPI_Init,,
       [AC_MSG_ERROR(Unable to compile with specified MPI implementation.  Check MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)])
   else
 	  # User didn't define the additional LIBS and CFLAGS stuff, so we must try to guess it :-(
