@@ -20,7 +20,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1840-1"
-#define BUILD_DATE_STRING "06/09/02"
+#define BUILD_DATE_STRING "10/09/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1840
 #define PATCH_VERSION 1
@@ -64,7 +64,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "06/09/02"
+#define BUILD_DATE_STRING "10/09/02"
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -169,7 +169,7 @@
 #define HAVE_SELECT 1
 
 /* Define to 1 if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
