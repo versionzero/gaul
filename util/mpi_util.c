@@ -51,7 +51,7 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	11 Feb 2002 SAA	Sequential version of mpi_setup() now defines namelen.
+  Updated:	11 Feb 2002 SAA	Sequential version of mpi_setup() now defines namelen.  Arguments for mpi_setup modified to match pthread_create().
 		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
 		30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
@@ -107,7 +107,7 @@ static char	node_name[MAX_LINE_LEN];	/* String containing processor name */
  **********************************************************************/
 
 boolean mpi_setup( int *argc, char ***argv,
-                         void (*master_func)(void *), void (*node_func)(void *) )
+                         void *(*master_func)(void *), void *(*node_func)(void *) )
   {
 #if PARALLEL == 0
 /*

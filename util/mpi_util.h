@@ -100,7 +100,7 @@ typedef size_t mpi_datatype;
  * Function prototypes
  */
 
-boolean mpi_setup(int *argc, char ***argv, void (*master_func)(void *), void (*node_func)(void *));
+boolean mpi_setup(int *argc, char ***argv, void *(*master_func)(void *), void *(*node_func)(void *));
 boolean mpi_init(int *argc, char ***argv);
 void mpi_exit(void);
 void mpi_abort(int errcode);
