@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for my general string utility routines
 
-  Updated:	10 Jan 2002 SAA	Added str_split(), str_freev(), str_join() and str_joinv() prototypes.
+  Updated:	16 Mar 2002 SAA Check for presence of limits.h on this system.
+		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join() and str_joinv() prototypes.
 		18/09/00 SAA	Tidied.
 		10/05/99 SAA	Added missing prototypes.
 		20/02/99 SAA	Collected together from various files.
@@ -42,7 +43,9 @@
 #include "SAA_header.h"
 
 #include <ctype.h>
+#ifdef HAVE_LIMITS_H
 #include <limits.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -26,7 +26,8 @@
 
   Synopsis:	Random number utility routines.
 
-  Updated:	25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
+  Updated:	16 Mar 2002 SAA	Check whether we have limits.h on this system.
+		25 Jan 2002 SAA	RANDOM_DEBUG now defined more intelligently.
 		4 Dec 2001 SAA	New 'float' functions.
 		20/06/01 SAA	Added #include <float.h> for definition of DBL_MAX, DBL_MIN on FreeBSD.
 		02/02/01 SAA	Converted from helga_random to random_util.
@@ -40,7 +41,9 @@
 #include "SAA_header.h"
 
 #include <float.h>
+#if HAVE_LIMITS_H==1
 #include <limits.h>
+#endif
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,11 +66,11 @@
 /*
  * Constants.
  */
-#if HAVE_LIMITS_H==1
-#include "limits.h"
+#ifdef UINT_MAX
+/* UINT_MAX comes from limits.h */
 #define RANDOM_RAND_MAX		UINT_MAX
 #else
-#define RANDOM_RAND_MAX         (unsigned int) 0xFFFFFFFF      /* Max. 32-bit unsigned int */
+#define RANDOM_RAND_MAX         (unsigned int) 0xFFFFFFFF      /* Maximum 32-bit unsigned int */
 #endif
 
 /*

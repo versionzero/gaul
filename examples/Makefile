@@ -157,7 +157,7 @@ DEPENDENCIES = \
 EXTRA_DIST = \
 	chromostubs.c \
 	chromostubs.h \
-	wine.data
+	wine.data wine.names
 
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
@@ -174,7 +174,7 @@ struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
-nnevolve_DEPENDENCIES = ${DEPENDENCIES} wine.data
+nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util -lrandom -lstr_util -lm
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -lmpi_util -lrandom -lstr_util -lm

@@ -165,6 +165,9 @@
 /* Define if you have the strerror function.  */
 #define HAVE_STRERROR 1
 
+/* Define if you have the stricmp function.  */
+/* #undef HAVE_STRICMP */
+
 /* Define if you have the strlcat function.  */
 /* #undef HAVE_STRLCAT */
 
@@ -188,6 +191,9 @@
 
 /* Define if you have the strnfill function.  */
 /* #undef HAVE_STRNFILL */
+
+/* Define if you have the strnicmp function.  */
+/* #undef HAVE_STRNICMP */
 
 /* Define if you have the strrchr function.  */
 #define HAVE_STRRCHR 1
@@ -224,6 +230,9 @@
 
 /* Define if you have the <fcntl.h> header file.  */
 #define HAVE_FCNTL_H 1
+
+/* Define if you have the <limits.h> header file.  */
+#define HAVE_LIMITS_H 1
 
 /* Define if you have the <netdb.h> header file.  */
 #define HAVE_NETDB_H 1
@@ -263,4 +272,7 @@
 
 /* Define if you have the <unistd.h> header file.  */
 #define HAVE_UNISTD_H 1
+
+/* Define if you have the <values.h> header file.  */
+#define HAVE_VALUES_H 1
 

@@ -40,7 +40,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_VALUES_H
 #include <values.h>
+#endif
 
 #include "ga_core.h"
 

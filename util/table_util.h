@@ -26,6 +26,8 @@
 
   Synopsis:	Table data structure. (basically a growable table)
 
+  Last Updated:	16 Mar 2002 SAA	Check for presence of limits.h on this system.
+
  **********************************************************************/
 
 #ifndef TABLE_UTIL_H_INCLUDED
@@ -33,7 +35,9 @@
 
 #include "SAA_header.h"
 
+#ifdef HAVE_LIMITS_H
 #include <limits.h>
+#endif
 
 #include "memory_util.h"
 

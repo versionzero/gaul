@@ -37,7 +37,9 @@
  */
 #include "SAA_header.h"
 
+#ifdef HAVE_LIMITS_H
 #include <limits.h>
+#endif
 #include <math.h>
 #include <unistd.h>
 
