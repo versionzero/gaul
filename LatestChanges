@@ -9,6 +9,7 @@ Changes since release 0.1847:
 - Added a round-robin selection operator - ga_select_one_roundrobin().
 - Fixed CFLAG clearing bug and added option for disabling addition of compiler optimisation switches.
 - Added ga_seed_bitstring_zero() selection function.
+- Updated function lookup tables.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
