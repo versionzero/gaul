@@ -1658,6 +1658,8 @@ entity *ga_entity_clone(population *pop, entity *parent)
   Network communication (population/entity migration) functions.
  **********************************************************************/
 
+#if W32_CRIPPLED != 1
+
 /**********************************************************************
   ga_population_send_by_mask()
   synopsis:	Send selected entities from a population to another
@@ -2137,6 +2139,7 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
   return TRUE;
   }
+#endif
 #endif
 
 
