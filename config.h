@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "07/01/03"
+#define BUILD_DATE_STRING "08/01/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -137,7 +137,7 @@
 /* #undef HAVE_SINCOS */
 
 /* Whether S-Lang is installed. */
-#define HAVE_SLANG 1
+#define HAVE_SLANG 0
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -311,7 +311,7 @@
 #define MEMORY_ALLOC_SAFE 1
 
 /* Define to disable memory chunk allocation routines. */
-/* #undef MEMORY_CHUNKS_MIMIC */
+#define MEMORY_CHUNKS_MIMIC 1
 
 /* Whether to pad memory. */
 #define MEMORY_PADDING 0

@@ -105,7 +105,7 @@ void	str_ncpyt(char *dest, const char *src, const int len);
 char	*str_sncpy(char *dest, char *src, const int len);
 char	*str_nclone(const char *str, const int len);
 char	*str_getline(FILE *fp, int *len);
-int	str_nreadline(FILE *fp, int len, char *dest);
+int	str_nreadline(FILE *fp, const int len, char *dest);
 int	str_countchar(char *str, char c);
 int	str_ncatf(char *str, size_t n, const char *format, ...);
 char	*str_cat_va(char *str, va_list ap);

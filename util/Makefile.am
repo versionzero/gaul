@@ -111,9 +111,6 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-#nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
-nn_LDADD = -L./ -L../src/ libnn_util.la libmpi_util_fake.la libstuff.la liblog_util.la -lm
-
 libstuff_a_LIBFLAGS =
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 

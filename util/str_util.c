@@ -3,7 +3,7 @@
  **********************************************************************
 
   str_util - Portable string handling, analysis and manipulation library.
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-doamin.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-doamin.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Last Updated:	29 Oct 2002 SAA	Enhanced str_sncpy() and str_scmp().
+  Last Updated:	08 Jan 2003 SAA	Minor fixes resulting from use of splint ( http://www.splint.org/ ).  Use s_strdup() instead of strdup(), which is a GNU extension.  str_nreadline() optimised slightly, and one parameter changed to const.  New str_rev().
+  		29 Oct 2002 SAA	Enhanced str_sncpy() and str_scmp().
 		28 Oct 2002 SAA Added str_sncpy().
 		15 Oct 2002 SAA Avoid an unsigned comparison warning when using Compaq's ccc.
 		13 Aug 2002 SAA	In str_scmp(), trailing NULL char is considered to be the same as a trailing space.
@@ -132,15 +133,15 @@ int str_cposr(const char *str, const char c)
   if (!str) die("NULL string pointer passed.\n");
   if (c == '\0') die("Null character passed.\n");
 
-  pos=strlen(str);
+  pos = (int) strlen(str);
 
   while(pos>0)
     {
     pos--;
-    if (str[pos] == c) return(pos);
+    if (str[pos] == c) return pos;
     }
 
-  return(-1);
+  return -1;
   }
 
 
@@ -206,7 +207,7 @@ int str_stripnewline(char *str)
 
   if (!str) die("NULL string pointer passed.\n");
 
-  last = strlen(str)-1;
+  last = (int) strlen(str)-1;
   if ( str[last] == '\n' ) str[last] = '\0';
 
   return last;
@@ -379,7 +380,7 @@ char *str_clone(const char *str)
 
   if (!str) die("Null string pointer passed.");
 
-  len = strlen(str)+1;
+  len = 1 + (int)strlen(str);
   if ( !(new = s_malloc(len * sizeof(char))) ) die("Unable to allocate memory.");
 
   return(memcpy(new, str, len));
@@ -401,7 +402,7 @@ char *str_subclone(const char *str, const int first, const int last)
   int len = last - first + 1;
 
   if (str) die("null string pointer passed");
-  if (first < 0 || last < 0 || first > last || last > strlen(str))
+  if (first < 0 || last < 0 || first > last || last > (int) strlen(str))
     die("That's a dumb parameter");
 
   new = s_malloc((len + 1) * sizeof (char));
@@ -511,10 +512,10 @@ PURPOSE  : right justify a string
 ------------------------------------------------------------------------------*/
 char *rjust(char *str)
 {
-  int n = strlen(str);
+  int n = (int) strlen(str);
   char *dup_str;
   
-  dup_str = (char *)s_malloc(sizeof(char) * (strlen(str)+1));
+  dup_str = (char *)s_malloc(sizeof(char) * (1 + (int)strlen(str)));
   strcpy(dup_str,str);
   rtrim(dup_str);
   sprintf(str,"%*.*s",n,n,dup_str);
@@ -528,7 +529,7 @@ PURPOSE  : trim trailing spaces from a string
 --------------------------------------------------------------------------------*/
 char *rtrim(char *str)
 {
-  int n = strlen(str) - 1;
+  int n = (int)strlen(str) - 1;
   
   while (n >= 0)
   {
@@ -568,7 +569,7 @@ char *fill_space(char* dest,char* in,int gesamtl)
 {
         char*   tmp     = (char*)(s_calloc(255,sizeof(char)));
         char*   lauf    = tmp;
-        int     len     = strlen(in);
+        int     len     = (int)strlen(in);
         int     ende    = gesamtl-len;
         int     i;
         for(i=0;i<ende;i++)
@@ -579,6 +580,7 @@ char *fill_space(char* dest,char* in,int gesamtl)
 }
   
 
+#if 0
 /*---------------------------------------------------------
 FUNCTION : strrev
 PURPOSE  : reverse a string
@@ -593,7 +595,7 @@ char *str_rev(char *str)
 
   if (!str || !*str) return(str);
   
-  for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
+  for (p1 = str, p2 = str + (int)strlen(str) - 1; p2 > p1; ++p1, --p2)
     {
     *p1 ^= *p2;
     *p2 ^= *p1;
@@ -602,6 +604,7 @@ char *str_rev(char *str)
   
   return(str);
   }
+#endif
 
 
 /*---------------------------------------------------------
@@ -615,7 +618,7 @@ int substring_count(char *needle, char *haystack)
 {
   char *pos = NULL, *newpos = NULL;
   int match_count = 0;
-  int len = strlen(needle);
+  int len = (int)strlen(needle);
   
   pos = strstr(haystack,needle);
   if (pos)
@@ -652,9 +655,9 @@ char *str_replace(char *Str, char *OldStr, char *NewStr)
   if(NULL == (p = strstr(Str, OldStr)))
     return p;
 
-  OldLen = strlen(OldStr);
-  NewLen = strlen(NewStr);
-  memmove(q = p+NewLen, p+OldLen, strlen(p+OldLen)+1);
+  OldLen = (int)strlen(OldStr);
+  NewLen = (int)strlen(NewStr);
+  memmove(q = p+NewLen, p+OldLen, (int)strlen(p+OldLen)+1);
   memcpy(p, NewStr, NewLen);
   return q;
   }
@@ -702,7 +705,7 @@ char *str_stripspace(const char *str)
 
   while (*str && isspace((int)*str)) str++;
 
-  len = strlen(str)+1;
+  len = 1+(int)strlen(str);
 
   if ( !(nstr=s_malloc(len*sizeof(char))) ) die("Unable to allocate memory.");
 
@@ -759,7 +762,7 @@ void str_ncpyt(char *dest, const char *src, const int len)
   
   if (dest == src) die("Destination and source are same.\n");
 
-  strncpy(dest, src, len);
+  strncpy(dest, src, (size_t)len);
   dest[len-1]='\0';
 
   return;
@@ -913,21 +916,21 @@ char *str_getline(FILE *fp, int *len)
   static char	*temp=NULL;	/* Intermediate string - grows as required */
   char		*dest;		/* Destination string */
   static int	temp_len=0;	/* Size of temp */
-  char		c;		/* Current character */
+  int		c;		/* Current character */
 
-  if (!len) die("null integer pointer passed.\n");
-  if (!fp) die("null file handle passed.\n");
+  if (!len) die("Null integer pointer passed.\n");
+  if (!fp) die("Null file handle passed.\n");
 
   *len = 0;
 
-  while((!feof(fp)) && (c=fgetc(fp)) && (c!='\n'))
+  while((c=fgetc(fp))!=EOF && ((char)c!='\n'))
     {
     if (*len==temp_len)
       {	/* Need more memory */
       temp_len+=256;	/* Magic number */
       temp=s_realloc(temp, temp_len*sizeof(char));
       }
-    temp[(*len)++]=c;
+    temp[(*len)++]=(char)c;
     }
   temp[(*len)++]='\0';
 
@@ -941,30 +944,32 @@ char *str_getline(FILE *fp, int *len)
   int str_nreadline(FILE *fp, int len, char *dest)
   synopsis:	Reads upto newline/eof from specified stream, to a
 		maximum of len characters, also
-		ensures that the string is null-terminated.
+		ensures that the string is always null-terminated.
   parameters:   char    	*dest	The destination string.
 		FILE		*fp	The input stream.
   return:	int	actual number of characters read. -1 on failure.
-  last updated: 13/08/99
+  last updated: 08 Jan 2003
  **********************************************************************/
 
-int str_nreadline(FILE *fp, int len, char *dest)
+int str_nreadline(FILE *fp, const int len, char *dest)
   {
-  int		count=0;	/* Number of chars read */
-  char		c;		/* Current character */
+  int		count=0, max_count;	/* Number of chars read */
+  int		c;			/* Current character */
 
-  if (!fp) die("null file handle passed.\n");
+  if (!fp) die("Null file handle passed.\n");
   if (len < 1) die("Stupid length.\n");
-  if (!dest) die("null string pointer passed.\n");
+  if (!dest) die("Null string pointer passed.\n");
 
-  len--;
+  max_count = len-1;
 
-  while((!feof(fp)) && (c=fgetc(fp)) && (c!='\n') && count<len)
-    dest[count++]=c;
+/*  while((!feof(fp)) && (c=fgetc(fp)) && (c!='\n') && count<len)*/
+
+  while(count<len && (c=fgetc(fp))!=EOF && ((char)c!='\n'))
+    dest[count++]=(char)c;
 
   dest[count]='\0';
 
-  return(count-1);
+  return count-1;
   }
 
 
@@ -980,11 +985,11 @@ void str_left_adjust(char *str)
   {
   char *nb;
 
-  if (str) die("null string pointer passed");
+  if (!str) die("null string pointer passed");
 
   nb = str;
-  while (*nb && isspace((int)*nb)) nb++;
-  memmove (str, nb, strlen (str) - (str-nb) + 1);
+  while (*nb!='\0' && isspace((int)*nb)) nb++;
+  memmove(str, nb, strlen(str) - (str-nb) + 1);
   }
 
 
@@ -1000,9 +1005,9 @@ void str_right_adjust(char *str)
   {
   int len;
 
-  if (str) die("null string pointer passed");
+  if (!str) die("null string pointer passed");
 
-  len = strlen (str);
+  len = (int) strlen(str);
   while (len--)
     {
     if (!isspace((int)str[len]))
@@ -1070,7 +1075,7 @@ int str_ncatf(char *str, const size_t n, const char *format, ...)
   app_len = vsnprintf(str+len, n-len, format, ap);
   va_end(ap);
 
-  return (app_len + len);
+  return app_len + len;
   }
 
 
@@ -1086,7 +1091,7 @@ int str_ncatf(char *str, const size_t n, const char *format, ...)
 char *str_cat_va(char *str, va_list ap)
   {
   va_list	orig_ap;	/* Store the passed va list */
-  int		len;		/* Required buffer length */
+  size_t	len;		/* Required buffer length */
   char		*dest;		/* The destination string */
   char		*dp, *sp;	/* Pointer into dest string, source string */
 
@@ -1099,7 +1104,7 @@ char *str_cat_va(char *str, va_list ap)
   orig_ap = ap;
   len = strlen(str);
 
-  while ( (sp = va_arg(ap, char *)) ) len += strlen(sp);
+  while ( (sp = va_arg(ap, char *))!=NULL ) len += strlen(sp);
 
   ap = orig_ap;
 
@@ -1108,15 +1113,15 @@ char *str_cat_va(char *str, va_list ap)
 
 /* Concatenate the strings. */
   dp = dest;
-  while ( (*dp++ = *str++) );
+  while ( (*dp++ = *str++)!='\0' );
 
-  while ( (sp = va_arg(ap, char *)) )
+  while ( (sp = va_arg(ap, char *))!=NULL )
     {
-    while ( (*dp++ = *sp++) );
+    while ( (*dp++ = *sp++)!='\0' );
     }
 
 /* Tack on a terminating null char. */
-  *dp = NULL_CHAR;
+  *dp = '\0';
 
   return dest;
   }
@@ -1202,14 +1207,14 @@ int str_safecopy(char *src, char *dest, const int len)
     {	/* End of source may overlap start of dest. */
     s += n-1;
     d += n;
-    *d-- = NULL_CHAR;
+    *d-- = '\0';
     while (n-- > 0) *d-- = *s--;
     return len;
     }
   else if (s > d)
     {	/* Start of source may overlap end of dest. */
     while (n-- > 0) *d++ = *s++;
-    *s = NULL_CHAR;
+    *s = '\0';
     return len;
     }
 /* else source == dest anyway */
@@ -1238,7 +1243,7 @@ int str_scmp(const char *s1, const char *s2)
   if ( (*s1 == ' ' || *s1 == '\t' || *s1 == '\n' || *s1 == '\0') && 
        (*s2 == ' ' || *s2 == '\t' || *s2 == '\n' || *s2 == '\0') ) return 0;
 
-  return *s1 - *s2;
+  return (int) (*s1 - *s2);
   }
 
 
@@ -1267,7 +1272,7 @@ char **str_split(const char *string,
   s = strstr(string, delimiter);
   if (s)
     {
-    int delimiter_len = strlen(delimiter);
+    int delimiter_len = (int) strlen(delimiter);
 
     do
       {
@@ -1276,18 +1281,18 @@ char **str_split(const char *string,
 
       len = s - string;
       new_string = s_malloc(sizeof(char)*(len+1));
-      strncpy(new_string, string, len);
-      new_string[len] = 0;
+      strncpy(new_string, string, (size_t) len);
+      new_string[len] = '\0';
       string_list = slink_prepend(string_list, new_string);
       n++;
       string = s + delimiter_len;
       s = strstr(string, delimiter);
       } while(--max_tokens && s);
     }
-  if (*string)
+  if (*string != '\0')
     {
     n++;
-    string_list = slink_prepend(string_list, strdup(string));
+    string_list = slink_prepend(string_list, s_strdup(string));
     }
 
   str_array = s_malloc(sizeof(char*)*n);
@@ -1295,8 +1300,12 @@ char **str_split(const char *string,
   i = n - 1;
 
   str_array[i--] = NULL;
-  for(slist = string_list; slist; slist = slink_next(slist))
+  slist = string_list;
+  while(slist!=NULL)
+    {
     str_array[i--] = slink_data(slist);
+    slist = slink_next(slist);
+    }
 
   slink_free(string_list);
 
@@ -1348,13 +1357,13 @@ char *str_joinv(const char *separator, char **str_array)
       int i, len;
       int separator_len;
 
-      separator_len = strlen(separator);
-      len = 1 + strlen(str_array[0]);
+      separator_len = (int) strlen(separator);
+      len = 1 + (int) strlen(str_array[0]);
       for(i = 1; str_array[i] != NULL; i++)
-	len += separator_len + strlen(str_array[i]);
+	len += separator_len + (int) strlen(str_array[i]);
 
       string = s_malloc(sizeof(char)*len);
-      *string = 0;
+      *string = '\0';
       strcat(string, *str_array);
       for(i = 1; str_array[i] != NULL; i++)
 	{
@@ -1363,7 +1372,7 @@ char *str_joinv(const char *separator, char **str_array)
 	}
       }
   else
-    string = strdup("");
+    string = s_strdup("");
 
   return string;
   }
@@ -1387,7 +1396,7 @@ char *str_join(const char *separator, ...)
   if (separator == NULL)
     separator = "";
 
-  separator_len = strlen(separator);
+  separator_len = (int) strlen(separator);
 
   va_start(args, separator);
 
@@ -1395,18 +1404,18 @@ char *str_join(const char *separator, ...)
 
   if (s)
     {
-      len = strlen(s);
+      len = (int) strlen(s);
       
       s = va_arg(args, char*);
       while(s)
 	{
-	  len += separator_len + strlen(s);
+	  len += separator_len + (int) strlen(s);
 	  s = va_arg(args, char*);
 	}
       va_end(args);
       
       string = s_malloc(sizeof(char)*(len+1));
-      *string = 0;
+      *string = '\0';
       
       va_start(args, separator);
       
@@ -1422,11 +1431,41 @@ char *str_join(const char *separator, ...)
 	}
     }
   else
-    string = strdup("");
+    string = s_strdup("");
   
   va_end(args);
 
   return string;
+  }
+
+
+/**********************************************************************
+  str_rev()
+  synopsis:	Reverse the contents of a string.
+  parameters:	char *str	String to reverse.
+  return:	The same pointer as parameter *str.
+  last updated: 08 Jan 2003
+ **********************************************************************/
+
+char *str_rev(char *str)
+  {
+  char *p1, *p2, tmp;
+
+  if (str==NULL || *str=='\0') return str;
+  
+  p1 = str;
+  p2 = str + (int)strlen(str) - 1;
+ 
+  while (p1 < p2)
+    {
+    tmp = *p2;
+    *p2 = *p1;
+    *p1 = tmp;
+    p1++;
+    p2--;
+    }
+  
+  return str;
   }
 
 

@@ -18,8 +18,8 @@
 # util/Makefile.am
 #######################################################################
 #
-# util - General collection of C-programming utitily routines.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# util - General collection of C-programming utility routines.
+# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,7 +96,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1842/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -122,7 +122,7 @@ STRIP = strip
 VERSION = 0.1842-2
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1842/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -136,12 +136,6 @@ lib_LTLIBRARIES = libstuff.la \
 	libnn_util.la \
         liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
-
-
-bin_PROGRAMS = nn
-
-nn_SOURCES = \
-	nn_main.c
 
 
 
@@ -223,9 +217,6 @@ include_HEADERS = \
      timer_util.h
 
 
-#nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
-nn_LDADD = -L./ -L../src/ libnn_util.la libmpi_util_fake.la libstuff.la liblog_util.la -lm
-
 libstuff_a_LIBFLAGS = 
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
@@ -269,20 +260,12 @@ am_libstuff_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_util.lo table_util.lo random_util.lo str_util.lo \
 	dstr_util.lo str_match.lo timer_util.lo
 libstuff_la_OBJECTS = $(am_libstuff_la_OBJECTS)
-bin_PROGRAMS = nn$(EXEEXT)
-PROGRAMS = $(bin_PROGRAMS)
-
-am_nn_OBJECTS = nn_main.$(OBJEXT)
-nn_OBJECTS = $(am_nn_OBJECTS)
-nn_DEPENDENCIES = libnn_util.la libmpi_util_fake.la libstuff.la \
-	liblog_util.la
-nn_LDFLAGS =
 
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/home/stewart/lib
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
@@ -293,8 +276,7 @@ DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/memory_util.Plo \
 	./$(DEPDIR)/mpi_util.Plo \
 	./$(DEPDIR)/mpi_util_fake.Plo \
-	./$(DEPDIR)/nn_main.Po ./$(DEPDIR)/nn_util.Plo \
-	./$(DEPDIR)/random_util.Plo \
+	./$(DEPDIR)/nn_util.Plo ./$(DEPDIR)/random_util.Plo \
 	./$(DEPDIR)/str_match.Plo ./$(DEPDIR)/str_util.Plo \
 	./$(DEPDIR)/table_util.Plo \
 	./$(DEPDIR)/timer_util.Plo
@@ -309,11 +291,11 @@ CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slan
 DIST_SOURCES = $(liblog_util_la_SOURCES) \
 	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
 	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \
-	$(libstuff_la_SOURCES) $(nn_SOURCES)
+	$(libstuff_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
 DIST_COMMON = README $(include_HEADERS) Makefile.am Makefile.in
-SOURCES = $(liblog_util_la_SOURCES) $(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) $(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) $(libstuff_la_SOURCES) $(nn_SOURCES)
+SOURCES = $(liblog_util_la_SOURCES) $(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) $(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) $(libstuff_la_SOURCES)
 
 all: all-am
 
@@ -364,38 +346,6 @@ libnn_util.la: $(libnn_util_la_OBJECTS) $(libnn_util_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libnn_util_la_LDFLAGS) $(libnn_util_la_OBJECTS) $(libnn_util_la_LIBADD) $(LIBS)
 libstuff.la: $(libstuff_la_OBJECTS) $(libstuff_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libstuff_la_LDFLAGS) $(libstuff_la_OBJECTS) $(libstuff_la_LIBADD) $(LIBS)
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
-	  else :; fi; \
-	done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
-	  rm -f $(DESTDIR)$(bindir)/$$f; \
-	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-nn$(EXEEXT): $(nn_OBJECTS) $(nn_DEPENDENCIES) 
-	@rm -f nn$(EXEEXT)
-	$(LINK) $(nn_LDFLAGS) $(nn_OBJECTS) $(nn_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -412,7 +362,6 @@ include ./$(DEPDIR)/log_util_parallel.Plo
 include ./$(DEPDIR)/memory_util.Plo
 include ./$(DEPDIR)/mpi_util.Plo
 include ./$(DEPDIR)/mpi_util_fake.Plo
-include ./$(DEPDIR)/nn_main.Po
 include ./$(DEPDIR)/nn_util.Plo
 include ./$(DEPDIR)/random_util.Plo
 include ./$(DEPDIR)/str_match.Plo
@@ -533,12 +482,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
-install-binPROGRAMS: install-libLTLIBRARIES
-
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 
 installdirs:
-	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) $(DESTDIR)$(includedir)
+	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 
 install: install-am
 install-exec: install-exec-am
@@ -566,8 +513,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 
@@ -584,7 +531,7 @@ info-am:
 
 install-data-am: install-includeHEADERS
 
-install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -601,21 +548,20 @@ mostlyclean: mostlyclean-am
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-binPROGRAMS uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES
+uninstall-am: uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
-.PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libLTLIBRARIES clean-libtool distclean \
-	distclean-compile distclean-depend distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am info \
-	info-am install install-am install-binPROGRAMS install-data \
-	install-data-am install-exec install-exec-am \
-	install-includeHEADERS install-info install-info-am \
-	install-libLTLIBRARIES install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-includeHEADERS \
+.PHONY: GTAGS all all-am check check-am clean clean-generic \
+	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-data install-data-am install-exec \
+	install-exec-am install-includeHEADERS install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	tags uninstall uninstall-am uninstall-includeHEADERS \
 	uninstall-info-am uninstall-libLTLIBRARIES
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
