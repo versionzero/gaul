@@ -26,7 +26,8 @@
 
   Synopsis:	Table data structure. (basically a growable table)
 
-  Last Updated:	16 Mar 2002 SAA	Check for presence of limits.h on this system.
+  Last Updated:	20 mar 2002 SAA When limits.h is not available, compilation failed since UINT_MAX was not defined.
+		16 Mar 2002 SAA	Check for presence of limits.h on this system.
 
  **********************************************************************/
 
@@ -57,7 +58,13 @@ typedef struct TableStruct_t
  * Convenience macro.
  */
 /*#define table_error_index(X)	(((TableStruct *)(X))->next)*/
-#define TABLE_ERROR_INDEX	UINT_MAX
+
+#ifdef UINT_MAX
+/* UINT_MAX comes from limits.h */
+# define TABLE_ERROR_INDEX	UINT_MAX
+#else
+# define TABLE_ERROR_INDEX	(unsigned int) 0xFFFFFFFF      /* Maximum 32-bit unsigned int */
+#endif
 
 /*
  * Prototypes.

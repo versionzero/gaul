@@ -56,6 +56,7 @@
 		Alternative switching functions.
 		Automated functions for "leave-one-out" validation.
 		Full support for weight decay method starting at a given epoch.
+		Node pruning. (prune zeros and +/- ones(by using BIAS as replacement))
 
  **********************************************************************/
 

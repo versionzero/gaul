@@ -1,7 +1,6 @@
-# Generated automatically from Makefile.in by configure.
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -44,6 +43,7 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
+
 prefix = /usr/local
 exec_prefix = ${prefix}
 
@@ -73,10 +73,10 @@ AUTOCONF = autoconf
 AUTOMAKE = automake
 AUTOHEADER = autoheader
 
-INSTALL = .././install-sh -c
+INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+INSTALL_SCRIPT = ${INSTALL}
 transform = s,x,x,
 
 NORMAL_INSTALL = :
@@ -85,14 +85,14 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = rs6000-ibm-aix
-build_triplet = rs6000-ibm-aix
-host_alias = rs6000-ibm-aix
-host_triplet = rs6000-ibm-aix
-target_alias = rs6000-ibm-aix
-target_triplet = rs6000-ibm-aix
+build_alias = 
+build_triplet = i686-pc-linux-gnu
+host_alias = 
+host_triplet = i686-pc-linux-gnu
+target_alias = 
+target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = cc
+CC = gcc
 DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
@@ -101,7 +101,7 @@ LT_RELEASE = 0.1837
 LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = makeinfo
+MAKEINFO = /u1/gaul-devel/missing makeinfo
 MINOR_VERSION = 1837
 MPICC = echo
 MPIFLAGS = > /dev/null
@@ -125,9 +125,9 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: # Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps tests/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu tests/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -140,10 +140,15 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = tests
 
 distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu tests/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

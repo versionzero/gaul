@@ -22,10 +22,11 @@ If that doesn't work because you don't have the GNU maketools (or because I made
 There are several configuration options available for more advanced users.  For details:
 ./configure --help
 
-On some systems, including Solaris and IRIX, you may need to specify GNU make instead the native make.  In these cases substitute 'make' with 'gmake'.
+On some systems, including Solaris, AIX and IRIX, you may need to specify GNU make instead the native make.  In these cases substitute 'make' with 'gmake'.
 
 If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
 automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake
+The above sequence is known to work for AIX and IRIX, whilst the more simple "./configure ; make" definitely does not.
 
 If you plan to use the Intel C/C++ compiler, use:
 ./configure --disable-cvs-deps ; automake -i ; make
@@ -52,4 +53,4 @@ rpm -Uvh gaul-devel-[version].[arch].rpm
 
 Of course, this only works on computers using the RPM package management system.
 
-Stewart Adcock, 13 Feb 2002
+Stewart Adcock, 20 Mar 2002
