@@ -6593,7 +6593,7 @@ if test "${enable_g+set}" = set; then
   enableval="$enable_g"
 
 else
-  enable_g=yes
+  enable_g=no
 fi;
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
@@ -7044,7 +7044,7 @@ else
     else
       case " $CFLAGS " in
       *[\ \	]-ipo[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ipo" ;;
+      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
       esac
     fi
 

@@ -264,7 +264,7 @@ saveload_OBJECTS =  saveload.$(OBJEXT)
 saveload_LDFLAGS = 
 nnevolve_OBJECTS =  nnevolve.$(OBJEXT)
 nnevolve_LDFLAGS = 
-CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -O2 -I../util/ -I../src/
+CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -ipo -ipo_obj -O2 -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
