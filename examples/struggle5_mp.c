@@ -99,13 +99,15 @@ boolean struggle_score(population *pop, entity *entity)
 		multiple processors.
   parameters:
   return:
-  updated:	29 Jan 2002
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  int		i;					/* Loop over populations. */
+  int		i;				/* Loop over populations. */
   population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of population pointers. */
+  char		*beststring=NULL;		/* Human readable form of best solution. */
+  size_t	beststrlen=0;			/* Length of beststring. */
 
   mpi_init(&argc, &argv);
 
@@ -162,15 +164,18 @@ int main(int argc, char **argv)
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
     {
+    beststring = ga_chromosome_char_to_string(pops[i], ga_get_entity_from_rank(pops[i],0), beststring, &beststrlen);
     printf( "The best solution on processor %d, island %d with score %f was:\n%s\n",
             mpi_get_rank(), i,
             ga_get_entity_from_rank(pops[i],0)->fitness,
-            ga_chromosome_char_to_staticstring(pops[i], ga_get_entity_from_rank(pops[i],0)) );
+            beststring );
 
     ga_extinction(pops[i]);
     }
 
   mpi_exit();
+
+  s_free(beststring);
 
   exit(2);
   }

@@ -3,7 +3,7 @@
  **********************************************************************
 
   chromostubs - Stubs for chromosome handling routines.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -35,14 +35,8 @@
 		chromosome_XXX_to_bytes() - for serialization.
 		   (Leave max_bytes==0, if no need to free (i.e. static))
 		chromosome_XXX_from_bytes() - for deserialization.
-		chromosome_XXX_to_staticstring() - Human readable NULL-
+		chromosome_XXX_to_string() - Human readable NULL-
 		   terminated string.
-
-		The serialization functions are needed for reading and
-		writing of soup files, for checkpointing and for
-		inter-process communication; none of which are
-		currently supported in this version of GAUL -- but
-		they should be soon.
 
 		You are welcome to cut'n'paste code for these functions
 		from the GAUL library source, e.g. src/ga_chromo.c and
@@ -53,8 +47,6 @@
 		and pop.len_chromosomes define the number and length
 		of chromosomes in each entity.  In your code, you are
 		free to ignore this values if they are inappropriate.
-
-  Bugs:		The staticstring stuff will be really bad for threading!
 
   To do:	Will need chromosome comparison functions.
 
@@ -227,37 +219,33 @@ void chromosome_XXX_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  chromosome_XXX_to_staticstring()
+  chromosome_XXX_to_string()
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 01/07/01
+  last updated: 21 Aug 2002
  **********************************************************************/
 
-char *chromosome_XXX_to_staticstring(population *pop, entity *joe)
+char *chromosome_XXX_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
-  int		i, j;		/* Loop over chromosome, alleles. */
-  int		k=0;		/* Pointer into 'text'. */
-  int		l;		/* Number of appended digits. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
-  /* Sanity checks. */
+ nt           i, j;           /* Loop over chromosome, alleles. */
+  int           k=0;            /* Pointer into 'text'. */
+  int           l;              /* Number of appended digits. */
+
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+/* Ensure that a reasonable amount of memory is allocated. */
+  if (!text || *textlen < 8 * pop->len_chromosomes * pop->num_chromosomes)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
-    text = s_realloc(text, sizeof(char) * textlen);
+    *textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
-  if (textlen == 0)
-    {	/* Allocate a reasonable amount of memory. */
-    textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
-    text = s_malloc(sizeof(char) * textlen);
-    }
-
+/* Handle empty chromosomes. */
   if (!joe->chromosome)
     {
     text[1] = '\0';
@@ -268,14 +256,20 @@ char *chromosome_XXX_to_staticstring(population *pop, entity *joe)
     {
     for(j=0; j<pop->len_chromosomes; j++)
       {
-      l = snprintf(&(text[k]), textlen-k, " %d",
+      if (*textlen-k<8)
+        {
+        *textlen *= 2;   /* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
+        }
+
+      l = snprintf(&(text[k]), *textlen-k, "%d ",
                        ((int *)joe->chromosome[i])[j]);
 
       if (l == -1)
-        {	/* Truncation occured so double size of text buffer. */
-	textlen *= 2;
-        text = s_realloc(text, sizeof(char) * textlen);
-        l = snprintf(&(text[k]), textlen-k, " %d",
+        {       /* Truncation occured. */
+        *textlen *= 2;  /* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
+        l = snprintf(&(text[k]), *textlen-k, "%d ",
                        ((int *)joe->chromosome[i])[j]);
 
         if (l == -1) die("Internal error, string truncated again.");
@@ -285,8 +279,11 @@ char *chromosome_XXX_to_staticstring(population *pop, entity *joe)
       }
     }
 
-  return &(text[1]);	/* Index of 1 skips first ' ' character. */
-  }
+/* Replace last space character with NULL character. */
+  text[k-1]='\0';
+
+  return text;
+ }
 
 
 /**********************************************************************

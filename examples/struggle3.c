@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle3 - Test/example program for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -187,12 +187,14 @@ boolean struggle_generation_hook(int generation, population *pop)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	07/07/01
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  population	*pop=NULL;	/* Population structure. */
+  population	*pop=NULL;		/* Population structure. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   random_seed(42);
 
@@ -234,11 +236,13 @@ int main(int argc, char **argv)
 
   printf( "The final solution with score %f was:\n",
           ga_get_entity_from_rank(pop,0)->fitness );
-  printf( "%s\n",
-          ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)) );
+  beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
   printf( "Total number of fitness evaluations: %ld\n", evaluation_count );
 
   ga_extinction(pop);
+
+  s_free(beststring);
 
   exit(2);
   }

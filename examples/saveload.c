@@ -104,7 +104,7 @@ void write_usage(void)
   synopsis:	Another GAUL example.
   parameters:
   return:
-  updated:	28 May 2002
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -114,6 +114,8 @@ int main(int argc, char **argv)
   char		*filename_out=NULL;	/* Output filename. */
   int		i;			/* Loop variable over command-line arguments. */
   int		generations=10;		/* Number of generations to perform. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   random_seed(42);
 
@@ -234,7 +236,8 @@ int main(int argc, char **argv)
               );
 
   printf("The final solution with seed = %d was:\n", i);
-  printf("%s\n", ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
+  beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
   printf("With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
 
   ga_population_write(pop, filename_out);

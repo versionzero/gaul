@@ -264,9 +264,9 @@ CEOF
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"17/08/02"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"17/08/02"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"17/08/02"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"21/08/02"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"21/08/02"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"21/08/02"${ac_eD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1839-2"${ac_dD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1839-2"${ac_uD}
 ${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1839-2"${ac_eD}
@@ -357,9 +357,9 @@ ${ac_eA}SIZEOF_VOID_P${ac_eB}SIZEOF_VOID_P${ac_eC}0${ac_eD}
 ${ac_dA}const${ac_dB}const${ac_dC}${ac_dD}
 ${ac_uA}const${ac_uB}const${ac_uC}${ac_uD}
 ${ac_eA}const${ac_eB}const${ac_eC}${ac_eD}
-${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}0${ac_dD}
-${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}0${ac_uD}
-${ac_eA}MEMORY_ALIGN_SIZE${ac_eB}MEMORY_ALIGN_SIZE${ac_eC}0${ac_eD}
+${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}4${ac_dD}
+${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}4${ac_uD}
+${ac_eA}MEMORY_ALIGN_SIZE${ac_eB}MEMORY_ALIGN_SIZE${ac_eC}4${ac_eD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_eA}STDC_HEADERS${ac_eB}STDC_HEADERS${ac_eC}1${ac_eD}

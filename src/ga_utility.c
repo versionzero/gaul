@@ -135,7 +135,7 @@ population *ga_genesis_int(	const int		population_size,
   pop->chromosome_replicate = ga_chromosome_integer_replicate;
   pop->chromosome_to_bytes = ga_chromosome_integer_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_integer_from_bytes;
-  pop->chromosome_to_string = ga_chromosome_integer_to_staticstring;
+  pop->chromosome_to_string = ga_chromosome_integer_to_string;
 
   pop->evaluate = evaluate;
   pop->seed = seed;
@@ -254,7 +254,7 @@ population *ga_genesis_char(	const int		population_size,
   pop->chromosome_replicate = ga_chromosome_char_replicate;
   pop->chromosome_to_bytes = ga_chromosome_char_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_char_from_bytes;
-  pop->chromosome_to_string = ga_chromosome_char_to_staticstring;
+  pop->chromosome_to_string = ga_chromosome_char_to_string;
 
   pop->evaluate = evaluate;
   pop->seed = seed;
@@ -335,7 +335,7 @@ population *ga_genesis_boolean(	const int		population_size,
   pop->chromosome_replicate = ga_chromosome_boolean_replicate;
   pop->chromosome_to_bytes = ga_chromosome_boolean_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_boolean_from_bytes;
-  pop->chromosome_to_string = ga_chromosome_boolean_to_staticstring;
+  pop->chromosome_to_string = ga_chromosome_boolean_to_string;
 
   pop->evaluate = evaluate;
   pop->seed = seed;
@@ -416,7 +416,7 @@ population *ga_genesis_double(	const int		population_size,
   pop->chromosome_replicate = ga_chromosome_double_replicate;
   pop->chromosome_to_bytes = ga_chromosome_double_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_double_from_bytes;
-  pop->chromosome_to_string = ga_chromosome_double_to_staticstring;
+  pop->chromosome_to_string = ga_chromosome_double_to_string;
 
   pop->evaluate = evaluate;
   pop->seed = seed;
@@ -497,7 +497,7 @@ population *ga_genesis_bitstring(	const int		population_size,
   pop->chromosome_replicate = ga_chromosome_bitstring_replicate;
   pop->chromosome_to_bytes = ga_chromosome_bitstring_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_bitstring_from_bytes;
-  pop->chromosome_to_string = ga_chromosome_bitstring_to_staticstring;
+  pop->chromosome_to_string = ga_chromosome_bitstring_to_string;
 
   pop->evaluate = evaluate;
   pop->seed = seed;

@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle - Test/example program for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -81,12 +81,14 @@ boolean struggle_score(population *pop, entity *entity)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	20/06/01
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  population	*pop=NULL;	/* Population of solutions. */
+  population	*pop=NULL;		/* Population of solutions. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   random_init();
 
@@ -111,24 +113,27 @@ int main(int argc, char **argv)
             );
 
   ga_population_set_parameters(
-       pop,			/* population      *pop */
-       GA_SCHEME_DARWIN,	/* const ga_scheme_type  scheme */
-       GA_ELITISM_NULL,		/* const ga_elitism_type elitism */
-       1.0,			/* double  crossover */
-       0.1,			/* double  mutation */
-       0.0              	/* double  migration */
+       pop,			/* population		*pop */
+       GA_SCHEME_DARWIN,	/* const ga_scheme_type		scheme */
+       GA_ELITISM_NULL,		/* const ga_elitism_type	elitism */
+       1.0,			/* double		crossover */
+       0.1,			/* double		mutation */
+       0.0              	/* double		migration */
                               );
 
   ga_evolution_steady_state(
-       pop,		/* population              *pop */
-       50000		/* const int               max_generations */
+       pop,			/* population		*pop */
+       50000			/* const int		max_generations */
               );
 
   printf( "The final solution was:\n");
-  printf( "%s\n", ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
+  beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
   printf( "With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
 
   ga_extinction(pop);
+
+  s_free(beststring);
 
   exit(2);
   }

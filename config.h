@@ -11,7 +11,7 @@
 
 /* #undef MEMORY_ALLOC_DEBUG */
 #define MEMORY_ALLOC_SAFE 1
-#define MEMORY_ALIGN_SIZE 0
+#define MEMORY_ALIGN_SIZE 4
 #define MEMORY_PADDING 0
 
 #define DEBUG 0
@@ -20,7 +20,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1839-2"
-#define BUILD_DATE_STRING "17/08/02"
+#define BUILD_DATE_STRING "21/08/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
 #define PATCH_VERSION 2
@@ -64,7 +64,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "17/08/02"
+#define BUILD_DATE_STRING "21/08/02"
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1

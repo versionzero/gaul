@@ -99,7 +99,7 @@ typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
 typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
 typedef unsigned int    (*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
 typedef void    (*GAchromosome_from_bytes)(population *pop, entity *joe, byte *bytes);
-typedef char    *(*GAchromosome_to_string)(population *pop, entity *joe);
+typedef char    *(*GAchromosome_to_string)(const population *pop, const entity *joe, char *text, size_t *textlen);
 
 /*
  * GA operations.

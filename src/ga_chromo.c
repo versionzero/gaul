@@ -33,16 +33,8 @@
 		ga_chromosome_XXX_to_bytes() - for serialization.
 		   (Leave max_bytes==0, if no need to free (i.e. static))
 		ga_chromosome_XXX_from_bytes() - for deserialization.
-		ga_chromosome_XXX_to_staticstring() - Human readable NULL-
+		ga_chromosome_XXX_to_string() - Human readable NULL-
 		   terminated string.
-
-		The serialization functions are needed for read/write
-		of soup files and for inter-process communication.
-		Neither of which is currently supported in this
-		version of GAUL -- but they will be soon.
-
-  Bugs:		The staticstring stuff will be really bad for
-		multi-threaded applications!
 
   To do:	Will need chromosome comparison functions.
 
@@ -190,37 +182,35 @@ void ga_chromosome_integer_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  ga_chromosome_integer_to_staticstring()
+  ga_chromosome_integer_to_string()
   synopsis:	Convert to human readable form.
-  parameters:
+  parameters:	const population *pop	Population (compatible with entity)
+  		const entity *joe	Entity to encode as text.
+		char *text		Malloc()'ed text buffer, or NULL.
+		size_t *textlen		Current size of text buffer.
   return:
-  last updated: 26 Feb 2002
+  last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_integer_to_staticstring(
-                              population *pop, entity *joe)
+char *ga_chromosome_integer_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   int		i, j;		/* Loop over chromosome, alleles. */
   int		k=0;		/* Pointer into 'text'. */
   int		l;		/* Number of appended digits. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+/* Ensure that a reasonable amount of memory is allocated. */
+  if (!text || *textlen < 8 * pop->len_chromosomes * pop->num_chromosomes)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
-    text = s_realloc(text, sizeof(char) * textlen);
+    *textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
-  if (textlen == 0)
-    {	/* Allocate a reasonable amount of memory. */
-    textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
-    text = s_malloc(sizeof(char) * textlen);
-    }
-
+/* Handle empty chromosomes. */
   if (!joe->chromosome)
     {
     text[1] = '\0';
@@ -231,20 +221,20 @@ char *ga_chromosome_integer_to_staticstring(
     {
     for(j=0; j<pop->len_chromosomes; j++)
       {
-      if (textlen-k<8)
+      if (*textlen-k<8)
         {
-        textlen *= 2;   /* FIXME: This isn't intelligent. */
-        text = s_realloc(text, sizeof(char) * textlen);
+        *textlen *= 2;   /* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
         }
 
-      l = snprintf(&(text[k]), textlen-k, " %d",
+      l = snprintf(&(text[k]), *textlen-k, "%d ",
                        ((int *)joe->chromosome[i])[j]);
 
       if (l == -1)
         {	/* Truncation occured. */
-	textlen *= 2;	/* FIXME: This isn't intelligent. */
-        text = s_realloc(text, sizeof(char) * textlen);
-        l = snprintf(&(text[k]), textlen-k, " %d",
+	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
+        l = snprintf(&(text[k]), *textlen-k, "%d ",
                        ((int *)joe->chromosome[i])[j]);
 
         if (l == -1) die("Internal error, string truncated again.");
@@ -254,7 +244,10 @@ char *ga_chromosome_integer_to_staticstring(
       }
     }
 
-  return &(text[1]);	/* Index of 1 skips first ' ' character. */
+/* Replace last space character with NULL character. */
+  text[k-1]='\0';
+
+  return text;
   }
 
 
@@ -399,28 +392,27 @@ void ga_chromosome_boolean_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  ga_chromosome_boolean_to_staticstring()
+  ga_chromosome_boolean_to_string()
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 13/06/01
+  last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_boolean_to_staticstring(
-                              population *pop, entity *joe)
+char *ga_chromosome_boolean_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   int		i, j;		/* Loop over chromosome, alleles. */
   int		k=0;		/* Pointer into 'text'. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if (!text || *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
-    text = s_realloc(text, sizeof(char) * textlen);
+    *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
   if (!joe->chromosome)
@@ -584,35 +576,28 @@ void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  ga_chromosome_double_to_staticstring()
+  ga_chromosome_double_to_string()
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 26 Feb 2002
+  last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_double_to_staticstring(
-                              population *pop, entity *joe)
+char *ga_chromosome_double_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   int		i, j;		/* Loop over chromosome, alleles. */
   int		k=0;		/* Pointer into 'text'. */
   int		l;		/* Number of 'snprintf'ed characters. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+  if (!text || *textlen < 10 * pop->len_chromosomes * pop->num_chromosomes)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
-    text = s_realloc(text, sizeof(char) * textlen);
-    }
-
-  if (textlen == 0)
-    {	/* Allocate a reasonable amount of memory. */
-    textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
-    text = s_malloc(sizeof(char) * textlen);
+    *textlen = 10 * pop->len_chromosomes * pop->num_chromosomes;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
   if (!joe->chromosome)
@@ -625,20 +610,20 @@ char *ga_chromosome_double_to_staticstring(
     {
     for(j=0; j<pop->len_chromosomes; j++)
       {
-      if (textlen-k<8)
+      if (*textlen-k<8)
         {
-	textlen *= 2;	/* FIXME: This isn't intelligent. */
-        text = s_realloc(text, sizeof(char) * textlen);
+	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
         }
 
-      l = snprintf(&(text[k]), textlen-k, " %f",
+      l = snprintf(&(text[k]), *textlen-k, "%f ",
                        ((double *)joe->chromosome[i])[j]);
 
       if (l == -1)
         {	/* Truncation occured. */
-	textlen *= 2;	/* FIXME: This isn't intelligent. */
-        text = s_realloc(text, sizeof(char) * textlen);
-        l = snprintf(&(text[k]), textlen-k, " %f",
+	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+        text = s_realloc(text, sizeof(char) * *textlen);
+        l = snprintf(&(text[k]), *textlen-k, "%f ",
                        ((double *)joe->chromosome[i])[j]);
 
         if (l == -1) die("Internal error, string truncated again.");
@@ -648,7 +633,9 @@ char *ga_chromosome_double_to_staticstring(
       }
     }
 
-  return &(text[1]);	/* Index of 1 skips first ' ' character. */
+  text[k-1] = '\0';
+
+  return text;
   }
 
 
@@ -792,28 +779,27 @@ void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
 
 
 /**********************************************************************
-  ga_chromosome_char_to_staticstring()
+  ga_chromosome_char_to_string()
   synopsis:	Convert genetic data into human readable form.
   parameters:
   return:
-  last updated: 15 Aug 2002
+  last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_char_to_staticstring(
-                              population *pop, entity *joe)
+char *ga_chromosome_char_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   int		i;		/* Loop over chromosome, alleles. */
   int		k=0;		/* Pointer into 'text'. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if (*textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
-    text = s_realloc(text, sizeof(char) * textlen);
+    *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
   if (!joe->chromosome)
@@ -989,27 +975,27 @@ void ga_chromosome_bitstring_from_bytes(population *pop, entity *joe, byte *byte
 
 
 /**********************************************************************
-  ga_chromosome_bitstring_to_staticstring()
+  ga_chromosome_bitstring_to_string()
   synopsis:	Convert to human readable form.
   parameters:
   return:
-  last updated: 30/06/01
+  last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_bitstring_to_staticstring(population *pop, entity *joe)
+char *ga_chromosome_bitstring_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   int		i, j;		/* Loop over chromosome, alleles. */
   int		k=0;		/* Pointer into 'text'. */
-  static char	*text=NULL;	/* String for display. */
-  static int	textlen=0;	/* Length of string. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if (!text || *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
-    text = s_realloc(text, sizeof(char) * textlen);
+    *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
+    text = s_realloc(text, sizeof(char) * *textlen);
     }
 
   if (!joe->chromosome)

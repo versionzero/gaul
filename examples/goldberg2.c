@@ -3,7 +3,7 @@
  **********************************************************************
 
   goldberg2 - Test/example program for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -99,13 +99,15 @@ boolean goldberg2_ga_callback(int generation, population *pop)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	31/05/01
+  updated:	21 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  int		i;		/* Runs. */
-  population	*pop=NULL;	/* Population of solutions. */
+  int		i;			/* Runs. */
+  population	*pop=NULL;		/* Population of solutions. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   random_init();
 
@@ -150,12 +152,15 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     goldberg2_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:", i);
-    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
+    beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+    printf("%s\n", beststring);
     printf("With score = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
     }
 
   ga_extinction(pop);
 
+  s_free(beststring);
+  
   exit(2);
   }
 

@@ -86,13 +86,15 @@ boolean struggle_score(population *pop, entity *entity)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	11 Jun 2002
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  int		i;		/* Runs. */
-  population	*pop=NULL;	/* Population of solutions. */
+  int		i;			/* Loop over runs. */
+  population	*pop=NULL;		/* Population of solutions. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   for (i=0; i<50; i++)
     {
@@ -130,12 +132,15 @@ int main(int argc, char **argv)
        500			/* const int       max_generations */
               );
 
-    printf( "The final solution with seed = %d was:\n", i);
-    printf( "%s\n", ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
-    printf( "With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
+    printf("The final solution with seed = %d was:\n", i);
+    beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+    printf("%s\n", beststring);
+    printf("With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
 
     ga_extinction(pop);
     }
+
+  s_free(beststring);
 
   exit(2);
   }

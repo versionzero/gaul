@@ -3,7 +3,7 @@
  **********************************************************************
 
   struggle2 - Test/example program for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -129,14 +129,16 @@ entity *struggle_adaptation(population *pop, entity *child)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	07/07/01
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  population	*popd=NULL;	/* Population for Darwinian evolution. */
-  population	*popb=NULL;	/* Population for Baldwinian evolution. */
-  population	*popl=NULL;	/* Population for Lamarckian evolution. */
+  population	*popd=NULL;		/* Population for Darwinian evolution. */
+  population	*popb=NULL;		/* Population for Baldwinian evolution. */
+  population	*popl=NULL;		/* Population for Lamarckian evolution. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   random_seed(42);
 
@@ -183,8 +185,8 @@ int main(int argc, char **argv)
 
   printf( "The final solution with Darwinian evolution with score %f was:\n",
           ga_get_entity_from_rank(popd,0)->fitness );
-  printf( "%s\n",
-          ga_chromosome_char_to_staticstring(popd, ga_get_entity_from_rank(popd,0)) );
+  beststring = ga_chromosome_char_to_string(popd, ga_get_entity_from_rank(popd,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
 
   ga_evolution(
     popb,			/* population          *pop */
@@ -193,8 +195,8 @@ int main(int argc, char **argv)
 
   printf( "The final solution with Baldwinian evolution with score %f was:\n",
           ga_get_entity_from_rank(popb,0)->fitness );
-  printf( "%s\n",
-          ga_chromosome_char_to_staticstring(popb, ga_get_entity_from_rank(popb,0)) );
+  beststring = ga_chromosome_char_to_string(popb, ga_get_entity_from_rank(popb,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
 
   ga_evolution(
     popl,			/* population          *pop */
@@ -203,12 +205,16 @@ int main(int argc, char **argv)
 
   printf( "The final solution with Lamarckian evolution with score %f was:\n",
           ga_get_entity_from_rank(popl,0)->fitness );
-  printf( "%s\n",
-          ga_chromosome_char_to_staticstring(popl, ga_get_entity_from_rank(popl,0)) );
+  beststring = ga_chromosome_char_to_string(popl, ga_get_entity_from_rank(popl,0), beststring, &beststrlen);
+  printf("%s\n", beststring);
 
+  /* Deallocate population structures. */
   ga_extinction(popd);
   ga_extinction(popb);
   ga_extinction(popl);
+
+  /* Deallocate string buffer. */
+  s_free(beststring);
 
   exit(2);
   }

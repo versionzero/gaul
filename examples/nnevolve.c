@@ -717,13 +717,15 @@ void nnevolve_chromosome_from_bytes(population *pop, entity *joe, byte *bytes)
 /**********************************************************************
   nnevolve_chromosome_to_string()
   synopsis:     Chromosome conversion to human readable static string.
-  		FIXME: incorrect, but not needed in this application.
+  		This function is not really needed in this application.
   parameters:
   return:
-  last updated: 29 Jan 2002
+  last updated: 21 Aug 2002
  **********************************************************************/
 
-char *nnevolve_chromosome_to_string(population *pop, entity *joe)
+char *nnevolve_chromosome_to_string(
+                              const population *pop, const entity *joe,
+                              char *text, size_t *textlen)
   {
   static char   *text=NULL;     /* String for display. */
 

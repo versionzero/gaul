@@ -88,13 +88,15 @@ boolean struggle_score(population *pop, entity *entity)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	20/06/01
+  updated:	19 Aug 2002
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
   int		i;				/* Loop over populations. */
   population	*pop[GA_STRUGGLE_NUM_POPS];	/* Array of populations. */
+  char		*beststring=NULL;		/* Human readable form of best solution. */
+  size_t	beststrlen=0;			/* Length of beststring. */
 
   random_seed(42);
 
@@ -127,12 +129,13 @@ int main(int argc, char **argv)
     {
     printf( "The best solution on island %d with score %f was:\n",
             i, ga_get_entity_from_rank(pop[i],0)->fitness );
-    printf( "%s\n",
-            ga_chromosome_char_to_staticstring(pop[i],
-                               ga_get_entity_from_rank(pop[i],0)) );
+    beststring = ga_chromosome_char_to_string(pop[i], ga_get_entity_from_rank(pop[i],0), beststring, &beststrlen);
+    printf("%s\n", beststring);
 
     ga_extinction(pop[i]);
     }
+
+  s_free(beststring);
 
   exit(2);
   }
