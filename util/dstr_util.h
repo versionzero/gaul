@@ -88,6 +88,7 @@ dstring	*dstr_create(const int max_size);
 dstring	*dstr_allocate(void);
 dstring	*dstr_convertstr(char *str);
 /*static void dstr_realloc(dstring *ds, const int max_size)*/
+dstring	*dstr_fromstr(char *str);
 void	dstr_reallocate(dstring *ds, const int max_size);
 int	dstr_cmp(const dstring *dstr1, const dstring *dstr2);
 dstring	*dstr_clone(dstring *src);

@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Updated:      11 Apr 2002 SAA	Added dstr_fromstr() convenience function.
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Changes for clean compilation under AIX.
 		13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
 		20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
@@ -352,6 +353,37 @@ dstring *dstr_convertstr(char *str)
 
   ds->string[0] = '\0';
   ds->size = 0;
+
+  return( ds );
+  }
+
+
+/**********************************************************************
+  dstring *dstr_fromstr()
+  synopsis:	Creates a dstring from a standard null-terminated
+		char array.
+  parameters:	char *str
+  return:	dstring	*ds	The dynamic string.
+  last updated: 11 Apr 2002
+ **********************************************************************/
+
+dstring *dstr_fromstr(char *str)
+  {
+  dstring	*ds;
+
+#ifndef DSTR_NO_CHUNKS
+  THREAD_LOCK(dstr_global_lock);
+  if (!dstr_mem_chunk)
+    dstr_mem_chunk = mem_chunk_new(sizeof(dstring), 1024);
+
+  ds = mem_chunk_alloc(dstr_mem_chunk);
+  THREAD_UNLOCK(dstr_global_lock);
+#else
+  if ( !(ds = s_malloc(sizeof(dstring))) ) die("Unable to allocate memory.");
+#endif
+
+  ds->string = s_strdup(str);
+  ds->size = strlen(str);
 
   return( ds );
   }
