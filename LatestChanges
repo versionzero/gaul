@@ -7,7 +7,7 @@ Changes since release 0.1837:
 - Diagnostic functions display additional information.
 - ROADMAP file added to CVS archive.
 - Modifications for clean compilation under AIX (use gmake).
-- Applied some fixes which will be required for compilation on the Cygwin platform.
+- Applied some fixes to enable compilation on the Cygwin platform.
 - Error checking added in ga_get_entity_from_id().
 - Internal changes to entity and population structures.
 
