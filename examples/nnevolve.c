@@ -40,6 +40,7 @@
 
  **********************************************************************/
 
+#include "gaul.h"
 #include "nn_util.h"
 
 /*
@@ -65,14 +66,18 @@ int        num_score_prop=0;        /* Number of training target properties. */
 boolean nnevolve_evaluate(population *pop, entity *entity)
   {
   int		item, n;
-  network_t	nn=(network_t *)entity->chromosome[0];
+  network_t	*nn=(network_t *)entity->chromosome[0];
   float		error=0;	/* Summed network errors. */
 
   for (n=0; n<num_score_data; n++)
     {
     item = random_int(num_score_data);
-    NN_simulate(nn, score_data[item]);
-    error += network->error;
+/*
+printf("DEBUG: item %d = %d/%d\n", n, item, num_score_data);
+printf("DEBUG: %f %f\n", score_data[item][0], score_property[item][0]);
+*/
+    NN_simulate(nn, score_data[item], score_property[item]);
+    error += nn->error;
     }
 
   entity->fitness = error;
@@ -91,13 +96,13 @@ boolean nnevolve_evaluate(population *pop, entity *entity)
 
 void nnevolve_seed(population *pop, entity *adam)
   {
-  network_t	nn=(network_t *)entity->chromosome[0];
+  network_t	*nn=(network_t *)adam->chromosome[0];
 
   NN_randomize_weights(nn);
 
-  nn_set_momentum(nn, random_float_range(0.1,1.0));
-  nn_set_rate(nn, random_float_range(0.01,0.5));
-  nn_set_gain(nn, random_float_range(0.9,1.1));
+  NN_set_momentum(nn, random_float_range(0.1,1.0));
+  NN_set_rate(nn, random_float_range(0.01,0.5));
+  NN_set_gain(nn, random_float_range(0.9,1.1));
   NN_set_bias(nn, random_float_range(0.9,1.1));
 
   return;
@@ -115,7 +120,8 @@ void nnevolve_seed(population *pop, entity *adam)
 entity *nnevolve_adapt(population *pop, entity *child)
   {
   entity        *adult;         /* Adapted solution. */
-  network_t	nn=(network_t *)entity->chromosome[0];
+  network_t	*nn=(network_t *)child->chromosome[0];
+  int		n, item;
 
 /*
  * We must generate a new solution by copying the original solution.
@@ -131,10 +137,10 @@ entity *nnevolve_adapt(population *pop, entity *child)
   for (n=0; n<10; n++)
     {
     item = random_int(num_train_data);
-    NN_simulate(network, train_data[item], train_property[item]);
+    NN_simulate(nn, train_data[item], train_property[item]);
 
-    NN_backpropagate(network);
-    NN_adjust_weights(network);
+    NN_backpropagate(nn);
+    NN_adjust_weights(nn);
     }
 
   return adult;
@@ -144,6 +150,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
 /**********************************************************************
   nnevolve_crossover()
   synopsis:	Crossover.
+		FIXME: Only quickly hacked together.
   parameters:
   return:
   updated:	28 Jan 2002
@@ -151,9 +158,52 @@ entity *nnevolve_adapt(population *pop, entity *child)
 
 void nnevolve_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son)
   {
-  int		i, j;	/* Team members. */
+  int		l, i;	/* Layer, neuron, number. */
+  network_t     *nn1=(network_t *)son->chromosome[0], *nn2=(network_t *)daughter->chromosome[0];
+  float		temp;
 
-  dief("Function not implemented");
+  NN_copy((network_t *)mother->chromosome[0], nn1);
+  NN_copy((network_t *)father->chromosome[0], nn2);
+
+  if (random_boolean())
+    {
+    temp = nn1->momentum;
+    nn1->momentum = nn2->momentum;
+    nn2->momentum = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->rate;
+    nn1->rate = nn2->rate;
+    nn2->rate = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->gain;
+    nn1->gain = nn2->gain;
+    nn2->gain = temp;
+    }
+
+  if (random_boolean())
+    {
+    temp = nn1->bias;
+    nn1->bias = nn2->bias;
+    nn2->bias = temp;
+    }
+
+  for (l=1; l<nn1->num_layers; l++)
+    {
+    if (random_boolean())
+      {
+      for (i=1; i<=nn1->layer[l].neurons; i++)
+        {
+        memcpy(nn1->layer[l].weight[i], ((network_t *)father->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
+        memcpy(nn2->layer[l].weight[i], ((network_t *)mother->chromosome[0])->layer[l].weight[i], nn1->layer[l-1].neurons+1);
+        }
+      }
+    }
 
   return;
   }
@@ -169,8 +219,13 @@ void nnevolve_crossover(population *pop, entity *mother, entity *father, entity 
 
 void nnevolve_mutate(population *pop, entity *mother, entity *son)
   {
-  network_t	nn=(network_t *)entity->chromosome[0];
+  network_t	*nn=(network_t *)son->chromosome[0];
   int		l,i,j,event;
+
+/*
+ * Copy the network from the parent.
+ */
+  NN_copy((network_t *)mother->chromosome[0], nn);
 
 /*
  * Equal chance for tweaking momentum, gain, rate, bias, or
@@ -178,7 +233,7 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
  */
   event = random_int(5);
 
-  switch (event);
+  switch (event)
     {
     case 0:
       nn->momentum += random_float_range(-0.2,0.2);
@@ -198,9 +253,9 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
  * (a) only 1 random number should be needed.
  * (b) currently weights are not selected with equal probability.
  */
-      l = random_int(nn->num_layers);
-      i = random_int(nn->layer[l].neurons);
-      j = random_int(nn->layer[l-1].neurons);
+      l = random_int(nn->num_layers-1)+1;
+      i = random_int(nn->layer[l].neurons)+1;
+      j = random_int(nn->layer[l-1].neurons+1);
 
       nn->layer[l].weight[i][j] = random_float(1.0);
     }
@@ -245,7 +300,6 @@ boolean nnevolve_generation_hook(int generation, population *pop)
 
 void nnevolve_chromosome_constructor(population *pop, entity *embryo)
   {
-  int        i;              /* Loop variable over all chromosomes */
   int        num_layers=4;   /* Number of layers in NN. */
   int        neurons[4]={11,10,10,3};  /* Number of neurons in each layer. */
 
@@ -307,7 +361,7 @@ void nnevolve_chromosome_replicate( population *pop,
   if (!parent->chromosome[0] || !child->chromosome[0]) die("Entity has empty chromosomes.");
   if (chromosomeid != 0) die("Invalid chromosome index passed.");
 
-  nn_copy((network_t *)child->chromosome[chromosomeid],
+  NN_copy((network_t *)child->chromosome[chromosomeid],
            (network_t *)parent->chromosome[chromosomeid]);
 
   return;
@@ -320,13 +374,15 @@ void nnevolve_chromosome_replicate( population *pop,
   		FIXME: incorrect.
   parameters:
   return:       Number of bytes processed.
-  last updated: 29 Jan 2002
+  last updated: 04 Feb 2002
  **********************************************************************/
 
 unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
                                      byte **bytes, unsigned int *max_bytes)
   {
   int           num_bytes;      /* Actual size of genes. */
+
+  dief("Function not implemented");
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
@@ -335,11 +391,11 @@ unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
 
   if (!joe->chromosome || !joe->chromosome[0]) die("Entity has no chromosome.");
 
-  num_bytes = sizeof(nt);
+  num_bytes = sizeof(network_t);
 
   *bytes = (byte *)joe->chromosome[0];
 
-  return (unsigned int) sizeof(network_t);
+  return (unsigned int) num_bytes;
   }
 
 
@@ -354,6 +410,7 @@ unsigned int nnevolve_chromosome_to_bytes(population *pop, entity *joe,
 
 void nnevolve_chromosome_from_bytes(population *pop, entity *joe, byte *bytes)
   {
+  dief("Function not implemented");
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
@@ -392,39 +449,52 @@ char *nnevolve_chromosome_to_string(population *pop, entity *joe)
   nnevolve_setup_data()
   synopsis:	Some simple hard-coded data.
   		FIXME: Need to read more challenging data from disk.
+		FIXME: Also need to free this data eventually.
   parameters:	none
   return:	none
-  updated:	29 Jan 2002
+  updated:	04 Feb 2002
  **********************************************************************/
 
 void nnevolve_setup_data(void)
   {
+  int		i, j;
 #include "wine.data"
 
-  for (i=0; i<179; i++)
+  train_property = s_malloc(sizeof(float *)*178);
+  train_data = s_malloc(sizeof(float *)*178);
+  score_property = s_malloc(sizeof(float *)*178);
+  score_data = s_malloc(sizeof(float *)*178);
+
+  for (i=0; i<178; i++)
     {
-    if (random_prob(0.1))
+    if (random_boolean_prob(0.1))
       {
-      for (i=0; i<4; i++)
+      score_property[num_score_prop] = s_malloc(sizeof(float)*3);
+      score_data[num_score_data] = s_malloc(sizeof(float)*13);
+
+      for (j=0; j<4; j++)
         {
-        score_property[i][j] = data[i][j];
+        score_property[num_score_prop][j] = data[num_score_prop][j];
         }
-      for (i=4; i<16; i++)
+      for (j=4; j<16; j++)
         {
-        score_data[i] = data[i][j];
+        score_data[num_score_data][j-4] = data[num_score_data][j];
         }
       num_score_data++;
       num_score_prop++;
       }
     else
       {
-      for (i=0; i<4; i++)
+      train_property[num_train_prop] = s_malloc(sizeof(float)*3);
+      train_data[num_train_data] = s_malloc(sizeof(float)*13);
+
+      for (j=0; j<4; j++)
         {
-        train_property[i][j] = data[i][j];
+        train_property[num_train_prop][j] = data[num_train_prop][j];
         }
-      for (i=4; i<16; i++)
+      for (j=4; j<16; j++)
         {
-        train_data[i] = data[i][j];
+        train_data[num_train_data][j-4] = data[num_train_data][j];
         }
       num_train_data++;
       num_train_prop++;
@@ -432,7 +502,6 @@ void nnevolve_setup_data(void)
     }
 
   printf("Data has been partitioned into %d training and %d scoring items.\n", num_score_data, num_train_data);
-
 
   return;
   }
@@ -448,7 +517,6 @@ void nnevolve_setup_data(void)
 
 int main(int argc, char **argv)
   {
-  int		i;		/* Runs. */
   population	*pop=NULL;	/* Population of solutions. */
 
 /*
@@ -471,12 +539,12 @@ int main(int argc, char **argv)
  * Define chromosome handling functions for the custom
  * NN chromosome type.
  */
-  pop->chromosome_constructor = nnevolve_constructor;
-  pop->chromosome_destructor = nnevolve_destructor;
-  pop->chromosome_replicate = nnevolve_replicate;
-  pop->chromosome_to_bytes = nnevolve_to_bytes;
-  pop->chromosome_from_bytes = nnevolve_from_bytes;
-  pop->chromosome_to_string = nnevolve_to_string;
+  pop->chromosome_constructor = nnevolve_chromosome_constructor;
+  pop->chromosome_destructor = nnevolve_chromosome_destructor;
+  pop->chromosome_replicate = nnevolve_chromosome_replicate;
+  pop->chromosome_to_bytes = nnevolve_chromosome_to_bytes;
+  pop->chromosome_from_bytes = nnevolve_chromosome_from_bytes;
+  pop->chromosome_to_string = nnevolve_chromosome_to_string;
 
 /*
  * Define all of the needed callback functions.
@@ -524,7 +592,7 @@ int main(int argc, char **argv)
 /*
  * Write the best solution to disk.
  */
-  NN-write((network_t *)ga_get_entity_from_rank(pop,0), "best.nn");
+  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "best.nn");
 
   ga_extinction(pop);
 

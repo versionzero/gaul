@@ -149,6 +149,10 @@ void NN_train_systematic(network_t *network, const int num_epochs);
 void NN_test(network_t *network, float *trainerror, float *testerror);
 void NN_evaluate(network_t *network);
 void NN_predict(network_t *network);
+void NN_define_train_data(int ndata, float **data, float **prop);
+void NN_define_test_data(int ndata, float **data, float **prop);
+void NN_define_eval_data(int ndata, float **data, float **prop);
+void NN_define_predict_data(int ndata, float **data);
 int read_fingerprint_binary_header(FILE *fp);
 void read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int dimensions);
 #ifdef NN_STANDALONE

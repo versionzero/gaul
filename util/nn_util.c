@@ -40,7 +40,7 @@
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	04 Feb 2002 SAA	All global variables are now declared static.
+  Last Updated:	04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
 		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
   		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
 		24 Dec 2002 SAA Removed stupid error calculation from NN_predict().
@@ -1056,6 +1056,88 @@ void NN_predict(network_t *network)
 
 
 /**********************************************************************
+  NN_define_train_data()
+  synopsis:     Define training data.
+  parameters:
+  return:
+  last updated: 04 Feb 2002
+ **********************************************************************/
+
+void NN_define_train_data(int ndata, float **data, float **prop)
+  {
+  train_data=data;           /* Input data for training. */
+  num_train_data=ndata;      /* Number of training target items. */
+  max_train_data=ndata;      /* Maximum number of training target items. */
+  train_property=prop;       /* Training target property. */
+  num_train_prop=ndata;      /* Number of training target properties. */
+  train_labels=NULL;         /* Labels for training data. */
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_define_test_data()
+  synopsis:     Define testing data.
+  parameters:
+  return:
+  last updated: 04 Feb 2002
+ **********************************************************************/
+
+void NN_define_test_data(int ndata, float **data, float **prop)
+  {
+  test_data=data;           /* Input data for testing. */
+  num_test_data=ndata;      /* Number of testing target items. */
+  max_test_data=ndata;      /* Maximum number of testing target items. */
+  test_property=prop;       /* Testing target property. */
+  num_test_prop=ndata;      /* Number of testing target properties. */
+  test_labels=NULL;         /* Labels for testing data. */
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_define_eval_data()
+  synopsis:     Define evaluation data.
+  parameters:
+  return:
+  last updated: 04 Feb 2002
+ **********************************************************************/
+
+void NN_define_eval_data(int ndata, float **data, float **prop)
+  {
+  eval_data=data;           /* Input data for evaluation. */
+  num_eval_data=ndata;      /* Number of evaluation target items. */
+  max_eval_data=ndata;      /* Maximum number of evaluation target items. */
+  eval_property=prop;       /* Evaluation target property. */
+  num_eval_prop=ndata;      /* Number of evaluation target properties. */
+  eval_labels=NULL;         /* Labels for evaluation data. */
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_define_predict_data()
+  synopsis:     Define prediction data.
+  parameters:
+  return:
+  last updated: 04 Feb 2002
+ **********************************************************************/
+
+void NN_define_predict_data(int ndata, float **data)
+  {
+  predict_data=data;           /* Input data for prediction. */
+  num_predict_data=ndata;      /* Number of prediction target items. */
+  max_predict_data=ndata;      /* Maximum number of prediction target items. */
+  predict_labels=NULL;         /* Labels for prediction data. */
+
+  return;
+  }
+
+
+/**********************************************************************
   read_fingerprint_binary_header()
   synopsis:     Read binary fingerprint info from given filehandle.
                 Designed for future expansion rather than current
@@ -1126,6 +1208,7 @@ int read_data(char *fname, float ***data, char ***labels, int *num_data, int *ma
   }
 
 
+#if 0
 /**********************************************************************
   split_data()
   synopsis:     Split a single dataset into several datasets.
@@ -1222,6 +1305,7 @@ void read_comma_delimited_data(char *fname, float ***data, float ***prop, char *
 
   return;
   }
+#endif
 
 
 /**********************************************************************

@@ -134,7 +134,7 @@ struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
-nnevolve_SOURCES = diagnostics.c
+nnevolve_SOURCES = nnevolve.c
 
 lib_LIBRARIES = libbtree.a
 
@@ -186,7 +186,7 @@ struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lst
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm @MPIFLAGS@
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm 
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lnn_util -lrandom -lstr_util -lm 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -230,7 +230,7 @@ struggle5_mp_OBJECTS =  struggle5_mp.o
 struggle5_mp_LDFLAGS = 
 struggle_ss_OBJECTS =  struggle_ss.o
 struggle_ss_LDFLAGS = 
-nnevolve_OBJECTS =  diagnostics.o
+nnevolve_OBJECTS =  nnevolve.o
 nnevolve_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -247,7 +247,7 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/btree.P .deps/diagnostics.P .deps/goldberg1.P \
-.deps/goldberg2.P .deps/pingpong.P .deps/royalroad.P \
+.deps/goldberg2.P .deps/nnevolve.P .deps/pingpong.P .deps/royalroad.P \
 .deps/royalroad_ss.P .deps/struggle.P .deps/struggle2.P \
 .deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
 .deps/struggle5_mp.P .deps/struggle_ss.P .deps/wildfire.P
