@@ -32,7 +32,7 @@
 <p>For the purpose of this tutorial, it is assumed that the reader has a reasonable understanding of the C programming language.  When alternative language wrappers for the GAUL library are made available, versions of this tutorial written to also cover those.
 <p>This is a guide to producing a really simple GA-based program.  This example doesn't make use of any of GAUL's more advanced features, but is intended to demonstrate the ease with which a minimal application may be created.
 The aim of this example is to generate the final sentence from Chapter 3 of Darwin's "The Origin of Species", entitled "Struggle for Existence".  Taking the &quot;Monkey's with typewriters&quot; style approach would basically never solve this problem.</p>
-<p>For reference, the slightly extended source code for this example is tests/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/tests/struggle.c?content-type=text/plain&amp;only_with_tag=MAIN">struggle.c</a>.  The only difference between these codes is that the distributed example runs the GA procedure fifty times instead of just once.</p>
+<p>For reference, the slightly extended source code for this example is examples/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/examples/struggle.c?content-type=text/plain&amp;only_with_tag=MAIN">struggle.c</a>.  The only difference between these codes is that the distributed example runs the GA procedure fifty times instead of just once.</p>
 <p>The public header file for the GAUL library is "gaul.h" and this must be included by any code that will use GAUL:</p>
 <pre>
 #include &lt;gaul.h&gt;
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
        1000                        /* const int         max_generations */
               );
 </pre>
-<p>The function &quot;ga_evolution()&quot; performs the standard generation-based GA.  An alternative is &quot;ga_evolution_steady_state()&quot; which performs the standard steady-state GA.  This example is modified for use with this steady-state GA in tests/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/tests/struggle_ss.c?content-type=text/plain&amp;only_with_tag=MAIN">struggle_ss.c</a>.</p>
+<p>The function &quot;ga_evolution()&quot; performs the standard generation-based GA.  An alternative is &quot;ga_evolution_steady_state()&quot; which performs the standard steady-state GA.  This example is modified for use with this steady-state GA in examples/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/examples/struggle_ss.c?content-type=text/plain&amp;only_with_tag=MAIN">struggle_ss.c</a>.</p>
 <p>And finally, we deallocate the population structure, and are finished:<p>
 <pre>
   printf( "The best final solution is:\n", i);
