@@ -69,15 +69,10 @@ include_HEADERS = \
      mpi_util.h \
      nn_util.h \
      random_util.h \
-     str_hash.h \
      str_match.h \
-     str_perl.h \
      str_util.h \
      table_util.h \
      memory_chunks.c \
-     str_atof.c \
-     str_hash.c \
-     str_pcre_tab.c \
      timer_util.h
 
 libmethods_a_LIBFLAGS = -lm @MPIFLAGS@
