@@ -81,6 +81,9 @@
 /* Define if you have the `bcopy' function. */
 #undef HAVE_BCOPY
 
+/* Define if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
 /* Define if you don't have `vprintf' but do have `_doprnt.' */
 #undef HAVE_DOPRNT
 

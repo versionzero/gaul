@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - MT safe, MP aware, general logging functions.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for my general logging functions.
 
-  Updated:	02/02/01 SAA	Converted from helga_log.  Use mpi_util stuff instead of helga_mpi stuff.
+  Updated:	29 Jul 2002 SAA	Avoid a warning from the Intel C/C++ compiler.
+		02/02/01 SAA	Converted from helga_log.  Use mpi_util stuff instead of helga_mpi stuff.
 		19/09/00 SAA	Put a 'do{}while(0)' loop around contents of the helga_log() macro to avoid some tricky problems.
 		28/05/00 SAA	'enum helga_log_type' used properly now.  Renaming stuff so that helga_log() is now a macro.
 		07/05/00 SAA	First code.
@@ -78,11 +79,17 @@ typedef void	(*log_func)(const enum log_level_type level,
 void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
 void	log_set_level(enum log_level_type level);
 void	log_set_file(const char *fname);
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+/*#if defined(__GNUC__) || defined(__INTEL_COMPILER)*/
+#if defined(__GNUC__)
 extern	inline enum log_level_type	log_get_level(void);
 #else
+/*
+ * The intel compiler will inlinen this anyway, depending upon IPO options.
+ * Other compiler probably won't.
+ */
 extern	enum log_level_type	log_get_level(void);
 #endif
+
 /*
  * This is the actual logging function, but isn't intended to be used
  * directly.
