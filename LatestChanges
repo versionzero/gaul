@@ -19,6 +19,8 @@ Changes since release 0.1836:
 - Added ga_entity_evaluate() convenience function.
 - Removed some surplus files from the CVS archive and distribution.
 - Added textual summary of configure process at end of "./configure" output.
+- Removed unneeded header files from installation.
+- Fixed gaul.spec file so that RPM packages actually work.
 - Many millions of minor bugfixes.
 - Many millions of major bugfixes.
 - Many millions of new bugs.

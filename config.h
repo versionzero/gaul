@@ -35,10 +35,10 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1836"
-#define BUILD_DATE_STRING "07/02/02"
+#define VERSION_STRING "0.1837"
+#define BUILD_DATE_STRING "11/02/02"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1836
+#define MINOR_VERSION 1837
 #define PATCH_VERSION 1
 #define UNAME_STRING "Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"
 

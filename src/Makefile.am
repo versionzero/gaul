@@ -74,7 +74,7 @@ include_HEADERS = \
     gaul.h
 
 libgaul_la_DEPENDENCIES = \
-	../util/libmethods.a \
+	../util/libstuff.a \
 	../util/libmpi_util.a \
 	../util/librandom.a \
 	../util/libstr_util.a

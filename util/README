@@ -28,12 +28,9 @@ mpi_util.{c|h}          Portable and generalised message passing wrappers.
 random_util.{c|h}       Portable and comprehensive pseudo-random number
                         functions.
 
-str_atof.{c|h}          String handling and manipulation functions.
-str_hash.{c|h}
+str_util.{c|h}		String handling and manipulation functions.
 str_match.{c|h}
-str_pcre_tab.{c|h}
-str_perl.{c|h}
-str_util.{c|h}
 
 table.{c|h}             Indexed table implementation.
 
+Stewart Adcock 11 Feb 2002

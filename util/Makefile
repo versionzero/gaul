@@ -98,26 +98,26 @@ DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
-LT_RELEASE = 0.1836
+LT_RELEASE = 0.1837
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
-MINOR_VERSION = 1836
+MINOR_VERSION = 1837
 MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1836
+VERSION = 0.1837
 
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libmethods.a \
+lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
 
-libmethods_a_SOURCES = \
+libstuff_a_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	log_util.c \
@@ -160,19 +160,14 @@ include_HEADERS = \
      mpi_util.h \
      nn_util.h \
      random_util.h \
-     str_hash.h \
      str_match.h \
-     str_perl.h \
      str_util.h \
      table_util.h \
      memory_chunks.c \
-     str_atof.c \
-     str_hash.c \
-     str_pcre_tab.c \
      timer_util.h
 
 
-libmethods_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libstuff_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
 libnn_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 
@@ -193,9 +188,9 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
 LIBS =  -lslang -lslang
-libmethods_a_LIBADD = 
-libmethods_a_OBJECTS =  avltree.o compatibility.o log_util.o \
-linkedlist.o memory_util.o table_util.o
+libstuff_a_LIBADD = 
+libstuff_a_OBJECTS =  avltree.o compatibility.o log_util.o linkedlist.o \
+memory_util.o table_util.o
 libmpi_util_a_LIBADD = 
 libmpi_util_a_OBJECTS =  mpi_util.o
 libnn_util_a_LIBADD = 
@@ -225,8 +220,8 @@ DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/linkedlist.P .deps/log_util.P .deps/memory_util.P \
 .deps/mpi_util.P .deps/nn_util.P .deps/random_util.P .deps/str_match.P \
 .deps/str_util.P .deps/table_util.P .deps/timer_util.P
-SOURCES = $(libmethods_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES)
-OBJECTS = $(libmethods_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS)
+SOURCES = $(libstuff_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES)
+OBJECTS = $(libstuff_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -303,10 +298,10 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-libmethods.a: $(libmethods_a_OBJECTS) $(libmethods_a_DEPENDENCIES)
-	-rm -f libmethods.a
-	$(AR) cru libmethods.a $(libmethods_a_OBJECTS) $(libmethods_a_LIBADD)
-	$(RANLIB) libmethods.a
+libstuff.a: $(libstuff_a_OBJECTS) $(libstuff_a_DEPENDENCIES)
+	-rm -f libstuff.a
+	$(AR) cru libstuff.a $(libstuff_a_OBJECTS) $(libstuff_a_LIBADD)
+	$(RANLIB) libstuff.a
 
 libmpi_util.a: $(libmpi_util_a_OBJECTS) $(libmpi_util_a_DEPENDENCIES)
 	-rm -f libmpi_util.a

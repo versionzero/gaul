@@ -52,14 +52,14 @@
  * Global data storage.
  */
 float      **train_data=NULL;       /* Input data for training. */
-int        num_train_data=0;        /* Number of training items. */
 float      **train_property=NULL;   /* Training properties. */
+int        num_train_data=0;        /* Number of training items. */
 
 /*
  * Compilation constants.
  */
 #define NNEVOLVE_NUM_SCORE	100
-#define NNEVOLVE_NUM_TRAIN	500
+#define NNEVOLVE_NUM_TRAIN	200
 
 
 /**********************************************************************
@@ -115,7 +115,7 @@ boolean nnevolve_display_evaluation(population *pop, entity *entity)
         wrong_count++;
       }
 
-    printf("%d: %f %f %f ... %f %f %f --- %d\n", n, property[0], property[1], property[2], train_property[n][0], train_property[n][1], train_property[n][2], wrong_count);
+    printf("%d: %f %f %f ... %f %f %f --- %d ( %f )\n", n, property[0], property[1], property[2], train_property[n][0], train_property[n][1], train_property[n][2], wrong_count, nn->error);
     }
 
   printf("Total network error is %f with %d incorrect predictions.  Score = %f\n",
@@ -262,7 +262,7 @@ void nnevolve_seed(population *pop, entity *adam)
 
   NN_randomize_weights_01(nn);
 
-  NN_set_momentum(nn, random_float_range(0.45,0.85));
+  NN_set_momentum(nn, random_float_range(0.40,0.90));
   NN_set_rate(nn, random_float_range(0.05,0.35));
   NN_set_gain(nn, random_float_range(0.95,1.05));
   NN_set_bias(nn, random_float_range(0.95,1.05));
@@ -513,22 +513,22 @@ void nnevolve_crossover_in(population *pop, entity *mother, entity *father, enti
   
   for (i=1; i<=nn1->layer[1].neurons; i++)
     {
-    nn1->layer[1].weight[h][i] = ((network_t *)father->chromosome[0])->layer[1].weight[h][i];
-    nn2->layer[1].weight[h][i] = ((network_t *)mother->chromosome[0])->layer[1].weight[h][i];
+    nn1->layer[1].weight[i][h] = ((network_t *)father->chromosome[0])->layer[1].weight[i][h];
+    nn2->layer[1].weight[i][h] = ((network_t *)mother->chromosome[0])->layer[1].weight[i][h];
 
     if (random_boolean_prob(0.2))
       {
       for (j=1; j<=nn1->layer[2].neurons; j++)
 	{
-        nn1->layer[2].weight[i][j] = ((network_t *)father->chromosome[0])->layer[2].weight[i][j];
-        nn2->layer[2].weight[i][j] = ((network_t *)mother->chromosome[0])->layer[2].weight[i][j];
+        nn1->layer[2].weight[j][i] = ((network_t *)father->chromosome[0])->layer[2].weight[j][i];
+        nn2->layer[2].weight[j][i] = ((network_t *)mother->chromosome[0])->layer[2].weight[j][i];
 
         if (random_boolean_prob(0.2))
           {
           for (k=1; k<=nn1->layer[3].neurons; k++)
             {
-            nn1->layer[3].weight[j][k] = ((network_t *)father->chromosome[0])->layer[3].weight[j][k];
-            nn2->layer[3].weight[j][k] = ((network_t *)mother->chromosome[0])->layer[3].weight[j][k];
+            nn1->layer[3].weight[k][j] = ((network_t *)father->chromosome[0])->layer[3].weight[k][j];
+            nn2->layer[3].weight[k][j] = ((network_t *)mother->chromosome[0])->layer[3].weight[k][j];
 	    }
 	  }
         }
@@ -635,7 +635,7 @@ boolean nnevolve_generation_hook(int generation, population *pop)
 void nnevolve_chromosome_constructor(population *pop, entity *embryo)
   {
   int        num_layers=4;   /* Number of layers in NN. */
-  int        neurons[4]={11,10,10,3};  /* Number of neurons in each layer. */
+  int        neurons[4]={11,20,20,3};  /* Number of neurons in each layer. */
 
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -861,16 +861,16 @@ int main(int argc, char **argv)
  * Initialize random number generator.
  */
   random_init();
-  random_seed(1001001);
+  random_seed(2002002);
 
 /*
  * Allocate a new popuation structure.
- * max. individuals        = 300
- * stable num. individuals = 40
+ * max. individuals        = 200
+ * stable num. individuals = 30
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 200, 40, 1, 0 );
+  pop = ga_population_new( 200, 30, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -906,8 +906,10 @@ int main(int argc, char **argv)
   pop->select_one = ga_select_one_bestof2;
   pop->select_two = ga_select_two_bestof2;
   pop->mutate = nnevolve_mutate;
+/*
   pop->crossover = nnevolve_crossover_layerwise;
   pop->crossover = nnevolve_crossover_in;
+*/
   pop->crossover = nnevolve_crossover_out;
   pop->replace = NULL;
 
@@ -918,11 +920,11 @@ int main(int argc, char **argv)
 
 /*
  * Set the GA parameters:
- * Crossover ratio  = 0.45
+ * Crossover ratio  = 0.40
  * Mutation ratio   = 0.01
  * Migration ration = 0.0
  */
-  ga_population_set_parameters( pop, 0.45, 0.01, 0.0 );
+  ga_population_set_parameters( pop, 0.40, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -930,13 +932,13 @@ int main(int argc, char **argv)
   nnevolve_setup_data();
 
 /*
- * Perform Lamarckian evolution for 250 generations.
+ * Perform Lamarckian evolution for 200 generations.
  */
 /*
-  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 250 );
+  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 200 );
 */
   timer_start(&lga_timer);
-  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 250 );
+  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 500 );
   timer_check(&lga_timer);
 
   printf("The fitness of the final solution found was: %f\n",

@@ -97,18 +97,18 @@ DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
-LT_RELEASE = 0.1836
+LT_RELEASE = 0.1837
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
-MINOR_VERSION = 1836
+MINOR_VERSION = 1837
 MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1836
+VERSION = 0.1837
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -144,7 +144,7 @@ include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
 DEPENDENCIES = \
 	../util/librandom.a \
-	../util/libmethods.a \
+	../util/libstuff.a \
 	../util/libmpi_util.a \
 	../util/libnn_util.a \
 	../util/libstr_util.a \
@@ -154,7 +154,8 @@ DEPENDENCIES = \
 
 EXTRA_DIST = \
 	chromostubs.c \
-	chromostubs.h
+	chromostubs.h \
+	wine.data
 
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}

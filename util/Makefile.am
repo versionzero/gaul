@@ -29,10 +29,10 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libmethods.a \
+lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
-libmethods_a_SOURCES = \
+libstuff_a_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	log_util.c \
@@ -75,7 +75,7 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-libmethods_a_LIBFLAGS = -lm @MPIFLAGS@
+libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
 
 libnn_util_a_LIBFLAGS = @MPIFLAGS@
 

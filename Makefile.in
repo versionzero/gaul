@@ -114,6 +114,9 @@ VERSION = @VERSION@
 AUTOMAKE_OPTIONS = 1.4
 
 SUBDIRS = util src tests docs examples .
+
+# Configuration process should create gaul.spec from a gaul.spec.in file.
+EXTRA_DIST = gaul.spec
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h

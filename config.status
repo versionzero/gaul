@@ -80,11 +80,11 @@ s%@build_cpu@%i686%g
 s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@MAJOR_VERSION@%0%g
-s%@MINOR_VERSION@%1836%g
+s%@MINOR_VERSION@%1837%g
 s%@PATCH_VERSION@%1%g
-s%@VERSION@%0.1836%g
+s%@VERSION@%0.1837%g
 s%@MPIFLAGS@%-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil%g
-s%@LT_RELEASE@%0.1836%g
+s%@LT_RELEASE@%0.1837%g
 s%@LT_CURRENT@%0%g
 s%@LT_REVISION@%1%g
 s%@INSTALL_PROGRAM@%${INSTALL}%g
@@ -243,9 +243,9 @@ for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
 ${ac_dA}MAJOR_VERSION${ac_dB}MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_uA}MAJOR_VERSION${ac_uB}MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_eA}MAJOR_VERSION${ac_eB}MAJOR_VERSION${ac_eC}0${ac_eD}
-${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1836${ac_dD}
-${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1836${ac_uD}
-${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1836${ac_eD}
+${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1837${ac_dD}
+${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1837${ac_uD}
+${ac_eA}MINOR_VERSION${ac_eB}MINOR_VERSION${ac_eC}1837${ac_eD}
 ${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}1${ac_dD}
 ${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}1${ac_uD}
 ${ac_eA}PATCH_VERSION${ac_eB}PATCH_VERSION${ac_eC}1${ac_eD}
@@ -261,12 +261,12 @@ CEOF
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
 ${ac_eA}AVLTREE_KEY_TYPE${ac_eB}AVLTREE_KEY_TYPE${ac_eC}void *${ac_eD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"07/02/02"${ac_dD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"07/02/02"${ac_uD}
-${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"07/02/02"${ac_eD}
-${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1836"${ac_dD}
-${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1836"${ac_uD}
-${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1836"${ac_eD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"11/02/02"${ac_dD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"11/02/02"${ac_uD}
+${ac_eA}BUILD_DATE_STRING${ac_eB}BUILD_DATE_STRING${ac_eC}"11/02/02"${ac_eD}
+${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1837"${ac_dD}
+${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1837"${ac_uD}
+${ac_eA}VERSION_STRING${ac_eB}VERSION_STRING${ac_eC}"0.1837"${ac_eD}
 ${ac_dA}MPI_NUM_THREADS_ENVVAR_STRING${ac_dB}MPI_NUM_THREADS_ENVVAR_STRING${ac_dC}"GA_NUM_THREADS"${ac_dD}
 ${ac_uA}MPI_NUM_THREADS_ENVVAR_STRING${ac_uB}MPI_NUM_THREADS_ENVVAR_STRING${ac_uC}"GA_NUM_THREADS"${ac_uD}
 ${ac_eA}MPI_NUM_THREADS_ENVVAR_STRING${ac_eB}MPI_NUM_THREADS_ENVVAR_STRING${ac_eC}"GA_NUM_THREADS"${ac_eD}

@@ -13,7 +13,7 @@ ac_default_prefix=/usr/local
 # Any additions from configure.in:
 
 MAJOR_VERSION=0
-MINOR_VERSION=1836
+MINOR_VERSION=1837
 PATCH_VERSION=1
 #VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 VERSION=$MAJOR_VERSION.$MINOR_VERSION
@@ -3333,4 +3333,18 @@ chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
+
+echo \
+"************************************************************************
+  GAUL has been configured successfully.  In summary:
+
+  Version:                  ${VERSION}
+  Source code location:     ${srcdir}
+  Host System Type:         ${host}
+  Compiler:	            ${CC}
+  Compiler flags:           ${CFLAGS}
+  Extra include flags:      ${INCLUDE}
+  Install path:             ${prefix}
+
+************************************************************************"
 
