@@ -48,49 +48,9 @@
 #include "gaul/ga_qsort.h"
 
 /*
- * Nice and useful macro
+ * Nice and useful macro for swapping pointers to entities.
  */
 #define swap_e(x, y)	{entity *t; t = x; x = y; y = t; }
-
-#ifdef GA_QSORT_TIME
-#include <time.h>
-
-typedef struct
-  {
-  clock_t	begin_clock, save_clock;
-  time_t	begin_time, save_time;
-  } time_record;
-
-static time_record	tim;
-
-void start_timer(void)
-  {
-  tim.begin_clock = tim.save_clock = clock();
-  tim.begin_time = tim.save_time = time(NULL);
-
-  plog(LOG_NORMAL, "Timer started: %d", clock());
-  }
-
-
-double check_timer(void)
-  {
-  double	user_time, real_time;
-
-  plog(LOG_NORMAL, "Timer checked: %d", clock());
-
-  user_time = (clock() - tim.save_clock) / (double) CLOCKS_PER_SEC;
-  real_time = difftime(time(NULL), tim.save_time);
-  tim.save_clock = clock();
-  tim.save_time = time(NULL);
-
-  plog(LOG_NORMAL, "User time: %f seconds.", user_time);
-  plog(LOG_NORMAL, "Real time: %f seconds.", real_time);
-
-  return user_time;
-  }
-
-#endif
-
 
 /**********************************************************************
   quicksort_population()
@@ -216,7 +176,7 @@ void quicksort_population(population *pop)
   plog(LOG_VERBOSE, "Sorting population with %d members.", pop->size);
 
 #ifdef GA_QSORT_TIME
-  start_timer();
+  timer_start();
 #endif
 
 #if GA_QSORT_DEBUG>2
@@ -287,7 +247,7 @@ void quicksort_population(population *pop)
 #endif
 
 #ifdef GA_QSORT_TIME
-  check_timer();
+  timer_check();
 #endif
 
   return;
@@ -307,7 +267,7 @@ void sort_population(population *pop)
   plog(LOG_VERBOSE, "Sorting population with %d members.", pop->size);
 
 #ifdef GA_QSORT_TIME
-  start_timer();
+  timer_start();
 #endif
 
 /*
@@ -358,7 +318,7 @@ void sort_population(population *pop)
 #endif
 
 #ifdef GA_QSORT_TIME
-  check_timer();
+  timer_check();
 #endif
 
   return;

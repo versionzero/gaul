@@ -1,6 +1,7 @@
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.
 - Reorganisation of installed header files to avoid config.h clashes, along with configuration improvements.
+- Header files now installed in a subdirectory of the include dir.
 - Improved timer code.
 - Portability improvements through addition of feature checks in the configure script to replace in code checks.
 - Fixed bug in ga_crossover_bitstring_doublepoints().  It was only performing single point crossover. -- bug reported by Henk van Lingen.
@@ -13,6 +14,7 @@ Changes since release 0.1844:
 - All parameters are now copied in ga_population_clone() and ga_population_clone_empty().
 - Removed some minor memory leaks from the stochastic optimisation methods code.
 - Added population accessor functions; ga_population_get_crossover(), ga_population_get_mutation(), ga_population_get_migration(), ga_population_get_elitism(), ga_population_get_scheme().
+- Custom timer code deleted from sorting routines.
 
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.
