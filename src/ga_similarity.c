@@ -562,7 +562,7 @@ double ga_similarity_double_tanimoto(const population *pop,
   parameters:	const population *pop	Population.
 		const entity *alpha	entity containing alpha chromosome.
 		const entity *beta	entity containing beta chromosome.
-  return:	Returns Tanimoto similarity coefficient.
+  return:	Returns Dice similarity coefficient.
 		Range: -1 to +1
   last updated:	23 May 2002
  **********************************************************************/
@@ -601,7 +601,7 @@ double ga_similarity_double_dice(const population *pop,
   parameters:	const population *pop	Population.
 		const entity *alpha	entity containing alpha chromosome.
 		const entity *beta	entity containing beta chromosome.
-  return:	Returns Tanimoto similarity coefficient.
+  return:	Returns Cosine similarity coefficient.
 		Range: -1 to +1
   last updated:	23 May 2002
  **********************************************************************/
