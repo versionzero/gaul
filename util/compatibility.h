@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	09 Oct 2002 SAA	A #if should have been a #ifdef.
+  Updated:	20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
+		09 Oct 2002 SAA	A #if should have been a #ifdef.
   		16 Aug 2002 SAA	Don't include config.h here (It is done in SAA_header.h).
   		10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
 		13 Mar 2002 SAA	Use index() for strchr(), when available.
@@ -125,7 +126,7 @@ int strcmp(const char *str1, const char *str2);
 #endif
 
 #ifndef HAVE_STRNCMP
-int strncmp(const char *str1, const char *str2, const int len);
+int strncmp(const char *str1, const char *str2, size_t len);
 #endif
 
 #ifndef HAVE_STRCPY
@@ -133,11 +134,11 @@ char *strcpy(char *str1, const char *str2);
 #endif
 
 #ifndef HAVE_STRNCPY
-char *strncpy(char *str1, const char *str2, const int len);
+char *strncpy(char *str1, const char *str2, size_t len);
 #endif
 
 #ifndef HAVE_STRTOK
-char *strtok(char *str, char *delim);
+char *strtok(char *str, const char *delim);
 #endif
 
 #ifndef HAVE_STRPBRK

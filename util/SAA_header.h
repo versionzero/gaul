@@ -213,6 +213,11 @@ typedef short _Bool;
 # define bool _Bool
 #endif
 
+#if !defined(_Bool)
+#warning Broken stdbool.h?
+typedef short _Bool;
+#endif
+
 #define boolean _Bool
 
 #if !defined(TRUE)
@@ -223,7 +228,7 @@ typedef short _Bool;
 /*
  * Additional types.
  */
-#if !defined(SUN_FORTE_C) || SUN_FORTE_C==0
+#if !defined(SUN_FORTE_C) || SUN_FORTE_C==FALSE
 typedef void* vpointer;
 #else
 #define vpointer void*

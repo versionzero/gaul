@@ -515,6 +515,7 @@ AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
                memrev memchr memmem memcmp \
                min max \
                index rindex \
+               setlocale \
                snprintf \
                strchr strrchr strcat \
                strcmp strcpy strpbrk strsep \
@@ -543,8 +544,10 @@ else
   AC_CHECK_FUNC( sincos )
 fi
 
-if test "x$target" = "xsparc-sun-solaris2.7"; then
-  if test "x$CC" = "xcc"; then
+# Fix defines for case that the Sun Forte C compiler is being used on Solaris.
+if test "x$CC" = "xcc"; then
+# Compiler is possibly Sun's Forte C, so check platform.
+  if test "x$target" = "xsparc-sun-solaris2.7"; then
     AC_DEFINE( SUN_FORTE_C, 2.7, [Define if using Sun's Forte C Compiler] )
     AC_DEFINE(HAVE_BCOPY,1,[Whether bcopy() is available])      # Big problems!!!
     AC_DEFINE(HAVE_BCMP,1,[Whether bcmp() is available])
@@ -562,6 +565,10 @@ if test "x$target" = "xsparc-sun-solaris2.7"; then
     AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
     AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
   fi
+else
+# Don't recognise compiler as possibly being Sun's Forte C.
+  AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
+  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
 fi
 
 case "$target" in

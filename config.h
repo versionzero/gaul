@@ -38,16 +38,16 @@
 #define HAVE_BASENAME 1
 
 /* Define to 1 if you have the `bcmp' function. */
-#define HAVE_BCMP 1
+/* #undef HAVE_BCMP */
 
 /* Define to 1 if you have the `bcopy' function. */
-#define HAVE_BCOPY 1
+/* #undef HAVE_BCOPY */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-/* #undef HAVE_DOPRNT */
+#define HAVE_DOPRNT 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
@@ -89,7 +89,7 @@
 #define HAVE_MEMCPY 1
 
 /* Define to 1 if you have the `memmem' function. */
-#define HAVE_MEMMEM 1
+/* #undef HAVE_MEMMEM */
 
 /* Define to 1 if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
@@ -104,7 +104,7 @@
 /* #undef HAVE_MEMSCAN */
 
 /* Define to 1 if you have the `memset' function. */
-#define HAVE_MEMSET 1
+/* #undef HAVE_MEMSET */
 
 /* Define to 1 if you have the `min' function. */
 /* #undef HAVE_MIN */
@@ -116,7 +116,7 @@
 #define HAVE_NETINET_IN_H 1
 
 /* Define to 1 if you have the `on_exit' function. */
-#define HAVE_ON_EXIT 1
+/* #undef HAVE_ON_EXIT */
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
@@ -146,7 +146,7 @@
 #define HAVE_STDBOOL_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
+/* #undef HAVE_STDINT_H */
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -188,25 +188,25 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcat' function. */
-/* #undef HAVE_STRLCAT */
+#define HAVE_STRLCAT 1
 
 /* Define to 1 if you have the `strlcpy' function. */
-/* #undef HAVE_STRLCPY */
+#define HAVE_STRLCPY 1
 
 /* Define to 1 if you have the `strlen' function. */
-#define HAVE_STRLEN 1
+/* #undef HAVE_STRLEN */
 
 /* Define to 1 if you have the `strncasecmp' function. */
 #define HAVE_STRNCASECMP 1
 
 /* Define to 1 if you have the `strncmp' function. */
-#define HAVE_STRNCMP 1
+/* #undef HAVE_STRNCMP */
 
 /* Define to 1 if you have the `strncpy' function. */
-#define HAVE_STRNCPY 1
+/* #undef HAVE_STRNCPY */
 
 /* Define to 1 if you have the `strndup' function. */
-#define HAVE_STRNDUP 1
+/* #undef HAVE_STRNDUP */
 
 /* Define to 1 if you have the `strnfill' function. */
 /* #undef HAVE_STRNFILL */
@@ -224,7 +224,7 @@
 /* #undef HAVE_STRREV */
 
 /* Define to 1 if you have the `strsep' function. */
-#define HAVE_STRSEP 1
+/* #undef HAVE_STRSEP */
 
 /* Define to 1 if you have the `strsignal' function. */
 #define HAVE_STRSIGNAL 1
@@ -236,10 +236,10 @@
 #define HAVE_STRSTR 1
 
 /* Define to 1 if you have the `strtod' function. */
-#define HAVE_STRTOD 1
+/* #undef HAVE_STRTOD */
 
 /* Define to 1 if you have the `strtok' function. */
-#define HAVE_STRTOK 1
+/* #undef HAVE_STRTOK */
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #define HAVE_SYS_IOCTL_H 1
@@ -257,7 +257,7 @@
 #define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/termio.h> header file. */
-/* #undef HAVE_SYS_TERMIO_H */
+#define HAVE_SYS_TERMIO_H 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
 #define HAVE_SYS_TIME_H 1
@@ -278,7 +278,7 @@
 #define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `usleep' function. */
-#define HAVE_USLEEP 1
+/* #undef HAVE_USLEEP */
 
 /* Define to 1 if you have the <values.h> header file. */
 #define HAVE_VALUES_H 1
@@ -293,7 +293,7 @@
 #define HAVE_WAITPID 1
 
 /* Define if compiler has built-in _Bool type. */
-#define HAVE__BOOL 1
+/* #undef HAVE__BOOL */
 
 /* Major version number. */
 #define MAJOR_VERSION 0
@@ -353,7 +353,7 @@
 #define STDC_HEADERS 1
 
 /* Define if using Sun's Forte C Compiler */
-#define SUN_FORTE_C 0
+/* #undef SUN_FORTE_C */
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #define TIME_WITH_SYS_TIME 1
@@ -362,7 +362,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux dhcp-506-475 2.4.18-18.8.0 #1 Wed Nov 13 22:52:09 EST 2002 i686 athlon i386 GNU/Linux"
+#define UNAME_STRING "SunOS usf-cf-sparc-solaris-1 5.8 Generic_108528-17 sun4u sparc SUNW,Ultra-60"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

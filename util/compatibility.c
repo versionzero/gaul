@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	25 Oct 2002 SAA	Added gethostname() stub.
+  Updated:	20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
+		25 Oct 2002 SAA	Added gethostname() stub.
 		02 Oct 2002 SAA A #ifndef HAVE_STRCASECMP should have been #ifndef HAVE_STRSEP
 		12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
 		09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
@@ -250,33 +251,42 @@ int	strlen(const char *str)
 
 #ifndef HAVE_STRCMP
 /*
- * Returns -1,0,1 on whether STR1 is <,==,> STR2
+ * Compare str1 and str2.  It returns
+ * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
+ * or be greater than str2, respectively.
  */
-int	strcmp(const char *str1, const char *str2)
-{
-  for (; *str1 != '\0' && *str1 == *str2; str1++, str2++);
+int strcmp(const char *str1, const char *str2)
+  {
+
+  while (*str1 != '\0' && *str1 == *str2)
+    {
+    str1++;
+    str2++;
+    }
+
   return *str1 - *str2;
-}
+  }
 #endif /* HAVE_STRCMP */
 
 
 #ifndef HAVE_STRNCMP
 /*
- * Compare at most LEN chars in STR1 and STR2 and return -1,0,1 or
- * STR1 - STR2
+ * Compare at most len characters of str1 and str2.  It returns
+ * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
+ * or be greater than str2, respectively.
  */
-int	strncmp(const char *str1, const char *str2, const int len)
-{
-  int	len_c;
+int strncmp(const char *str1, const char *str2, size_t len)
+  {
+  int	c;
   
-  for (len_c = 0; len_c < len; len_c++, str1++, str2++) {
-    if (*str1 != *str2 || *str1 == '\0') {
+  for (c = 0; c < len; c++, str1++, str2++)
+    {
+    if (*str1 != *str2 || *str1 == '\0')
       return *str1 - *str2;
     }
-  }
   
   return 0;
-}
+  }
 #endif /* HAVE_STRNCMP */
 
 
@@ -300,7 +310,7 @@ char *strcpy(char *str1, const char *str2)
 /*
  * Copy STR2 to STR1 until LEN or null character in source.
  */
-char	*strncpy(char *str1, const char *str2, const int len)
+char	*strncpy(char *str1, const char *str2, size_t len)
 {
   char		*str1_p, null_reached = FALSE;
   int		len_c;
@@ -327,7 +337,7 @@ char	*strncpy(char *str1, const char *str2, const int len)
  * character from DELIM.  writes null into STR to end token.
  * This is not thread-safe.
  */
-char	*strtok(char *str, char *delim)
+char	*strtok(char *str, const char *delim)
 {
   static char	*last_str = "";
   char		*start, *delim_p;
@@ -792,11 +802,11 @@ void *memscan(void *addr, int c, size_t size)
  */
 #ifndef USE_OPTIMISED_MEMSET
 /* Original version.  Must use this on Solaris, by the looks of things. */
-char *memset(char *str, int c, size_t len)
+void *memset(void *str, int c, size_t len)
   {
   char	*orig = str;
   
-  for (; len > 0; len--, str++) *str = (char)c;
+  for (; len > 0; len--, str++) *(char *)str = (char)c;
   
   return orig;
   }
@@ -1124,27 +1134,31 @@ double strtod(const char *nptr, char **endptr)
 
   if (fail_pos_1 && fail_pos_1[0] != 0)
     {
-      char *old_locale;
+#ifndef HAVE_SETLOCALE
+    val_2 = strtod(nptr, &fail_pos_2);
+#else
+    char *old_locale;
 
-      old_locale = strdup(setlocale(LC_NUMERIC, NULL));
-      setlocale(LC_NUMERIC, "C");
-      val_2 = strtod(nptr, &fail_pos_2);
-      setlocale(LC_NUMERIC, old_locale);
-      s_free(old_locale);
+    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+    val_2 = strtod(nptr, &fail_pos_2);
+    setlocale(LC_NUMERIC, old_locale);
+    s_free(old_locale);
+#endif
     }
 
   if (!fail_pos_1 || fail_pos_1[0] == 0 || fail_pos_1 >= fail_pos_2)
     {
-      if (endptr)
-	*endptr = fail_pos_1;
-      return val_1;
+    if (endptr) *endptr = fail_pos_1;
+    return val_1;
     }
   else
     {
-      if (endptr)
-	*endptr = fail_pos_2;
-      return val_2;
+    if (endptr) *endptr = fail_pos_2;
+    return val_2;
     }
+
+/* Should never get here! */
   }
 #endif /* HAVE_STRTOD */
 

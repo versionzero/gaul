@@ -39,7 +39,7 @@
 # http://www.gnu.org/
 #
 #######################################################################
-SHELL = /bin/sh
+SHELL = /bin/bash
 
 srcdir = .
 top_srcdir = ..
@@ -64,13 +64,13 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/gaul-devel/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/gaul-devel/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/gaul-devel/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/gaul-devel/missing --run autoheader
+ACLOCAL = ${SHELL} /home/users/s/st/stewartadcock/gaul-devel/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/users/s/st/stewartadcock/gaul-devel/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/users/s/st/stewartadcock/gaul-devel/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/users/s/st/stewartadcock/gaul-devel/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
-INSTALL = /usr/bin/install -c
+INSTALL = /opt/sfw/bin/ginstall -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 install_sh_DATA = $(install_sh) -c -m 644
@@ -86,16 +86,16 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_alias = 
-build_triplet = i686-pc-linux-gnu
+build_triplet = sparc-sun-solaris2.8
 host_alias = 
-host_triplet = i686-pc-linux-gnu
+host_triplet = sparc-sun-solaris2.8
 target_alias = 
-target_triplet = i686-pc-linux-gnu
+target_triplet = sparc-sun-solaris2.8
 
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/gaul-devel/missing --run tar
+AMTAR = ${SHELL} /home/users/s/st/stewartadcock/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -121,7 +121,7 @@ STRIP = strip
 VERSION = 0.1841-6
 am__include = include
 am__quote = 
-install_sh = /home/stewart/gaul-devel/install-sh
+install_sh = /home/users/s/st/stewartadcock/gaul-devel/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -415,7 +415,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
@@ -432,7 +432,7 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
-DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
+DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in
 SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
@@ -637,7 +637,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc
 
 mostlyclean-libtool:
 	-rm -f *.lo
