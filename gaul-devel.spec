@@ -41,7 +41,7 @@ URL: http://gaul.sourceforge.net/
 Requires: slang-devel
 
 %description
-GAUL: Genetic Algorithm Utility Library.  GAUL is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms.   It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm. Additional stochastic algorithms are provided for comparison to the genetic algorithms. Much of the functionality is also available through a simple SLang interface.
+The Genetic Algorithm Utility Library (GAUL) is an open source programming library designed to assist in the development of code using genetic algorithms. Both steady-state and generation based evolution is supported, together with the island model. GAUL supports the Darwinian, Lamarkian and Baldwininan evolutionary schemes. Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators. Much of the functionality is also available through a simple S-Lang interface.
 
 %prep
 
