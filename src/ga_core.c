@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -735,8 +735,9 @@ static void gaul_write_entity(FILE *fp, population *pop, entity *entity)
   gaul_read_entity()
   synopsis:	Reads an entity from a filepointer using a binary
 		format.
-  parameters:
-  return:
+  parameters:	FILE *fp	File handle from which to read entity.
+		population *pop	Population to add new entity to.
+  return:	entity*	An entity as read from disk.
   last updated: 30 May 2002
  **********************************************************************/
 
@@ -744,7 +745,7 @@ static entity *gaul_read_entity(FILE *fp, population *pop)
   {
   byte		*buffer=NULL;	/* Buffer for genetic data. */
   unsigned int	len;		/* Length of buffer. */
-  entity	*entity;	/* Input entity. */
+  entity	*entity;	/* New entity read from disk. */
 
   entity = ga_get_free_entity(pop);
 
@@ -2520,7 +2521,7 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
   mpi_receive( &recv_count, 1, MPI_TYPE_INT, prev, GA_TAG_MIGRATIONINFO );
 
-  plog(LOG_DEBUG, "Will be recieving %d entities = %d ints (%Zd bytes).",
+  plog(LOG_DEBUG, "Will be receiving %d entities = %d ints (%Zd bytes).",
             recv_count,
             recv_count*pop->num_chromosomes*pop->len_chromosomes,
             recv_count*pop->num_chromosomes*pop->len_chromosomes*sizeof(int));
