@@ -1236,7 +1236,7 @@ int str_scmp(const char *s1, const char *s2)
     }
 
   if ( (*s1 == ' ' || *s1 == '\t' || *s1 == '\n' || *s1 == '\0') && 
-       (*s2 == ' ' || *s1 == '\t' || *s1 == '\n' || *s2 == '\0') ) return 0;
+       (*s2 == ' ' || *s2 == '\t' || *s2 == '\n' || *s2 == '\0') ) return 0;
 
   return *s1 - *s2;
   }
