@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
+  Last Updated:	18 Jul 2002 SAA	Fixed typo causing erronerous data dimension mismatches.
+		17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
 		26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
 		04 Apr 2002 SAA write_usage() tweaked slightly.
 		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  Added some new options.
@@ -564,11 +565,11 @@ die("FIXME: code broken.");
 
       NN_read_prop(train_prop_infname, &train_property, &train_labels,
                     &num_train_prop, &num_train_data,  &output_data_dim);
-      if (output_data_dim != input_data_dim)
+      if (output_data_dim != output_layer_dim)
         die("Output data dimension mismatch");
       NN_read_prop(test_prop_infname, &test_property, &test_labels,
                     &num_test_prop, &num_test_data, &output_data_dim);
-      if (output_data_dim != input_data_dim)
+      if (output_data_dim != output_layer_dim)
         die("Output data dimension mismatch");
       }
 
@@ -584,7 +585,7 @@ die("FIXME: code broken.");
 
       NN_read_prop(eval_prop_infname, &eval_property, &eval_labels,
                     &num_eval_prop, &num_eval_data, &output_data_dim);
-      if (output_data_dim != input_data_dim)
+      if (output_data_dim != output_layer_dim)
         die("Output data dimension mismatch");
       }
       
