@@ -63,13 +63,10 @@ noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 DEPENDENCIES = \
-	../util/librandom.a \
 	../util/liblog_util.a \
 	../util/libstuff.a \
 	../util/libmpi_util_fake.a \
 	../util/libnn_util.a \
-	../util/libstr_util.a \
-	../util/libtimer_util.a \
 	../src/libgaul.la
 
 EXTRA_DIST = \
@@ -97,25 +94,25 @@ saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
-saveload_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -ltimer_util -lm 
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lnn_util -lrandom -lstr_util -ltimer_util -lm 
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake  -lm
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lnn_util -lstuff -lm 
 
 # Parallel code:
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util_parallel -lmpi_util -lrandom -lstr_util -lm
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util_parallel -lmpi_util -lm
 struggle5_mp_LINK = @MPICC@ $(struggle5_mp_LDADD) -o struggle5_mp @MPIFLAGS@
 

@@ -161,12 +161,6 @@ include_HEADERS = \
     gaul.h
 
 
-#libgaul_la_DEPENDENCIES = \
-#	../util/libstuff.a \
-#	../util/libmpi_util.a \
-#	../util/librandom.a \
-#	../util/libstr_util.a
-
 libgaul_la_LIBFLAGS = -lm
 libgaul_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -178,7 +172,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = 
+LIBS =  -lslang -lslang
 libgaul_a_LIBADD = 
 libgaul_a_OBJECTS =  ga_bitstring.o ga_chromo.o ga_core.o ga_crossover.o \
 ga_intrinsics.o ga_mutate.o ga_optim.o ga_qsort.o ga_replace.o \
@@ -190,7 +184,7 @@ libgaul_la_LIBADD =
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_core.lo \
 ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
 ga_replace.lo ga_seed.lo ga_select.lo ga_similarity.lo ga_utility.lo
-CFLAGS = -g -O2 -Wall -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

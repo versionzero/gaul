@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1839-1"
-#define BUILD_DATE_STRING "12/06/02"
+#define BUILD_DATE_STRING "13/06/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
 #define PATCH_VERSION 1
@@ -30,7 +30,7 @@
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
 #define V3_QUICK 1
-#define HAVE_SLANG 0
+#define HAVE_SLANG 1
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* #undef HAVE_FLOAT_H */
@@ -68,7 +68,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "12/06/02"
+#define BUILD_DATE_STRING "13/06/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -167,7 +167,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the `sincos' function. */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Define if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */

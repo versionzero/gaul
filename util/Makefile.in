@@ -115,13 +115,13 @@ VERSION = @VERSION@
 AUTOMAKE_OPTIONS = 1.4
 
 lib_LIBRARIES = libstuff.a \
-	libnn_util.a librandom.a libstr_util.a libtimer_util.a \
+	libnn_util.a \
         liblog_util.a liblog_util_parallel.a \
 	libmpi_util.a libmpi_util_fake.a
 
 
 lib_LTLIBRARIES = libstuff.la \
-	libnn_util.la librandom.la libstr_util.la libtimer_util.la \
+	libnn_util.la \
         liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
 
@@ -137,7 +137,12 @@ libstuff_a_SOURCES = \
 	compatibility.c \
 	linkedlist.c \
 	memory_util.c \
-	table_util.c
+	table_util.c \
+	random_util.c \
+	str_util.c \
+	dstr_util.c \
+	str_match.c \
+	timer_util.c
 
 
 libstuff_la_SOURCES = \
@@ -145,7 +150,12 @@ libstuff_la_SOURCES = \
 	compatibility.c \
 	linkedlist.c \
 	memory_util.c \
-	table_util.c
+	table_util.c \
+	random_util.c \
+	str_util.c \
+	dstr_util.c \
+	str_match.c \
+	timer_util.c
 
 
 liblog_util_parallel_a_SOURCES = \
@@ -188,34 +198,6 @@ libnn_util_la_SOURCES = \
 	nn_util.c
 
 
-librandom_a_SOURCES = \
-	random_util.c
-
-
-librandom_la_SOURCES = \
-	random_util.c
-
-
-libstr_util_a_SOURCES = \
-	str_util.c \
-	dstr_util.c \
-	str_match.c
-
-
-libstr_util_la_SOURCES = \
-	str_util.c \
-	dstr_util.c \
-	str_match.c
-
-
-libtimer_util_a_SOURCES = \
-	timer_util.c
-
-
-libtimer_util_la_SOURCES = \
-	timer_util.c
-
-
 include_HEADERS = \
      SAA_header.h \
      avltree.h \
@@ -235,7 +217,7 @@ include_HEADERS = \
      timer_util.h
 
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstr_util -lstuff -llog_util -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
 
 libstuff_a_LIBFLAGS = -lm
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
@@ -254,15 +236,6 @@ libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_fake_a_LIBFLAGS = 
 libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-librandom_a_LIBFLAGS = -lm
-librandom_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libstr_util_a_LIBFLAGS = 
-libstr_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libtimer_util_a_LIBFLAGS = 
-libtimer_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -275,15 +248,10 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libstuff_a_LIBADD = 
 libstuff_a_OBJECTS =  avltree.o compatibility.o linkedlist.o \
-memory_util.o table_util.o
+memory_util.o table_util.o random_util.o str_util.o dstr_util.o \
+str_match.o timer_util.o
 libnn_util_a_LIBADD = 
 libnn_util_a_OBJECTS =  nn_util.o
-librandom_a_LIBADD = 
-librandom_a_OBJECTS =  random_util.o
-libstr_util_a_LIBADD = 
-libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
-libtimer_util_a_LIBADD = 
-libtimer_util_a_OBJECTS =  timer_util.o
 liblog_util_a_LIBADD = 
 liblog_util_a_OBJECTS =  log_util.o
 liblog_util_parallel_a_LIBADD = 
@@ -297,15 +265,10 @@ LTLIBRARIES =  $(lib_LTLIBRARIES)
 
 libstuff_la_LIBADD = 
 libstuff_la_OBJECTS =  avltree.lo compatibility.lo linkedlist.lo \
-memory_util.lo table_util.lo
+memory_util.lo table_util.lo random_util.lo str_util.lo dstr_util.lo \
+str_match.lo timer_util.lo
 libnn_util_la_LIBADD = 
 libnn_util_la_OBJECTS =  nn_util.lo
-librandom_la_LIBADD = 
-librandom_la_OBJECTS =  random_util.lo
-libstr_util_la_LIBADD = 
-libstr_util_la_OBJECTS =  str_util.lo dstr_util.lo str_match.lo
-libtimer_util_la_LIBADD = 
-libtimer_util_la_OBJECTS =  timer_util.lo
 liblog_util_la_LIBADD = 
 liblog_util_la_OBJECTS =  log_util.lo
 liblog_util_parallel_la_LIBADD = 
@@ -338,8 +301,8 @@ DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/memory_util.P .deps/mpi_util.P .deps/mpi_util_fake.P \
 .deps/nn_main.P .deps/nn_util.P .deps/random_util.P .deps/str_match.P \
 .deps/str_util.P .deps/table_util.P .deps/timer_util.P
-SOURCES = $(libstuff_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES) $(liblog_util_a_SOURCES) $(liblog_util_parallel_a_SOURCES) $(libmpi_util_a_SOURCES) $(libmpi_util_fake_a_SOURCES) $(libstuff_la_SOURCES) $(libnn_util_la_SOURCES) $(librandom_la_SOURCES) $(libstr_util_la_SOURCES) $(libtimer_util_la_SOURCES) $(liblog_util_la_SOURCES) $(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) $(libmpi_util_fake_la_SOURCES) $(nn_SOURCES)
-OBJECTS = $(libstuff_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS) $(liblog_util_a_OBJECTS) $(liblog_util_parallel_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libmpi_util_fake_a_OBJECTS) $(libstuff_la_OBJECTS) $(libnn_util_la_OBJECTS) $(librandom_la_OBJECTS) $(libstr_util_la_OBJECTS) $(libtimer_util_la_OBJECTS) $(liblog_util_la_OBJECTS) $(liblog_util_parallel_la_OBJECTS) $(libmpi_util_la_OBJECTS) $(libmpi_util_fake_la_OBJECTS) $(nn_OBJECTS)
+SOURCES = $(libstuff_a_SOURCES) $(libnn_util_a_SOURCES) $(liblog_util_a_SOURCES) $(liblog_util_parallel_a_SOURCES) $(libmpi_util_a_SOURCES) $(libmpi_util_fake_a_SOURCES) $(libstuff_la_SOURCES) $(libnn_util_la_SOURCES) $(liblog_util_la_SOURCES) $(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) $(libmpi_util_fake_la_SOURCES) $(nn_SOURCES)
+OBJECTS = $(libstuff_a_OBJECTS) $(libnn_util_a_OBJECTS) $(liblog_util_a_OBJECTS) $(liblog_util_parallel_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libmpi_util_fake_a_OBJECTS) $(libstuff_la_OBJECTS) $(libnn_util_la_OBJECTS) $(liblog_util_la_OBJECTS) $(liblog_util_parallel_la_OBJECTS) $(libmpi_util_la_OBJECTS) $(libmpi_util_fake_la_OBJECTS) $(nn_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -426,21 +389,6 @@ libnn_util.a: $(libnn_util_a_OBJECTS) $(libnn_util_a_DEPENDENCIES)
 	$(AR) cru libnn_util.a $(libnn_util_a_OBJECTS) $(libnn_util_a_LIBADD)
 	$(RANLIB) libnn_util.a
 
-librandom.a: $(librandom_a_OBJECTS) $(librandom_a_DEPENDENCIES)
-	-rm -f librandom.a
-	$(AR) cru librandom.a $(librandom_a_OBJECTS) $(librandom_a_LIBADD)
-	$(RANLIB) librandom.a
-
-libstr_util.a: $(libstr_util_a_OBJECTS) $(libstr_util_a_DEPENDENCIES)
-	-rm -f libstr_util.a
-	$(AR) cru libstr_util.a $(libstr_util_a_OBJECTS) $(libstr_util_a_LIBADD)
-	$(RANLIB) libstr_util.a
-
-libtimer_util.a: $(libtimer_util_a_OBJECTS) $(libtimer_util_a_DEPENDENCIES)
-	-rm -f libtimer_util.a
-	$(AR) cru libtimer_util.a $(libtimer_util_a_OBJECTS) $(libtimer_util_a_LIBADD)
-	$(RANLIB) libtimer_util.a
-
 liblog_util.a: $(liblog_util_a_OBJECTS) $(liblog_util_a_DEPENDENCIES)
 	-rm -f liblog_util.a
 	$(AR) cru liblog_util.a $(liblog_util_a_OBJECTS) $(liblog_util_a_LIBADD)
@@ -491,15 +439,6 @@ libstuff.la: $(libstuff_la_OBJECTS) $(libstuff_la_DEPENDENCIES)
 
 libnn_util.la: $(libnn_util_la_OBJECTS) $(libnn_util_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libnn_util_la_LDFLAGS) $(libnn_util_la_OBJECTS) $(libnn_util_la_LIBADD) $(LIBS)
-
-librandom.la: $(librandom_la_OBJECTS) $(librandom_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(librandom_la_LDFLAGS) $(librandom_la_OBJECTS) $(librandom_la_LIBADD) $(LIBS)
-
-libstr_util.la: $(libstr_util_la_OBJECTS) $(libstr_util_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libstr_util_la_LDFLAGS) $(libstr_util_la_OBJECTS) $(libstr_util_la_LIBADD) $(LIBS)
-
-libtimer_util.la: $(libtimer_util_la_OBJECTS) $(libtimer_util_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libtimer_util_la_LDFLAGS) $(libtimer_util_la_OBJECTS) $(libtimer_util_la_LIBADD) $(LIBS)
 
 liblog_util.la: $(liblog_util_la_OBJECTS) $(liblog_util_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(liblog_util_la_LDFLAGS) $(liblog_util_la_OBJECTS) $(liblog_util_la_LIBADD) $(LIBS)

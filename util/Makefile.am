@@ -30,12 +30,12 @@
 AUTOMAKE_OPTIONS = 1.4
 
 lib_LIBRARIES = libstuff.a \
-	libnn_util.a librandom.a libstr_util.a libtimer_util.a \
+	libnn_util.a \
         liblog_util.a liblog_util_parallel.a \
 	libmpi_util.a libmpi_util_fake.a
 
 lib_LTLIBRARIES = libstuff.la \
-	libnn_util.la librandom.la libstr_util.la libtimer_util.la \
+	libnn_util.la \
         liblog_util.la liblog_util_parallel.la \
 	libmpi_util.la libmpi_util_fake.la
 
@@ -49,14 +49,24 @@ libstuff_a_SOURCES = \
 	compatibility.c \
 	linkedlist.c \
 	memory_util.c \
-	table_util.c
+	table_util.c \
+	random_util.c \
+	str_util.c \
+	dstr_util.c \
+	str_match.c \
+	timer_util.c
 
 libstuff_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
 	memory_util.c \
-	table_util.c
+	table_util.c \
+	random_util.c \
+	str_util.c \
+	dstr_util.c \
+	str_match.c \
+	timer_util.c
 
 liblog_util_parallel_a_SOURCES = \
 	log_util_parallel.c
@@ -88,28 +98,6 @@ libnn_util_a_SOURCES = \
 libnn_util_la_SOURCES = \
 	nn_util.c
 
-librandom_a_SOURCES = \
-	random_util.c
-
-librandom_la_SOURCES = \
-	random_util.c
-
-libstr_util_a_SOURCES = \
-	str_util.c \
-	dstr_util.c \
-	str_match.c
-
-libstr_util_la_SOURCES = \
-	str_util.c \
-	dstr_util.c \
-	str_match.c
-
-libtimer_util_a_SOURCES = \
-	timer_util.c
-
-libtimer_util_la_SOURCES = \
-	timer_util.c
-
 include_HEADERS = \
      SAA_header.h \
      avltree.h \
@@ -128,7 +116,7 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstr_util -lstuff -llog_util -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
 
 libstuff_a_LIBFLAGS = -lm
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
@@ -147,13 +135,4 @@ libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_fake_a_LIBFLAGS =
 libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-librandom_a_LIBFLAGS = -lm
-librandom_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libstr_util_a_LIBFLAGS =
-libstr_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libtimer_util_a_LIBFLAGS =
-libtimer_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
