@@ -105,9 +105,11 @@ int main(int argc, char **argv)
   printf("HAVE_SNOOZE:   %s\n", HAVE_SNOOZE?"true":"false");
 */
   printf("HAVE_SNPRINTF:   %s\n", HAVE_SNPRINTF?"true":"false");
+/*
   printf("HAVE_STDBOOL_H:   %s\n", HAVE_STDBOOL_H?"true":"false");
   printf("HAVE_STDINT_H:   %s\n", HAVE_STDINT_H?"true":"false");
   printf("HAVE_STDLIB_H:   %s\n", HAVE_STDLIB_H?"true":"false");
+*/
   printf("HAVE_STRCASECMP:   %s\n", HAVE_STRCASECMP?"true":"false");
   printf("HAVE_STRCAT:   %s\n", HAVE_STRCAT?"true":"false");
   printf("HAVE_STRCATV:   %s\n", HAVE_STRCATV?"true":"false");
@@ -117,8 +119,10 @@ int main(int argc, char **argv)
   printf("HAVE_STRCSPN:   %s\n", HAVE_STRCSPN?"true":"false");
   printf("HAVE_STRDUP:   %s\n", HAVE_STRDUP?"true":"false");
   printf("HAVE_STRERROR:   %s\n", HAVE_STRERROR?"true":"false");
+/*
   printf("HAVE_STRINGS_H:   %s\n", HAVE_STRINGS_H?"true":"false");
   printf("HAVE_STRING_H:   %s\n", HAVE_STRING_H?"true":"false");
+*/
   printf("HAVE_STRLCAT:   %s\n", HAVE_STRLCAT?"true":"false");
   printf("HAVE_STRLCPY:   %s\n", HAVE_STRLCPY?"true":"false");
   printf("HAVE_STRLEN:   %s\n", HAVE_STRLEN?"true":"false");

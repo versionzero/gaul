@@ -16,6 +16,7 @@ Changes since release 0.1846:
 - Changed license/copyright details in util/gaul/gaul_util.h
 - Added ga_select_one_linearrank() and ga_select_two_linearrank(), a selection operator based on a linear probability distribution with respect to rank.
 - Fixed incorrect inclusion of stdbool.h on FreeBSD.  -- patch submitted by Ying-Chieh Liao.
+- Changes for clean compilation with gcc 3.2
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

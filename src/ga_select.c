@@ -920,7 +920,7 @@ boolean ga_select_one_linearrank(population *pop, entity **mother)
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
+  *mother = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
 
   return pop->select_state>(pop->orig_size*pop->mutation_ratio);
   }
@@ -942,10 +942,10 @@ boolean ga_select_two_linearrank(population *pop, entity **mother, entity **fath
 
   pop->select_state++;
 
-  *mother = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
+  *mother = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
   do
     {
-    *father = pop->entity_iarray[pop->orig_size*(1.0-sqrt(random_unit_uniform()))];
+    *father = pop->entity_iarray[(int)(1.0-sqrt(random_unit_uniform()))*pop->orig_size];
     } while (*mother == *father);
 
   return pop->select_state>(pop->orig_size*pop->crossover_ratio);
