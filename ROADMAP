@@ -10,21 +10,20 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1843     |  ga_evolution_mpi() and associated examples.
-            |  ga_evolution_threaded() and associated example.
-            |  Updated tutorial documentation.
-------------+--------------------------------------------------------
  0.1844     |  Linked-list chromosome.
             |  Linked-list chromosome example.
-            |  Fully document chromosomes.
-            |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h
-            |  Document elitism options.
             |  Intro to GAs finished.
+            |  ga_evolution_mpi() and associated examples.
+            |  ga_evolution_threaded() and associated example.
+            |  Fully document chromosomes.
+            |  Document elitism options.
+            |  Updated tutorial documentation.
 ------------+--------------------------------------------------------
  0.1845     |  Save/Load genomic soup.
             |  User data in array, not list.
             |  Parallel search heuristics (Tabu-search etc.)
+            |  De Jong - working examples.
 ------------+--------------------------------------------------------
  0.1846     |  More on-line/off-line statistics options.
             |  Built-in evaluation profiling.
@@ -81,5 +80,5 @@ Features to be added if enough interest is demonstrated:
 * PVM support.
 * Replica-exchange SA search.
 
-Stewart Adcock, 20 Mar 2003.
+Stewart Adcock, 05 Apr 2003.
 

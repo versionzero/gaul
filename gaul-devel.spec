@@ -1,6 +1,6 @@
 %define PACKAGE_VERSION 	0
-%define RELEASE			1842
-%define PATCH			6
+%define RELEASE			1843
+%define PATCH			0
 %define prefix			/usr/local/
 
 ########################################################################

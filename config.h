@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "18/03/03"
+#define BUILD_DATE_STRING "05/04/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -326,7 +326,7 @@
 #define MEMORY_PADDING 0
 
 /* Minor version number. */
-#define MINOR_VERSION 1842
+#define MINOR_VERSION 1843
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
@@ -344,7 +344,7 @@
 #define PACKAGE_VERSION ""
 
 /* Patch level. */
-#define PATCH_VERSION 6
+#define PATCH_VERSION 0
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -380,7 +380,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1842-6"
+#define VERSION_STRING "0.1843-0"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
