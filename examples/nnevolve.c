@@ -38,6 +38,10 @@
 		nn_util.h.  This is an example where
 		population->len_chromosome is ignored.
 
+		Both crossover and mutation rates are comparatively
+		low, whilst the Lamarckian adaptation affects all
+		members of the population.
+
  **********************************************************************/
 
 #include "gaul.h"
@@ -47,40 +51,149 @@
  * Global data storage.
  */
 float      **train_data=NULL;       /* Input data for training. */
-int        num_train_data=0;        /* Number of training target items. */
-float      **train_property=NULL;   /* Training target property. */
-int        num_train_prop=0;        /* Number of training target properties. */
-float      **score_data=NULL;       /* Input data for training. */
-int        num_score_data=0;        /* Number of training target items. */
-float      **score_property=NULL;   /* Training target property. */
-int        num_score_prop=0;        /* Number of training target properties. */
+int        num_train_data=0;        /* Number of training items. */
+float      **train_property=NULL;   /* Training properties. */
+
+/*
+ * Compilation constants.
+ */
+#define NNEVOLVE_NUM_SCORE	75
+#define NNEVOLVE_NUM_TRAIN	50
+
 
 /**********************************************************************
-  nnevolve_evaluate()
-  synopsis:	Score solution.
+  nnevolve_display_evaluation()
+  synopsis:	Write score information.
+  parameters:
+  return:
+  updated:	05 Feb 2002
+ **********************************************************************/
+
+boolean nnevolve_display_evaluation(population *pop, entity *entity)
+  {
+  int		n;		/* Loop over all items. */
+  network_t	*nn=(network_t *)entity->chromosome[0];
+  float		error=0.0;	/* Summed network errors. */
+  float		property[4];	/* Prediction from NN. */
+  int		wrong_count=0;	/* Number of incorrect predictions. */
+
+  for (n=0; n<num_train_data; n++)
+    {
+    NN_simulate_with_output(nn, train_data[n], train_property[n], property);
+    error += nn->error;
+
+    if (NN_IS_ON(property[0]) != NN_IS_ON(train_property[n][0]))
+      wrong_count++;
+    if (NN_IS_ON(property[1]) != NN_IS_ON(train_property[n][1]))
+      wrong_count++;
+    if (NN_IS_ON(property[2]) != NN_IS_ON(train_property[n][2]))
+      wrong_count++;
+
+    printf("%d: %f %f %f ... %f %f %f\n", n, property[0], property[1], property[2], train_property[n][0], train_property[n][1], train_property[n][2]);
+    }
+
+  entity->fitness = -(error+wrong_count)/num_train_data;
+
+  printf("Total network error is %f with %d incorrect predictions.  Score = %f\n",
+	 error, wrong_count, entity->fitness);
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  nnevolve_evaluate_all()
+  synopsis:	Score solution - measure average total network error
+  		for all data items.
+  parameters:
+  return:
+  updated:	05 Feb 2002
+ **********************************************************************/
+
+boolean nnevolve_evaluate_all(population *pop, entity *entity)
+  {
+  int		n;		/* Loop over all items. */
+  network_t	*nn=(network_t *)entity->chromosome[0];
+  float		error=0.0;	/* Summed network errors. */
+  float		property[4];	/* Prediction from NN. */
+  int		wrong_count=0;	/* Number of incorrect predictions. */
+
+  for (n=0; n<num_train_data; n++)
+    {
+    NN_simulate_with_output(nn, train_data[n], train_property[n], property);
+    error += nn->error;
+
+    if (NN_IS_ON(property[0]) != NN_IS_ON(train_property[n][0]))
+      wrong_count++;
+    if (NN_IS_ON(property[1]) != NN_IS_ON(train_property[n][1]))
+      wrong_count++;
+    if (NN_IS_ON(property[2]) != NN_IS_ON(train_property[n][2]))
+      wrong_count++;
+    }
+
+  entity->fitness = -(error+wrong_count)/num_train_data;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  nnevolve_evaluate1()
+  synopsis:	Score solution - measure network error.
   parameters:
   return:
   updated:	29 Jan 2002
  **********************************************************************/
 
-boolean nnevolve_evaluate(population *pop, entity *entity)
+boolean nnevolve_evaluate1(population *pop, entity *entity)
   {
   int		item, n;
   network_t	*nn=(network_t *)entity->chromosome[0];
-  float		error=0;	/* Summed network errors. */
+  float		error=0.0;	/* Summed network errors. */
 
-  for (n=0; n<num_score_data; n++)
+  for (n=0; n<NNEVOLVE_NUM_SCORE; n++)
     {
-    item = random_int(num_score_data);
-/*
-printf("DEBUG: item %d = %d/%d\n", n, item, num_score_data);
-printf("DEBUG: %f %f\n", score_data[item][0], score_property[item][0]);
-*/
-    NN_simulate(nn, score_data[item], score_property[item]);
+    item = random_int(num_train_data);
+    NN_simulate(nn, train_data[item], train_property[item]);
     error += nn->error;
     }
 
-  entity->fitness = error;
+  entity->fitness = -error/NNEVOLVE_NUM_SCORE;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  nnevolve_evaluate2()
+  synopsis:	Score solution via alternative method - count incorrect
+  		assignments.
+  parameters:
+  return:
+  updated:	05 Feb 2002
+ **********************************************************************/
+
+boolean nnevolve_evaluate2(population *pop, entity *entity)
+  {
+  int		item, n;
+  network_t	*nn=(network_t *)entity->chromosome[0];
+  float		property[4];	/* Prediction from NN. */
+
+  entity->fitness = 0.0;
+
+  for (n=0; n<NNEVOLVE_NUM_SCORE; n++)
+    {
+    item = random_int(num_train_data);
+    NN_run(nn, train_data[item], property);
+    if (NN_IS_ON(property[0])  != NN_IS_ON(train_property[item][0]))  entity->fitness -= 1;
+    if (NN_IS_OFF(property[0]) != NN_IS_OFF(train_property[item][0])) entity->fitness -= 1;
+    if (NN_IS_ON(property[1])  != NN_IS_ON(train_property[item][1]))  entity->fitness -= 1;
+    if (NN_IS_OFF(property[1]) != NN_IS_OFF(train_property[item][1])) entity->fitness -= 1;
+    if (NN_IS_ON(property[2])  != NN_IS_ON(train_property[item][2]))  entity->fitness -= 1;
+    if (NN_IS_OFF(property[2]) != NN_IS_OFF(train_property[item][2])) entity->fitness -= 1;
+    }
+
+  entity->fitness /= NNEVOLVE_NUM_SCORE;
 
   return TRUE;
   }
@@ -98,12 +211,12 @@ void nnevolve_seed(population *pop, entity *adam)
   {
   network_t	*nn=(network_t *)adam->chromosome[0];
 
-  NN_randomize_weights(nn);
+  NN_randomize_weights_01(nn);
 
-  NN_set_momentum(nn, random_float_range(0.1,1.0));
-  NN_set_rate(nn, random_float_range(0.01,0.5));
-  NN_set_gain(nn, random_float_range(0.9,1.1));
-  NN_set_bias(nn, random_float_range(0.9,1.1));
+  NN_set_momentum(nn, random_float_range(0.45,0.85));
+  NN_set_rate(nn, random_float_range(0.05,0.35));
+  NN_set_gain(nn, random_float_range(0.95,1.05));
+  NN_set_bias(nn, random_float_range(0.95,1.05));
 
   return;
   }
@@ -134,7 +247,7 @@ entity *nnevolve_adapt(population *pop, entity *child)
  * Train network using back-propagation with momentum using
  * randomly selected training data.  (10 items)
  */
-  for (n=0; n<10; n++)
+  for (n=0; n<NNEVOLVE_NUM_TRAIN; n++)
     {
     item = random_int(num_train_data);
     NN_simulate(nn, train_data[item], train_property[item]);
@@ -142,6 +255,10 @@ entity *nnevolve_adapt(population *pop, entity *child)
     NN_backpropagate(nn);
     NN_adjust_weights(nn);
     }
+
+  pop->evaluate(pop, adult);
+
+/*  printf("DEBUG: Fitness %f -> %f\n", child->fitness, adult->fitness);*/
 
   return adult;
   }
@@ -205,6 +322,8 @@ void nnevolve_crossover(population *pop, entity *mother, entity *father, entity 
       }
     }
 
+/*  printf("DEBUG: Crossover: rate = %f %f -> %f %f momentum = %f %f -> %f %f\n", ((network_t *)father->chromosome[0])->rate, ((network_t *)mother->chromosome[0])->rate, nn1->rate, nn2->rate, ((network_t *)father->chromosome[0])->momentum, ((network_t *)mother->chromosome[0])->momentum, nn1->momentum, nn2->momentum);*/
+
   return;
   }
 
@@ -236,16 +355,16 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
   switch (event)
     {
     case 0:
-      nn->momentum += random_float_range(-0.2,0.2);
+      nn->momentum += random_float_range(-0.1,0.1);
       break;
     case 1:
-      nn->gain += random_float_range(-0.2,0.2);
+      nn->gain += random_float_range(-0.1,0.1);
       break;
     case 2:
-      nn->rate += random_float_range(-0.2,0.2);
+      nn->rate += random_float_range(-0.1,0.1);
       break;
     case 3:
-      NN_set_bias(nn, nn->bias+random_float_range(-0.2,0.2));
+      NN_set_bias(nn, nn->bias+random_float_range(-0.1,0.1));
       break;
     default:
 /*
@@ -259,6 +378,8 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
 
       nn->layer[l].weight[i][j] = random_float(1.0);
     }
+
+/*  printf("DEBUG: Mutate: rate = %f -> %f momentum = %f -> %f\n", ((network_t *)mother->chromosome[0])->rate, nn->rate, ((network_t *)mother->chromosome[0])->momentum, nn->momentum);*/
 
   return;
   }
@@ -301,7 +422,7 @@ boolean nnevolve_generation_hook(int generation, population *pop)
 void nnevolve_chromosome_constructor(population *pop, entity *embryo)
   {
   int        num_layers=4;   /* Number of layers in NN. */
-  int        neurons[4]={11,10,10,3};  /* Number of neurons in each layer. */
+  int        neurons[4]={11,20,20,3};  /* Number of neurons in each layer. */
 
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -351,18 +472,18 @@ void nnevolve_chromosome_destructor(population *pop, entity *corpse)
  **********************************************************************/
 
 void nnevolve_chromosome_replicate( population *pop,
-                                    entity *parent, entity *child,
+                                    entity *src, entity *dest,
                                     const int chromosomeid )
   {
 
   if (!pop) die("Null pointer to population structure passed.");
-  if (!parent || !child) die("Null pointer to entity structure passed.");
-  if (!parent->chromosome || !child->chromosome) die("Entity has no chromosomes.");
-  if (!parent->chromosome[0] || !child->chromosome[0]) die("Entity has empty chromosomes.");
+  if (!src || !dest) die("Null pointer to entity structure passed.");
+  if (!src->chromosome || !dest->chromosome) die("Entity has no chromosomes.");
+  if (!src->chromosome[0] || !dest->chromosome[0]) die("Entity has empty chromosomes.");
   if (chromosomeid != 0) die("Invalid chromosome index passed.");
 
-  NN_copy((network_t *)child->chromosome[chromosomeid],
-           (network_t *)parent->chromosome[chromosomeid]);
+  NN_copy((network_t *)src->chromosome[0],
+           (network_t *)dest->chromosome[0]);
 
   return;
   }
@@ -458,50 +579,27 @@ char *nnevolve_chromosome_to_string(population *pop, entity *joe)
 void nnevolve_setup_data(void)
   {
   int		i, j;
+
 #include "wine.data"
 
   train_property = s_malloc(sizeof(float *)*178);
   train_data = s_malloc(sizeof(float *)*178);
-  score_property = s_malloc(sizeof(float *)*178);
-  score_data = s_malloc(sizeof(float *)*178);
 
   for (i=0; i<178; i++)
     {
-    if (random_boolean_prob(0.1))
-      {
-      score_property[num_score_prop] = s_malloc(sizeof(float)*3);
-      score_data[num_score_data] = s_malloc(sizeof(float)*13);
+    train_property[num_train_data] = s_malloc(sizeof(float)*3);
+    train_data[num_train_data] = s_malloc(sizeof(float)*13);
 
-      for (j=0; j<4; j++)
-        {
-        score_property[num_score_prop][j] = data[num_score_prop][j];
-        }
-      for (j=4; j<16; j++)
-        {
-        score_data[num_score_data][j-4] = data[num_score_data][j];
-        }
-      num_score_data++;
-      num_score_prop++;
-      }
-    else
+    for (j=0; j<4; j++)
       {
-      train_property[num_train_prop] = s_malloc(sizeof(float)*3);
-      train_data[num_train_data] = s_malloc(sizeof(float)*13);
-
-      for (j=0; j<4; j++)
-        {
-        train_property[num_train_prop][j] = data[num_train_prop][j];
-        }
-      for (j=4; j<16; j++)
-        {
-        train_data[num_train_data][j-4] = data[num_train_data][j];
-        }
-      num_train_data++;
-      num_train_prop++;
+      train_property[num_train_data][j] = data[num_train_data][j];
       }
+    for (j=4; j<16; j++)
+      {
+      train_data[num_train_data][j-4] = data[num_train_data][j];
+      }
+    num_train_data++;
     }
-
-  printf("Data has been partitioned into %d training and %d scoring items.\n", num_score_data, num_train_data);
 
   return;
   }
@@ -518,6 +616,7 @@ void nnevolve_setup_data(void)
 int main(int argc, char **argv)
   {
   population	*pop=NULL;	/* Population of solutions. */
+  entity	*entity=NULL;	/* Used to test standard back-prop. */
 
 /*
  * Initialize random number generator.
@@ -527,12 +626,12 @@ int main(int argc, char **argv)
 
 /*
  * Allocate a new popuation structure.
- * max. individuals        = 200
- * stable num. individuals = 40
+ * max. individuals        = 300
+ * stable num. individuals = 80
  * num. chromosomes        = 1
  * length of chromosomes   = 0 (This is ignored by the constructor)
  */
-  pop = ga_population_new( 200, 40, 1, 0 );
+  pop = ga_population_new( 300, 80, 1, 0 );
   if ( !pop ) die("Unable to allocate population.");
 
 /*
@@ -554,11 +653,19 @@ int main(int argc, char **argv)
   pop->data_destructor = NULL;
   pop->data_ref_incrementor = NULL;
 
-  pop->evaluate = nnevolve_evaluate;
+  pop->evaluate = nnevolve_evaluate_all;
+/*
+  pop->evaluate = nnevolve_evaluate1;
+  pop->evaluate = nnevolve_evaluate2;
+*/
   pop->seed = nnevolve_seed;
   pop->adapt = nnevolve_adapt;
+/*
   pop->select_one = ga_select_one_roulette;
   pop->select_two = ga_select_two_roulette;
+*/
+  pop->select_one = ga_select_one_bestof2;
+  pop->select_two = ga_select_two_bestof2;
   pop->mutate = nnevolve_mutate;
   pop->crossover = nnevolve_crossover;
   pop->replace = NULL;
@@ -570,11 +677,11 @@ int main(int argc, char **argv)
 
 /*
  * Set the GA parameters:
- * Crossover ratio  = 0.7
- * Mutation ratio   = 0.1
+ * Crossover ratio  = 0.65
+ * Mutation ratio   = 0.05
  * Migration ration = 0.0
  */
-  ga_population_set_parameters( pop, 0.7, 0.1, 0.0 );
+  ga_population_set_parameters( pop, 0.5, 0.01, 0.0 );
 
 /*
  * Setup the data for NN simulation.
@@ -584,15 +691,31 @@ int main(int argc, char **argv)
 /*
  * Perform Lamarckian evolution for 200 generations.
  */
-  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 200 );
+/*
+  ga_evolution( pop, GA_CLASS_LAMARCK, GA_ELITISM_PARENTS_SURVIVE, 200 );
+*/
+  ga_evolution( pop, GA_CLASS_LAMARCK_ALL, GA_ELITISM_PARENTS_SURVIVE, 500 );
 
   printf("The fitness of the final solution found was: %f\n",
 		  ga_get_entity_from_rank(pop,0)->fitness);
+  
+  nnevolve_display_evaluation(pop, ga_get_entity_from_rank(pop,0));
 
 /*
  * Write the best solution to disk.
  */
-  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "best.nn");
+  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "ga_best.nn");
+
+
+/*
+ * For comparison, try standard back-propagation.
+ */
+  NN_define_train_data(num_train_data, train_data, train_property);
+  entity = ga_get_free_entity(pop);
+  nnevolve_seed(pop, entity);
+  NN_train_systematic((network_t *)entity->chromosome[0], 1000);
+  nnevolve_display_evaluation(pop, ga_get_entity_from_rank(pop,0));
+  NN_write((network_t *)ga_get_entity_from_rank(pop,0), "bp_best.nn");
 
   ga_extinction(pop);
 

@@ -28,7 +28,8 @@
   Synopsis:	Multi-layer NN trained using backpropagation with
 		momentum.
 
-  Last Updated:	28 Jan 2002 SAA changes for distribution with GAUL.
+  Last Updated:	05 Feb 2002 SAA	Added NN_IS_ON() and NN_IS_OFF() macros.
+		28 Jan 2002 SAA changes for distribution with GAUL.
   		25 Jan 2002 SAA	Header file stuff split from nn.c.  By default, standalone code is not compiled - change required for incorporation into GAUL example directory.
 
  **********************************************************************/
@@ -110,6 +111,11 @@ typedef struct
 #define NN_DEFAULT_TEST_STEP	20
 #define NN_DEFAULT_STOP_RATIO	1.25
 
+/*
+ * Switch check macro.
+ */
+#define NN_IS_ON(x)	((x)>=NN_SIGNAL_ON)
+#define NN_IS_OFF(x)	((x)<=NN_SIGNAL_OFF)
 
 /*
  * Prototypes.

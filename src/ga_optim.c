@@ -29,6 +29,7 @@
   To do:	Rewrite parallel versions, ga_evolution_mp() in particular.
 		Temperatures should be double-precision floats?
 		Need to fix elitism/crowding stuff.
+		Remove much duplicated code.
 
  **********************************************************************/
 
@@ -306,8 +307,8 @@ boolean ga_evolution(	population		*pop,
       {
       while (pop->orig_size>0)
         {
-        ga_entity_dereference_by_rank(pop, pop->orig_size);
         pop->orig_size--;
+        ga_entity_dereference_by_rank(pop, pop->orig_size);
         }
       }
 
@@ -1602,8 +1603,8 @@ boolean ga_evolution_archipelago( const int num_pops,
           {
           while (pop->orig_size>0)
             {
-            ga_entity_dereference_by_rank(pop, pop->orig_size);
             pop->orig_size--;
+            ga_entity_dereference_by_rank(pop, pop->orig_size);
             }
           }
 
@@ -2096,8 +2097,8 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
           {
           while (pop->orig_size>0)
             {
-            ga_entity_dereference_by_rank(pop, pop->orig_size);
             pop->orig_size--;
+            ga_entity_dereference_by_rank(pop, pop->orig_size);
             }
           }
 

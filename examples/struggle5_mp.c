@@ -107,8 +107,6 @@ int main(int argc, char **argv)
   int		i;					/* Loop over populations. */
   population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of population pointers. */
 
-  log_set_level(LOG_DEBUG);
-
   mpi_init(&argc, &argv);
 
   random_init();
