@@ -43,7 +43,7 @@ bin_PROGRAMS = \
 	struggle struggle_forked \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
-        struggle2 struggle3 struggle4 \
+	struggle2 struggle3 struggle4 \
 	struggle5 struggle5_mp struggle5_forked \
 	saveload \
 	nnevolve \

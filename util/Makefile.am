@@ -44,8 +44,7 @@ libgaul_util_la_SOURCES = \
 	table_util.c \
 	random_util.c \
 	timer_util.c \
-	log_util.c \
-	mpi_util.c 
+	log_util.c
 
 libnn_util_la_SOURCES = \
 	nn_util.c
@@ -60,7 +59,6 @@ nobase_include_HEADERS = \
 	gaul/log_util.h \
 	gaul/memory_chunks.h \
 	gaul/memory_util.h \
-	gaul/mpi_util.h \
 	gaul/nn_util.h \
 	gaul/random_util.h \
 	gaul/table_util.h \

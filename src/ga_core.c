@@ -1658,7 +1658,7 @@ entity *ga_entity_clone(population *pop, entity *parent)
   Network communication (population/entity migration) functions.
  **********************************************************************/
 
-#if W32_CRIPPLED != 1
+#if W32_CRIPPLED != 1 && HAVE_MPI == 1
 
 /**********************************************************************
   ga_population_send_by_mask()

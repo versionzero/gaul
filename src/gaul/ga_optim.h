@@ -38,7 +38,7 @@
  */
 #include "gaul.h"
 
-#ifdef HAVE_MPI
+#if HAVE_MPI==1
 #include <mpi.h>
 #endif
 

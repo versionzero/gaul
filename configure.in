@@ -25,7 +25,7 @@ dnl http://www.gnu.org/
 dnl
 dnl ***************************************************************
 dnl
-dnl To do:	MPI/PVM/thread checks and configuration.
+dnl To do:	MPI/thread checks and configuration.
 dnl		Consider use of AC_TRY_CFLAGS().
 dnl
 dnl ***************************************************************
@@ -47,7 +47,7 @@ PACKAGE=gaul-devel
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1846
-GA_PATCH_VERSION=1
+GA_PATCH_VERSION=2
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
@@ -118,31 +118,25 @@ AC_ARG_ENABLE(debug,
        [  --enable-debug=[no/minimum/yes] turn on debugging. [default=$debug_default]],,
        enable_debug=$debug_default)
 AC_ARG_ENABLE(memory_debug,
-       [  --enable-memory-debug           turn on memory access debugging. [default=no]],,
+       [  --enable-memory-debug=[yes/no]  turn on memory access debugging. [default=no]],,
        enable_memory_debug=no)
 AC_ARG_ENABLE(ansi,
-       [  --enable-ansi                   turn on strict ansi. [default=no]],,
+       [  --enable-ansi=[yes/no]          turn on strict ansi. [default=no]],,
        enable_ansi=no)
 AC_ARG_ENABLE(missing_prototypes,
-       [  --enable-missing-prototypes     turn on missing prototype checks. [default=no]],,
+       [  --enable-missing-prototypes=[yes/no] turn on missing prototype checks. [default=no]],,
        enable_missing_prototypes=no)
 AC_ARG_ENABLE(threads,
-       [  --enable-threads                turn on multi-thread support. [default=no]
-                          ([=no] will override --with-threads)],,
+       [  --enable-threads=[yes/no]       turn on multi-thread support. [default=no]],,
        enable_threads=no)
 AC_ARG_ENABLE(mpi,
-       [  --enable-mpi                    turn on MPI support. [default=no]
-                          ([=no] will override --with-mpi)],,
+       [  --enable-mpi=[yes/no]           turn on MPI support. [default=no]],,
        enable_mpi=no)
-AC_ARG_ENABLE(pvm,
-       [  --enable-pvm                    turn on PVM3 support. [default=no]
-                          ([=no] will override --with-pvm)],,
-       enable_pvm=no)
 AC_ARG_ENABLE(slang,
        [  --enable-slang=[yes/no]         use S-Lang for scripting. [default=yes]],,
        enable_slang=yes)
 AC_ARG_ENABLE(prof,
-       [  --enable-profile                turn on profiling. [default=no]],,
+       [  --enable-profile=[yes/no]       turn on profiling. [default=no]],,
        enable_prof=no)
 AC_ARG_ENABLE(efence,
        [  --enable-efence=[yes/no]        use Electric Fence for memory debugging. [default=no]],,
@@ -183,27 +177,49 @@ fi
 #
 # Setup MPI compilation
 #
-AC_MSG_CHECKING(for MPI use)
+AC_MSG_CHECKING(for whether to use MPI)
 if test "x$enable_mpi" != "xyes"; then
-  AC_MSG_RESULT(don't use)
+  AC_MSG_RESULT(no)
   enable_mpi=no
   MPIFLAGS=""
   MPILIBS=""
+  result=0
 else
-  AC_MSG_RESULT(use)
-  AC_DEFINE( HAVE_MPI, 1, [Define to use MPI for parallel code.])
+  AC_MSG_RESULT(yes)
   MPIFLAGS=""
   MPILIBS=""
-fi
+  result=1
+#
+# Check for MPI version.
+#
+  if test "x$MPIFLAGS" != "x" || test "x$MPILIBS" != "x"; then
+	  # User defined the additional LIBS and CFLAGS stuff :-).
+    AC_CHECK_LIB(mpi, MPI_Init,
+      [LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"],
+      [AC_MSG_ERROR(Unable to compile with specified MPI implementation.  Check MPIFLAGS and MPILIBS environment variables, or configure with '--enable-mpi=no' to disable MPI use.)])
+  else
+	  # User didn't define the additional LIBS and CFLAGS stuff, so we must try to guess it :-(
+    AC_MSG_WARN([You are advised to specify requirements of your MPI implementation via the MPIFLAGS and MPILIBS environment variables.])
+    # Try LAM
+    MPIFLAGS="-D_REENTRANT"
+    MPILIBS="-llammpio -llamf77mpi -lmpi -llam -lutil -lpthread"
 
-AC_MSG_CHECKING(for PVM3 use)
-if test "x$enable_pvm" != "xyes"; then
-	AC_MSG_RESULT(don't use)
-  enable_pvm=no
-else
-  AC_MSG_RESULT(use)
-  AC_DEFINE( HAVE_PVM3, 1, [Define to use PVM3 for parallel code.])
+    AC_CHECK_LIB(mpi, MPI_Init,
+      [LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"],
+      [result=0])
+    if test result = 0; then
+      # Try MPICH
+      result=1
+      MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1"
+      MPILIBS="-lmpich"
+    
+      AC_CHECK_LIB(mpi, MPI_Init,
+        [LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"],
+        [result=0])
+    fi
+  fi
 fi
+AC_DEFINE_UNQUOTED( HAVE_MPI, ${result}, [Whether to use MPI for parallel code.])
 
 AC_MSG_CHECKING(whether to disable memory chunk allocation)
 if test "x$enable_memory_chunks" = "xyes"; then
@@ -318,7 +334,7 @@ dnl Electric Fence has to be last library linked.
 AC_MSG_CHECKING(whether to link Electric Fence for memory debugging)
 if test "x$enable_efence" = "xyes"; then
   AC_MSG_RESULT(yes)
-  AC_CHECK_LIB(efence, malloc, LIBS="$LIBS -lefence")
+  AC_CHECK_LIB(efence, malloc, [LIBS="$LIBS -lefence"], [AC_MSG_ERROR(Unable to detect working Electric Fence installation)])
 else
   AC_MSG_RESULT(no)
 fi

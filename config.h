@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "10/09/03"
+#define GA_BUILD_DATE_STRING "22/09/03"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 1
+#define GA_PATCH_VERSION 2
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1846-1"
+#define GA_VERSION_STRING "0.1846-2"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -109,17 +109,14 @@
 /* Define to 1 if you have the `min' function. */
 /* #undef HAVE_MIN */
 
-/* Define to use MPI for parallel code. */
-/* #undef HAVE_MPI */
+/* Whether to use MPI for parallel code. */
+#define HAVE_MPI 0
 
 /* Define to 1 if you have the `on_exit' function. */
 #define HAVE_ON_EXIT 1
 
 /* Define to use pthreads for parallel code. */
 /* #undef HAVE_PTHREADS */
-
-/* Define to use PVM3 for parallel code. */
-/* #undef HAVE_PVM3 */
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1

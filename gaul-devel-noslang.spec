@@ -1,15 +1,15 @@
 Name:		gaul-devel-noslang
 Summary:	Genetic Algorithm Utility Library
 Version:	0.1846
-Release:	1
+Release:	2
 License:	Copyright (c) 2000-2003, Stewart Adcock.  Licensed under terms of the GNU GPL.
 Vendor:		Stewart Adcock
 Packager:	"Stewart Adcock" <gaul@linux-domain.com>
 Group:		Scientific/Engineering
 Source:		gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}.tar.gz
 URL:		http://gaul.sourceforge.net/
-Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroot
+#Requires:	none
 
 ########################################################################
 # gaul/gaul-devel-noslang.spec

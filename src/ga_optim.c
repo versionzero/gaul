@@ -3775,7 +3775,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
 int ga_evolution_mp(	population		*pop,
 			const int		max_generations )
   {
-#if HAVE_MPI
+#if HAVE_MPI==1
   int		generation=0;		/* Current generation number. */
 
 /* Checks. */

@@ -108,7 +108,7 @@
 /* Define to 1 if you have the `min' function. */
 #undef HAVE_MIN
 
-/* Define to use MPI for parallel code. */
+/* Whether to use MPI for parallel code. */
 #undef HAVE_MPI
 
 /* Define to 1 if you have the `on_exit' function. */
@@ -116,9 +116,6 @@
 
 /* Define to use pthreads for parallel code. */
 #undef HAVE_PTHREADS
-
-/* Define to use PVM3 for parallel code. */
-#undef HAVE_PVM3
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H

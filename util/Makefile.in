@@ -153,8 +153,7 @@ libgaul_util_la_SOURCES = \
 	table_util.c \
 	random_util.c \
 	timer_util.c \
-	log_util.c \
-	mpi_util.c 
+	log_util.c
 
 
 libnn_util_la_SOURCES = \
@@ -171,7 +170,6 @@ nobase_include_HEADERS = \
 	gaul/log_util.h \
 	gaul/memory_chunks.h \
 	gaul/memory_util.h \
-	gaul/mpi_util.h \
 	gaul/nn_util.h \
 	gaul/random_util.h \
 	gaul/table_util.h \
@@ -193,7 +191,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
-	timer_util.lo log_util.lo mpi_util.lo
+	timer_util.lo log_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -210,8 +208,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/compatibility.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/memory_chunks.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/memory_util.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/memory_util.Plo ./$(DEPDIR)/nn_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/random_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/table_util.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/timer_util.Plo
@@ -283,7 +280,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory_chunks.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory_util.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mpi_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nn_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/random_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/table_util.Plo@am__quote@

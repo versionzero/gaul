@@ -47,6 +47,20 @@
 
  **********************************************************************/
 
+#if HAVE_MPI != 1
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+  {
+  printf("GAUL was not compiled with MPI support.\n");
+
+  exit(EXIT_FAILURE);
+  }
+
+#else
+
 /*
  * Includes
  */
@@ -162,4 +176,6 @@ int main(int argc, char **argv)
   exit(EXIT_SUCCESS);
   }
 
+
+#endif /* #if HAVE_MPI != 1 */
 

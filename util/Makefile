@@ -108,9 +108,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1846
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 1
+GA_PATCH_VERSION = 2
 GA_UNAME_STRING = 
-GA_VERSION = 0.1846-1
+GA_VERSION = 0.1846-2
 GA_VERSION_STRING = 
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -118,7 +118,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1846
-LT_REVISION = 1
+LT_REVISION = 2
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -129,7 +129,7 @@ PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
 V3_QUICK = 1
-VERSION = 0.1846-1
+VERSION = 0.1846-2
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
@@ -153,8 +153,7 @@ libgaul_util_la_SOURCES = \
 	table_util.c \
 	random_util.c \
 	timer_util.c \
-	log_util.c \
-	mpi_util.c 
+	log_util.c
 
 
 libnn_util_la_SOURCES = \
@@ -171,7 +170,6 @@ nobase_include_HEADERS = \
 	gaul/log_util.h \
 	gaul/memory_chunks.h \
 	gaul/memory_util.h \
-	gaul/mpi_util.h \
 	gaul/nn_util.h \
 	gaul/random_util.h \
 	gaul/table_util.h \
@@ -193,7 +191,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_util_la_LIBADD =
 am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
 	memory_chunks.lo memory_util.lo table_util.lo random_util.lo \
-	timer_util.lo log_util.lo mpi_util.lo
+	timer_util.lo log_util.lo
 libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
@@ -210,8 +208,7 @@ DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/compatibility.Plo \
 	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
 	./$(DEPDIR)/memory_chunks.Plo \
-	./$(DEPDIR)/memory_util.Plo \
-	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
+	./$(DEPDIR)/memory_util.Plo ./$(DEPDIR)/nn_util.Plo \
 	./$(DEPDIR)/random_util.Plo \
 	./$(DEPDIR)/table_util.Plo \
 	./$(DEPDIR)/timer_util.Plo
@@ -283,7 +280,6 @@ include ./$(DEPDIR)/linkedlist.Plo
 include ./$(DEPDIR)/log_util.Plo
 include ./$(DEPDIR)/memory_chunks.Plo
 include ./$(DEPDIR)/memory_util.Plo
-include ./$(DEPDIR)/mpi_util.Plo
 include ./$(DEPDIR)/nn_util.Plo
 include ./$(DEPDIR)/random_util.Plo
 include ./$(DEPDIR)/table_util.Plo

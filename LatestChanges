@@ -5,6 +5,9 @@ Changes since release 0.1846:
 - Added ga_mutate_bitstring_multipoint() mutation function.
 - Added ga_mutate_double_allpoint() mutation function.
 - Added ga_mutate_double_multipoint() mutation function.
+- Use of MPI for parallel processing now more seemless.
+- The (incomplete) support for use of PVM for parallel processing removed completely.
+- Several unused or unneeded portions of code culled.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
