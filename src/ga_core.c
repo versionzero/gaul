@@ -284,7 +284,7 @@ population *ga_population_new(	const int stable_size,
   newpop->scheme = GA_SCHEME_DARWIN;
   newpop->elitism = GA_ELITISM_UNKNOWN;
 
-  thread_mutex_new(newpop->lock);
+  THREAD_LOCK_NEW(newpop->lock);
 
   if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
@@ -401,7 +401,7 @@ population *ga_population_clone_empty(population *pop)
   newpop->scheme = pop->scheme;
   newpop->elitism = pop->elitism;
 
-  thread_mutex_new(newpop->lock);
+  THREAD_LOCK_NEW(newpop->lock);
 
 /*
  * Clone the callback functions.
@@ -2538,7 +2538,7 @@ boolean ga_extinction(population *extinct)
     if (extinct->search_params) s_free(extinct->search_params);
     if (extinct->sampling_params) s_free(extinct->sampling_params);
 
-    thread_mutex_free(extinct->lock);
+    THREAD_LOCK_FREE(extinct->lock);
 
     s_free(extinct);
     }

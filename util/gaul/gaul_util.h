@@ -71,24 +71,26 @@
 #endif
 
 #if HAVE_PTHREADS == 1
+# define THREAD_LOCK_DECLARE(name)	pthread_mutex_t (name)
 # define THREAD_LOCK_DEFINE_STATIC(name)       static pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
 # define THREAD_LOCK_DEFINE(name)	pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
 # define THREAD_LOCK_EXTERN(name)	extern pthread_mutex_t (name)
 # define THREAD_LOCK(name)		pthread_mutex_lock(&(name))
 # define THREAD_UNLOCK(name)		pthread_mutex_unlock(&(name))
 # define THREAD_TRYLOCK(name)		pthread_mutex_trylock(&(name))
-# define thread_mutex_new(name)		pthread_mutex_init(&(name), NULL)
-# define thread_mutex_free(name)	pthread_mutex_destroy(&(name))
+# define THREAD_LOCK_NEW(name)		pthread_mutex_init(&(name), NULL)
+# define THREAD_LOCK_FREE(name)		pthread_mutex_destroy(&(name))
 #else
 # if USE_OPENMP == 1
+#  define THREAD_LOCK_DECLARE(name)      omp_lock_t (name)
 #  define THREAD_LOCK_DEFINE_STATIC(name)       static omp_lock_t (name)
 #  define THREAD_LOCK_DEFINE(name)      omp_lock_t (name)
 #  define THREAD_LOCK_EXTERN(name)      extern omp_lock_t (name)
 #  define THREAD_LOCK(name)             omp_set_lock(&(name))
 #  define THREAD_UNLOCK(name)           omp_unset_lock(&(name))
 #  define THREAD_TRYLOCK(name)          omp_test_lock(&(name))
-#  define thread_mutex_new(name)	omp_init_lock(&(name))
-#  define thread_mutex_free(name)	omp_destroy_lock(&(name))
+#  define THREAD_LOCK_NEW(name)		omp_init_lock(&(name))
+#  define THREAD_LOCK_FREE(name)	omp_destroy_lock(&(name))
 /*
  * If threads are used, these must be properly defined somewhere.
  * Unfortunately empty macros cause splint parse errors.  They
@@ -99,19 +101,25 @@
  */
 # else
 #  if defined(__GNUC__) && !defined(_ISOC99_SOURCE)
+#   define THREAD_LOCK_DECLARE(name)
 #   define THREAD_LOCK_DEFINE_STATIC(name)
 #   define THREAD_LOCK_DEFINE(name)
 #   define THREAD_LOCK_EXTERN(name)
 #   define THREAD_LOCK(name)
 #   define THREAD_UNLOCK(name)
 #   define THREAD_TRYLOCK(name)		0
+#   define THREAD_LOCK_NEW(name)
+#   define THREAD_LOCK_FREE(name)
 #  else
+#   define THREAD_LOCK_DECLARE(name)	int (name)
 #   define THREAD_LOCK_DEFINE_STATIC(name)	static int (name) = 0
 #   define THREAD_LOCK_DEFINE(name)	int (name) = 0
 #   define THREAD_LOCK_EXTERN(name)	extern int (name)
 #   define THREAD_LOCK(name)		(name) = 1
 #   define THREAD_UNLOCK(name)		(name) = 0
 #   define THREAD_TRYLOCK(name)		0
+#   define THREAD_LOCK_NEW(name)	(name) = 0
+#   define THREAD_LOCK_FREE(name)	(name) = 0
 #  endif
 # endif
 #endif

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -304,13 +304,7 @@ struct population_t
   GAcrossover			crossover;
   GAreplace			replace;
 
-#if HAVE_PTHREADS == 1
-  pthread_mutex_t		lock;
-#else
-# if USE_OPENMP == 1
-  omp_lock_t			lock;
-# endif
-#endif
+  THREAD_LOCK_DECLARE(lock);
   };
 
 /*

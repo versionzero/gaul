@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -113,7 +113,7 @@ GA_UNAME_STRING =
 GA_VERSION = 0.1846-8
 GA_VERSION_STRING = 
 HAVE_MPI = 0
-HAVE_PTHREADS = 1
+HAVE_PTHREADS = 0
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool

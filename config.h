@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "17/05/04"
+#define GA_BUILD_DATE_STRING "22/05/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -113,7 +113,7 @@
 #define HAVE_ON_EXIT 1
 
 /* Whether libpthread is installed. */
-#define HAVE_PTHREADS 1
+#define HAVE_PTHREADS 0
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
