@@ -759,7 +759,9 @@ static int gaul_lookup_hook_id(void *func)
 
   while (lookup[id].func_ptr != NULL && func != lookup[id].func_ptr) id++;
 
-printf("Function id is %d\n", id);
+#if GAUL_DEBUG>2
+  printf("Function id is %d\n", id);
+#endif
 
   return lookup[id].func_ptr!=NULL?id:-1;
   }
@@ -776,7 +778,9 @@ printf("Function id is %d\n", id);
 static void *gaul_lookup_hook(int id)
   {
 
-printf("Looking for function with id %d\n", id);
+#if GAUL_DEBUG>2
+  printf("Looking for function with id %d\n", id);
+#endif
 
   return (id<0)?NULL:lookup[id].func_ptr;
   }
