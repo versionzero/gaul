@@ -588,7 +588,7 @@ void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, d
 		into a real. 
   parameters:
   return:
-  last updated: 08 Jan 2003
+  last updated: 25 Jul 2003
  **********************************************************************/
 
 double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
@@ -599,8 +599,8 @@ double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
   int_mantissa = ga_bit_decode_gray_int( bstr, n, mantissa );
   int_exponent = ga_bit_decode_gray_int( bstr, n+mantissa, exponent );
 
-  value = ((double)int_mantissa) / ((double)(1<<(mantissa-1)))
-          * pow( 2.0, (double) int_exponent );
+  value = pow( 2.0, (double) int_exponent ) *
+          ((double)int_mantissa) / ((double)(1<<(mantissa-1)));
 
   return value;        
   }
@@ -612,7 +612,7 @@ double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
                 given offset. 
   parameters:
   return:
-  last updated: 08 Jan 2003
+  last updated: 25 Jul 2003
  **********************************************************************/
 
 void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, double value )
@@ -620,6 +620,7 @@ void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, dou
   int int_mantissa, int_exponent;
 
   int_mantissa = (int) floor(frexp( value, &int_exponent ) * (double)(1<<(mantissa-1)));
+
   ga_bit_encode_gray_int( bstr, n, mantissa, int_mantissa );
   ga_bit_encode_gray_int( bstr, n+mantissa, exponent, int_exponent );
 
@@ -630,9 +631,9 @@ void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, dou
 /**********************************************************************
   ga_bit_test()
   synopsis:	Test bitstring conversion routines.
-  parameters:
-  return:
-  last updated: 08 Jan 2003
+  parameters:	none
+  return:	Always TRUE, currently.
+  last updated: 25 Jul 2003
  **********************************************************************/
 
 boolean ga_bit_test( void )
@@ -652,7 +653,8 @@ boolean ga_bit_test( void )
     origint = 23*i;
     ga_bit_encode_binary_int( bstr, 0, 64, origint );
     newint = ga_bit_decode_binary_int( bstr, 0, 64 );
-    printf("Orig val = %d new val = %d\n", origint, newint);
+    printf("Orig val = %d new val = %d %s\n",
+           origint, newint, origint==newint?"PASSED":"FAILED");
     }
 
   for (i=0; i<10; i++)
@@ -660,7 +662,9 @@ boolean ga_bit_test( void )
     origval = -0.3+0.16*i;
     ga_bit_encode_binary_real( bstr, 0, 64, 64, origval );
     newval = ga_bit_decode_binary_real( bstr, 0, 64, 64 );
-    printf("Orig val = %f new val = %f\n", origval, newval);
+    printf("Orig val = %f new val = %f %s\n",
+           origval, newval,
+           (origval>newval-TINY&&origval<newval+TINY)?"PASSED":"FAILED");
     }
 
   printf("Gray encoding:\n");
@@ -670,7 +674,8 @@ boolean ga_bit_test( void )
     origint = 23*i;
     ga_bit_encode_gray_int( bstr, 0, 64, origint );
     newint = ga_bit_decode_gray_int( bstr, 0, 64 );
-    printf("Orig val = %d new val = %d\n", origint, newint);
+    printf("Orig val = %d new val = %d %s\n",
+           origint, newint, origint==newint?"PASSED":"FAILED");
     }
 
   for (i=0; i<10; i++)
@@ -678,7 +683,9 @@ boolean ga_bit_test( void )
     origval = -0.3+0.16*i;
     ga_bit_encode_gray_real( bstr, 0, 64, 64, origval );
     newval = ga_bit_decode_gray_real( bstr, 0, 64, 64 );
-    printf("Orig val = %f new val = %f\n", origval, newval);
+    printf("Orig val = %f new val = %f %s\n",
+           origval, newval,
+           (origval>newval-TINY&&origval<newval+TINY)?"PASSED":"FAILED");
     }
 
   s_free(bstr);
