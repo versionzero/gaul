@@ -233,7 +233,7 @@ static void destruct_list(population *pop, SLList *list)
 		const int num_chromosome	Num. of chromosomes.
 		const int len_chromosome	Size of chromosomes (may be ignored).
   return:	population *	new population structure.
-  last updated: 18 Mar 2002
+  last updated: 07 Nov 2002
  **********************************************************************/
 
 population *ga_population_new(	const int stable_size,
@@ -255,6 +255,7 @@ population *ga_population_new(	const int stable_size,
   newpop->len_chromosomes = len_chromosome;
   newpop->data = NULL;
   newpop->free_index = newpop->max_size-1;
+  newpop->island = -1;
 
   newpop->crossover_ratio = 1.0;
   newpop->mutation_ratio = 1.0;
@@ -284,6 +285,8 @@ population *ga_population_new(	const int stable_size,
  */
   newpop->tabu_params = NULL;
   newpop->sa_params = NULL;
+  newpop->climbing_params = NULL;
+  newpop->simplex_params = NULL;
   
 /*
  * Clean the callback functions.
@@ -745,7 +748,6 @@ static entity *gaul_read_entity(FILE *fp, population *pop)
   buffer = s_malloc(sizeof(byte)*len);
   fread(buffer, sizeof(byte), len, fp);
   pop->chromosome_from_bytes(pop, entity, buffer);
-  fwrite(buffer, sizeof(byte), len, fp);
 
   s_free(buffer);
 
@@ -817,7 +819,7 @@ boolean ga_population_write(population *pop, char *fname)
   char		buffer[BUFFER_LEN];	/* String buffer. */
   int		id[18];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 001";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
 
 /* Checks. */
   if (!pop) die("Null pointer to population structure passed.");
@@ -853,6 +855,8 @@ boolean ga_population_write(population *pop, char *fname)
   fwrite(&(pop->migration_ratio), sizeof(double), 1, fp);
   fwrite(&(pop->scheme), sizeof(int), 1, fp);
   fwrite(&(pop->elitism), sizeof(int), 1, fp);
+
+  fwrite(&(pop->island), sizeof(int), 1, fp);
 
 /*
  * Callback handling.  Note that user-implemented functions currently
@@ -928,15 +932,16 @@ boolean ga_population_write(population *pop, char *fname)
 
 /**********************************************************************
   ga_population_read()
-  synopsis:	Reads entire population and it's genetic data back
+  synopsis:	Reads entire population and its genetic data back
 		from disk.   Some things can't be retored.  See
 		ga_population_write() for details.
+		Compatibility version.
   parameters:	char *fname		Filename to read from.
   return:	population *pop		New population structure.
-  last updated: 30 May 2002
+  last updated: 07 Nov 2002
  **********************************************************************/
 
-population *ga_population_read(char *fname)
+static population *ga_population_read_001(char *fname)
   {
   population	*pop=NULL;		/* New population structure. */
   FILE          *fp;			/* File handle. */
@@ -962,9 +967,9 @@ population *ga_population_read(char *fname)
  */
   fread(format_str_in, sizeof(char), strlen(format_str), fp);
   if (strcmp(format_str, format_str_in)!=0)
-    die("Incorrect format for population file.");
+    die("Incompatible format for population file.");
 
-  fread(buffer, sizeof(char), 64, fp);	/* Ignored. */
+  fread(buffer, sizeof(char), 64, fp);	/* Presently ignored. */
 
 /*
  * Population info.
@@ -1059,6 +1064,143 @@ population *ga_population_read(char *fname)
 
 
 /**********************************************************************
+  ga_population_read()
+  synopsis:	Reads entire population and it's genetic data back
+		from disk.   Some things can't be retored.  See
+		ga_population_write() for details.
+  parameters:	char *fname		Filename to read from.
+  return:	population *pop		New population structure.
+  last updated: 07 Nov 2002
+ **********************************************************************/
+
+population *ga_population_read(char *fname)
+  {
+  population	*pop=NULL;		/* New population structure. */
+  FILE          *fp;			/* File handle. */
+  int		i;			/* Loop variables. */
+  char		buffer[BUFFER_LEN];	/* String buffer. */
+  int		id[18];			/* Array of hook indices. */
+  int		count=0;		/* Number of unrecognised hook functions. */
+  char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  char		format_str_in[32]="";	/* Input format tag. (Empty initialiser to avoid valgrind warning...) */
+  int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
+
+/* Checks. */
+  if (!fname) die("Null pointer to filename passed.");
+
+/*
+ * Open output file.
+ */
+  if((fp=fopen(fname,"r"))==NULL)
+    dief("Cannot open population file \"%s\" for input.", fname);
+
+/*
+ * Program info.
+ */
+  fread(format_str_in, sizeof(char), strlen(format_str), fp);
+  if (strcmp(format_str, format_str_in)!=0)
+    {
+    fclose(fp);
+    plog(LOG_WARNING, "Old format for population file. (Pre-002)");
+    return ga_population_read_001(fname);
+    }
+
+  fread(buffer, sizeof(char), 64, fp);	/* Presently ignored. */
+
+/*
+ * Population info.
+ */
+  fread(&size, sizeof(int), 1, fp);
+  fread(&stable_size, sizeof(int), 1, fp);
+  fread(&num_chromosomes, sizeof(int), 1, fp);
+  fread(&len_chromosomes, sizeof(int), 1, fp);
+
+/*
+ * Allocate a new population structure.
+ */
+  pop = ga_population_new(stable_size, num_chromosomes, len_chromosomes);
+
+/*
+ * Got a population structure?
+ */
+  if (!pop) die("Unable to allocate population structure.");
+
+/*
+ * GA parameters.
+ */
+  fread(&(pop->crossover_ratio), sizeof(double), 1, fp);
+  fread(&(pop->mutation_ratio), sizeof(double), 1, fp);
+  fread(&(pop->migration_ratio), sizeof(double), 1, fp);
+  fread(&(pop->scheme), sizeof(int), 1, fp);
+  fread(&(pop->elitism), sizeof(int), 1, fp);
+  fread(&(pop->island), sizeof(int), 1, fp);
+
+/*
+ * Callback handling.  Note that user-implemented functions currently
+ * can't be handled in these files.
+ * id = -1 - Unknown, external function.
+ * id = 0  - NULL function.
+ * id > 0  - GAUL defined function.
+ */
+  fread(id, sizeof(int), 18, fp);
+
+  pop->generation_hook        = (GAgeneration_hook)  gaul_lookup_hook(id[0]);
+  pop->iteration_hook         = (GAiteration_hook)   gaul_lookup_hook(id[1]);
+
+  pop->data_destructor        = (GAdata_destructor)      gaul_lookup_hook(id[2]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) gaul_lookup_hook(id[3]);
+
+  pop->chromosome_constructor = (GAchromosome_constructor) gaul_lookup_hook(id[4]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  gaul_lookup_hook(id[5]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   gaul_lookup_hook(id[6]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    gaul_lookup_hook(id[7]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  gaul_lookup_hook(id[8]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   gaul_lookup_hook(id[9]);
+
+  pop->evaluate               = (GAevaluate)       gaul_lookup_hook(id[10]);
+  pop->seed                   = (GAseed)           gaul_lookup_hook(id[11]);
+  pop->adapt                  = (GAadapt)          gaul_lookup_hook(id[12]);
+  pop->select_one             = (GAselect_one)     gaul_lookup_hook(id[13]);
+  pop->select_two             = (GAselect_two)     gaul_lookup_hook(id[14]);
+  pop->mutate                 = (GAmutate)         gaul_lookup_hook(id[15]);
+  pop->crossover              = (GAcrossover)      gaul_lookup_hook(id[16]);
+  pop->replace                = (GAreplace)        gaul_lookup_hook(id[17]);
+
+/*
+ * Warn user of any unhandled data.
+ */
+  for (i=0; i<18; i++)
+    if (id[i] == -1) count++;
+
+  if (count>0)
+    plog(LOG_NORMAL, "Unable to handle %d hook function%sspecified in population structure.", count, count==1?" ":"s ");
+
+/*
+ * Entity info.
+ */
+  for (i=0; i<size; i++)
+    {
+    gaul_read_entity(fp, pop);
+    }
+
+/*
+ * Footer info.
+ */
+  fread(buffer, sizeof(char), 4, fp); 
+  if (strcmp("END", buffer)!=0) die("Corrupt population file?");
+
+/*
+ * Close file.
+ */
+  fclose(fp);
+
+  plog(LOG_DEBUG, "Have read %d entities into population.", pop->size);
+
+  return pop;
+  }
+
+
+/**********************************************************************
   ga_entity_write()
   synopsis:	Write an entity to disk.
 		Note: Currently does not (and probably can not) store
@@ -1067,7 +1209,7 @@ population *ga_population_read(char *fname)
 		entity *entity
 		char *fname
   return:	TRUE
-  last updated: 29 May 2002
+  last updated: 07 Nov 2002
  **********************************************************************/
 
 boolean ga_entity_write(population *pop, entity *entity, char *fname)
