@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "07/10/04"
+#define GA_BUILD_DATE_STRING "07/02/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,7 +32,7 @@
 #define GA_PATCH_VERSION 5
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
+#define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.760_FC3 #1 Wed Feb 2 00:12:56 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
 #define GA_VERSION_STRING "0.1847-5"
@@ -191,7 +191,7 @@
 #define HAVE__BOOL 1
 
 /* Memory alignment boundry characteristics. */
-#define MEMORY_ALIGN_SIZE 4
+#define MEMORY_ALIGN_SIZE 8
 
 /* Whether to use debugging memory allocation routines. */
 #define MEMORY_ALLOC_DEBUG 0
@@ -230,10 +230,10 @@
 #define SIZEOF_INT 4
 
 /* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
+#define SIZEOF_LONG 8
 
 /* The size of a `void *', as computed by sizeof. */
-#define SIZEOF_VOID_P 4
+#define SIZEOF_VOID_P 8
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

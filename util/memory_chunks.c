@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -900,9 +900,10 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
           mem_chunk->mem_area = (MemArea*) malloc(sizeof(MemArea)+
                                                   MEMORY_ALIGN_SIZE-(sizeof(MemArea)%MEMORY_ALIGN_SIZE)+
                                                   mem_chunk->area_size);
-          mem_chunk->mem_area->mem = (unsigned char*) (mem_chunk->mem_area+
-                                                       sizeof(MemArea)+
-                                                       MEMORY_ALIGN_SIZE-(sizeof(MemArea)%MEMORY_ALIGN_SIZE));
+          mem_chunk->mem_area->mem = ((unsigned char*) (mem_chunk->mem_area)+
+                                     sizeof(MemArea)+
+                                     MEMORY_ALIGN_SIZE-
+                                     (sizeof(MemArea)%MEMORY_ALIGN_SIZE));
 
           if (!mem_chunk->mem_area) die("Unable to allocate memory.");
 

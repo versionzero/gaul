@@ -19,6 +19,7 @@ Changes since release 0.1847:
 - Added experimental efficient memory handling code for chromosomes (Disabled by default, however).
 - All mentions of the outdated V3_QUICK preprocessor constant removed.
 - Added autogen.sh script to distribution.
+- Probable bug in memory_chunks.c fixed -- thanks to Al Cripps.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

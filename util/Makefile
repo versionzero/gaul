@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/gaul-devel/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/gaul-devel/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/gaul-devel/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/gaul-devel/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -88,19 +88,19 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_alias = 
-build_triplet = i686-pc-linux-gnu
+build_triplet = x86_64-unknown-linux-gnu
 host_alias = 
-host_triplet = i686-pc-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 target_alias = 
-target_triplet = i686-pc-linux-gnu
+target_triplet = x86_64-unknown-linux-gnu
 
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-5/missing --run tar
+AMTAR = ${SHELL} /home/stewart/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -137,7 +137,7 @@ VERSION = 0.1847-5
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel/gaul-devel-0.1847-5/install-sh
+install_sh = /home/stewart/gaul-devel/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -205,7 +205,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang
+LIBS =  -lpthread -lpthread -lslang -lm -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/avltree.Plo \
@@ -223,7 +223,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -w2 -O2 -ipo -ipo_obj -tpp7 -I/u2/include -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall  -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 
