@@ -146,6 +146,9 @@ AC_ARG_ENABLE(efence,
 AC_ARG_ENABLE(padding,
        [  --enable-padding=[yes/no]       use memory padding for overflow detection. [default=no]],,
        enable_padding=no)
+AC_ARG_ENABLE(memory_chunks,
+       [  --enable-memory-chunks=[yes/no] use memory chunk allocation routines. [default=yes]],,
+       enable_memory_chunks=yes)
 AC_ARG_ENABLE(num_procs,
        [  --enable-num-procs=[INT]        default number of processes to spawn in MP code. [default=16]],,
        enable_num_procs=16)
@@ -197,6 +200,14 @@ if test "x$enable_threads" = "xno"; then
   fi
 fi
 
+AC_MSG_CHECKING(whether to disable memory chunk allocation)
+if test "x$enable_memory_chunks" = "xyes"; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_DEFINE( MEMORY_CHUNKS_MIMIC, 1, [Define to disable memory chunk allocation routines.])
+fi
+
 AC_MSG_CHECKING(whether to enable memory access debugging)
 if test "x$enable_memory_debug" = "xyes"; then
   AC_MSG_RESULT(yes - full profiling)
@@ -207,8 +218,8 @@ else
   result1=0
   result2=1
 fi
-  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result1}, [Whether to use debugging memory allocation routines.])
-  AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result2}, [Whether to use safe memory allocation routines.])
+AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result1}, [Whether to use debugging memory allocation routines.])
+AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result2}, [Whether to use safe memory allocation routines.])
 
 AC_MSG_CHECKING(whether to enable dumping of statistics)
 if test "x$enable_stats" = "xyes"; then

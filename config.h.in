@@ -129,6 +129,9 @@
 /* Define to 1 if you have the `select' function. */
 #undef HAVE_SELECT
 
+/* Define to 1 if you have the `setlocale' function. */
+#undef HAVE_SETLOCALE
+
 /* Whether sincos() is available */
 #undef HAVE_SINCOS
 
@@ -305,6 +308,9 @@
 
 /* Whether to use safe memory allocation routines. */
 #undef MEMORY_ALLOC_SAFE
+
+/* Define to disable memory chunk allocation routines. */
+#undef MEMORY_CHUNKS_MIMIC
 
 /* Whether to pad memory. */
 #undef MEMORY_PADDING
