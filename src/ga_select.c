@@ -173,10 +173,7 @@ boolean ga_select_one_every(population *pop, entity **mother)
     return TRUE;
     }
 
-  if ( random_boolean_prob(pop->mutation_ratio) )
-    {
-    *mother = pop->entity_iarray[pop->select_state];
-    }
+  *mother = pop->entity_iarray[pop->select_state];
 
   pop->select_state++;
 
@@ -198,16 +195,13 @@ boolean ga_select_two_every(population *pop, entity **mother, entity **father)
   *mother = NULL;
   *father = NULL;
 
-  if ( pop->orig_size <= pop->select_state )
+  if ( SQU(pop->orig_size) <= pop->select_state )
     {
     return TRUE;
     }
 
-  if ( random_boolean_prob(pop->crossover_ratio) )
-    {
-    *mother = pop->entity_iarray[pop->select_state%pop->orig_size];
-    *father = pop->entity_iarray[pop->select_state/pop->orig_size];
-    }
+  *mother = pop->entity_iarray[pop->select_state%pop->orig_size];
+  *father = pop->entity_iarray[pop->select_state/pop->orig_size];
 
   pop->select_state++;
 
