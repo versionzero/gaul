@@ -67,22 +67,28 @@
 #include "ga_core.h"
 
 /**********************************************************************
-  ga_select_stats()
+  gaul_select_stats()
   synopsis:     Determine mean and standard deviation (and some other
                 potentially useful junk) of the fitness scores.
-  parameters:
-  return:
+  parameters:	population *pop
+  return:	TRUE
   last updated: 30/04/01
  **********************************************************************/
 
-static boolean ga_select_stats( population *pop,
+static boolean gaul_select_stats( population *pop,
                              double *average, double *stddev, double *sum )
   {
   int           i;                      /* Loop over all entities. */
   double        fsum=0.0, fsumsq=0.0;   /* Sum and sum squared. */
 
+#if 0
+/*
+ * Checks not needed for this static function unless used by
+ * external code... which it isn't.
+ */
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
+#endif
 
   for (i=0; i<pop->orig_size; i++)
     {
@@ -95,6 +101,28 @@ static boolean ga_select_stats( population *pop,
   *stddev = (fsumsq - fsum*fsum/pop->orig_size)/pop->orig_size;
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  gaul_select_sum_fitness()
+  synopsis:	Determine sum of entity fitnesses.
+  parameters:	population *pop
+  return:	double sum
+  last updated: 11 Jun 2002
+ **********************************************************************/
+
+static double gaul_select_sum_fitness( population *pop )
+  {
+  int           i;		/* Loop over all entities. */
+  double        sum=0.0;	/* Sum and sum squared. */
+
+  for (i=0; i<pop->orig_size; i++)
+    {
+    sum += pop->entity_iarray[i]->fitness;
+    }
+
+  return sum;
   }
 
 
@@ -396,7 +424,7 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    gaul_select_stats(pop, &mean, &stddev, &sum);
     total_expval=sum/mean;
     marker = random_int(pop->orig_size);
     }
@@ -455,7 +483,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    gaul_select_stats(pop, &mean, &stddev, &sum);
     marker = random_int(pop->orig_size);
     minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
@@ -518,7 +546,7 @@ boolean ga_select_two_roulette( population *pop,
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    gaul_select_stats(pop, &mean, &stddev, &sum);
     total_expval=sum/mean;
     marker = random_int(pop->orig_size);
 /*
@@ -596,7 +624,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    gaul_select_stats(pop, &mean, &stddev, &sum);
     marker = random_int(pop->orig_size);
     minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
@@ -648,15 +676,16 @@ boolean ga_select_two_roulette_rebased( population *pop,
 		severely mess-up the algorithm.
   parameters:
   return:	
-  last updated: 18 Apr 2002
+  last updated: 11 Jun 2002
  **********************************************************************/
 
 boolean ga_select_one_sus(population *pop, entity **mother)
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
   static double	offset;			/* Current pointer offset. */
   static double	step;			/* Distance between each pointer. */
   static int	current;		/* Currently selected individual. */
+  static int	num_to_select;		/* Number of individuals to select. */
+  double	sum;			/* Fitness total. */
 
   if (!pop) die("Null pointer to population structure passed.");
 
@@ -669,10 +698,15 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    num_to_select = (pop->orig_size*pop->crossover_ratio);
+    sum = gaul_select_sum_fitness(pop);
     step = sum/(pop->orig_size*pop->mutation_ratio);
     offset = random_double(step);
     current=0;
+    }
+  else if (pop->select_state>num_to_select)
+    {
+    return TRUE;
     }
   else
     {
@@ -683,13 +717,14 @@ boolean ga_select_one_sus(population *pop, entity **mother)
     {
     offset -= pop->entity_iarray[current]->fitness;
     current++;
+    if (current>=pop->orig_size) current-=pop->orig_size;
     }
 
   *mother = pop->entity_iarray[current];
 
   pop->select_state++;
 
-  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  return FALSE;
   }
 
 
@@ -703,17 +738,17 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 		severely mess-up the algorithm.
   parameters:
   return:	
-  last updated: 18 Apr 2002
+  last updated: 11 Jun 2002
  **********************************************************************/
 
 boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
   {
-  static double	mean, stddev, sum;	/* Fitness statistics. */
   static double	offset1, offset2;	/* Current pointer offsets. */
   static double	step;			/* Distance between each pointer. */
   static int	current1, current2;	/* Currently selected individuals. */
   static int	*permutation=NULL;	/* Randomly ordered indices. */
   static int	num_to_select;		/* Number of individuals to select. */
+  double	sum;			/* Fitness total. */
   int		*ordered;		/* Ordered indices. */
   int		i;			/* Loop variable over indices. */
 
@@ -729,7 +764,7 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
   if (pop->select_state == 0)
     { /* First call of this generation. */
     num_to_select = (pop->orig_size*pop->crossover_ratio);
-    ga_select_stats(pop, &mean, &stddev, &sum);
+    sum = gaul_select_sum_fitness(pop);
     step = sum/num_to_select;
     offset1 = offset2 = random_double(step);
     current1=0;
@@ -743,6 +778,12 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
     random_int_permutation(pop->orig_size, ordered, permutation);
     s_free(ordered);
     }
+  else if (pop->select_state>num_to_select)
+    {
+    s_free(permutation);
+    permutation=NULL;
+    return TRUE;
+    }
   else
     {
     offset1 += step;
@@ -753,27 +794,22 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
     {
     offset1 -= pop->entity_iarray[current1]->fitness;
     current1++;
+    if (current1>=pop->orig_size) current1-=pop->orig_size;
     }
 
-  while (offset2 > pop->entity_iarray[current2]->fitness)
+  while (offset2 > pop->entity_iarray[permutation[current2]]->fitness)
     {
-    offset2 -= pop->entity_iarray[current2]->fitness;
+    offset2 -= pop->entity_iarray[permutation[current2]]->fitness;
     current2++;
+    if (current2>=pop->orig_size) current2-=pop->orig_size;
     }
-
-  if (current1>=pop->orig_size) current1-=pop->orig_size;
-  if (current2>=pop->orig_size) current2-=pop->orig_size;
 
   *mother = pop->entity_iarray[current1];
   *father = pop->entity_iarray[permutation[current2]];
 
   pop->select_state++;
 
-  if (pop->select_state<num_to_select) return FALSE;
-
-  s_free(permutation);
-  permutation=NULL;
-  return TRUE;
+  return FALSE;
   }
 
 
