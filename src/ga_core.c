@@ -938,7 +938,7 @@ boolean ga_population_write(population *pop, char *fname)
 /**********************************************************************
   ga_population_read()
   synopsis:	Reads entire population and its genetic data back
-		from disk.   Some things can't be retored.  See
+		from disk.   Some things can't be restored.  See
 		ga_population_write() for details.
 		Compatibility version.
   parameters:	char *fname		Filename to read from.
@@ -1071,7 +1071,7 @@ static population *ga_population_read_001(char *fname)
 /**********************************************************************
   ga_population_read()
   synopsis:	Reads entire population and it's genetic data back
-		from disk.   Some things can't be retored.  See
+		from disk.   Some things can't be restored.  See
 		ga_population_write() for details.
   parameters:	char *fname		Filename to read from.
   return:	population *pop		New population structure.
@@ -2037,8 +2037,8 @@ boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, in
 
 /**********************************************************************
   ga_entity_copy()
-  synopsis:	Er..., copy entire entity structure.  This is safe
-		for copying between popultions provided that they
+  synopsis:	Copy entire entity structure.  This is safe
+		for copying between populations... provided that they
 		are compatible.
   parameters:
   return:

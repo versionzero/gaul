@@ -699,7 +699,7 @@ boolean ga_select_one_sus(population *pop, entity **mother)
 
   if (pop->select_state == 0)
     { /* First call of this generation. */
-    num_to_select = (pop->orig_size*pop->crossover_ratio);
+    num_to_select = (pop->orig_size*pop->mutation_ratio);
     sum = gaul_select_sum_fitness(pop);
     step = sum/(pop->orig_size*pop->mutation_ratio);
     offset = random_double(step);

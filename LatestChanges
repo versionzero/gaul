@@ -10,6 +10,8 @@ Changes since release 0.1842:
 - Modified copyright notices.
 - HP-UX fixes.
 - *** API CHANGE *** Changed parameters to the ga_genesis_XXX() functions.  This enables userdata field of the population structure to be defined prior to use by the seeding operator.
+- Fixed bug in ga_select_one_sus() causing incorrect nuber of entities to be selected.
+- Fixed bug in configure.in _Bool tests.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

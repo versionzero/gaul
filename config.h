@@ -71,7 +71,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Whether itoa() is available */
-/* #undef HAVE_ITOA */
+#define HAVE_ITOA 1
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -335,7 +335,7 @@
 #define PACKAGE_VERSION ""
 
 /* type of parallelisation */
-#define PARALLEL 0
+#define PARALLEL 2
 
 /* Patch level. */
 #define PATCH_VERSION 4

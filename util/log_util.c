@@ -59,12 +59,6 @@
 
  **********************************************************************/
 
-#ifndef LOG_PARALLEL
-#undef PARALLEL
-#define PARALLEL 0
-#define NO_PARALLEL
-#endif
-
 #include "log_util.h"
 
 /*
