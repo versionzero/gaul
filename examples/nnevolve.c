@@ -727,7 +727,6 @@ char *nnevolve_chromosome_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
-  static char   *text=NULL;     /* String for display. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
