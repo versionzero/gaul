@@ -182,7 +182,7 @@ static void gaul_ensure_evaluations(population *pop)
   {
   int		i;			/* Loop variable over entity ranks. */
 
-  for (i=pop->orig_size; i<pop->size; i++)
+  for (i=0; i<pop->size; i++)
     {
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
       pop->evaluate(pop, pop->entity_iarray[i]);
@@ -549,85 +549,84 @@ int ga_evolution_forked(	population		*pop,
  *
  * Skip evaluations for entities that have been previously evaluated.
  */
+  fork_num = 0;
+  eval_num = 0;
+
+  /* Fork initial processes. */
+  /* Skip to the next entity which needs evaluating. */
+  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+
+  while (fork_num < max_processes && eval_num < pop->size)
+    {
+    eid[fork_num] = eval_num;
+    pid[fork_num] = fork();
+
+    if (pid[fork_num] < 0)
+      {       /* Error in fork. */
+      dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
+      }
+    else if (pid[fork_num] == 0)
+      {       /* This is the child process. */
+      pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+      write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+      _exit(1);
+      }
+
+    fork_num++;
+    eval_num++;
+
+    /* Skip to the next entity which needs evaluating. */
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+    }
+  num_forks = fork_num;
+
+  /* Wait for a forked process to finish and, if needed, fork another. */
+  while (num_forks > 0)
+    {
+    fpid = wait(NULL);
+
+    if (fpid == -1) die("Error in wait().");
+
+    /* Find which entity this forked process was evaluating. */
     fork_num = 0;
-    eval_num = 0;
+    while (fpid != pid[fork_num]) fork_num++;
 
-    /* Fork initial processes. */
-    while (fork_num < max_processes && eval_num < pop->size)
-      {
-      if (pop->entity_iarray[eval_num]->fitness == GA_MIN_FITNESS)
-        {
-        eid[fork_num] = eval_num;
-        pid[fork_num] = fork();
+    if (eid[fork_num] == -1) die("Internal error.  eid is -1");
 
-        if (pid[fork_num] < 0)
-          {       /* Error in fork. */
-          dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-          }
-        else if (pid[fork_num] == 0)
-          {       /* This is the child process. */
-          pop->evaluate(pop, pop->entity_iarray[eval_num]);
+    read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
 
-          write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+    if (eval_num < pop->size)
+      {       /* New fork. */
+      eid[fork_num] = eval_num;
+      pid[fork_num] = fork();
 
-          _exit(1);
-          }
-        fork_num++;
+      if (pid[fork_num] < 0)
+        {       /* Error in fork. */
+        dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
         }
+      else if (pid[fork_num] == 0)
+        {       /* This is the child process. */
+        pop->evaluate(pop, pop->entity_iarray[eval_num]);
+
+        write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
+
+        _exit(1);
+        }
+
       eval_num++;
-      }
-    num_forks = fork_num;
 
-    /* Wait for a forked process to finish and, if needed, fork another. */
-    while (num_forks > 0)
+      /* Skip to the next entity which needs evaluating. */
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+      }
+    else
       {
-      fpid = wait(NULL);
-
-      if (fpid == -1) die("Error in wait().");
-
-      /* Find which entity this forked process was evaluating. */
-      fork_num = 0;
-      while (fpid != pid[fork_num]) fork_num++;
-
-      if (eid[fork_num] == -1) die("Internal error.  eid is -1");
-
-      read(evalpipe[2*fork_num], &(pop->entity_iarray[eid[fork_num]]->fitness), sizeof(double));
-
-      if (eval_num < pop->size)
-        {
-        while (fork_num > -1 && eval_num < pop->size)
-          {       /* New fork. */
-          if (pop->entity_iarray[eval_num]->fitness == GA_MIN_FITNESS)
-            {
-            eid[fork_num] = eval_num;
-            pid[fork_num] = fork();
-
-            if (pid[fork_num] < 0)
-              {       /* Error in fork. */
-              dief("Error %d in fork. (%s)", errno, errno==EAGAIN?"EAGAIN":errno==ENOMEM?"ENOMEM":"unknown");
-              }
-            else if (pid[fork_num] == 0)
-              {       /* This is the child process. */
-              pop->evaluate(pop, pop->entity_iarray[eval_num]);
-
-              write(evalpipe[2*fork_num+1], &(pop->entity_iarray[eval_num]->fitness), sizeof(double));
-
-              _exit(1);
-              }
-
-            fork_num = -1;
-            }
-
-          eval_num++;
-          }
-        }
-      else
-        {
-        pid[fork_num] = -1;
-        eid[fork_num] = -1;
-        num_forks--;
-        }
+      pid[fork_num] = -1;
+      eid[fork_num] = -1;
+      num_forks--;
       }
+    }
 
   sort_population(pop);
 

@@ -32,7 +32,7 @@ bin_PROGRAMS = diagnostics \
 	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
+	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
 	saveload \
 	nnevolve
 
@@ -44,6 +44,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_forked_SOURCES = struggle_forked.c
 struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
@@ -83,6 +84,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
 struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
@@ -101,6 +103,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm

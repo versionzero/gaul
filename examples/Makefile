@@ -117,7 +117,7 @@ bin_PROGRAMS = diagnostics \
 	pingpong wildfire \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
+	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
 	saveload \
 	nnevolve
 
@@ -130,6 +130,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_forked_SOURCES = struggle_forked.c
 struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
@@ -172,6 +173,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
 struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
@@ -190,6 +192,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lrandom -lstr_util -lm
@@ -232,6 +235,8 @@ royalroad_ss_OBJECTS =  royalroad_ss.o
 royalroad_ss_LDFLAGS = 
 struggle_OBJECTS =  struggle.o
 struggle_LDFLAGS = 
+struggle_forked_OBJECTS =  struggle_forked.o
+struggle_forked_LDFLAGS = 
 struggle2_OBJECTS =  struggle2.o
 struggle2_LDFLAGS = 
 struggle3_OBJECTS =  struggle3.o
@@ -266,9 +271,10 @@ DEP_FILES =  .deps/btree.P .deps/diagnostics.P .deps/goldberg1.P \
 .deps/goldberg2.P .deps/nnevolve.P .deps/pingpong.P .deps/royalroad.P \
 .deps/royalroad_ss.P .deps/saveload.P .deps/struggle.P \
 .deps/struggle2.P .deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
-.deps/struggle5_mp.P .deps/struggle_ss.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_mp_SOURCES) $(struggle_ss_SOURCES) $(saveload_SOURCES) $(nnevolve_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle5_mp_OBJECTS) $(struggle_ss_OBJECTS) $(saveload_OBJECTS) $(nnevolve_OBJECTS)
+.deps/struggle5_mp.P .deps/struggle_forked.P .deps/struggle_ss.P \
+.deps/wildfire.P
+SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle_forked_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_mp_SOURCES) $(struggle_ss_SOURCES) $(saveload_SOURCES) $(nnevolve_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle_forked_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle5_mp_OBJECTS) $(struggle_ss_OBJECTS) $(saveload_OBJECTS) $(nnevolve_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -406,6 +412,10 @@ royalroad_ss: $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
 struggle: $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
 	@rm -f struggle
 	$(LINK) $(struggle_LDFLAGS) $(struggle_OBJECTS) $(struggle_LDADD) $(LIBS)
+
+struggle_forked: $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES)
+	@rm -f struggle_forked
+	$(LINK) $(struggle_forked_LDFLAGS) $(struggle_forked_OBJECTS) $(struggle_forked_LDADD) $(LIBS)
 
 struggle2: $(struggle2_OBJECTS) $(struggle2_DEPENDENCIES)
 	@rm -f struggle2

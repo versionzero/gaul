@@ -583,8 +583,6 @@ int main(int argc, char **argv)
   int		map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION];	/* Map. */
   int		count=0;	/* Number of cisterns. */
 
-  random_init();
-
   for (i=0; i<5; i++)
     {
     if (pop) ga_extinction(pop);
