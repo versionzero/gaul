@@ -62,7 +62,7 @@
  
  **********************************************************************/
 
-#include "memory_chunks.h"
+#include "gaul/memory_chunks.h"
 
 /* MEMORY_ALIGN_SIZE should have been set in config.h */
 

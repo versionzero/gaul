@@ -3,7 +3,7 @@
  **********************************************************************
 
   table_util - Data table routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -55,7 +55,7 @@
 
  **********************************************************************/
 
-#include "table_util.h"
+#include "gaul/table_util.h"
 
 static unsigned int _next_pow2(unsigned int num)
   {

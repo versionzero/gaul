@@ -123,7 +123,7 @@
 
  **********************************************************************/
 
-#include "compatibility.h"
+#include "gaul/compatibility.h"
 
 #if HAVE_IPOW != 1
 /*

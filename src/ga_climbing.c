@@ -34,7 +34,7 @@
 
  **********************************************************************/
 
-#include "ga_climbing.h"
+#include "gaul/ga_climbing.h"
 
 /**********************************************************************
   ga_population_set_hillclimbing_parameters()

@@ -148,7 +148,7 @@ EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = config.h $(top_builddir)/util/gaul_config.h
+CONFIG_HEADER = config.h $(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 
@@ -156,10 +156,10 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
 	install-exec-recursive installdirs-recursive install-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
-DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-	Makefile.in NEWS aclocal.m4 config.guess config.h.in config.sub \
-	configure configure.in depcomp install-sh ltconfig ltmain.sh \
-	missing mkinstalldirs
+DIST_COMMON = README ./util/gaul/gaul_config.h.in AUTHORS COPYING \
+	ChangeLog INSTALL Makefile.am Makefile.in NEWS aclocal.m4 \
+	config.guess config.h.in config.sub configure configure.in \
+	depcomp install-sh ltconfig ltmain.sh missing mkinstalldirs
 DIST_SUBDIRS = $(SUBDIRS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -196,8 +196,22 @@ $(srcdir)/config.h.in:  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOHEADER)
 	touch $(srcdir)/config.h.in
 
+util/gaul/gaul_config.h: util/gaul/stamp-h2
+	@if test ! -f $@; then \
+	  rm -f util/gaul/stamp-h2; \
+	  $(MAKE) util/gaul/stamp-h2; \
+	else :; fi
+
+util/gaul/stamp-h2: $(srcdir)/./util/gaul/gaul_config.h.in $(top_builddir)/config.status
+	@rm -f util/gaul/stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status util/gaul/gaul_config.h
+
+$(srcdir)/./util/gaul/gaul_config.h.in:  $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOHEADER)
+	touch $(srcdir)/./util/gaul/gaul_config.h.in
+
 distclean-hdr:
-	-rm -f config.h stamp-h1
+	-rm -f config.h stamp-h1 util/gaul/gaul_config.h util/gaul/stamp-h2
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -320,6 +334,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
+	$(mkinstalldirs) $(distdir)/./util/gaul
 	@list='$(DISTFILES)'; for file in $$list; do \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \

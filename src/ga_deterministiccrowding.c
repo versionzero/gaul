@@ -29,7 +29,7 @@
 
  **********************************************************************/
 
-#include "ga_deterministiccrowding.h"
+#include "gaul/ga_deterministiccrowding.h"
 
 /**********************************************************************
   ga_population_set_deterministiccrowding_parameters()

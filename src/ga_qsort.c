@@ -45,7 +45,7 @@
 
  **********************************************************************/
 
-#include "ga_qsort.h"
+#include "gaul/ga_qsort.h"
 
 /*
  * Nice and useful macro

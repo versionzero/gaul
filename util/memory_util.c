@@ -125,7 +125,7 @@
 
  **********************************************************************/
 
-#include "memory_util.h"
+#include "gaul/memory_util.h"
 
 /*
  * Integrated chunk handling implementation.

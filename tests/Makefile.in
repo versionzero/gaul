@@ -138,7 +138,7 @@ AUTOMAKE_OPTIONS = 1.4
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/util/gaul_config.h
+	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 DIST_COMMON = README Makefile.am Makefile.in

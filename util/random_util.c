@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -109,7 +109,7 @@
 
  **********************************************************************/
 
-#include "random_util.h"
+#include "gaul/random_util.h"
 
 /*
  * PRNG constants.  Don't mess with these values willie-nillie.

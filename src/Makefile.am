@@ -62,22 +62,22 @@ libgaul_la_SOURCES = \
     ga_utility.c
 
 include_HEADERS = \
-    ga_bitstring.h \
-    ga_chromo.h \
-    ga_climbing.h \
-    ga_core.h \
-    ga_deterministiccrowding.h \
-    ga_intrinsics.h \
-    ga_gradient.h \
-    ga_optim.h \
-    ga_qsort.h \
-    ga_randomsearch.h \
-    ga_sa.h \
-    ga_similarity.h \
-    ga_simplex.h \
-    ga_systematicsearch.h \
-    ga_tabu.h \
-    ga_utility.h \
+    gaul/ga_bitstring.h \
+    gaul/ga_chromo.h \
+    gaul/ga_climbing.h \
+    gaul/ga_core.h \
+    gaul/ga_deterministiccrowding.h \
+    gaul/ga_intrinsics.h \
+    gaul/ga_gradient.h \
+    gaul/ga_optim.h \
+    gaul/ga_qsort.h \
+    gaul/ga_randomsearch.h \
+    gaul/ga_sa.h \
+    gaul/ga_similarity.h \
+    gaul/ga_simplex.h \
+    gaul/ga_systematicsearch.h \
+    gaul/ga_tabu.h \
+    gaul/ga_utility.h \
     gaul.h
 
 libgaul_la_LIBFLAGS = -lm

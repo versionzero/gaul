@@ -30,7 +30,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-EXTRA_DIST = gaul_config.h.in
+EXTRA_DIST = gaul/gaul_config.h.in
 
 lib_LTLIBRARIES = libgaul_util.la \
 	libnn_util.la
@@ -54,22 +54,22 @@ libnn_util_la_SOURCES = \
 	nn_util.c
 
 include_HEADERS = \
-	gaul_config.h \
-	gaul_util.h \
-	avltree.h \
-	compatibility.h \
-	dstr_util.h \
-	linkedlist.h \
-	log_util.h \
-	memory_chunks.h \
-	memory_util.h \
-	mpi_util.h \
-	nn_util.h \
-	random_util.h \
-	str_match.h \
-	str_util.h \
-	table_util.h \
-	timer_util.h
+	gaul/gaul_config.h \
+	gaul/gaul_util.h \
+	gaul/avltree.h \
+	gaul/compatibility.h \
+	gaul/dstr_util.h \
+	gaul/linkedlist.h \
+	gaul/log_util.h \
+	gaul/memory_chunks.h \
+	gaul/memory_util.h \
+	gaul/mpi_util.h \
+	gaul/nn_util.h \
+	gaul/random_util.h \
+	gaul/str_match.h \
+	gaul/str_util.h \
+	gaul/table_util.h \
+	gaul/timer_util.h
 
 libgaul_util_a_LIBFLAGS =
 libgaul_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
@@ -78,15 +78,17 @@ libnn_util_a_LIBFLAGS =
 libnn_util_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 
 # Regenerate gaul_config.h with config.status whenever gaul_config.h.in changes.
-gaul_config.h: stamp-gaul_config
+gaul_config.h: gaul/stamp-gaul_config
 	@:
-stamp-common: $(srcdir)/gaul_config.h.in $(top_builddir)/config.status
+stamp-common: $(srcdir)/gaul/gaul_config.h.in $(top_builddir)/config.status
 	cd $(top_builddir) \
-	&& CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gaul_config.h \
+	&& CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gaul/gaul_config.h \
 	$(SHELL) ./config.status
 	echo timestamp > $@
 
 # Don't distribute gaul_config.h, since it is build host dependent!
-dist-hook:
-	rm -f $(distdir)/gaul_config.h
+# -- Currently, we do distribute this for easier compilation on
+# systems without the GNU autotools.
+#dist-hook:
+#	rm -f $(distdir)/gaul/gaul_config.h
 

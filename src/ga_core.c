@@ -55,7 +55,7 @@
 
  **********************************************************************/
 
-#include "ga_core.h"
+#include "gaul/ga_core.h"
 
 /*
  * Global variables.

@@ -47,7 +47,7 @@
 
  ***********************************************************************/
 
-#include "str_match.h"
+#include "gaul/str_match.h"
 
 boolean str_match(char *str, char *pat)
   {

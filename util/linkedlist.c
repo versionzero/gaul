@@ -57,7 +57,7 @@
  * Single-linked list functions are named slink_*().
  */
 
-#include "linkedlist.h"
+#include "gaul/linkedlist.h"
 
 #ifdef LINKEDLIST_COMPILE_MAIN
 #include <stdio.h>

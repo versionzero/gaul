@@ -39,7 +39,7 @@
  * Include requisite headers.
  **********************************************************************/
 
-#include "gaul_util.h"		/* General header containing commonly
+#include "gaul/gaul_util.h"	/* General header containing commonly
 				   used convenience definitions.
 				   This also includes a platform-
 				   specific configuration file. */
@@ -47,13 +47,13 @@
 /*
  * Portable programming utilities.
  */
-#include "compatibility.h"      /* For portability stuff. */
-#include "linkedlist.h"         /* For linked lists. */
-#include "log_util.h"           /* For logging facilities. */
-#include "memory_util.h"        /* Memory handling. */
-#include "mpi_util.h"           /* For multiprocessing facilities. */
-#include "random_util.h"        /* For PRNGs. */
-#include "table_util.h"         /* Handling unique integer ids. */
+#include "gaul/compatibility.h"      /* For portability stuff. */
+#include "gaul/linkedlist.h"         /* For linked lists. */
+#include "gaul/log_util.h"           /* For logging facilities. */
+#include "gaul/memory_util.h"        /* Memory handling. */
+#include "gaul/mpi_util.h"           /* For multiprocessing facilities. */
+#include "gaul/random_util.h"        /* For PRNGs. */
+#include "gaul/table_util.h"         /* Handling unique integer ids. */
 
 
 /**********************************************************************
@@ -541,10 +541,10 @@ double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
  * But they currently contain almost everything.
  **********************************************************************/
 
-#include "ga_core.h"		/* Private aspects of GAUL. */
+#include "gaul/ga_core.h"		/* Private aspects of GAUL. */
 
 #if HAVE_SLANG==1
-#include "ga_intrinsics.h"	/* GAUL's S-Lang interface. */
+#include "gaul/ga_intrinsics.h"         /* GAUL's S-Lang interface. */
 #endif
 
 #endif	/* GAUL_H_INCLUDED */

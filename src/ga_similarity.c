@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_similarity - Genetic algorithm genome/chromosome comparison routines.
-  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -54,7 +54,7 @@
 
  **********************************************************************/
 
-#include "ga_core.h"
+#include "gaul/ga_core.h"
 
 /**********************************************************************
   ga_compare_genome()

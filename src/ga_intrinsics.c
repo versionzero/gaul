@@ -42,7 +42,7 @@
 
  **********************************************************************/
 
-#include "ga_intrinsics.h"
+#include "gaul/ga_intrinsics.h"
 
 #if HAVE_SLANG==1
 

@@ -1461,7 +1461,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # Add the stamp file to the list of files AC keeps track of,
 # along with our hook.
-          ac_config_headers="$ac_config_headers util/gaul_config.h"
+          ac_config_headers="$ac_config_headers util/gaul/gaul_config.h"
 
 
 
@@ -12745,7 +12745,7 @@ do
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
   "default" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
-  "util/gaul_config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS util/gaul_config.h" ;;
+  "util/gaul/gaul_config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS util/gaul/gaul_config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
@@ -13332,8 +13332,8 @@ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
     config.h ) # update the timestamp
 echo 'timestamp for config.h' >"./stamp-h1"
  ;;
-    util/gaul_config.h ) # update the timestamp
-echo 'timestamp for util/gaul_config.h' >"util/stamp-h2"
+    util/gaul/gaul_config.h ) # update the timestamp
+echo 'timestamp for util/gaul/gaul_config.h' >"util/gaul/stamp-h2"
  ;;
   esac
 done
@@ -13489,12 +13489,12 @@ done
   if ( test -n "$CONFIG_FILES" && test -n "$CONFIG_HEADERS" ); then
     # If both these vars are non-empty, then config.status wasn't run by
     # automake rules (which always set one or the other to empty).
-    CONFIG_OTHER=${CONFIG_OTHER-util/gaul_config.h}
+    CONFIG_OTHER=${CONFIG_OTHER-util/gaul/gaul_config.h}
   fi
   case "$CONFIG_OTHER" in
-  *util/gaul_config.h*)
-    outfile=util/gaul_config.h
-    stampfile=util/stamp-gaul_config
+  *util/gaul/gaul_config.h*)
+    outfile=util/gaul/gaul_config.h
+    stampfile=util/gaul/stamp-gaul_config
     tmpfile=${outfile}.tmp
     dirname="sed s,^.*/,,g"
 

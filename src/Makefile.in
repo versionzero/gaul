@@ -171,22 +171,22 @@ libgaul_la_SOURCES = \
 
 
 include_HEADERS = \
-    ga_bitstring.h \
-    ga_chromo.h \
-    ga_climbing.h \
-    ga_core.h \
-    ga_deterministiccrowding.h \
-    ga_intrinsics.h \
-    ga_gradient.h \
-    ga_optim.h \
-    ga_qsort.h \
-    ga_randomsearch.h \
-    ga_sa.h \
-    ga_similarity.h \
-    ga_simplex.h \
-    ga_systematicsearch.h \
-    ga_tabu.h \
-    ga_utility.h \
+    gaul/ga_bitstring.h \
+    gaul/ga_chromo.h \
+    gaul/ga_climbing.h \
+    gaul/ga_core.h \
+    gaul/ga_deterministiccrowding.h \
+    gaul/ga_intrinsics.h \
+    gaul/ga_gradient.h \
+    gaul/ga_optim.h \
+    gaul/ga_qsort.h \
+    gaul/ga_randomsearch.h \
+    gaul/ga_sa.h \
+    gaul/ga_similarity.h \
+    gaul/ga_simplex.h \
+    gaul/ga_systematicsearch.h \
+    gaul/ga_tabu.h \
+    gaul/ga_utility.h \
     gaul.h
 
 
@@ -195,7 +195,7 @@ libgaul_la_LDFLAGS = -version-info ${GA_MAJOR_VERSION}:${GA_MINOR_VERSION}:0
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/util/gaul_config.h
+	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
@@ -210,7 +210,7 @@ am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
 DEFS = @DEFS@
-DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
@@ -408,6 +408,7 @@ top_distdir = ..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
+	$(mkinstalldirs) $(distdir)/gaul
 	@list='$(DISTFILES)'; for file in $$list; do \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \

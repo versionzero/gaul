@@ -32,7 +32,7 @@
 
  **********************************************************************/
 
-#include "ga_systematicsearch.h"
+#include "gaul/ga_systematicsearch.h"
 
 /**********************************************************************
   ga_population_set_search_parameters()

@@ -44,7 +44,7 @@
 
  **********************************************************************/
 
-#include "ga_optim.h"
+#include "gaul/ga_optim.h"
 
 /*
  * Here is a kludge.

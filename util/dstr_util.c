@@ -3,7 +3,7 @@
  **********************************************************************
 
   dstr_util - Dynamic string library.
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -68,7 +68,7 @@
 
 /* #define DSTR_NO_CHUNKS 1 To disable usage of memory chunks */
 
-#include "dstr_util.h"
+#include "gaul/dstr_util.h"
 
 /*
  * Global variables.

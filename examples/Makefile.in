@@ -280,7 +280,7 @@ struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/util/gaul_config.h
+	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 
@@ -407,7 +407,7 @@ wildfire_loadbalancing_OBJECTS = $(am_wildfire_loadbalancing_OBJECTS)
 wildfire_loadbalancing_LDFLAGS =
 
 DEFS = @DEFS@
-DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@

@@ -61,7 +61,7 @@
 
  **********************************************************************/
 
-#include "log_util.h"
+#include "gaul/log_util.h"
 
 /*
  * Global variables.

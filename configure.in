@@ -40,7 +40,7 @@ AC_PREREQ(2.5)
 # Specify a configuration file
 #
 AC_INIT(src/gaul.h)
-AM_CONFIG_HEADER(config.h util/gaul_config.h)
+AM_CONFIG_HEADER(config.h util/gaul/gaul_config.h)
 AC_CANONICAL_SYSTEM
 
 PACKAGE=gaul-devel
@@ -755,12 +755,12 @@ AC_OUTPUT_COMMANDS([
   if ( test -n "$CONFIG_FILES" && test -n "$CONFIG_HEADERS" ); then
     # If both these vars are non-empty, then config.status wasn't run by
     # automake rules (which always set one or the other to empty).
-    CONFIG_OTHER=${CONFIG_OTHER-util/gaul_config.h}
+    CONFIG_OTHER=${CONFIG_OTHER-util/gaul/gaul_config.h}
   fi
   case "$CONFIG_OTHER" in
-  *util/gaul_config.h*)
-    outfile=util/gaul_config.h
-    stampfile=util/stamp-gaul_config
+  *util/gaul/gaul_config.h*)
+    outfile=util/gaul/gaul_config.h
+    stampfile=util/gaul/stamp-gaul_config
     tmpfile=${outfile}.tmp
     dirname="sed s,^.*/,,g"
 
