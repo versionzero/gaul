@@ -1,0 +1,10 @@
+GAUL Documentation
+==================
+
+All of the GAUL documentation is available from:
+- The GAUL website at http://gaul.sourceforge.net/documantation.html
+- The "gaul-docs" module in the CVS archive at cvs.gaul.souceforge.net, with a web interface at http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/gaul/gaul-devel/
+
+The most upto date documentation will always be found in the CVS archive.
+
+Stewart Adcock, 11 Feb 2002
