@@ -460,7 +460,7 @@ AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
                  sys/select.h sys/signal.h sys/socket.h sys/termio.h \
-                 sys/time.h sys/types.h sys/uio.h \
+                 sys/time.h sys/types.h sys/uio.h sys/wait.h \
                  limits.h values.h termios.h unistd.h fcntl.h)
 
 dnl Check for some library functions, many of which GAUL doesn't use, but I
