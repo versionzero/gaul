@@ -46,6 +46,7 @@ void ga_diagnostics(void)
   int	num_pops;	/* Number of populations defined, or -1 for no table. */
 
   printf("=== GA utility library =======================================\n");
+  printf("Version:                   %s\n", VERSION_STRING);
   printf("Build date:                %s\n", BUILD_DATE_STRING);
   printf("GA_DEBUG:                  %d\n", GA_DEBUG);
   printf("GA_BOLTZMANN_FACTOR:       %f\n", GA_BOLTZMANN_FACTOR);

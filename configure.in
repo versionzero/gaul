@@ -35,7 +35,7 @@ AC_PREREQ(2.13)
 # init autoconf (and check for presence of gaul.h - the public header file)
 AC_INIT(src/gaul.h)
 
-PACKAGE=gaul
+PACKAGE=gaul-devel
 
 AC_CANONICAL_SYSTEM
 
@@ -46,7 +46,7 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion (don't we all *love* autoconf?)
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 MAJOR_VERSION=0
-MINOR_VERSION=1
+MINOR_VERSION=1831
 PATCH_VERSION=`date +%y%m%d`
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 dnl
