@@ -205,7 +205,7 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
 
@@ -240,7 +240,7 @@ int ga_similarity_bitstring_count_match_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
   b = (byte*)(beta->chromosome[chromosomeid]);
@@ -278,7 +278,7 @@ int ga_similarity_bitstring_count_and_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
   b = (byte*)(beta->chromosome[chromosomeid]);
@@ -314,7 +314,7 @@ int ga_similarity_integer_count_match_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
   a = (int*)(alpha->chromosome[chromosomeid]);
   b = (int*)(beta->chromosome[chromosomeid]);
@@ -512,7 +512,7 @@ int ga_similarity_double_count_match_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
   a = (double*)(alpha->chromosome[chromosomeid]);
   b = (double*)(beta->chromosome[chromosomeid]);
@@ -540,9 +540,8 @@ int ga_similarity_double_count_match_alleles( const population *pop,
 double ga_similarity_double_tanimoto(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
-  int           i;              /* Loop variable over all chromosomes. */
-  int		a=0, b=0;	/* Number of ones in the individual entities' chromosomes. */
-  int		n=0;		/* Number of ones both entities' chromosomes. */
+  int           i, j;			/* Loop variable over all chromosomes, alleles. */
+  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
@@ -550,12 +549,12 @@ double ga_similarity_double_tanimoto(const population *pop,
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    n += ga_similarity_bitstring_count_and_alleles( pop, alpha, beta, i );
-    a += ga_similarity_bitstring_count_1_alleles( pop, alpha, i );
-    b += ga_similarity_bitstring_count_1_alleles( pop, beta, i );
+    for (j=0; j<pop->len_chromosomes; j++)
+       {
+       }
     }
 
-  return (double) n/(a+b-n);
+  return ab/(aa+bb-ab);
   }
 
 
