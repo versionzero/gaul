@@ -171,13 +171,15 @@ void ga_bit_randomize( byte *bstr, int n )
 /**********************************************************************
   ga_bit_copy()
   synopsis:	Copies a set of bits in a bitstring.
+		If dest and src are the same, overlapping sequences
+		of bits are safely handled.
   parameters:	byte	*dest	Destination bitstring.
 		byte	*src	Source bitstring
 		int	ndest	Initial bit index of destination bits.
 		int	nsrc	Initial bit index of source bits.
 		int	length	Number of bits to copy.
   return:	none
-  last updated:	30/06/01
+  last updated:	06 Dec 2001
  **********************************************************************/
 
 void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length )
@@ -187,12 +189,25 @@ void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length )
  */ 
   int i;
 
-  for ( i=0; i < length; ++i )
+  if (dest != src || ndest < nsrc)
     {
-    if ( ga_bit_get(dest, ndest+i) )
-      ga_bit_set( src, nsrc+i );
-    else
-      ga_bit_clear( src, nsrc+i );
+    for ( i=0; i < length; ++i )
+      {
+      if ( ga_bit_get(dest, ndest+i) )
+        ga_bit_set( src, nsrc+i );
+      else
+        ga_bit_clear( src, nsrc+i );
+      }
+    }
+  else
+    {
+    for ( i = length-1 ; i >= 0; --i )
+      {
+      if ( ga_bit_get(dest, ndest+i) )
+        ga_bit_set( src, nsrc+i );
+      else
+        ga_bit_clear( src, nsrc+i );
+      }
     }
 
   return;
