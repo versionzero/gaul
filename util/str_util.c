@@ -778,7 +778,7 @@ void str_ncpyt(char *dest, const char *src, const int len)
   last updated: 29 Oct 2002
  **********************************************************************/
 
-char *str_sncpy(char *dest, const char *src, const int len)
+char *str_sncpy(char *dest, char *src, const int len)
   {
   char	*end=&(dest[len-1]);
 
