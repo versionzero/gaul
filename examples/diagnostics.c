@@ -3,7 +3,7 @@
  **********************************************************************
 
   diagnostics - Diagnostic checking for GAUL.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -42,7 +42,7 @@
   synopsis:	Erm?
   parameters:
   return:
-  updated:	22/07/01
+  updated:	08 Jan 2003
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -69,7 +69,12 @@ int main(int argc, char **argv)
   ga_diagnostics();
 
 /*
- * Run test functions.
+ * Run GAUL test functions.
+ */
+  ga_bit_test();
+
+/*
+ * Run utility test functions.
  */
   random_test();
   avltree_test();

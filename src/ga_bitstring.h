@@ -66,14 +66,17 @@ void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int valu
 int ga_bit_decode_binary_int( byte *bstr, int n, int length );
 void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value );
 int ga_bit_decode_gray_int( byte *bstr, int n, int length );
-int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
-void ga_bit_encode_gray_uint( byte *bstr, int n, int length, int value );
+unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
+void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value );
 
 /* Real conversion. */
 double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent );
 void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value );
 double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent );
 void ga_bit_encode_grayy_real( byte *bstr, int n, int mantissa, int exponent, double value );
+
+/* Test. */
+boolean ga_bit_test( void );
 
 #endif	/* GA_BITSTRING_H_INCLUDED */
 
