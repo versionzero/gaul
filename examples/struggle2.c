@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
     popd,			/* population          *pop */
-    500				/* const int           max_generations */
+    600				/* const int           max_generations */
             );
 
   printf( "The final solution with Darwinian evolution with score %f was:\n",
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
     popb,			/* population          *pop */
-    250				/* const int           max_generations */
+    300				/* const int           max_generations */
             );
 
   printf( "The final solution with Baldwinian evolution with score %f was:\n",
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
     popl,			/* population          *pop */
-    250				/* const int           max_generations */
+    300				/* const int           max_generations */
             );
 
   printf( "The final solution with Lamarckian evolution with score %f was:\n",

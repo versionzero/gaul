@@ -208,8 +208,8 @@ int main(int argc, char **argv)
      struggle_score,			/* GAevaluate             evaluate */
      ga_seed_printable_random,		/* GAseed                 seed */
      struggle_adaptation,		/* GAadapt                adapt */
-     ga_select_one_roulette,		/* GAselect_one		select_one */
-     ga_select_two_roulette,		/* GAselect_two		select_two */
+     ga_select_one_sus,			/* GAselect_one		select_one */
+     ga_select_two_sus,			/* GAselect_two		select_two */
      ga_mutate_printable_singlepoint_drift,	/* GAmutate	mutate */
      ga_crossover_char_allele_mixing,	/* GAcrossover		crossover */
      NULL				/* GAreplace		replace */

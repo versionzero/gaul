@@ -321,10 +321,10 @@ int main(int argc, char **argv)
   pop->adapt = struggle_adaptation;
 
 /* Mutation selection operator. */
-  pop->select_one = ga_select_one_roulette;
+  pop->select_one = ga_select_one_sus;
 
 /* Crossover selection operator. */
-  pop->select_two = ga_select_two_roulette;
+  pop->select_two = ga_select_two_sus;
 
 /* Mutation operator. */
   pop->mutate = struggle_mutate;
