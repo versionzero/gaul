@@ -31,8 +31,17 @@
 		It may be used independantly if you feel very brave.
 
 		This is thread safe.
+
+		Define MEMORY_CHUNKS_MIMIC to allow your favourite
+		memory debugger to function properly.  Defining
+		MEMORY_CHUNKS_MIMIC will cause a number of memory
+		leaks if you rely on mem_chunk_clean(),
+	       	mem_chunk_reset() or mem_chunk_free() to implicitely
+	       	deallocate all memory atoms (which would normally be
+		a valid thing to do).
  
-  Last updated:	21 Nov 2002 SAA Added cut-down and local version of my tree routines.
+  Last updated:	20 Dec 2002 SAA	Added debug mode, intended for use with valgrind/purify/electric fence etc.
+  		21 Nov 2002 SAA Added cut-down and local version of my tree routines.
 		16 Aug 2002 SAA	Added mem_chunk_isempty().
   		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	mem_chunk_diagnostics() modified.  Comments at top of this file tidied.
@@ -52,6 +61,8 @@
  **********************************************************************/
 
 #include "memory_chunks.h"
+
+#ifndef MEMORY_CHUNKS_MIMIC
 
 /* MEMORY_ALIGN_SIZE should have been set in config.h */
 
@@ -1204,3 +1215,134 @@ void mem_chunk_diagnostics(void)
 
   return;
   }
+
+#else /* MEMORY_CHUNKS_MIMIC */
+
+struct MemChunk_t
+  {
+  size_t	atom_size;		/* The size of an atom. */
+  long		num_atoms_alloc;	/* The number of allocated atoms. */
+  };
+
+
+/*
+ * Return TRUE is the memory chunk is empty.
+ */
+boolean mem_chunk_isempty(MemChunk *mem_chunk)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+
+  return num_atoms_alloc==0;
+  }
+
+
+/*
+ * Create new memory chunk.
+ */
+
+MemChunk *mem_chunk_new(size_t atom_size, unsigned int num_atoms)
+  {
+  MemChunk	*mem_chunk;
+
+  mem_chunk = malloc(sizeof(MemChunk));
+
+  if (!mem_chunk) die("Unable to allocate memory.");
+
+  return mem_chunk;
+  }
+
+
+MemChunk *mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms)
+  {
+  return mem_chunk_new(atom_size, num_atoms);
+  }
+
+
+void mem_chunk_destroy(MemChunk *mem_chunk)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+  
+  free(mem_chunk);
+
+  return;
+  }
+
+
+void *mem_chunk_alloc(MemChunk *mem_chunk)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+
+  mem_chunk->num_atoms_alloc++;
+
+  return malloc(mem_chunk->atom_size);
+  }
+
+
+void mem_chunk_free(MemChunk *mem_chunk, void *mem)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+  if (!mem) die("Null pointer to memory passed.");
+
+  free(mem);
+
+  mem_chunk->num_atoms_alloc--;
+
+  return;
+  }
+
+
+void mem_chunk_clean(MemChunk *mem_chunk)
+  {
+
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+
+  mem_chunk->num_atoms_alloc=0;
+
+  return;
+  }
+
+
+void mem_chunk_reset(MemChunk *mem_chunk)
+  {
+  
+  if (!mem_chunk) die("Null pointer to mem_chunk passed.");
+  
+  mem_chunk->num_atoms_alloc=0;
+
+  return;
+  }
+
+
+boolean mem_chunk_check_bounds(MemChunk *mem_chunk, void *mem)
+  {
+  return TRUE;
+  }
+
+
+boolean mem_chunk_test(void)
+  {
+  return TRUE;
+  }
+
+
+void mem_chunk_diagnostics(void)
+  {
+  printf("=== mem_chunk diagnostics *** MIMIC *** ======================\n");
+  printf("Version:                   %s\n", VERSION_STRING);
+  printf("Build date:                %s\n", BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+
+  printf("--------------------------------------------------------------\n");
+  printf("structure          sizeof\n");
+  printf("MemChunk           %lu\n", (unsigned long) sizeof(MemChunk));
+  printf("==============================================================\n");
+
+  return;
+  }
+
+#endif /* MEMORY_CHUNKS_MIMIC */
+
