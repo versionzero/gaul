@@ -638,3 +638,142 @@ boolean ga_select_two_roulette_rebased( population *pop,
   }
 
 
+/**********************************************************************
+  ga_select_one_sus()
+  synopsis:	Stochastic Universal Sampling selection.
+  		pop->mutation_ratio multiplied by pop->orig_size gives
+		the number of selections which will be performed.
+		This version is for fitness values where 0.0 is bad and
+		large positive values are good.  Negative values will
+		severely mess-up the algorithm.
+  parameters:
+  return:	
+  last updated: 18 Apr 2002
+ **********************************************************************/
+
+boolean ga_select_one_sus(population *pop, entity **mother)
+  {
+  static double	mean, stddev, sum;	/* Fitness statistics. */
+  static double	offset;			/* Current pointer offset. */
+  static double	step;			/* Distance between each pointer. */
+  static int	current;		/* Currently selected individual. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  *mother = NULL;
+
+  if (pop->orig_size < 1)
+    {
+    return TRUE;
+    }
+
+  if (pop->select_state == 0)
+    { /* First call of this generation. */
+    ga_select_stats(pop, &mean, &stddev, &sum);
+    step = sum/(pop->orig_size*pop->mutation_ratio);
+    offset = random_double(step);
+    current=0;
+    }
+  else
+    {
+    offset += step;
+    }
+
+  while (offset > pop->entity_iarray[current]->fitness)
+    {
+    offset -= pop->entity_iarray[current]->fitness;
+    current++;
+    }
+
+  *mother = pop->entity_iarray[current];
+
+  pop->select_state++;
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+
+/**********************************************************************
+  ga_select_two_sus()
+  synopsis:	Stochastic Universal Sampling selection.
+  		pop->mutation_ratio multiplied by pop->orig_size gives
+		the number of selections which will be performed.
+		This version is for fitness values where 0.0 is bad and
+		large positive values are good.  Negative values will
+		severely mess-up the algorithm.
+  parameters:
+  return:	
+  last updated: 18 Apr 2002
+ **********************************************************************/
+
+boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
+  {
+  static double	mean, stddev, sum;	/* Fitness statistics. */
+  static double	offset1, offset2;	/* Current pointer offsets. */
+  static double	step;			/* Distance between each pointer. */
+  static int	current1, current2;	/* Currently selected individuals. */
+  static int	*permutation=NULL;	/* Randomly ordered indices. */
+  static int	num_to_select;		/* Number of individuals to select. */
+  int		*ordered;		/* Ordered indices. */
+  int		i;			/* Loop variable over indices. */
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  *mother = NULL;
+
+  if (pop->orig_size < 1)
+    {
+    return TRUE;
+    }
+
+  if (pop->select_state == 0)
+    { /* First call of this generation. */
+    num_to_select = (pop->orig_size*pop->crossover_ratio);
+    ga_select_stats(pop, &mean, &stddev, &sum);
+    step = sum/num_to_select;
+    offset1 = offset2 = random_double(step);
+    current1=0;
+    current2=0;
+
+    if (permutation!=NULL) dief("Internal error.  Permutation buffer not NULL.");
+    permutation = s_malloc(sizeof(int)*pop->orig_size);
+    ordered = s_malloc(sizeof(int)*pop->orig_size);
+    for (i=0; i<pop->orig_size;i++)
+      ordered[i]=i;
+    random_int_permutation(pop->orig_size, ordered, permutation);
+    s_free(ordered);
+    }
+  else
+    {
+    offset1 += step;
+    offset2 += step;
+    }
+
+  while (offset1 > pop->entity_iarray[current1]->fitness)
+    {
+    offset1 -= pop->entity_iarray[current1]->fitness;
+    current1++;
+    }
+
+  while (offset2 > pop->entity_iarray[current2]->fitness)
+    {
+    offset2 -= pop->entity_iarray[current2]->fitness;
+    current2++;
+    }
+
+  if (current1>=pop->orig_size) current1-=pop->orig_size;
+  if (current2>=pop->orig_size) current2-=pop->orig_size;
+
+  *mother = pop->entity_iarray[current1];
+  *father = pop->entity_iarray[permutation[current2]];
+
+  pop->select_state++;
+
+  if (pop->select_state<num_to_select) return FALSE;
+
+  s_free(permutation);
+  permutation=NULL;
+  return TRUE;
+  }
+
+

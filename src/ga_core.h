@@ -265,14 +265,12 @@ boolean	ga_select_one_randomrank(population *pop, entity **mother);
 boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father);
 boolean ga_select_one_bestof2(population *pop, entity **mother);
 boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father);
-boolean	ga_select_one_roulette( population *pop,
-                                entity **mother );
-boolean	ga_select_two_roulette( population *pop,
-                                entity **mother, entity **father );
-boolean	ga_select_one_roulette_rebased( population *pop,
-                                entity **mother );
-boolean	ga_select_two_roulette_rebased( population *pop,
-                                entity **mother, entity **father );
+boolean	ga_select_one_roulette( population *pop, entity **mother );
+boolean	ga_select_two_roulette( population *pop, entity **mother, entity **father );
+boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
+boolean	ga_select_two_roulette_rebased( population *pop, entity **mother, entity **father );
+boolean	ga_select_one_sus( population *pop, entity **mother );
+boolean	ga_select_two_sus( population *pop, entity **mother, entity **father );
 
 
 void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);

@@ -99,7 +99,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1838
-LT_REVISION = 0
+LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /u1/gaul-devel/missing makeinfo
@@ -108,9 +108,9 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 0
+PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1838-0
+VERSION = 0.1838-1
 
 AUTOMAKE_OPTIONS = 1.4
 
