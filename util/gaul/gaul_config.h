@@ -144,8 +144,8 @@ extern int errno;
 
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1847
-#define GA_PATCH_VERSION 5
-#define GA_VERSION_STRING "0.1847-5"
+#define GA_PATCH_VERSION 6
+#define GA_VERSION_STRING "0.1847-6"
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 #define GA_BUILD_DATE_STRING "17/02/05"
 
