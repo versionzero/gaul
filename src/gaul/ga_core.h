@@ -309,13 +309,11 @@ struct population_t
 
 /*
  * Constant definitions.
- * FIXME: There should be no purpose for these 3 constants.  I'd say
- * they result from inflexibilities in the GAUL library.  Consider
- * them as marked for removal!
+ * FIXME: There should be no purpose for this constant.  I'd say
+ * it results from an inflexibility in the GAUL library.  Consider
+ * it as marked for removal!
  */
 #define GA_MULTI_BIT_CHANCE	(0.02)
-#define GA_ELITISM_MULTIPLIER	(0.05)
-#define GA_ELITISM_CONSTANT	(2.0)
 
 /* Define lower bound on fitness. */
 #define GA_MIN_FITNESS		DBL_MIN

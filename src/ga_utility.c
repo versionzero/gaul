@@ -41,7 +41,7 @@
   synopsis:	Diagnostics.
   parameters:	none
   return:	none
-  last updated:	13/06/01
+  last updated:	14 Jun 2004
  **********************************************************************/
 
 void ga_diagnostics(void)
@@ -57,8 +57,6 @@ void ga_diagnostics(void)
   printf("GA_BOLTZMANN_FACTOR:       %e\n", GA_BOLTZMANN_FACTOR);
   printf("GA_MIN_FITNESS:            %e\n", GA_MIN_FITNESS);
   printf("GA_MULTI_BIT_CHANCE:       %f\n", GA_MULTI_BIT_CHANCE);
-  printf("GA_ELITISM_MULTIPLIER:     %f\n", GA_ELITISM_MULTIPLIER);
-  printf("GA_ELITISM_CONSTANT:       %f\n", GA_ELITISM_CONSTANT);
   printf("BYTEBITS:                  %d\n", BYTEBITS);
   printf("--- Data structures ------------------------------------------\n");
   printf("structure                  sizeof\n");
