@@ -67,14 +67,6 @@ typedef struct population_t population;
 /**********************************************************************
  * Enumerated types, used to define varients of the GA algorithms.
  **********************************************************************/
-/*
- * Genesis mode -- not currently used in the GPL'd version of GAUL.
- */
-typedef enum ga_genesis_type_t
-  {
-  GA_GENESIS_UNKNOWN = 0,
-  GA_GENESIS_RANDOM, GA_GENESIS_SOUP, GA_GENESIS_USER
-  } ga_genesis_type;
 
 /*
  * Evolutionary mode.
@@ -208,7 +200,6 @@ unsigned int *ga_get_all_population_ids(void);
 population **ga_get_all_populations(void);
 boolean	ga_entity_seed(population *pop, entity *e);
 boolean ga_population_seed(population *pop);
-boolean ga_population_seed_soup(population *pop, const char *fname);
 double	ga_entity_evaluate(population *pop, entity *entity);
 boolean	ga_population_score_and_sort(population *pop);
 boolean	ga_population_sort(population *pop);
@@ -292,7 +283,6 @@ char	*ga_funclookup_id_to_label(int id);
  * Functions located in ga_io.c:
  * (Disk I/O)
  */
-boolean ga_write_soup(population *pop);
 boolean ga_population_write(population *pop, char *fname);
 population *ga_population_read(char *fname);
 boolean ga_entity_write(population *pop, entity *entity, char *fname);

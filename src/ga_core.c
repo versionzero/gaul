@@ -1030,7 +1030,7 @@ double ga_population_convergence_chromosomes( population *pop )
       {
       for (k=0; k<pop->num_chromosomes; k++)
         {
-/* FIXME: Not countly effiecient: */
+/* FIXME: Not counted efficiently: */
         if (ga_count_match_alleles( pop->len_chromosomes,
                                     pop->entity_iarray[i]->chromosome[k],
                                     pop->entity_iarray[j]->chromosome[k] ) == pop->len_chromosomes)
@@ -1901,6 +1901,7 @@ population *ga_population_new_receive( int src_node )
   population *pop=NULL;
 
   plog(LOG_FIXME, "Function not fully implemented");
+
   mpi_receive(&(pop->stable_size), 1, MPI_INT, src_node, GA_TAG_POPSTABLESIZE);
   mpi_receive(&(pop->crossover_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPCROSSOVER);
   mpi_receive(&(pop->mutation_ratio), 1, MPI_DOUBLE, src_node, GA_TAG_POPMUTATION);
@@ -2214,7 +2215,7 @@ entity *ga_optimise_entity(population *pop, entity *unopt)
   if ( !unopt ) die("Null pointer to entity structure passed.");
 
   plog(LOG_FIXME,
-       "Code incomplete, using 25 iterations of the RAHC algorithm for now.");
+       "This function is deprecated and shoulf not be used.");
 
   optimised = ga_entity_clone(pop, unopt);
 

@@ -27,8 +27,7 @@
 
   Synopsis:     Routines for reading/writing GA data from/onto disk.
 
-  To do:	Reading/writing 'soup' files.
-		Fix the really inefficient entity format (i.e. remove len).
+  To do:	Fix the really inefficient entity format (i.e. remove len).
 		Remove excessive use of malloc()/free() in posix versions.
 		Support for longer chromosomes in win32 versions.
 		It is fair to say that the file formats are embarrasingly poor.
@@ -39,65 +38,6 @@
 #include "gaul/ga_core.h"
 
 #define BUFFER_SIZE	1024
-
-/**********************************************************************
-  ga_population_seed_soup()
-  synopsis:	Seed a population structure with starting genes from
-		a previously created soup file.
-  parameters:
-  return:
-  last updated: 06/07/00
- **********************************************************************/
-
-boolean ga_population_seed_soup(population *pop, const char *fname)
-  {
-#if 0
-  int		i, j, k;	/* Loop variables */
-  entity	*this_entity;	/* Current population member */
-  quaternion	q;		/* Quaternion */
-  FILE          *fp;		/* File ptr */
-  char          *line=NULL;	/* Line buffer */
-  int           line_len;	/* Current buffer size */
-  molstruct     *mol;		/* Current molstruct structure */
-#endif
-
-  plog(LOG_DEBUG, "Population seeding by reading soup file.");
-  plog(LOG_FIXME, "Code incomplete.");
-
-  if ( !fname ) die("Null pointer to filename passed.");
-  if ( !pop ) die("Null pointer to population structure passed.");
-
-#if 0
-/*
- * Open soup file
- */
-  FILE          *fp;		/* File ptr */
-  if((fp=fopen(fname,"r"))==NULL)
-    dief("Unable to open SOUP file \"%s\".", fname);
-#endif
-
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
-  ga_write_soup()
-  synopsis:	Writes a soup file based on the current gene pool.
-  parameters:
-  return:
-  last updated: 06/07/00
- **********************************************************************/
-
-boolean ga_write_soup(population *pop)
-  {
-
-  plog(LOG_DEBUG, "Writing soup file.");
-  plog(LOG_FIXME, "Code incomplete.");
-
-  return TRUE;
-  }
-
 
 /**********************************************************************
   gaul_write_entity_posix()
