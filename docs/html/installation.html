@@ -45,9 +45,14 @@
 ./configure --enable-slang=no ; make
 </pre>
 
-<p>Note that if you are using Solaris, you should instead use:</p>
+<p>Note that if you are using a non-GNU system (e.g. Sun's Solaris, SGI's IRIX), you should instead use:</p>
 <pre>
 ./configure ; gmake
+</pre>
+
+<p>Some systems have known problems with dependency tracking, which are exhibited if you try to compile code directly from the CVS archive.  This may be avoided by using:</p>
+<pre>
+./configure --disable-cvs-deps ; make
 </pre>
 
 <p>If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.  Email me if:</p>
@@ -56,7 +61,7 @@
 <li>You would like pre-compiled binaries.  Note: I can guarantee to provide Linux binaries only.  I may possibly be able to acquire other binaries, but don't hold your breath. (Send the output from 'uname -a' so I can generate binaries with the correct format -- Or even better, provide the file "config.h" which is produced by running "configure").</li>
 </ul>
 
-<p><a href="platforms.html">Here</a> is a list of platforms that are known to work.</p>
+<p><a href="platforms.html">Here</a> is a table of platforms that are known to work, with some associated information.</p>
 
 </td></tr></table>
 

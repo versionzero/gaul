@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
+  Updated:	28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
+		17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
 		30 Nov 2001 SAA	The constant DEBUG will always be defined now.
 		29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
 		07 Nov 2001 SAA	Added MINMAX macro.
@@ -85,6 +86,15 @@
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+/*
+ * ICC kludge.  This needs fixing through the GNU make tools.
+ */
+#ifdef __INTEL_COMPILER
+#define HAVE_MEMCPY 1
+#define HAVE_STRLEN 1
+#define HAVE_STRNCPY 1
+#define HAVE_STRNCMP 1
+#endif
 #endif
 
 /* PARALLEL library to use.
@@ -338,7 +348,15 @@ typedef unsigned char byte;
 #  endif
 # endif
 #else
-# define s_breakpoint	abort()
+# ifdef __INTEL_COMPILER
+#  ifdef __i386__
+#   define s_breakpoint	asm volatile ("int $03")
+#  else
+#   define s_breakpoint	abort()
+#  endif
+# else
+#  define s_breakpoint	abort()
+# endif
 #endif
 
 /*
@@ -423,17 +441,13 @@ typedef unsigned char byte;
                            format, ##args); } while(0)
 */
 
-#ifndef __GNUC__
 /*
- * void dief(const char *format, ...);
- * is defined in compatibility.c because vararg macros are not
- * implemented in many inferior compilers ;)
+ * Implement my dief macro where possible.
  */
-#define HAVE_DIEF	0
-#else
-#define HAVE_DIEF	1
-#if PARALLEL==2
-#define dief(format, args...)	{				\
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+# if PARALLEL==2
+/* Special version for MPI programs. */
+#  define dief(format, args...)	{				\
 			int flubberrank;			\
 			MPI_Comm_rank(MPI_COMM_WORLD, &flubberrank);		\
 			printf("FATAL ERROR: (process %d) ", flubberrank);	\
@@ -445,8 +459,8 @@ typedef unsigned char byte;
 			fflush(NULL);				\
                         MPI_Abort(MPI_COMM_WORLD, 2);		\
 			}
-#else
-#define dief(format, args...)	{				\
+# else
+#  define dief(format, args...)	{				\
 			printf("FATAL ERROR: ");		\
 			printf(format, ##args);			\
 			printf("\nin %s at \"%s\" line %d\n",	\
@@ -456,7 +470,16 @@ typedef unsigned char byte;
 			fflush(NULL);				\
 			s_breakpoint;                           \
 			}
-#endif
+# endif
+# define HAVE_DIEF	0
+#else
+/*
+ * void dief(const char *format, ...);
+ * is defined in compatibility.c because vararg macros are not
+ * implemented in many inferior compilers ;)
+ */
+# define HAVE_DIEF	1
 #endif
 		
 #endif
+

@@ -28,7 +28,8 @@
 
   Thread-safe.
  
-  Updated:	18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
+  Updated:	28 Jan 2002 SAA	Removed some pointless comparisons of unsigned integers with zeros.
+		18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
 		07/08/01 SAA	Added table_remove_data_all().
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
  		21/02/01 SAA	Added table_count_items().
@@ -151,7 +152,8 @@ vpointer table_remove_index(TableStruct *table, unsigned int index)
 
   if (!table) die("NULL pointer to TableStruct passed.");
 
-  if (index < 0 || index >= table->next) die("Invalid index passed.");
+/* if (index < 0 || index >= table->next) die("Invalid index passed."); */
+  if (index >= table->next) die("Invalid index passed.");
 
   data = table->data[index];
 
@@ -227,9 +229,11 @@ unsigned int table_remove_data_all(TableStruct *table, vpointer data)
 
 vpointer table_get_data(TableStruct *table, unsigned int index)
   {
+
   if (!table) die("NULL pointer to TableStruct passed.");
 
-  if (index < 0 || index >= table->next) dief("Invalid index (%d) passed.", index);
+/*  if (index < 0 || index >= table->next) dief("Invalid index (%d) passed.", index);*/
+  if (index >= table->next) dief("Invalid index (%d) passed.", index);
 
   return table->data[index];
   }
