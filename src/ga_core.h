@@ -150,6 +150,27 @@ struct entity_t
   };
 
 /*
+ * Tabu-search parameter structure.
+ */
+typedef struct
+  {
+  int		list_length;	/* Length of the tabu-list. */
+  int		search_count;	/* Number of local searches initiated at each iteration. */
+  GAtabu_accept	tabu_accept;	/* Acceptance function. */
+  } ga_tabu_t;
+
+/*
+ * Simulated Annealling search parameter structure.
+ */
+typedef struct
+  {
+  int		initial_temp;	/* Initial temperature. */
+  int		final_temp;	/* Final temperature. */
+  int		temp_freq;	/* Frequency for temperature updates. */
+  GAsa_accept	sa_accept;	/* Acceptance criterion function. */
+  } ga_sa_t;
+
+/*
  * Population Structure.
  *
  * FIXME: Make opaque. (I have already written the accessor functions.)
@@ -183,6 +204,12 @@ struct population_t
   double		migration_ratio;	/* Chance for migration. */
   ga_scheme_type	scheme;			/* Evolutionary scheme. */
   ga_elitism_type	elitism;		/* Elitism mode. */
+
+/*
+ * Non-evolutionary parameters.
+ */
+  ga_tabu_t	*tabu_params;			/* Parameters for tabu-searches. */
+  ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
 
 /*
  * Scoring function and the other callbacks are defined here.
