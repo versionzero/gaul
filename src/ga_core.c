@@ -414,7 +414,7 @@ population *ga_population_clone_empty(population *pop)
 /*
  * Copy optional parameter data.
  */
-  if (newpop->tabu_params == NULL)
+  if (pop->tabu_params == NULL)
     {
     newpop->tabu_params = NULL;
     }
@@ -427,7 +427,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->tabu_params->search_count = pop->tabu_params->search_count;
     }
 
-  if (newpop->sa_params == NULL)
+  if (pop->sa_params == NULL)
     {
     newpop->sa_params = NULL;
     }
@@ -442,7 +442,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->sa_params->temperature = pop->sa_params->temperature;
     }
 
-  if (newpop->climbing_params == NULL)
+  if (pop->climbing_params == NULL)
     {
     newpop->climbing_params = NULL;
     }
@@ -453,7 +453,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->climbing_params->mutate_allele = pop->climbing_params->mutate_allele;
     }
 
-  if (newpop->simplex_params == NULL)
+  if (pop->simplex_params == NULL)
     {
     newpop->simplex_params = NULL;
     }
@@ -467,7 +467,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->simplex_params->dimensions = pop->simplex_params->dimensions;
     }
 
-  if (newpop->dc_params == NULL)
+  if (pop->dc_params == NULL)
     {
     newpop->dc_params = NULL;
     }
@@ -478,7 +478,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->dc_params->compare = pop->dc_params->compare;
     }
 
-  if (newpop->gradient_params == NULL)
+  if (pop->gradient_params == NULL)
     {
     newpop->gradient_params = NULL;
     }
@@ -493,7 +493,7 @@ population *ga_population_clone_empty(population *pop)
     newpop->gradient_params->dimensions = newpop->gradient_params->dimensions;
     }
 
-  if (newpop->search_params == NULL)
+  if (pop->search_params == NULL)
     {
     newpop->search_params = NULL;
     }
@@ -2445,11 +2445,11 @@ boolean ga_extinction(population *extinct)
 
     if (extinct->tabu_params) s_free(extinct->tabu_params);
     if (extinct->sa_params) s_free(extinct->sa_params);
+    if (extinct->dc_params) s_free(extinct->dc_params);
     if (extinct->climbing_params) s_free(extinct->climbing_params);
     if (extinct->simplex_params) s_free(extinct->simplex_params);
     if (extinct->gradient_params) s_free(extinct->gradient_params);
     if (extinct->search_params) s_free(extinct->search_params);
-    if (extinct->dc_params) s_free(extinct->dc_params);
     if (extinct->sampling_params) s_free(extinct->sampling_params);
 
     s_free(extinct);
