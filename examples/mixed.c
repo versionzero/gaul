@@ -365,7 +365,7 @@ int main(int argc, char **argv)
        1000		/* const int               max_generations */
               );
 
-  printf("The final solution with seed = %d had score %8.0\n",
+  printf("The final solution with seed = %d had score %8.0f\n",
          seed, ga_get_entity_from_rank(pop,0)->fitness);
   for (i=0; i<NBITS; i++)
     printf("%d", ga_bit_get((byte *)ga_get_entity_from_rank(pop,0)->chromosome[0],i)?1:0);
