@@ -364,7 +364,7 @@ struct population_t
  */
 
 /* Define lower bound on fitness. */
-#define GA_MIN_FITNESS			DBL_MIN
+#define GA_MIN_FITNESS			-DBL_MAX
 
 /*
  * Define some default values.

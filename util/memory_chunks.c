@@ -1228,7 +1228,7 @@ void mem_chunk_diagnostics_real(void)
 
   printf("--------------------------------------------------------------\n");
   printf("MEMORY_PADDING:    %s\n", MEMORY_PADDING?"TRUE":"FALSE");
-  printf("MEMORY_ALIGN_SIZE  %d\n", MEMORY_ALIGN_SIZE);
+  printf("MEMORY_ALIGN_SIZE  %zd\n", MEMORY_ALIGN_SIZE);
   printf("MEMORY_AREA_SIZE   %ld\n", MEMORY_AREA_SIZE);
 
   printf("--------------------------------------------------------------\n");

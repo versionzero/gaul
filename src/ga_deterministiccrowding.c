@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_deterministiccrowding - Deterministic crowding.
-  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -77,7 +77,7 @@ void ga_population_set_deterministiccrowding_parameters( population		*pop,
 		deterministic crowding algorithm.
   parameters:
   return:
-  last updated:	20 May 2003
+  last updated:	18 Feb 2005
  **********************************************************************/
 
 int ga_deterministiccrowding(	population		*pop,
@@ -94,8 +94,6 @@ int ga_deterministiccrowding(	population		*pop,
 /* Checks. */
   if (!pop)
     die("NULL pointer to population structure passed.");
-  if (pop->size < 1)
-    die("Population is empty.");
   if (!pop->dc_params)
     die("ga_population_set_deterministiccrowding_params(), or similar, must be used prior to ga_deterministiccrowding().");
 
@@ -112,11 +110,18 @@ int ga_deterministiccrowding(	population		*pop,
 /*
  * Score the initial population members.
  */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
+
   for (i=0; i<pop->size; i++)
     {
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
       pop->evaluate(pop, pop->entity_iarray[i]);
     }
+
+  sort_population(pop);
+  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
 
 /*
  * Prepare arrays to store permutations.

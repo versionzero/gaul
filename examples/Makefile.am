@@ -49,7 +49,7 @@ bin_PROGRAMS = \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
-	struggle5 struggle5_mp struggle5_forked \
+	struggle5 struggle5_mp struggle5_forked struggle5_threaded \
 	saveload \
 	nnevolve \
 	mixed
@@ -84,11 +84,13 @@ struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
 struggle_forked_SOURCES = struggle_forked.c
+struggle_threaded_SOURCES = struggle_threaded.c
 struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle5_forked_SOURCES = struggle5_forked.c
+struggle5_threaded_SOURCES = struggle5_threaded.c
 struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
@@ -138,6 +140,7 @@ struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_forked_DEPENDENCIES = ${DEPENDENCIES}
+struggle5_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
@@ -179,6 +182,7 @@ struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm @MPILIBS@

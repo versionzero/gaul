@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_systematicsearch - Systematic algorithm for comparison and search.
-  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -68,7 +68,7 @@ void ga_population_set_search_parameters( population              *pop,
 		available to the caller in any obvious way.
   parameters:
   return:
-  last updated:	08 Nov 2002
+  last updated:	18 Feb 2005
  **********************************************************************/
 
 int ga_search(	population		*pop,
@@ -82,7 +82,6 @@ int ga_search(	population		*pop,
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
-  if (pop->size < 1) die("Population is empty.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->search_params) die("ga_population_set_search_params(), or similar, must be used prior to ga_search().");
   if (!pop->search_params->scan_chromosome) die("Population's chromosome scan callback is undefined.");

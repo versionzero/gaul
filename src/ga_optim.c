@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Optimisation and evolution routines.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -4487,21 +4487,155 @@ int ga_evolution_archipelago( const int num_pops,
 		this function.
 		This is a multiprocess version, using a thread
 		for each current_island.
+		FIXME: There is scope for further optimisation in here.
   parameters:	const int	num_pops
 		population	**pops
 		const int	max_generations
   return:	number of generation performed
-  last updated:	21 Apr 2004
+  last updated:	18 Feb 2005
  **********************************************************************/
 
-#if HAVE_PTHREADS != 1
+#if HAVE_PTHREADS == 1
 int ga_evolution_archipelago_threaded( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
+  int		current_island;		/* Current current_island number. */
+  population	*pop=NULL;		/* Current population. */
+  boolean	complete=FALSE;		/* Whether evolution is terminated. */
+  int		max_threads=0;		/* Maximum number of threads to use at one time. */
+  char		*max_thread_str;	/* Value of enviroment variable. */
+  threaddata_t	*threaddata;		/* Used for passing data to threads. */
+  int		i;			/* Loop over threaddata elements. */
 
-  plog(LOG_FIXME, "Code incomplete.");
+/* Checks. */
+  if (!pops)
+    die("NULL pointer to array of population structures passed.");
+  if (num_pops<2)
+    die("Need at least two populations for the current_island model.");
+
+  for (current_island=0; current_island<num_pops; current_island++)
+    {
+    pop = pops[current_island];
+
+    if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+    if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+    if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+    if (!pop->mutate) die("Population's mutation callback is undefined.");
+    if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+
+/* Set current_island property. */
+    pop->island = current_island;
+    }
+
+  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
+
+/*
+ * Look at environment to find number of threads to use.
+ */
+  max_thread_str = getenv(GA_NUM_THREADS_ENVVAR_STRING);
+  if (max_thread_str) max_threads = atoi(max_thread_str);
+  if (max_threads == 0) max_threads = GA_DEFAULT_NUM_THREADS;
+
+  plog(LOG_VERBOSE, "During evolution upto %d threads will be created", max_threads);
+
+/*
+ * Allocate memory required for handling the threads.
+ */
+  threaddata = s_malloc(sizeof(threaddata_t)*max_threads);
+  pop->generation = 0;
+
+  for (current_island=0; current_island<num_pops; current_island++)
+    {
+    pop = pops[current_island];
+
+    for (i=0; i<max_threads; i++)
+      threaddata[i].pop = pop;
+
+/*
+ * Score and sort the initial population members.
+ */
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
+    gaul_ensure_evaluations_threaded(pop, max_threads, threaddata);
+    sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+  
+    plog( LOG_VERBOSE,
+          "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
+          current_island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+    }
+
+/* Do all the generations: */
+  while ( generation<max_generations && complete==FALSE)
+    {
+    generation++;
+    pop->generation = generation;
+
+/*
+ * Migration step.
+ */
+    gaul_migration(num_pops, pops);
+
+    for(current_island=0; current_island<num_pops; current_island++)
+      {
+      pop = pops[current_island];
+
+      plog( LOG_VERBOSE, "*** Evolution on current_island %d ***", current_island );
+
+      for (i=0; i<max_threads; i++)
+        threaddata[i].pop = pop;
+
+      if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
+        {
+        pop->orig_size = pop->size;
+
+        plog( LOG_DEBUG,
+              "Population %d size is %d at start of generation %d",
+              current_island, pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+        gaul_crossover(pop);	/* FIXME: Need to pass current_island for messages. */
+
+/*
+ * Mutation step.
+ */
+        gaul_mutation(pop);	/* FIXME: Need to pass current_island for messages. */
+
+/*
+ * Apply environmental adaptations, score entities, sort entities, etc.
+ */
+        gaul_adapt_and_evaluate_threaded(pop, max_threads, threaddata);
+
+/*
+ * Survival of the fittest.
+ */
+        gaul_survival_threaded(pop, max_threads, threaddata);
+
+        }
+      else
+        {
+        complete = TRUE;
+        }
+      }
+
+    plog(LOG_VERBOSE,
+          "After generation %d, population %d has fitness scores between %f and %f",
+          generation,
+          current_island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+    }	/* Generation loop. */
+
+/* Free memory used for storing thread information. */
+  s_free(threaddata);
 
   return generation;
   }
@@ -4514,6 +4648,7 @@ int ga_evolution_archipelago_threaded( const int num_pops,
   return 0;
   }
 #endif
+
 
 /**********************************************************************
   ga_evolution_archipelago_forked()

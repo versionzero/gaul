@@ -42,7 +42,7 @@
 #######################################################################
 
 
-SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 srcdir = .
 top_srcdir = ..
@@ -82,8 +82,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT) \
-	mixed$(EXEEXT)
+	struggle5_forked$(EXEEXT) struggle5_threaded$(EXEEXT) \
+	saveload$(EXEEXT) nnevolve$(EXEEXT) mixed$(EXEEXT)
 subdir = examples
 DIST_COMMON = README $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -154,6 +154,8 @@ am_struggle5_forked_OBJECTS = struggle5_forked.$(OBJEXT)
 struggle5_forked_OBJECTS = $(am_struggle5_forked_OBJECTS)
 am_struggle5_mp_OBJECTS = struggle5_mp-struggle5_mp.$(OBJEXT)
 struggle5_mp_OBJECTS = $(am_struggle5_mp_OBJECTS)
+am_struggle5_threaded_OBJECTS = struggle5_threaded.$(OBJEXT)
+struggle5_threaded_OBJECTS = $(am_struggle5_threaded_OBJECTS)
 am_struggle_dc_OBJECTS = struggle_dc.$(OBJEXT)
 struggle_dc_OBJECTS = $(am_struggle_dc_OBJECTS)
 am_struggle_forked_OBJECTS = struggle_forked.$(OBJEXT)
@@ -171,8 +173,8 @@ am_struggle_systematicsearch_OBJECTS =  \
 	struggle_systematicsearch.$(OBJEXT)
 struggle_systematicsearch_OBJECTS =  \
 	$(am_struggle_systematicsearch_OBJECTS)
-struggle_threaded_SOURCES = struggle_threaded.c
-struggle_threaded_OBJECTS = struggle_threaded.$(OBJEXT)
+am_struggle_threaded_OBJECTS = struggle_threaded.$(OBJEXT)
+struggle_threaded_OBJECTS = $(am_struggle_threaded_OBJECTS)
 am_test_ga_OBJECTS = test_ga.$(OBJEXT)
 test_ga_OBJECTS = $(am_test_ga_OBJECTS)
 am_test_sd_OBJECTS = test_sd.$(OBJEXT)
@@ -209,13 +211,13 @@ SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) struggle_threaded.c \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
+	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
+	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
+	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
@@ -229,13 +231,13 @@ DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) struggle_threaded.c \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
+	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
+	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
+	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -405,11 +407,13 @@ struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
 struggle_forked_SOURCES = struggle_forked.c
+struggle_threaded_SOURCES = struggle_threaded.c
 struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
 struggle4_SOURCES = struggle4.c
 struggle5_SOURCES = struggle5.c
 struggle5_forked_SOURCES = struggle5_forked.c
+struggle5_threaded_SOURCES = struggle5_threaded.c
 struggle5_mp_SOURCES = struggle5_mp.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
@@ -458,6 +462,7 @@ struggle3_DEPENDENCIES = ${DEPENDENCIES}
 struggle4_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_forked_DEPENDENCIES = ${DEPENDENCIES}
+struggle5_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
@@ -499,6 +504,7 @@ struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+struggle5_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
@@ -653,6 +659,9 @@ struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPEND
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
 	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
+struggle5_threaded$(EXEEXT): $(struggle5_threaded_OBJECTS) $(struggle5_threaded_DEPENDENCIES) 
+	@rm -f struggle5_threaded$(EXEEXT)
+	$(LINK) $(struggle5_threaded_LDFLAGS) $(struggle5_threaded_OBJECTS) $(struggle5_threaded_LDADD) $(LIBS)
 struggle_dc$(EXEEXT): $(struggle_dc_OBJECTS) $(struggle_dc_DEPENDENCIES) 
 	@rm -f struggle_dc$(EXEEXT)
 	$(LINK) $(struggle_dc_LDFLAGS) $(struggle_dc_OBJECTS) $(struggle_dc_LDADD) $(LIBS)
@@ -729,6 +738,7 @@ include ./$(DEPDIR)/struggle4.Po
 include ./$(DEPDIR)/struggle5.Po
 include ./$(DEPDIR)/struggle5_forked.Po
 include ./$(DEPDIR)/struggle5_mp-struggle5_mp.Po
+include ./$(DEPDIR)/struggle5_threaded.Po
 include ./$(DEPDIR)/struggle_dc.Po
 include ./$(DEPDIR)/struggle_forked.Po
 include ./$(DEPDIR)/struggle_mp-struggle_mp.Po

@@ -26,6 +26,7 @@ Changes since release 0.1847:
 - No longer include the obsolete values.h header.
 - Allow user to specify ranges for integer and double-precision chromosomes without creating custom chromosomes, along with example for demonstration examples/all5s_allele_ranges.c.
 - Move location of the actual population seeding process from the genesis routines, to the evolution routines.  This has the benefit of GAUL now automatically seeding populations if user doesn't use the genesis or seed functions.
+- ga_evolution_archipelago_threaded() implemented.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

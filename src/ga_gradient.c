@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_gradient - Gradient methods for comparison and local search.
-  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -96,7 +96,7 @@ void ga_population_set_gradient_parameters( population		*pop,
 		available to the caller in any obvious way.
   parameters:
   return:
-  last updated:	28 May 2003
+  last updated:	18 Feb 2005
  **********************************************************************/
 
 int ga_steepestascent(	population	*pop,
@@ -120,7 +120,6 @@ int ga_steepestascent(	population	*pop,
  * Checks.
  */
   if (!pop) die("NULL pointer to population structure passed.");
-  if (pop->size < 1) die("Population is empty.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->gradient_params) die("ga_population_set_gradient_params(), or similar, must be used prior to ga_gradient().");
   if (!pop->gradient_params->to_double) die("Population's genome to double callback is undefined.");
