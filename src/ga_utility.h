@@ -108,6 +108,12 @@ entity  *ga_allele_search(      population      *pop,
                                 entity          *initial );
 void ga_population_dump(population *pop);
 void ga_entity_dump(population *pop, entity *john);
+boolean ga_fitness_mean_stddev( population *pop,
+                             double *average, double *stddev );
+boolean ga_fitness_stats( population *pop,
+                          double *max, double *min,
+                          double *mean, double *varience, double *stddev,
+                          double *kurtosis, double *skew );
 
 #endif	/* GA_UTILITY_H_INCLUDED */
 

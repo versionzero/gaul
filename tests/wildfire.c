@@ -551,7 +551,7 @@ boolean wildfire_ga_callback(int generation, population *pop)
   if (generation > 0)
     {
     ga_population_score_and_sort(pop);
-    ga_population_stats(pop, &average, &stddev);
+    ga_fitness_mean_stddev(pop, &average, &stddev);
     printf( "%d: Best %d Average %f Stddev %f\n",
             generation, (int) ga_get_entity_from_rank(pop,0)->fitness,
             average, stddev );

@@ -150,7 +150,7 @@ boolean struggle_generation_hook(int generation, population *pop)
     printf("Generation = %d\n", generation);
     printf("Number of evaluations = %ld\n", evaluation_count);
     printf("Best fitness = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
-    ga_population_stats(pop, &average, &stddev);
+    ga_fitness_mean_stddev(pop, &average, &stddev);
     printf("Mean fitness = %f, with standard deviation = %f\n", average, stddev);
     if (generation>0)
       printf("Average best fitness for entire run = %f\n", total_best_fitnesses/generation);

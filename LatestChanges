@@ -20,6 +20,7 @@ Changes since release 0.1834:
 - Configure script stores output from "uname -a" which will aid in fixing people's compilation proplems.
 - A basic diagnostic program added as tests/diagnostics.c
 - Fixed multi-population extinction bug.
+- Reorganised stats functions.
 
 Changes since release 0.1833:
 - Changes for docs/html/books.html to validate.

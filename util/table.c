@@ -75,7 +75,9 @@ static boolean table_ensure_size(TableStruct *table, int size)
 
     table->size = size;
 
+/*
     printf("DEBUG: Table size is now %d\n", size);
+*/
     }
 
   return TRUE;

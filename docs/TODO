@@ -7,7 +7,7 @@ The following list conmtains the most urgent things to be done.  These are, or a
   - Variable length array chromsomes
   - Tree chromosomes
   - Permutation chromosomes
-* Facilities for a Messy-GA.
+* Built-in support for, so-called, Messy-GAs.
 * Entity user data should be stored in an array instead of a list.
 * Fix the read/write and parallel routines.
 * Lots of examples.
@@ -17,4 +17,4 @@ The following list conmtains the most urgent things to be done.  These are, or a
 * Fix elitism.
 * Need some handy macros, I think, for accessing chromosome data etc.
 
-Stewart Adcock 20/06/01
+Stewart Adcock 08/08/01

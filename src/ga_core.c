@@ -832,37 +832,6 @@ double ga_population_convergence_alleles( population *pop )
 
 
 /**********************************************************************
-  ga_population_stats()
-  synopsis:	Determine mean and standard deviation of the fitness
-		scores.
-  parameters:
-  return:
-  last updated: 30/04/01
- **********************************************************************/
-
-boolean ga_population_stats( population *pop,
-                             double *average, double *stddev )
-  {
-  int		i;			/* Loop over all entities. */
-  double	sum=0.0, sumsq=0.0;	/* Sum and sum squared. */
-
-  if (!pop) die("Null pointer to population structure passed.");
-  if (pop->size < 1) die("Pointer to empty population structure passed.");
-
-  for (i=0; i<pop->size; i++)
-    {
-    sum += pop->entity_iarray[i]->fitness;
-    sumsq += SQU(pop->entity_iarray[i]->fitness);
-    }
-
-  *average = sum / pop->size;
-  *stddev = (sumsq - sum*sum/pop->size)/pop->size;
-
-  return TRUE;
-  }
-
-
-/**********************************************************************
   ga_get_entity_rank()
   synopsis:	Gets an entity's rank (subscript into entity_iarray of
 		the population).  This is not necessarily the fitness
