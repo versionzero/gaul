@@ -367,7 +367,7 @@ int main(int argc, char **argv)
 
   random_init();
 
-  pop = ga_genesis(
+  pop = ga_genesis_int(
        2000,			/* const int              population_size */
        1,			/* const int              num_chromo */
        9,			/* const int              len_chromo */

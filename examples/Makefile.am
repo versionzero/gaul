@@ -41,6 +41,7 @@ bin_PROGRAMS = \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
+	onemax \
 	struggle struggle_forked \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
@@ -67,6 +68,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
+onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
@@ -115,6 +117,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
+onemax_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
@@ -149,6 +152,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm

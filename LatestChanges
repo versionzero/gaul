@@ -1,6 +1,7 @@
 Changes since release 0.1844:
 - Fixed grey-encoded bitstring bug.
 - Coded a minimal test suite.  examples/diagnostics stripped down and included as part of this suite now.
+- Removed use of the deprecated ga_genesis() function from the examples.
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.

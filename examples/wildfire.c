@@ -595,7 +595,7 @@ int main(int argc, char **argv)
 
     random_seed(i);
 
-    pop = ga_genesis(
+    pop = ga_genesis_int(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION,/* const int      len_chromo */

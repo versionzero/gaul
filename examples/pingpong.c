@@ -361,7 +361,7 @@ int main(int argc, char **argv)
 
     random_seed(424242*i);
 
-    pop = ga_genesis(
+    pop = ga_genesis_int(
        50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        25,			/* const int              len_chromo */
