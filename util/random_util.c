@@ -78,7 +78,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	30 May 2002 SAA	random_init() no longer needs to be called so long as random_seed() is called before any of the other functions are called.
+  Updated:	05 Jun 2003 SAA	Added some checks to avoid trying to calculate modulus of zero.
+		30 May 2002 SAA	random_init() no longer needs to be called so long as random_seed() is called before any of the other functions are called.
 		28 May 2002 SAA	Added extra check into random_seed().
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) with more portable printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Added random_int_permutation().
@@ -359,7 +360,7 @@ boolean random_boolean_prob(const double prob)
   synopsis:	Return a random integer between 0 and (N-1) inclusive.
   parameters:
   return:
-  last updated:	30/12/00
+  last updated:	05 Jun 2003
  **********************************************************************/
 
 unsigned int random_int(const unsigned int max)
@@ -367,7 +368,10 @@ unsigned int random_int(const unsigned int max)
 /*
   return (int)((double)random_rand()*max/RANDOM_RAND_MAX);
 */
-  return random_rand()%max;
+  if (max==0)
+    return 0;
+  else
+    return random_rand()%max;
   }
 
 
@@ -376,7 +380,7 @@ unsigned int random_int(const unsigned int max)
   synopsis:	Return a random integer between min and max-1 inclusive.
   parameters:
   return:
-  last updated:	30/12/00
+  last updated:	05 Jun 2003
  **********************************************************************/
 
 int random_int_range(const int min, const int max)
@@ -384,7 +388,10 @@ int random_int_range(const int min, const int max)
 /*
   return (random_rand()*(max-min)/RANDOM_RAND_MAX + min);
 */
-  return min + (random_rand()%(max-min));
+  if (max-min==0)
+    return max;
+  else
+    return min + (random_rand()%(max-min));
   }
 
 
