@@ -136,10 +136,10 @@ entity *struggle_adaptation(population *pop, entity *child)
 
 boolean struggle_generation_hook(int generation, population *pop)
   {
-  static double	total_best_fitnesses=0.0;	/* Sum of best fitness score at each generation. */
+  static double	sum_best_fitnesses=0.0;	/* Sum of best fitness score at each generation. */
   double	average, stddev;	/* Simple stats. */
 
-  total_best_fitnesses += ga_get_entity_from_rank(pop,0)->fitness;
+  sum_best_fitnesses += ga_get_entity_from_rank(pop,0)->fitness;
 
 /*
  * Display statistics every 20th generation.
@@ -152,7 +152,7 @@ boolean struggle_generation_hook(int generation, population *pop)
     ga_fitness_mean_stddev(pop, &average, &stddev);
     printf("Mean fitness = %f, with standard deviation = %f\n", average, stddev);
     if (generation>0)
-      printf("Average best fitness for entire run = %f\n", total_best_fitnesses/generation);
+      printf("Average best fitness for entire run = %f\n", sum_best_fitnesses/generation);
     }
 
 /*

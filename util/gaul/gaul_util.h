@@ -179,15 +179,12 @@ typedef unsigned char byte;
 #ifndef PI
 #define PI              3.1415926536
 #endif
-#define	EPSILONZERO	(8.854187817e-12)
 #define	TWO_PI		6.2831853072
 #define SQRT_PI		1.7724538509
 #define SQRT_TWO	1.4142135624
-#define EXP             2.7182818285
 #define ROOT_TWO	1.4142135624
 #define	INV_SQRT_3	(1.0/sqrt(3.0))
 #define PI_OVER_TWO	(3.1415926536/2.0)
-#define EOF             (-1)
 #ifndef NULL
 #define NULL		((void*)0)
 #endif

@@ -987,7 +987,7 @@ FIXME: The following 3 functions need to be fixed for the new absracted chromoso
 double ga_population_convergence_genotypes( population *pop )
   {
   int		i, j;		/* Loop over pairs of entities. */
-  int		total=0, converged=0;	/* Number of comparisons, matches. */
+  int		count=0, converged=0;	/* Number of comparisons, matches. */
 
   if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
@@ -998,11 +998,11 @@ double ga_population_convergence_genotypes( population *pop )
       {
       if (ga_compare_genome(pop, pop->entity_iarray[i], pop->entity_iarray[j]))
         converged++;
-      total++;
+      count++;
       }
     }
 
-  return (double) converged/total;
+  return (double) converged/count;
   }
 
 
@@ -1018,7 +1018,7 @@ double ga_population_convergence_chromosomes( population *pop )
   {
   int		i, j;		/* Loop over pairs of entities. */
   int		k;		/* Loop over chromosomes. */
-  int		total=0, converged=0;	/* Number of comparisons, matches. */
+  int		count=0, converged=0;	/* Number of comparisons, matches. */
 
   if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
@@ -1029,17 +1029,17 @@ double ga_population_convergence_chromosomes( population *pop )
       {
       for (k=0; k<pop->num_chromosomes; k++)
         {
-/* FIXME: Not totally effiecient: */
+/* FIXME: Not countly effiecient: */
         if (ga_count_match_alleles( pop->len_chromosomes,
                                     pop->entity_iarray[i]->chromosome[k],
                                     pop->entity_iarray[j]->chromosome[k] ) == pop->len_chromosomes)
           converged++;
-        total++;
+        count++;
         }
       }
     }
 
-  return (double) converged/total;
+  return (double) converged/count;
   }
 
 
@@ -1055,7 +1055,7 @@ double ga_population_convergence_alleles( population *pop )
   {
   int		i, j;		/* Loop over pairs of entities. */
   int		k;		/* Loop over chromosomes. */
-  int		total=0, converged=0;	/* Number of comparisons, matches. */
+  int		count=0, converged=0;	/* Number of comparisons, matches. */
 
   if ( !pop ) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
@@ -1069,12 +1069,12 @@ double ga_population_convergence_alleles( population *pop )
         converged+=ga_count_match_alleles( pop->len_chromosomes,
                                            pop->entity_iarray[i]->chromosome[k],
                                            pop->entity_iarray[j]->chromosome[k] );
-        total+=pop->len_chromosomes;
+        count+=pop->len_chromosomes;
         }
       }
     }
 
-  return (double) converged/total;
+  return (double) converged/count;
   }
 #endif
 

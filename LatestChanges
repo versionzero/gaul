@@ -27,6 +27,7 @@ Changes since release 0.1846:
 - Added missing struggle_threaded example source, discussed in the tutorial.
 - Altered error messages that mentioned the deprecated ga_genesis().
 - Various fixes for using native Windows I/O functions on Windows platforms.
+- Avoid use of several reserved C keywords/identifiers in source.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

@@ -125,7 +125,7 @@ static MemChunk *mem_record_chunk=NULL;	/* the memory record buffer. */
 static AVLTree	*memtree=NULL;		/* the global memory allocation tree. */
 static int	num_mem;		/* the number of entries in the memory table. */
 static int	max_mem;		/* the current size of the memory table. */
-static int	total_mem;		/* the total memory currently allocated. */
+static int	allocated_mem;		/* the total memory currently allocated. */
 static int	most_mem;		/* record of maximum allocated memory. */
 static int	memory_verbose=1;	/* level of reporting. */
 static int	memory_strict=3;	/* level of strictness for uninitialized memory. */
@@ -735,8 +735,8 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
       pad_mptr_low(j);
       }
 
-    total_mem+=memsize*numvars;
-    if (total_mem > most_mem) most_mem = total_mem;
+    allocated_mem+=memsize*numvars;
+    if (allocated_mem > most_mem) most_mem = allocated_mem;
 /*
 printf("INSERT (1) mtemp = %p j = %p j->mptr = %p\n", mtemp, j, j->mptr);
 */
@@ -812,8 +812,8 @@ printf("mtemp = %p, j = %p, j->mptr = %p\n", mtemp, j, j->mptr);
 printf("REPLACING j->mptr %p with mtemp %p j %p\n", j->mptr, mtemp, j);
 */
 
-      total_mem+=memsize*numvars-j->mem;
-      if (total_mem > most_mem) most_mem = total_mem;
+      allocated_mem+=memsize*numvars-j->mem;
+      if (allocated_mem > most_mem) most_mem = allocated_mem;
       j->mptr=mtemp;
       j->mem=memsize*numvars;
       strncpy(j->label,label,64);
@@ -869,7 +869,7 @@ printf("INSERT (2) mtemp = %p j = %p j->mptr = %p\n", mtemp, j, j->mptr);
       printf("%s allocation call from %s, file \"%s\", line %d\n", label, name, file, line);
       }
     printf("s_alloc_debug(): %s has %lu used, %lu allocated, total memory allocated = %d\n",
-                label, (unsigned long) j->rmem, (unsigned long) j->mem, total_mem);
+                label, (unsigned long) j->rmem, (unsigned long) j->mem, allocated_mem);
     }
 
 /*
@@ -950,7 +950,7 @@ printf("REMOVING mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
  */
   free_padded(j);
 
-  total_mem-=j->mem;
+  allocated_mem-=j->mem;
 
 /* report on deallocation, if required */
   if (memory_verbose>1)
@@ -960,7 +960,7 @@ printf("REMOVING mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
       printf("deallocation call from %s, file \"%s\", line %d\n", name, file, line);
       printf("orig. \"%s\" allocation call from %s, file \"%s\", line %d\n", j->label, j->func, j->file, j->line);
       }
-    printf("s_free_debug(): deallocated %zd bytes successfully, total memory allocated now %d\n", j->mem, total_mem);
+    printf("s_free_debug(): deallocated %zd bytes successfully, total memory allocated now %d\n", j->mem, allocated_mem);
     }
 
 /*
@@ -977,16 +977,16 @@ printf("REMOVING mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
   synopsis:     Return the total memory currently allocated through
 		these routines.
   parameters:   None.
-  return:       int	total_mem
+  return:       int	allocated_mem
   last updated: 07/12/98
  **********************************************************************/
 
 int memory_total(void)
   {
   if (memory_verbose>0)
-    printf("Total memory allocated:\t%d bytes.\n", total_mem);
+    printf("Total memory allocated:\t%d bytes.\n", allocated_mem);
 
-  return(total_mem);
+  return(allocated_mem);
   }
 
 
@@ -1089,7 +1089,7 @@ void memory_display_status(void)
   printf("Number of entries in memory table:  %d\n", num_mem);
   printf("Number of entries in memory tree:   %d\n", avltree_num_nodes(memtree));
   printf("Current size of memory table:       %d\n", max_mem);
-  printf("Current total memory allocated:     %d bytes\n", total_mem);
+  printf("Current total memory allocated:     %d bytes\n", allocated_mem);
   printf("Maximum total memory allocated:     %d bytes\n", most_mem);
   printf("----------------------------------------------\n");
   printf("Report level:                       %d\n", memory_verbose);

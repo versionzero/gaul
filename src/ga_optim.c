@@ -215,20 +215,20 @@ static void gaul_entity_swap_rank(population *pop, const int rank1, const int ra
 static void gaul_migration(const int num_pops, population **pops)
   {
   int		pop0_osize;		/* Required for correct migration. */
-  int		island;			/* Current island number. */
+  int		current_island;			/* Current current_island number. */
   int		i;			/* Loop over members of population. */
 
   plog( LOG_VERBOSE, "*** Migration Cycle ***" );
 
   pop0_osize = pops[0]->size;
-  for(island=1; island<num_pops; island++)
+  for(current_island=1; current_island<num_pops; current_island++)
     {
-    for(i=0; i<pops[island]->size; i++)
+    for(i=0; i<pops[current_island]->size; i++)
       {
-      if (random_boolean_prob(pops[island]->migration_ratio))
+      if (random_boolean_prob(pops[current_island]->migration_ratio))
         {
-        ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
-/* printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
+        ga_entity_clone(pops[current_island-1], pops[current_island]->entity_iarray[i]);
+/* printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), current_island, i, pops[current_island]->entity_iarray[i]->fitness);*/
         }
       }
     }
@@ -237,7 +237,7 @@ static void gaul_migration(const int num_pops, population **pops)
     {
     if (random_boolean_prob(pops[0]->migration_ratio))
       ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
-/*  printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[island]->entity_iarray[i]->fitness);*/
+/*  printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[current_island]->entity_iarray[i]->fitness);*/
     }
 
 /*
@@ -245,9 +245,9 @@ static void gaul_migration(const int num_pops, population **pops)
  * Need this to ensure that new immigrants are ranked correctly.
  * FIXME: It would be more efficient to insert the immigrants correctly.
  */
-  for(island=0; island<num_pops; island++)
+  for(current_island=0; current_island<num_pops; current_island++)
     {
-    sort_population(pops[island]);
+    sort_population(pops[current_island]);
     }
 
   return;
@@ -3629,7 +3629,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
   ga_evolution_archipelago()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
-		island model.  Migration occurs around a cyclic
+		current_island model.  Migration occurs around a cyclic
 		topology only.  Migration causes a duplication of the
 		respective entities.  This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
@@ -3646,7 +3646,7 @@ int ga_evolution_archipelago( const int num_pops,
 			const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
-  int		island;			/* Current island number. */
+  int		current_island;			/* Current current_island number. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
 
@@ -3654,11 +3654,11 @@ int ga_evolution_archipelago( const int num_pops,
   if (!pops)
     die("NULL pointer to array of population structures passed.");
   if (num_pops<2)
-    die("Need at least two populations for the island model.");
+    die("Need at least two populations for the current_island model.");
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
     if (!pop->evaluate) die("Population's evaluation callback is undefined.");
     if (!pop->select_one) die("Population's asexual selection callback is undefined.");
@@ -3668,17 +3668,17 @@ int ga_evolution_archipelago( const int num_pops,
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
     if (pop->size < 1) die("Population is empty.");
 
-/* Set island property. */
-    pop->island = island;
+/* Set current_island property. */
+    pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
 
   pop->generation = 0;
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
 /*
  * Score and sort the initial population members.
@@ -3687,8 +3687,8 @@ int ga_evolution_archipelago( const int num_pops,
     sort_population(pop);
   
     plog( LOG_VERBOSE,
-          "Prior to the first generation, population on island %d has fitness scores between %f and %f",
-          island,
+          "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
+          current_island,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
     }
@@ -3704,11 +3704,11 @@ int ga_evolution_archipelago( const int num_pops,
  */
     gaul_migration(num_pops, pops);
 
-    for(island=0; island<num_pops; island++)
+    for(current_island=0; current_island<num_pops; current_island++)
       {
-      pop = pops[island];
+      pop = pops[current_island];
 
-      plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
+      plog( LOG_VERBOSE, "*** Evolution on current_island %d ***", current_island );
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -3716,17 +3716,17 @@ int ga_evolution_archipelago( const int num_pops,
 
         plog( LOG_DEBUG,
               "Population %d size is %d at start of generation %d",
-              island, pop->orig_size, generation );
+              current_island, pop->orig_size, generation );
 
 /*
  * Crossover step.
  */
-        gaul_crossover(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_crossover(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Mutation step.
  */
-        gaul_mutation(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_mutation(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Apply environmental adaptations, score entities, sort entities, etc.
@@ -3748,7 +3748,7 @@ int ga_evolution_archipelago( const int num_pops,
     plog(LOG_VERBOSE,
           "After generation %d, population %d has fitness scores between %f and %f",
           generation,
-          island,
+          current_island,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
 
@@ -3762,13 +3762,13 @@ int ga_evolution_archipelago( const int num_pops,
   ga_evolution_archipelago_threaded()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
-		island model.  Migration occurs around a cyclic
+		current_island model.  Migration occurs around a cyclic
 		topology only.  Migration causes a duplication of the
 		respective entities.  This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
 		This is a multiprocess version, using a thread
-		for each island.
+		for each current_island.
   parameters:	const int	num_pops
 		population	**pops
 		const int	max_generations
@@ -3801,13 +3801,13 @@ int ga_evolution_archipelago_threaded( const int num_pops,
   ga_evolution_archipelago_forked()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
-		island model.  Migration occurs around a cyclic
+		current_island model.  Migration occurs around a cyclic
 		topology only.  Migration causes a duplication of the
 		respective entities.  This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
 		This is a multiprocess version, using a forked process
-		for each island.
+		for each current_island.
   parameters:	const int	num_pops
 		population	**pops
 		const int	max_generations
@@ -3825,7 +3825,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
   plog(LOG_FIXME, "Code incomplete.");
 
 #if 0
-  int		island;			/* Current island number. */
+  int		current_island;			/* Current current_island number. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		i;			/* Loop over members of population. */
@@ -3841,13 +3841,13 @@ int ga_evolution_archipelago_forked( const int num_pops,
   if (!pops)
     die("NULL pointer to array of population structures passed.");
   if (num_pops<2)
-    die("Need at least two populations for the island model.");
+    die("Need at least two populations for the current_island model.");
 
   pop->generation = 0;
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
     if (!pop->evaluate) die("Population's evaluation callback is undefined.");
     if (!pop->select_one) die("Population's asexual selection callback is undefined.");
@@ -3857,11 +3857,11 @@ int ga_evolution_archipelago_forked( const int num_pops,
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
     if (pop->size < 1) die("Population is empty.");
 
-/* Set island property. */
-    pop->island = island;
+/* Set current_island property. */
+    pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
   
 /*
  * Allocate memory.
@@ -3878,9 +3878,9 @@ int ga_evolution_archipelago_forked( const int num_pops,
     eid[i] = -1;
     }
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
     if (pid[fork_num] < 0)
       {       /* Error in fork. */
@@ -3896,8 +3896,8 @@ int ga_evolution_archipelago_forked( const int num_pops,
     sort_population(pop);
 
     plog( LOG_VERBOSE,
-          "Prior to the first generation, population on island %d has fitness scores between %f and %f",
-          island,
+          "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
+          current_island,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
     }
@@ -3913,7 +3913,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
  */
       FIXME.
 
-      plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
+      plog( LOG_VERBOSE, "*** Evolution on current_island %d ***", current_island );
 
       if ( pop->generation_hook?pop->generation_hook(generation, pop):TRUE &&
            complete == FALSE )
@@ -3922,17 +3922,17 @@ int ga_evolution_archipelago_forked( const int num_pops,
 
         plog( LOG_DEBUG,
               "Population %d size is %d at start of generation %d",
-              island, pop->orig_size, generation );
+              current_island, pop->orig_size, generation );
 
 /*
  * Crossover step.
  */
-        gaul_crossover(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_crossover(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Mutation step.
  */
-        gaul_mutation(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_mutation(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Apply environmental adaptations, score entities, sort entities, etc.
@@ -3953,7 +3953,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
       plog(LOG_VERBOSE,
           "After generation %d, population %d has fitness scores between %f and %f",
           generation,
-          island,
+          current_island,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
 
@@ -4005,11 +4005,11 @@ int ga_evolution_archipelago_forked( const int num_pops,
   ga_evolution_archipelago_mp()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
-		island model.  Migration occurs around a cyclic
+		current_island model.  Migration occurs around a cyclic
 		topology only.  Migration causes a duplication of the
 		respective entities.  This is a generation-based GA.
 		This is a multi-processor version with uses one
-	       	processor for one or more islands.  Note that the
+	       	processor for one or more current_islands.  Note that the
 		populations must be pre-distributed.  The number of
 		populations on each processor and the properties (e.g.
 		size) of those populations need not be equal - but be
@@ -4031,7 +4031,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
   {
 #if HAVE_MPI == 1
   int		generation=0;		/* Current generation number. */
-  int		island;			/* Current island number. */
+  int		current_island;			/* Current current_island number. */
   int		i;			/* Loop over members of population. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
@@ -4044,9 +4044,9 @@ int ga_evolution_archipelago_mp( const int num_pops,
   if (!pops)
     die("NULL pointer to array of population structures passed.");
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
     if (!pop->evaluate) die("Population's evaluation callback is undefined.");
     if (!pop->select_one) die("Population's asexual selection callback is undefined.");
@@ -4056,25 +4056,25 @@ int ga_evolution_archipelago_mp( const int num_pops,
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
     if (pop->size < 1) die("Population is empty.");
 
-/* Set island property. */
-    pop->island = island;
+/* Set current_island property. */
+    pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d islands on node %d!", num_pops, mpi_get_rank());
+  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands on node %d!", num_pops, mpi_get_rank());
 
   mpi_init();
 
-  for (island=0; island<num_pops; island++)
+  for (current_island=0; current_island<num_pops; current_island++)
     {
-    pop = pops[island];
+    pop = pops[current_island];
 
 /*
  * Score and sort the initial population members.
  */
     ga_population_score_and_sort(pop);
     plog( LOG_VERBOSE,
-          "Prior to the first generation, population on island %d (process %d) has fitness scores between %f and %f",
-          island, mpi_get_rank(),
+          "Prior to the first generation, population on current_island %d (process %d) has fitness scores between %f and %f",
+          current_island, mpi_get_rank(),
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
 
@@ -4098,14 +4098,14 @@ int ga_evolution_archipelago_mp( const int num_pops,
  */
     plog( LOG_VERBOSE, "*** Migration Cycle ***" );
     pop0_osize = pops[0]->size;
-    for(island=1; island<num_pops; island++)
+    for(current_island=1; current_island<num_pops; current_island++)
       {
-      for(i=0; i<pops[island]->size; i++)
+      for(i=0; i<pops[current_island]->size; i++)
         {
-        if (random_boolean_prob(pops[island]->migration_ratio))
+        if (random_boolean_prob(pops[current_island]->migration_ratio))
 	  {
-          ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
-/*	  printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
+          ga_entity_clone(pops[current_island-1], pops[current_island]->entity_iarray[i]);
+/*	  printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), current_island, i, pops[current_island]->entity_iarray[i]->fitness);*/
 	  }
         }
       }
@@ -4113,7 +4113,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
     if (mpi_get_num_processes()<2)
       {	/* No parallel stuff initialized, or only 1 processor. */
       if (num_pops>1)
-        { /* There is more than one island. */
+        { /* There is more than one current_island. */
         for(i=0; i<pop0_osize; i++)
           {
           if (random_boolean_prob(pops[0]->migration_ratio))
@@ -4156,11 +4156,11 @@ int ga_evolution_archipelago_mp( const int num_pops,
 	}
       }
 
-    for(island=0; island<num_pops; island++)
+    for(current_island=0; current_island<num_pops; current_island++)
       {
-      pop = pops[island];
+      pop = pops[current_island];
 
-      plog( LOG_VERBOSE, "*** Evolution on island %d ***", island );
+      plog( LOG_VERBOSE, "*** Evolution on current_island %d ***", current_island );
 
 /*
  * Sort the individuals in each population.
@@ -4175,17 +4175,17 @@ int ga_evolution_archipelago_mp( const int num_pops,
 
         plog( LOG_DEBUG,
               "Population %d size is %d at start of generation %d",
-              island, pop->orig_size, generation );
+              current_island, pop->orig_size, generation );
 
 /*
  * Crossover step.
  */
-        gaul_crossover(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_crossover(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Mutation step.
  */
-        gaul_mutation(pop);	/* FIXME: Need to pass island for messages. */
+        gaul_mutation(pop);	/* FIXME: Need to pass current_island for messages. */
 
 /*
  * Apply environmental adaptations, score entities, sort entities, etc.
@@ -4207,7 +4207,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
     plog(LOG_VERBOSE,
           "After generation %d, population %d has fitness scores between %f and %f",
           generation,
-          island,
+          current_island,
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
 

@@ -432,7 +432,7 @@ boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
 boolean ga_select_one_roulette(population *pop, entity **mother)
   {
   static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	total_expval;		/* Total of expectancy values. */
+  static double	current_expval;		/* Total of expectancy values. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
@@ -448,11 +448,11 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
   if (pop->select_state == 0)
     { /* First call of this generation. */
     gaul_select_stats(pop, &mean, &stddev, &sum);
-    total_expval=sum/mean;
+    current_expval=sum/mean;
     marker = random_int(pop->orig_size);
     }
 
-  selectval = random_double(total_expval)*mean;
+  selectval = random_double(current_expval)*mean;
 
   do
     {
@@ -490,7 +490,7 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
   {
   static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	total_expval;		/* Total of expectancy values. */
+  static double	current_expval;		/* Total of expectancy values. */
   static double	minval;			/* Worst fitness value. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
@@ -511,10 +511,10 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
     minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
-    total_expval = (sum-minval*pop->orig_size)/mean;
+    current_expval = (sum-minval*pop->orig_size)/mean;
     }
 
-  selectval = random_double(total_expval);
+  selectval = random_double(current_expval);
 
   do
     {
@@ -553,7 +553,7 @@ boolean ga_select_two_roulette( population *pop,
                                 entity **mother, entity **father )
   {
   static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	total_expval;		/* Total of expectancy values. */
+  static double	current_expval;		/* Total of expectancy values. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
 
@@ -570,16 +570,16 @@ boolean ga_select_two_roulette( population *pop,
   if (pop->select_state == 0)
     { /* First call of this generation. */
     gaul_select_stats(pop, &mean, &stddev, &sum);
-    total_expval=sum/mean;
+    current_expval=sum/mean;
     marker = random_int(pop->orig_size);
 /*
-printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum, total_expval);
+printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum, current_expval);
 */
     }
 
   pop->select_state++;
 
-  selectval = random_double(total_expval)*mean;
+  selectval = random_double(current_expval)*mean;
 
   do
     {
@@ -593,7 +593,7 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 
   *mother = pop->entity_iarray[marker];
 
-  selectval = random_double(total_expval)*mean;
+  selectval = random_double(current_expval)*mean;
 
   do
     {
@@ -631,7 +631,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
                                         entity **mother, entity **father )
   {
   static double	mean, stddev, sum;	/* Fitness statistics. */
-  static double	total_expval;		/* Total of expectancy values. */
+  static double	current_expval;		/* Total of expectancy values. */
   static double	minval;			/* Worst fitness value. */
   static int	marker;			/* The roulette wheel marker. */
   double	selectval;		/* Select when this reaches zero. */
@@ -652,12 +652,12 @@ boolean ga_select_two_roulette_rebased( population *pop,
     minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
-    total_expval = (sum-minval*pop->orig_size)/mean;
+    current_expval = (sum-minval*pop->orig_size)/mean;
     }
 
   pop->select_state++;
 
-  selectval = random_double(total_expval);
+  selectval = random_double(current_expval);
 
   do
     {
@@ -671,7 +671,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   *mother = pop->entity_iarray[marker];
 
-  selectval = random_double(total_expval);
+  selectval = random_double(current_expval);
 
   do
     {

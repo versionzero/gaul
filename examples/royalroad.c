@@ -100,7 +100,7 @@ int highestlevel=0;
 boolean royalroad_score(population *pop, entity *entity)
   {
   double	score = 0.0;
-  int		total, i, j, index, n;
+  int		count, i, j, index, n;
   int		blockarray[NBLOCKS];
   int		proceed, level;
 
@@ -108,14 +108,14 @@ boolean royalroad_score(population *pop, entity *entity)
 
   n = 0;
   for(i=0; i<NBLOCKS; i++) {
-    total = 0;
+    count = 0;
     for(j=i*(BLOCKSIZE + GAPSIZE); j<i*(BLOCKSIZE+GAPSIZE)+BLOCKSIZE; j++)
-      if(((boolean *)entity->chromosome[0])[j] == 1) total++;  /* count the bits in the block. */
-    if(total > MSTAR && total < BLOCKSIZE)
-      score -= (total-MSTAR)*RR_V;
-    else if(total <= MSTAR)
-      score += total * RR_V;
-    if(total == BLOCKSIZE) {
+      if(((boolean *)entity->chromosome[0])[j] == 1) count++;  /* count the bits in the block. */
+    if(count > MSTAR && count < BLOCKSIZE)
+      score -= (count-MSTAR)*RR_V;
+    else if(count <= MSTAR)
+      score += count * RR_V;
+    if(count == BLOCKSIZE) {
       blockarray[i] = 1;
       n++;
     }
@@ -135,12 +135,12 @@ boolean royalroad_score(population *pop, entity *entity)
   level = 0;
   while ((n > 1) && proceed) {
     proceed = 0;
-    total = 0;
+    count = 0;
       /* there are n valid blocks in the blockarray each time */
       /* round, so n=2 is the last.                           */
     for(i=0,index=0; i<(n/2)*2; i+=2,index++) {
       if(blockarray[i] == 1 && blockarray[i+1] == 1) {
-	total++;
+	count++;
 	proceed = 1;
 	blockarray[index] = 1;
       }
@@ -148,8 +148,8 @@ boolean royalroad_score(population *pop, entity *entity)
 	blockarray[index] = 0;
       }
     }
-    if(total > 0){
-      score += USTAR + (total-1)*RR_U;
+    if(count > 0){
+      score += USTAR + (count-1)*RR_U;
       level++;
     }
     n /= 2;
