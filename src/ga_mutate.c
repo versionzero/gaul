@@ -26,7 +26,7 @@
 
   Synopsis:     Routines for performing GA mutation operations.
 
-		These functions should duplicate user data were
+		These functions should duplicate user data where
 		appropriate.
 
  **********************************************************************/
@@ -374,6 +374,62 @@ void ga_mutate_char_singlepoint_drift( population *pop,
 
   return;
   }
+
+
+/**********************************************************************
+  ga_mutate_char_allpoint()
+  synopsis:	Cause a number of mutation events.  Each allele has
+		equal probability of being incremented, decremented, or
+		remaining the same.
+  parameters:
+  return:
+  last updated: 03 Jun 2002
+ **********************************************************************/
+
+void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Copy chromosomes of parent to offspring. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(int));
+    }
+
+/*
+ * Mutate by incrementing or decrementing alleles.
+ */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      switch (random_int(3))
+        {
+        case (1):
+          (((char *)son->chromosome[chromo])[point])++;
+
+          break;
+
+        case (2):
+          (((char *)son->chromosome[chromo])[point])--;
+
+          break;
+
+        default:
+          /* Do nothing. */
+          break;
+        }
+      }
+    }
+
+  return;
+  }
+
 
 
 /**********************************************************************

@@ -1,3 +1,6 @@
+Changes since release 0.1839:
+- Added ga_mutate_char_allpoint().
+
 Changes since release 0.1838:
 - Added Stochastic Universal Sampling selection functions ga_select_one_sus() and ga_select_two_sus().
 - examples/struggle2 now uses stochastic universal sampling instead of roulette wheel sampling.

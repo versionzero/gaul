@@ -316,6 +316,7 @@ void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
 void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_char_singlepoint_drift(population *pop, entity *father, entity *son);
 void	ga_mutate_char_singlepoint_randomize(population *pop, entity *father, entity *son);
+void	ga_mutate_char_allpoint(population *pop, entity *father, entity *son);
 void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
 void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
