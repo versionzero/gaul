@@ -40,7 +40,8 @@
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
+  Last Updated:	04 Feb 2002 SAA	All global variables are now declared static.
+		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
   		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
 		24 Dec 2002 SAA Removed stupid error calculation from NN_predict().
 		12 Dec 2001 SAA Fixed read_prop() bug.
@@ -60,31 +61,31 @@
 /*
  * Yucky global variables.
  */
-float      **train_data=NULL;       /* Input data for training. */
-float      **test_data=NULL;        /* Input data for testing. */
-float      **eval_data=NULL;        /* Input data for evaluation. */
-int        num_train_data=0;        /* Number of training target items. */
-int        num_test_data=0;         /* Number of testing target items. */
-int        num_eval_data=0;         /* Number of evaluation target items. */
-int        max_train_data=0;        /* Maximum number of training target items. */
-int        max_test_data=0;         /* Maximum number of testing target items. */
-int        max_eval_data=0;         /* Maximum number of evaluation target items. */
+static float      **train_data=NULL;       /* Input data for training. */
+static float      **test_data=NULL;        /* Input data for testing. */
+static float      **eval_data=NULL;        /* Input data for evaluation. */
+static int        num_train_data=0;        /* Number of training target items. */
+static int        num_test_data=0;         /* Number of testing target items. */
+static int        num_eval_data=0;         /* Number of evaluation target items. */
+static int        max_train_data=0;        /* Maximum number of training target items. */
+static int        max_test_data=0;         /* Maximum number of testing target items. */
+static int        max_eval_data=0;         /* Maximum number of evaluation target items. */
 
-float      **train_property=NULL;   /* Training target property. */
-float      **test_property=NULL;    /* Testing target property. */
-float      **eval_property=NULL;    /* Evaluation target property. */
-int        num_train_prop=0;        /* Number of training target properties. */
-int        num_test_prop=0;         /* Number of testing target properties. */
-int        num_eval_prop=0;         /* Number of evaluation target properties. */
+static float      **train_property=NULL;   /* Training target property. */
+static float      **test_property=NULL;    /* Testing target property. */
+static float      **eval_property=NULL;    /* Evaluation target property. */
+static int        num_train_prop=0;        /* Number of training target properties. */
+static int        num_test_prop=0;         /* Number of testing target properties. */
+static int        num_eval_prop=0;         /* Number of evaluation target properties. */
 
-float      **predict_data=NULL;     /* Input data for prediction. */
-int        num_predict_data=0;      /* Number of sets of input data to predict. */
-int        max_predict_data=0;      /* Maximum number of sets of input data to predict. */
+static float      **predict_data=NULL;     /* Input data for prediction. */
+static int        num_predict_data=0;      /* Number of sets of input data to predict. */
+static int        max_predict_data=0;      /* Maximum number of sets of input data to predict. */
 
-char       **train_labels=NULL;     /* Labels for training data. */
-char       **test_labels=NULL;      /* Labels for test data. */
-char       **eval_labels=NULL;      /* Labels for evaluation data. */
-char       **predict_labels=NULL;   /* Labels for prediction data. */
+static char       **train_labels=NULL;     /* Labels for training data. */
+static char       **test_labels=NULL;      /* Labels for test data. */
+static char       **eval_labels=NULL;      /* Labels for evaluation data. */
+static char       **predict_labels=NULL;   /* Labels for prediction data. */
 
 
 /**********************************************************************

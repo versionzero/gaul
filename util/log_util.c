@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
+  Updated:	04 Feb 2002 SAA	All global variables are now decleared static.
+		31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
 		07/02/01 SAA	Added warning-level messages.  LOG_WARNING is intended for non-fatal errors and so on.
 		02/02.01 SAA	Converted from helga_log.c to log_util.c
@@ -63,10 +64,10 @@
 THREAD_LOCK_DEFINE_STATIC(log_global_lock);
 THREAD_LOCK_DEFINE_STATIC(log_callback_lock);
 
-char		*log_filename=NULL;		/* Log filename */
-log_func	log_callback=NULL;		/* Callback function for log */
-enum log_level_type	log_level=LOG_NONE;	/* Logging level */
-boolean		log_date=TRUE;			/* Whether to display date in logs */
+static char		*log_filename=NULL;		/* Log filename */
+static log_func	log_callback=NULL;		/* Callback function for log */
+static enum log_level_type	log_level=LOG_NONE;	/* Logging level */
+static boolean		log_date=TRUE;			/* Whether to display date in logs */
 
 
 /**********************************************************************

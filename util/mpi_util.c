@@ -51,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
+  Updated:	04 Feb 2002 SAA	All global variables are now decleared static.
+		31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
 		30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
   		23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
 		04/02/01 SAA	Code for basic BSPlib support.
@@ -87,13 +88,13 @@
  * Size is used to inticate that MPI has been initialized.  Appears much quicker
  * than using MPI_Initialized().  (Also isn't restricted to MPI only).
  */
-int	rank=-1;				/* Current process's rank */
-int	size=0;					/* Total number of processes */
-int	namelen;				/* Length of processor name */
+static int	rank=-1;				/* Current process's rank */
+static int	size=0;					/* Total number of processes */
+static int	namelen;				/* Length of processor name */
 #if PARALLEL == 2
-char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name */
+istatic char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name */
 #else
-char	node_name[MAX_LINE_LEN];	/* String containing processor name */
+static char	node_name[MAX_LINE_LEN];	/* String containing processor name */
 #endif
 
 /**********************************************************************
