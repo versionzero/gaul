@@ -40,7 +40,8 @@
 			-Lmethods/ -I. -I.. -Imethods/ -Imolstruct/ \
                         -lm -lstr_util -lmethods -lrandom -Wall
 
-  Last Updated:	06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
+  Last Updated:	25 Feb 2002 SAA	Added code for batch mode training; NN_train_batch_systematic(), NN_train_batch_random(), NN_output_error_sum() and NN_simulate_batch().
+		06 Feb 2002 SAA Fixed bug in NN_train_systematic() that caused segfault if num_epochs>1.
 		04 Feb 2002 SAA	All global variables are now declared static.  Functions for defining data from external source added.
 		28 Jan 2002 SAA Modifications for distribution with GAUL.  Renamed NN_train() to NN_train_random() and added NN_train_systematic().  Added NN_clone() and NN_copy().
   		25 Jan 2002 SAA	By default, standalone code is not compiled - change required for incorporation into GAUL example directory.  Renamed to nn_util.c and split off a nn_util.h file.  NN_diagnostics() added.  Renamed some defines for consistency.
@@ -735,7 +736,7 @@ void NN_propagate(network_t *network)
 /**********************************************************************
   NN_output_error()
   synopsis:     Assess the error of a network against a given output
-		vector.
+		vector.  (For sequential mode training)
   parameters:   network_t *network
 		float *target
   return:       none
@@ -753,6 +754,34 @@ void NN_output_error(network_t *network, float *target)
     out = network->layer[network->num_layers-1].output[i];
     err = target[i-1]-out;
     network->layer[network->num_layers-1].error[i] = network->gain * out * (1-out) * err;
+    network->error += 0.5 * SQU(err);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_output_error_sum()
+  synopsis:     Sumate the error of a network against a given output
+		vector.  (For batch mode training)
+  parameters:   network_t *network
+		float *target
+  return:       none
+  last updated: 25 Feb 2002
+ **********************************************************************/
+
+void NN_output_error_sum(network_t *network, float *target)
+  {
+  int  i;
+  float out, err;
+   
+  network->error = 0;
+  for (i=1; i<=network->layer[network->num_layers-1].neurons; i++)
+    {
+    out = network->layer[network->num_layers-1].output[i];
+    err = target[i-1]-out;
+    network->layer[network->num_layers-1].error[i] += network->gain * out * (1-out) * err;
     network->error += 0.5 * SQU(err);
     }
 
@@ -820,6 +849,28 @@ void NN_adjust_weights(network_t *network)
         }
       }
     }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_simulate_batch()
+  synopsis:     Training simulation for batch-mode training.
+  parameters:   network_t *network
+		float *input
+		float *target
+  return:       none
+  last updated: 25 Feb 2002
+ **********************************************************************/
+
+void NN_simulate_batch(network_t *network, float *input, float *target)
+  {
+
+  NN_input(network, input);
+  NN_propagate(network);
+   
+  NN_output_error_sum(network, target);
 
   return;
   }
@@ -948,6 +999,64 @@ void NN_train_systematic(network_t *network, const int num_epochs)
       NN_backpropagate(network);
       NN_adjust_weights(network);
       }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_train_batch_random()
+  synopsis:     Train network using back-propagation.
+  parameters:   network_t *network
+		int num_epochs
+  return:       none
+  last updated: 25 Feb 2002
+ **********************************************************************/
+
+void NN_train_batch_random(network_t *network, const int num_epochs)
+  {
+  int  i, n;
+  int  item;
+
+  for (i=0; i<num_epochs; i++)
+    {
+    for (n=0; n<num_train_data; n++)
+      {
+      item = random_int(num_train_data);
+      NN_simulate_batch(network, train_data[item], train_property[item]);
+      }
+
+    NN_backpropagate(network);
+    NN_adjust_weights(network);
+    }
+ 
+  return;
+  }
+
+
+/**********************************************************************
+  NN_train_batch_systematic()
+  synopsis:     Train network using back-propagation.
+  parameters:   network_t *network
+		int num_epochs
+  return:       none
+  last updated: 25 Feb 2002
+ **********************************************************************/
+
+void NN_train_batch_systematic(network_t *network, const int num_epochs)
+  {
+  int  i, n;
+
+  for (i=0; i<num_epochs; i++)
+    {
+    for (n=0; n<num_train_data; n++)
+      {
+      NN_simulate_batch(network, train_data[n], train_property[n]);
+      }
+
+    NN_backpropagate(network);
+    NN_adjust_weights(network);
     }
  
   return;

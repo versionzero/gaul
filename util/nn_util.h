@@ -152,6 +152,8 @@ void NN_simulate_with_output(network_t *network, float *input, float *target, fl
 void NN_run(network_t *network, float *input, float *output);
 void NN_train_random(network_t *network, const int num_epochs);
 void NN_train_systematic(network_t *network, const int num_epochs);
+void NN_train_batch_random(network_t *network, const int num_epochs);
+void NN_train_batch_systematic(network_t *network, const int num_epochs);
 void NN_test(network_t *network, float *trainerror, float *testerror);
 void NN_evaluate(network_t *network);
 void NN_predict(network_t *network);
