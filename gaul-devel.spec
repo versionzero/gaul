@@ -1,7 +1,15 @@
-%define PACKAGE_VERSION 	0
-%define RELEASE			1843
-%define PATCH			3
-%define prefix			/usr/local/
+Name:		gaul-devel
+Summary:	Genetic Algorithm Utility Library
+Version:	0.1843
+Release:	3
+License:	Copyright (c) 2000-2003, Stewart Adcock.  Licensed under terms of the GNU GPL.
+Vendor:		Stewart Adcock
+Packager:	"Stewart Adcock" <gaul@linux-domain.com>
+Group:		Scientific/Engineering
+Source:		gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}.tar.gz
+URL:		http://gaul.sourceforge.net/
+Requires:	slang-devel
+BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroot
 
 ########################################################################
 # gaul/gaul-devel.spec
@@ -30,28 +38,14 @@
 #
 ########################################################################
 
-Name:		gaul-devel
-Summary:	Genetic Algorithm Utility Library
-Version:	%{PACKAGE_VERSION}
-Release:	%{RELEASE}
-License:	Copyright (c) 2000-2003 Stewart Adcock.  Licensed under terms of the GNU GPL.
-Vendor:		Stewart Adcock
-Packager:	"Stewart Adcock" <gaul@linux-domain.com>
-Group:		Scientific/Engineering
-Source:		gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}.tar.gz
-URL:		http://gaul.sourceforge.net/
-Requires:	slang-devel
-BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}-buildroot
-
 %description
 The Genetic Algorithm Utility Library (GAUL) is an open source programming library providing genetic algorithms.  Both steady-state and generation based evolution is supported, together with the island model.  GAUL supports the Darwinian, Lamarckian and Baldwininan evolutionary schemes.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are provided for comparison and local search purposes, including simplex method, hill climbing, simulated annealling and steepest ascent.  Much of the functionality is also available through a simple S-Lang interface.
 
 %prep
-%setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
+%setup -n gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}
 
 %build
-#./configure --includedir=%{prefix}/include/gaul --libdir=%{prefix}/lib/gaul --bindir=%{prefix}/bin/gaul
-./configure --prefix=%{prefix}
+./configure
 make
 
 %install
@@ -69,6 +63,11 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Wed May 28 2003 Stewart Adcock <stewart@linux-domain.com>
+- 0.1843-3
+- Tidied, removed dodgy prefix stuff.
+- Adjusted to give more appropriate package numbering.
+
 * Thu Jan 09 2003 Stewart Adcock <stewart@linux-domain.com>
 - 0.1842-3
 - Added packager tag.
