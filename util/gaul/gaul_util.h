@@ -157,7 +157,9 @@ typedef short _Bool;
 #  define __bool_true_false_are_defined 1
 # endif
 
-# define bool _Bool
+# if !defined(bool)
+#  define bool _Bool
+# endif
 #endif
 
 #if HAVE__BOOL != 1
