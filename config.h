@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "09/01/03"
+#define BUILD_DATE_STRING "13/01/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -134,7 +134,7 @@
 #define HAVE_SETLOCALE 1
 
 /* Whether sincos() is available */
-/* #undef HAVE_SINCOS */
+#define HAVE_SINCOS 1
 
 /* Whether S-Lang is installed. */
 #define HAVE_SLANG 1
@@ -338,7 +338,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 2
+#define PATCH_VERSION 3
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -374,7 +374,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1842-2"
+#define VERSION_STRING "0.1842-3"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

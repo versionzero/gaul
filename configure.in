@@ -3,7 +3,7 @@ dnl gaul/configure.in
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
-dnl Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+dnl Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
 dnl
 dnl The latest version of this program should be available at:
 dnl http://www.stewart-adcock.co.uk/
@@ -43,7 +43,7 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
 MAJOR_VERSION=0
 MINOR_VERSION=1842
-PATCH_VERSION=2
+PATCH_VERSION=3
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 
 AC_SUBST(MAJOR_VERSION)
@@ -537,9 +537,12 @@ dnl Some dodgy work-arounds.
 dnl Most of this is a bit kludgy.  Proper fixes would be desirable...
 case "$target" in
   *-*-mingw*) is_mingw="yes" ;;
-  *) is_mingw="no" ;;
+  *-*-nto-qnx*) is_qnx="yes" ;;
+  *)
+    is_qnx="no"
+    is_mingw="no" ;;
 esac
-if ( test "x$enable_mpi" = "xyes" || test $is_mingw = yes ); then
+if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qnx" = "xyes" ); then
   # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
   AC_DEFINE(HAVE_ITOA,1,[Whether itoa() is available])
 else
@@ -596,8 +599,8 @@ AC_CACHE_CHECK([for working stdbool.h],
 	   gaul_header_stdbool_h,
 	   [AC_TRY_COMPILE([#include <stdbool.h>],
 	[bool blah = false;],
-	gaul_header_stdbool_h=yes, gaul_header_stdbool_h=no)])
-if test $gaul_header_stdbool_h = yes; then
+	gaul_header_stdbool_h="yes", gaul_header_stdbool_h="no")])
+if test "x$gaul_header_stdbool_h" = "xyes"; then
   AC_DEFINE(HAVE_STDBOOL_H, 1, [Define if you have a working <stdbool.h> header file.])
 fi
 
@@ -608,13 +611,13 @@ AC_CACHE_CHECK([for built-in _Bool type],
 	      gaul__bool,
 	     [AC_TRY_COMPILE(,
 	     [_Bool blah = (_Bool)0;],
-	     gaul__bool=yes, gaul__bool=no)])
-if test $gaul__bool = no && $gaul_header_stdbool_h = yes; then
+	     gaul__bool="yes", gaul__bool="no")])
+if test "x$gaul__bool" = "xno" && "x$gaul_header_stdbool_h" = "xyes"; then
   AC_TRY_COMPILE([#include <stdbool.h>],
            [_Bool blah = (_Bool)0;],
-           gaul__bool=yes, gaul__bool=no)
+           gaul__bool="yes", gaul__bool="no")
 fi
-if test $gaul__bool = yes; then
+if test "x$gaul__bool" = "xyes"; then
   AC_DEFINE(HAVE__BOOL, 1, [Define if compiler has built-in _Bool type.])
 fi
 

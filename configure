@@ -1495,7 +1495,7 @@ test -n "$target_alias" &&
 
 MAJOR_VERSION=0
 MINOR_VERSION=1842
-PATCH_VERSION=2
+PATCH_VERSION=3
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 
 
@@ -10865,9 +10865,12 @@ done
 
 case "$target" in
   *-*-mingw*) is_mingw="yes" ;;
-  *) is_mingw="no" ;;
+  *-*-nto-qnx*) is_qnx="yes" ;;
+  *)
+    is_qnx="no"
+    is_mingw="no" ;;
 esac
-if ( test "x$enable_mpi" = "xyes" || test $is_mingw = yes ); then
+if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qnx" = "xyes" ); then
   # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW.
 
 cat >>confdefs.h <<\_ACEOF
@@ -11475,17 +11478,17 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  gaul_header_stdbool_h=yes
+  gaul_header_stdbool_h="yes"
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-gaul_header_stdbool_h=no
+gaul_header_stdbool_h="no"
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 fi
 echo "$as_me:$LINENO: result: $gaul_header_stdbool_h" >&5
 echo "${ECHO_T}$gaul_header_stdbool_h" >&6
-if test $gaul_header_stdbool_h = yes; then
+if test "x$gaul_header_stdbool_h" = "xyes"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_STDBOOL_H 1
@@ -11528,17 +11531,17 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  gaul__bool=yes
+  gaul__bool="yes"
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-gaul__bool=no
+gaul__bool="no"
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 fi
 echo "$as_me:$LINENO: result: $gaul__bool" >&5
 echo "${ECHO_T}$gaul__bool" >&6
-if test $gaul__bool = no && $gaul_header_stdbool_h = yes; then
+if test "x$gaul__bool" = "xno" && "x$gaul_header_stdbool_h" = "xyes"; then
   cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
@@ -11569,15 +11572,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  gaul__bool=yes
+  gaul__bool="yes"
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-gaul__bool=no
+gaul__bool="no"
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 fi
-if test $gaul__bool = yes; then
+if test "x$gaul__bool" = "xyes"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE__BOOL 1
