@@ -35,7 +35,8 @@ bin_PROGRAMS = diagnostics \
 	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
-	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
+	struggle struggle_randomsearch struggle_forked \
+        struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
 	saveload \
 	nnevolve
 
@@ -52,6 +53,7 @@ goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
 royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_forked_SOURCES = struggle_forked.c
 struggle2_SOURCES = struggle2.c
 struggle3_SOURCES = struggle3.c
@@ -91,6 +93,7 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_forked_DEPENDENCIES = ${DEPENDENCIES}
 struggle2_DEPENDENCIES = ${DEPENDENCIES}
 struggle3_DEPENDENCIES = ${DEPENDENCIES}
@@ -116,6 +119,7 @@ goldberg2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
+struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 struggle2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
 struggle3_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm

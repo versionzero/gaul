@@ -5,6 +5,7 @@ Changes since release 0.1841:
 - Path to S-Lang headers is no longer hard-coded.
 - Added missing prototypes for built-in Tabu-search acceptance functions.
 - Added simplex search algorithm.
+- Added random search algorithm.
 
 Changes since release 0.1840:
 - Added a few missing intrinsic functions.
