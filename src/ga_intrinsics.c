@@ -170,20 +170,19 @@ int ga_entity_write_slang(int *pop_id, int *entity_id, char *fname)
 
   pop = ga_get_population_from_id(*pop_id);
 
-  return ga_population_write(pop, ga_get_entity_from_id(pop, *entity_id), fname);
+  return ga_entity_write(pop, ga_get_entity_from_id(pop, *entity_id), fname);
   }
 
 
 /**********************************************************************
-  ga_population_read_slang()
-  synopsis:	Reads entire population and it's genetic data back
-		from disk.
+  ga_entity_read_slang()
+  synopsis:	Reads an entity from disk.
   parameters:
   return:
   last updated: 30 May 2002
  **********************************************************************/
 
-int ga_population_read_slang(int *pop_id, char *fname)
+int ga_entity_read_slang(int *pop_id, char *fname)
   {
   population	*pop;
 
