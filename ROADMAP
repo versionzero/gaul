@@ -12,30 +12,28 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1848     |  Linked-list chromosome.
             |  Linked-list chromosome example.
+------------+--------------------------------------------------------
+ 0.1849     |  More on-line/off-line statistics options.
             |  Use MemChunks in chromosome allocation, where appropriate.
             |  Move prototypes for all public functions into src/gaul.h
-            |  Fully document chromosomes.
             |  Checkpoint files.
             |  Mersenne twister for PRNG.
 ------------+--------------------------------------------------------
- 0.1849     |  More on-line/off-line statistics options.
+ 0.1850     |  Boolean chromosome example from Mitchell book.
             |  More replacement operators.
             |  Replacement operators documentation
             |  User data in array, not list.
             |  Rewritten convergence testing functions.
-            |  Compile a native windows DLL.
-------------+--------------------------------------------------------
- 0.1850     |  Boolean chromosome example from Mitchell book.
-            |  De Jong - working examples.
-            |  Parallel search heuristics (i.e. Parallel Tabu-search etc.)
 ------------+--------------------------------------------------------
  0.1851     |  Binary tree chromosome.
+            |  De Jong - working examples.
+            |  Parallel search heuristics (i.e. Parallel Tabu-search etc.)
             |  Genetic programming example.
             |  ES examples.
 ------------+--------------------------------------------------------
- 0.1852     |  Distribution of points on sphere example.
-            |  Improve in-code documentation/comments.
+ 0.1852     |  Improve in-code documentation/comments.
             |  Cellular GAs.
+            |  Compile a native windows DLL.
 ------------+--------------------------------------------------------
  0.1853     |  Tidy and rationalise S-Lang interface, and provide examples.
 ------------+--------------------------------------------------------
@@ -57,6 +55,7 @@ Additional features needed for version 1.0:
 * S-Lang embedding example.
 * Run-time control of statistic collection.
 * More run-time checking.
+* GAUL-Perl interface.
 
 Optional Features for version 1.0, or (more likely) later:
 
@@ -73,5 +72,5 @@ Features to be added if enough interest is demonstrated:
 * Replica-exchange SA search.
 * EDAs.
 
-Stewart Adcock, 18 Jun 2004.
+Stewart Adcock, 05 Oct 2004.
 
