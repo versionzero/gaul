@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
+  Updated:	09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
+  		07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
   		01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
 		14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
 		31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
@@ -273,6 +274,7 @@ typedef unsigned char byte;
 #define ONE_MINUS_TINY  (1.0 - TINY)
 #define MAX_LINE_LENGTH 1024
 #define MAX_LINE_LEN	1024
+#define MAX_FNAME_LEN	256
 #define LARGE_AMOUNT	(1.0e38)
 #define ApproxZero      (1e-18)
 #define IsApproxZero(x) (fabs(x)<=ApproxZero)
