@@ -26,6 +26,12 @@
 
   Synopsis:     Routines for optimisation and evolution.
 
+                Note that the temperatures in the simulated annealling
+                and MC functions do not exactly run from the initial
+                temperature to the final temperature.  They are offset
+                slightly so that sequential calls to these functions
+                will have a linear temperature change.
+
   To do:	Finish rewriting parallel versions, ga_evolution_mp() in particular.
 		Temperatures should be double-precision floats?
 		Need to fix elitism/crowding stuff.

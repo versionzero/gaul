@@ -39,12 +39,6 @@
 		pointers are unusable, so identifing integers are
 		used instead.
 
-		Note that the temperatures in the simulated annealling
-		and MC functions do not exactly run from the initial
-		temperature to the final temperature.  They are offset
-		slightly so that sequential calls to these functions
-		will have a linear temperature change.
-
   Vague usage details:	Set-up with ga_genesis().
 			Perform calculations with ga_evolution().
 			Grab data for post-analysis with ga_transcend().
@@ -55,7 +49,6 @@
 		Replace the send_mask int array with a bit vector.
 		All functions here should be based on entity/population _pointers_ while the functions in ga_intrinsics should be based on _handles_.
 		More "if (!pop) die("Null pointer to population structure passed.");" checks are needed.
-		Genome distance measures (tanimoto, euclidean, tverski etc.)
 		Population/entity iterator functions.
 		ga_get_struct_whatever() should be renamed to ga_struct_get_whatever().
 

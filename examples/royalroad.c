@@ -185,7 +185,7 @@ boolean royalroad_ga_callback(int generation, population *pop)
 int main(int argc, char **argv)
   {
   population	*pop=NULL;	/* Population of solutions. */
-  int		seed=1234;	/* Random number seed. */
+  int		seed=12345678;	/* Random number seed. */
   int		i;		/* Loop over alleles. */
 
   printf("Running Holland's Royal Road test problem with a genome that\n");
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 
   ga_evolution(
        pop,		/* population              *pop */
-       10000		/* const int               max_generations */
+       100		/* const int               max_generations */
               );
 
   printf("The final solution with seed = %d was: \n", seed);

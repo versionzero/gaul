@@ -10,21 +10,11 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1840     |  Similarity routines for continuous chromosome types.
-            |  ga_evolution_forked() and associated example.
-            |  Optimise the evolution functions with respect to fitness evaluations during Lamarckian/Baldwinian schemes.
-            |  Fix elitism options.
-            |  Move selection of evolutionary scheme and elitism mode out of ga_evolution_[XXX]() calls.
-            |    *** This will break compatibility! ***
-            |  Return number of generations performed from the evolutionary functions.
-            |    *** This will break compatibility! ***
-            |  Rename "ga_get_entity_rank()" etc to "ga_entity_get_rank()" etc.
-            |    *** This will break compatibility! ***
-            |  Accessor functions for the callback functions.  Change examples to use these.
-------------+--------------------------------------------------------
  0.1841     |  ga_evolution_mp() and associated example.
             |  Use MemChunks in chromosome allocation, where appropriate.
             |  Intro to GAs finished.
+            |  Optimise the evolution functions with respect to fitness evaluations during Lamarckian/Baldwinian schemes.
+            |  Fix elitism options.
             |  Document elitism options.
 ------------+--------------------------------------------------------
  0.1842     |  Linked-list chromosome.

@@ -92,10 +92,10 @@ int main(int argc, char **argv)
 
   random_init();
 
-  random_seed(42);
+  random_seed(12345678);
 
   pop = ga_genesis_char(
-       80,				/* const int              population_size */
+       60,				/* const int              population_size */
        1,				/* const int              num_chromo */
        strlen(target_text),		/* const int              len_chromo */
        NULL,			 	/* GAgeneration_hook      generation_hook */
@@ -105,8 +105,8 @@ int main(int argc, char **argv)
        struggle_score,			/* GAevaluate             evaluate */
        ga_seed_printable_random,	/* GAseed                 seed */
        NULL,				/* GAadapt                adapt */
-       ga_select_one_sus,		/* GAselect_one           select_one */
-       ga_select_two_sus,		/* GAselect_two           select_two */
+       ga_select_one_roulette,		/* GAselect_one           select_one */
+       ga_select_two_roulette,		/* GAselect_two           select_two */
        ga_mutate_printable_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_char_allele_mixing,	/* GAcrossover            crossover */
        ga_replace_by_fitness		/* GAreplace replace */
