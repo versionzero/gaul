@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,9 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:    	05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
+  Updated:	10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().
+	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
+		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
 		19/03/01 SAA	Removed GNU specific stuff.
 		16/11/00 SAA	I liked the helga_compat.c version, so used it to replace methods/compatibility.c
 		15/11/00 SAA	new version for helga_compat.c
@@ -87,265 +89,186 @@
  * Prototypes
  */
 
-#ifdef HAVE_IPOW
-#if HAVE_IPOW == 0
+#ifndef HAVE_IPOW
 int ipow(int n, int e);
 #endif
-#endif
 
-#ifdef HAVE_MEMCPY
-#if HAVE_MEMCPY == 0
+#ifndef HAVE_MEMCPY
 void memcpy(char *dest, const char *src, size_t len);
 #endif
-#endif
 
-#ifdef HAVE_STRCHR
-#if HAVE_STRCHR == 0
+#ifndef HAVE_STRCHR
 char *strchr(const char *str, int c);
 #endif
-#endif
 
-#ifdef HAVE_STRRCHR
-# if HAVE_STRRCHR == 0
+#ifndef HAVE_STRRCHR
 /* Some systems have rindex() instead */
-#  if HAVE_RINDEX == 1
-#   define strrchr rindex
-#  else
+# ifdef HAVE_RINDEX
+#  define strrchr rindex
+# else
 char *strrchr(const char *str, int c);
-#  endif
 # endif
 #endif
 
-#ifdef HAVE_STRCAT 
-#if HAVE_STRCAT == 0
+#ifndef HAVE_STRCAT 
 char *strcat(char *str1, const char *str2);
 #endif
-#endif
 
-#ifdef HAVE_STRLEN
-#if HAVE_STRLEN == 0
+#ifndef HAVE_STRLEN
 int strlen(const char *str);
 #endif
-#endif
 
-#ifdef HAVE_STRCMP
-#if HAVE_STRCMP == 0
+#ifndef HAVE_STRCMP
 int strcmp(const char *str1, const char *str2);
 #endif
-#endif
 
-#ifdef HAVE_STRNCMP
-#if HAVE_STRNCMP == 0
+#ifndef HAVE_STRNCMP
 int strncmp(const char *str1, const char *str2, const int len);
 #endif
-#endif
 
-#ifdef HAVE_STRCPY
-#if HAVE_STRCPY == 0
+#ifndef HAVE_STRCPY
 char *strcpy(char *str1, const char *str2);
 #endif
-#endif
 
-#ifdef HAVE_STRNCPY
-#if HAVE_STRNCPY == 0
+#ifndef HAVE_STRNCPY
 char *strncpy(char *str1, const char *str2, const int len);
 #endif
-#endif
 
-#ifdef HAVE_STRTOK
-#if HAVE_STRTOK == 0
+#ifndef HAVE_STRTOK
 char *strtok(char *str, char *delim);
 #endif
-#endif
 
-#ifdef HAVE_STRCASECMP
-#if HAVE_STRCASECMP == 0
+#ifndef HAVE_STRCASECMP
 int strcasecmp(const char *str0, const char *str1);
 #endif
-#endif
 
-#ifdef HAVE_STRNCASECMP
-#if HAVE_STRNCASECMP == 0
+#ifndef HAVE_STRNCASECMP
 int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
-#endif
 
-#ifdef HAVE_USLEEP
-#if HAVE_USLEEP == 0
+#ifndef HAVE_USLEEP
 void usleep(unsigned long usec);
 #endif
-#endif
 
-#ifdef HAVE_STRLCPY
-#if HAVE_STRLCPY == 0
+#ifndef HAVE_STRLCPY
 size_t strlcpy(char *dest, const char *src, size_t n);
 #endif
-#endif
 
-#ifdef HAVE_STRLCAT
-#if HAVE_STRLCAT == 0
+#ifndef HAVE_STRLCAT
 size_t strlcat(char *dest, const char *src, size_t n);
 #endif
-#endif
 
-#ifdef HAVE_SNPRINTF
-#if HAVE_SNPRINTF == 0
+#ifndef HAVE_SNPRINTF
 int snprintf(char *str, size_t n, const char *format, ...);
 #endif
-#endif
 
-#ifdef HAVE_VSNPRINTF
-#if HAVE_VSNPRINTF == 0
+#ifndef HAVE_VSNPRINTF
 int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 #endif
-#endif
 
-#ifdef HAVE_MEMSET
-#if HAVE_MEMSET == 0
+#ifndef HAVE_MEMSET
 void *memset(void *dst0, int c0, size_t bytes);
-#endif
 #endif
 
 #ifdef HAVE_MEMMOVE
-# if HAVE_MEMMOVE == 0
 /* Some systems, such as SunOS do have BCOPY instead. */
-#  if HAVE_BCOPY == 1
-#   define memmove(A, B, C) bcopy((A), (B), (C))
-#  else
+# ifdef HAVE_BCOPY
+#  define memmove(A, B, C) bcopy((A), (B), (C))
+# else
 void *memmove(void *dst, const void *src, size_t bytes);
-#  endif
 # endif
 #endif
 
-#ifdef HAVE_MEMREV
-#if HAVE_MEMREV == 0
+#ifndef HAVE_MEMREV
 void *memrev(void *src, size_t bytes);
 #endif
-#endif
 
-#ifdef HAVE_MEMCHR
-#if HAVE_MEMCHR == 0
+#ifndef HAVE_MEMCHR
 void *memchr(const void *src, int c, size_t bytes);
 #endif
-#endif
 
-#ifdef HAVE_MEMMEM
-#if HAVE_MEMMEM == 0
+#ifndef HAVE_MEMMEM
 void *memmem(const void *haystack, size_t haystack_len,
            const void *needle,   size_t needle_len);
 #endif
-#endif
 
-#ifdef HAVE_MEMCMP
-#if HAVE_MEMCMP == 0
+#ifndef HAVE_MEMCMP
 int memcmp(const void *src1, const void *src2, size_t n);
 #endif
-#endif
 
-#ifdef HAVE_STRDUP
-#if HAVE_STRDUP == 0
+#ifndef HAVE_STRDUP
 char *strdup(const char *str);
 #endif
-#endif
 
-#ifdef HAVE_MEMDUP
-#if HAVE_MEMDUP == 0
+#ifndef HAVE_MEMDUP
 void *memdup(const void *mem, int byte_size);
 #endif
-#endif
 
-#ifdef HAVE_STRNDUP
-#if HAVE_STRNDUP == 0
+#ifndef HAVE_STRNDUP
 char *strndup(const char *str, int n);
 #endif
-#endif
 
-#ifdef HAVE_STRNFILL
-#if HAVE_STRNFILL == 0
+#ifndef HAVE_STRNFILL
 char *strnfill(int length, char fill_char);
 #endif
-#endif
 
-#if HAVE_STRCATV == 0
+#ifndef HAVE_STRCATV
 char *strcatv(const char *string1, ...);
 #endif
 
-/*#if HAVE_STRTOD == 0*/
-#if 0
+#ifndef HAVE_STRTOD
 double strtod(const char *nptr, char **endptr);
 #endif
 
-#ifdef HAVE_STRSIGNAL
-#if HAVE_STRSIGNAL == 0
+#ifndef HAVE_STRSIGNAL
 char *strsignal(int signum);
 #endif
-#endif
 
-#ifdef HAVE_STRREV
-#if HAVE_STRREV == 0
+#ifndef HAVE_STRREV
 void strrev(char *string);
 #endif
-#endif
 
-#ifdef HAVE_STRERROR
-#if HAVE_STRERROR == 0
+#ifndef HAVE_STRERROR
 char *strerror(int errnum);
 #endif
-#endif
 
-#ifdef HAVE_DIEF
-#if HAVE_DIEF == 0
+#ifndef HAVE_DIEF
 /*
  * HAVE_DIEF is set in "SAA_header.h", not "config.h"
  */
 void dief(const char *format, ...);
 #endif
-#endif
 
-#ifdef HAVE_BASENAME
-#if HAVE_BASENAME == 0
+#ifndef HAVE_BASENAME
 char *basename (char *path);
 #endif
-#endif
 
-#ifdef HAVE_READLINE
-#if HAVE_READLINE == 0
+#ifndef HAVE_READLINE
 char *readline (char *prompt);
 #endif
-#endif
 
-#ifdef HAVE_STRCSPN
-#if HAVE_STRCSPN == 0
+#ifndef HAVE_STRCSPN
 size_t strcspn(const char *string, const char *reject);
 #endif
-#endif
 
-#ifdef HAVE_WAITPID
-#if HAVE_WAITPID == 0
+#ifndef HAVE_WAITPID
 pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
-#endif
 
-#ifdef HAVE_MIN
-#if HAVE_MIN == 0
+#ifndef HAVE_MIN
 int min(int a, int b);
 #endif
-#endif
 
-#ifdef HAVE_MAX
-#if HAVE_MAX == 0
+#ifndef HAVE_MAX
 int max(int a, int b);
-#endif
 #endif
 
 /*if HAVE_STRRUP == 0*/
 /*if HAVE_STRICMP == 0*/
 /*if HAVE_STRNICMP == 0*/
 
-#ifdef HAVE_SINCOS
-#if HAVE_SINCOS == 0
+#ifndef HAVE_SINCOS
 maybeinline void sincos( double radians, double *s, double *c );
-#endif
 #endif
 
 #endif

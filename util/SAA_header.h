@@ -3,7 +3,7 @@
  **********************************************************************
 
   SAA_header.h - My general header to define a few useful things
-  Copyright ©1999-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/

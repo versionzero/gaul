@@ -95,6 +95,7 @@ static void destruct_list(population *pop, SLList *list)
   {
   SLList        *this;		/* Current list element */
   int		num_destroyed;	/* Count number of things destroyed. */
+  vpointer	data;		/* Data in item. */
 
 /* A bit of validation. */
   if ( !pop->data_destructor ) return;
@@ -106,9 +107,9 @@ static void destruct_list(population *pop, SLList *list)
 
   while(this!=NULL)
     {
-    if (this->data)
+    if ((data = slink_data(this)))
       {
-      pop->data_destructor(this->data);
+      pop->data_destructor(data);
       num_destroyed++;
       }
     this=slink_next(this);
@@ -1077,13 +1078,14 @@ boolean ga_entity_dereference(population *pop, entity *dying)
 void ga_entity_clear_data(population *p, entity *entity, const int chromosome)
   {
   SLList	*tmplist;
+  vpointer	data;		/* Data in item. */
 
   if (entity->data)
     {
     tmplist = slink_nth(entity->data, chromosome);
-    if (tmplist->data)
+    if ( (data = slink_data(tmplist)) )
       {
-      p->data_destructor(tmplist->data);
+      p->data_destructor(data);
       tmplist->data=NULL;
       }
     }

@@ -3,7 +3,7 @@
  **********************************************************************
 
   str_util - Portable string handling, analysis and manipulation library.
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -47,7 +47,8 @@
 		These are (mostly) coded in ANSI C to enable their use
 		on platforms which may not have native equivalents.
 
-  Updated:	20/06/01 SAA	Added a few casts for clean compilation on Solaris.
+  Updated:	10 Jan 2002 SAA	Added str_split(), str_freev(), str_join(), and str_joinv() based on code recently removed from methods/compatiability.c
+		20/06/01 SAA	Added a few casts for clean compilation on Solaris.
 		23/03/01 SAA	Added str_scmp().
 		09/01/01 SAA	str_stripnewline() now returns the length of the string returned.
 		24/09/00 SAA	Added str_tr().
@@ -1196,4 +1197,193 @@ int str_scmp(const char *s1, const char *s2)
 
   return *s1 - *s2;
   }
+
+
+/**********************************************************************
+  str_split()
+  synopsis:	Tokenise strings.
+  parameters:
+  return:
+  last updated: 10 Jan 2002
+ **********************************************************************/
+
+char **str_split(const char *string,
+                 const char *delimiter,
+	         int         max_tokens)
+  {
+  SLList *string_list = NULL, *slist;
+  char **str_array, *s;
+  int i, n = 1;
+
+  if (!string) return NULL;
+  if (!delimiter) return NULL;
+
+  if (max_tokens < 1)
+    max_tokens = INT_MAX;
+
+  s = strstr(string, delimiter);
+  if (s)
+    {
+    int delimiter_len = strlen(delimiter);
+
+    do
+      {
+      int len;
+      char *new_string;
+
+      len = s - string;
+      new_string = s_malloc(sizeof(char)*(len+1));
+      strncpy(new_string, string, len);
+      new_string[len] = 0;
+      string_list = slink_prepend(string_list, new_string);
+      n++;
+      string = s + delimiter_len;
+      s = strstr(string, delimiter);
+      } while(--max_tokens && s);
+    }
+  if (*string)
+    {
+    n++;
+    string_list = slink_prepend(string_list, strdup(string));
+    }
+
+  str_array = s_malloc(sizeof(char*)*n);
+
+  i = n - 1;
+
+  str_array[i--] = NULL;
+  for(slist = string_list; slist; slist = slink_next(slist))
+    str_array[i--] = slink_data(slist);
+
+  slink_free(string_list);
+
+  return str_array;
+  }
+
+
+/**********************************************************************
+  str_freev()
+  synopsis:	Free tokenised strings.
+  parameters:
+  return:
+  last updated: 10 Jan 2002
+ **********************************************************************/
+
+void str_freev(char **str_array)
+  {
+  int i;
+
+  if (!str_array) return;
+
+  for(i = 0; str_array[i] != NULL; i++) s_free(str_array[i]);
+
+  s_free(str_array);
+
+  return;
+  }
+
+
+/**********************************************************************
+  str_joinv()
+  synopsis:	Rejoin tokenised strings.
+  parameters:
+  return:
+  last updated: 10 Jan 2002
+ **********************************************************************/
+
+char *str_joinv(const char *separator, char **str_array)
+  {
+  char *string;
+
+  if (!str_array) return NULL;
+
+  if (separator == NULL)
+    separator = "";
+
+  if (*str_array)
+    {
+      int i, len;
+      int separator_len;
+
+      separator_len = strlen(separator);
+      len = 1 + strlen(str_array[0]);
+      for(i = 1; str_array[i] != NULL; i++)
+	len += separator_len + strlen(str_array[i]);
+
+      string = s_malloc(sizeof(char)*len);
+      *string = 0;
+      strcat(string, *str_array);
+      for(i = 1; str_array[i] != NULL; i++)
+	{
+	  strcat(string, separator);
+	  strcat(string, str_array[i]);
+	}
+      }
+  else
+    string = strdup("");
+
+  return string;
+  }
+
+
+/**********************************************************************
+  str_joinv()
+  synopsis:	Rejoin tokenised strings.
+  parameters:
+  return:
+  last updated: 10 Jan 2002
+ **********************************************************************/
+
+char *str_join(const char *separator, ...)
+  {
+  char *string, *s;
+  va_list args;
+  int len;
+  int separator_len;
+
+  if (separator == NULL)
+    separator = "";
+
+  separator_len = strlen(separator);
+
+  va_start(args, separator);
+
+  s = va_arg(args, char*);
+
+  if (s)
+    {
+      len = strlen(s);
+      
+      s = va_arg(args, char*);
+      while(s)
+	{
+	  len += separator_len + strlen(s);
+	  s = va_arg(args, char*);
+	}
+      va_end(args);
+      
+      string = s_malloc(sizeof(char)*(len+1));
+      *string = 0;
+      
+      va_start(args, separator);
+      
+      s = va_arg(args, char*);
+      strcat(string, s);
+      
+      s = va_arg(args, char*);
+      while(s)
+	{
+	  strcat(string, separator);
+	  strcat(string, s);
+	  s = va_arg(args, char*);
+	}
+    }
+  else
+    string = strdup("");
+  
+  va_end(args);
+
+  return string;
+  }
+
 

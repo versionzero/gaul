@@ -3,7 +3,7 @@
  **********************************************************************
 
   str_util - Portable string handling, analysis and manipulation library.
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for my general string utility routines
 
-  Updated:	18/09/00 SAA	Tidied.
+  Updated:	10 Jan 2002 SAA	Added str_split(), str_freev(), str_join() and str_joinv() prototypes.
+		18/09/00 SAA	Tidied.
 		10/05/99 SAA	Added missing prototypes.
 		20/02/99 SAA	Collected together from various files.
 
@@ -41,11 +42,14 @@
 #include "SAA_header.h"
 
 #include <ctype.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "memory_util.h"
+
+#include "linkedlist.h"
 
 /* Debugging stuff */
 /* STR_UTIL_DEBUG sets debug level for code.
@@ -91,6 +95,11 @@ char	*str_cat_va(char *str, va_list ap);
 char	*str_cat(char *str, ...);
 int	str_safecopy(char *src, char *dest, const int len);
 int	str_scmp(const char *s1, const char *s2);
+char	**str_split(const char *string, const char *delimiter, int max_tokens);
+void	str_freev(char **str_array);
+char	*str_joinv(const char *separator, char **str_array);
+char	*str_join(const char *separator, ...);
+
 
 #endif
 
