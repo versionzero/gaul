@@ -1015,7 +1015,7 @@ boolean ga_population_write(population *pop, char *fname)
  */
   fwrite(format_str, sizeof(char), strlen(format_str), fp);
   for (i=0; i<64; i++) buffer[i]='\0';
-  snprintf(buffer, 64, "%s %s", VERSION_STRING, BUILD_DATE_STRING);
+  snprintf(buffer, 64, "%s %s", GA_VERSION_STRING, GA_BUILD_DATE_STRING);
   fwrite(buffer, sizeof(char), 64, fp);
 
 /*
@@ -1414,7 +1414,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
  */
   fwrite(format_str, sizeof(char), strlen(format_str), fp);
   for (i=0; i<64; i++) buffer[i]='\0';
-  snprintf(buffer, 64, "%s %s", VERSION_STRING, BUILD_DATE_STRING);
+  snprintf(buffer, 64, "%s %s", GA_VERSION_STRING, GA_BUILD_DATE_STRING);
   fwrite(buffer, sizeof(char), 64, fp);
 
   gaul_write_entity(fp, pop, entity);

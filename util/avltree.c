@@ -912,9 +912,9 @@ int avltree_num_nodes(AVLTree *tree)
 void avltree_diagnostics(void)
   {
   printf("=== AVLTree diagnostics ======================================\n");
-  printf("Version:                   %s\n", VERSION_STRING);
-  printf("Build date:                %s\n", BUILD_DATE_STRING);
-  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("Version:                   %s\n", GA_VERSION_STRING);
+  printf("Build date:                %s\n", GA_BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", GA_UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");

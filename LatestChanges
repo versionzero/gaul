@@ -1,10 +1,11 @@
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
-- Remove presence of ophan ';'s to be ISO C99 compliant.
+- Removed presence of ophan ';'s to make source (closer to being) ISO C99 compliant.
 - Fixed grey-encoded bitstring bug.
 - Coded a minimal test suite.  examples/diagnostics stripped down and included as part of this suite now.
 - Removed use of the deprecated ga_genesis() function from the examples.
 - Added the common "onemax" GA test as an example program.
+- Prepended "GA_" to some constants' names to reduce occurrance of clashes with external code.
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.

@@ -1207,9 +1207,9 @@ boolean mem_chunk_test_real(void)
 void mem_chunk_diagnostics_real(void)
   {
   printf("=== mem_chunk diagnostics ====================================\n");
-  printf("Version:                   %s\n", VERSION_STRING);
-  printf("Build date:                %s\n", BUILD_DATE_STRING);
-  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("Version:                   %s\n", GA_VERSION_STRING);
+  printf("Build date:                %s\n", GA_BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", GA_UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
   printf("MEMORY_PADDING:    %s\n", MEMORY_PADDING?"TRUE":"FALSE");
@@ -1353,9 +1353,9 @@ boolean mem_chunk_test_mimic(void)
 void mem_chunk_diagnostics_mimic(void)
   {
   printf("=== mem_chunk diagnostics *** MIMIC *** ======================\n");
-  printf("Version:                   %s\n", VERSION_STRING);
-  printf("Build date:                %s\n", BUILD_DATE_STRING);
-  printf("Compilation machine characteristics:\n%s\n", UNAME_STRING);
+  printf("Version:                   %s\n", GA_VERSION_STRING);
+  printf("Build date:                %s\n", GA_BUILD_DATE_STRING);
+  printf("Compilation machine characteristics:\n%s\n", GA_UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");

@@ -1,10 +1,10 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
-/* Record date of compilation. */
-#undef BUILD_DATE_STRING
-
 /* Overall debugging level. */
 #undef DEBUG
+
+/* Record date of compilation. */
+#undef GA_BUILD_DATE_STRING
 
 /* Core GAUL debugging level. */
 #undef GA_DEBUG
@@ -29,6 +29,12 @@
 
 /* Patch level. */
 #undef GA_PATCH_VERSION
+
+/* Record compilation platform information. */
+#undef GA_UNAME_STRING
+
+/* Version string. */
+#undef GA_VERSION_STRING
 
 /* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
@@ -330,14 +336,8 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
-/* Record compilation platform information. */
-#undef UNAME_STRING
-
 /* Whether to skip expensive sanity checking in vector routines. */
 #undef V3_QUICK
-
-/* Version string. */
-#undef VERSION_STRING
 
 /* Whether to cripple GAUL so it works on windows. */
 #undef W32_CRIPPLED

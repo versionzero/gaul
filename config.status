@@ -435,7 +435,7 @@ gaul__bool=yes
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1845
 GA_PATCH_VERSION=1
-VERSION_STRING=
+GA_VERSION_STRING=
 
 V3_QUICK=1
 W32_CRIPPLED=0
@@ -602,11 +602,11 @@ s,@GA_MAJOR_VERSION@,0,;t t
 s,@GA_MINOR_VERSION@,1845,;t t
 s,@GA_PATCH_VERSION@,1,;t t
 s,@GA_VERSION@,0.1845-1,;t t
-s,@VERSION_STRING@,,;t t
+s,@GA_VERSION_STRING@,,;t t
 s,@MPIFLAGS@,,;t t
 s,@MPILIBS@,,;t t
-s,@UNAME_STRING@,,;t t
-s,@BUILD_DATE_STRING@,,;t t
+s,@GA_UNAME_STRING@,,;t t
+s,@GA_BUILD_DATE_STRING@,,;t t
 s,@V3_QUICK@,1,;t t
 s,@W32_CRIPPLED@,0,;t t
 s,@HAVE_SLANG@,1,;t t
@@ -898,9 +898,9 @@ ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}""${ac_dD}
 ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1845${ac_dD}
 ${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}1${ac_dD}
-${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"08/08/03"${ac_dD}
-${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1845-1"${ac_dD}
+${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
+${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"13/08/03"${ac_dD}
+${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1845-1"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_STAT_H${ac_dB}HAVE_SYS_STAT_H${ac_dC}1${ac_dD}
@@ -1028,9 +1028,9 @@ ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}""${ac_uD}
 ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1845${ac_uD}
 ${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}1${ac_uD}
-${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"08/08/03"${ac_uD}
-${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1845-1"${ac_uD}
+${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
+${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"13/08/03"${ac_uD}
+${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1845-1"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_STAT_H${ac_uB}HAVE_SYS_STAT_H${ac_uC}1${ac_uD}
@@ -1571,9 +1571,9 @@ _EOF_
 #define GA_MAJOR_VERSION ${GA_MAJOR_VERSION}
 #define GA_MINOR_VERSION ${GA_MINOR_VERSION}
 #define GA_PATCH_VERSION ${GA_PATCH_VERSION}
-#define VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
-#define UNAME_STRING "`uname -a`"
-#define BUILD_DATE_STRING "`date +%d/%m/%y`"
+#define GA_VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
+#define GA_UNAME_STRING "`uname -a`"
+#define GA_BUILD_DATE_STRING "`date +%d/%m/%y`"
 
 #define V3_QUICK ${V3_QUICK}
 #define W32_CRIPPLED ${W32_CRIPPLED}
