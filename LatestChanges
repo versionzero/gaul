@@ -10,6 +10,7 @@ Changes since release 0.1847:
 - Fixed CFLAG clearing bug and added option for disabling addition of compiler optimisation switches.
 - Added ga_seed_bitstring_zero() selection function.
 - Updated function lookup tables.
+- Fixed bug in ga_select_one_roundrobin() for case that mutation rate is greater than one.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
