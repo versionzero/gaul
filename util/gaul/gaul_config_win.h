@@ -56,8 +56,8 @@ extern int errno;
  */
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1845
-#define GA_PATCH_VERSION 1
-#define GA_VERSION_STRING "0.1845-1"
+#define GA_PATCH_VERSION 2
+#define GA_VERSION_STRING "0.1845-2"
 #define GA_UNAME_STRING "<Unknown windows machine>"
 #define GA_BUILD_DATE_STRING "13/08/03"
 
@@ -125,7 +125,7 @@ extern int errno;
  */
 
 #define V3_QUICK 1
-#define W32_CRIPPLED 0
+#define W32_CRIPPLED 1
 #define HAVE_SLANG 0
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"

@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /u2
+prefix = /home/stewart
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = .
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,10 +97,10 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = icc
+CC = gcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,9 +108,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1845
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 1
+GA_PATCH_VERSION = 2
 GA_UNAME_STRING = 
-GA_VERSION = 0.1845-1
+GA_VERSION = 0.1845-2
 GA_VERSION_STRING = 
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -118,7 +118,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1845
-LT_REVISION = 1
+LT_REVISION = 2
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -129,11 +129,11 @@ PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
 V3_QUICK = 1
-VERSION = 0.1845-1
+VERSION = 0.1845-2
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1845/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1845/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
