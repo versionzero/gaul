@@ -100,7 +100,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,9 +108,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1846
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 5
+GA_PATCH_VERSION = 6
 GA_UNAME_STRING = 
-GA_VERSION = 0.1846-5
+GA_VERSION = 0.1846-6
 GA_VERSION_STRING = 
 HAVE_MPI = 0
 HAVE_PTHREADS = 1
@@ -120,7 +120,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1846
-LT_REVISION = 5
+LT_REVISION = 6
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -131,7 +131,7 @@ PACKAGE = gaul-devel
 RANLIB = ranlib
 STRIP = strip
 V3_QUICK = 1
-VERSION = 0.1846-5
+VERSION = 0.1846-6
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
@@ -221,7 +221,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
+CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7   -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 
