@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
+  Updated:	30 Nov 2001 SAA	The constant DEBUG will always be defined now.
+		29 Nov 2001 SAA	Added checks around definition of BYTEBITS so that it works on Solaris2.7 and others.
 		07 Nov 2001 SAA	Added MINMAX macro.
 		26/08/01 SAA	boolean is now short instead of int.  Bool and Boolean are now define'd to that instead of int too.  SWAP_BOOLEAN() macro added.
 		11/06/01 SAA	Added 'byte' type definition for more readable code.  I Assume that the sizeof of a char is always 1 byte, but reading the ANSI definitions, that seems perfectly reasonable.
@@ -158,6 +159,13 @@
  */
 #ifndef VERSION_STRING
 #define VERSION_STRING		"<Unknown>\0"
+#endif
+
+/*
+ * Ensure that the DEBUG constant is set to something.
+ */
+#ifndef DEBUG
+# define DEBUG	0
 #endif
 
 /*

@@ -3,18 +3,22 @@ SHORT TODO LIST FOR GAUL
 The following list conmtains the most urgent things to be done.  These are, or at least should be, my current development priorities.
 
 * Operators for alternative chromosome types, including:
-  - Binary chromosomes
   - Variable length array chromsomes
   - Tree chromosomes
   - Permutation chromosomes
 * Built-in support for, so-called, Messy-GAs.
 * Entity user data should be stored in an array instead of a list.
 * Fix the read/write and parallel routines.
-* Lots of examples.
-* Lots of documentation!
+* Lots more examples.
+  - Optimising a Neural Network?
+  - Points on a sphere?
+  - More examples to accompany the tutorial.
+* Lots of documentation.
+  - Reference Manual
+  - Tutorial
 * add lots of convenience (high level) functions to src/ga_utility.c
 * ga_genesis prototype is now a mess.  Need to replace this with simpler high level function(s) and a set of low level functions.
 * Fix elitism.
-* Need some handy macros, I think, for accessing chromosome data etc.
+* Accessor functions for accessing chromosome data etc. in preparation for language bindings.
 
 Stewart Adcock 08/08/01

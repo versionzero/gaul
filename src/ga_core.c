@@ -72,12 +72,6 @@
 /*
  * Global variables.
  */
-#if 0
-THREAD_LOCK_DEFINE_STATIC(ga_active_population);
-population	*pop=NULL;		/* The active population. */
-unsigned int	pop_id=0;		/* The active population's id. */
-#endif
-
 THREAD_LOCK_DEFINE_STATIC(pop_table);
 TableStruct	*pop_table=NULL;	/* The population table. */
 
