@@ -29,7 +29,7 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 4
+#define GA_PATCH_VERSION 5
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -350,7 +350,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1844-4"
+#define VERSION_STRING "0.1844-5"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
