@@ -73,7 +73,7 @@
  * Global variables.
  */
 THREAD_LOCK_DEFINE_STATIC(pop_table_lock);
-TableStruct	*pop_table=NULL;	/* The population table. */
+static TableStruct	*pop_table=NULL;	/* The population table. */
 
 /**********************************************************************
   Private utility functions.
