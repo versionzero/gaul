@@ -166,7 +166,7 @@ typedef short _Bool;
 typedef short _Bool;
 #endif
 
-#define boolean bool
+#define boolean _Bool
 
 #if !defined(TRUE)
 #define TRUE	(0==0)
