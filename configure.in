@@ -303,7 +303,7 @@ if test "x$enable_slang" = "xyes"; then
   HAVE_SLANG=1
   LIBS="$LIBS -lslang"
   AC_CHECK_LIB(slang, SLang_init_slang,
-    [LIBS="$LIBS -lslang"],
+    [LIBS="$LIBS -lslang -lm"],
     [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
   result=1
 else
@@ -549,7 +549,7 @@ AC_C_CONST
 AC_STRUCT_TM
 
 dnl Get includes setup correctly.
-INCLUDE="$INCLUDE -I../util/ -I../src/ -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
+INCLUDE="$INCLUDE -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
 #
 # Checks for header files.

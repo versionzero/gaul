@@ -54,6 +54,7 @@ libnn_util_la_SOURCES = \
 
 nobase_include_HEADERS = \
 	gaul/gaul_config.h \
+	gaul/gaul_config_win.h \
 	gaul/gaul_util.h \
 	gaul/avltree.h \
 	gaul/compatibility.h \
