@@ -330,9 +330,9 @@ boolean wildfire_score(population *pop, entity *entity)
  * Load-balancing code!
  */
 
-  while (load1>1.0*NUM_PROC || load15>1.5*NUM_PROC)
+  while (load1>1.05*NUM_PROC || load15>1.5*NUM_PROC)
     {
-    if (str!=NULL)usleep(4000000/NUM_PROC);
+    if (str!=NULL)usleep(2500000/NUM_PROC);
 
     pf = popen("uptime", "r");
 
@@ -622,14 +622,14 @@ int main(int argc, char **argv)
   int		map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION];	/* Map. */
   int		count=0;	/* Number of cisterns. */
 
-  for (i=0; i<10; i++)
+  for (i=0; i<50; i++)
     {
     if (pop) ga_extinction(pop);
 
     random_seed(i);
 
     pop = ga_genesis(
-       100,			/* const int              population_size */
+       80,			/* const int              population_size */
        1,			/* const int              num_chromo */
        WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION,/* const int      len_chromo */
        wildfire_ga_callback,	/* GAgeneration_hook      generation_hook */
@@ -650,7 +650,7 @@ int main(int argc, char **argv)
     ga_population_set_parameters(
        pop,			/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type    scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
+       GA_ELITISM_ONE_PARENT_SURVIVES,	/* const ga_elitism_type   elitism */
        0.8,			/* double  crossover */
        0.1,			/* double  mutation */
        0.0              	/* double  migration */
@@ -658,7 +658,7 @@ int main(int argc, char **argv)
 
     ga_evolution(
        pop,		/* population              *pop */
-       5000		/* const int               max_generations */
+       10000		/* const int               max_generations */
               );
 
     printf( "Solution %d, with score %d, was:\n",
