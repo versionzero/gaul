@@ -1200,3 +1200,27 @@ boolean ga_select_two_linearrank(population *pop, entity **mother, entity **fath
   }
 
 
+/**********************************************************************
+  ga_select_one_roundrobin()
+  synopsis:	Select an entities in a round-robin fashion.
+  parameters:
+  return:	
+  last updated: 12 Jul 2004
+ **********************************************************************/
+
+boolean ga_select_one_roundrobin(population *pop, entity **mother)
+  {
+
+  if (!pop) die("Null pointer to population structure passed.");
+
+  pop->select_state++;
+
+  if ( pop->orig_size <= pop->select_state )
+    pop->select_state = 0;
+
+  *mother = pop->entity_iarray[pop->select_state];
+
+  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  }
+
+

@@ -6,6 +6,7 @@ Changes since release 0.1847:
 - Handle invalid entities correctly/cleanly in all evolutionary functions.
 - Fixed bug in configuration to use certian MPI implementations, including MPICH.
 - Fixed bug that assumed fitness mean was always zero in some statistics functions.
+- Added a round-robin selection operator - ga_select_one_roundrobin().
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.
