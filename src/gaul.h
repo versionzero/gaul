@@ -26,7 +26,8 @@
 
   Synopsis:	Public header file for GAUL.
 
-  Updated:      03/06/01 SAA	First version - currently just a stub.
+		This file should be included by any code that will
+		be linking to libga.
 
  **********************************************************************/
 

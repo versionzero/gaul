@@ -59,9 +59,6 @@
 		you are free to use whichever value you like in
 		user-defined functions.)
 
-  Updated:	30/04/01 SAA	Rewrote ga_select_(one|two)_random() to avoid many NULL returns and one random_boolean_prob() call per selection.  Added ga_select_(one|two)_roulette[_rebased]() functions (ExpVal has double-precision values instead of integer values in the original implementation - this should make any significant difference except to remove any descretisation effects).  Added private utility function, ga_select_stats().
-		23/04/01 SAA	First code.  The idea is to allow several types of selection, rather than just the current method.
-
   To do:	Reimplement roulette wheel selection etc. using this callback mechanism.
 		Reimplement probability ranges: mutation_prob = mutation_max - (mutation_max-mutation_min)*i/pop->orig_size;
 

@@ -33,24 +33,7 @@
 		pointers are unusable, so identifing integers are
 		used instead.
 
-  Updated:      03/06/01 SAA	Stuff for replacement operator added.
-		24/04/01 SAA	Added ga_slang_mutate() and friends.
-		23/04/01 SAA	Modifications required due to changes to ga_util/ga_optim functions and the population structure.  Obsellete functions removed.
-		17/04/01 SAA	Added ga_intrinsic_sladd().
-		27/03/01 SAA	Added ga_population_set_stablesize().
-		16/03/01 SAA	ga_entity_rank_from_id() and ga_entity_id_from_rank() much simplified.
-		28/02/01 SAA	Entity ids are now int instead of unsigned int.  Added ga_population_score_and_sort_wrapper().
-		23/02/01 SAA	Changed wrappers for the new ga_metropolis_mutation(), ga_metropolis_mc(), ga_simulated_annealling_mutation() and ga_simulated_annealling_mc() functions.
-		21/02/01 SAA	Added wrapper for ga_simulated_annelling().
-		14/02/01 SAA	Added ga_crossover_chromosome_singlepoints_wrapper() and ga_crossover_chromosome_mixing_wrapper().  Also added ga_entity_migrate() to move entities from one population to another **compatiable** population.
-		07/02/01 SAA	Added ga_entity_score().  Added ga_entity_cross_compare_genome_wrapper().
-		02/02/01 SAA	ga_genesis_canned() removed.  helga_genesis_canned() should be used instead.
-		29/01/01 SAA	Based on re-organisation in ga_util.c, removed all calls to ga_set_active_population(), and changed parameters to various functions, as required.
-		28/01/01 SAA	Added a few missing ga_set_active_population() calls.  ga_[metropolis|nahc|rmhc]_wrapper() calls now take population index as a parameter.
-		22/01/01 SAA	Split from ga_util.c mostly, with some bits from helga_slang.c.
-
-  To do: *->	Error checking.
-		Wrappers around the GA operators.
+  To do: 	More error checking.
 
  **********************************************************************/
 

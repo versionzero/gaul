@@ -1,5 +1,44 @@
 Welcome to GAUL: The Genetic Algorithm Utility Library
 ======================================================
+Copyright © 2000-2001 "Stewart Adcock" <stewart@linux-domain.com>
+
+Further Information
+-------------------
 
 See ./docs/ for more documentation.
+GAUL homepage: http://souceforge.net/projects/gaul
+GAUL development homepage: http://souceforge.net/projects/gaul
+
+A GAUL FAQ is still being written. In the mean-time you are welcome to join the mailing list, GAUL-devel@sourceforge.net, hosted by SourceForge.
+
+Introduction
+------------
+
+The Genetic Algorithm Utility Library (or, GAUL for short) is a flexible programming library designed to aid in the development of applications that require the use of genetic algorithms. It provides data structures and functions for handling and manipulation of the data required for a genetic algorithm. Additional stochastic algorithms are provided for comparison to the genetic algorithms. Much of the functionality is also available through a simple SLang interface.
+
+Features include:
+
+o Darwinian, Lamarckian or Baldwinian evolutionary schemes. 
+o Steady-state and generation-based GAs are available. 
+o Includes most of the usual crossover, mutation and selection operators. 
+o Allows user-defined crossover, mutation, selection, adaptation and replacement operators. 
+o Additional, non-GA, optimisation algorithms are built-in for local optimisation or comparitive purposes. 
+o Availability of multiple chromosome genomes. 
+o Choice of high-level or low-level interface functions. 
+o Trivial to extend using external code via the built-in code hooks. 
+o Full support for multiple, simultaneously evolved, populations. 
+o May be driven by, or extended by, powerful SLang scripts. 
+
+The current primary aims for the GAUL development project are to produce documentation, examples and test cases for this open-source release of GAUL. Several new features are also planned for GAUL including wrappers to enable its use with programming languages other than C. The open-source release of GAUL is currently not parallelised, however this will become a priority development target.
+
+The main development platform for GAUL is Linux with the gcc compiler, but in the past GAUL or its non open-source predecessor have compiled successfully on Linux using Compaq's ccc compiler, on Solaris 7 with gcc, on SGI's IRIX 6.5 using the MIPSPro C compiler and on FreeBSD with gcc. It should be fairly trivial to use GAUL on any truely POSIX compliant systems. Full use is made of the GNU maketools to aid portability issues.
+
+This version of GAUL is distributed under the terms of the GNU General Public License.  See the file ./COPYING for full details.
+
+Bug Submission
+--------------
+
+GAUL is still under heavy development, and certianly far from bug free. At the present time, the only bugs we are really interested in are those which cause crashes. If the stable distribution crashes, then we have done something wrong. If you find such a bug, please send details of your system, the version of GAUL that you are using and concise instructions for reproducing the crash to gaul@linux-domain.com.
+
+Stewart Adcock, 6th June 2001.
 

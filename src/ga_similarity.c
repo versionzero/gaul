@@ -52,8 +52,6 @@
 		measure", MUG '97 - 11th annual Daylight user group
 		meeting.
 
-  Updated:	13/02/01 SAA	First version.
-
  **********************************************************************/
 
 #include "ga_util.h"

@@ -29,9 +29,6 @@
 		These functions should duplicate user data where
 		appropriate.
 
-  Updated:	31/05/01 SAA	Added double-point crossover stuff.
-		23/04/01 SAA	Split from ga_util.c for ease of maintainance.  These functions now have no return value.
-
  **********************************************************************/
 
 #include "ga_util.h"

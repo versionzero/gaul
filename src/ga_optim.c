@@ -26,22 +26,13 @@
 
   Synopsis:     Routines for gene-based optimisation.
 
-  Updated:	31/05/01 SAA	Added a steady-state GA.
-		22/05/01 SAA	Fixed crash in ga_simulated_annealling_mutation() due to use of mutation selection operator that potentially returns a NULL selection, but in fact no selection is needed at all!.
-		23/04/01 SAA	orig_pop_size variable in ga_evolution() replaced with pop->orig_size - needed for selection callbacks.  Lots of changes required due to rationalisation of the mutation and crossover callbacks.  ga_evolution() calling simplified by moving many parameters in to the population structure.  Also simplified by removing all "optional hacks" - these should now be reimplemented in a consistent manor, if desired.  Parallelisation code removed - Reimplementation is required.  Sub-population code removed - Reimplementation is required.  Inbreeding check is now to be handled in the selection callbacks, if desired.  Functions with a 'drift' mode are now obsellete.  All parallelised functions removed (for now).  All usage of ga_entity_seed_random() replaced with ga_entity_seed().  Specific Monte Carlo functions no longer needed - they may now just be a special case of the mutation functions.
-		17/04/01 SAA	The optimisation routines moved here from ga_util for ease of maintainance.  Option for parents to die during generation in ga_evolve as part of the elitism parameter.
-
   To do:	Reimplement sub-populations.
-		Write parallel versions.
+		Rewrite parallel versions.
 		Temperatures should be double-precision floats?
 
  **********************************************************************/
 
 #include "ga_util.h"
-
-/*
- * Global variables.
- */
 
 /**********************************************************************
   ga_evolution()

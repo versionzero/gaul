@@ -29,9 +29,6 @@
 		These functions should duplicate user data were
 		appropriate.
 
-  Updated:	02/05/01 SAA	Remived some "fixme" comments, which had already been fixed.
-		23/04/01 SAA	Split from ga_util.c for ease of maintainance.  These functions now have no return value.
-
  **********************************************************************/
 
 #include "ga_util.h"

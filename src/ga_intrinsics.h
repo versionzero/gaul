@@ -27,8 +27,6 @@
   Synopsis:     Wrappers around the routines for handling populations
 		and performing GA operations.
 
-  Updated:      22/01/01 SAA	Taken from ga_util.h and helga_slang.h.
-
  **********************************************************************/
 
 #ifndef GA_INTRINSICS_H_INCLUDED

@@ -26,8 +26,6 @@
 
   Synopsis:     Routines for performing GA seeding operations.
 
-  Updated:	15/05/01 SAA	First version.
-
  **********************************************************************/
 
 #include "ga_util.h"

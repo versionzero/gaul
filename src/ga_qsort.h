@@ -26,8 +26,6 @@
 
   Synopsis:     Sort the population by fitness.
 
-  Last Updated: 08/05/00 SAA	Some stuff moved out of qsort.c prior to rename to helga_qsort.c
-
  **********************************************************************/
 
 #ifndef GA_QSORT_H_INCLUDED

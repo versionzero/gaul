@@ -27,8 +27,6 @@
   Synopsis:     Routines for handling populations and performing GA
 		operations.
 
-  Updated:      17/04/01 SAA	The optimisation routines moved here from ga_util for ease of maintainance.
-
  **********************************************************************/
 
 #ifndef GA_OPTIM_H_INCLUDED

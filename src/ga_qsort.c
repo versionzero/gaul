@@ -32,17 +32,6 @@
   Implementation note:	I can clearly choose functions to inline better
 			than gcc/egcs can.  (Shame)
 
-  Last Updated:	05/06/01 SAA	Removed last remaining Helga stuff.
-		02/02/01 SAA	Converted from helga_qsort.c to ga_qsort.c.  Removed all dependancies on helga.
-		22/01/01 SAA	The population is now passed as a pointer to the structure.
-		12/01/01 SAA	helga_qsort_test now returns a boolean value (Although, at present this is always TRUE).  Changed HELGA_QSORT_TEST to HELGA_QSORT_COMPILE_MAIN for consistency with the other helga source code.
-		21/11/00 SAA	Removed some expensive debug code.
-		27/10/00 SAA	exit() values rationalised.
-		03/08/00 SAA	Made find_pivot() and partition() inline functions.
-		24/07/00 SAA	Use helga_log() for output.
-		08/05/00 SAA	Renamed to helga_qsort.c, improved namespace and created header file.
-		14/04/00 SAA	Converted from some of my old code.  By removing generalisations so that it only works with the helga stuff, I can acheive a very reasonable performance boost.  (Had to do this twice though 'cos some idiot typed rm *.c, doh!)
-
  **********************************************************************/
 
 #include "ga_qsort.h"

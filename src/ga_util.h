@@ -27,14 +27,6 @@
   Synopsis:     Routines for handling populations and performing GA
 		operations.
 
-  Updated:      20/04/01 SAA	Reorganization of the callback functions.  Much more consistent now.
-		17/04/01 SAA	Split the optimisation functions into ga_optim.c.  Started coding flexible selection scheme.
-		02/02/01 SAA	Removed helga dependancies.  Now use log_util and mpi_util instead of helga_log and helga_mpi.
-		30/01/01 SAA	Tidying.
-		22/01/01 SAA	Moved a truckload of stuff over to ga_intrisics.h
-		18/12/00 SAA	I haven't been keeping this log upto date.  Hmmm.  Today the genome and entity structures are merged.
-		11/04/00 SAA	Based on my dt_ga code - but extensive rewriting was required.
-
  **********************************************************************/
 
 #ifndef GA_UTIL_H_INCLUDED

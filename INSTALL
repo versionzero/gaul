@@ -1,3 +1,7 @@
+GAUL Installation Instructions
+==============================
+
+Full (and maybe more up-to-date) instructions are available on the GAUL website.  This file should have just enough detail to help you.
 
 Dependancies:
 The only non-trivial pre-requisite for GAUL is slang.  This may be obtained from http://www.s-lang.org/
@@ -5,8 +9,10 @@ The only non-trivial pre-requisite for GAUL is slang.  This may be obtained from
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
 
 You should be able to work it out, but for any real dumbies out there follow the standard GNU make procedure:
+./configure ; make
 
-./configure ; make ; make install
+Or if you don't have SLang installed:
+./configure --disable-slang; make
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
 

@@ -26,8 +26,6 @@
 
   Synopsis:     Routines for comparing genomes/chromosomes.
 
-  Updated:      13/02/01 SAA	First version.
-
  **********************************************************************/
 
 #ifndef GA_SIMILARITY_H_INCLUDED

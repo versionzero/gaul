@@ -29,8 +29,6 @@
 		These functions should duplicate user data were
 		appropriate.
 
-  Updated:	31/05/01 SAA	First version.
-
  **********************************************************************/
 
 #include "ga_util.h"

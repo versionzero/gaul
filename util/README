@@ -1,5 +1,4 @@
-GAUL/util/
+gaul-devel/util/
 
 These files are only here temporarially, in order to allow GAUL to compile and run.  They are basically included here to avoid unnecessary dependancies at this stage of the development.  Further development of these files should not occur in this CVS archive.  
-
 

@@ -51,53 +51,6 @@
 			Evolution will continue if ga_evolution() is
 			called again without calling ga_genesis() again.
 
-  Updated:	31/05/01 SAA	Added ga_population_convergence_{genotypes|chromosomes|alleles}().
-		15/05/01 SAA	Prototype for seeding function (GAseed) altered.
-		30/04/01 SAA	Moved ga_population_stats() into here.
-		24/04/01 SAA	Renamed project to GAUL (Genetic Algorithm Utility Library) and removed any trace of propriety code which may still be lurking in here.
-		23/04/01 SAA	ga_genesis() is now much simpler.  ga_entity_seed_random() no longer needed - now a special case of ga_entity_seed().  Many of the crossover and mutation variants have been removed - the calling code may reimplement them if necessary through the crossover and mutation callback mechanisms.  The remaining functions have been moved to ga_mutate.c and ga_crossover.c.  A whole shed-load of debugging code has been removed.  Added ga_population_set_parameters() which is now needed to define the GA parameters.
-		20/04/01 SAA	Reorganization of the callback functions.  Callbacks and other behavour much more consistent now - their functionality is easily enhanced now.
-		17/04/01 SAA	Split the optimisation functions into ga_optim.c.  Started coding flexible selection scheme.
-		24/03/01 SAA	Added ga_allele_search().
-		22/03/01 SAA	Available adaptation classes extended.
-		16/03/01 SAA	Split ga_entity_dereference() into ga_entity_dereference() and ga_entity_dereference_by_rank().  The latter function should be used when possible.  Added ga_get_entity_id_from_rank() and ga_get_entity_rank_from_id() to make some of the intrinsics more efficient.
-		14/03/01 SAA	Added user data field to the population structure.
-		28/01/01 SAA	Entity id now int instead of unsigned int.  Removed boltzmann factor from simulated_annealling_[mutation|mc]().  Added useful ga_population_score_and_sort() function.  Fixed ga_population_seed() and ga_entity_seed().
-		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc
-		23/02/01 SAA	Removed HelGA specific mutation types.  Replaced them by a "Monte Carlo move" mutation - but the actual function to do this needs to be defined by the user.  ga_metropolis() split into ga_metropolis_mutation() and ga_metropolis_mc() which use GA mutation operators and MC moves respectively.  Similarly ga_simulated_annealling() split into ga_simulated_annealling_mutation() and ga_simulated_annealling_mc().  ga_evolution() is now safe in the case of the mutation operator callbacks being defined as NULL.
-		21/02/01 SAA	Added ga_simulated_annealling().
-		14/02/01 SAA	Renamed ga_singlepoint_crossover_whole() to ga_crossover_chromosome_mixing() which is more appropriate.
-		13/02/01 SAA	Moved ga_compare_genome() to ga_similarity.c, a new collection of similarity measures.
-		07/02/01 SAA	Changed parameters for ga_population_read().
-		02/02/01 SAA	Removed helga dependancies.  Added ga_diagnostics().
-		29/01/01 SAA	ga_population_new() now returns a pointer to the new structure instead of it's integer handle.  ga_genesis() returns NULL on failure now.  Working on removing the global population structure.  Removed some one letter variables.
-		28/01/01 SAA	Use of ga_entity_index() replaced by the almost identical ga_get_entity_id().
-		22/01/01 SAA	Integer (unsigned int) handled for population and entity structures have been added for ease of embedding functions into a script language when pointers to arbitrary structures are not available.  Script language wrappers split off into a seperate file ga_intrinsics.c for neatness.  ga_clear_entity() renamed to ga_entity_blank() for naming consistency.  Added ga_copy_entity_chromosome().  Replaced ga_copy_entity_genes() with ga_copy_entity_all_chromosomes().  Added ga_population_{g|s}et_*() accessor functions.  ga_genesis() returns population handle instead of boolean success.
-		19/01/01 SAA	ga_metropolis() now has the same form as ga_next_ascent_hill_climbing() and ga_random_ascent_hill_climbing().  Merged ga_population_allocate() and ga_population_init() into ga_population_new().  Initial code for maintaining a table of population structures instead of a single structure.
-		11/01/01 SAA	ga_genocide() added for reducing population to some given size.  Changes for namespace changes in mpi().  ga_population_save() written properly.  ga_population_read() added.
-		05/01/00 SAA	Removed dependence on the helga routines, except helga_random.c (which will become the basis for my PRNG library), and mpi which are general parallel code utilities.  Properly typed the callback and hook function prototypes.
-		21/12/00 SAA	Removed some fixed FIXMEs.  Added ga_next_ascent_hill_climbing().
-		20/12/00 SAA	ga_revive() renamed to ga_resurect().  Corrected spelling of Lanark to Lamarck after I looked it up!  The user-defined destructor only acts on one item now.  RMHC algorithm debugged.
-		19/12/00 SAA	Merging of the genome structure into the entity structure.  This saves a few lookup, and much memory.  This also means that entities are unable to share genes - they must be copied instead, but chromosomes may still be shared (if that is desired.) with no additional memory requirements, so that is good.  This has significantly reduced the volume of some portions of code.  ga_gene_seed_random() etc. removed.  Lots of genome checking code has also been deprecated.  ga_compare_genome() now takes entity structures as paramters.  Callbacks now fully specified by call to ga_genesis() instead of partially by call to ga_evolution().  ga_entity_seed_random() added.  Continued to move some helga specific code out of this file.  Removed a number of unused or unneeded variables.  Added ga_entity_index() for debugging purposes.
-		18/12/00 SAA	Split some of ga_population_seed_random() into ga_gene_seed_random().  Work on ga_metropolis() function, primarily for zero temperature metropolis for ga validation.  GA_UTIL_MIN_FITNESS constant used.  ga_copy_data() added.
-		08/12/00 SAA	Deleted loads of unused functions.  Converted chromosomes into standard interger arrays instead of dints for efficiency reasons.
-		07/12/00 SAA	Linear scaling of mutation probabilities now coded.
-		22/11/00 SAA	Count number of successful vs. unsuccessful mutations etc. in ga_evolution().
-		18/10/00 SAA	Changes for flexible backbone.  Changes to make chromosome structures opaque to these functions.  Removed code relating to the old-old-chromosome encoding method.
-		22/09/00 SAA	Recoded the entity sending routines.  Sending and recieving all done within one function.
-		07/08/00 SAA	Elitism added to the core ga_evolution() routine.
-		01/08/00 SAA	Added ga_revive().
-		27/07/00 SAA	Bug in ga_helixthread_mutation() which caused seg fault in construction code fixed.  Also optimised it's usage of quaternions.
-		21/07/00 SAA	ga_multipoint_mutation(), ga_helixthread_mutation(), ga_helixswap_mutation() added.
-		19/07/00 SAA	Fixed bug in ga_population_seed_pdb() which cause one too few entities to be filled correctly.  ga_entity_setup() no long erroneously sets the data pointer to NULL.
-		14/07/00 SAA	Removed a few fixed FIXMEs.
-		06/07/00 SAA	Replaced ga_population_seed() with ga_population_seed_random(), ga_population_seed_user(), and ga_population_seed_soup().  Added several function stubs for planned file read/writing.  Altered code to avoid using the temporary integer buffer in ga_population_seed_random().
-		05/07/00 SAA	ga_population_seed() now sets a random conformation index for each residue.
-		04/07/00 SAA	Avoid free-ing of user data in ga_entity_dereference().  This function also decrements the population size now.
-		03/07/00 SAA	ga_evolution() now uses crossover probibility parameter, and ga_singlepoint_crossover() now works fully.
-		15/05/00 SAA	Now almost useable, so I must remember to keep this changelog up to date!
-		14/04/00 SAA	Extensive rewrite (after accidental rm *.c doh!)
-
   To do:	Reading/writing 'soup'.
 		Replace the send_mask int array with a bit vector.
 		Use Memory Chunks for efficient memory allocation?
