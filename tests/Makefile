@@ -103,6 +103,7 @@ MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
 MINOR_VERSION = 1836
+MPIFLAGS = -DPARALLEL=2 -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 PATCH_VERSION = 1

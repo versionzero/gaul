@@ -51,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
+  Updated:	30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
+  		23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
 		04/02/01 SAA	Code for basic BSPlib support.
 		02/02/01 SAA	Removed from helga.  Use plog() instead of helga_log().
 		12/01/01 SAA	helga_mpi_test now returns a boolean value (Although, at present this is always TRUE).
@@ -96,14 +97,14 @@ char	node_name[MAX_LINE_LEN];	/* String containing processor name */
 
 /**********************************************************************
   mpi_setup()
-  synopsis:	Initialise MPI stuff.
+  synopsis:	Initialise MPI stuff for master/slave paradigm.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
   last updated:	11/01/01
  **********************************************************************/
 
 boolean mpi_setup( int *argc, char ***argv,
-                         void *(*master_func)(void *), void *(*node_func)(void *) )
+                         void (*master_func)(void *), void (*node_func)(void *) )
   {
 #if PARALLEL == 0
 /*
@@ -184,12 +185,12 @@ boolean mpi_setup( int *argc, char ***argv,
   plog(LOG_DEBUG, "Process %d sync-ed", rank);
 
 /* Register exit function. */
-  atexit(&exit_mpi);
+  atexit(&mpi_exit);
 
-  if (rank=0)
-    *master_func(NULL);
+  if (rank==0)
+    master_func(NULL);
   else
-    *node_func(NULL);
+    node_func(NULL);
 
   plog(LOG_DEBUG, "Process %d has fallen through...", rank);
 
@@ -252,14 +253,141 @@ boolean mpi_setup( int *argc, char ***argv,
   plog(LOG_DEBUG, "Process %d sync-ed", rank);
 
 /* Register exit function. */
-  atexit(&exit_mpi);
+  atexit(&mpi_exit);
 
-  if (rank=0)
-    *master_func(NULL);
+  if (rank==0)
+    master_func(NULL);
   else
-    *node_func(NULL);
+    node_func(NULL);
 
   plog(LOG_DEBUG, "Process %d has fallen through...", rank);
+
+#endif
+#endif
+#endif
+#endif
+#endif /* PARALLEL */
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  mpi_init()
+  synopsis:	Initialise MPI stuff for bulk paradigm.
+  parameters:
+  return:
+  last updated:	30 Jan 2002
+ **********************************************************************/
+
+boolean mpi_init( int *argc, char ***argv )
+  {
+#if PARALLEL == 0
+/*
+ * Single-processor, single-thread version.
+ */
+  plog(LOG_VERBOSE, "Single-processor, single-thread version.");
+
+  size = 1;
+  rank = 0;
+  if (gethostname(node_name, MAX_LINE_LEN)<0)
+    strcpy(node_name, "<unknown>");
+
+#else
+#if PARALLEL == 1
+  die("FIXME: PARALLEL == 1 case (pthreads) not implemented.");
+#else
+#if PARALLEL == 2
+/*
+ * Multi-processor version. (Using MPI)
+ */
+/*
+  plog(LOG_VERBOSE, "Multi-processor version. (Using MPI)");
+*/
+
+/*
+  plog(LOG_DEBUG, "MPI_Init() returned %d", MPI_Init(argc, argv));
+*/
+printf("MPI_Init\n");
+  MPI_Init(argc, argv);
+
+printf("MPI_Comm_size\n");
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+printf("MPI_Comm_rank\n");
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+printf("MPI_Get_processor_name\n");
+  MPI_Get_processor_name(node_name, &namelen);
+
+  plog(LOG_VERBOSE,
+            "Process %d of %d initialized on %s",
+            rank, size, node_name);
+  printf("Process %d of %d initialized on %s",
+            rank, size, node_name);
+
+/*
+ * Now wait for the other processors to be syncronised.
+ */
+  plog(LOG_DEBUG, "Process %d sync-ing", rank);
+  mpi_sync();
+  plog(LOG_DEBUG, "Process %d sync-ed", rank);
+
+#else
+#if PARALLEL == 3
+/*
+ * Multi-processor version. (Using PVM3)
+ */
+  plog(LOG_VERBOSE, "Multi-processor version. (Using PVM3)");
+
+  die("FIXME: PARALLEL == 3 case (PVM) not implemented.");
+#else
+#if PARALLEL == 4
+/*
+ * Multi-processor version. (Using BSPlib)
+ */
+  char          *env_num_threads=NULL;
+  unsigned int	real_size;
+
+  /* Find the number of processes to spawn. */
+  env_num_threads=getenv(MPI_NUM_PROCESSES_ENVVAR_STRING);
+
+  if (env_num_threads)
+    {
+    size = atoi(env_num_threads);
+    }
+  else
+    {
+    size=1;
+    plog(LOG_NORMAL, "Starting 1 processes.  You may specify the number of processes required by defining the environment variable \"%s\".", MPI_NUM_PROCESSES_ENVVAR_STRING);
+    }
+
+  if (gethostname(node_name, MAX_LINE_LEN)<0)
+    strcpy(node_name, "<unknown>");
+
+  plog(LOG_VERBOSE, "Multi-processor version. (Using BSP)");
+
+  bsp_begin(size);
+
+  realsize = bsp_nprocs();
+
+  if (real_size != size)
+    {
+    plog(LOG_NORMAL, "%d processes requested, but only %s started.",
+         size, real_size);
+    size = real_size;
+    }
+
+  rank = bsp_pid();
+
+  plog(LOG_VERBOSE,
+            "Process %d of %d initialized on %s",
+            rank, size, node_name);
+
+/*
+ * Now wait for the other processors to be syncronised.
+ */
+  plog(LOG_DEBUG, "Process %d sync-ing", rank);
+  mpi_sync();
+  plog(LOG_DEBUG, "Process %d sync-ed", rank);
 
 #endif
 #endif
@@ -579,6 +707,7 @@ int mpi_find_global_max(const double local, double *global)
   }
 
 
+#ifdef MPI_UTIL_COMPILE_MAIN
 /**********************************************************************
   mpi_send_test()
   parameters:	The node to send test message to.  node = -1 for
@@ -670,6 +799,7 @@ boolean mpi_send_test_next()
   return( mpi_send_test(next) );
   }
 #endif /* PARALLEL==2 */
+#endif
 
 
 /**********************************************************************
@@ -681,8 +811,8 @@ boolean mpi_send_test_next()
   last updated:	21/11/00
  **********************************************************************/
 
-boolean mpi_synchronous_send(const void *buf, const int count,
-                               const enum mpi_datatype type, const int node,
+boolean mpi_synchronous_send(void *buf, const int count,
+                               const mpi_datatype type, const int node,
                                const int tag)
   {
   /* Checks */
@@ -723,8 +853,8 @@ boolean mpi_synchronous_send(const void *buf, const int count,
   last updated:	23 Jan 2002
  **********************************************************************/
 
-boolean mpi_nonblocking_send(const void *buf, const int count,
-                               const enum mpi_datatype type, const int node,
+boolean mpi_nonblocking_send(void *buf, const int count,
+                               const mpi_datatype type, const int node,
                                const int tag)
   {
   /* Checks */
@@ -764,8 +894,8 @@ boolean mpi_nonblocking_send(const void *buf, const int count,
   last updated:	21/11/00
  **********************************************************************/
 
-boolean mpi_standard_send(const void *buf, const int count,
-                            const enum mpi_datatype type, const int node,
+boolean mpi_standard_send(void *buf, const int count,
+                            const mpi_datatype type, const int node,
                             const int tag)
   {
   /* Checks */
@@ -804,10 +934,14 @@ boolean mpi_standard_send(const void *buf, const int count,
   last updated:	19/12/00
  **********************************************************************/
 
-boolean mpi_standard_broadcast(const void *buf, const int count,
-                            const enum mpi_datatype type,
+boolean mpi_standard_broadcast(void *buf, const int count,
+                            const mpi_datatype type,
                             const int tag)
   {
+#if PARALLEL == 2 || PARALLEL == 4
+  int	i;
+#endif
+
   /* Checks */
   if (!buf) die("Null pointer to (void *) buffer passed.");
 
@@ -855,8 +989,8 @@ boolean mpi_standard_broadcast(const void *buf, const int count,
   last updated:	19/12/00
  **********************************************************************/
 
-boolean mpi_standard_distribute(const void *buf, const int count,
-                            const enum mpi_datatype type, const int root,
+boolean mpi_standard_distribute(void *buf, const int count,
+                            const mpi_datatype type, const int root,
                             const int tag)
   {
   /* Checks */
@@ -895,8 +1029,8 @@ boolean mpi_standard_distribute(const void *buf, const int count,
   last updated:	21/11/00
  **********************************************************************/
 
-boolean mpi_receive(const void *buf, const int count,
-                               const enum mpi_datatype type, const int node,
+boolean mpi_receive(void *buf, const int count,
+                               const mpi_datatype type, const int node,
                                const int tag)
   {
 #if PARALLEL == 2
@@ -942,8 +1076,8 @@ boolean mpi_receive(const void *buf, const int count,
   last updated:	23 Jan 2002
  **********************************************************************/
 
-boolean mpi_receive_any(const void *buf, const int count,
-                    const enum mpi_datatype type,
+boolean mpi_receive_any(void *buf, const int count,
+                    const mpi_datatype type,
 		    int *node, int *tag)
   {
 #if PARALLEL == 2
@@ -963,8 +1097,8 @@ boolean mpi_receive_any(const void *buf, const int count,
 #else
 #if PARALLEL == 2
   MPI_Recv( buf, count, (MPI_Datatype) type, MPI_SOURCE_ANY, MPI_TAG_ANY, MPI_COMM_WORLD, &status );
-  node = status.source;
-  tag = status.tag;
+  *node = status.MPI_SOURCE;
+  *tag = status.MPI_TAG;
 
 #else
 #if PARALLEL == 3
@@ -997,11 +1131,11 @@ int main(int argc, char **argv)
   {
   mpi_setup(&argc, &argv);
 
-#else
+/*#else*/
 
-boolean mpi_test(void)
-  {
-#endif
+/*boolean mpi_test(void)*/
+/*  {*/
+/*#endif*/
 
 #if PARALLEL == 2
   if ( mpi_ismaster() )
@@ -1019,9 +1153,10 @@ boolean mpi_test(void)
 
   plog(LOG_DEBUG, "The end of process %d.", rank);
 
-#ifdef MPI_UTIL_COMPILE_MAIN
+/*#ifdef MPI_UTIL_COMPILE_MAIN*/
   exit(OKAY);
-#else
-  return TRUE;
-#endif
   }
+/*#else*/
+/*  return TRUE;*/
+/*  }*/
+#endif

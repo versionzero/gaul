@@ -37,6 +37,13 @@
 
 		This example is discussed in docs/html/tutorial9.html
 
+		It is likely that you have problems to compile and/or
+		execute this example.  Isuggest the following:
+		1) Download and _correctly_ install a MPI implementation.
+		2) Confirm that MPI programs work okay.
+		3) Use "./configure --enable-mpi=yes" to build GAUL.
+		4) Execute this example with something like "mpirum -v -np 4 ./struggle5_mp"
+
  **********************************************************************/
 
 /*
@@ -97,13 +104,15 @@ boolean struggle_score(population *pop, entity *entity)
 
 int main(int argc, char **argv)
   {
-  int		i;				/* Loop over populations. */
-  population	*pops[GA_STRUGGLE_NUM_POPS];	/* Array of populations. */
+  int		i;					/* Loop over populations. */
+  population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of populations. */
+
+  mpi_init(&argc, &argv);
 
   random_init();
-  random_seed(42);
+  random_seed(42+mpi_get_rank());
 
-  for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
+  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
     {
     pops[i] = ga_genesis_char(
        80,			/* const int              population_size */
@@ -130,19 +139,20 @@ int main(int argc, char **argv)
  * The only significant difference between "examples/struggle5" and
  * "examples/struggle5_mp" is in the following statement.
  */
-  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS, pops,
+  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS_PER_PROC, pops,
        GA_CLASS_DARWIN,	GA_ELITISM_PARENTS_SURVIVE, 250 );
 
-  for (i=0; i<GA_STRUGGLE_NUM_POPS; i++)
+  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
     {
-    printf( "The best solution on island %d with score %f was:\n",
-            i, ga_get_entity_from_rank(pops[i],0)->fitness );
-    printf( "%s\n",
-            ga_chromosome_char_to_staticstring(pops[i],
-                               ga_get_entity_from_rank(pops[i],0)));
+    printf( "The best solution on processor %d, island %d with score %f was:\n%s\n",
+            mpi_get_rank(), i,
+            ga_get_entity_from_rank(pops[i],0)->fitness,
+            ga_chromosome_char_to_staticstring(pops[i], ga_get_entity_from_rank(pops[i],0)) );
 
     ga_extinction(pops[i]);
     }
+
+  mpi_exit();
 
   exit(2);
   }

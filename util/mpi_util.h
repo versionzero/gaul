@@ -27,7 +27,8 @@
   Synopsis:	Header file for some abstract message passing functions
 		using the MPI API.
 
-  Updated:	23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
+  Updated:	30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
+		23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
 		02/02/01 SAA	Converted from helga_mpi.h to mpi_util.h
 		11/01/01 SAA	SAA_header.h includes the parallel library header files as necessary.
 		10/04/00 SAA	First code.
@@ -55,31 +56,39 @@
 #endif
 
 /*
+ * Constants.
+ */
+#define MPI_TAG_ANY	-1
+#define MPI_SOURCE_ANY	-1
+
+/*
  * Message datatypes.
  */
 #if PARALLEL == 0 || PARALLEL == 1
-enum mpi_datatype {
-  MPI_TYPE_UNKNOWN=0,
-  MPI_TYPE_INT, MPI_TYPE_DOUBLE, MPI_TYPE_CHAR
-  };
+typedef int mpi_datatype;
+#define MPI_TYPE_UNKNOWN	0
+#define MPI_TYPE_INT		1
+#define MPI_TYPE_DOUBLE		2
+#define MPI_TYPE_CHAR		3
+
 #else
 #if PARALLEL == 2
 /* Use the MPI datatype definitions. */
-enum mpi_datatype {
-  MPI_TYPE_UNKNOWN=0,
-  MPI_TYPE_INT=MPI_INT,
-  MPI_TYPE_DOUBLE=MPI_DOUBLE,
-  MPI_TYPE_CHAR=MPI_CHAR
-  };
+typedef MPI_Datatype mpi_datatype;
+#define MPI_TYPE_UNKNOWN	(MPI_Datatype) 0
+#define MPI_TYPE_INT		(MPI_Datatype) MPI_INT
+#define MPI_TYPE_DOUBLE		(MPI_Datatype) MPI_DOUBLE,
+#define MPI_TYPE_CHAR		(MPI_Datatype) MPI_CHAR
+
 #else
 #if PARALLEL == 3 || PARALLEL == 4
 /* For PVM and BSP, use size of the primitives. */
-enum mpi_datatype {
-  MPI_TYPE_UNKNOWN=0,
-  MPI_TYPE_INT=SIZEOF_INT,
-  MPI_TYPE_DOUBLE=SIZEOF_DOUBLE,
-  MPI_TYPE_CHAR=SIZEOF_CHAR
-  };
+typedef size_t mpi_datatype;
+#define MPI_TYPE_UNKNOWN	(size_t) 0
+#define MPI_TYPE_INT		SIZEOF_INT,
+#define MPI_TYPE_DOUBLE		SIZEOF_DOUBLE,
+#define MPI_TYPE_CHAR		SIZEOF_CHAR
+
 #endif
 #endif
 #endif
@@ -88,7 +97,8 @@ enum mpi_datatype {
  * Function prototypes
  */
 
-boolean mpi_setup(int *argc, char ***argv, void *(*master_func)(void *), void *(*node_func)(void *));
+boolean mpi_setup(int *argc, char ***argv, void (*master_func)(void *), void (*node_func)(void *));
+boolean mpi_init(int *argc, char ***argv);
 void mpi_exit(void);
 void mpi_abort(int errcode);
 boolean mpi_isinit();
@@ -99,29 +109,27 @@ int mpi_get_next_rank();
 int mpi_get_prev_rank();
 boolean mpi_sync();
 int mpi_find_global_max(const double local, double *global);
+boolean mpi_synchronous_send(void *buf, const int count,
+                               const mpi_datatype type, const int node,
+                               int tag);
+boolean mpi_standard_send(void *buf, const int count,
+                            const mpi_datatype type, const int node,
+                            int tag);
+boolean mpi_standard_broadcast(void *buf, const int count,
+                            const mpi_datatype type,
+                            int tag);
+boolean mpi_standard_distribute(void *buf, const int count,
+                            const mpi_datatype type, const int root,
+                            int tag);
+boolean mpi_receive(void *buf, const int count,
+                               const mpi_datatype type, const int node,
+                               int tag);
+#ifndef MPI_UTIL_COMPILE_MAIN
 boolean mpi_send_test(int node);
 boolean mpi_recv_test();
 boolean mpi_send_test_all();
 boolean mpi_send_test_next();
-boolean mpi_send_population(int node);
-boolean mpi_send_population_all();
-boolean mpi_send_population_next();
-boolean mpi_synchronous_send(const void *buf, const int count,
-                               const enum mpi_datatype type, const int node,
-                               int tag);
-boolean mpi_standard_send(const void *buf, const int count,
-                            const enum mpi_datatype type, const int node,
-                            int tag);
-boolean mpi_standard_broadcast(const void *buf, const int count,
-                            const enum mpi_datatype type,
-                            int tag);
-boolean mpi_standard_distribute(const void *buf, const int count,
-                            const enum mpi_datatype type, const int root,
-                            int tag);
-boolean mpi_receive(const void *buf, const int count,
-                               const enum mpi_datatype type, const int node,
-                               int tag);
-#ifndef HELGA_MPI_COMPILE_MAIN
+
 boolean	mpi_test(void);
 #endif
 

@@ -75,6 +75,7 @@ include_HEADERS = \
 
 libgaul_la_DEPENDENCIES = \
 	../util/libmethods.a \
+	../util/libmpi_util.a \
 	../util/librandom.a \
 	../util/libstr_util.a
 

@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
+  Updated:	30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
+		29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
 		28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
 		17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
 		30 Nov 2001 SAA	The constant DEBUG will always be defined now.
@@ -82,20 +83,20 @@
  * standard C headers.
  */
 #ifdef __GNUC__
-#define _GNU_SOURCE
+# define _GNU_SOURCE
 #endif
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
 /*
  * ICC kludge.  This needs fixing through the GNU make tools.
  */
-#ifdef __INTEL_COMPILER
-#define HAVE_MEMCPY 1
-#define HAVE_STRLEN 1
-#define HAVE_STRNCPY 1
-#define HAVE_STRNCMP 1
-#endif
+# ifdef __INTEL_COMPILER
+#  define HAVE_MEMCPY 1
+#  define HAVE_STRLEN 1
+#  define HAVE_STRNCPY 1
+#  define HAVE_STRNCMP 1
+# endif
 #endif
 
 /* PARALLEL library to use.
@@ -163,9 +164,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Me */
+/*
+ * Me.
+ */
 #define AUTHOR	"Stewart Adcock"
-#define EMAIL	"<stewart@bellatrix.pcl.ox.ac.uk>"
+#define EMAIL	"<stewart@linux_domain.com>"
 
 /*
  * Build date - should be specified at compile time
@@ -413,9 +416,10 @@ typedef unsigned char byte;
  * die() macro, inspired by perl!
  */
 #if PARALLEL==2
+#include "mpi_util.h"
 #define die(X)          {						\
 			int flubberrank;			\
-			MPI_Comm_rank(MPI_COMM_WORLD, &flubberrank);		\
+			mpi_get_rank(&flubberrank);		\
                         printf(							\
 		"FATAL ERROR: (process %d) %s\nin %s at \"%s\" line %d\n",	\
 				flubberrank,				\
@@ -423,7 +427,7 @@ typedef unsigned char byte;
                                __PRETTY_FUNCTION__,			\
                                __FILE__,				\
                                __LINE__);				\
-                        MPI_Abort(MPI_COMM_WORLD, 2);			\
+                        mpi_abort(127);			\
 			fflush(NULL);					\
                         }
 #else
@@ -459,10 +463,11 @@ typedef unsigned char byte;
  */
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 # if PARALLEL==2
+#include "mpi_util.h"
 /* Special version for MPI programs. */
 #  define dief(format, args...)	{				\
 			int flubberrank;			\
-			MPI_Comm_rank(MPI_COMM_WORLD, &flubberrank);		\
+			mpi_get_rank(&flubberrank);		\
 			printf("FATAL ERROR: (process %d) ", flubberrank);	\
 			printf(format, ##args);			\
 			printf("\nin %s at \"%s\" line %d\n",	\
@@ -470,7 +475,7 @@ typedef unsigned char byte;
 			__FILE__,				\
 			__LINE__);				\
 			fflush(NULL);				\
-                        MPI_Abort(MPI_COMM_WORLD, 2);		\
+                        mpi_abort(127);				\
 			}
 # else
 #  define dief(format, args...)	{				\

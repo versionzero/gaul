@@ -882,10 +882,10 @@ void NN_simulate_with_output(network_t *network, float *input, float *target, fl
 		float *input
 		float *output
   return:       none
-  last updated:
+  last updated:	28 Jan 2002
  **********************************************************************/
 
-void NN_simulate_with_output(network_t *network, float *input, float *output)
+void NN_run(network_t *network, float *input, float *output)
   {
 
   NN_input(network, input);

@@ -60,6 +60,7 @@ include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 DEPENDENCIES = \
 	../util/librandom.a \
 	../util/libmethods.a \
+	../util/libmpi_util.a \
 	../util/libstr_util.a \
 	../util/libnn_util.a \
 	../src/libgaul.la
@@ -84,19 +85,19 @@ struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lnn_util -lm
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm 
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm @MPIFLAGS@
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lmpi_util -lrandom -lstr_util -lnn_util -lm
 

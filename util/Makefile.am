@@ -29,9 +29,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-INCLUDES =
-
-lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a
+lib_LIBRARIES = libmethods.a libstr_util.a librandom.a libnn_util.a libmpi_util.a
 
 libmethods_a_SOURCES = \
 	avltree.c \
@@ -39,16 +37,18 @@ libmethods_a_SOURCES = \
 	log_util.c \
 	linkedlist.c \
 	memory_util.c \
-	mpi_util.c \
 	table.c
+
+libmpi_util_a_SOURCES = \
+	mpi_util.c 
+
+librandom_a_SOURCES = \
+	random_util.c
 
 libstr_util_a_SOURCES = \
 	str_util.c \
 	dstr_util.c \
 	str_match.c
-
-librandom_a_SOURCES = \
-	random_util.c
 
 libnn_util_a_SOURCES = \
 	nn_util.c
@@ -75,11 +75,13 @@ include_HEADERS = \
      str_hash.c \
      str_pcre_tab.c
 
-libmethods_a_LIBFLAGS = -lm
+libmethods_a_LIBFLAGS = -lm @MPIFLAGS@
 
-librandom_a_LIBFLAGS = -lm
+libmpi_util_a_LIBFLAGS = @MPIFLAGS@
 
-libstr_util_a_LIBFLAGS =
+librandom_a_LIBFLAGS = -lm @MPIFLAGS@
 
-libnn_util_a_LIBFLAGS =
+libstr_util_a_LIBFLAGS = @MPIFLAGS@
+
+libnn_util_a_LIBFLAGS = @MPIFLAGS@
 
