@@ -960,7 +960,7 @@ printf("REMOVING mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
       printf("deallocation call from %s, file \"%s\", line %d\n", name, file, line);
       printf("orig. \"%s\" allocation call from %s, file \"%s\", line %d\n", j->label, j->func, j->file, j->line);
       }
-    printf("s_free_debug(): deallocated %d bytes successfully, total memory allocated now %d\n", j->mem, total_mem);
+    printf("s_free_debug(): deallocated %zd bytes successfully, total memory allocated now %d\n", j->mem, total_mem);
     }
 
 /*
@@ -1012,7 +1012,7 @@ void memory_print_alloc_to(void* mptr)
     return;
     }
 
-  printf("Total memory in %s is %lu, used = %lu\n", j->label, (unsigned long) j->mem, (unsigned long) j->rmem);
+  printf("Total memory in %s is %zd, used = %zd\n", j->label, j->mem, j->rmem);
 
   return;
   }
@@ -1095,7 +1095,7 @@ void memory_display_status(void)
   printf("Report level:                       %d\n", memory_verbose);
   printf("Strictness level:                   %d\n", memory_strict);
   printf("Padding flag:                       %d\n", memory_padding);
-  printf("Size of padding:                    %d\n", memory_size_pad);
+  printf("Size of padding:                    %zd\n", memory_size_pad);
   printf("Bounds check level:                 %d\n", memory_bounds);
   printf("Bounds violation reset flag:        %d\n", memory_reset_bv);
   printf("----------------------------------------------\n");
