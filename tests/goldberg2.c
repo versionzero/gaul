@@ -107,7 +107,6 @@ boolean goldberg2_ga_callback(int generation, population *pop)
 int main(int argc, char **argv)
   {
   int		i;		/* Runs. */
-  int		j;		/* Loop over alleles. */
   population	*pop=NULL;	/* Population of solutions. */
 
   random_init();
@@ -153,9 +152,8 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     goldberg2_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:", i);
-    for (j=0; j<30; j++) printf(" %d", ((boolean *)pop->entity_iarray[0]->chromosome[0])[j]?1:0);
-    printf(" score = %f", pop->entity_iarray[0]->fitness);
-    printf("\n");
+    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, pop->entity_iarray[0]));
+    printf("With score = %f\n", pop->entity_iarray[0]->fitness);
     }
 
   ga_extinction(pop);

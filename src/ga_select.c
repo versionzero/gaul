@@ -82,7 +82,7 @@ static boolean ga_select_stats( population *pop,
   double        fsum=0.0, fsumsq=0.0;   /* Sum and sum squared. */
 
   if (!pop) die("Null pointer to population structure passed.");
-  if (!pop->size < 1) die("Pointer to empty population structure passed.");
+  if (pop->size < 1) die("Pointer to empty population structure passed.");
 
   for (i=0; i<pop->orig_size; i++)
     {
@@ -389,13 +389,13 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
     marker = 0;
     }
 
-  selectval = random_double(total_expval);
+  selectval = random_double(total_expval)*mean;
 
   do
     {
-    selectval -= pop->entity_iarray[marker]->fitness/mean;
+    selectval -= pop->entity_iarray[marker]->fitness;
 
-    if (marker == pop->orig_size)
+    if (marker >= pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -456,7 +456,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
     {
     selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
-    if (marker == pop->orig_size)
+    if (marker == pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -495,6 +495,7 @@ boolean ga_select_two_roulette( population *pop,
   double	selectval;		/* Select when this reaches zero. */
 
   *mother = NULL;
+  *father = NULL;
 
   if (pop->orig_size < 1)
     {
@@ -506,17 +507,23 @@ boolean ga_select_two_roulette( population *pop,
     ga_select_stats(pop, &mean, &stddev, &sum);
     total_expval=sum/mean;
     marker = 0;
+/*
+printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum, total_expval);
+*/
     }
 
   pop->select_state++;
 
-  selectval = random_double(total_expval);
+  selectval = random_double(total_expval)*mean;
 
   do
     {
-    selectval -= pop->entity_iarray[marker]->fitness/mean;
+/*
+    printf("(m) marker = %d val = %f fitness = %f\n", marker, selectval, pop->entity_iarray[marker]->fitness);
+*/
+    selectval -= pop->entity_iarray[marker]->fitness;
 
-    if (marker == pop->orig_size)
+    if (marker >= pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -525,13 +532,16 @@ boolean ga_select_two_roulette( population *pop,
 
   *mother = pop->entity_iarray[marker];
 
-  selectval = random_double(total_expval);
+  selectval = random_double(total_expval)*mean;
 
   do
     {
-    selectval -= pop->entity_iarray[marker]->fitness/mean;
+/*
+    printf("(f) marker = %d val = %f fitness = %f\n", marker, selectval, pop->entity_iarray[marker]->fitness);
+*/
+    selectval -= pop->entity_iarray[marker]->fitness;
 
-    if (marker == pop->orig_size)
+    if (marker >= pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -540,7 +550,7 @@ boolean ga_select_two_roulette( population *pop,
 
   *father = pop->entity_iarray[marker];
 
-  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
   }
 
 
@@ -594,7 +604,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
     {
     selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
-    if (marker == pop->orig_size)
+    if (marker == pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -609,7 +619,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
     {
     selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
-    if (marker == pop->orig_size)
+    if (marker == pop->orig_size-1)
       marker=0;
     else
       marker++;
@@ -618,7 +628,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   *father = pop->entity_iarray[marker];
 
-  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  return pop->select_state>(pop->orig_size*pop->crossover_ratio);
   }
 
 

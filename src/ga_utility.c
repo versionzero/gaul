@@ -28,6 +28,7 @@
 
   To do:	Population/entity iterator functions.
 		On-line and off-line performance summaries.
+		The ga_genesis_XXX() functions are bloated junk which duplicate loads of code and are a complete mess.  These need sorting out!
 
  **********************************************************************/
 
@@ -83,6 +84,7 @@ void ga_diagnostics(void)
 		Assumes the use of integer chromosomes is desired.
 		This currently only exists for compatibility with
 		older versions of GAUL.
+		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
   last updated:	13/06/01
@@ -137,6 +139,276 @@ population *ga_genesis(	const int		population_size,
   pop->chromosome_to_bytes = ga_chromosome_integer_to_bytes;
   pop->chromosome_from_bytes = ga_chromosome_integer_from_bytes;
   pop->chromosome_to_string = ga_chromosome_integer_to_staticstring;
+
+  pop->evaluate = evaluate;
+  pop->seed = seed;
+  pop->adapt = adapt;
+  pop->select_one = select_one;
+  pop->select_two = select_two;
+  pop->mutate = mutate;
+  pop->crossover = crossover;
+  pop->replace = replace;
+
+/*
+ * Seed the population.
+ */
+  if (!seed)
+    {
+    plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
+    }
+  else
+    {
+    ga_population_seed(pop);
+    plog(LOG_VERBOSE, "Genesis has occured!");
+    }
+
+  return pop;
+  }
+
+
+/**********************************************************************
+  ga_genesis_char()
+  synopsis:	High-level function to create a new population and
+		perform the basic setup (i.e. initial seeding) required
+		for further optimisation and manipulation.
+		Assumes the use of integer chromosomes is desired.
+		This currently only exists for compatibility with
+		older versions of GAUL.
+		Character-valued chromosomes.
+  parameters:
+  return:	population, or NULL on failure.
+  last updated:	16/06/01
+ **********************************************************************/
+
+population *ga_genesis_char(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace )
+  {
+  population	*pop;	/* The new population structure. */
+
+  plog(LOG_VERBOSE, "Genesis is beginning!");
+  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
+
+/*
+ * Allocate and initialise a new population.
+ * This call also sets this as the active population.
+ *
+ * FIXME:
+ * The hard-coded value below "4(N+2)" should be determined based on the
+ * actual mutation and crossover rates to be used.
+ */
+  if ( !(pop = ga_population_new( 4*(population_size+2),
+                              population_size,
+                              num_chromo,
+                              len_chromo )) ) return NULL;
+
+/*
+ * Define some callback functions.
+ */
+  pop->generation_hook = generation_hook;
+  pop->iteration_hook = iteration_hook;
+
+  pop->data_destructor = data_destructor;
+  pop->data_ref_incrementor = data_ref_incrementor;
+
+  pop->chromosome_constructor = ga_chromosome_char_allocate;
+  pop->chromosome_destructor = ga_chromosome_char_deallocate;
+  pop->chromosome_replicate = ga_chromosome_char_replicate;
+  pop->chromosome_to_bytes = ga_chromosome_char_to_bytes;
+  pop->chromosome_from_bytes = ga_chromosome_char_from_bytes;
+  pop->chromosome_to_string = ga_chromosome_char_to_staticstring;
+
+  pop->evaluate = evaluate;
+  pop->seed = seed;
+  pop->adapt = adapt;
+  pop->select_one = select_one;
+  pop->select_two = select_two;
+  pop->mutate = mutate;
+  pop->crossover = crossover;
+  pop->replace = replace;
+
+/*
+ * Seed the population.
+ */
+  if (!seed)
+    {
+    plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
+    }
+  else
+    {
+    ga_population_seed(pop);
+    plog(LOG_VERBOSE, "Genesis has occured!");
+    }
+
+  return pop;
+  }
+
+
+/**********************************************************************
+  ga_genesis_boolean()
+  synopsis:	High-level function to create a new population and
+		perform the basic setup (i.e. initial seeding) required
+		for further optimisation and manipulation.
+		Assumes the use of integer chromosomes is desired.
+		This currently only exists for compatibility with
+		older versions of GAUL.
+		Boolean-valued chromosomes.
+  parameters:
+  return:	population, or NULL on failure.
+  last updated:	16/06/01
+ **********************************************************************/
+
+population *ga_genesis_boolean(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace )
+  {
+  population	*pop;	/* The new population structure. */
+
+  plog(LOG_VERBOSE, "Genesis is beginning!");
+  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
+
+/*
+ * Allocate and initialise a new population.
+ * This call also sets this as the active population.
+ *
+ * FIXME:
+ * The hard-coded value below "4(N+2)" should be determined based on the
+ * actual mutation and crossover rates to be used.
+ */
+  if ( !(pop = ga_population_new( 4*(population_size+2),
+                              population_size,
+                              num_chromo,
+                              len_chromo )) ) return NULL;
+
+/*
+ * Define some callback functions.
+ */
+  pop->generation_hook = generation_hook;
+  pop->iteration_hook = iteration_hook;
+
+  pop->data_destructor = data_destructor;
+  pop->data_ref_incrementor = data_ref_incrementor;
+
+  pop->chromosome_constructor = ga_chromosome_boolean_allocate;
+  pop->chromosome_destructor = ga_chromosome_boolean_deallocate;
+  pop->chromosome_replicate = ga_chromosome_boolean_replicate;
+  pop->chromosome_to_bytes = ga_chromosome_boolean_to_bytes;
+  pop->chromosome_from_bytes = ga_chromosome_boolean_from_bytes;
+  pop->chromosome_to_string = ga_chromosome_boolean_to_staticstring;
+
+  pop->evaluate = evaluate;
+  pop->seed = seed;
+  pop->adapt = adapt;
+  pop->select_one = select_one;
+  pop->select_two = select_two;
+  pop->mutate = mutate;
+  pop->crossover = crossover;
+  pop->replace = replace;
+
+/*
+ * Seed the population.
+ */
+  if (!seed)
+    {
+    plog(LOG_VERBOSE, "Entity seed function not defined.  Genesis can not occur.  Continuing anyway.");
+    }
+  else
+    {
+    ga_population_seed(pop);
+    plog(LOG_VERBOSE, "Genesis has occured!");
+    }
+
+  return pop;
+  }
+
+
+/**********************************************************************
+  ga_genesis_double()
+  synopsis:	High-level function to create a new population and
+		perform the basic setup (i.e. initial seeding) required
+		for further optimisation and manipulation.
+		Assumes the use of integer chromosomes is desired.
+		This currently only exists for compatibility with
+		older versions of GAUL.
+		Double precision real-valued chromosomes.
+  parameters:
+  return:	population, or NULL on failure.
+  last updated:	16/06/01
+ **********************************************************************/
+
+population *ga_genesis_double(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace )
+  {
+  population	*pop;	/* The new population structure. */
+
+  plog(LOG_VERBOSE, "Genesis is beginning!");
+  plog(LOG_FIXME, "There are hard coded values in ga_genesis().");
+
+/*
+ * Allocate and initialise a new population.
+ * This call also sets this as the active population.
+ *
+ * FIXME:
+ * The hard-coded value below "4(N+2)" should be determined based on the
+ * actual mutation and crossover rates to be used.
+ */
+  if ( !(pop = ga_population_new( 4*(population_size+2),
+                              population_size,
+                              num_chromo,
+                              len_chromo )) ) return NULL;
+
+/*
+ * Define some callback functions.
+ */
+  pop->generation_hook = generation_hook;
+  pop->iteration_hook = iteration_hook;
+
+  pop->data_destructor = data_destructor;
+  pop->data_ref_incrementor = data_ref_incrementor;
+
+  pop->chromosome_constructor = ga_chromosome_double_allocate;
+  pop->chromosome_destructor = ga_chromosome_double_deallocate;
+  pop->chromosome_replicate = ga_chromosome_double_replicate;
+  pop->chromosome_to_bytes = ga_chromosome_double_to_bytes;
+  pop->chromosome_from_bytes = ga_chromosome_double_from_bytes;
+  pop->chromosome_to_string = ga_chromosome_double_to_staticstring;
 
   pop->evaluate = evaluate;
   pop->seed = seed;
@@ -257,4 +529,41 @@ entity *ga_allele_search(	population	*pop,
   return best;
   }
 
+
+/**********************************************************************
+  ga_population_dump()
+  synopsis:	Dump some statistics about a population.
+  parameters:	population	*pop
+  return:	none
+  last updated:	16/06/01
+ **********************************************************************/
+
+void ga_population_dump(population	*pop)
+  {
+  printf("Population id %d\n", ga_get_population_id(pop));
+  printf("Max size %d Stable size %d Current size %d\n", pop->max_size, pop->stable_size, pop->size);
+  printf("Crossover %f Mutation %f Migration %f\n", pop->crossover_ratio, pop->mutation_ratio, pop->migration_ratio);
+  printf("Chromosome length %d count %d\n", pop->len_chromosomes, pop->num_chromosomes);
+  printf("Best fitness %f\n", pop->entity_iarray[0]->fitness);
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_entity_dump()
+  synopsis:	Dump some statistics about a entity.
+  parameters:	entity	*john
+  return:	none
+  last updated:	16/06/01
+ **********************************************************************/
+
+void ga_entity_dump(population *pop, entity *john)
+  {
+  printf("Entity id %d rank %d\n", ga_get_entity_id(pop, john), ga_get_entity_rank(pop, john));
+  printf("Fitness %f\n", john->fitness);
+  printf("data <%s> data0 <%s> chromo <%s> chromo0 <%s>\n", john->data?"defined":"undefined", john->data&&((SLList *)john->data)->data?"defined":"undefined", john->chromosome?"defined":"undefined", john->chromosome&&john->chromosome[0]?"defined":"undefined");
+
+  return;
+  }
 

@@ -288,32 +288,59 @@ boolean	ga_select_one_roulette_rebased( population *pop,
 boolean	ga_select_two_roulette_rebased( population *pop,
                                 entity **mother, entity **father );
 
-void	ga_singlepoint_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter);
+
 void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_integer_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter );
-void	ga_singlepoint_boolean_chromosome(population *pop, int *father, int *mother, int *son, int *daughter);
 void	ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_boolean_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
 void	ga_crossover_boolean_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter );
+void	ga_crossover_char_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_char_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter );
+void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+void	ga_crossover_double_allele_mixing( population *pop,
+                                 entity *father, entity *mother,
+                                 entity *son, entity *daughter );
+void	ga_crossover_char_singlepoints( population *pop,
+                                     entity *father, entity *mother,
+                                     entity *son, entity *daughter );
+void	ga_crossover_char_doublepoints( population *pop,
+                                     entity *father, entity *mother,
+                                     entity *son, entity *daughter );
 
-void	ga_singlepoint_drift_mutation(population *pop, entity *father, entity *son);
-void	ga_singlepoint_randomize_mutation(population *pop, entity *father, entity *son);
-void	ga_multipoint_mutation(population *pop, entity *father, entity *son);
+
+void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
+void	ga_mutate_integer_singlepoint_randomize(population *pop, entity *father, entity *son);
+void	ga_mutate_integer_multipoint(population *pop, entity *father, entity *son);
 void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son);
 void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
+void	ga_mutate_char_singlepoint_drift(population *pop, entity *father, entity *son);
+void	ga_mutate_char_singlepoint_randomize(population *pop, entity *father, entity *son);
+void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
+void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
+void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
+void	ga_mutate_printable_multipoint(population *pop, entity *father, entity *son);
+
 
 void	ga_seed_boolean_random(population *pop, entity *adam);
 void	ga_seed_integer_random(population *pop, entity *adam);
 void	ga_seed_integer_zero(population *pop, entity *adam);
+void	ga_seed_double_random(population *pop, entity *adam);
+void	ga_seed_double_zero(population *pop, entity *adam);
+void	ga_seed_char_random(population *pop, entity *adam);
+void	ga_seed_printable_random(population *pop, entity *adam);
+
 
 void	ga_replace_by_fitness(population *pop, entity *child);
+
 
 #include "ga_utility.h"	/* Hmm. */
 

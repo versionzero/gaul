@@ -35,11 +35,11 @@
 /* #undef MOLSTRUCT_DEBUG */
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1-010616"
-#define BUILD_DATE_STRING "16/06/01"
+#define VERSION_STRING "0.1831-010617"
+#define BUILD_DATE_STRING "17/06/01"
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 1
-#define PATCH_VERSION 010616
+#define MINOR_VERSION 1831
+#define PATCH_VERSION 010617
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
@@ -129,7 +129,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the sincos function.  */
-#define HAVE_SINCOS 1
+/* #undef HAVE_SINCOS */
 
 /* Define if you have the snooze function.  */
 /* #undef HAVE_SNOOZE */

@@ -395,8 +395,7 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     }
 
   printf("The final solution found was:\n");
-  ga_chromosome_integer_to_staticstring(pop, pop->entity_iarray[0]);
-  printf("\n");
+  printf("%s\n", ga_chromosome_integer_to_staticstring(pop, pop->entity_iarray[0]));
 
   ga_extinction(pop);
 

@@ -55,8 +55,6 @@
 
 		where K = 1,2,3, or 4.  Holland used K = 4.
 
-  Last Updated:	31/05/01 SAA	First version tidy version.
-
  **********************************************************************/
 
 /*

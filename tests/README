@@ -21,7 +21,7 @@ wildfire	Solves the fire-fighting problem presented in:
 		Dr Dobb's Journal, 320:193-194 (2001).
 		Uses a single integer chromosome, treated as a Binary String.
 		Should use a single binary chromosome.
-		*** As of today (17/05/01) this doesn't work very well! ***
+		WARNING: Slow.
 
 goldberg{1,2}	Ports of the examples from Goldberg's book.
 
@@ -29,3 +29,10 @@ dejong		Port of DeJong's GA test suite.
 
 royalroad	Port of Holland's royal road problem.
 
+struggle	A fairly fairly lean example, showing how little
+                application code is needed when using GAUL.
+                This program aims to generate the final sentence from
+                Chapter 3 of Darwin's "The Origin of Species",
+                entitled "Struggle for Existence".
+                It uses a character-valued chromosome.
+		WARNING: Slow.

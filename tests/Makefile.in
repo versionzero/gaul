@@ -115,7 +115,7 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad
+bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad struggle
 
 #CFLAGS = -g -Wall -O
 
@@ -128,22 +128,28 @@ wildfire_SOURCES = wildfire.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
+struggle_SOURCES = struggle.c
 
 libbtree_a_SOURCES = btree.c
 
 include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
-pingpong_DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a
+DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a 	../src/libgaul.a
 
 
-wildfire_DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a
+pingpong_DEPENDENCIES = ${DEPENDENCIES}
+wildfire_DEPENDENCIES = ${DEPENDENCIES}
+goldberg1_DEPENDENCIES = ${DEPENDENCIES}
+goldberg2_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_DEPENDENCIES = ${DEPENDENCIES}
+struggle_DEPENDENCIES = ${DEPENDENCIES}
 
-
-pingpong_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
-wildfire_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
-goldberg1_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
-goldberg2_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
-royalroad_LDADD = -L../src/ -L../util/ -lm -lga -lmethods -lrandom -lstr_util
+pingpong_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+wildfire_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+goldberg1_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+goldberg2_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+royalroad_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+struggle_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -164,14 +170,13 @@ pingpong_LDFLAGS =
 wildfire_OBJECTS =  wildfire.o
 wildfire_LDFLAGS = 
 goldberg1_OBJECTS =  goldberg1.o
-goldberg1_DEPENDENCIES = 
 goldberg1_LDFLAGS = 
 goldberg2_OBJECTS =  goldberg2.o
-goldberg2_DEPENDENCIES = 
 goldberg2_LDFLAGS = 
 royalroad_OBJECTS =  royalroad.o
-royalroad_DEPENDENCIES = 
 royalroad_LDFLAGS = 
+struggle_OBJECTS =  struggle.o
+struggle_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -186,9 +191,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/btree.P .deps/goldberg1.P .deps/goldberg2.P \
-.deps/pingpong.P .deps/royalroad.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS)
+.deps/pingpong.P .deps/royalroad.P .deps/struggle.P .deps/wildfire.P
+SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(struggle_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(struggle_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -298,6 +303,10 @@ goldberg2: $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
 royalroad: $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
 	@rm -f royalroad
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
+
+struggle: $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
+	@rm -f struggle
+	$(LINK) $(struggle_LDFLAGS) $(struggle_OBJECTS) $(struggle_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

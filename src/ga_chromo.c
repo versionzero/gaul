@@ -81,8 +81,7 @@ void ga_chromosome_integer_allocate(population *pop, entity *embryo)
     die("This entity already contains chromosomes.");
 
   embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(int *));
-  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
-                 pop->len_chromosomes*sizeof(int));
+  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(int));
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -283,8 +282,7 @@ void ga_chromosome_boolean_allocate(population *pop, entity *embryo)
     die("This entity already contains chromosomes.");
 
   embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(boolean *));
-  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
-                 pop->len_chromosomes*sizeof(boolean));
+  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(boolean));
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -468,8 +466,7 @@ void ga_chromosome_double_allocate(population *pop, entity *embryo)
     die("This entity already contains chromosomes.");
 
   embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(double *));
-  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
-                 pop->len_chromosomes*sizeof(double));
+  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(double));
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -672,8 +669,7 @@ void ga_chromosome_char_allocate(population *pop, entity *embryo)
     die("This entity already contains chromosomes.");
 
   embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(char *));
-  embryo->chromosome[0] = s_calloc(pop->num_chromosomes,
-                 pop->len_chromosomes*sizeof(char));
+  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(char));
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -700,6 +696,8 @@ void ga_chromosome_char_deallocate(population *pop, entity *corpse)
 
   if (corpse->chromosome==NULL)
     die("This entity already contains no chromosomes.");
+
+/*  ga_entity_dump(pop, corpse);*/
 
   s_free(corpse->chromosome[0]);
   s_free(corpse->chromosome);
@@ -824,7 +822,7 @@ char *ga_chromosome_char_to_staticstring(
     {
     for(i=0; i<pop->num_chromosomes; i++)
       {
-      memcpy(joe->chromosome, &(text[k]),
+      memcpy(&(text[k]), joe->chromosome[0],
          pop->len_chromosomes * sizeof(char));
       k += pop->len_chromosomes;
       }

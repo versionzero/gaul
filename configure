@@ -12,7 +12,7 @@ ac_help=
 ac_default_prefix=/usr/local
 # Any additions from configure.in:
 MAJOR_VERSION=0
-MINOR_VERSION=1
+MINOR_VERSION=1831
 PATCH_VERSION=`date +%y%m%d`
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 ac_help="$ac_help
@@ -567,7 +567,7 @@ fi
 
 
 
-PACKAGE=gaul
+PACKAGE=gaul-devel
 
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
@@ -1928,7 +1928,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
      INCLUDES="$INCLUDES -I/usr/include/slang/"
 else
   echo "$ac_t""no" 1>&6
-{ echo "configure: error: GAUL requires the SLang library for full functionality.  see http://space.mit.edu/pub/davis/slang/ configure with '--with-slang=no' for reduced version." 1>&2; exit 1; }
+{ echo "configure: error: GAUL requires the SLang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version." 1>&2; exit 1; }
 fi
 
 else

@@ -1620,6 +1620,9 @@ boolean ga_extinction(population *extinct)
   int		id;		/* Internal index for this extinct population. */
 
   plog(LOG_VERBOSE, "This population is becoming extinct!");
+/*
+  ga_population_dump(extinct);
+*/
 
   if (!extinct) die("Null pointer to population structure passed.");
 

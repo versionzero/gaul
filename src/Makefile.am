@@ -32,13 +32,13 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libga.a
+lib_LIBRARIES = libgaul.a
 
 # CFLAGS = -g -Wall -O
 
 INCLUDES = -I../util/
 
-libga_a_SOURCES = \
+libgaul_a_SOURCES = \
 	ga_core.c \
 	ga_intrinsics.c \
 	ga_optim.c \
@@ -54,10 +54,10 @@ include_HEADERS = \
 	ga_similarity.h \
 	ga_utility.h
 
-libga_a_DEPENDENCIES = \
+libgaul_a_DEPENDENCIES = \
 	../util/libmethods.a \
 	../util/librandom.a \
 	../util/libstr_util.a
 
-libga_a_LIBFLAGS = -lm
+libgaul_a_LIBFLAGS = -lm
 

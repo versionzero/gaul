@@ -115,22 +115,22 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LIBRARIES = libga.a
+lib_LIBRARIES = libgaul.a
 
 # CFLAGS = -g -Wall -O
 
 INCLUDES = -I../util/
 
-libga_a_SOURCES =  	ga_core.c 	ga_intrinsics.c 	ga_optim.c 	ga_qsort.c 	ga_similarity.c 	ga_utility.c
+libgaul_a_SOURCES =  	ga_core.c 	ga_intrinsics.c 	ga_optim.c 	ga_qsort.c 	ga_similarity.c 	ga_utility.c
 
 
 include_HEADERS =  	ga_core.h 	ga_intrinsics.h 	ga_optim.h 	ga_qsort.h 	ga_similarity.h 	ga_utility.h
 
 
-libga_a_DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a
+libgaul_a_DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a
 
 
-libga_a_LIBFLAGS = -lm
+libgaul_a_LIBFLAGS = -lm
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -141,8 +141,8 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libga_a_LIBADD = 
-libga_a_OBJECTS =  ga_core.o ga_intrinsics.o ga_optim.o ga_qsort.o \
+libgaul_a_LIBADD = 
+libgaul_a_OBJECTS =  ga_core.o ga_intrinsics.o ga_optim.o ga_qsort.o \
 ga_similarity.o ga_utility.o
 AR = ar
 CFLAGS = @CFLAGS@
@@ -160,8 +160,8 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/ga_core.P .deps/ga_intrinsics.P .deps/ga_optim.P \
 .deps/ga_qsort.P .deps/ga_similarity.P .deps/ga_utility.P
-SOURCES = $(libga_a_SOURCES)
-OBJECTS = $(libga_a_OBJECTS)
+SOURCES = $(libgaul_a_SOURCES)
+OBJECTS = $(libgaul_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -222,10 +222,10 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-libga.a: $(libga_a_OBJECTS) $(libga_a_DEPENDENCIES)
-	-rm -f libga.a
-	$(AR) cru libga.a $(libga_a_OBJECTS) $(libga_a_LIBADD)
-	$(RANLIB) libga.a
+libgaul.a: $(libgaul_a_OBJECTS) $(libgaul_a_DEPENDENCIES)
+	-rm -f libgaul.a
+	$(AR) cru libgaul.a $(libgaul_a_OBJECTS) $(libgaul_a_LIBADD)
+	$(RANLIB) libgaul.a
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

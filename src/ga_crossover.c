@@ -54,8 +54,8 @@ void ga_singlepoint_crossover_integer_chromosome( population *pop,
   /* Choose crossover point and perform operation */
   location=random_int(pop->len_chromosomes);
 
-  memcpy(son, mother, location);
-  memcpy(daughter, father, location);
+  memcpy(son, mother, location*sizeof(int));
+  memcpy(daughter, father, location*sizeof(int));
 
   memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(int));
   memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(int));
@@ -74,7 +74,8 @@ void ga_singlepoint_crossover_integer_chromosome( population *pop,
 
 void ga_doublepoint_crossover_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
   {
-  int	location1, location2;	/* Points of crossover */
+  int	location1, location2;	/* Points of crossover. */
+  int	tmp;			/* For swapping crossover loci. */
 
   /* Checks */
   if (!father || !mother || !son || !daughter)
@@ -86,6 +87,13 @@ void ga_doublepoint_crossover_integer_chromosome(population *pop, int *father, i
     {
     location2=random_int(pop->len_chromosomes);
     } while (location2==location1);
+
+    if (location1 > location2)
+      {
+      tmp = location1;
+      location1 = location2;
+      location2 = tmp;
+      }
 
   memcpy(son, father, location1*sizeof(int));
   memcpy(daughter, mother, location1*sizeof(int));
@@ -558,6 +566,109 @@ void ga_crossover_double_allele_mixing( population *pop,
         ((double *)son->chromosome[i])[j] = ((double *)mother->chromosome[i])[j];
         }
       }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_char_singlepoints()
+  synopsis:	`Mates' two genotypes by single-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 16/07/01
+ **********************************************************************/
+
+void ga_crossover_char_singlepoints( population *pop,
+                                     entity *father, entity *mother,
+                                     entity *son, entity *daughter )
+  {
+  int		i;		/* Loop variable over all chromosomes. */
+  int		location;	/* Point of crossover. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    /* Choose crossover point and perform operation */
+    location=random_int(pop->len_chromosomes);
+
+    memcpy( son->chromosome[i], mother->chromosome[i],
+            location*sizeof(char) );
+    memcpy( daughter->chromosome[i], father->chromosome[i],
+            location*sizeof(char));
+
+    memcpy( &(((char *)son->chromosome[i])[location]),
+            &(((char *)father->chromosome[i])[location]),
+            (pop->len_chromosomes-location)*sizeof(char) );
+    memcpy( &(((char *)daughter->chromosome[i])[location]),
+            &(((char *)mother->chromosome[i])[location]),
+            (pop->len_chromosomes-location)*sizeof(char) );
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_char_doublepoints()
+  synopsis:	`Mates' two genotypes by double-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 16/07/01
+ **********************************************************************/
+
+void ga_crossover_char_doublepoints( population *pop,
+                                     entity *father, entity *mother,
+                                     entity *son, entity *daughter )
+  {
+  int	i;			/* Loop variable over all chromosomes. */
+  int	location1, location2;	/* Points of crossover. */
+  int	tmp;			/* For swapping crossover loci. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    /* Choose crossover point and perform operation */
+    location1=random_int(pop->len_chromosomes);
+    do
+      {
+      location2=random_int(pop->len_chromosomes);
+      } while (location2==location1);
+
+    if (location1 > location2)
+      {
+      tmp = location1;
+      location1 = location2;
+      location2 = tmp;
+      }
+
+    memcpy( son->chromosome[i], father->chromosome[i],
+            location1*sizeof(char) );
+    memcpy( daughter->chromosome[i], mother->chromosome[i],
+            location1*sizeof(char) );
+
+    memcpy( &(((char *)son->chromosome[i])[location1]),
+            &(((char *)mother->chromosome[i])[location1]),
+            (location2-location1)*sizeof(char) );
+    memcpy( &(((char *)daughter->chromosome[i])[location1]),
+            &(((char *)father->chromosome[i])[location1]),
+            (location2-location1)*sizeof(char) );
+
+    memcpy( &(((char *)son->chromosome[i])[location2]),
+            &(((char *)mother->chromosome[i])[location2]),
+            (pop->len_chromosomes-location2)*sizeof(char) );
+    memcpy( &(((char *)daughter->chromosome[i])[location2]),
+            &(((char *)father->chromosome[i])[location2]),
+            (pop->len_chromosomes-location2)*sizeof(char) );
     }
 
   return;

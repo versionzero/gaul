@@ -1,8 +1,8 @@
 /**********************************************************************
-  goldberg1.c
+  struggle.c
  **********************************************************************
 
-  goldberg1 - Test/example program for GAUL.
+  struggle - Test/example program for GAUL.
   Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
 
   The latest version of this program should be available at:
@@ -26,71 +26,53 @@
 
   Synopsis:	Test/example program for GAUL.
 
-		This program aims to solve the first example problem
-		for Goldberg's book.
+		This program is fairly lean, showing how little
+		application code is needed when using GAUL.
 
-		Here a 10-bit chromosome is used to find the maximum
-		of function f(x)=x^10, normalized to the range [0,1].
-
-		FIXME: This code is derived from the description
-		of the problem in Gallops, I need to aquire the
-		goldberg book and check this.
-
-  Last Updated:	31/05/01 SAA	First version.
+		This program aims to generate the final sentence from
+		Chapter 3 of Darwin's "The Origin of Species",
+		entitled "Struggle for Existence".
 
  **********************************************************************/
 
-#include "goldberg1.h"
+/*
+ * Includes
+ */
+#include "SAA_header.h"
+
+#include "gaul.h"
+
+/*
+ * The solution string.
+ */
+char *target_text="When we reflect on this struggle, we may console ourselves with the full belief, that the war of nature is not incessant, that no fear is felt, that death is generally prompt, and that the vigorous, the healthy, and the happy survive and multiply.";
+
 
 /**********************************************************************
-  goldberg1_score()
+  struggle_score()
   synopsis:	Score solution.
   parameters:
   return:
-  updated:	31/05/01
+  updated:	16/06/01
  **********************************************************************/
 
-boolean goldberg1_score(population *pop, entity *entity)
+boolean struggle_score(population *pop, entity *entity)
   {
-  boolean	allele;
-  double	coef;
-  int		k;
+  int		k;		/* Loop variable over all alleles. */
 
   entity->fitness = 0.0;
-  coef = pow(2.0, (double) pop->len_chromosomes) - 1.0;
-  coef = pow(coef, 10.0);
 
   /* Loop over alleles in chromosome. */
   for (k = 0; k < pop->len_chromosomes; k++)
     {
-    /* Loop over bits in current byte. */
-    allele = ((boolean *)entity->chromosome[0])[k];
-    if (allele == 1)
-      {	/* Bit is set. */
-      entity->fitness += pow(2.0, (double) k);
-      }
+    if ( ((char *)entity->chromosome[0])[k] == target_text[k])
+      entity->fitness+=1.0;
+    /*
+     * Component to smooth function, which helps a lot in this case:
+     * Comment it out if you like.
+     */
+    entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
     }
-
-  /* Raise x to the power of 10. */
-  entity->fitness = pow(entity->fitness, 10.0);
-
-  /* Normalize fitness. */
-  entity->fitness /= coef;
-  
-  return TRUE;
-  }
-
-
-/**********************************************************************
-  goldberg1_ga_callback()
-  synopsis:	Callback.
-  parameters:
-  return:
-  updated:	31/05/01
- **********************************************************************/
-
-boolean goldberg1_ga_callback(int generation, population *pop)
-  {
 
   return TRUE;
   }
@@ -101,7 +83,7 @@ boolean goldberg1_ga_callback(int generation, population *pop)
   synopsis:	Erm?
   parameters:
   return:
-  updated:	31/05/01
+  updated:	16/06/01
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -117,28 +99,28 @@ int main(int argc, char **argv)
 
     random_seed(i);
 
-    pop = ga_genesis(
-       20,			/* const int              population_size */
+    pop = ga_genesis_char(
+       250,			/* const int              population_size */
        1,			/* const int              num_chromo */
-       10,			/* const int              len_chromo */
-NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
+       strlen(target_text),	/* const int              len_chromo */
+       NULL,		 	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
        NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-       goldberg1_score,		/* GAevaluate             evaluate */
-       ga_seed_boolean_random,	/* GAseed                 seed */
+       struggle_score,		/* GAevaluate             evaluate */
+       ga_seed_printable_random,	/* GAseed                 seed */
        NULL,			/* GAadapt                adapt */
-       ga_select_one_bestof2,	/* GAselect_one           select_one */
-       ga_select_two_bestof2,	/* GAselect_two           select_two */
-       ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
-       ga_crossover_boolean_singlepoints,	/* GAcrossover            crossover */
+       ga_select_one_roulette,	/* GAselect_one           select_one */
+       ga_select_two_roulette,	/* GAselect_two           select_two */
+       ga_mutate_printable_singlepoint_drift,	/* GAmutate               mutate */
+       ga_crossover_char_allele_mixing,	/* GAcrossover            crossover */
        NULL			/* GAreplace replace */
             );
 
     ga_population_set_parameters(
        pop,		/* population      *pop */
-       0.5,		/* double  crossover */
-       0.05,		/* double  mutation */
+       1.0,		/* double  crossover */
+       0.1,		/* double  mutation */
        0.0              /* double  migration */
                               );
 
@@ -146,14 +128,13 @@ NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       20		/* const int               max_generations */
+       500		/* const int               max_generations */
               );
 
-    goldberg1_ga_callback(i, pop);
-
     printf("The final solution with seed = %d was:\n", i);
-    printf("%s\n", ga_chromosome_boolean_to_staticstring(pop, pop->entity_iarray[0]));
-    printf("With score = %f\n", pop->entity_iarray[0]->fitness);
+    printf("%s\n", ga_chromosome_char_to_staticstring(pop, pop->entity_iarray[0]));
+    printf("With score = %f", pop->entity_iarray[0]->fitness);
+    printf("\n");
     }
 
   ga_extinction(pop);

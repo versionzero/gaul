@@ -39,7 +39,9 @@
 
 /**********************************************************************
   ga_replace_by_fitness()
-  synopsis:	Replace by fitness.
+  synopsis:	Replace by fitness.  (i.e. New entity gets inserted
+		into population, according to fitness, and least fit
+		entity dies.)
   parameters:
   return:
   last updated: 31/05/01
