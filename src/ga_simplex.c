@@ -323,7 +323,7 @@ printf("DEBUG: restarting search.\n");
  */
    for (j = 0; j < pop->simplex_params->dimensions; j++)
      {
-     new_d[j] = (1.0 + pop->simplex_params->alpha) * average[j] -
+     new1_d[j] = (1.0 + pop->simplex_params->alpha) * average[j] -
                 pop->simplex_params->alpha * putative_d[num_points-1][j];
      }
 
@@ -387,10 +387,10 @@ printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]
           }
 
         putative[0] = new1;
-        putative_d[0] = new_d;
+        putative_d[0] = new1_d;
 
         new1 = tmpentity;
-        new_d = tmpdoubleptr;
+        new1_d = tmpdoubleptr;
         }
       }
     else if (new1->fitness < putative[pop->simplex_params->dimensions-1]->fitness)
