@@ -38,7 +38,7 @@
  * This has to be defined prior to the inclusion of any of the 
  * standard C headers.
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(_GNU_SOURCE)
 # define _GNU_SOURCE
 #endif
 
