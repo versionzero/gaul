@@ -26,7 +26,8 @@
 
   Header file for memory_methods
 
-  Updated:	01/03/01 SAA	Added non-standard strndup() stuff.
+  Updated:	11 Jun 2002 SAA	No longer link the malloc.h header.
+  		01/03/01 SAA	Added non-standard strndup() stuff.
 		12/01/01 SAA	Tidied.
 		03/01/01 SAA	Changes for integrated memory chunk implementation.  Labels changed from "malloc()" etc. to "malloc" etc.
 		14/08/00 SAA	Overhaul for memory_util.h rename.
@@ -45,7 +46,7 @@
 #include "SAA_header.h"
 
 #include <errno.h>
-#include <malloc.h>
+/*#include <malloc.h>*/
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
