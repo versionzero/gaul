@@ -10,18 +10,15 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1843     |  Linked-list chromosome.
-            |  Linked-list chromosome example.
-            |  Fully document chromosomes.
-            |  ga_evolution_{mpi,pvm}() and associated examples.
+ 0.1843     |  ga_evolution_mpi() and associated examples.
             |  ga_evolution_threaded() and associated example.
             |  Updated tutorial documentation.
-            |  Add GA_ELITISM_PARENTS_RESCORE elitism mode.
 ------------+--------------------------------------------------------
- 0.1844     |  De Jong - working examples.
+ 0.1844     |  Linked-list chromosome.
+            |  Linked-list chromosome example.
+            |  Fully document chromosomes.
+            |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h
-            |  More replacement operators.
-            |  Replacement operators documentation
             |  Document elitism options.
             |  Intro to GAs finished.
 ------------+--------------------------------------------------------
@@ -32,6 +29,8 @@ These milestone requirements are subject to change ;)
  0.1846     |  More on-line/off-line statistics options.
             |  Built-in evaluation profiling.
             |  Use MemChunks in chromosome allocation, where appropriate.
+            |  More replacement operators.
+            |  Replacement operators documentation
 ------------+--------------------------------------------------------
  0.1847     |  Boolean chromosome example from Mitchell book.
             |  Comprehensive test suite.
@@ -82,5 +81,5 @@ Features to be added if enough interest is demonstrated:
 * PVM support.
 * Replica-exchange SA search.
 
-Stewart Adcock, 31 Dec 2002.
+Stewart Adcock, 20 Mar 2003.
 
