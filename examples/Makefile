@@ -42,7 +42,7 @@
 #######################################################################
 
 
-SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 srcdir = .
 top_srcdir = ..
@@ -82,8 +82,9 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) struggle5_threaded$(EXEEXT) \
-	saveload$(EXEEXT) nnevolve$(EXEEXT) mixed$(EXEEXT)
+	struggle5_mpi$(EXEEXT) struggle5_forked$(EXEEXT) \
+	struggle5_threaded$(EXEEXT) saveload$(EXEEXT) \
+	nnevolve$(EXEEXT) mixed$(EXEEXT)
 subdir = examples
 DIST_COMMON = README $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -154,6 +155,8 @@ am_struggle5_forked_OBJECTS = struggle5_forked.$(OBJEXT)
 struggle5_forked_OBJECTS = $(am_struggle5_forked_OBJECTS)
 am_struggle5_mp_OBJECTS = struggle5_mp-struggle5_mp.$(OBJEXT)
 struggle5_mp_OBJECTS = $(am_struggle5_mp_OBJECTS)
+am_struggle5_mpi_OBJECTS = struggle5_mpi-struggle5_mpi.$(OBJEXT)
+struggle5_mpi_OBJECTS = $(am_struggle5_mpi_OBJECTS)
 am_struggle5_threaded_OBJECTS = struggle5_threaded.$(OBJEXT)
 struggle5_threaded_OBJECTS = $(am_struggle5_threaded_OBJECTS)
 am_struggle_dc_OBJECTS = struggle_dc.$(OBJEXT)
@@ -211,10 +214,11 @@ SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) \
+	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
+	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) \
 	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
 	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
 	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
@@ -231,10 +235,11 @@ DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) \
+	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
+	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) \
 	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
 	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
 	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
@@ -281,7 +286,7 @@ GA_PATCH_VERSION = 6
 GA_UNAME_STRING = 
 GA_VERSION = 0.1847-6
 GA_VERSION_STRING = 
-HAVE_MPI = 0
+HAVE_MPI = 1
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_DATA = ${INSTALL} -m 644
@@ -301,8 +306,8 @@ MAKEINFO = ${SHELL} /home/stewart/gaul-devel/missing --run makeinfo
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = objdump
 OBJEXT = o
 PACKAGE = gaul-devel
@@ -415,6 +420,7 @@ struggle5_SOURCES = struggle5.c
 struggle5_forked_SOURCES = struggle5_forked.c
 struggle5_threaded_SOURCES = struggle5_threaded.c
 struggle5_mp_SOURCES = struggle5_mp.c
+struggle5_mpi_SOURCES = struggle5_mpi.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
@@ -464,59 +470,62 @@ struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_forked_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
+struggle5_mpi_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong9_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_mutation_prob_demo_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-all5s_allele_ranges_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
-mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
+test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong9_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_mutation_prob_demo_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+all5s_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+all5s_allele_ranges_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 
 # Parallel code:
-struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 all: all-am
 
 .SUFFIXES:
@@ -659,6 +668,9 @@ struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPEND
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
 	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
+struggle5_mpi$(EXEEXT): $(struggle5_mpi_OBJECTS) $(struggle5_mpi_DEPENDENCIES) 
+	@rm -f struggle5_mpi$(EXEEXT)
+	$(LINK) $(struggle5_mpi_LDFLAGS) $(struggle5_mpi_OBJECTS) $(struggle5_mpi_LDADD) $(LIBS)
 struggle5_threaded$(EXEEXT): $(struggle5_threaded_OBJECTS) $(struggle5_threaded_DEPENDENCIES) 
 	@rm -f struggle5_threaded$(EXEEXT)
 	$(LINK) $(struggle5_threaded_LDFLAGS) $(struggle5_threaded_OBJECTS) $(struggle5_threaded_LDADD) $(LIBS)
@@ -738,6 +750,7 @@ include ./$(DEPDIR)/struggle4.Po
 include ./$(DEPDIR)/struggle5.Po
 include ./$(DEPDIR)/struggle5_forked.Po
 include ./$(DEPDIR)/struggle5_mp-struggle5_mp.Po
+include ./$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po
 include ./$(DEPDIR)/struggle5_threaded.Po
 include ./$(DEPDIR)/struggle_dc.Po
 include ./$(DEPDIR)/struggle_forked.Po
@@ -788,6 +801,20 @@ struggle5_mp-struggle5_mp.obj: struggle5_mp.c
 #	source='struggle5_mp.c' object='struggle5_mp-struggle5_mp.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mp_CFLAGS) $(CFLAGS) -c -o struggle5_mp-struggle5_mp.obj `if test -f 'struggle5_mp.c'; then $(CYGPATH_W) 'struggle5_mp.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mp.c'; fi`
+
+struggle5_mpi-struggle5_mpi.o: struggle5_mpi.c
+	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -MT struggle5_mpi-struggle5_mpi.o -MD -MP -MF "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" -c -o struggle5_mpi-struggle5_mpi.o `test -f 'struggle5_mpi.c' || echo '$(srcdir)/'`struggle5_mpi.c; \
+	then mv -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po"; else rm -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo"; exit 1; fi
+#	source='struggle5_mpi.c' object='struggle5_mpi-struggle5_mpi.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -c -o struggle5_mpi-struggle5_mpi.o `test -f 'struggle5_mpi.c' || echo '$(srcdir)/'`struggle5_mpi.c
+
+struggle5_mpi-struggle5_mpi.obj: struggle5_mpi.c
+	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -MT struggle5_mpi-struggle5_mpi.obj -MD -MP -MF "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" -c -o struggle5_mpi-struggle5_mpi.obj `if test -f 'struggle5_mpi.c'; then $(CYGPATH_W) 'struggle5_mpi.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mpi.c'; fi`; \
+	then mv -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po"; else rm -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo"; exit 1; fi
+#	source='struggle5_mpi.c' object='struggle5_mpi-struggle5_mpi.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -c -o struggle5_mpi-struggle5_mpi.obj `if test -f 'struggle5_mpi.c'; then $(CYGPATH_W) 'struggle5_mpi.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mpi.c'; fi`
 
 struggle_mp-struggle_mp.o: struggle_mp.c
 	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -MT struggle_mp-struggle_mp.o -MD -MP -MF "$(DEPDIR)/struggle_mp-struggle_mp.Tpo" -c -o struggle_mp-struggle_mp.o `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c; \

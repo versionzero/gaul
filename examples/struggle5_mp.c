@@ -30,7 +30,9 @@
 		This example shows the use of multiple populations
 		with GAUL's so called "archipelago" scheme.  This is
 		the basic island model of evolution, with the islands'
-		populations distributed over several processors.
+		populations distributed over several processors.  This
+		particular example will place two "islands" on each
+		available processor.
 
 		This program aims to generate the final sentence from
 		Chapter 3 of Darwin's "The Origin of Species",
@@ -39,11 +41,12 @@
 		This example is discussed in docs/html/tutorial9.html
 
 		It is likely that you have problems to compile and/or
-		execute this example.  Isuggest the following:
+		execute this example.  I suggest the following:
 		1) Download and _correctly_ install a MPI implementation.
 		2) Confirm that MPI programs work okay.
 		3) Use "./configure --enable-mpi=yes" to build GAUL.
-		4) Execute this example with something like "mpirum -v -np 4 ./struggle5_mp"
+		4) Execute this example with something like:
+		   "mpirun -v -np 4 ./struggle5_mp"
 
  **********************************************************************/
 

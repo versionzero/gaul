@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "18/02/05"
+#define GA_BUILD_DATE_STRING "21/02/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -62,7 +62,7 @@
 /* #undef HAVE_LIBM */
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
-/* #undef HAVE_LIBMPI */
+#define HAVE_LIBMPI 1
 
 /* Define to 1 if you have the `mpich' library (-lmpich). */
 /* #undef HAVE_LIBMPICH */
@@ -89,7 +89,7 @@
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 0
+#define HAVE_MPI 1
 
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1

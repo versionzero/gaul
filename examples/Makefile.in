@@ -42,7 +42,7 @@
 #######################################################################
 
 
-SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong9_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_mutation_prob_demo_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(struggle_threaded_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -82,8 +82,9 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) struggle5_threaded$(EXEEXT) \
-	saveload$(EXEEXT) nnevolve$(EXEEXT) mixed$(EXEEXT)
+	struggle5_mpi$(EXEEXT) struggle5_forked$(EXEEXT) \
+	struggle5_threaded$(EXEEXT) saveload$(EXEEXT) \
+	nnevolve$(EXEEXT) mixed$(EXEEXT)
 subdir = examples
 DIST_COMMON = README $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -154,6 +155,8 @@ am_struggle5_forked_OBJECTS = struggle5_forked.$(OBJEXT)
 struggle5_forked_OBJECTS = $(am_struggle5_forked_OBJECTS)
 am_struggle5_mp_OBJECTS = struggle5_mp-struggle5_mp.$(OBJEXT)
 struggle5_mp_OBJECTS = $(am_struggle5_mp_OBJECTS)
+am_struggle5_mpi_OBJECTS = struggle5_mpi-struggle5_mpi.$(OBJEXT)
+struggle5_mpi_OBJECTS = $(am_struggle5_mpi_OBJECTS)
 am_struggle5_threaded_OBJECTS = struggle5_threaded.$(OBJEXT)
 struggle5_threaded_OBJECTS = $(am_struggle5_threaded_OBJECTS)
 am_struggle_dc_OBJECTS = struggle_dc.$(OBJEXT)
@@ -211,10 +214,11 @@ SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) \
+	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
+	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) \
 	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
 	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
 	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
@@ -231,10 +235,11 @@ DIST_SOURCES = $(all5s_SOURCES) $(all5s_allele_ranges_SOURCES) \
 	$(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) \
 	$(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle5_threaded_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(struggle5_mpi_SOURCES) $(struggle5_threaded_SOURCES) \
+	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
+	$(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) \
 	$(struggle_threaded_SOURCES) $(test_ga_SOURCES) \
 	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
 	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
@@ -415,6 +420,7 @@ struggle5_SOURCES = struggle5.c
 struggle5_forked_SOURCES = struggle5_forked.c
 struggle5_threaded_SOURCES = struggle5_threaded.c
 struggle5_mp_SOURCES = struggle5_mp.c
+struggle5_mpi_SOURCES = struggle5_mpi.c
 struggle_ss_SOURCES = struggle_ss.c
 saveload_SOURCES = saveload.c
 nnevolve_SOURCES = nnevolve.c
@@ -464,6 +470,7 @@ struggle5_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_forked_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_threaded_DEPENDENCIES = ${DEPENDENCIES}
 struggle5_mp_DEPENDENCIES = ${DEPENDENCIES}
+struggle5_mpi_DEPENDENCIES = ${DEPENDENCIES}
 struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
@@ -517,6 +524,8 @@ struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle5_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all: all-am
 
 .SUFFIXES:
@@ -659,6 +668,9 @@ struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPEND
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
 	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
+struggle5_mpi$(EXEEXT): $(struggle5_mpi_OBJECTS) $(struggle5_mpi_DEPENDENCIES) 
+	@rm -f struggle5_mpi$(EXEEXT)
+	$(LINK) $(struggle5_mpi_LDFLAGS) $(struggle5_mpi_OBJECTS) $(struggle5_mpi_LDADD) $(LIBS)
 struggle5_threaded$(EXEEXT): $(struggle5_threaded_OBJECTS) $(struggle5_threaded_DEPENDENCIES) 
 	@rm -f struggle5_threaded$(EXEEXT)
 	$(LINK) $(struggle5_threaded_LDFLAGS) $(struggle5_threaded_OBJECTS) $(struggle5_threaded_LDADD) $(LIBS)
@@ -738,6 +750,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle5_forked.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle5_mp-struggle5_mp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle5_threaded.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_dc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_forked.Po@am__quote@
@@ -788,6 +801,20 @@ struggle5_mp-struggle5_mp.obj: struggle5_mp.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='struggle5_mp.c' object='struggle5_mp-struggle5_mp.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mp_CFLAGS) $(CFLAGS) -c -o struggle5_mp-struggle5_mp.obj `if test -f 'struggle5_mp.c'; then $(CYGPATH_W) 'struggle5_mp.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mp.c'; fi`
+
+struggle5_mpi-struggle5_mpi.o: struggle5_mpi.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -MT struggle5_mpi-struggle5_mpi.o -MD -MP -MF "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" -c -o struggle5_mpi-struggle5_mpi.o `test -f 'struggle5_mpi.c' || echo '$(srcdir)/'`struggle5_mpi.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po"; else rm -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='struggle5_mpi.c' object='struggle5_mpi-struggle5_mpi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -c -o struggle5_mpi-struggle5_mpi.o `test -f 'struggle5_mpi.c' || echo '$(srcdir)/'`struggle5_mpi.c
+
+struggle5_mpi-struggle5_mpi.obj: struggle5_mpi.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -MT struggle5_mpi-struggle5_mpi.obj -MD -MP -MF "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" -c -o struggle5_mpi-struggle5_mpi.obj `if test -f 'struggle5_mpi.c'; then $(CYGPATH_W) 'struggle5_mpi.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mpi.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo" "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Po"; else rm -f "$(DEPDIR)/struggle5_mpi-struggle5_mpi.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='struggle5_mpi.c' object='struggle5_mpi-struggle5_mpi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mpi_CFLAGS) $(CFLAGS) -c -o struggle5_mpi-struggle5_mpi.obj `if test -f 'struggle5_mpi.c'; then $(CYGPATH_W) 'struggle5_mpi.c'; else $(CYGPATH_W) '$(srcdir)/struggle5_mpi.c'; fi`
 
 struggle_mp-struggle_mp.o: struggle_mp.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -MT struggle_mp-struggle_mp.o -MD -MP -MF "$(DEPDIR)/struggle_mp-struggle_mp.Tpo" -c -o struggle_mp-struggle_mp.o `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c; \

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Gene-based optimisation routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -75,6 +75,9 @@ int	ga_evolution_archipelago_threaded( const int num_pops,
                         population              **pops,
                         const int               max_generations );
 int	ga_evolution_archipelago_mp( const int num_pops,
+                        population              **pops,
+                        const int               max_generations );
+int	ga_evolution_archipelago_mpi( const int num_pops,
                         population              **pops,
                         const int               max_generations );
 

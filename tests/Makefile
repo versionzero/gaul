@@ -153,7 +153,7 @@ GA_PATCH_VERSION = 6
 GA_UNAME_STRING = 
 GA_VERSION = 0.1847-6
 GA_VERSION_STRING = 
-HAVE_MPI = 0
+HAVE_MPI = 1
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_DATA = ${INSTALL} -m 644
@@ -173,8 +173,8 @@ MAKEINFO = ${SHELL} /home/stewart/gaul-devel/missing --run makeinfo
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = objdump
 OBJEXT = o
 PACKAGE = gaul-devel
@@ -250,11 +250,11 @@ AUTOMAKE_OPTIONS = 1.4
 # Kludge:
 INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/ -I/usr/include/slang/
 gaul_diagnostics_SOURCES = diagnostics.c
-gaul_diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+gaul_diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 all: all-am
 
 .SUFFIXES:

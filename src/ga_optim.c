@@ -4387,7 +4387,7 @@ int ga_evolution_archipelago( const int num_pops,
     pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
 
   pop->generation = 0;
 
@@ -4477,6 +4477,207 @@ int ga_evolution_archipelago( const int num_pops,
 
 
 /**********************************************************************
+  ga_evolution_archipelago_mpi()
+  synopsis:	Main genetic algorithm routine.  Performs GA-based
+		optimisation on the given populations using a simple
+		current_island model.  Migration occurs around a cyclic
+		topology only.  Migration causes a duplication of the
+		respective entities.  This is a generation-based GA.
+		ga_genesis(), or equivalent, must be called prior to
+		this function.
+  parameters:	const int	num_pops
+		population	**pops
+		const int	max_generations
+  return:	number of generation performed
+  last updated:	21 Feb 2005
+ **********************************************************************/
+
+int ga_evolution_archipelago_mpi( const int num_pops,
+			population		**pops,
+			const int		max_generations )
+  {
+#if HAVE_MPI==1
+  int		current_island;		/* Current current_island number. */
+  population	*pop=NULL;		/* Current population. */
+  boolean	complete=FALSE;		/* Whether evolution is terminated. */
+  int		generation=0;		/* Current generation number. */
+  int		mpi_rank;		/* Rank of MPI process; should always by 0 here. */
+  int		mpi_size;		/* Number of MPI processes. */
+  byte		*buffer=NULL;		/* Send buffer. */
+  int		buffer_len=0;		/* Length of send buffer. */
+  int		buffer_max=0;		/* Length of send buffer. */
+  int		*eid;			/* Sorage of entity ids being processed. */
+
+/* Checks. */
+  if (!pops)
+    die("NULL pointer to array of population structures passed.");
+  if (num_pops<2)
+    die("Need at least two populations for the current_island model.");
+
+  for (current_island=0; current_island<num_pops; current_island++)
+    {
+    pop = pops[current_island];
+
+    if (!pop->evaluate) die("Population's evaluation callback is undefined.");
+    if (!pop->select_one) die("Population's asexual selection callback is undefined.");
+    if (!pop->select_two) die("Population's sexual selection callback is undefined.");
+    if (!pop->mutate) die("Population's mutation callback is undefined.");
+    if (!pop->crossover) die("Population's crossover callback is undefined.");
+    if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
+
+/* Set current_island property. */
+    pop->island = current_island;
+    }
+
+  for (current_island=0; current_island<num_pops; current_island++)
+    {
+    pop = pops[current_island];
+
+/*
+ * Seed initial entities.
+ * This is required prior to determining the size of the send buffer.
+ */
+    if (pop->size < pop->stable_size)
+      gaul_population_fill(pop, pop->stable_size - pop->size);
+    }
+
+/*
+ * Rank zero process is master.  This handles evolution.  Other processes are slaves
+ * which simply evaluate entities, and should be attached using ga_attach_slave().
+ */
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  if (mpi_rank != 0)
+    die("ga_evolution_archipelago_mpi() called by process other than rank=0.");
+
+/*
+ * Allocate a send buffer of the required length and an array to store
+ * entity ids.
+ */
+  buffer_len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &buffer_max);
+  if (buffer_max == 0)
+    buffer = s_malloc(buffer_len*sizeof(byte));
+
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+  eid = s_malloc(mpi_size*sizeof(int));
+
+/*
+ * Register, set up and synchronise slave processes.
+ */
+  gaul_bond_slaves_mpi(pop, buffer_len, buffer_max);
+
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands (on %d processors)!", num_pops, mpi_size);
+
+  pop->generation = 0;
+
+  for (current_island=0; current_island<num_pops; current_island++)
+    {
+    pop = pops[current_island];
+
+/*
+ * Score and sort the initial population members.
+ */
+    gaul_ensure_evaluations_mpi(pop, eid, buffer, buffer_len, buffer_max);
+    sort_population(pop);
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+  
+    plog( LOG_VERBOSE,
+          "Prior to the first generation, population on current_island %d has fitness scores between %f and %f",
+          current_island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+    }
+
+/* Do all the generations: */
+  while ( generation<max_generations && complete==FALSE)
+    {
+    generation++;
+    pop->generation = generation;
+
+/*
+ * Migration step.
+ */
+    gaul_migration(num_pops, pops);
+
+    for(current_island=0; current_island<num_pops; current_island++)
+      {
+      pop = pops[current_island];
+
+      plog( LOG_VERBOSE, "*** Evolution on current_island %d ***", current_island );
+
+      if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
+        {
+        pop->orig_size = pop->size;
+
+        plog( LOG_DEBUG,
+              "Population %d size is %d at start of generation %d",
+              current_island, pop->orig_size, generation );
+
+/*
+ * Crossover step.
+ */
+        gaul_crossover(pop);	/* FIXME: Need to pass current_island for messages. */
+
+/*
+ * Mutation step.
+ */
+        gaul_mutation(pop);	/* FIXME: Need to pass current_island for messages. */
+
+/*
+ * Apply environmental adaptations, score entities, sort entities, etc.
+ */
+        gaul_adapt_and_evaluate_mpi(pop, eid, buffer, buffer_len, buffer_max);
+
+/*
+ * Survival of the fittest.
+ */
+        gaul_survival_mpi(pop);
+
+        }
+      else
+        {
+        complete = TRUE;
+        }
+      }
+
+    plog(LOG_VERBOSE,
+          "After generation %d, population %d has fitness scores between %f and %f",
+          generation,
+          current_island,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+/*
+ * Use callback.
+ */
+    plog( LOG_VERBOSE,
+          "After generation %d, population has fitness scores between %f and %f",
+          generation,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
+
+    }	/* Generation loop. */
+
+/*
+ * Register, set up and synchronise slave processes.
+ */
+  gaul_debond_slaves_mpi(pop);
+
+/*
+ * Deallocate send buffer and entity id array.
+ */
+  s_free(buffer);
+  s_free(eid);
+
+  return generation;
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+
+  return 0;
+#endif
+  }
+
+
+/**********************************************************************
   ga_evolution_archipelago_threaded()
   synopsis:	Main genetic algorithm routine.  Performs GA-based
 		optimisation on the given populations using a simple
@@ -4530,7 +4731,7 @@ int ga_evolution_archipelago_threaded( const int num_pops,
     pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
 
 /*
  * Look at environment to find number of threads to use.
@@ -4678,7 +4879,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
   plog(LOG_FIXME, "Code incomplete.");
 
 #if 0
-  int		current_island;			/* Current current_island number. */
+  int		current_island;		/* Current current_island number. */
   population	*pop=NULL;		/* Current population. */
   boolean	complete=FALSE;		/* Whether evolution is terminated. */
   int		i;			/* Loop over members of population. */
@@ -4713,7 +4914,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
     pop->island = current_island;
     }
 
-  plog(LOG_VERBOSE, "The evolution has begun on %d current_islands!", num_pops);
+  plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
   
 /*
  * Allocate memory.
@@ -5246,7 +5447,16 @@ int ga_evolution_mpi(	population		*pop,
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
   if (mpi_rank != 0) die("ga_evolution_mpi() called by process other than rank=0.");
 
-  plog(LOG_VERBOSE, "The evolution has begun!");
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+  plog(LOG_VERBOSE, "The evolution has begun (on %d processors)!", mpi_size);
+
+/*
+ * Seed initial entities.
+ * This is required prior to determining the size of the send buffer.
+ */
+  if (pop->size < pop->stable_size)
+    gaul_population_fill(pop, pop->stable_size - pop->size);
 
 /*
  * Allocate a send buffer of the required length and an array to store
@@ -5256,7 +5466,6 @@ int ga_evolution_mpi(	population		*pop,
   if (buffer_max == 0)
     buffer = s_malloc(buffer_len*sizeof(byte));
 
-  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   eid = s_malloc(mpi_size*sizeof(int));
 
 /*
@@ -5269,8 +5478,6 @@ int ga_evolution_mpi(	population		*pop,
 /*
  * Score and sort the initial population members.
  */
-  if (pop->size < pop->stable_size)
-    gaul_population_fill(pop, pop->stable_size - pop->size);
   gaul_ensure_evaluations_mpi(pop, eid, buffer, buffer_len, buffer_max);
   sort_population(pop);
   ga_genocide_by_fitness(pop, GA_MIN_FITNESS);

@@ -121,9 +121,9 @@ int main(int argc, char **argv)
 /*
  * A population is created so that the callbacks are defined.  Evolution doesn't
  * occur with this population, so population_size can be zero.  In such a case,
- * no entities are seeded, so there is no significant overhead.
+ * no entities are ever seeded, so there is no significant overhead.
  * Strictly, several of these callbacks are not needed on the slave processes, but
- * there definition doesn't have any adverse effects.
+ * their definition doesn't have any adverse effects.
  */
     pop = ga_genesis_char(
             0,					/* const int              population_size */
@@ -150,8 +150,9 @@ int main(int argc, char **argv)
   else
     {
 /*
- * This is the master process.  Over than calling ga_evolution_mpi() instead of ga_evolution(), there
- * are no differences between this code and the usual GAUL invocation.
+ * This is the master process.  Other than calling ga_evolution_mpi() instead
+ * of ga_evolution(), there are no differences between this code and the usual
+ * GAUL invocation.
  */
     for (i=0; i<50; i++)
       {
