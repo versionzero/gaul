@@ -170,7 +170,7 @@ libgaul_la_SOURCES = \
     ga_utility.c
 
 
-include_HEADERS = \
+nobase_include_HEADERS = \
     gaul/ga_bitstring.h \
     gaul/ga_chromo.h \
     gaul/ga_climbing.h \
@@ -242,9 +242,9 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 DIST_SOURCES = $(libgaul_la_SOURCES)
-HEADERS = $(include_HEADERS)
+HEADERS = $(nobase_include_HEADERS)
 
-DIST_COMMON = README $(include_HEADERS) Makefile.am Makefile.in
+DIST_COMMON = README $(nobase_include_HEADERS) Makefile.am Makefile.in
 SOURCES = $(libgaul_la_SOURCES)
 
 all: all-am
@@ -348,21 +348,21 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-includeHEADERS_INSTALL = $(INSTALL_HEADER)
-install-includeHEADERS: $(include_HEADERS)
+nobase_includeHEADERS_INSTALL = $(install_sh_DATA)
+install-nobase_includeHEADERS: $(nobase_include_HEADERS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(includedir)
-	@list='$(include_HEADERS)'; for p in $$list; do \
+	@list='$(nobase_include_HEADERS)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " $(includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f"; \
-	  $(includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f; \
+	  f="$$p"; \
+	  echo " $(nobase_includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f"; \
+	  $(nobase_includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f; \
 	done
 
-uninstall-includeHEADERS:
+uninstall-nobase_includeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(include_HEADERS)'; for p in $$list; do \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	@list='$(nobase_include_HEADERS)'; for p in $$list; do \
+	  f="$$p"; \
 	  echo " rm -f $(DESTDIR)$(includedir)/$$f"; \
 	  rm -f $(DESTDIR)$(includedir)/$$f; \
 	done
@@ -478,7 +478,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeHEADERS
+install-data-am: install-nobase_includeHEADERS
 
 install-exec-am: install-libLTLIBRARIES
 
@@ -497,21 +497,22 @@ mostlyclean: mostlyclean-am
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-includeHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES
+uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
+	uninstall-nobase_includeHEADERS
 
 .PHONY: GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
 	distclean-depend distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am info info-am install \
 	install-am install-data install-data-am install-exec \
-	install-exec-am install-includeHEADERS install-info \
-	install-info-am install-libLTLIBRARIES install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	tags uninstall uninstall-am uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES
+	install-exec-am install-info install-info-am \
+	install-libLTLIBRARIES install-man \
+	install-nobase_includeHEADERS install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-info-am uninstall-libLTLIBRARIES \
+	uninstall-nobase_includeHEADERS
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

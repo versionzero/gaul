@@ -61,7 +61,7 @@ libgaul_la_SOURCES = \
     ga_tabu.c \
     ga_utility.c
 
-include_HEADERS = \
+nobase_include_HEADERS = \
     gaul/ga_bitstring.h \
     gaul/ga_chromo.h \
     gaul/ga_climbing.h \
