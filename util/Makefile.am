@@ -3,7 +3,7 @@
 # util/Makefile.am
 #######################################################################
 #
-# util - General collection of C-programming utitily routines.
+# util - General collection of C-programming utility routines.
 # Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
