@@ -72,7 +72,7 @@ boolean struggle_score(population *pop, entity *entity)
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    entity->fitness += (127.0-abs((int)(((char *)entity->chromosome[0])[k]-target_text[k])))/50.0;
     }
 
   return TRUE;
@@ -290,7 +290,7 @@ int main(int argc, char **argv)
  * num. chromosomes = 1.
  * length of chromosomes = strlen(target_text);
  */
-  pop = ga_population_new( 100, 1, strlen(target_text) );
+  pop = ga_population_new( 100, 1, (int) strlen(target_text) );
 
   if ( !pop ) die("Unable to allocate population.");
 
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 
   s_free(beststring);
   
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

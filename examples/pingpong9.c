@@ -399,7 +399,7 @@ int main(int argc, char **argv)
        20			/* const int               max_generations */
               );
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

@@ -151,7 +151,7 @@ NULL, /*dejong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
 
   ga_extinction(pop);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

@@ -354,7 +354,7 @@ int main(int argc, char **argv)
 
   s_free(beststring);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

@@ -54,8 +54,8 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /*
  * Copy unchanged data.
@@ -105,8 +105,8 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
@@ -122,7 +122,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
       }
     }
 
-  ((int *)son->chromosome[chromo])[point] = random_int(RAND_MAX);
+  ((int *)son->chromosome[chromo])[point] = (int) random_int(RAND_MAX);
 
   return;
   }
@@ -256,8 +256,8 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
@@ -341,8 +341,8 @@ void ga_mutate_char_singlepoint_drift( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /*
  * Copy unchanged data.
@@ -452,8 +452,8 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
@@ -469,7 +469,7 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
       }
     }
 
-  ((char *)son->chromosome[chromo])[point] = random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
+  ((char *)son->chromosome[chromo])[point] = (int) random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
 
   return;
   }
@@ -546,8 +546,8 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /*
  * Copy unchanged data.
@@ -599,8 +599,8 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
@@ -616,7 +616,7 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
       }
     }
 
-  ((char *)son->chromosome[chromo])[point] = random_int('~'-' ')+' ';
+  ((char *)son->chromosome[chromo])[point] = (int) random_int('~'-' ')+' ';
 
   return;
   }
@@ -690,8 +690,8 @@ void ga_mutate_bitstring_singlepoint( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)
@@ -736,8 +736,8 @@ void ga_mutate_double_singlepoint_drift( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /*
  * Copy unchanged data.
@@ -760,8 +760,8 @@ void ga_mutate_double_singlepoint_drift( population *pop,
  */
   ((double *)son->chromosome[chromo])[point] += amount;
 
-  if (((double *)son->chromosome[chromo])[point]==DBL_MAX) ((double *)son->chromosome[chromo])[point]=0;
-  if (((double *)son->chromosome[chromo])[point]==-1) ((double *)son->chromosome[chromo])[point]=DBL_MAX-1;
+  if (((double *)son->chromosome[chromo])[point]>DBL_MAX-1.0) ((double *)son->chromosome[chromo])[point]=DBL_MIN+1.0;
+  if (((double *)son->chromosome[chromo])[point]<DBL_MIN+1.0) ((double *)son->chromosome[chromo])[point]=DBL_MAX-1.0;
 
   return;
   }
@@ -787,8 +787,8 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
   if (!father || !son) die("Null pointer to entity structure passed");
 
 /* Select mutation locus. */
-  chromo = random_int(pop->num_chromosomes);
-  point = random_int(pop->len_chromosomes);
+  chromo = (int) random_int(pop->num_chromosomes);
+  point = (int) random_int(pop->len_chromosomes);
 
 /* Copy unchanging data. */
   for (i=0; i<pop->num_chromosomes; i++)

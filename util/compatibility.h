@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
+  Updated:	24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
+ 		20 Dec 2002 SAA	Modified prototypes of strncmp(), strncpy(), strtok() to match iso 9899 specification.
 		09 Oct 2002 SAA	A #if should have been a #ifdef.
   		16 Aug 2002 SAA	Don't include config.h here (It is done in SAA_header.h).
   		10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
@@ -118,7 +119,7 @@ char *strcat(char *str1, const char *str2);
 #endif
 
 #ifndef HAVE_STRLEN
-int strlen(const char *str);
+size_t strlen(const char *str);
 #endif
 
 #ifndef HAVE_STRCMP

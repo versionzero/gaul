@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
+  Updated:	24 Dec 2002 SAA	Prevented double declaration of _Bool.  Changed definitions of TRUE and FALSE to avoid splint warnings.
+  		17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
   		14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
   		03 Oct 2002 SAA	Compaq ccc compiler fix.
   		18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
@@ -196,6 +197,7 @@
 # if !defined(__bool_true_false_are_defined)
 #  if !defined(HAVE__BOOL)
 typedef short _Bool;
+#define HAVE__BOOL
 #  endif
 
 #  if !defined(true)
@@ -220,8 +222,8 @@ typedef short _Bool;
 #define boolean _Bool
 
 #if !defined(TRUE)
-#define TRUE  1
-#define FALSE 0
+#define TRUE	(0==0)
+#define FALSE	(0!=0)
 #endif
 
 /*

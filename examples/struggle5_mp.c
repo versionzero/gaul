@@ -86,7 +86,7 @@ boolean struggle_score(population *pop, entity *entity)
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    entity->fitness += (127.0-abs((int)(((char *)entity->chromosome[0])[k]-target_text[k])))/50.0;
     }
 
   return TRUE;
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     pops[i] = ga_genesis_char(
        80,			/* const int              population_size */
        1,			/* const int              num_chromo */
-       strlen(target_text),	/* const int              len_chromo */
+       (int) strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */
        NULL,			/* GAiteration_hook       iteration_hook */
        NULL,			/* GAdata_destructor      data_destructor */
@@ -135,26 +135,6 @@ int main(int argc, char **argv)
 
     ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_SURVIVE, 0.75, 0.25, 0.001 );
     }
-
-/*
- * Test chromosome packing.
- * FIXME: Move to test suite.
- */
-#if 0
-  for (i=0; i<pops[0]->size; i++)
-    {
-    int len;
-    byte *buffer1=NULL, *buffer2=NULL;
-    unsigned int max_len=0;
-
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer2, &max_len);
-    pops[0]->chromosome_from_bytes(pops[0], pops[0]->entity_iarray[i], buffer1);
-    len = (int) pops[0]->chromosome_to_bytes(pops[0], pops[0]->entity_iarray[i], &buffer1, &max_len);
-    
-    printf("E %d len %d match %d\n", i, len, memcmp(buffer1, buffer2, len));
-    }
-#endif
 
 /*
  * The only significant difference between "examples/struggle5" and
@@ -177,7 +157,7 @@ int main(int argc, char **argv)
 
   s_free(beststring);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

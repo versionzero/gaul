@@ -748,7 +748,7 @@ static entity *gaul_read_entity(FILE *fp, population *pop)
   fread(&(entity->fitness), sizeof(double), 1, fp);
   fread(&len, sizeof(unsigned int), 1, fp);
   buffer = s_malloc(sizeof(byte)*len);
-  fread(buffer, sizeof(byte), len, fp);
+  fread(buffer, sizeof(byte), (size_t) len, fp);
   pop->chromosome_from_bytes(pop, entity, buffer);
 
   s_free(buffer);
@@ -2122,7 +2122,7 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
 /* printf("DEBUG: Node %d sending entity %d/%d (%d/%d) with fitness %f\n",
              mpi_get_rank(), count, num_to_send, i, pop->size, pop->entity_iarray[i]->fitness); */
       mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
-      if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+      if (len != pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
 	die("Internal length mismatch");
       mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
       count++;
@@ -2172,7 +2172,7 @@ void ga_population_send_every( population *pop, int dest_node )
  * elegant approach for this.
  * Sending this length here should not be required at all.
  */
-  len = (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
+  len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
   mpi_send(&len, 1, MPI_TYPE_INT, dest_node, GA_TAG_ENTITYLEN);
 
 /*
@@ -2181,7 +2181,7 @@ void ga_population_send_every( population *pop, int dest_node )
   for (i=0; i<pop->size; i++)
     {
     mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
-    if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
+    if (len != pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
       die("Internal length mismatch");
     mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
     }
@@ -3027,7 +3027,7 @@ boolean ga_population_set_data(population *pop, vpointer data)
 
 vpointer ga_population_get_data(population *pop)
   {
-  if (!pop) return FALSE;
+  if (!pop) return NULL;
 
   return pop->data;
   }

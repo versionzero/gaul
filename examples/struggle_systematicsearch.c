@@ -72,7 +72,7 @@ boolean struggle_score(population *pop, entity *entity)
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    entity->fitness += (127.0-abs((int)(((char *)entity->chromosome[0])[k]-target_text[k])))/50.0;
     }
 
   return TRUE;
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
   ga_extinction(pop);
   s_free(beststring);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

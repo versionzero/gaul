@@ -625,7 +625,7 @@ entity *ga_allele_search(	population	*pop,
 
 void ga_population_dump(population	*pop)
   {
-  printf("Population id %d\n", ga_get_population_id(pop));
+  printf("Population id %d\n", (int) ga_get_population_id(pop));
   printf("Max size %d Stable size %d Current size %d\n", pop->max_size, pop->stable_size, pop->size);
   printf("Crossover %f Mutation %f Migration %f\n", pop->crossover_ratio, pop->mutation_ratio, pop->migration_ratio);
   printf("Chromosome length %d count %d\n", pop->len_chromosomes, pop->num_chromosomes);
@@ -640,14 +640,14 @@ void ga_population_dump(population	*pop)
   synopsis:	Dump some statistics about a entity.
   parameters:	entity	*john
   return:	none
-  last updated:	16/06/01
+  last updated:	24 Dec 2002
  **********************************************************************/
 
 void ga_entity_dump(population *pop, entity *john)
   {
   printf("Entity id %d rank %d\n", ga_get_entity_id(pop, john), ga_get_entity_rank(pop, john));
   printf("Fitness %f\n", john->fitness);
-  printf("data <%s> data0 <%s> chromo <%s> chromo0 <%s>\n", john->data?"defined":"undefined", john->data&&((SLList *)john->data)->data?"defined":"undefined", john->chromosome?"defined":"undefined", john->chromosome&&john->chromosome[0]?"defined":"undefined");
+  printf("data <%s> data0 <%s> chromo <%s> chromo0 <%s>\n", john->data?"defined":"undefined", john->data!=NULL&&((SLList *)john->data)->data!=NULL?"defined":"undefined", john->chromosome?"defined":"undefined", john->chromosome!=NULL&&john->chromosome[0]!=NULL?"defined":"undefined");
 
   return;
   }
@@ -690,7 +690,7 @@ boolean ga_fitness_mean_stddev( population *pop,
   synopsis:     Determine some stats about the fitness scores.
   parameters:
   return:
-  last updated: 07/08/01
+  last updated: 24 Dec 2002
  **********************************************************************/
 
 boolean ga_fitness_stats( population *pop,
@@ -728,8 +728,8 @@ boolean ga_fitness_stats( population *pop,
   *stddev = (sum2/pop->size - (*mean)*(*mean));	/* Cleverly avoid a sqrt() calc. */
   *variance = (sum2/pop->size - sum*sum);
 
-/* Check. */
-  if ( sqrt(*variance) != *stddev )
+/* Sanity check. */
+  if ( fabs(sqrt(*variance)-*stddev) > DBL_EPSILON )
     dief("stddev = %f, sqrt(*variance) = %f", *stddev, sqrt(*variance));
 
   for (i=0; i<pop->size; i++)
@@ -749,6 +749,4 @@ boolean ga_fitness_stats( population *pop,
 
   return TRUE;
   }
-
-
 

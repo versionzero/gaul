@@ -76,7 +76,7 @@ int main(int argc, char **argv)
   table_test();
   linkedlist_test();
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

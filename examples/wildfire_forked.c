@@ -656,7 +656,7 @@ int main(int argc, char **argv)
 
   ga_extinction(pop);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

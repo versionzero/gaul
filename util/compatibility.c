@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
+  Updated:	24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
+		20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
 		25 Oct 2002 SAA	Added gethostname() stub.
 		02 Oct 2002 SAA A #ifndef HAVE_STRCASECMP should have been #ifndef HAVE_STRSEP
 		12 Jun 2002 SAA	#ifdef HAVE_STRREV should have been #ifndef HAVE_STRREV.
@@ -238,14 +239,18 @@ char *strcat(char *str1, const char *str2)
 /*
  * Return the length in characters of STR
  */
-int	strlen(const char *str)
-{
-  int	len;
+size_t strlen(const char *str)
+  {
+  int	len=0;
   
-  for (len = 0; *str != '\0'; str++, len++);
+  while ( *str != '\0' )
+    {
+    str++;
+    len++;
+    }
   
   return len;
-}
+  }
 #endif /* HAVE_STRLEN */
 
 

@@ -161,7 +161,7 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
 
   s_free(beststring);
   
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

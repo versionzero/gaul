@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	22 Jul 2002 SAA	Added new '--random' option.
+  Last Updated:	24 Dec 2002 SAA Use standard exit value.
+  		22 Jul 2002 SAA	Added new '--random' option.
   		18 Jul 2002 SAA	Fixed typo causing erronerous data dimension mismatches.
 		17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
 		26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
@@ -306,12 +307,12 @@ int main(int argc, char **argv)
     if (!strcmp(argv[i],"--version"))
       {
       printf("Prototype version.\n");
-      exit(2);
+      exit(EXIT_SUCCESS);
       }
     else if (!strcmp(argv[i],"--help") || !strcmp(argv[i],"-usage"))
       {
       write_usage();
-      exit(2);
+      exit(EXIT_SUCCESS);
       }
     else if (!strcmp(argv[i],"--diagnostics"))
       {
@@ -766,7 +767,7 @@ die("FIXME: code broken.");
 
   if (historyfp) fclose(historyfp);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

@@ -71,7 +71,7 @@ boolean struggle_score(population *pop, entity *entity)
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    entity->fitness += (127.0-fabs(((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    entity->fitness += (127.0-abs((int)(((char *)entity->chromosome[0])[k]-target_text[k])))/50.0;
     }
 
   evaluation_count++;
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
   pop = ga_genesis_char(
      120,				/* const int              population_size */
      1,					/* const int              num_chromo */
-     strlen(target_text),		/* const int              len_chromo */
+     (int) strlen(target_text),		/* const int              len_chromo */
      struggle_generation_hook, 		/* GAgeneration_hook      generation_hook */
      NULL,				/* GAiteration_hook       iteration_hook */
      NULL,				/* GAdata_destructor      data_destructor */
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 
   s_free(beststring);
 
-  exit(2);
+  exit(EXIT_SUCCESS);
   }
 
 

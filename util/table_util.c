@@ -30,7 +30,8 @@
 
 		Thread-safe.
  
-  Updated:	15 Aug 2002 SAA	No longer use MemChunks.  All locks removed too.
+  Updated:	24 Dec 2002 SAA Use standard exit value.
+  		15 Aug 2002 SAA	No longer use MemChunks.  All locks removed too.
   		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA	table_diagnostics() modified.
 		07 Feb 2002 SAA	Renamed from table.c to table_util.c for consistency.
@@ -374,7 +375,7 @@ unsigned int table_add(TableStruct *table, vpointer data);
   table_destroy(table);
 
 #ifdef TABLE_COMPILE_MAIN
-  exit(2);
+  exit(EXIT_SUCCESS);
 #else
   return TRUE;
 #endif

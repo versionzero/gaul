@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	15 Oct 2002 SAA Avoid some unsigned comparison warnings when using Compaq's ccc.
+  Last Updated:	24 Dec 2002 SAA Use standard exit value.  Added so explicit typecasts.
+  		15 Oct 2002 SAA Avoid some unsigned comparison warnings when using Compaq's ccc.
 		22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
   		16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
   		14 Jun 2002 SAA	GList emulation not relied upon in this file now.
@@ -1148,7 +1149,7 @@ boolean linkedlist_test(void)
     }
 
   for (i = 0; i < 10; i++)
-    if(dlink_index_link(list, dlink_nth(list, i)) != i)
+    if(dlink_index_link(list, dlink_nth(list, i)) != (int) i)
       printf("dlink_index_link does not seem to be the inverse of dlink_nth_data\n");
 
   dlink_free_all(list);
@@ -1213,7 +1214,7 @@ boolean linkedlist_test(void)
   for (i = 0; i < 10; i++)
     {
       st = slink_nth(slist, i);
-      if (*((int*) st->data) != i)
+      if (*((int*) st->data) != (int) i)
          printf ("Sorted insert failed\n");
     }
 
@@ -1239,7 +1240,7 @@ boolean linkedlist_test(void)
 #endif
 
 #ifdef LINKEDLIST_COMPILE_MAIN
-  exit(2);
+  exit(EXIT_SUCCESS);
 #else
   return TRUE;
 #endif
