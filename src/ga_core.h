@@ -102,7 +102,9 @@
  * Should encourage the use of accessor functions rather than directly tweaking
  * the values in this structure manually.
  *
- * FIXME: chomosome field should be a moe generic type, and cast when required.
+ * FIXME: chomosome field should be a more generic type, and cast when required.
+ * FIXME: userdata field should be a more generic type, and cast when required:
+ * vpointer *userdata;       
  */
 struct entity_t
   {
@@ -214,6 +216,10 @@ void ga_entity_clear_data(population *p, entity *entity, const int chromosome);
 void ga_entity_blank(population *p, entity *entity);
 entity *ga_get_free_entity(population *pop);
 boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chromosome);
+/*
+vpointer	ga_entity_get_data(population *pop, entity *e, const int chromosome);
+void	ga_entity_set_data(population *pop, entity *e, vpointer data, const int chromosome);
+*/
 boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *src);
 boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, int chromo);
 boolean ga_entity_copy(population *pop, entity *dest, entity *src);
