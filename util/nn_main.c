@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	18 Jul 2002 SAA	Fixed typo causing erronerous data dimension mismatches.
+  Last Updated:	22 Jul 2002 SAA	Added new '--random' option.
+  		18 Jul 2002 SAA	Fixed typo causing erronerous data dimension mismatches.
 		17 Jul 2002 SAA	Simplified/improved handling of data dimensionality from users perspective.
 		26 Jun 2002 SAA	Added facility for writing the training and testing errors to a file.  This is intended for use with gnuplot, or some other plotting utility.
 		04 Apr 2002 SAA write_usage() tweaked slightly.
@@ -232,7 +233,7 @@ void write_usage(void)
   last updated: 12 Mar 2002
  **********************************************************************/
 
-typedef enum initmode_enum {fixed, randomize01, randomize11} initmode_t;
+typedef enum initmode_enum {fixed, randomize, randomize01, randomize11} initmode_t;
 
 int main(int argc, char **argv)
   {
@@ -246,8 +247,8 @@ int main(int argc, char **argv)
   boolean    do_train=TRUE, do_evaluate=TRUE;	/* Whether to train/evaluate NN. */
   boolean    do_predict=FALSE;			/* Whether to use NN for prediction. */
   NN_training_func training_func=NN_train_random;	/* Function to use for training. */
-  initmode_t initmode=randomize01;		/* How to initialize weights */
-  float      initval=0.5;			/* Value for weight initialization. */
+  initmode_t initmode=randomize11;		/* How to initialize weights */
+  float      initval=0.5, initval1=-0.5, initval2=0.5;	/* Values for weight initialization. */
   int        num_layers=0;			/* Number of layers in NN. */
   int        *neurons=NULL;			/* Number of neurons in each layer. */
   float      stop_ratio=NN_DEFAULT_STOP_RATIO;	/* Stopping criterion. */
@@ -460,6 +461,15 @@ int main(int argc, char **argv)
       printf("NN weights will be initialized between -1.0 and +1.0.\n");
       initmode = randomize11;
       }
+    else if (!strcmp(argv[i],"--random"))
+      {
+      i++;
+      initval1 = atof(argv[i]);
+      i++;
+      initval2 = atof(argv[i]);
+      printf("NN weights will be initialized using random values in range %f to %f.\n", initval1, initval2);
+      initmode = randomize;
+      }
     else if (!strcmp(argv[i],"--fixed"))
       {
       i++;
@@ -666,10 +676,13 @@ die("FIXME: code broken.");
     switch (initmode)
       {
       case randomize11:
-        NN_randomize_weights(network);
+        NN_randomize_weights_11(network);
         break;
       case randomize01:
         NN_randomize_weights_01(network);
+        break;
+      case randomize:
+        NN_randomize_weights(network, initval1, initval2);
         break;
       case fixed:
         NN_set_all_weights(network, initval);

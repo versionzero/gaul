@@ -34,7 +34,8 @@
 		Note that best results will be acheived if data is
 		similarly normalized.
 
-  Last Updated:	18 Jul 2002 SAA	Modified NN_read_prop().
+  Last Updated:	22 Jul 2002 SAA	Renamed NN_randomize_weights() to NN_randomize_weights_11() and added a new NN_randomize_weights() which takes a range for the random values.
+  		18 Jul 2002 SAA	Modified NN_read_prop().
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
 		13 Mar 2002 SAA Added version info to NN_diagnostics.
 		12 Mar 2002 SAA In standalone test program code, introduced the ability to select the alternative training functions.  Split the code for the standalone program version into a seperate file, nn_main.c.  read_data(), read_prop() and read_binary_fingerprint_header() all renamed with "NN_" prefix to improve namespace.
@@ -705,13 +706,42 @@ void NN_set_all_weights(network_t *network, const float weight)
   NN_randomize_weights()
   synopsis:     Randomize the weights of all neurons in a network.
 		Random values selected from a linear distribution
+		between the passed values.
+  parameters:   network_t *network
+  return:       none
+  last updated: 22 Jul 2002
+ **********************************************************************/
+
+void NN_randomize_weights(network_t *network, const float lower, const float upper)
+  {
+  int l,i,j;
+   
+  for (l=1; l<network->num_layers; l++)
+    {
+    for (i=1; i<=network->layer[l].neurons; i++)
+      {
+      for (j=0; j<=network->layer[l-1].neurons; j++)
+        {
+        network->layer[l].weight[i][j] = random_float_range(lower, upper);
+        }
+      }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  NN_randomize_weights_11()
+  synopsis:     Randomize the weights of all neurons in a network.
+		Random values selected from a linear distribution
 		between -1.0 and 1.0
   parameters:   network_t *network
   return:       none
   last updated: 29 Nov 2001
  **********************************************************************/
 
-void NN_randomize_weights(network_t *network)
+void NN_randomize_weights_11(network_t *network)
   {
   int l,i,j;
    
@@ -912,6 +942,10 @@ void NN_output_error(network_t *network, float *target)
     network->error += 0.5 * SQU(err);
     }
 
+#if NN_DEBUG>2
+  printf("network->error = %f\n", network->error);
+#endif
+
   return;
   }
 
@@ -1079,6 +1113,10 @@ void NN_adjust_weights_momentum(network_t *network)
   {
   int  l,i,j;
   float out, err;
+
+#if NN_DEBUG>2
+  printf("Adjusting weights with mmtm.  network->error = %f\n", network->error);
+#endif
    
   for (l=1; l<network->num_layers; l++)
     {
@@ -1133,18 +1171,20 @@ void NN_simulate_batch(network_t *network, float *input, float *target)
 
 void NN_simulate(network_t *network, float *input, float *target)
   {
-/*int i;  debug */
+#if NN_DEBUG>2
+  int i;	/* Debug. */
+#endif
 
   NN_input(network, input);
   NN_propagate(network);
    
   NN_output_error(network, target);
 
-/* Debug:
+#if NN_DEBUG>2
   for (i=1; i<=network->layer[network->num_layers-1].neurons; i++)
     printf("%f ", network->layer[network->num_layers-1].output[i]);
   printf("\n");
-*/
+#endif
 
   return;
   }

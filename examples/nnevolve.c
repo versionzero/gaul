@@ -548,7 +548,7 @@ void nnevolve_mutate(population *pop, entity *mother, entity *son)
       i = random_int(nn->layer[l].neurons)+1;
       j = random_int(nn->layer[l-1].neurons+1);
 
-      nn->layer[l].weight[i][j] += random_float_range(-0.5,0.5);
+      nn->layer[l].weight[i][j] += random_float_range(-0.7,0.7);
     }
 
 /*  printf("DEBUG: Mutate: rate = %f -> %f momentum = %f -> %f\n", ((network_t *)mother->chromosome[0])->rate, nn->rate, ((network_t *)mother->chromosome[0])->momentum, nn->momentum);*/
@@ -910,7 +910,7 @@ int main(int argc, char **argv)
  * For comparison, try standard back-propagation.
  */
   entity = ga_get_free_entity(pop);
-  NN_randomize_weights_01((network_t *)entity->chromosome[0]);
+  NN_randomize_weights((network_t *)entity->chromosome[0], -0.8, 0.8);
   NN_set_momentum((network_t *)entity->chromosome[0], 0.5);
   NN_set_rate((network_t *)entity->chromosome[0], 0.3);
   NN_set_gain((network_t *)entity->chromosome[0], 1.0);

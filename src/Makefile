@@ -176,7 +176,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS =  -lefence -lslang -lslang
 libgaul_a_LIBADD = 
 libgaul_a_OBJECTS =  ga_bitstring.$(OBJEXT) ga_chromo.$(OBJEXT) \
 ga_core.$(OBJEXT) ga_crossover.$(OBJEXT) ga_intrinsics.$(OBJEXT) \
