@@ -157,6 +157,7 @@ int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
 
 #ifndef HAVE_USLEEP
+/* FIXME: Need to add Win32 version of this code. */
 void usleep(unsigned long usec);
 #endif
 
@@ -283,7 +284,8 @@ size_t strspn(const char *string, const char *accept);
 size_t strcspn(const char *string, const char *reject);
 #endif
 
-#ifndef HAVE_WAITPID
+#if !defined( HAVE_WAITPID ) && !defined( W32_CRIPPLED )
+/* FIXME: Need to add Win32 version of this code. */
 pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
 

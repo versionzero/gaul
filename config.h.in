@@ -1,22 +1,286 @@
-/* config.h.in.  Generated from configure.in by autoheader.  */
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
-/* Type of key used by AVL tree routines. */
-#undef AVLTREE_KEY_TYPE
+/* Define to empty if the keyword does not work.  */
+#undef const
+
+/* Define if you don't have vprintf but do have _doprnt.  */
+#undef HAVE_DOPRNT
+
+/* Define if you have the vprintf function.  */
+#undef HAVE_VPRINTF
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* Define if you can safely include both <sys/time.h> and <time.h>.  */
+#undef TIME_WITH_SYS_TIME
+
+/* Define if your <sys/time.h> declares struct tm.  */
+#undef TM_IN_SYS_TIME
+
+/* The number of bytes in a char.  */
+#undef SIZEOF_CHAR
+
+/* The number of bytes in a double.  */
+#undef SIZEOF_DOUBLE
+
+/* The number of bytes in a int.  */
+#undef SIZEOF_INT
+
+/* The number of bytes in a long.  */
+#undef SIZEOF_LONG
+
+/* The number of bytes in a void *.  */
+#undef SIZEOF_VOID_P
+
+/* Define if you have the atexit function.  */
+#undef HAVE_ATEXIT
+
+/* Define if you have the basename function.  */
+#undef HAVE_BASENAME
+
+/* Define if you have the bcmp function.  */
+#undef HAVE_BCMP
+
+/* Define if you have the bcopy function.  */
+#undef HAVE_BCOPY
+
+/* Define if you have the fdopen function.  */
+#undef HAVE_FDOPEN
+
+/* Define if you have the gethostname function.  */
+#undef HAVE_GETHOSTNAME
+
+/* Define if you have the getpwuid function.  */
+#undef HAVE_GETPWUID
+
+/* Define if you have the gettimeofday function.  */
+#undef HAVE_GETTIMEOFDAY
+
+/* Define if you have the index function.  */
+#undef HAVE_INDEX
+
+/* Define if you have the max function.  */
+#undef HAVE_MAX
+
+/* Define if you have the memchr function.  */
+#undef HAVE_MEMCHR
+
+/* Define if you have the memcmp function.  */
+#undef HAVE_MEMCMP
+
+/* Define if you have the memcpy function.  */
+#undef HAVE_MEMCPY
+
+/* Define if you have the memmem function.  */
+#undef HAVE_MEMMEM
+
+/* Define if you have the memmove function.  */
+#undef HAVE_MEMMOVE
+
+/* Define if you have the memrev function.  */
+#undef HAVE_MEMREV
+
+/* Define if you have the memscan function.  */
+#undef HAVE_MEMSCAN
+
+/* Define if you have the memset function.  */
+#undef HAVE_MEMSET
+
+/* Define if you have the min function.  */
+#undef HAVE_MIN
+
+/* Define if you have the on_exit function.  */
+#undef HAVE_ON_EXIT
+
+/* Define if you have the readline function.  */
+#undef HAVE_READLINE
+
+/* Define if you have the rindex function.  */
+#undef HAVE_RINDEX
+
+/* Define if you have the select function.  */
+#undef HAVE_SELECT
+
+/* Define if you have the snooze function.  */
+#undef HAVE_SNOOZE
+
+/* Define if you have the snprintf function.  */
+#undef HAVE_SNPRINTF
+
+/* Define if you have the strcasecmp function.  */
+#undef HAVE_STRCASECMP
+
+/* Define if you have the strcat function.  */
+#undef HAVE_STRCAT
+
+/* Define if you have the strcatv function.  */
+#undef HAVE_STRCATV
+
+/* Define if you have the strchr function.  */
+#undef HAVE_STRCHR
+
+/* Define if you have the strcmp function.  */
+#undef HAVE_STRCMP
+
+/* Define if you have the strcpy function.  */
+#undef HAVE_STRCPY
+
+/* Define if you have the strcspn function.  */
+#undef HAVE_STRCSPN
+
+/* Define if you have the strdup function.  */
+#undef HAVE_STRDUP
+
+/* Define if you have the strerror function.  */
+#undef HAVE_STRERROR
+
+/* Define if you have the stricmp function.  */
+#undef HAVE_STRICMP
+
+/* Define if you have the strlcat function.  */
+#undef HAVE_STRLCAT
+
+/* Define if you have the strlcpy function.  */
+#undef HAVE_STRLCPY
+
+/* Define if you have the strlen function.  */
+#undef HAVE_STRLEN
+
+/* Define if you have the strncasecmp function.  */
+#undef HAVE_STRNCASECMP
+
+/* Define if you have the strncmp function.  */
+#undef HAVE_STRNCMP
+
+/* Define if you have the strncpy function.  */
+#undef HAVE_STRNCPY
+
+/* Define if you have the strndup function.  */
+#undef HAVE_STRNDUP
+
+/* Define if you have the strnfill function.  */
+#undef HAVE_STRNFILL
+
+/* Define if you have the strnicmp function.  */
+#undef HAVE_STRNICMP
+
+/* Define if you have the strpbrk function.  */
+#undef HAVE_STRPBRK
+
+/* Define if you have the strrchr function.  */
+#undef HAVE_STRRCHR
+
+/* Define if you have the strrev function.  */
+#undef HAVE_STRREV
+
+/* Define if you have the strsep function.  */
+#undef HAVE_STRSEP
+
+/* Define if you have the strsignal function.  */
+#undef HAVE_STRSIGNAL
+
+/* Define if you have the strspn function.  */
+#undef HAVE_STRSPN
+
+/* Define if you have the strstr function.  */
+#undef HAVE_STRSTR
+
+/* Define if you have the strtod function.  */
+#undef HAVE_STRTOD
+
+/* Define if you have the strtok function.  */
+#undef HAVE_STRTOK
+
+/* Define if you have the usleep function.  */
+#undef HAVE_USLEEP
+
+/* Define if you have the vsnprintf function.  */
+#undef HAVE_VSNPRINTF
+
+/* Define if you have the waitpid function.  */
+#undef HAVE_WAITPID
+
+/* Define if you have the <arpa/inet.h> header file.  */
+#undef HAVE_ARPA_INET_H
+
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
+/* Define if you have the <fcntl.h> header file.  */
+#undef HAVE_FCNTL_H
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
+
+/* Define if you have the <netdb.h> header file.  */
+#undef HAVE_NETDB_H
+
+/* Define if you have the <netinet/in.h> header file.  */
+#undef HAVE_NETINET_IN_H
+
+/* Define if you have the <pwd.h> header file.  */
+#undef HAVE_PWD_H
+
+/* Define if you have the <sys/ioctl.h> header file.  */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define if you have the <sys/select.h> header file.  */
+#undef HAVE_SYS_SELECT_H
+
+/* Define if you have the <sys/signal.h> header file.  */
+#undef HAVE_SYS_SIGNAL_H
+
+/* Define if you have the <sys/socket.h> header file.  */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define if you have the <sys/termio.h> header file.  */
+#undef HAVE_SYS_TERMIO_H
+
+/* Define if you have the <sys/time.h> header file.  */
+#undef HAVE_SYS_TIME_H
+
+/* Define if you have the <sys/types.h> header file.  */
+#undef HAVE_SYS_TYPES_H
+
+/* Define if you have the <sys/uio.h> header file.  */
+#undef HAVE_SYS_UIO_H
+
+/* Define if you have the <sys/wait.h> header file.  */
+#undef HAVE_SYS_WAIT_H
+
+/* Define if you have the <termios.h> header file.  */
+#undef HAVE_TERMIOS_H
+
+/* Define if you have the <unistd.h> header file.  */
+#undef HAVE_UNISTD_H
+
+/* Define if you have the <values.h> header file.  */
+#undef HAVE_VALUES_H
+
+/* Major version number. */
+#undef MAJOR_VERSION
+
+/* Minor version number. */
+#undef MINOR_VERSION
+
+/* Patch level. */
+#undef PATCH_VERSION
+
+/* Record compilation platform information. */
+#undef UNAME_STRING
 
 /* Record date of compilation. */
 #undef BUILD_DATE_STRING
 
-/* Overall debugging level. */
-#undef DEBUG
+/* Whether to skip expensive sanity checking in vector routines. */
+#undef V3_QUICK
 
-/* Core GAUL debugging level. */
-#undef GA_DEBUG
+/* Type of key used by AVL tree routines. */
+#undef AVLTREE_KEY_TYPE
 
-/* Default number of processes. */
-#undef GA_DEFAULT_NUM_PROCESSES
-
-/* Default number of threads. */
-#undef GA_DEFAULT_NUM_THREADS
+/* Version string. */
+#undef VERSION_STRING
 
 /* Environment variable used to request processes. */
 #undef GA_NUM_PROCESSES_ENVVAR_STRING
@@ -24,281 +288,23 @@
 /* Environment variable used to request threads. */
 #undef GA_NUM_THREADS_ENVVAR_STRING
 
-/* Whether to dump certian statistics. */
-#undef GA_WRITE_STATS
+/* Default number of processes. */
+#undef GA_DEFAULT_NUM_PROCESSES
 
-/* Define to 1 if you have the <arpa/inet.h> header file. */
-#undef HAVE_ARPA_INET_H
+/* Default number of threads. */
+#undef GA_DEFAULT_NUM_THREADS
 
-/* Define to 1 if you have the `atexit' function. */
-#undef HAVE_ATEXIT
+/* type of parallelisation */
+#undef PARALLEL
 
-/* Define to 1 if you have the `basename' function. */
-#undef HAVE_BASENAME
+/* type of parallelisation */
+#undef PARALLEL
 
-/* Define to 1 if you have the `bcmp' function. */
-#undef HAVE_BCMP
+/* type of parallelisation */
+#undef PARALLEL
 
-/* Define to 1 if you have the `bcopy' function. */
-#undef HAVE_BCOPY
-
-/* Define to 1 if you have the <dlfcn.h> header file. */
-#undef HAVE_DLFCN_H
-
-/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-#undef HAVE_DOPRNT
-
-/* Define to 1 if you have the <fcntl.h> header file. */
-#undef HAVE_FCNTL_H
-
-/* Define to 1 if you have the `fdopen' function. */
-#undef HAVE_FDOPEN
-
-/* Define to 1 if you have the `gethostname' function. */
-#undef HAVE_GETHOSTNAME
-
-/* Define to 1 if you have the `getpwuid' function. */
-#undef HAVE_GETPWUID
-
-/* Define to 1 if you have the `gettimeofday' function. */
-#undef HAVE_GETTIMEOFDAY
-
-/* Define to 1 if you have the `index' function. */
-#undef HAVE_INDEX
-
-/* Define to 1 if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
-
-/* Whether itoa() is available */
-#undef HAVE_ITOA
-
-/* Define to 1 if you have the <limits.h> header file. */
-#undef HAVE_LIMITS_H
-
-/* Define to 1 if you have the `max' function. */
-#undef HAVE_MAX
-
-/* Define to 1 if you have the `memchr' function. */
-#undef HAVE_MEMCHR
-
-/* Define to 1 if you have the `memcmp' function. */
-#undef HAVE_MEMCMP
-
-/* Define to 1 if you have the `memcpy' function. */
-#undef HAVE_MEMCPY
-
-/* Define to 1 if you have the `memmem' function. */
-#undef HAVE_MEMMEM
-
-/* Define to 1 if you have the `memmove' function. */
-#undef HAVE_MEMMOVE
-
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
-
-/* Define to 1 if you have the `memrev' function. */
-#undef HAVE_MEMREV
-
-/* Define to 1 if you have the `memscan' function. */
-#undef HAVE_MEMSCAN
-
-/* Define to 1 if you have the `memset' function. */
-#undef HAVE_MEMSET
-
-/* Define to 1 if you have the `min' function. */
-#undef HAVE_MIN
-
-/* Define to 1 if you have the <netdb.h> header file. */
-#undef HAVE_NETDB_H
-
-/* Define to 1 if you have the <netinet/in.h> header file. */
-#undef HAVE_NETINET_IN_H
-
-/* Define to 1 if you have the `on_exit' function. */
-#undef HAVE_ON_EXIT
-
-/* Define to 1 if you have the <pwd.h> header file. */
-#undef HAVE_PWD_H
-
-/* Define to 1 if you have the `readline' function. */
-#undef HAVE_READLINE
-
-/* Define to 1 if you have the `rindex' function. */
-#undef HAVE_RINDEX
-
-/* Define to 1 if you have the `select' function. */
-#undef HAVE_SELECT
-
-/* Whether sincos() is available */
-#undef HAVE_SINCOS
-
-/* Whether S-Lang is installed. */
-#undef HAVE_SLANG
-
-/* Define to 1 if you have the `snooze' function. */
-#undef HAVE_SNOOZE
-
-/* Define to 1 if you have the `snprintf' function. */
-#undef HAVE_SNPRINTF
-
-/* Define if you have a working <stdbool.h> header file. */
-#undef HAVE_STDBOOL_H
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#undef HAVE_STDINT_H
-
-/* Define to 1 if you have the <stdlib.h> header file. */
-#undef HAVE_STDLIB_H
-
-/* Define to 1 if you have the `strcasecmp' function. */
-#undef HAVE_STRCASECMP
-
-/* Define to 1 if you have the `strcat' function. */
-#undef HAVE_STRCAT
-
-/* Define to 1 if you have the `strcatv' function. */
-#undef HAVE_STRCATV
-
-/* Define to 1 if you have the `strchr' function. */
-#undef HAVE_STRCHR
-
-/* Define to 1 if you have the `strcmp' function. */
-#undef HAVE_STRCMP
-
-/* Define to 1 if you have the `strcpy' function. */
-#undef HAVE_STRCPY
-
-/* Define to 1 if you have the `strcspn' function. */
-#undef HAVE_STRCSPN
-
-/* Define to 1 if you have the `strdup' function. */
-#undef HAVE_STRDUP
-
-/* Define to 1 if you have the `strerror' function. */
-#undef HAVE_STRERROR
-
-/* Define to 1 if you have the `stricmp' function. */
-#undef HAVE_STRICMP
-
-/* Define to 1 if you have the <strings.h> header file. */
-#undef HAVE_STRINGS_H
-
-/* Define to 1 if you have the <string.h> header file. */
-#undef HAVE_STRING_H
-
-/* Define to 1 if you have the `strlcat' function. */
-#undef HAVE_STRLCAT
-
-/* Define to 1 if you have the `strlcpy' function. */
-#undef HAVE_STRLCPY
-
-/* Define to 1 if you have the `strlen' function. */
-#undef HAVE_STRLEN
-
-/* Define to 1 if you have the `strncasecmp' function. */
-#undef HAVE_STRNCASECMP
-
-/* Define to 1 if you have the `strncmp' function. */
-#undef HAVE_STRNCMP
-
-/* Define to 1 if you have the `strncpy' function. */
-#undef HAVE_STRNCPY
-
-/* Define to 1 if you have the `strndup' function. */
-#undef HAVE_STRNDUP
-
-/* Define to 1 if you have the `strnfill' function. */
-#undef HAVE_STRNFILL
-
-/* Define to 1 if you have the `strnicmp' function. */
-#undef HAVE_STRNICMP
-
-/* Define to 1 if you have the `strpbrk' function. */
-#undef HAVE_STRPBRK
-
-/* Define to 1 if you have the `strrchr' function. */
-#undef HAVE_STRRCHR
-
-/* Define to 1 if you have the `strrev' function. */
-#undef HAVE_STRREV
-
-/* Define to 1 if you have the `strsep' function. */
-#undef HAVE_STRSEP
-
-/* Define to 1 if you have the `strsignal' function. */
-#undef HAVE_STRSIGNAL
-
-/* Define to 1 if you have the `strspn' function. */
-#undef HAVE_STRSPN
-
-/* Define to 1 if you have the `strstr' function. */
-#undef HAVE_STRSTR
-
-/* Define to 1 if you have the `strtod' function. */
-#undef HAVE_STRTOD
-
-/* Define to 1 if you have the `strtok' function. */
-#undef HAVE_STRTOK
-
-/* Define to 1 if you have the <sys/ioctl.h> header file. */
-#undef HAVE_SYS_IOCTL_H
-
-/* Define to 1 if you have the <sys/select.h> header file. */
-#undef HAVE_SYS_SELECT_H
-
-/* Define to 1 if you have the <sys/signal.h> header file. */
-#undef HAVE_SYS_SIGNAL_H
-
-/* Define to 1 if you have the <sys/socket.h> header file. */
-#undef HAVE_SYS_SOCKET_H
-
-/* Define to 1 if you have the <sys/stat.h> header file. */
-#undef HAVE_SYS_STAT_H
-
-/* Define to 1 if you have the <sys/termio.h> header file. */
-#undef HAVE_SYS_TERMIO_H
-
-/* Define to 1 if you have the <sys/time.h> header file. */
-#undef HAVE_SYS_TIME_H
-
-/* Define to 1 if you have the <sys/types.h> header file. */
-#undef HAVE_SYS_TYPES_H
-
-/* Define to 1 if you have the <sys/uio.h> header file. */
-#undef HAVE_SYS_UIO_H
-
-/* Define to 1 if you have the <sys/wait.h> header file. */
-#undef HAVE_SYS_WAIT_H
-
-/* Define to 1 if you have the <termios.h> header file. */
-#undef HAVE_TERMIOS_H
-
-/* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
-
-/* Define to 1 if you have the `usleep' function. */
-#undef HAVE_USLEEP
-
-/* Define to 1 if you have the <values.h> header file. */
-#undef HAVE_VALUES_H
-
-/* Define to 1 if you have the `vprintf' function. */
-#undef HAVE_VPRINTF
-
-/* Define to 1 if you have the `vsnprintf' function. */
-#undef HAVE_VSNPRINTF
-
-/* Define to 1 if you have the `waitpid' function. */
-#undef HAVE_WAITPID
-
-/* Define if compiler has built-in _Bool type. */
-#undef HAVE__BOOL
-
-/* Major version number. */
-#undef MAJOR_VERSION
-
-/* Memory alignment boundry characteristics. */
-#undef MEMORY_ALIGN_SIZE
+/* type of parallelisation */
+#undef PARALLEL
 
 /* Whether to use debugging memory allocation routines. */
 #undef MEMORY_ALLOC_DEBUG
@@ -306,71 +312,96 @@
 /* Whether to use safe memory allocation routines. */
 #undef MEMORY_ALLOC_SAFE
 
-/* Whether to pad memory. */
+/* Whether to use debugging memory allocation routines. */
+#undef MEMORY_ALLOC_DEBUG
+
+/* Whether to use safe memory allocation routines. */
+#undef MEMORY_ALLOC_SAFE
+
+/* Whether to dump certian statistics. */
+#undef GA_WRITE_STATS
+
+/* Whether to dump certian statistics. */
+#undef GA_WRITE_STATS
+
+/* Overall debugging level. */
+#undef DEBUG
+
+/* Core GAUL debugging level. */
+#undef GA_DEBUG
+
+/* Whether to pad memory.  */
 #undef MEMORY_PADDING
 
-/* Minor version number. */
-#undef MINOR_VERSION
-
-/* Define to the address where bug reports for this package should be sent. */
-#undef PACKAGE_BUGREPORT
-
-/* Define to the full name of this package. */
-#undef PACKAGE_NAME
-
-/* Define to the full name and version of this package. */
-#undef PACKAGE_STRING
-
-/* Define to the one symbol short name of this package. */
-#undef PACKAGE_TARNAME
-
-/* Define to the version of this package. */
-#undef PACKAGE_VERSION
-
-/* type of parallelisation */
-#undef PARALLEL
-
-/* Patch level. */
-#undef PATCH_VERSION
-
-/* The size of a `char', as computed by sizeof. */
-#undef SIZEOF_CHAR
-
-/* The size of a `double', as computed by sizeof. */
-#undef SIZEOF_DOUBLE
-
-/* The size of a `int', as computed by sizeof. */
-#undef SIZEOF_INT
-
-/* The size of a `long', as computed by sizeof. */
-#undef SIZEOF_LONG
-
-/* The size of a `void *', as computed by sizeof. */
-#undef SIZEOF_VOID_P
-
-/* Define to 1 if you have the ANSI C header files. */
-#undef STDC_HEADERS
-
-/* Define if using Sun's Forte C Compiler */
-#undef SUN_FORTE_C
-
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#undef TIME_WITH_SYS_TIME
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-#undef TM_IN_SYS_TIME
-
-/* Record compilation platform information. */
-#undef UNAME_STRING
-
-/* Whether to skip expensive sanity checking in vector routines. */
-#undef V3_QUICK
-
-/* Version string. */
-#undef VERSION_STRING
+/* Whether to pad memory.  */
+#undef MEMORY_PADDING
 
 /* Whether to cripple GAUL so it works on windows. */
 #undef W32_CRIPPLED
 
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
+/* Whether to cripple GAUL so it works on windows. */
+#undef W32_CRIPPLED
+
+/* Whether S-Lang is installed. */
+#undef HAVE_SLANG
+
+/* Whether S-Lang is installed. */
+#undef HAVE_SLANG
+
+/* Whether itoa() is available */
+#undef HAVE_ITOA
+
+/* Whether sincos() is available */
+#undef HAVE_SINCOS
+
+/* Define if using Sun's Forte C Compiler  */
+#undef SUN_FORTE_C
+
+/* Whether bcopy() is available */
+#undef HAVE_BCOPY
+
+/* Whether bcmp() is available */
+#undef HAVE_BCMP
+
+/* Whether strlen() is available */
+#undef HAVE_STRLEN
+
+/* Whether strncmp() is available */
+#undef HAVE_STRNCMP
+
+/* Whether strncpy() is available */
+#undef HAVE_STRNCPY
+
+/* Whether strtod() is available */
+#undef HAVE_STRTOD
+
+/* Whether strtok() is available */
+#undef HAVE_STRTOK
+
+/* Whether memset() is available */
+#undef HAVE_MEMSET
+
+/* Whether usleep() is available */
+#undef HAVE_USLEEP
+
+/* Define if using Sun's Forte C Compiler  */
+#undef SUN_FORTE_C
+
+/* Define if using Sun's Forte C Compiler  */
+#undef SUN_FORTE_C
+
+/* Whether stricmp() is available */
+#undef HAVE_STRICMP
+
+/* Whether strnicmp() is available */
+#undef HAVE_STRNICMP
+
+/* Define if you have a working <stdbool.h> header file. */
+#undef HAVE_STDBOOL_H
+
+/* Define if compiler has built-in _Bool type. */
+#undef HAVE__BOOL
+
+/* Memory alignment boundry characteristics. */
+#undef MEMORY_ALIGN_SIZE
+

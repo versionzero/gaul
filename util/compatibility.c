@@ -1552,7 +1552,7 @@ size_t strcspn(const char *string, const char *reject)
 #endif /* HAVE_STRCSPN */
 
 
-#ifndef HAVE_WAITPID
+#if !defined( HAVE_WAITPID ) && !defined( W32_CRIPPLED )
 pid_t waitpid(pid_t pid, int *pstatus, int options)
   {
   pid_t result;
@@ -1700,28 +1700,28 @@ void itoa(const int n, char *s)
 
 #ifndef HAVE_GETHOSTNAME
 /*
- * gethostname() − get host name
+ * gethostname() - get host name
 
    This function is used to access the host name of the current processor.  It
-   returns a NUL‐terminated hostname by filling the array name with a length of
-   len bytes.  In case the NUL‐terminated hostname does not fit, no error is
+   returns a NULL-terminated hostname by filling the array name with a length of
+   len bytes.  In case the NULL-terminated hostname does not fit, no error is
    returned, but the hostname is truncated.  In the specification, it is
-   unspecified whether the truncated hostname will be NUL‐terminated, but here
+   unspecified whether the truncated hostname will be NULL-terminated, but here
    it is.
 
-   What should happen is that upon success, zero is returned.  On error, −1 is
-   returned, and errno is set to EINVAL.  But here the hostname is set to
+   What should happen is that upon success, zero is returned.  On error, -1 
+   is returned, and errno is set to EINVAL.  But here the hostname is set to
    <unknown>.
 
   From the manpage:
-       EINVAL len is negative or, for sethostname, len is larger than the max‐
-              imum allowed size, or, for gethostname  on  Linux/i386,  len  is
-              smaller than the actual size.  (In this last case glibc 2.1 uses
-              ENAMETOOLONG.)
+       EINVAL len is negative or, for sethostname, len is larger than the
+              maximum allowed size, or, for gethostname on Linux/i386, len
+              is smaller than the actual size.  (In this last case glibc 2.1
+              uses ENAMETOOLONG.)
 
-   SUSv2 guarantees that ‘Host names are limited to 255  bytes’.  POSIX
-   1003.1‐2001 guarantees that ‘Host names (not including the terminating
-   NUL) are limited to HOST_NAME_MAX bytes’.
+   SUSv2 guarantees that host names are limited to 255 bytes.  POSIX
+   1003.1-2001 guarantees that host names (not including the terminating
+   NUL) are limited to HOST_NAME_MAX bytes.
 
  */
 
