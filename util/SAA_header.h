@@ -3,7 +3,7 @@
  **********************************************************************
 
   SAA_header.h - My general header to define a few useful things
-  Copyright ©1999-2002, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
+  Updated:	26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
+		30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
 		29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
 		28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
 		17 Dec 2001 SAA	Boolean stuff is now handled in a much more portable way, and follows C99 where possible.
@@ -273,6 +274,7 @@ typedef unsigned char byte;
 #define ERROR           (-5)
 #define OKAY		2
 #define TINY            (1.0e-8)
+#define ONE_MINUS_TINY  (1.0 - TINY)
 #define MAX_LINE_LENGTH 1024
 #define MAX_LINE_LEN	1024
 #define LARGE_AMOUNT	(1.0e38)
