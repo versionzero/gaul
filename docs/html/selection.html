@@ -2,8 +2,8 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="description" content="GAUL Documentation: Contents">
-   <meta name="keywords" content="genetic algorithm, GA, tutorial, examples, documentation, GAUL">
+   <meta name="description" content="GAUL Documentation: Selection Operators">
+   <meta name="keywords" content="genetic algorithm, GA, selection, documentation, GAUL">
    <meta name="author" content="Stewart Adcock">
    <meta name="copyright" content="© Stewart Adcock">
    <meta name="generator" content="vi">
@@ -20,7 +20,7 @@
 </table>
 <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%">
   <tr>
-    <td ALIGN=CENTER BGCOLOR="#2222AA"><b><font face="Arial,Helvetica" color="#FFFFFF">GAUL Documentation: Contents</font></b></td>
+    <td ALIGN=CENTER BGCOLOR="#2222AA"><b><font face="Arial,Helvetica" color="#FFFFFF">GAUL Documentation: Selection Operators</font></b></td>
   </tr>
 </table>
 
@@ -28,19 +28,45 @@
 <table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="100%">
 <tr>
 <td>
-<p>The GAUL documentation is far from complete, but it has now been started at least.  If you have any particular questions, don't hesitate to email me.  Below is the list of documents prepared so far.</p>
-<ul>
- <li><a href="./intro.html">An introduction to genetic algorithms.</a></li>
- <li><a href="./installation.html">Installation instructions.</a></li>
- <li><a href="./simpletutorial.html">A minimal GAUL program.</a></li>
- <li><a href="./examples.html">Example programs bundled with GAUL.</a></li>
- <li><a href="./selection.html">GAUL selection operators.</a></li>
- <li><a href="./chromosomes.html">GAUL chromosome definitions.</a></li>
- <li><a href="./books.html">Available books about genetic algorithms.</a></li>
- <li><a href="./license.html">Distribution license.</a></li>
-</ul>
+<p>The selection operator to be used in GAUL is defined through a callback mechanism.  Several common types of selection have been implemented, and it is easy to add your own.</p>
+<p>In GAUL there are two classes of selection operator - those which select only one individual, and those which select two individuals.  The advatage of having a specialist operator for selecting two individuals is that it may optionally include incest control (i.e. a pair of closely related individuals will not be selected).</p>
+<p>The built-in selection operators are defined in src/<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/~checkout~/gaul/gaul-devel/src/select.c?content-type=text/plain&amp;only_with_tag=MAIN">ga_select.c</a>:</p>
+<table>
+  <tr>
+    <td>Random Selection</td>
+    <td><tt>boolean ga_select_one_random(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_random(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+  <tr>
+    <td>Complete Selection</td>
+    <td><tt>boolean ga_select_one_every(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_every(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+  <tr>
+    <td>&quot;Randomranked&quot; Selection</td>
+    <td><tt>boolean ga_select_one_randomrank(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+  <tr>
+    <td>Two-way Tournament Selection</td>
+    <td><tt>boolean ga_select_one_bestof2(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+  <tr>
+    <td>Roulette-wheel Selection</td>
+    <td><tt>boolean ga_select_one_roulette(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_roulette(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+  <tr>
+    <td>Rebased Roulette-wheel Selection</td>
+    <td><tt>boolean ga_select_one_roulette_rebased(population *pop, entity **mother)</tt><br>
+        <tt>boolean ga_select_two_roulette_rebased(population *pop, entity **mother, entity **father)</tt></td>
+  </tr>
+</table>
+</td>
+</tr>
 
-</td></tr></table>
+</table>
 
 <p><a NAME="footer"></a></p>
 <table BORDER=0 CELLSPACING=0 CELLPADDING=2 WIDTH="100%">

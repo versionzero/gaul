@@ -1,5 +1,5 @@
-Welcome to GAUL: The Genetic Algorithm Utility Library
-======================================================
+GAUL: The Genetic Algorithm Utility Library
+===========================================
 Copyright © 2000-2001 "Stewart Adcock" <stewart@linux-domain.com>
 
 Further Information
@@ -32,7 +32,7 @@ o May be driven by, or extended by, powerful SLang scripts.
 
 The current primary aims for the GAUL development project are to produce documentation, examples and test cases for this open-source release of GAUL. Several new features are also planned for GAUL including wrappers to enable its use with programming languages other than C. The open-source release of GAUL is currently not parallelised, however this will become a priority development target.
 
-The main development platform for GAUL is Linux with the gcc compiler, but in the past GAUL or its non open-source predecessor have compiled successfully on Linux using Compaq's ccc compiler, on Solaris 7 with gcc, on SGI's IRIX 6.5 using the MIPSPro C compiler and on FreeBSD with gcc. It should be fairly trivial to use GAUL on any truly POSIX compliant systems. Full use is made of the GNU maketools to aid portability issues.
+The main development platform for GAUL is Linux with the gcc compiler, but in the past GAUL or its non open-source predecessor have compiled successfully on Linux using Compaq's ccc compiler, on Solaris 7 with gcc, on SGI's IRIX 6.5 using the MIPSPro C compiler and on FreeBSD with gcc. It should be fairly trivial to use GAUL on any truly POSIX compliant systems. Full use is made of the GNU maketools to aid portability issues.  A compatibility table is located at http://gaul.souceforge.net/platforms.html
 
 This version of GAUL is distributed under the terms of the GNU General Public License.  See the file ./COPYING for full details.
 

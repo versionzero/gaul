@@ -3,6 +3,9 @@ Changes since release 0.1833:
 - Used cvs2cl.pl to create change log.
 - Modifications for compilation using MIPSPro C compiler under IRIX.
 - Added bitstring chromosomes (incl. the necessary handling routines).
+- Some more documentation.
+- examples/chromostubs.c added.
+- .cvsignore updated, thn renamed to cvsignore.
 
 Changes since release 0.1832:
 

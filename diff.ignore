@@ -12,6 +12,7 @@
 *.rej
 *.sav
 *.tmp
+*.gz
 core
 aclocal.m4
 configure
@@ -36,5 +37,4 @@ goldberg2
 royalroad
 struggle
 gmon.out
-diff.ignore
 

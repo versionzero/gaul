@@ -134,8 +134,9 @@ void ga_chromosome_integer_replicate( population *pop,
   if (!parent || !child) die("Null pointer to entity structure passed.");
   if (!parent->chromosome || !child->chromosome) die("Entity has no chromsomes.");
 
-  memcpy(child->chromosome[chromosomeid], parent->chromosome[chromosomeid],
-              pop->len_chromosomes * pop->num_chromosomes * sizeof(int));
+  memcpy( child->chromosome[chromosomeid],
+          parent->chromosome[chromosomeid],
+          pop->len_chromosomes * sizeof(int));
 
   return;
   }

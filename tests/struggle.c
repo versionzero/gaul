@@ -38,8 +38,6 @@
 /*
  * Includes
  */
-#include "SAA_header.h"
-
 #include "gaul.h"
 
 /*
@@ -98,7 +96,7 @@ int main(int argc, char **argv)
     random_seed(i);
 
     pop = ga_genesis_char(
-       250,			/* const int              population_size */
+       150,			/* const int              population_size */
        1,			/* const int              num_chromo */
        strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */
@@ -126,13 +124,12 @@ int main(int argc, char **argv)
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       1000		/* const int               max_generations */
+       500		/* const int               max_generations */
               );
 
-    printf("The final solution with seed = %d was:\n", i);
-    printf("%s\n", ga_chromosome_char_to_staticstring(pop, pop->entity_iarray[0]));
-    printf("With score = %f", pop->entity_iarray[0]->fitness);
-    printf("\n");
+    printf( "The final solution with seed = %d was:\n", i);
+    printf( "%s\n", ga_chromosome_char_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
+    printf( "With score = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
 
     ga_extinction(pop);
     }

@@ -24,10 +24,6 @@
 # http://www.gnu.org/
 #
 #######################################################################
-#
-# Last Updated:	11/05/01 SAA	Added wildfire stuff.
-#		23/04/01 SAA	From ga/Makefile.am
-#
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -52,6 +48,8 @@ libbtree_a_SOURCES = btree.c
 include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
 DEPENDENCIES = \
+	chromostubs.c \
+	chromostubs.h \
 	../util/libmethods.a \
 	../util/librandom.a \
 	../util/libstr_util.a \
