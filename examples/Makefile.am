@@ -56,7 +56,7 @@ lib_LIBRARIES = libbtree.a
 libbtree_a_SOURCES = btree.c
 
 noinst_HEADERS = \
-	btree.h dejong.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 DEPENDENCIES = \
 	../util/librandom.a \

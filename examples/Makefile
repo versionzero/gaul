@@ -140,7 +140,9 @@ lib_LIBRARIES = libbtree.a
 
 libbtree_a_SOURCES = btree.c
 
-include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
+noinst_HEADERS = \
+	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+
 
 DEPENDENCIES = \
 	../util/librandom.a \
@@ -239,7 +241,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-HEADERS =  $(include_HEADERS)
+HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  README Makefile.am Makefile.in
 
@@ -421,21 +423,6 @@ nnevolve: $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
 	@rm -f nnevolve
 	$(LINK) $(nnevolve_LDFLAGS) $(nnevolve_OBJECTS) $(nnevolve_LDADD) $(LIBS)
 
-install-includeHEADERS: $(include_HEADERS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(includedir)
-	@list='$(include_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p; \
-	done
-
-uninstall-includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	list='$(include_HEADERS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(includedir)/$$p; \
-	done
-
 tags: TAGS
 
 ID: $(HEADERS) $(SOURCES) $(LISP)
@@ -528,22 +515,20 @@ installcheck: installcheck-am
 install-exec-am: install-libLIBRARIES install-binPROGRAMS
 install-exec: install-exec-am
 
-install-data-am: install-includeHEADERS
+install-data-am:
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-libLIBRARIES uninstall-binPROGRAMS \
-		uninstall-includeHEADERS
+uninstall-am: uninstall-libLIBRARIES uninstall-binPROGRAMS
 uninstall: uninstall-am
 all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) \
-		$(DESTDIR)$(includedir)
+	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir)
 
 
 mostlyclean-generic:
@@ -591,9 +576,8 @@ clean-compile maintainer-clean-compile mostlyclean-libtool \
 distclean-libtool clean-libtool maintainer-clean-libtool \
 mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
-uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
+tags mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
+distdir mostlyclean-depend distclean-depend clean-depend \
 maintainer-clean-depend info-am info dvi-am dvi check check-am \
 installcheck-am installcheck install-exec-am install-exec \
 install-data-am install-data install-am install uninstall-am uninstall \
