@@ -103,7 +103,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
+  Updated:	07 Jul 2003 SAA Added dpow().
+		10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
 		25 Feb 2003 SAA	Tweaked strndup() prototype.
 		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
 		20 Dec 2002 SAA Modified prototype of strncmp(), strncpy(), strtok() to match iso 9899 specification.  Also added new comments to strcmp() and strncmp().  Fixed strtod() for case that setlocale() is unavailable.  memset() code now matches it's prototype.
@@ -141,6 +142,25 @@ int ipow(int n, int e)
   return result;
   }
 #endif	/* HAVE_IPOW */
+
+
+#if HAVE_DPOW != 1
+/*
+ * Double to integer power.
+ */
+double dpow(double n, int e)
+  {
+  double	result=1.0;	/* The answer. */
+
+  while (e>0)
+    {
+    result*=n;
+    e--;
+    }
+
+  return result;
+  }
+#endif	/* HAVE_DPOW */
 
 
 #if HAVE_MEMCPY != 1

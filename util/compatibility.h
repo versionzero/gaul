@@ -100,6 +100,10 @@
 int ipow(int n, int e);
 #endif
 
+#if HAVE_DPOW != 1
+double dpow(double n, int e);
+#endif
+
 #if HAVE_STRCHR != 1
 # if HAVE_INDEX == 1
 #  define strchr index
