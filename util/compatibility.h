@@ -267,9 +267,17 @@ int min(int a, int b);
 int max(int a, int b);
 #endif
 
-/*if HAVE_STRRUP == 0*/
-/*if HAVE_STRICMP == 0*/
-/*if HAVE_STRNICMP == 0*/
+#ifndef HAVE_STRUPR
+char *strupr( char *s );
+#endif
+
+#ifndef HAVE_STRICMP
+int strnicmp( char *s1, char *s2, int n );
+#endif
+
+#ifndef HAVE_STRNICMP
+int strnicmp( char *s1, char *s2, int n );
+#endif
 
 #ifndef HAVE_SINCOS
 maybeinline void sincos( double radians, double *s, double *c );
