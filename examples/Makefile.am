@@ -31,6 +31,9 @@ AUTOMAKE_OPTIONS = 1.4
 
 #EXTRA_PROGRAMS = 
 
+# Kludge:
+INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
+
 bin_PROGRAMS = diagnostics \
 	test_ga test_simplex test_sd \
 	fitting fitting_simplex fitting_sd \
@@ -39,7 +42,8 @@ bin_PROGRAMS = diagnostics \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked \
-	struggle_dc struggle_randomsearch struggle_systematicsearch struggle_ss \
+	struggle_dc struggle_randomsearch \
+	struggle_systematicsearch struggle_ss \
         struggle2 struggle3 struggle4 \
 	struggle5 struggle5_mp struggle5_forked \
 	saveload \

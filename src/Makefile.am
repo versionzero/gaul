@@ -29,6 +29,9 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
+# Kludge:
+INCLUDES = -I../util/ -I/usr/include/slang/
+
 lib_LTLIBRARIES = libgaul.la
 
 libgaul_la_SOURCES = \
