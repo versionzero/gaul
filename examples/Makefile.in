@@ -130,7 +130,7 @@ AUTOMAKE_OPTIONS = 1.4
 #EXTRA_PROGRAMS = 
 bin_PROGRAMS = diagnostics \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
-	wildfire wildfire_forked \
+	wildfire wildfire_forked wildfire_loadbalancing \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss \
 	struggle struggle_forked struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle5_forked struggle_ss \
@@ -145,6 +145,7 @@ pingpong_tabu2_SOURCES = pingpong_tabu2.c
 pingpong_sa_SOURCES = pingpong_sa.c
 wildfire_SOURCES = wildfire.c
 wildfire_forked_SOURCES = wildfire_forked.c
+wildfire_loadbalancing_SOURCES = wildfire_loadbalancing.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
@@ -185,6 +186,7 @@ pingpong_tabu2_DEPENDENCIES = ${DEPENDENCIES}
 pingpong_sa_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_forked_DEPENDENCIES = ${DEPENDENCIES}
+wildfire_loadbalancing_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
@@ -209,6 +211,7 @@ pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util
 pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm 
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lstuff -llog_util -lmpi_util_fake -lm
@@ -240,12 +243,12 @@ libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
 bin_PROGRAMS = diagnostics$(EXEEXT) pingpong$(EXEEXT) \
 	pingpong_tabu$(EXEEXT) pingpong_tabu2$(EXEEXT) \
 	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
-	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
-	royalroad_ss$(EXEEXT) struggle$(EXEEXT) \
-	struggle_forked$(EXEEXT) struggle2$(EXEEXT) struggle3$(EXEEXT) \
-	struggle4$(EXEEXT) struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
-	struggle5_forked$(EXEEXT) struggle_ss$(EXEEXT) \
-	saveload$(EXEEXT) nnevolve$(EXEEXT)
+	wildfire_loadbalancing$(EXEEXT) goldberg1$(EXEEXT) \
+	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
+	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle2$(EXEEXT) \
+	struggle3$(EXEEXT) struggle4$(EXEEXT) struggle5$(EXEEXT) \
+	struggle5_mp$(EXEEXT) struggle5_forked$(EXEEXT) \
+	struggle_ss$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
 am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
@@ -314,6 +317,9 @@ wildfire_LDFLAGS =
 am_wildfire_forked_OBJECTS = wildfire_forked.$(OBJEXT)
 wildfire_forked_OBJECTS = $(am_wildfire_forked_OBJECTS)
 wildfire_forked_LDFLAGS =
+am_wildfire_loadbalancing_OBJECTS = wildfire_loadbalancing.$(OBJEXT)
+wildfire_loadbalancing_OBJECTS = $(am_wildfire_loadbalancing_OBJECTS)
+wildfire_loadbalancing_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -337,7 +343,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/struggle5_mp.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_forked.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_ss.Po ./$(DEPDIR)/wildfire.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/wildfire_forked.Po
+@AMDEP_TRUE@	./$(DEPDIR)/wildfire_forked.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/wildfire_loadbalancing.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -355,11 +362,12 @@ DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) \
 	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
 	$(struggle_forked_SOURCES) $(struggle_ss_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES)
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_forked_SOURCES) $(struggle_ss_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -476,6 +484,9 @@ wildfire$(EXEEXT): $(wildfire_OBJECTS) $(wildfire_DEPENDENCIES)
 wildfire_forked$(EXEEXT): $(wildfire_forked_OBJECTS) $(wildfire_forked_DEPENDENCIES) 
 	@rm -f wildfire_forked$(EXEEXT)
 	$(LINK) $(wildfire_forked_LDFLAGS) $(wildfire_forked_OBJECTS) $(wildfire_forked_LDADD) $(LIBS)
+wildfire_loadbalancing$(EXEEXT): $(wildfire_loadbalancing_OBJECTS) $(wildfire_loadbalancing_DEPENDENCIES) 
+	@rm -f wildfire_loadbalancing$(EXEEXT)
+	$(LINK) $(wildfire_loadbalancing_LDFLAGS) $(wildfire_loadbalancing_OBJECTS) $(wildfire_loadbalancing_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -506,6 +517,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_ss.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wildfire.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wildfire_forked.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wildfire_loadbalancing.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

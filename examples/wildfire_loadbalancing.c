@@ -337,9 +337,8 @@ boolean wildfire_score(population *pop, entity *entity)
     fgets(buffer, 80, pf);
     while (*str!=':') str++;
     str++;
-    sscanf(str, "%f %f %f", load1, load5, load15);
+    sscanf(str, "%lf %lf %lf", &load1, &load5, &load15);
     
-    load = atof(&(buffer[64]));
 /*    printf("load = %f %f %f\n", load1, load5, load15);*/
 
     pclose(pf);

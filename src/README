@@ -26,6 +26,8 @@ ga_tabu.c              Tabu Search functions.
 
 ga_climbing.c          Hill climbing optimisation functions.
 
+ga_simplex.c           Simplex search functions.
+
 ga_replace.c           Crowding, elimination and elitism operators.
 
 ga_qsort.{c,h}         Functions used internally to sort entities by fitness.
@@ -38,5 +40,5 @@ ga_intrinsics.{c,h}    Definition of S-Lang intrinsic functions.
 
 ga_crossover.c         Crossover operators.
 
-Stewart Adcock, 23 October 2002
+Stewart Adcock, 30 October 2002
 

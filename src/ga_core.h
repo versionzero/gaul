@@ -100,11 +100,13 @@
 #include "gaul.h"
 #include "ga_bitstring.h"
 #include "ga_chromo.h"
+#include "ga_climbing.h"
 #include "ga_optim.h"
 #include "ga_qsort.h"
 #include "ga_sa.h"
 #include "ga_similarity.h"
 #include "ga_tabu.h"
+#include "ga_simplex.h"
 
 /*
  * Compilation constants.
@@ -174,6 +176,16 @@ typedef struct
   } ga_climbing_t;
 
 /*
+ * Simplex parameter structure.
+ */
+typedef struct
+  {
+  int		dimensions;	/* Size of double array. */
+  GAto_double	to_double;	/* Convert chromosome to double array. */
+  GAfrom_double	from_double;	/* Convert chromosome from double array. */
+  } ga_simplex_t;
+
+/*
  * Population Structure.
  *
  * FIXME: Make opaque. (I have already written the accessor functions.)
@@ -211,9 +223,10 @@ struct population_t
 /*
  * Non-evolutionary parameters.
  */
-  ga_tabu_t	*tabu_params;			/* Parameters for tabu-searches. */
+  ga_tabu_t	*tabu_params;			/* Parameters for tabu-search. */
   ga_sa_t	*sa_params;			/* Parameters for simulated annealling. */
   ga_climbing_t	*climbing_params;		/* Parameters for hill climbing. */
+  ga_simplex_t	*simplex_params;		/* Parameters for simplex search. */
 
 /*
  * Scoring function and the other callbacks are defined here.

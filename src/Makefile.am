@@ -45,6 +45,7 @@ libgaul_la_SOURCES = \
     ga_select.c \
     ga_sa.c \
     ga_similarity.c \
+    ga_simplex.c \
     ga_tabu.c \
     ga_utility.c
 
@@ -58,6 +59,7 @@ include_HEADERS = \
     ga_qsort.h \
     ga_sa.h \
     ga_similarity.h \
+    ga_simplex.h \
     ga_tabu.h \
     ga_utility.h \
     gaul.h

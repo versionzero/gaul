@@ -130,10 +130,18 @@ typedef void    (*GAreplace)(population *pop, entity *child);
 
 /*
  * Alternative heuristic search function operations.
+ * 
+ * GAtabu_accept   - Tabu-search tabu+aspiration criteria.
+ * GAsa_accept     - Simulated Annealing acceptance criteria.
+ * GAmutate_allele - Mutate a single, specified, allele.
+ * GAto_double     - Map chromosomal data to double-precision float array.
+ * GAfrom_double   - Map chromosomal data from double-precision float array.
  */
 typedef boolean	(*GAtabu_accept)(population *pop, entity *putative, entity *tabu);
 typedef boolean	(*GAsa_accept)(population *pop, entity *current, entity *trial);
 typedef boolean	(*GAmutate_allele)(population *pop, entity *parent, entity *child, const int chromosomeid, const int alleleid);
+typedef boolean	(*GAto_double)(population *pop, entity *entity, double *darray);
+typedef boolean	(*GAfrom_double)(population *pop, entity *entity, double *darray);
 
 /*
  * Include remainder of this library's headers.

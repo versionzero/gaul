@@ -3,6 +3,8 @@ Changes since release 0.1841:
 - Numerous fixes for compilation with MingW ( http://www.mingw.org/ ) for Windows.
 - Added kludge to avoid problem with "OpenMOSIX weird bus error bug".
 - Path to S-Lang headers is no longer hard-coded.
+- Added missing prototypes for built-in Tabu-search acceptance functions.
+- Added simplex search algorithm.
 
 Changes since release 0.1840:
 - Added a few missing intrinsic functions.
@@ -16,7 +18,7 @@ Changes since release 0.1840:
 - RPM spec file improved considerably.
 - Simulated annealling algorithm completely rewritten.
 - Tabu search algorithm completely rewritten.
-- Three new examples added to demonstrate Tabu-searching and Simualted Annealling.
+- Three new examples added to demonstrate Tabu-searching and Simulated Annealling.
 - Configure script now checks for a working stdbool.h header and a built-in _Bool type.
 - Added configuration option to alter the default numbers of threads and/or processes spawned in multiprocessor code.
 
