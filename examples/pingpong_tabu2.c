@@ -3,7 +3,7 @@
  **********************************************************************
 
   pingpong_tabu2 - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -281,7 +281,7 @@ boolean pingpong_iteration_callback(int iteration, entity *this)
   synopsis:	main function.
   parameters:
   return:
-  updated:	09 Oct 2002
+  updated:	18 Feb 2005
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -321,6 +321,7 @@ int main(int argc, char **argv)
             );
 
     /* Evaluate the initial 50 population members. */
+    ga_population_seed(pop);
     ga_population_score_and_sort(pop);
 
     /* ga_population_set_tabu_parameters() is required instead of
