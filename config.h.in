@@ -297,29 +297,11 @@
 /* type of parallelisation */
 #undef PARALLEL
 
-/* type of parallelisation */
-#undef PARALLEL
-
-/* type of parallelisation */
-#undef PARALLEL
-
-/* type of parallelisation */
-#undef PARALLEL
-
 /* Whether to use debugging memory allocation routines. */
 #undef MEMORY_ALLOC_DEBUG
 
 /* Whether to use safe memory allocation routines. */
 #undef MEMORY_ALLOC_SAFE
-
-/* Whether to use debugging memory allocation routines. */
-#undef MEMORY_ALLOC_DEBUG
-
-/* Whether to use safe memory allocation routines. */
-#undef MEMORY_ALLOC_SAFE
-
-/* Whether to dump certian statistics. */
-#undef GA_WRITE_STATS
 
 /* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
@@ -333,17 +315,8 @@
 /* Whether to pad memory.  */
 #undef MEMORY_PADDING
 
-/* Whether to pad memory.  */
-#undef MEMORY_PADDING
-
 /* Whether to cripple GAUL so it works on windows. */
 #undef W32_CRIPPLED
-
-/* Whether to cripple GAUL so it works on windows. */
-#undef W32_CRIPPLED
-
-/* Whether S-Lang is installed. */
-#undef HAVE_SLANG
 
 /* Whether S-Lang is installed. */
 #undef HAVE_SLANG

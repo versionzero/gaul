@@ -269,10 +269,10 @@
 #define PATCH_VERSION 5
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-17.8.0smp #1 SMP Tue Oct 8 12:39:01 EDT 2002 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-18.7.x #1 Wed Nov 13 19:05:27 EST 2002 i686 unknown"
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "11/11/02"
+#define BUILD_DATE_STRING "17/11/02"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
@@ -298,29 +298,11 @@
 /* type of parallelisation */
 #define PARALLEL 0
 
-/* type of parallelisation */
-#define PARALLEL 0
-
-/* type of parallelisation */
-#define PARALLEL 0
-
-/* type of parallelisation */
-#define PARALLEL 0
-
 /* Whether to use debugging memory allocation routines. */
 #define MEMORY_ALLOC_DEBUG 0
 
 /* Whether to use safe memory allocation routines. */
 #define MEMORY_ALLOC_SAFE 1
-
-/* Whether to use debugging memory allocation routines. */
-#define MEMORY_ALLOC_DEBUG 0
-
-/* Whether to use safe memory allocation routines. */
-#define MEMORY_ALLOC_SAFE 1
-
-/* Whether to dump certian statistics. */
-#define GA_WRITE_STATS 0
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -334,17 +316,8 @@
 /* Whether to pad memory.  */
 #define MEMORY_PADDING 0
 
-/* Whether to pad memory.  */
-#define MEMORY_PADDING 0
-
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
-
-/* Whether to cripple GAUL so it works on windows. */
-#define W32_CRIPPLED 0
-
-/* Whether S-Lang is installed. */
-#define HAVE_SLANG 1
 
 /* Whether S-Lang is installed. */
 #define HAVE_SLANG 1
@@ -401,7 +374,7 @@
 #define HAVE_STDBOOL_H 1
 
 /* Define if compiler has built-in _Bool type. */
-#define HAVE__BOOL 1
+/* #undef HAVE__BOOL */
 
 /* Memory alignment boundry characteristics. */
 #define MEMORY_ALIGN_SIZE 4
