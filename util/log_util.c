@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	04 Feb 2002 SAA	All global variables are now decleared static.
+  Updated:	26 Feb 2002 SAA Removed s_strdup() warning from log_init().
+		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
 		07/02/01 SAA	Added warning-level messages.  LOG_WARNING is intended for non-fatal errors and so on.
@@ -78,7 +79,7 @@ static boolean		log_date=TRUE;			/* Whether to display date in logs */
 		char	*fname	Filename, or NULL.
 		log_func	func	Callback function, or NULL.
   return:	none
-  last updated:	31 Jan 2002
+  last updated:	26 Feb 2002
  **********************************************************************/
 
 void log_init(	enum log_level_type	level,
@@ -90,8 +91,11 @@ void log_init(	enum log_level_type	level,
 
   THREAD_LOCK(log_global_lock);
   log_level = level;
-  if (log_filename != fname) oldfname = log_filename;
-  log_filename = s_strdup(fname);
+  if (fname)
+    {
+    if (log_filename != fname) oldfname = log_filename;
+    log_filename = s_strdup(fname);
+    }
   log_date = date;
   THREAD_UNLOCK(log_global_lock);
 
