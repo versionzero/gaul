@@ -62,12 +62,12 @@ libbtree_a_SOURCES = btree.c
 noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
-DEPENDENCIES = \
-	../util/liblog_util.a \
-	../util/libstuff.a \
-	../util/libmpi_util_fake.a \
-	../util/libnn_util.a \
-	../src/libgaul.la
+#DEPENDENCIES = \
+#	../util/liblog_util.a \
+#	../util/libstuff.a \
+#	../util/libmpi_util_fake.a \
+#	../util/libnn_util.a \
+#	../src/libgaul.la
 
 EXTRA_DIST = \
 	chromostubs.c \

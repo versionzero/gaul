@@ -347,7 +347,10 @@ int main(int argc, char **argv)
  * Crossover ratio = 0.9.
  * Mutation ratio = 0.1.
  * Migration ration = 0.0.
+ *
  * Note that custom operator functions may choose to ignore these values.
+ *
+ * There are functions for setting these individually too.
  */
   ga_population_set_parameters( pop, GA_SCHEME_LAMARCK_CHILDREN, GA_ELITISM_PARENTS_SURVIVE, 0.9, 0.1, 0.0 );
 

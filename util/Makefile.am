@@ -118,7 +118,7 @@ include_HEADERS = \
 
 nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
 
-libstuff_a_LIBFLAGS = -lm
+libstuff_a_LIBFLAGS =
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS =

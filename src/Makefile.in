@@ -94,6 +94,8 @@ target_triplet = @target@
 AS = @AS@
 CC = @CC@
 DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LT_CURRENT = @LT_CURRENT@
@@ -106,9 +108,11 @@ MINOR_VERSION = @MINOR_VERSION@
 MPICC = @MPICC@
 MPIFLAGS = @MPIFLAGS@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PATCH_VERSION = @PATCH_VERSION@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
@@ -174,9 +178,11 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libgaul_a_LIBADD = 
-libgaul_a_OBJECTS =  ga_bitstring.o ga_chromo.o ga_core.o ga_crossover.o \
-ga_intrinsics.o ga_mutate.o ga_optim.o ga_qsort.o ga_replace.o \
-ga_seed.o ga_select.o ga_similarity.o ga_utility.o
+libgaul_a_OBJECTS =  ga_bitstring.$(OBJEXT) ga_chromo.$(OBJEXT) \
+ga_core.$(OBJEXT) ga_crossover.$(OBJEXT) ga_intrinsics.$(OBJEXT) \
+ga_mutate.$(OBJEXT) ga_optim.$(OBJEXT) ga_qsort.$(OBJEXT) \
+ga_replace.$(OBJEXT) ga_seed.$(OBJEXT) ga_select.$(OBJEXT) \
+ga_similarity.$(OBJEXT) ga_utility.$(OBJEXT)
 AR = ar
 LTLIBRARIES =  $(lib_LTLIBRARIES)
 
@@ -207,7 +213,7 @@ OBJECTS = $(libgaul_a_OBJECTS) $(libgaul_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .s
+.SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
@@ -248,6 +254,11 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -256,6 +267,7 @@ uninstall-libLIBRARIES:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 

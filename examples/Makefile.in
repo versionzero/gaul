@@ -94,6 +94,8 @@ target_triplet = @target@
 AS = @AS@
 CC = @CC@
 DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LT_CURRENT = @LT_CURRENT@
@@ -106,9 +108,11 @@ MINOR_VERSION = @MINOR_VERSION@
 MPICC = @MPICC@
 MPIFLAGS = @MPIFLAGS@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PATCH_VERSION = @PATCH_VERSION@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
@@ -149,13 +153,12 @@ noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 
-DEPENDENCIES = \
-	../util/liblog_util.a \
-	../util/libstuff.a \
-	../util/libmpi_util_fake.a \
-	../util/libnn_util.a \
-	../src/libgaul.la
-
+#DEPENDENCIES = \
+#	../util/liblog_util.a \
+#	../util/libstuff.a \
+#	../util/libmpi_util_fake.a \
+#	../util/libnn_util.a \
+#	../src/libgaul.la
 
 EXTRA_DIST = \
 	chromostubs.c \
@@ -215,45 +218,51 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libbtree_a_LIBADD = 
-libbtree_a_OBJECTS =  btree.o
+libbtree_a_OBJECTS =  btree.$(OBJEXT)
 AR = ar
+bin_PROGRAMS =  diagnostics$(EXEEXT) pingpong$(EXEEXT) wildfire$(EXEEXT) \
+goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
+royalroad_ss$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
+struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
+struggle5$(EXEEXT) struggle5_mp$(EXEEXT) struggle5_forked$(EXEEXT) \
+struggle_ss$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
-diagnostics_OBJECTS =  diagnostics.o
+diagnostics_OBJECTS =  diagnostics.$(OBJEXT)
 diagnostics_LDFLAGS = 
-pingpong_OBJECTS =  pingpong.o
+pingpong_OBJECTS =  pingpong.$(OBJEXT)
 pingpong_LDFLAGS = 
-wildfire_OBJECTS =  wildfire.o
+wildfire_OBJECTS =  wildfire.$(OBJEXT)
 wildfire_LDFLAGS = 
-goldberg1_OBJECTS =  goldberg1.o
+goldberg1_OBJECTS =  goldberg1.$(OBJEXT)
 goldberg1_LDFLAGS = 
-goldberg2_OBJECTS =  goldberg2.o
+goldberg2_OBJECTS =  goldberg2.$(OBJEXT)
 goldberg2_LDFLAGS = 
-royalroad_OBJECTS =  royalroad.o
+royalroad_OBJECTS =  royalroad.$(OBJEXT)
 royalroad_LDFLAGS = 
-royalroad_ss_OBJECTS =  royalroad_ss.o
+royalroad_ss_OBJECTS =  royalroad_ss.$(OBJEXT)
 royalroad_ss_LDFLAGS = 
-struggle_OBJECTS =  struggle.o
+struggle_OBJECTS =  struggle.$(OBJEXT)
 struggle_LDFLAGS = 
-struggle_forked_OBJECTS =  struggle_forked.o
+struggle_forked_OBJECTS =  struggle_forked.$(OBJEXT)
 struggle_forked_LDFLAGS = 
-struggle2_OBJECTS =  struggle2.o
+struggle2_OBJECTS =  struggle2.$(OBJEXT)
 struggle2_LDFLAGS = 
-struggle3_OBJECTS =  struggle3.o
+struggle3_OBJECTS =  struggle3.$(OBJEXT)
 struggle3_LDFLAGS = 
-struggle4_OBJECTS =  struggle4.o
+struggle4_OBJECTS =  struggle4.$(OBJEXT)
 struggle4_LDFLAGS = 
-struggle5_OBJECTS =  struggle5.o
+struggle5_OBJECTS =  struggle5.$(OBJEXT)
 struggle5_LDFLAGS = 
-struggle5_mp_OBJECTS =  struggle5_mp.o
+struggle5_mp_OBJECTS =  struggle5_mp.$(OBJEXT)
 struggle5_mp_LDFLAGS = 
-struggle5_forked_OBJECTS =  struggle5_forked.o
+struggle5_forked_OBJECTS =  struggle5_forked.$(OBJEXT)
 struggle5_forked_LDFLAGS = 
-struggle_ss_OBJECTS =  struggle_ss.o
+struggle_ss_OBJECTS =  struggle_ss.$(OBJEXT)
 struggle_ss_LDFLAGS = 
-saveload_OBJECTS =  saveload.o
+saveload_OBJECTS =  saveload.$(OBJEXT)
 saveload_LDFLAGS = 
-nnevolve_OBJECTS =  nnevolve.o
+nnevolve_OBJECTS =  nnevolve.$(OBJEXT)
 nnevolve_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -280,7 +289,7 @@ OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wil
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .s
+.SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu examples/Makefile
 
@@ -321,6 +330,11 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -329,6 +343,7 @@ uninstall-libLIBRARIES:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -383,76 +398,76 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
-diagnostics: $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES)
-	@rm -f diagnostics
+diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES)
+	@rm -f diagnostics$(EXEEXT)
 	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
 
-pingpong: $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES)
-	@rm -f pingpong
+pingpong$(EXEEXT): $(pingpong_OBJECTS) $(pingpong_DEPENDENCIES)
+	@rm -f pingpong$(EXEEXT)
 	$(LINK) $(pingpong_LDFLAGS) $(pingpong_OBJECTS) $(pingpong_LDADD) $(LIBS)
 
-wildfire: $(wildfire_OBJECTS) $(wildfire_DEPENDENCIES)
-	@rm -f wildfire
+wildfire$(EXEEXT): $(wildfire_OBJECTS) $(wildfire_DEPENDENCIES)
+	@rm -f wildfire$(EXEEXT)
 	$(LINK) $(wildfire_LDFLAGS) $(wildfire_OBJECTS) $(wildfire_LDADD) $(LIBS)
 
-goldberg1: $(goldberg1_OBJECTS) $(goldberg1_DEPENDENCIES)
-	@rm -f goldberg1
+goldberg1$(EXEEXT): $(goldberg1_OBJECTS) $(goldberg1_DEPENDENCIES)
+	@rm -f goldberg1$(EXEEXT)
 	$(LINK) $(goldberg1_LDFLAGS) $(goldberg1_OBJECTS) $(goldberg1_LDADD) $(LIBS)
 
-goldberg2: $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
-	@rm -f goldberg2
+goldberg2$(EXEEXT): $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
+	@rm -f goldberg2$(EXEEXT)
 	$(LINK) $(goldberg2_LDFLAGS) $(goldberg2_OBJECTS) $(goldberg2_LDADD) $(LIBS)
 
-royalroad: $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
-	@rm -f royalroad
+royalroad$(EXEEXT): $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
+	@rm -f royalroad$(EXEEXT)
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
 
-royalroad_ss: $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
-	@rm -f royalroad_ss
+royalroad_ss$(EXEEXT): $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
+	@rm -f royalroad_ss$(EXEEXT)
 	$(LINK) $(royalroad_ss_LDFLAGS) $(royalroad_ss_OBJECTS) $(royalroad_ss_LDADD) $(LIBS)
 
-struggle: $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
-	@rm -f struggle
+struggle$(EXEEXT): $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
+	@rm -f struggle$(EXEEXT)
 	$(LINK) $(struggle_LDFLAGS) $(struggle_OBJECTS) $(struggle_LDADD) $(LIBS)
 
-struggle_forked: $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES)
-	@rm -f struggle_forked
+struggle_forked$(EXEEXT): $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES)
+	@rm -f struggle_forked$(EXEEXT)
 	$(LINK) $(struggle_forked_LDFLAGS) $(struggle_forked_OBJECTS) $(struggle_forked_LDADD) $(LIBS)
 
-struggle2: $(struggle2_OBJECTS) $(struggle2_DEPENDENCIES)
-	@rm -f struggle2
+struggle2$(EXEEXT): $(struggle2_OBJECTS) $(struggle2_DEPENDENCIES)
+	@rm -f struggle2$(EXEEXT)
 	$(LINK) $(struggle2_LDFLAGS) $(struggle2_OBJECTS) $(struggle2_LDADD) $(LIBS)
 
-struggle3: $(struggle3_OBJECTS) $(struggle3_DEPENDENCIES)
-	@rm -f struggle3
+struggle3$(EXEEXT): $(struggle3_OBJECTS) $(struggle3_DEPENDENCIES)
+	@rm -f struggle3$(EXEEXT)
 	$(LINK) $(struggle3_LDFLAGS) $(struggle3_OBJECTS) $(struggle3_LDADD) $(LIBS)
 
-struggle4: $(struggle4_OBJECTS) $(struggle4_DEPENDENCIES)
-	@rm -f struggle4
+struggle4$(EXEEXT): $(struggle4_OBJECTS) $(struggle4_DEPENDENCIES)
+	@rm -f struggle4$(EXEEXT)
 	$(LINK) $(struggle4_LDFLAGS) $(struggle4_OBJECTS) $(struggle4_LDADD) $(LIBS)
 
-struggle5: $(struggle5_OBJECTS) $(struggle5_DEPENDENCIES)
-	@rm -f struggle5
+struggle5$(EXEEXT): $(struggle5_OBJECTS) $(struggle5_DEPENDENCIES)
+	@rm -f struggle5$(EXEEXT)
 	$(LINK) $(struggle5_LDFLAGS) $(struggle5_OBJECTS) $(struggle5_LDADD) $(LIBS)
 
-struggle5_mp: $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES)
-	@rm -f struggle5_mp
+struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES)
+	@rm -f struggle5_mp$(EXEEXT)
 	$(struggle5_mp_LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
 
-struggle5_forked: $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPENDENCIES)
-	@rm -f struggle5_forked
+struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPENDENCIES)
+	@rm -f struggle5_forked$(EXEEXT)
 	$(LINK) $(struggle5_forked_LDFLAGS) $(struggle5_forked_OBJECTS) $(struggle5_forked_LDADD) $(LIBS)
 
-struggle_ss: $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
-	@rm -f struggle_ss
+struggle_ss$(EXEEXT): $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
+	@rm -f struggle_ss$(EXEEXT)
 	$(LINK) $(struggle_ss_LDFLAGS) $(struggle_ss_OBJECTS) $(struggle_ss_LDADD) $(LIBS)
 
-saveload: $(saveload_OBJECTS) $(saveload_DEPENDENCIES)
-	@rm -f saveload
+saveload$(EXEEXT): $(saveload_OBJECTS) $(saveload_DEPENDENCIES)
+	@rm -f saveload$(EXEEXT)
 	$(LINK) $(saveload_LDFLAGS) $(saveload_OBJECTS) $(saveload_LDADD) $(LIBS)
 
-nnevolve: $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
-	@rm -f nnevolve
+nnevolve$(EXEEXT): $(nnevolve_OBJECTS) $(nnevolve_DEPENDENCIES)
+	@rm -f nnevolve$(EXEEXT)
 	$(LINK) $(nnevolve_LDFLAGS) $(nnevolve_OBJECTS) $(nnevolve_LDADD) $(LIBS)
 
 tags: TAGS

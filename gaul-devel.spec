@@ -25,9 +25,9 @@
 #######################################################################
 
 %define PACKAGE_VERSION 0
-%define RELEASE 1839
-%define PATCH	0
-%define prefix	/usr/local/
+%define RELEASE		1839
+%define PATCH		1
+%define prefix		/usr/local/
 
 Summary: Genetic Algorithm Utility Library
 Name: gaul-devel
@@ -63,7 +63,7 @@ make install
 %{prefix}/lib/gaul/liblog_util_parallel.so.*
 %{prefix}/lib/gaul/libmpi_util.so.*
 %{prefix}/lib/gaul/libmpi_util_fake.so.*
-%{prefix}/lib/gaul/libbtree.so.*
+#%{prefix}/lib/gaul/libbtree.so.*
 %{prefix}/lib/gaul/libgaul.la
 %{prefix}/lib/gaul/libstuff.la
 %{prefix}/lib/gaul/libnn_util.la
@@ -71,7 +71,7 @@ make install
 %{prefix}/lib/gaul/liblog_util_parallel.la
 %{prefix}/lib/gaul/libmpi_util.la
 %{prefix}/lib/gaul/libmpi_util_fake.la
-%{prefix}/lib/gaul/libbtree.la
+#%{prefix}/lib/gaul/libbtree.la
 %{prefix}/lib/gaul/libgaul.a
 %{prefix}/lib/gaul/libstuff.a
 %{prefix}/lib/gaul/libnn_util.a
@@ -79,7 +79,7 @@ make install
 %{prefix}/lib/gaul/liblog_util_parallel.a
 %{prefix}/lib/gaul/libmpi_util.a
 %{prefix}/lib/gaul/libmpi_util_fake.a
-%{prefix}/lib/gaul/libbtree.a
+#%{prefix}/lib/gaul/libbtree.a
 %{prefix}/lib/gaul/
 %{prefix}/include/gaul/ga_bitstring.h
 %{prefix}/include/gaul/ga_chromo.h
@@ -120,7 +120,7 @@ make install
 %{prefix}/bin/struggle3
 %{prefix}/bin/struggle4
 %{prefix}/bin/struggle5
-%{prefix}/bin/struggle5_mp
+#%{prefix}/bin/struggle5_mp
 %{prefix}/bin/struggle5_forked
 %{prefix}/bin/struggle_ss
 %{prefix}/bin/nn

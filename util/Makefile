@@ -93,8 +93,10 @@ host_triplet = i686-pc-linux-gnu
 target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = gcc
+CC = icc
 DLLTOOL = @DLLTOOL@
+ECHO = echo
+EXEEXT = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
@@ -107,9 +109,11 @@ MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
+OBJEXT = o
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
 RANLIB = ranlib
+STRIP = strip
 VERSION = 0.1839-1
 
 AUTOMAKE_OPTIONS = 1.4
@@ -219,7 +223,7 @@ include_HEADERS = \
 
 nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstuff -llog_util -lm
 
-libstuff_a_LIBFLAGS = -lm
+libstuff_a_LIBFLAGS = 
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS = 
@@ -247,19 +251,20 @@ CPPFLAGS =
 LDFLAGS = 
 LIBS =  -lslang -lslang
 libstuff_a_LIBADD = 
-libstuff_a_OBJECTS =  avltree.o compatibility.o linkedlist.o \
-memory_util.o table_util.o random_util.o str_util.o dstr_util.o \
-str_match.o timer_util.o
+libstuff_a_OBJECTS =  avltree.$(OBJEXT) compatibility.$(OBJEXT) \
+linkedlist.$(OBJEXT) memory_util.$(OBJEXT) table_util.$(OBJEXT) \
+random_util.$(OBJEXT) str_util.$(OBJEXT) dstr_util.$(OBJEXT) \
+str_match.$(OBJEXT) timer_util.$(OBJEXT)
 libnn_util_a_LIBADD = 
-libnn_util_a_OBJECTS =  nn_util.o
+libnn_util_a_OBJECTS =  nn_util.$(OBJEXT)
 liblog_util_a_LIBADD = 
-liblog_util_a_OBJECTS =  log_util.o
+liblog_util_a_OBJECTS =  log_util.$(OBJEXT)
 liblog_util_parallel_a_LIBADD = 
-liblog_util_parallel_a_OBJECTS =  log_util_parallel.o
+liblog_util_parallel_a_OBJECTS =  log_util_parallel.$(OBJEXT)
 libmpi_util_a_LIBADD = 
-libmpi_util_a_OBJECTS =  mpi_util.o
+libmpi_util_a_OBJECTS =  mpi_util.$(OBJEXT)
 libmpi_util_fake_a_LIBADD = 
-libmpi_util_fake_a_OBJECTS =  mpi_util_fake.o
+libmpi_util_fake_a_OBJECTS =  mpi_util_fake.$(OBJEXT)
 AR = ar
 LTLIBRARIES =  $(lib_LTLIBRARIES)
 
@@ -277,12 +282,13 @@ libmpi_util_la_LIBADD =
 libmpi_util_la_OBJECTS =  mpi_util.lo
 libmpi_util_fake_la_LIBADD = 
 libmpi_util_fake_la_OBJECTS =  mpi_util_fake.lo
+bin_PROGRAMS =  nn$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
-nn_OBJECTS =  nn_main.o
+nn_OBJECTS =  nn_main.$(OBJEXT)
 nn_DEPENDENCIES = 
 nn_LDFLAGS = 
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
+CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -O2 -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -306,7 +312,7 @@ OBJECTS = $(libstuff_a_OBJECTS) $(libnn_util_a_OBJECTS) $(liblog_util_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .s
+.SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: # Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu util/Makefile
 
@@ -347,6 +353,11 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -355,6 +366,7 @@ uninstall-libLIBRARIES:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -477,8 +489,8 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
-nn: $(nn_OBJECTS) $(nn_DEPENDENCIES)
-	@rm -f nn
+nn$(EXEEXT): $(nn_OBJECTS) $(nn_DEPENDENCIES)
+	@rm -f nn$(EXEEXT)
 	$(LINK) $(nn_LDFLAGS) $(nn_OBJECTS) $(nn_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)

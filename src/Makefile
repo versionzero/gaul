@@ -92,8 +92,10 @@ host_triplet = i686-pc-linux-gnu
 target_alias = 
 target_triplet = i686-pc-linux-gnu
 AS = @AS@
-CC = gcc
+CC = icc
 DLLTOOL = @DLLTOOL@
+ECHO = echo
+EXEEXT = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
@@ -106,9 +108,11 @@ MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
+OBJEXT = o
 PACKAGE = gaul-devel
 PATCH_VERSION = 1
 RANLIB = ranlib
+STRIP = strip
 VERSION = 0.1839-1
 
 AUTOMAKE_OPTIONS = 1.4
@@ -174,9 +178,11 @@ CPPFLAGS =
 LDFLAGS = 
 LIBS =  -lslang -lslang
 libgaul_a_LIBADD = 
-libgaul_a_OBJECTS =  ga_bitstring.o ga_chromo.o ga_core.o ga_crossover.o \
-ga_intrinsics.o ga_mutate.o ga_optim.o ga_qsort.o ga_replace.o \
-ga_seed.o ga_select.o ga_similarity.o ga_utility.o
+libgaul_a_OBJECTS =  ga_bitstring.$(OBJEXT) ga_chromo.$(OBJEXT) \
+ga_core.$(OBJEXT) ga_crossover.$(OBJEXT) ga_intrinsics.$(OBJEXT) \
+ga_mutate.$(OBJEXT) ga_optim.$(OBJEXT) ga_qsort.$(OBJEXT) \
+ga_replace.$(OBJEXT) ga_seed.$(OBJEXT) ga_select.$(OBJEXT) \
+ga_similarity.$(OBJEXT) ga_utility.$(OBJEXT)
 AR = ar
 LTLIBRARIES =  $(lib_LTLIBRARIES)
 
@@ -184,7 +190,7 @@ libgaul_la_LIBADD =
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_core.lo \
 ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
 ga_replace.lo ga_seed.lo ga_select.lo ga_similarity.lo ga_utility.lo
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/
+CFLAGS = -g -I/usr/include/slang/ -tpp6 -w1 -O2 -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -207,7 +213,7 @@ OBJECTS = $(libgaul_a_OBJECTS) $(libgaul_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .s
+.SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: # Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
@@ -248,6 +254,11 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -256,6 +267,7 @@ uninstall-libLIBRARIES:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 

@@ -955,15 +955,15 @@ int ga_population_sort_slang(int *pop_id)
   synopsis:	Handle S-Lang based seeding operator.
   parameters:
   return:
-  last updated:	24/04/01
+  last updated:	13 Jun 2002
  **********************************************************************/
 
-void ga_slang_seed(population *pop, entity *adam)
+boolean ga_slang_seed(population *pop, entity *adam)
   {
 
   plog(LOG_FIXME, "ga_slang_seed() is not implemented.");
 
-  return;
+  return TRUE;
   }
 
 

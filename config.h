@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1839-1"
-#define BUILD_DATE_STRING "13/06/02"
+#define BUILD_DATE_STRING "14/06/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
 #define PATCH_VERSION 1
@@ -47,9 +47,6 @@
 #define HAVE_UNISTD_H 1
 #define HAVE_VALUES_H 1
 
-/* Kludge required for linking to LAM-MPI */
-/* #undef HAVE_ITOA */
-
 /* #undef NO_SYS_ERRLIST */
 
 #define SIZEOF_DOUBLE 8
@@ -68,7 +65,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "13/06/02"
+#define BUILD_DATE_STRING "14/06/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -108,6 +105,9 @@
 
 /* Define if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
+
+/* Define if you have the `itoa' function. */
+/* #undef HAVE_ITOA */
 
 /* Define if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -167,7 +167,7 @@
 #define HAVE_SELECT 1
 
 /* Define if you have the `sincos' function. */
-#define HAVE_SINCOS 1
+/* #undef HAVE_SINCOS */
 
 /* Define if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
