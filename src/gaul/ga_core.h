@@ -259,13 +259,13 @@ struct population_t
 /*
  * Non-evolutionary parameters.
  */
-  ga_tabu_t		*tabu_params;			/* Parameters for tabu-search. */
-  ga_sa_t		*sa_params;			/* Parameters for simulated annealling. */
-  ga_climbing_t		*climbing_params;		/* Parameters for hill climbing. */
-  ga_simplex_t		*simplex_params;		/* Parameters for simplex search. */
-  ga_dc_t		*dc_params;			/* Parameters for deterministic crowding. */
-  ga_gradient_t		*gradient_params;		/* Parameters for gradient methods. */
-  ga_search_t		*search_params;			/* Parameters for systematic search. */
+  ga_tabu_t		*tabu_params;		/* Parameters for tabu-search. */
+  ga_sa_t		*sa_params;		/* Parameters for simulated annealling. */
+  ga_climbing_t		*climbing_params;	/* Parameters for hill climbing. */
+  ga_simplex_t		*simplex_params;	/* Parameters for simplex search. */
+  ga_dc_t		*dc_params;		/* Parameters for deterministic crowding. */
+  ga_gradient_t		*gradient_params;	/* Parameters for gradient methods. */
+  ga_search_t		*search_params;		/* Parameters for systematic search. */
 
 /*
  * Scoring function and the other callbacks are defined here.
@@ -295,6 +295,9 @@ struct population_t
 
 /*
  * Constant definitions.
+ * FIXME: There should be no purpose for these 3 constants.  I'd say
+ * they result from inflexibilities in the GAUL library.  Consider
+ * them as marked for removal!
  */
 #define GA_MULTI_BIT_CHANCE	(0.02)
 #define GA_ELITISM_MULTIPLIER	(0.05)
