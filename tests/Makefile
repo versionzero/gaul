@@ -135,21 +135,157 @@ install_sh = /u1/adcock/gaul-devel-0.1845/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
+
+# Kludge:
+INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
+
+bin_PROGRAMS = diagnostics
+
+noinst_PROGRAMS = test_prng test_utils test_bitstrings
+
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/util/gaul/gaul_config.h
 CONFIG_CLEAN_FILES =
-DIST_SOURCES =
+bin_PROGRAMS = diagnostics$(EXEEXT)
+noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
+	test_bitstrings$(EXEEXT)
+PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+
+diagnostics_SOURCES = diagnostics.c
+diagnostics_OBJECTS = diagnostics.$(OBJEXT)
+diagnostics_DEPENDENCIES =
+diagnostics_LDFLAGS =
+test_bitstrings_SOURCES = test_bitstrings.c
+test_bitstrings_OBJECTS = test_bitstrings.$(OBJEXT)
+test_bitstrings_DEPENDENCIES =
+test_bitstrings_LDFLAGS =
+test_prng_SOURCES = test_prng.c
+test_prng_OBJECTS = test_prng.$(OBJEXT)
+test_prng_DEPENDENCIES =
+test_prng_LDFLAGS =
+test_utils_SOURCES = test_utils.c
+test_utils_OBJECTS = test_utils.$(OBJEXT)
+test_utils_DEPENDENCIES =
+test_utils_LDFLAGS =
+
+DEFS = -DHAVE_CONFIG_H
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
+CPPFLAGS = 
+LDFLAGS = 
+LIBS = -L/u2/lib -lslang -lslang
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+DEP_FILES = ./$(DEPDIR)/diagnostics.Po \
+	./$(DEPDIR)/test_bitstrings.Po \
+	./$(DEPDIR)/test_prng.Po ./$(DEPDIR)/test_utils.Po
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
+DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in
+SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_utils.c
+
 all: all-am
 
 .SUFFIXES:
+.SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  tests/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	     || test -f $$p1 \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
+	  rm -f $(DESTDIR)$(bindir)/$$f; \
+	done
+
+clean-binPROGRAMS:
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
+
+clean-noinstPROGRAMS:
+	@list='$(noinst_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
+diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES) 
+	@rm -f diagnostics$(EXEEXT)
+	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
+test_bitstrings$(EXEEXT): $(test_bitstrings_OBJECTS) $(test_bitstrings_DEPENDENCIES) 
+	@rm -f test_bitstrings$(EXEEXT)
+	$(LINK) $(test_bitstrings_LDFLAGS) $(test_bitstrings_OBJECTS) $(test_bitstrings_LDADD) $(LIBS)
+test_prng$(EXEEXT): $(test_prng_OBJECTS) $(test_prng_DEPENDENCIES) 
+	@rm -f test_prng$(EXEEXT)
+	$(LINK) $(test_prng_LDFLAGS) $(test_prng_OBJECTS) $(test_prng_LDADD) $(LIBS)
+test_utils$(EXEEXT): $(test_utils_OBJECTS) $(test_utils_DEPENDENCIES) 
+	@rm -f test_utils$(EXEEXT)
+	$(LINK) $(test_utils_LDFLAGS) $(test_utils_OBJECTS) $(test_utils_LDADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT) core *.core
+
+distclean-compile:
+	-rm -f *.tab.c
+
+include ./$(DEPDIR)/diagnostics.Po
+include ./$(DEPDIR)/test_bitstrings.Po
+include ./$(DEPDIR)/test_prng.Po
+include ./$(DEPDIR)/test_utils.Po
+
+distclean-depend:
+	-rm -rf ./$(DEPDIR)
+
+.c.o:
+	source='$<' object='$@' libtool=no \
+	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(COMPILE) -c `test -f '$<' || echo '$(srcdir)/'`$<
+
+.c.obj:
+	source='$<' object='$@' libtool=no \
+	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(COMPILE) -c `cygpath -w $<`
+
+.c.lo:
+	source='$<' object='$@' libtool=yes \
+	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -160,9 +296,42 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-tags: TAGS
-TAGS:
 
+ETAGS = etags
+ETAGSFLAGS =
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	mkid -fID $$unique
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$tags$$unique" \
+	  || $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	     $$tags $$unique
+
+GTAGS:
+	here=`$(am__cd) $(top_builddir) && pwd` \
+	  && cd $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) $$here
+
+distclean-tags:
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 top_distdir = ..
@@ -191,9 +360,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile
+all-am: Makefile $(PROGRAMS)
 
 installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
 
 install: install-am
 install-exec: install-exec-am
@@ -221,11 +391,13 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 
-distclean-am: clean-am distclean-generic distclean-libtool
+distclean-am: clean-am distclean-compile distclean-depend \
+	distclean-generic distclean-libtool distclean-tags
 
 dvi: dvi-am
 
@@ -237,7 +409,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
+install-exec-am: install-binPROGRAMS
 
 install-info: install-info-am
 
@@ -251,18 +423,22 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
-.PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	distclean distclean-generic distclean-libtool distdir dvi \
-	dvi-am info info-am install install-am install-data \
+.PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic clean-libtool clean-noinstPROGRAMS distclean \
+	distclean-compile distclean-depend distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am info \
+	info-am install install-am install-binPROGRAMS install-data \
 	install-data-am install-exec install-exec-am install-info \
 	install-info-am install-man install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool uninstall uninstall-am uninstall-info-am
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-binPROGRAMS uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

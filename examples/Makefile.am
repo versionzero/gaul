@@ -34,7 +34,7 @@ AUTOMAKE_OPTIONS = 1.4
 # Kludge:
 INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
-bin_PROGRAMS = diagnostics \
+bin_PROGRAMS = \
 	test_ga test_simplex test_sd \
 	fitting fitting_simplex fitting_sd \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
@@ -49,7 +49,6 @@ bin_PROGRAMS = diagnostics \
 	saveload \
 	nnevolve
 
-diagnostics_SOURCES = diagnostics.c
 test_ga_SOURCES = test_ga.c
 test_simplex_SOURCES = test_simplex.c
 test_sd_SOURCES = test_sd.c
@@ -98,7 +97,6 @@ EXTRA_DIST = \
 	chromostubs.h \
 	wine.data wine.names
 
-diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 test_ga_DEPENDENCIES = ${DEPENDENCIES}
 test_simplex_DEPENDENCIES = ${DEPENDENCIES}
 test_sd_DEPENDENCIES = ${DEPENDENCIES}
@@ -133,7 +131,6 @@ saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm

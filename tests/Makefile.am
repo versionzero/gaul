@@ -28,5 +28,15 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
+# Kludge:
+INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
+bin_PROGRAMS = diagnostics
+
+noinst_PROGRAMS = test_prng test_utils test_bitstrings
+
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 

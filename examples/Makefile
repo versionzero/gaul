@@ -142,7 +142,7 @@ AUTOMAKE_OPTIONS = 1.4
 # Kludge:
 INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
 
-bin_PROGRAMS = diagnostics \
+bin_PROGRAMS = \
 	test_ga test_simplex test_sd \
 	fitting fitting_simplex fitting_sd \
 	pingpong pingpong_tabu pingpong_tabu2 pingpong_sa \
@@ -158,7 +158,6 @@ bin_PROGRAMS = diagnostics \
 	nnevolve
 
 
-diagnostics_SOURCES = diagnostics.c
 test_ga_SOURCES = test_ga.c
 test_simplex_SOURCES = test_simplex.c
 test_sd_SOURCES = test_sd.c
@@ -209,7 +208,6 @@ EXTRA_DIST = \
 	wine.data wine.names
 
 
-diagnostics_DEPENDENCIES = ${DEPENDENCIES}
 test_ga_DEPENDENCIES = ${DEPENDENCIES}
 test_simplex_DEPENDENCIES = ${DEPENDENCIES}
 test_sd_DEPENDENCIES = ${DEPENDENCIES}
@@ -244,7 +242,6 @@ saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -288,15 +285,14 @@ libbtree_la_LDFLAGS =
 libbtree_la_LIBADD =
 am_libbtree_la_OBJECTS = btree.lo
 libbtree_la_OBJECTS = $(am_libbtree_la_OBJECTS)
-bin_PROGRAMS = diagnostics$(EXEEXT) test_ga$(EXEEXT) \
-	test_simplex$(EXEEXT) test_sd$(EXEEXT) fitting$(EXEEXT) \
-	fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) pingpong$(EXEEXT) \
-	pingpong_tabu$(EXEEXT) pingpong_tabu2$(EXEEXT) \
-	pingpong_sa$(EXEEXT) wildfire$(EXEEXT) wildfire_forked$(EXEEXT) \
-	wildfire_loadbalancing$(EXEEXT) goldberg1$(EXEEXT) \
-	goldberg2$(EXEEXT) royalroad$(EXEEXT) royalroad_ss$(EXEEXT) \
-	royalroad_bitstring$(EXEEXT) struggle$(EXEEXT) \
-	struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
+bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
+	fitting$(EXEEXT) fitting_simplex$(EXEEXT) fitting_sd$(EXEEXT) \
+	pingpong$(EXEEXT) pingpong_tabu$(EXEEXT) \
+	pingpong_tabu2$(EXEEXT) pingpong_sa$(EXEEXT) wildfire$(EXEEXT) \
+	wildfire_forked$(EXEEXT) wildfire_loadbalancing$(EXEEXT) \
+	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
+	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
+	struggle$(EXEEXT) struggle_forked$(EXEEXT) struggle_dc$(EXEEXT) \
 	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
@@ -304,9 +300,6 @@ bin_PROGRAMS = diagnostics$(EXEEXT) test_ga$(EXEEXT) \
 	struggle5_forked$(EXEEXT) saveload$(EXEEXT) nnevolve$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_diagnostics_OBJECTS = diagnostics.$(OBJEXT)
-diagnostics_OBJECTS = $(am_diagnostics_OBJECTS)
-diagnostics_LDFLAGS =
 am_fitting_OBJECTS = fitting.$(OBJEXT)
 fitting_OBJECTS = $(am_fitting_OBJECTS)
 fitting_LDFLAGS =
@@ -413,8 +406,8 @@ LDFLAGS =
 LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/diagnostics.Po \
-	./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
+DEP_FILES = ./$(DEPDIR)/btree.Plo ./$(DEPDIR)/fitting.Po \
+	./$(DEPDIR)/fitting_sd.Po \
 	./$(DEPDIR)/fitting_simplex.Po \
 	./$(DEPDIR)/goldberg1.Po ./$(DEPDIR)/goldberg2.Po \
 	./$(DEPDIR)/nnevolve.Po ./$(DEPDIR)/pingpong.Po \
@@ -446,25 +439,25 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = -g -w1 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
-DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
-	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
-	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
-	$(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) \
-	$(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) \
-	$(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) \
-	$(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) \
-	$(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) \
-	$(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) \
-	$(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) \
-	$(struggle_dc_SOURCES) $(struggle_forked_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) \
-	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
-	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+DIST_SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) \
+	$(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) \
+	$(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) \
+	$(pingpong_SOURCES) $(pingpong_sa_SOURCES) \
+	$(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) \
+	$(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) \
+	$(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) \
+	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
+	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
+	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
+	$(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
+	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
+	$(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(libbtree_la_SOURCES) $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(nnevolve_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -515,9 +508,6 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-diagnostics$(EXEEXT): $(diagnostics_OBJECTS) $(diagnostics_DEPENDENCIES) 
-	@rm -f diagnostics$(EXEEXT)
-	$(LINK) $(diagnostics_LDFLAGS) $(diagnostics_OBJECTS) $(diagnostics_LDADD) $(LIBS)
 fitting$(EXEEXT): $(fitting_OBJECTS) $(fitting_DEPENDENCIES) 
 	@rm -f fitting$(EXEEXT)
 	$(LINK) $(fitting_LDFLAGS) $(fitting_OBJECTS) $(fitting_LDADD) $(LIBS)
@@ -622,7 +612,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/btree.Plo
-include ./$(DEPDIR)/diagnostics.Po
 include ./$(DEPDIR)/fitting.Po
 include ./$(DEPDIR)/fitting_sd.Po
 include ./$(DEPDIR)/fitting_simplex.Po

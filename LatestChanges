@@ -1,4 +1,8 @@
 Changes since release 0.1844:
+- Fixed grey-encoded bitstring bug.
+- Coded a minimal test suite.  examples/diagnostics stripped down and included as part of this suite now.
+
+Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.
 - Reorganisation of installed header files to avoid config.h clashes, along with configuration improvements.
 - Header files now installed in a subdirectory of the include dir.

@@ -1,9 +1,9 @@
 /**********************************************************************
-  diagnostics.c
+  test_bitstrings.c
  **********************************************************************
 
-  diagnostics - Diagnostic checking for GAUL.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  test_bitstrings - Test GAUL bitstring routines.
+  Copyright ©2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,11 +25,7 @@
 
  **********************************************************************
 
-  Synopsis:	Diagnostic checking for GAUL.
-
-		This program run some simple diagnostic checks
-		on the GAUL library.  It is currently very basic, but
-		I anticipate that it will be extended over time.
+  Synopsis:	Test GAUL bitstring routines.
 
  **********************************************************************/
 
@@ -40,51 +36,20 @@
 
 /**********************************************************************
   main()
-  synopsis:	Erm?
+  synopsis:	Test GAUL's bitstring routines.
   parameters:
   return:
-  updated:	08 Jan 2003
+  updated:	25 Jul 2003
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-
-/*
- * What machine type is this?
- */
-  printf("Execution machine characteristics:\n");
-#if W32_CRIPPLED != 1
-  system("uname -a");
-#else
-  printf("Native MS Windows support.");
-#endif
-
-/*
- * Usual initializations.
- */
-  random_init();
-
-/*
- * Output GAUL's diagnostic info.
- */
-  printf("This program is linked against GAUL %d.%d-%d\n",
-         ga_get_major_version(), ga_get_minor_version(), ga_get_patch_version());
-  printf("This program was compiled with the GAUL %d.%d-%d headers.\n",
-         GA_MAJOR_VERSION, GA_MINOR_VERSION, GA_PATCH_VERSION);
-  ga_diagnostics();
+  boolean	success;
 
 /*
  * Run GAUL test functions.
  */
   ga_bit_test();
-
-/*
- * Run utility test functions.
- */
-  random_test();
-  avltree_test();
-  table_test();
-  linkedlist_test();
 
   exit(EXIT_SUCCESS);
   }
