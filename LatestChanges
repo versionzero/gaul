@@ -9,6 +9,7 @@ Changes since release 0.1845:
 - Removed unused dynamic string handling code.
 - Removed unused binary tree code.
 - Applied the minor changes required for compilation with Dev-C++ on MS Windows.
+- Split disk i/o functions into their own source file to facilitate a future native windows port.
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.

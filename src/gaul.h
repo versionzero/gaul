@@ -210,11 +210,6 @@ population **ga_get_all_populations(void);
 boolean	ga_entity_seed(population *pop, entity *e);
 boolean ga_population_seed(population *pop);
 boolean ga_population_seed_soup(population *pop, const char *fname);
-boolean ga_write_soup(population *pop);
-boolean ga_population_write(population *pop, char *fname);
-population *ga_population_read(char *fname);
-boolean ga_entity_write(population *pop, entity *entity, char *fname);
-entity *ga_entity_read(population *pop, char *fname);
 double	ga_entity_evaluate(population *pop, entity *entity);
 boolean	ga_population_score_and_sort(population *pop);
 boolean	ga_population_sort(population *pop);
@@ -293,6 +288,16 @@ int	ga_funclookup_label_to_id(char *funcname);
 void	*ga_funclookup_label_to_ptr(char *funcname);
 void	*ga_funclookup_id_to_ptr(int id);
 char	*ga_funclookup_id_to_label(int id);
+
+/*
+ * Functions located in ga_io.c:
+ * (Disk I/O)
+ */
+boolean ga_write_soup(population *pop);
+boolean ga_population_write(population *pop, char *fname);
+population *ga_population_read(char *fname);
+boolean ga_entity_write(population *pop, entity *entity, char *fname);
+entity *ga_entity_read(population *pop, char *fname);
 
 /*
  * Functions located in ga_select.c:

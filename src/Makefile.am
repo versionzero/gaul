@@ -45,6 +45,7 @@ libgaul_la_SOURCES = \
     ga_crossover.c \
     ga_deterministiccrowding.c \
     ga_intrinsics.c \
+    ga_io.c \
     ga_gradient.c \
     ga_mutate.c \
     ga_optim.c \

@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /home/stewart
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -65,10 +65,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -96,10 +96,10 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1845/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1845/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -132,7 +132,7 @@ VERSION = 0.1845-2
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1845/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1845/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -153,6 +153,7 @@ libgaul_la_SOURCES = \
     ga_crossover.c \
     ga_deterministiccrowding.c \
     ga_intrinsics.c \
+    ga_io.c \
     ga_gradient.c \
     ga_mutate.c \
     ga_optim.c \
@@ -202,10 +203,10 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libgaul_la_LIBADD =
 am_libgaul_la_OBJECTS = ga_bitstring.lo ga_chromo.lo ga_climbing.lo \
 	ga_compare.lo ga_core.lo ga_crossover.lo \
-	ga_deterministiccrowding.lo ga_intrinsics.lo ga_gradient.lo \
-	ga_mutate.lo ga_optim.lo ga_qsort.lo ga_replace.lo \
-	ga_randomsearch.lo ga_seed.lo ga_select.lo ga_sa.lo \
-	ga_similarity.lo ga_simplex.lo ga_stats.lo \
+	ga_deterministiccrowding.lo ga_intrinsics.lo ga_io.lo \
+	ga_gradient.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
+	ga_replace.lo ga_randomsearch.lo ga_seed.lo ga_select.lo \
+	ga_sa.lo ga_similarity.lo ga_simplex.lo ga_stats.lo \
 	ga_systematicsearch.lo ga_tabu.lo ga_utility.lo
 libgaul_la_OBJECTS = $(am_libgaul_la_OBJECTS)
 
@@ -213,7 +214,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/home/stewart/lib -lslang -lslang
+LIBS = -L/u2/lib -lslang -lslang
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
@@ -223,7 +224,7 @@ DEP_FILES = ./$(DEPDIR)/ga_bitstring.Plo \
 	./$(DEPDIR)/ga_crossover.Plo \
 	./$(DEPDIR)/ga_deterministiccrowding.Plo \
 	./$(DEPDIR)/ga_gradient.Plo \
-	./$(DEPDIR)/ga_intrinsics.Plo \
+	./$(DEPDIR)/ga_intrinsics.Plo ./$(DEPDIR)/ga_io.Plo \
 	./$(DEPDIR)/ga_mutate.Plo ./$(DEPDIR)/ga_optim.Plo \
 	./$(DEPDIR)/ga_qsort.Plo \
 	./$(DEPDIR)/ga_randomsearch.Plo \
@@ -240,7 +241,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -w2 -O2 -ipo -ipo_obj -tpp7  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 
@@ -302,6 +303,7 @@ include ./$(DEPDIR)/ga_crossover.Plo
 include ./$(DEPDIR)/ga_deterministiccrowding.Plo
 include ./$(DEPDIR)/ga_gradient.Plo
 include ./$(DEPDIR)/ga_intrinsics.Plo
+include ./$(DEPDIR)/ga_io.Plo
 include ./$(DEPDIR)/ga_mutate.Plo
 include ./$(DEPDIR)/ga_optim.Plo
 include ./$(DEPDIR)/ga_qsort.Plo
