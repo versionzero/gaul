@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     random_seed(i);
 
     pop = ga_genesis_char(
-       150,			/* const int              population_size */
+       100,			/* const int              population_size */
        1,			/* const int              num_chromo */
        strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
        pop,			/* population      *pop */
        GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       1.0,			/* double  crossover */
+       0.9,			/* double  crossover */
        0.1,			/* double  mutation */
        0.0              	/* double  migration */
                               );
