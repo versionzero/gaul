@@ -10,10 +10,9 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1848     |  Linked-list chromosome.
+ 0.1849     |  Linked-list chromosome.
             |  Linked-list chromosome example.
-------------+--------------------------------------------------------
- 0.1849     |  More on-line/off-line statistics options.
+            |  More on-line/off-line statistics options.
             |  Use MemChunks in chromosome allocation, where appropriate.
             |  Move prototypes for all public functions into src/gaul.h
             |  Checkpoint files.
@@ -71,6 +70,7 @@ Features to be added if enough interest is demonstrated:
 * PVM support.
 * Replica-exchange SA search.
 * EDAs.
+* Differential Evolution algorithms.
 
-Stewart Adcock, 05 Oct 2004.
+Stewart Adcock, 17 Feb 2007.
 
