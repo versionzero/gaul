@@ -178,7 +178,7 @@ static struct func_lookup lookup[90]={
   parameters:	population *pop	Population.
 		SLList *list	Phenomic data.
   return:	none
-  last updated:	20/12/00
+  last updated:	24 Aug 2002
  **********************************************************************/
 
 static void destruct_list(population *pop, SLList *list)
@@ -188,35 +188,41 @@ static void destruct_list(population *pop, SLList *list)
   vpointer	data;		/* Data in item. */
 
 /* A bit of validation. */
-  if ( !pop->data_destructor ) return;
+  if ( !pop ) die("Null pointer to population structure passed.");
   if ( !list ) die("Null pointer to list passed.");
 
-/* Deallocate individual structures. */
-  num_destroyed = 0;
-  this=list;
-
-  while(this!=NULL)
+/*
+ * Deallocate data stored in the list, if required.
+ */
+  if ( pop->data_destructor )
     {
-    if ((data = slink_data(this)))
-      {
-      pop->data_destructor(data);
-      num_destroyed++;
-      }
-    this=slink_next(this);
-    }
+    num_destroyed = 0;
+    this=list;
 
-/* Deallocate list sructure. */
-  slink_free_all(list);
+    while(this!=NULL)
+      {
+      if ((data = slink_data(this)))
+        {
+        pop->data_destructor(data);
+        num_destroyed++;
+        }
+      this=slink_next(this);
+      }
 
 #if GA_DEBUG>2
-  /*
-   * Not typically needed now, because num_destrtoyed may
-   * (correctly) differ from the actual number of chromosomes.
-   */
-  if (num_destroyed != pop->num_chromosomes)
-    printf("Uh oh! Dodgy user data here? %d %d\n",
+/*
+ * Not typically needed now, because num_destrtoyed may
+ * (correctly) differ from the actual number of chromosomes.
+ */
+    if (num_destroyed != pop->num_chromosomes)
+      printf("Uh oh! Dodgy user data here? %d %d\n",
                  num_destroyed, pop->num_chromosomes);
 #endif
+
+    }
+
+/* Deallocate the list sructure. */
+  slink_free_all(list);
 
   return;
   }
@@ -2715,7 +2721,7 @@ boolean ga_extinction(population *extinct)
 		specified value.
   parameters:
   return:
-  last updated:	11/01/01
+  last updated:	22 Aug 2002
  **********************************************************************/
 
 boolean ga_genocide(population *pop, int target_size)

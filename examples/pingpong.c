@@ -358,7 +358,7 @@ int main(int argc, char **argv)
     {
     if (pop) ga_extinction(pop);
 
-    random_seed(i);
+    random_seed(424242*i);
 
     pop = ga_genesis(
        50,			/* const int              population_size */

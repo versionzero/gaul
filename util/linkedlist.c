@@ -33,7 +33,8 @@
 
 		MP-safe.
 
-  Last Updated:	16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
+  Last Updated:	22 Aug 2002 SAA	Removed memory leak in dlink_free_all().
+  		16 Aug 2002 SAA	Memory chunks will be destroyed with the last slist/dlist structures.
   		14 Jun 2002 SAA	GList emulation not relied upon in this file now.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
  
@@ -43,7 +44,7 @@
                 Equivalent of avltree_destroy().
                 ?link_unlink_data() etc like delete functions, except without freeing the element(s).
 
-  To compile:	gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lmethods
+  To compile:	gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lstuff
 
  **********************************************************************/
 
@@ -482,21 +483,26 @@ DLList *dlink_new(void)
 
 void dlink_free_all(DLList *list)
   {
+  DLList        *list2;
   DLList        *element;
 
+  if (!list) return;
+
+  list2 = list->prev;
+
   THREAD_LOCK(dlist_chunk_lock);
-  while (list->next)
+  while (list)
     {
     element = list->next;
     mem_chunk_free(dlist_chunk, list);
     list = element;
     }
 
-  while (list)
+  while (list2)
     {
-    element = list->prev;
-    mem_chunk_free(dlist_chunk, list);
-    list = element;
+    element = list2->prev;
+    mem_chunk_free(dlist_chunk, list2);
+    list2 = element;
     }
 
   if (mem_chunk_isempty(dlist_chunk))
@@ -1123,13 +1129,13 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      t = dlink_nth_data(list, i);
+      t = dlink_nth(list, i);
       if (*((int*) t->data) != (9 - i))
 	printf("Regular insert failed\n");
     }
 
   for (i = 0; i < 10; i++)
-    if(dlink_index_link(list, dlink_nth_data(list, i)) != i)
+    if(dlink_index_link(list, dlink_nth(list, i)) != i)
       printf("dlink_index_link does not seem to be the inverse of dlink_nth_data\n");
 
   dlink_free_all(list);
@@ -1143,7 +1149,7 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      t = dlink_nth_data(list, i);
+      t = dlink_nth(list, i);
       if (*((unsigned int*) t->data) != i)
          printf("Sorted insert failed\n");
     }
@@ -1159,7 +1165,7 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      t = dlink_nth_data(list, i);
+      t = dlink_nth(list, i);
       if (*((int*) t->data) != (9 - i))
          printf("Sorted insert failed\n");
     }
@@ -1177,7 +1183,7 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      st = slink_nth_data(slist, i);
+      st = slink_nth(slist, i);
       if (*((int*) st->data) != (9 - i))
 	printf ("failed\n");
     }
@@ -1193,7 +1199,7 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      st = slink_nth_data(slist, i);
+      st = slink_nth(slist, i);
       if (*((int*) st->data) != i)
          printf ("Sorted insert failed\n");
     }
@@ -1209,7 +1215,7 @@ boolean linkedlist_test(void)
 
   for (i = 0; i < 10; i++)
     {
-      st = slink_nth_data(slist, i);
+      st = slink_nth(slist, i);
       if (*((int*) st->data) != (9 - i))
          printf("Sorted insert failed\n");
     }

@@ -926,7 +926,7 @@ int ga_evolution_forked(	population		*pop,
 		This is a generation-based GA.
 		ga_genesis(), or equivalent, must be called prior to
 		this function.
-		This is alomost identical to ga_evolution() except is
+		This is almost identical to ga_evolution() except is
 		modified to facilitate the collection of certain
 		statistics.
 
