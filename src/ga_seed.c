@@ -352,3 +352,35 @@ boolean ga_seed_bitstring_random(population *pop, entity *adam)
   return TRUE;
   }
 
+
+/**********************************************************************
+  ga_seed_bitstring_zero()
+  synopsis:	Seed bitstring chromosomes with zeros.
+  parameters:	population *pop
+		entity *adam
+  return:	success
+  last updated: 10 Aug 2004
+ **********************************************************************/
+
+boolean ga_seed_bitstring_zero(population *pop, entity *adam)
+  {
+  int		chromo;		/* Index of chromosome to seed */
+  int		point;		/* Index of allele to seed */
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+  if (!adam) die("Null pointer to entity structure passed.");
+
+/* Seeding. */
+  for (chromo=0; chromo<pop->num_chromosomes; chromo++)
+    {
+    for (point=0; point<pop->len_chromosomes; point++)
+      {
+      ga_bit_clear(adam->chromosome[chromo],point);
+      }
+    }
+
+  return TRUE;
+  }
+
+
