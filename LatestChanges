@@ -15,6 +15,7 @@ Changes since release 0.1842:
 - Code linking to GAUL now only needs "-lgaul -lgaul_util -lm".
 - Extensive rewrite of portions of parallel code.
 - Changed strdup() prototype in compatibility routines.
+- Added ga_population_get_generation() function to access the generation number from within the callbacks used during evolution, e.g. the fitness evaluation function.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

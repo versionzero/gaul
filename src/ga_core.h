@@ -236,6 +236,7 @@ struct population_t
   vpointer	data;			/* User data. */
 
   int		select_state;		/* Available to selection algorithm. */
+  int		generation;		/* For ga_population_get_generation(). */
 
 /*
  * Evolutionary parameters.

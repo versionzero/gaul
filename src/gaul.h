@@ -237,7 +237,8 @@ boolean ga_genocide(population *pop, int target_size);
 boolean ga_population_set_data(population *pop, vpointer data);
 vpointer ga_population_get_data(population *pop);
 boolean ga_entity_set_data(population *pop, entity *e, SLList *data);
-SLList *ga_entity_get_data(population *pop, entity *e);
+SLList	*ga_entity_get_data(population *pop, entity *e);
+int	ga_population_get_generation(population *pop);
 
 double	ga_entity_get_fitness(entity *e);
 boolean	ga_entity_set_fitness(entity *e, double fitness);

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Optimisation and evolution routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -1045,6 +1045,8 @@ int ga_evolution(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
+  pop->generation = 0;
+
 /*
  * Score and sort the initial population members.
  */
@@ -1066,6 +1068,7 @@ int ga_evolution(	population		*pop,
            generation<max_generations )
     {
     generation++;
+    pop->generation = generation;
     pop->orig_size = pop->size;
 
     plog(LOG_DEBUG,
@@ -1160,6 +1163,8 @@ int ga_evolution_forked(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!  Upto %d processes will be fork'ed", max_processes);
 
+  pop->generation = 0;
+
 /*
  * Allocate memory required for handling the forked processes.
  * Open pipes for reporting fitnesses.
@@ -1196,6 +1201,7 @@ int ga_evolution_forked(	population		*pop,
            generation<max_generations )
     {
     generation++;
+    pop->generation = generation;
     pop->orig_size = pop->size;
 
     plog(LOG_DEBUG,
@@ -1305,6 +1311,8 @@ int ga_evolution_threaded(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!  Upto %d threads will be created", max_threads);
 
+  pop->generation = 0;
+
 /*
  * Start with all threads locked.
  */
@@ -1361,6 +1369,7 @@ THREAD_LOCK(global_thread_lock);
            generation<max_generations )
     {
     generation++;
+    pop->generation = generation;
     pop->orig_size = pop->size;
 
     plog(LOG_DEBUG,
@@ -1467,6 +1476,8 @@ int ga_evolution_with_stats(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
+  pop->generation = 0;
+
 /*
  * Create name for statistics log file.
  * Write a simple header to that file.
@@ -1492,6 +1503,7 @@ int ga_evolution_with_stats(	population		*pop,
            generation<max_generations )
     {
     generation++;
+    pop->generation = generation;
     pop->orig_size = pop->size;
 
     plog(LOG_DEBUG,
@@ -1741,6 +1753,8 @@ int ga_evolution_steady_state(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
+  pop->generation = 0;
+
 /*
  * Score and sort the initial population members.
  */
@@ -1958,6 +1972,8 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
+
+  pop->generation = 0;
 
 /*
  * Create name for statistics log file.
@@ -2828,6 +2844,8 @@ int ga_evolution_archipelago( const int num_pops,
 
   plog(LOG_VERBOSE, "The evolution has begun on %d islands!", num_pops);
 
+  pop->generation = 0;
+
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
@@ -2849,6 +2867,7 @@ int ga_evolution_archipelago( const int num_pops,
   while ( generation<max_generations && complete==FALSE)
     {
     generation++;
+    pop->generation = generation;
 
 /*
  * Migration step.
@@ -2955,6 +2974,8 @@ int ga_evolution_archipelago_forked( const int num_pops,
   if (num_pops<2)
     die("Need at least two populations for the island model.");
 
+  pop->generation = 0;
+
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
@@ -3016,6 +3037,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
     while ( generation<max_generations && complete==FALSE)
       {
       generation++;
+      pop->generation = generation;
 
 /*
  * Migration and synchronisation step.
@@ -3362,6 +3384,8 @@ int ga_evolution_mp(	population		*pop,
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
+  pop->generation = 0;
+
 /*
  * Rank zero process is master.  This handles evolution.  Other processes are slaves
  * which simply evaluate entities.
@@ -3390,6 +3414,7 @@ int ga_evolution_mp(	population		*pop,
              generation<max_generations )
       {
       generation++;
+      pop->generation = generation;
       pop->orig_size = pop->size;
 
       plog(LOG_DEBUG,

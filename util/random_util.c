@@ -413,7 +413,7 @@ double random_double_full(void)
 
 double random_double(const double max)
   {
-  return ( (((double)random_rand()*max)/(double)RANDOM_RAND_MAX) );
+  return ( max*(((double)random_rand())/(double)RANDOM_RAND_MAX) );
   }
 
 
@@ -427,7 +427,7 @@ double random_double(const double max)
 
 double random_double_range(const double min, const double max)
   {
-  return ( (((double)random_rand()*(max-min))/(double)RANDOM_RAND_MAX) + min );
+  return ( (max-min)*(((double)random_rand())/(double)RANDOM_RAND_MAX) + min );
   }
 
 
@@ -441,7 +441,7 @@ double random_double_range(const double min, const double max)
 
 double random_double_1(void)
   {
-  return ( (((double)random_rand()*2.0)/(double)RANDOM_RAND_MAX) - 1.0 );
+  return ( 2.0*(((double)random_rand())/(double)RANDOM_RAND_MAX) - 1.0 );
   }
 
 
@@ -470,7 +470,7 @@ float random_float_full(void)
 
 float random_float(const float max)
   {
-  return ( (((float)random_rand()*max)/(float)RANDOM_RAND_MAX) );
+  return ( max*(((float)random_rand())/(float)RANDOM_RAND_MAX) );
   }
 
 
@@ -484,7 +484,7 @@ float random_float(const float max)
 
 float random_float_range(const float min, const float max)
   {
-  return ( (((float)random_rand()*(max-min))/(float)RANDOM_RAND_MAX) + min );
+  return ( (max-min)*(((float)random_rand())/(float)RANDOM_RAND_MAX) + min );
   }
 
 
@@ -498,7 +498,7 @@ float random_float_range(const float min, const float max)
 
 float random_float_1(void)
   {
-  return ( (((float)random_rand()*2.0)/(float)RANDOM_RAND_MAX) - 1.0 );
+  return ( 2.0*(((float)random_rand())/(float)RANDOM_RAND_MAX) - 1.0 );
   }
 
 

@@ -259,6 +259,7 @@ population *ga_population_new(	const int stable_size,
   newpop->data = NULL;
   newpop->free_index = newpop->max_size-1;
   newpop->island = -1;
+  newpop->generation = 0;
 
   newpop->crossover_ratio = 1.0;
   newpop->mutation_ratio = 1.0;
@@ -3090,6 +3091,24 @@ SLList *ga_entity_get_data(population *pop, entity *e)
   if ( !e ) return NULL;
 
   return e->data;
+  }
+
+
+/**********************************************************************
+  ga_population_get_generation()
+  synopsis:	Gets the current generation number.  Intended for use
+		within fitness evaluation callbacks only.
+  parameters:
+  return:
+  last updated: 18 Mar 2003
+ **********************************************************************/
+
+int ga_population_get_generation(population *pop)
+  {
+
+  if ( !pop ) return 0;
+
+  return pop->generation;
   }
 
 
