@@ -385,6 +385,7 @@ echo \
   Compiler flags:           ${CFLAGS}
   Extra include flags:      ${INCLUDE}
   Install path:             ${prefix}
+  Use S-Lang:               $HAVE_SLANG
 
 ************************************************************************"
 

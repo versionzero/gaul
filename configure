@@ -2861,7 +2861,7 @@ for ac_func in fdopen gethostname getpwuid gettimeofday select \
                 min max \
                 sincos \
                 index rindex \
-                strchr strrchr rindex strcat strlen \
+                strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok \
                 strcasecmp strncasecmp snprintf \
                 strdup strndup strnfill strcatv strtod strsignal strrev \
@@ -3344,6 +3344,7 @@ echo \
   Compiler flags:           ${CFLAGS}
   Extra include flags:      ${INCLUDE}
   Install path:             ${prefix}
+  Use S-Lang:               $HAVE_SLANG
 
 ************************************************************************"
 
