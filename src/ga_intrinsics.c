@@ -1066,7 +1066,7 @@ int ga_population_score_and_sort_slang(int *pop_id)
 
 
 /**********************************************************************
-  ga_population_score_and_sort_slang()
+  ga_population_sort_slang()
   synopsis:	Wrapper around ga_population_sort() for
 		scripted API.
   parameters:	Population handle.
@@ -1231,7 +1231,7 @@ void ga_slang_mutate(population *pop, entity *father, entity *son)
   synopsis:	Handle S-Lang based replacement operator.
   parameters:
   return:
-  last updated:	03/06/01
+  last updated:	08 Apr 2003
  **********************************************************************/
 
 void ga_slang_replace(population *pop, entity *child)
@@ -1241,7 +1241,7 @@ void ga_slang_replace(population *pop, entity *child)
   if (!pop) die("Null pointer to population structure passed.");
   if (!child) die("Null pointer to entity structure passed.");
 
-  if ( SLang_run_hooks( "replace_hook", 3,
+  if ( SLang_run_hooks( "replace_hook", 2,
                         ga_get_population_id(pop), 
                         ga_get_entity_id(pop, child)) == -1 )
     die("Error calling S-Lang function \"replace_hook\".");

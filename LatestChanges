@@ -1,5 +1,7 @@
 Changes since release 0.1843:
 - Version details may be probed at run-time.  Better namespace compliance for version constants.  diagnostics example modified accordingly.
+- Updated the README file.
+- Fixed bug in ga_slang_replace().
 
 Changes since release 0.1842:
 - Lots of "behind-the-scenes" code tidying, some of which was based on splint reports ( http://www.splint.org/ ).
