@@ -5,7 +5,7 @@ Changes since release 0.1846:
 - Added ga_mutate_bitstring_multipoint() mutation function.
 - Added ga_mutate_double_allpoint() mutation function.
 - Added ga_mutate_double_multipoint() mutation function.
-- Use of MPI for parallel processing now more seemless.
+- Use of MPI for parallel processing now more seamless.
 - The (incomplete) support for use of PVM for parallel processing removed completely.
 - Several unused or unneeded portions of code culled.
 - More careful with includes.
@@ -25,13 +25,13 @@ Changes since release 0.1846:
 - Fixed long-standing memory chunk bug exhibited on Solaris, IRIX, HP/UX and possibly other (64-bit) OSes.
 - Fixed compilation on IRIX with the MIPSpro compiler.
 - Added missing struggle_threaded example source, discussed in the tutorial.
-- Altered error messages that mentioned the deprecated ga_genesis().
+- Altered error messages that mentioned the deprecated ga_genesis() function.
 - Various fixes for using native Windows I/O functions on Windows platforms.
 - Avoid the use of several reserved C keywords/identifiers in source.
 - Added a configure option to make use of Intel's icc compiler's autoparallelisation features more easily.
-- Added sanity checking into ga_get_entity_from_rank().
+- Added sanity checking into the ga_get_entity_from_rank() function.
 - Deleted code relating to usused ga_genesis_t and deprecated soup files.
-- ga_compare_genome(), ga_count_match_alleles(), ga_genome_hamming_similarity() and ga_genome_euclidian_similarity() deprecated.
+- ga_compare_genome(), ga_count_match_alleles(), ga_genome_hamming_similarity() and ga_genome_euclidian_similarity() functions deprecated.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
