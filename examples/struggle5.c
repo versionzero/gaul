@@ -119,7 +119,7 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters( pop[i], 0.75, 0.25, 0.001);
+    ga_population_set_parameters( pop[i], 0.75, 0.25, 0.001 );
     }
 
   ga_evolution_archipelago( GA_STRUGGLE_NUM_POPS, pop,
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
             i, ga_get_entity_from_rank(pop[i],0)->fitness );
     printf( "%s\n",
             ga_chromosome_char_to_staticstring(pop[i],
-                               ga_get_entity_from_rank(pop[i],0)));
+                               ga_get_entity_from_rank(pop[i],0)) );
 
     ga_extinction(pop[i]);
     }

@@ -55,7 +55,7 @@
  * Specify the number of populations (islands) to use on each processor.
  * (This value doesn't need to be constant across all processors.)
  */
-#define GA_STRUGGLE_NUM_POPS_PER_PROC	5
+#define GA_STRUGGLE_NUM_POPS_PER_PROC	2
 
 /*
  * The solution string.
@@ -105,16 +105,14 @@ boolean struggle_score(population *pop, entity *entity)
 int main(int argc, char **argv)
   {
   int		i;					/* Loop over populations. */
-  population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of populations. */
+  population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of population pointers. */
 
-/*
   log_set_level(LOG_DEBUG);
-*/
 
   mpi_init(&argc, &argv);
 
   random_init();
-  random_seed(42+mpi_get_rank());
+  random_seed(42*mpi_get_rank());
 
   for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
     {
@@ -136,7 +134,7 @@ int main(int argc, char **argv)
        NULL			/* GAreplace replace */
             );
 
-    ga_population_set_parameters( pops[i], 0.75, 0.25, 0.001);
+    ga_population_set_parameters( pops[i], 0.75, 0.25, 0.001 );
     }
 
 /*
