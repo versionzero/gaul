@@ -250,6 +250,15 @@ byte *ga_bit_clone( byte *dest, byte *src, int length )
   }
 
 
+/**********************************************************************
+  ga_bit_decode_binary_uint()
+  synopsis:	Convert a binary-encoded bitstring into an unsigned int
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
 unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length )
   {
   int		i;
@@ -264,6 +273,15 @@ unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length )
   return value;
   }
 
+
+/**********************************************************************
+  ga_bit_encode_binary_uint()
+  synopsis:	Convert an unsigned int into a binary-encoded bitstring
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
 
 void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value )
   {
@@ -284,6 +302,15 @@ void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int valu
   }
 
 
+/**********************************************************************
+  ga_bit_decode_binary_int()
+  synopsis:	Convert a binary-encoded bitstring into a signed int
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
 int ga_bit_decode_binary_int( byte *bstr, int n, int length )
   {
   if ( ga_bit_get( bstr, n ) )
@@ -292,6 +319,15 @@ int ga_bit_decode_binary_int( byte *bstr, int n, int length )
     return (int) ga_bit_decode_binary_uint( bstr, n+1, length-1 );
   }
 
+
+/**********************************************************************
+  ga_bit_encode_binary_int()
+  synopsis:	Convert a signed int into a binary-encoded bitstring
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
 
 void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value )
   {
@@ -310,6 +346,15 @@ void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value )
   return;
   }
 
+
+/**********************************************************************
+  gray_to_binary()
+  synopsis:	Convert a Gray-encoded bitstring into a binary-encoded
+		bitstring.
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
 
 static void gray_to_binary( byte *gray_bstr, int n, byte *int_bstr, int length )
   {
@@ -338,6 +383,15 @@ static void gray_to_binary( byte *gray_bstr, int n, byte *int_bstr, int length )
   return;
   }
 
+
+/**********************************************************************
+  binary_to_gray()
+  synopsis:	Convert a binary-encoded bitstring into a gray-encoded
+		bitstring.
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
 
 static void binary_to_gray( byte *gray_bstr, int n, byte *int_bstr, int length )
   {
@@ -374,6 +428,15 @@ static void binary_to_gray( byte *gray_bstr, int n, byte *int_bstr, int length )
   }
 
 
+/**********************************************************************
+  ga_bit_decode_gray_int()
+  synopsis:	Convert a gray-encoded bitstring into a signed int
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
 int ga_bit_decode_gray_int( byte *bstr, int n, int length )
   {
   byte	int_bstr[SIZEOF_INT];
@@ -384,6 +447,15 @@ int ga_bit_decode_gray_int( byte *bstr, int n, int length )
   }
 
 
+/**********************************************************************
+  ga_bit_decode_gray_uint()
+  synopsis:	Convert a gray-encoded bitstring into an unsigned int
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
 int ga_bit_decode_gray_uint( byte *bstr, int n, int length )
   {
   byte	int_bstr[SIZEOF_INT];
@@ -393,6 +465,15 @@ int ga_bit_decode_gray_uint( byte *bstr, int n, int length )
   return ( ga_bit_decode_binary_uint( int_bstr, 0, length ) );
   }
 
+
+/**********************************************************************
+  ga_bit_encode_gray_uint()
+  synopsis:	Convert an unsigned int into a gray-encoded bitstring
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
 
 void ga_bit_encode_gray_uint( byte *bstr, int n, int length, int value )
   {
@@ -405,7 +486,36 @@ void ga_bit_encode_gray_uint( byte *bstr, int n, int length, int value )
   }
 
 
-double ga_bit_decode_real( byte *bstr, int n, int mantissa, int exponent )
+/**********************************************************************
+  ga_bit_encode_gray_int()
+  synopsis:	Convert an unsigned int into a gray-encoded bitstring
+		starting at a given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
+void ga_bit_encode_gray_int( byte *bstr, int n, int length, int value )
+  {
+  byte	int_bstr[SIZEOF_INT];
+
+  ga_bit_encode_binary_int( int_bstr, 0, length, value );
+  binary_to_gray( bstr, n, int_bstr, length );
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_bit_decode_binary_real()
+  synopsis:	Convert a binary-encoded bitstring at a given offset
+		into a real. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
+double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent )
   {
   double	value;
   int		int_mantissa, int_exponent;
@@ -420,13 +530,67 @@ double ga_bit_decode_real( byte *bstr, int n, int mantissa, int exponent )
   }
 
 
-void ga_bit_encode_real( byte *bstr, int n, int mantissa, int exponent, double value )
+/**********************************************************************
+  ga_bit_encode_binary_real()
+  synopsis:	Convert a real into a binary-encoded bitstring at a
+                given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
+void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value )
   {
   int int_mantissa, int_exponent;
 
   int_mantissa = frexp( value, &int_exponent ) * (double)(1<<(mantissa-1));
   ga_bit_encode_binary_int( bstr, n, mantissa, int_mantissa );
   ga_bit_encode_binary_int( bstr, n+mantissa, exponent, int_exponent );
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_bit_decode_gray_real()
+  synopsis:	Convert a Gray-encoded bitstring at a given offset
+		into a real. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
+double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
+  {
+  double	value;
+  int		int_mantissa, int_exponent;
+
+  int_mantissa = ga_bit_decode_gray_int( bstr, n, mantissa );
+  int_exponent = ga_bit_decode_gray_int( bstr, n+mantissa, exponent );
+
+  value = ((double)int_mantissa) / ((double)(1<<(mantissa-1)))
+          * pow( 2.0, int_exponent );
+
+  return value;        
+  }
+
+
+/**********************************************************************
+  ga_bit_encode_gray_real()
+  synopsis:	Convert a real into a Gray-encoded bitstring at a
+                given offset. 
+  parameters:
+  return:
+  last updated:
+ **********************************************************************/
+
+void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, double value )
+  {
+  int int_mantissa, int_exponent;
+
+  int_mantissa = frexp( value, &int_exponent ) * (double)(1<<(mantissa-1));
+  ga_bit_encode_gray_int( bstr, n, mantissa, int_mantissa );
+  ga_bit_encode_gray_int( bstr, n+mantissa, exponent, int_exponent );
 
   return;
   }

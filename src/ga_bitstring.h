@@ -57,6 +57,8 @@ void ga_bit_randomize( byte *bstr, int n );
 void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length );
 size_t ga_bit_sizeof( int length );
 byte *ga_bit_clone( byte *dest, byte *src, int length );
+
+/* Integer conversion. */
 unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length );
 void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value );
 int ga_bit_decode_binary_int( byte *bstr, int n, int length );
@@ -64,8 +66,12 @@ void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value );
 int ga_bit_decode_gray_int( byte *bstr, int n, int length );
 int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
 void ga_bit_encode_gray_uint( byte *bstr, int n, int length, int value );
-double ga_bit_decode_real( byte *bstr, int n, int mantissa, int exponent );
-void ga_bit_encode_real( byte *bstr, int n, int mantissa, int exponent, double value );
+
+/* Real conversion. */
+double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent );
+void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value );
+double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent );
+void ga_bit_encode_grayy_real( byte *bstr, int n, int mantissa, int exponent, double value );
 
 #endif	/* GA_BITSTRING_H_INCLUDED */
 
