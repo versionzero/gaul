@@ -45,7 +45,7 @@
  * Includes.
  */
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -59,8 +59,8 @@
 # endif
 #endif
 
-#include "memory_util.h"
-#include "random_util.h"
+#include "gaul/memory_util.h"
+#include "gaul/random_util.h"
 
 /*
  * The NN layer data structure.  This is used to represent a single

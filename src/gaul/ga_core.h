@@ -98,20 +98,19 @@
 /*
  * Include remainder of this library's headers.
  */
-#include "gaul.h"
-#include "ga_bitstring.h"
-#include "ga_chromo.h"
-#include "ga_climbing.h"
-#include "ga_deterministiccrowding.h"
-#include "ga_gradient.h"
-#include "ga_optim.h"
-#include "ga_qsort.h"
-#include "ga_randomsearch.h"
-#include "ga_sa.h"
-#include "ga_similarity.h"
-#include "ga_systematicsearch.h"
-#include "ga_simplex.h"
-#include "ga_tabu.h"
+#include "gaul/ga_bitstring.h"
+#include "gaul/ga_chromo.h"
+#include "gaul/ga_climbing.h"
+#include "gaul/ga_deterministiccrowding.h"
+#include "gaul/ga_gradient.h"
+#include "gaul/ga_optim.h"
+#include "gaul/ga_qsort.h"
+#include "gaul/ga_randomsearch.h"
+#include "gaul/ga_sa.h"
+#include "gaul/ga_similarity.h"
+#include "gaul/ga_systematicsearch.h"
+#include "gaul/ga_simplex.h"
+#include "gaul/ga_tabu.h"
 
 /*
  * Compilation constants.

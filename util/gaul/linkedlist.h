@@ -38,9 +38,9 @@
 #ifndef LINKEDLIST_H_INCLUDED
 #define LINKEDLIST_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
-#include "memory_util.h"
+#include "gaul/memory_util.h"
 
 /*
  * Type definitions.

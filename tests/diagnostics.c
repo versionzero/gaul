@@ -41,7 +41,7 @@
   synopsis:	Produce some standard diagnostic output.
   parameters:
   return:
-  updated:	25 Jul 2003
+  updated:	23 Sep 2003
  **********************************************************************/
 
 int main(int argc, char **argv)
@@ -71,6 +71,77 @@ int main(int argc, char **argv)
          GA_MAJOR_VERSION, GA_MINOR_VERSION, GA_PATCH_VERSION);
 
   ga_diagnostics();
+
+  printf("Configuration details:\n");
+
+  printf("GA_BUILD_DATE_STRING:           %s\n", GA_BUILD_DATE_STRING);
+  printf("GA_DEFAULT_NUM_PROCESSES:       %d\n",GA_DEFAULT_NUM_PROCESSES);
+  printf("GA_DEFAULT_NUM_THREADS:         %d\n", GA_DEFAULT_NUM_THREADS);
+  printf("GA_NUM_PROCESSES_ENVVAR_STRING: %s\n", GA_NUM_PROCESSES_ENVVAR_STRING);
+  printf("GA_NUM_THREADS_ENVVAR_STRING:   %s\n", GA_NUM_THREADS_ENVVAR_STRING);
+  printf("HAVE_ATEXIT:                    %s\n", HAVE_ATEXIT?"true":"false");
+  printf("HAVE_BCMP:                      %s\n", HAVE_BCMP?"true":"false");
+  printf("HAVE_BCOPY:   %s\n", HAVE_BCOPY?"true":"false");
+  printf("HAVE_FDOPEN:   %s\n", HAVE_FDOPEN?"true":"false");
+  printf("HAVE_GETHOSTNAME:   %s\n", HAVE_GETHOSTNAME?"true":"false");
+  printf("HAVE_GETPWUID:   %s\n", HAVE_GETPWUID?"true":"false");
+  printf("HAVE_INDEX:   %s\n", HAVE_INDEX?"true":"false");
+  printf("HAVE_MEMCHR:   %s\n", HAVE_MEMCHR?"true":"false");
+  printf("HAVE_MEMCMP:   %s\n", HAVE_MEMCMP?"true":"false");
+  printf("HAVE_MEMCPY:   %s\n", HAVE_MEMCPY?"true":"false");
+  printf("HAVE_MEMMEM:   %s\n", HAVE_MEMMEM?"true":"false");
+  printf("HAVE_MEMMOVE:   %s\n", HAVE_MEMMOVE?"true":"false");
+  printf("HAVE_MEMREV:   %s\n", HAVE_MEMREV?"true":"false");
+  printf("HAVE_MEMSCAN:   %s\n", HAVE_MEMSCAN?"true":"false");
+  printf("HAVE_MEMSET:   %s\n", HAVE_MEMSET?"true":"false");
+  printf("HAVE_MPI:   %s\n", HAVE_MPI?"true":"false");
+  printf("HAVE_ON_EXIT:   %s\n", HAVE_ON_EXIT?"true":"false");
+  printf("HAVE_PTHREADS:   %s\n", HAVE_PTHREADS?"true":"false");
+  printf("HAVE_RINDEX:   %s\n", HAVE_RINDEX?"true":"false");
+  printf("HAVE_SELECT:   %s\n", HAVE_SELECT?"true":"false");
+  printf("HAVE_SINCOS:   %s\n", HAVE_SINCOS?"true":"false");
+  printf("HAVE_SLANG:   %s\n", HAVE_SLANG?"true":"false");
+/* FIXME: Temporarialy commented out for ease of development at this point (i.e. laziness)
+  printf("HAVE_SNOOZE:   %s\n", HAVE_SNOOZE?"true":"false");
+*/
+  printf("HAVE_SNPRINTF:   %s\n", HAVE_SNPRINTF?"true":"false");
+  printf("HAVE_STDBOOL_H:   %s\n", HAVE_STDBOOL_H?"true":"false");
+  printf("HAVE_STDINT_H:   %s\n", HAVE_STDINT_H?"true":"false");
+  printf("HAVE_STDLIB_H:   %s\n", HAVE_STDLIB_H?"true":"false");
+  printf("HAVE_STRCASECMP:   %s\n", HAVE_STRCASECMP?"true":"false");
+  printf("HAVE_STRCAT:   %s\n", HAVE_STRCAT?"true":"false");
+  printf("HAVE_STRCATV:   %s\n", HAVE_STRCATV?"true":"false");
+  printf("HAVE_STRCHR:   %s\n", HAVE_STRCHR?"true":"false");
+  printf("HAVE_STRCMP:   %s\n", HAVE_STRCMP?"true":"false");
+  printf("HAVE_STRCPY:   %s\n", HAVE_STRCPY?"true":"false");
+  printf("HAVE_STRCSPN:   %s\n", HAVE_STRCSPN?"true":"false");
+  printf("HAVE_STRDUP:   %s\n", HAVE_STRDUP?"true":"false");
+  printf("HAVE_STRERROR:   %s\n", HAVE_STRERROR?"true":"false");
+  printf("HAVE_STRINGS_H:   %s\n", HAVE_STRINGS_H?"true":"false");
+  printf("HAVE_STRING_H:   %s\n", HAVE_STRING_H?"true":"false");
+  printf("HAVE_STRLCAT:   %s\n", HAVE_STRLCAT?"true":"false");
+  printf("HAVE_STRLCPY:   %s\n", HAVE_STRLCPY?"true":"false");
+  printf("HAVE_STRLEN:   %s\n", HAVE_STRLEN?"true":"false");
+  printf("HAVE_STRNCASECMP:   %s\n", HAVE_STRNCASECMP?"true":"false");
+  printf("HAVE_STRNCMP:   %s\n", HAVE_STRNCMP?"true":"false");
+  printf("HAVE_STRNCPY:   %s\n", HAVE_STRNCPY?"true":"false");
+  printf("HAVE_STRNDUP:   %s\n", HAVE_STRNDUP?"true":"false");
+  printf("HAVE_STRNFILL:   %s\n", HAVE_STRNFILL?"true":"false");
+  printf("HAVE_STRPBRK:   %s\n", HAVE_STRPBRK?"true":"false");
+  printf("HAVE_STRRCHR:   %s\n", HAVE_STRRCHR?"true":"false");
+  printf("HAVE_STRREV:   %s\n", HAVE_STRREV?"true":"false");
+  printf("HAVE_STRSEP:   %s\n", HAVE_STRSEP?"true":"false");
+  printf("HAVE_STRSIGNAL:   %s\n", HAVE_STRSIGNAL?"true":"false");
+  printf("HAVE_STRSPN:   %s\n", HAVE_STRSPN?"true":"false");
+  printf("HAVE_STRSTR:   %s\n", HAVE_STRSTR?"true":"false");
+  printf("HAVE_STRTOD:   %s\n", HAVE_STRTOD?"true":"false");
+  printf("HAVE_STRTOK:   %s\n", HAVE_STRTOK?"true":"false");
+  printf("HAVE_USLEEP:   %s\n", HAVE_USLEEP?"true":"false");
+  printf("HAVE_VSNPRINTF:   %s\n", HAVE_VSNPRINTF?"true":"false");
+  printf("HAVE_WAITPID:   %s\n", HAVE_WAITPID?"true":"false");
+  printf("HAVE__BOOL:   %s\n", HAVE__BOOL?"true":"false");
+  printf("V3_QUICK:   %s\n", V3_QUICK?"true":"false");
+  printf("W32_CRIPPLED:   %s\n", W32_CRIPPLED?"true":"false");
 
   exit(EXIT_SUCCESS);
   }

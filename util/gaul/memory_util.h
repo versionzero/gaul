@@ -47,7 +47,7 @@
 #ifndef MEMORY_UTIL_H_INCLUDED
 #define MEMORY_UTIL_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <errno.h>
 #include <stdarg.h>
@@ -56,8 +56,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "memory_chunks.h"
-#include "avltree.h"
+#include "gaul/memory_chunks.h"
+#include "gaul/avltree.h"
 
 /* Take advantage of the GNU malloc checking features. */
 #ifdef __GNUC__

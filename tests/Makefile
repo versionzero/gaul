@@ -110,6 +110,8 @@ GA_PATCH_VERSION = 2
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-2
 GA_VERSION_STRING = 
+HAVE_MPI = 1
+HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -120,8 +122,8 @@ LT_REVISION = 2
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -183,7 +185,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lslang -lm -lslang
+LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/diagnostics.Po \
@@ -197,7 +199,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I/usr/include/slang/
+CFLAGS =  -Wall -pedantic -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
 DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c \
 	test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in

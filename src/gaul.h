@@ -51,7 +51,6 @@
 #include "gaul/linkedlist.h"         /* For linked lists. */
 #include "gaul/log_util.h"           /* For logging facilities. */
 #include "gaul/memory_util.h"        /* Memory handling. */
-#include "gaul/mpi_util.h"           /* For multiprocessing facilities. */
 #include "gaul/random_util.h"        /* For PRNGs. */
 #include "gaul/table_util.h"         /* Handling unique integer ids. */
 

@@ -51,9 +51,6 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-#undef HAVE_DOPRNT
-
 /* Define to 1 if you have the `fdopen' function. */
 #undef HAVE_FDOPEN
 
@@ -69,8 +66,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Whether itoa() is available */
-#undef HAVE_ITOA
+/* Define to 1 if you have the `mpi' library (-lmpi). */
+#undef HAVE_LIBMPI
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
@@ -114,7 +111,7 @@
 /* Define to 1 if you have the `on_exit' function. */
 #undef HAVE_ON_EXIT
 
-/* Define to use pthreads for parallel code. */
+/* Whether libpthread is installed. */
 #undef HAVE_PTHREADS
 
 /* Define to 1 if you have the <pwd.h> header file. */
@@ -171,12 +168,6 @@
 /* Define to 1 if you have the `strdup' function. */
 #undef HAVE_STRDUP
 
-/* Define to 1 if you have the `strerror' function. */
-#undef HAVE_STRERROR
-
-/* Define to 1 if you have the `stricmp' function. */
-#undef HAVE_STRICMP
-
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
@@ -207,9 +198,6 @@
 /* Define to 1 if you have the `strnfill' function. */
 #undef HAVE_STRNFILL
 
-/* Define to 1 if you have the `strnicmp' function. */
-#undef HAVE_STRNICMP
-
 /* Define to 1 if you have the `strpbrk' function. */
 #undef HAVE_STRPBRK
 
@@ -221,9 +209,6 @@
 
 /* Define to 1 if you have the `strsep' function. */
 #undef HAVE_STRSEP
-
-/* Define to 1 if you have the `strsignal' function. */
-#undef HAVE_STRSIGNAL
 
 /* Define to 1 if you have the `strspn' function. */
 #undef HAVE_STRSPN
@@ -263,9 +248,6 @@
 
 /* Define to 1 if you have the <values.h> header file. */
 #undef HAVE_VALUES_H
-
-/* Define to 1 if you have the `vprintf' function. */
-#undef HAVE_VPRINTF
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF

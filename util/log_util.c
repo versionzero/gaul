@@ -76,6 +76,17 @@ static log_func		log_callback=NULL;		/* Callback function for log */
 static enum log_level_type	log_level=LOG_NONE;	/* Logging level */
 static boolean		log_date=TRUE;			/* Whether to display date in logs */
 
+#if HAVE_MPI == 1
+static int mpi_get_rank(void)
+  {
+  int	rank;
+
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+  return rank;
+  }
+#endif
+
 
 /**********************************************************************
   log_init()

@@ -111,6 +111,8 @@ GA_PATCH_VERSION = 2
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-2
 GA_VERSION_STRING = 
+HAVE_MPI = 1
+HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -121,8 +123,8 @@ LT_REVISION = 2
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -138,7 +140,7 @@ install_sh = /u1/adcock/gaul-devel-0.1846/install-sh
 AUTOMAKE_OPTIONS = 1.4
 
 # Kludge:
-INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
+INCLUDES = -I../util/ -I../src/
 
 bin_PROGRAMS = \
 	test_ga test_simplex test_sd \
@@ -148,7 +150,7 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
-	struggle struggle_forked \
+	struggle struggle_forked struggle_mp \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -178,6 +180,7 @@ royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
+struggle_mp_SOURCES = struggle_mp.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
@@ -223,6 +226,7 @@ royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_systematicsearch_DEPENDENCIES = ${DEPENDENCIES}
@@ -272,6 +276,11 @@ struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
 mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+
+# Parallel code:
+struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -286,7 +295,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	goldberg1$(EXEEXT) goldberg2$(EXEEXT) royalroad$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
 	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
-	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
+	struggle_mp$(EXEEXT) struggle_dc$(EXEEXT) \
+	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -360,7 +370,7 @@ struggle5_LDFLAGS =
 am_struggle5_forked_OBJECTS = struggle5_forked.$(OBJEXT)
 struggle5_forked_OBJECTS = $(am_struggle5_forked_OBJECTS)
 struggle5_forked_LDFLAGS =
-am_struggle5_mp_OBJECTS = struggle5_mp.$(OBJEXT)
+am_struggle5_mp_OBJECTS = struggle5_mp-struggle5_mp.$(OBJEXT)
 struggle5_mp_OBJECTS = $(am_struggle5_mp_OBJECTS)
 struggle5_mp_LDFLAGS =
 am_struggle_dc_OBJECTS = struggle_dc.$(OBJEXT)
@@ -369,6 +379,9 @@ struggle_dc_LDFLAGS =
 am_struggle_forked_OBJECTS = struggle_forked.$(OBJEXT)
 struggle_forked_OBJECTS = $(am_struggle_forked_OBJECTS)
 struggle_forked_LDFLAGS =
+am_struggle_mp_OBJECTS = struggle_mp-struggle_mp.$(OBJEXT)
+struggle_mp_OBJECTS = $(am_struggle_mp_OBJECTS)
+struggle_mp_LDFLAGS =
 am_struggle_randomsearch_OBJECTS = struggle_randomsearch.$(OBJEXT)
 struggle_randomsearch_OBJECTS = $(am_struggle_randomsearch_OBJECTS)
 struggle_randomsearch_LDFLAGS =
@@ -403,7 +416,7 @@ DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir) -I$(top_builddir)/util/gaul
 CPPFLAGS = 
 LDFLAGS = 
-LIBS = -L/u2/lib -lslang -lm -lslang
+LIBS = -L/u2/lib -lpthread -lpthread -lslang -lm -lslang -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
@@ -421,9 +434,10 @@ DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 	./$(DEPDIR)/struggle3.Po ./$(DEPDIR)/struggle4.Po \
 	./$(DEPDIR)/struggle5.Po \
 	./$(DEPDIR)/struggle5_forked.Po \
-	./$(DEPDIR)/struggle5_mp.Po \
+	./$(DEPDIR)/struggle5_mp-struggle5_mp.Po \
 	./$(DEPDIR)/struggle_dc.Po \
 	./$(DEPDIR)/struggle_forked.Po \
+	./$(DEPDIR)/struggle_mp-struggle_mp.Po \
 	./$(DEPDIR)/struggle_randomsearch.Po \
 	./$(DEPDIR)/struggle_ss.Po \
 	./$(DEPDIR)/struggle_systematicsearch.Po \
@@ -438,7 +452,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I/usr/include/slang/
+CFLAGS =  -Wall -pedantic -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
 DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
@@ -449,15 +463,15 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) \
 	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
 	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
-	$(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) \
-	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
+	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
+	$(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) \
+	$(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -563,6 +577,7 @@ struggle5$(EXEEXT): $(struggle5_OBJECTS) $(struggle5_DEPENDENCIES)
 struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPENDENCIES) 
 	@rm -f struggle5_forked$(EXEEXT)
 	$(LINK) $(struggle5_forked_LDFLAGS) $(struggle5_forked_OBJECTS) $(struggle5_forked_LDADD) $(LIBS)
+struggle5_mp-struggle5_mp.$(OBJEXT): struggle5_mp.c
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
 	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
@@ -572,6 +587,10 @@ struggle_dc$(EXEEXT): $(struggle_dc_OBJECTS) $(struggle_dc_DEPENDENCIES)
 struggle_forked$(EXEEXT): $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES) 
 	@rm -f struggle_forked$(EXEEXT)
 	$(LINK) $(struggle_forked_LDFLAGS) $(struggle_forked_OBJECTS) $(struggle_forked_LDADD) $(LIBS)
+struggle_mp-struggle_mp.$(OBJEXT): struggle_mp.c
+struggle_mp$(EXEEXT): $(struggle_mp_OBJECTS) $(struggle_mp_DEPENDENCIES) 
+	@rm -f struggle_mp$(EXEEXT)
+	$(LINK) $(struggle_mp_LDFLAGS) $(struggle_mp_OBJECTS) $(struggle_mp_LDADD) $(LIBS)
 struggle_randomsearch$(EXEEXT): $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_DEPENDENCIES) 
 	@rm -f struggle_randomsearch$(EXEEXT)
 	$(LINK) $(struggle_randomsearch_LDFLAGS) $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_LDADD) $(LIBS)
@@ -628,9 +647,10 @@ include ./$(DEPDIR)/struggle3.Po
 include ./$(DEPDIR)/struggle4.Po
 include ./$(DEPDIR)/struggle5.Po
 include ./$(DEPDIR)/struggle5_forked.Po
-include ./$(DEPDIR)/struggle5_mp.Po
+include ./$(DEPDIR)/struggle5_mp-struggle5_mp.Po
 include ./$(DEPDIR)/struggle_dc.Po
 include ./$(DEPDIR)/struggle_forked.Po
+include ./$(DEPDIR)/struggle_mp-struggle_mp.Po
 include ./$(DEPDIR)/struggle_randomsearch.Po
 include ./$(DEPDIR)/struggle_ss.Po
 include ./$(DEPDIR)/struggle_systematicsearch.Po
@@ -661,6 +681,42 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+
+struggle5_mp-struggle5_mp.o: struggle5_mp.c
+	source='struggle5_mp.c' object='struggle5_mp-struggle5_mp.o' libtool=no \
+	depfile='$(DEPDIR)/struggle5_mp-struggle5_mp.Po' tmpdepfile='$(DEPDIR)/struggle5_mp-struggle5_mp.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mp_CFLAGS) $(CFLAGS) -c -o struggle5_mp-struggle5_mp.o `test -f 'struggle5_mp.c' || echo '$(srcdir)/'`struggle5_mp.c
+
+struggle5_mp-struggle5_mp.obj: struggle5_mp.c
+	source='struggle5_mp.c' object='struggle5_mp-struggle5_mp.obj' libtool=no \
+	depfile='$(DEPDIR)/struggle5_mp-struggle5_mp.Po' tmpdepfile='$(DEPDIR)/struggle5_mp-struggle5_mp.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mp_CFLAGS) $(CFLAGS) -c -o struggle5_mp-struggle5_mp.obj `cygpath -w struggle5_mp.c`
+
+struggle5_mp-struggle5_mp.lo: struggle5_mp.c
+	source='struggle5_mp.c' object='struggle5_mp-struggle5_mp.lo' libtool=yes \
+	depfile='$(DEPDIR)/struggle5_mp-struggle5_mp.Plo' tmpdepfile='$(DEPDIR)/struggle5_mp-struggle5_mp.TPlo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle5_mp_CFLAGS) $(CFLAGS) -c -o struggle5_mp-struggle5_mp.lo `test -f 'struggle5_mp.c' || echo '$(srcdir)/'`struggle5_mp.c
+
+struggle_mp-struggle_mp.o: struggle_mp.c
+	source='struggle_mp.c' object='struggle_mp-struggle_mp.o' libtool=no \
+	depfile='$(DEPDIR)/struggle_mp-struggle_mp.Po' tmpdepfile='$(DEPDIR)/struggle_mp-struggle_mp.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -c -o struggle_mp-struggle_mp.o `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c
+
+struggle_mp-struggle_mp.obj: struggle_mp.c
+	source='struggle_mp.c' object='struggle_mp-struggle_mp.obj' libtool=no \
+	depfile='$(DEPDIR)/struggle_mp-struggle_mp.Po' tmpdepfile='$(DEPDIR)/struggle_mp-struggle_mp.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -c -o struggle_mp-struggle_mp.obj `cygpath -w struggle_mp.c`
+
+struggle_mp-struggle_mp.lo: struggle_mp.c
+	source='struggle_mp.c' object='struggle_mp-struggle_mp.lo' libtool=yes \
+	depfile='$(DEPDIR)/struggle_mp-struggle_mp.Plo' tmpdepfile='$(DEPDIR)/struggle_mp-struggle_mp.TPlo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -c -o struggle_mp-struggle_mp.lo `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c
 CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:
@@ -815,6 +871,11 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	mostlyclean-libtool tags uninstall uninstall-am \
 	uninstall-binPROGRAMS uninstall-info-am
 
+
+#struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -D_REENTRANT
+#struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+#struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -D_REENTRANT
+#struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

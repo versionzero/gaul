@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "22/09/03"
+#define GA_BUILD_DATE_STRING "23/09/03"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -52,9 +52,6 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
-/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-/* #undef HAVE_DOPRNT */
-
 /* Define to 1 if you have the `fdopen' function. */
 #define HAVE_FDOPEN 1
 
@@ -70,8 +67,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Whether itoa() is available */
-/* #undef HAVE_ITOA */
+/* Define to 1 if you have the `mpi' library (-lmpi). */
+#define HAVE_LIBMPI 1
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -110,13 +107,13 @@
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 0
+#define HAVE_MPI 1
 
 /* Define to 1 if you have the `on_exit' function. */
 #define HAVE_ON_EXIT 1
 
-/* Define to use pthreads for parallel code. */
-/* #undef HAVE_PTHREADS */
+/* Whether libpthread is installed. */
+#define HAVE_PTHREADS 1
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
@@ -172,12 +169,6 @@
 /* Define to 1 if you have the `strdup' function. */
 #define HAVE_STRDUP 1
 
-/* Define to 1 if you have the `strerror' function. */
-#define HAVE_STRERROR 1
-
-/* Define to 1 if you have the `stricmp' function. */
-/* #undef HAVE_STRICMP */
-
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
 
@@ -208,9 +199,6 @@
 /* Define to 1 if you have the `strnfill' function. */
 /* #undef HAVE_STRNFILL */
 
-/* Define to 1 if you have the `strnicmp' function. */
-/* #undef HAVE_STRNICMP */
-
 /* Define to 1 if you have the `strpbrk' function. */
 #define HAVE_STRPBRK 1
 
@@ -222,9 +210,6 @@
 
 /* Define to 1 if you have the `strsep' function. */
 #define HAVE_STRSEP 1
-
-/* Define to 1 if you have the `strsignal' function. */
-#define HAVE_STRSIGNAL 1
 
 /* Define to 1 if you have the `strspn' function. */
 #define HAVE_STRSPN 1
@@ -264,9 +249,6 @@
 
 /* Define to 1 if you have the <values.h> header file. */
 #define HAVE_VALUES_H 1
-
-/* Define to 1 if you have the `vprintf' function. */
-#define HAVE_VPRINTF 1
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #define HAVE_VSNPRINTF 1

@@ -474,10 +474,10 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 
 void usleep(unsigned long usec)
   {
-#ifdef W32_CRIPPLED
+#if W32_CRIPPLED == 1
   /* FIXME: Need to add windows code for sleeping here. */
 #else
-  #ifdef HAVE_SNOOZE		/* i.e. BeOS, AtheOS, Syllable. */
+  #if HAVE_SNOOZE == 1		/* i.e. BeOS, AtheOS, Syllable. */
   snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
   #else
   struct timeval tv;

@@ -64,6 +64,123 @@
  */
 #define NEED_MOSIX_FORK_HACK 1
 
+#if HAVE_MPI == 1
+/*
+ * Convenience wrappers around MPI functions:
+ */
+static int	rank=-1;				/* Current process's rank. */
+static int	size=0;					/* Total number of processes. */
+static int	namelen;				/* Length of processor name. */
+static char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name. */
+
+/**********************************************************************
+  mpi_ismaster()
+  synopsis:	Ensure that MPI is initialised and prepare some global
+		variables.
+  parameters:
+  return:	TRUE if master process, FALSE otherwise.
+  last updated:	23 Sep 2003
+ **********************************************************************/
+
+static void mpi_init(void)
+  {
+
+  if (rank==-1)
+    {
+/*
+ * FIXME: Test for proir MPI_Init() call here.
+ */
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Get_processor_name(node_name, &namelen);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  mpi_ismaster()
+  synopsis:	Is this the master process?
+  parameters:
+  return:	TRUE if master process, FALSE otherwise.
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static boolean mpi_ismaster(void)
+  {
+  return (rank==0);
+  }
+
+
+/**********************************************************************
+  mpi_get_num_processes()
+  synopsis:	Return the total number of MPI processes.
+  parameters:
+  return:	int	number of processes.
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static int mpi_get_num_processes(void)
+  {
+  return (size);
+  }
+
+
+/**********************************************************************
+  mpi_get_rank()
+  synopsis:	Return the rank of this process.
+  parameters:
+  return:	int	rank
+  last updated:	03 Feb 2003
+**********************************************************************/
+
+static int mpi_get_rank(void)
+  {
+  return (rank);
+  }
+
+
+/**********************************************************************
+  mpi_get_next_rank()
+  synopsis:	Return the rank of the next node in a circular
+		topology.
+  parameters:
+  return:	int	rank
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static int mpi_get_next_rank(void)
+  {
+  int	next=rank+1;		/* The rank of the next process */
+
+  if (next==size) next=0;	/* Last process sends to first process */
+
+  return (next);
+  }
+
+
+/**********************************************************************
+  mpi_get_prev_rank()
+  synopsis:	Return the rank of the previous node in a circular
+		topology.
+  parameters:
+  return:	int	rank
+  last updated:	03 Feb 2003
+ **********************************************************************/
+
+static int mpi_get_prev_rank(void)
+  {
+  int	prev=rank;		/* The rank of the previous process */
+
+  if (prev==0) prev=size;	/* First process sends to last process */
+
+  return (prev-1);
+  }
+
+#endif
+
+
 /**********************************************************************
   gaul_entity_swap_rank()
   synopsis:	Swap the ranks of a pair of entities.
@@ -237,13 +354,12 @@ static void gaul_mutation(population *pop)
 static void gaul_evaluation_slave_mp(population *pop)
   {
 #if HAVE_MPI == 1
-  int		i;			/* Loop variable over entity ranks. */
   MPI_Status	status;			/* MPI status structure. */
   int		int_single;		/* Receive buffer. */
   byte		*buffer;		/* Receive buffer. */
   boolean	finished=FALSE;		/* Whether this slave is done. */
   entity	*entity, *adult;	/* Received entity, adapted entity. */
-  int		len=0;			/* Length of buffer to receive. */
+  unsigned int	len=0;			/* Length of buffer to receive. */
 
 /*
  * Allocate receive buffer.
@@ -3599,6 +3715,8 @@ int ga_evolution_archipelago_mp( const int num_pops,
 
   plog(LOG_VERBOSE, "The evolution has begun on %d islands on node %d!", num_pops, mpi_get_rank());
 
+  mpi_init();
+
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
@@ -3789,6 +3907,8 @@ int ga_evolution_mp(	population		*pop,
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
+
+  mpi_init();
 
   pop->generation = 0;
 

@@ -47,7 +47,7 @@
 #ifndef COMPATIBILITY_H_INCLUDED
 #define COMPATIBILITY_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 /* Includes */
 #include <assert.h>
@@ -81,7 +81,7 @@
 #include <sys/wait.h>
 #endif
 
-#include "memory_util.h"
+#include "gaul/memory_util.h"
 
 /*
  * Debugging

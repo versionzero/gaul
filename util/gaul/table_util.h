@@ -36,13 +36,13 @@
 #ifndef TABLE_UTIL_H_INCLUDED
 #define TABLE_UTIL_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
 
-#include "memory_util.h"
+#include "gaul/memory_util.h"
 
 typedef struct TableStruct_t
   {

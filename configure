@@ -467,7 +467,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LT_RELEASE LT_CURRENT LT_REVISION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE LN_S ECHO RANLIB ac_ct_RANLIB CPP EGREP LIBTOOL GA_MAJOR_VERSION GA_MINOR_VERSION GA_PATCH_VERSION GA_VERSION GA_VERSION_STRING MPIFLAGS MPILIBS GA_UNAME_STRING GA_BUILD_DATE_STRING V3_QUICK W32_CRIPPLED HAVE_SLANG GA_NUM_PROCESSES_ENVVAR_STRING MEMORY_ALLOC_DEBUG MEMORY_ALLOC_SAFE MEMORY_CHUNKS_MIMIC LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LT_RELEASE LT_CURRENT LT_REVISION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE LN_S ECHO RANLIB ac_ct_RANLIB CPP EGREP LIBTOOL GA_MAJOR_VERSION GA_MINOR_VERSION GA_PATCH_VERSION GA_VERSION GA_VERSION_STRING MPIFLAGS MPILIBS GA_UNAME_STRING GA_BUILD_DATE_STRING V3_QUICK W32_CRIPPLED HAVE_SLANG HAVE_MPI HAVE_PTHREADS GA_NUM_PROCESSES_ENVVAR_STRING MEMORY_ALLOC_DEBUG MEMORY_ALLOC_SAFE MEMORY_CHUNKS_MIMIC LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1019,7 +1019,7 @@ Optional Features:
   --enable-memory-debug=yes/no  turn on memory access debugging. default=no
   --enable-ansi=yes/no          turn on strict ansi. default=no
   --enable-missing-prototypes=yes/no turn on missing prototype checks. default=no
-  --enable-threads=yes/no       turn on multi-thread support. default=no
+  --enable-pthread=yes/no       turn on multi-thread support using pthread. default=yes
   --enable-mpi=yes/no           turn on MPI support. default=no
   --enable-slang=yes/no         use S-Lang for scripting. default=yes
   --enable-profile=yes/no       turn on profiling. default=no
@@ -7984,12 +7984,12 @@ if test "${enable_missing_prototypes+set}" = set; then
 else
   enable_missing_prototypes=no
 fi;
-# Check whether --enable-threads or --disable-threads was given.
-if test "${enable_threads+set}" = set; then
-  enableval="$enable_threads"
+# Check whether --enable-pthread or --disable-pthread was given.
+if test "${enable_pthread+set}" = set; then
+  enableval="$enable_pthread"
 
 else
-  enable_threads=no
+  enable_pthread=yes
 fi;
 # Check whether --enable-mpi or --disable-mpi was given.
 if test "${enable_mpi+set}" = set; then
@@ -8075,25 +8075,98 @@ _ACEOF
 echo "$as_me:$LINENO: result: ${enable_num_threads}" >&5
 echo "${ECHO_T}${enable_num_threads}" >&6
 
-echo "$as_me:$LINENO: checking for pthreads use" >&5
-echo $ECHO_N "checking for pthreads use... $ECHO_C" >&6
-if test "x$enable_threads" != "xyes"; then
-  echo "$as_me:$LINENO: result: don't use" >&5
-echo "${ECHO_T}don't use" >&6
-  enable_threads=no
+#
+# Check for pthreads
+#
+echo "$as_me:$LINENO: checking whether to link to pthread library" >&5
+echo $ECHO_N "checking whether to link to pthread library... $ECHO_C" >&6
+if test "x$enable_pthread" = "xyes"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+  WILL_USE_PTHREADS="yes"
+  HAVE_PTHREADS=1
+  LIBS="$LIBS -lpthread"
+  echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
+echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
+if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  echo "$as_me:$LINENO: result: use" >&5
-echo "${ECHO_T}use" >&6
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_PTHREADS 1
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_create ();
+int
+main ()
+{
+pthread_create ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_pthread_pthread_create=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_pthread_pthread_create=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
+echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
+if test $ac_cv_lib_pthread_pthread_create = yes; then
+  LIBS="$LIBS -lpthread"
+else
+  { { echo "$as_me:$LINENO: error: GAUL requires the pthread library for full functionality.  Install it or configure with '--enable-pthread=no' for reduced version." >&5
+echo "$as_me: error: GAUL requires the pthread library for full functionality.  Install it or configure with '--enable-pthread=no' for reduced version." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  result=1
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  WILL_USE_PTHREADS="no"
+  result=0
+  HAVE_PTHREADS=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_PTHREADS ${result}
 _ACEOF
 
-fi
 
 #
 # Setup MPI compilation
 #
+old_LIBS=$LIBS
+old_CFLAGS=$CFLAGS
 echo "$as_me:$LINENO: checking for whether to use MPI" >&5
 echo $ECHO_N "checking for whether to use MPI... $ECHO_C" >&6
 if test "x$enable_mpi" != "xyes"; then
@@ -8106,15 +8179,16 @@ echo "${ECHO_T}no" >&6
 else
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-  MPIFLAGS=""
-  MPILIBS=""
   result=1
 #
 # Check for MPI version.
 #
   if test "x$MPIFLAGS" != "x" || test "x$MPILIBS" != "x"; then
-	  # User defined the additional LIBS and CFLAGS stuff :-).
-    echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
+    # User defined the additional LIBS and CFLAGS stuff :-).
+    LIBS="$old_LIBS $MPILIBS"
+    CFLAGS="$old_CFLAGS $MPIFLAGS"
+
+echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
 echo $ECHO_N "checking for MPI_Init in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_MPI_Init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -8169,7 +8243,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpi_MPI_Init" >&5
 echo "${ECHO_T}$ac_cv_lib_mpi_MPI_Init" >&6
 if test $ac_cv_lib_mpi_MPI_Init = yes; then
-  LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMPI 1
+_ACEOF
+
+  LIBS="-lmpi $LIBS"
+
 else
   { { echo "$as_me:$LINENO: error: Unable to compile with specified MPI implementation.  Check MPIFLAGS and MPILIBS environment variables" >&5
 echo "$as_me: error: Unable to compile with specified MPI implementation.  Check MPIFLAGS and MPILIBS environment variables" >&2;}
@@ -8183,8 +8262,11 @@ echo "$as_me: WARNING: You are advised to specify requirements of your MPI imple
     # Try LAM
     MPIFLAGS="-D_REENTRANT"
     MPILIBS="-llammpio -llamf77mpi -lmpi -llam -lutil -lpthread"
+    LIBS="$old_LIBS $MPILIBS"
+    CFLAGS="$old_CFLAGS $MPIFLAGS"
 
-    echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
+
+echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
 echo $ECHO_N "checking for MPI_Init in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_MPI_Init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -8239,7 +8321,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpi_MPI_Init" >&5
 echo "${ECHO_T}$ac_cv_lib_mpi_MPI_Init" >&6
 if test $ac_cv_lib_mpi_MPI_Init = yes; then
-  LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMPI 1
+_ACEOF
+
+  LIBS="-lmpi $LIBS"
+
 else
   result=0
 fi
@@ -8249,8 +8336,11 @@ fi
       result=1
       MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1"
       MPILIBS="-lmpich"
+      LIBS="$old_LIBS $MPILIBS"
+      CFLAGS="$old_CFLAGS $MPIFLAGS"
 
-      echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
+
+echo "$as_me:$LINENO: checking for MPI_Init in -lmpi" >&5
 echo $ECHO_N "checking for MPI_Init in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_MPI_Init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -8305,13 +8395,27 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpi_MPI_Init" >&5
 echo "${ECHO_T}$ac_cv_lib_mpi_MPI_Init" >&6
 if test $ac_cv_lib_mpi_MPI_Init = yes; then
-  LIBS="$LIBS $MPILIBS", CFLAGS="$CFLAGS $MPIFLAGS"
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMPI 1
+_ACEOF
+
+  LIBS="-lmpi $LIBS"
+
 else
   result=0
 fi
 
     fi
   fi
+fi
+LIBS=$old_LIBS
+CFLAGS=$old_CFALGS
+if test ${result} = 0; then
+  WILL_USE_MPI="no"
+  HAVE_MPI=0
+else
+  WILL_USE_MPI="yes"
+  HAVE_MPI=1
 fi
 
 cat >>confdefs.h <<_ACEOF
@@ -8546,6 +8650,9 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+#
+# Electric Fence has to be last library linked.
+#
 echo "$as_me:$LINENO: checking whether to link Electric Fence for memory debugging" >&5
 echo $ECHO_N "checking whether to link Electric Fence for memory debugging... $ECHO_C" >&6
 if test "x$enable_efence" = "xyes"; then
@@ -8658,6 +8765,8 @@ _ACEOF
 
 
 
+
+
 #
 # Compiler specific switches.
 #
@@ -8666,7 +8775,7 @@ case $CC in
     # Optimisations etc. for the GNU gcc compiler.
     case " $CFLAGS " in
       *[\ \	]-Wall[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -Wall" ;;
+      *) CFLAGS="$CFLAGS -Wall -pedantic" ;;
     esac
 
     if test "x$enable_g" = "xyes"; then
@@ -8832,175 +8941,6 @@ case $CC in
     ;;
 
 esac
-
-#
-# Checks for standard library functions.
-#
-
-for ac_func in vprintf
-do
-as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $ac_func" >&5
-echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
-if eval "test \"\${$as_ac_var+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $ac_func (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $ac_func ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
-choke me
-#else
-char (*f) () = $ac_func;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != $ac_func;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  eval "$as_ac_var=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-eval "$as_ac_var=no"
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
-if test `eval echo '${'$as_ac_var'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-echo "$as_me:$LINENO: checking for _doprnt" >&5
-echo $ECHO_N "checking for _doprnt... $ECHO_C" >&6
-if test "${ac_cv_func__doprnt+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char _doprnt (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char _doprnt ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub__doprnt) || defined (__stub____doprnt)
-choke me
-#else
-char (*f) () = _doprnt;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != _doprnt;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func__doprnt=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func__doprnt=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func__doprnt" >&5
-echo "${ECHO_T}$ac_cv_func__doprnt" >&6
-if test $ac_cv_func__doprnt = yes; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_DOPRNT 1
-_ACEOF
-
-fi
-
-fi
-done
-
-
 
 #
 # Check type sizes.
@@ -11390,8 +11330,6 @@ done
 
 
 
-
-
 for ac_func in fdopen gethostname getpwuid select \
                atexit on_exit \
                waitpid snooze \
@@ -11405,9 +11343,9 @@ for ac_func in fdopen gethostname getpwuid select \
                strcmp strcpy strpbrk strsep \
                strcasecmp strncasecmp \
                strdup strndup \
-               strnfill strcatv strsignal strrev \
+               strnfill strcatv strrev \
                strspn strcspn \
-               strerror strlcat strlcpy strstr vsnprintf
+               strlcat strlcpy strstr vsnprintf
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -11495,96 +11433,6 @@ done
 # Some dodgy work-arounds.
 # Most of this is a bit kludgy.  Proper fixes would be desirable...
 #
-case "$target" in
-  *-*-mingw*) is_mingw="yes" ;;
-  *-*-nto-qnx*) is_qnx="yes" ;;
-  *)
-    is_qnx="no"
-    is_mingw="no" ;;
-esac
-if ( test "x$enable_mpi" = "xyes" || test "x$is_mingw" = "xyes" || test "x$is_qnx" = "xyes" ); then
-  # Avoid symbol conflict with LAM-MPI and incorrect detection of itoa() with MingW/QNX Neutrino.
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_ITOA 1
-_ACEOF
-
-else
-  echo "$as_me:$LINENO: checking for itoa" >&5
-echo $ECHO_N "checking for itoa... $ECHO_C" >&6
-if test "${ac_cv_func_itoa+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char itoa (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char itoa ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_itoa) || defined (__stub___itoa)
-choke me
-#else
-char (*f) () = itoa;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != itoa;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_itoa=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_itoa=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_itoa" >&5
-echo "${ECHO_T}$ac_cv_func_itoa" >&6
-
-fi
-
 # Fix defines for case that the Sun Forte C compiler is being used on Solaris.
 if test "x$CC" = "xcc"; then
 # Compiler is possibly Sun's Forte C, so check platform.
@@ -11937,110 +11785,6 @@ done
 
 fi
 
-case "$target" in
-  *-*-cygwin*)
-# stricmp() and strnicmp() are defined as macros by Cygwin, therefore the
-# AC_CHECK_FUNCS tests give incorrect result.
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRICMP 1
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRNICMP 1
-_ACEOF
-
-    ;;
-  *)
-
-
-for ac_func in stricmp strnicmp
-do
-as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $ac_func" >&5
-echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
-if eval "test \"\${$as_ac_var+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $ac_func (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $ac_func ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
-choke me
-#else
-char (*f) () = $ac_func;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != $ac_func;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  eval "$as_ac_var=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-eval "$as_ac_var=no"
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
-if test `eval echo '${'$as_ac_var'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
-
-    ;;
-esac
-
 #
 # Some processor specific stuff.
 #
@@ -12302,7 +12046,8 @@ _ACEOF
 fi
 
 # Where the linker must look!
-CFLAGS="$CFLAGS $INCLUDE"
+CFLAGS="$CFLAGS $MPIFLAGS $INCLUDE"
+LIBS="$LIBS $MPILIBS"
 
 #
 # Add code to config.status to generate a platform dependent configuration
@@ -12869,8 +12614,6 @@ ac_cv_func_strcpy=$ac_cv_func_strcpy
 ac_cv_func_strncpy=$ac_cv_func_strncpy
 ac_cv_func_strcmp=$ac_cv_func_strcmp
 ac_cv_func_strncmp=$ac_cv_func_strncmp
-ac_cv_func_stricmp=$ac_cv_func_stricmp
-ac_cv_func_strnicmp=$ac_cv_func_strnicmp
 ac_cv_func_strcasecmp=$ac_cv_func_strcasecmp
 ac_cv_func_strncasecmp=$ac_cv_func_strncasecmp
 ac_cv_func_usleep=$ac_cv_func_usleep
@@ -12894,6 +12637,8 @@ GA_VERSION_STRING=$GA_VERSION_STRING
 V3_QUICK=$V3_QUICK
 W32_CRIPPLED=$W32_CRIPPLED
 HAVE_SLANG=$HAVE_SLANG
+HAVE_MPI=$HAVE_MPI
+HAVE_PTHREADS=$HAVE_PTHREADS
 GA_NUM_PROCESSES_ENVVAR_STRING=$GA_NUM_PROCESSES_ENVVAR_STRING
 GA_NUM_THREADS_ENVVAR_STRING=$GA_NUM_THREADS_ENVVAR_STRING
 
@@ -13072,6 +12817,8 @@ s,@GA_BUILD_DATE_STRING@,$GA_BUILD_DATE_STRING,;t t
 s,@V3_QUICK@,$V3_QUICK,;t t
 s,@W32_CRIPPLED@,$W32_CRIPPLED,;t t
 s,@HAVE_SLANG@,$HAVE_SLANG,;t t
+s,@HAVE_MPI@,$HAVE_MPI,;t t
+s,@HAVE_PTHREADS@,$HAVE_PTHREADS,;t t
 s,@GA_NUM_PROCESSES_ENVVAR_STRING@,$GA_NUM_PROCESSES_ENVVAR_STRING,;t t
 s,@MEMORY_ALLOC_DEBUG@,$MEMORY_ALLOC_DEBUG,;t t
 s,@MEMORY_ALLOC_SAFE@,$MEMORY_ALLOC_SAFE,;t t
@@ -13743,6 +13490,7 @@ _EOF_
     fi
 
     cat >> $tmpfile << _EOF_
+
 /*
  * Explicitely tested functions for this platform:
  */
@@ -13781,12 +13529,6 @@ _EOF_
     fi
     if test "x$ac_cv_func_strncmp" = "xyes"; then
       echo '#define HAVE_STRNCMP 1' >> $tmpfile
-    fi
-    if test "x$ac_cv_func_stricmp" = "xyes"; then
-      echo '#define HAVE_STRICMP 1' >> $tmpfile
-    fi
-    if test "x$ac_cv_func_strnicmp" = "xyes"; then
-      echo '#define HAVE_STRNICMP 1' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcasecmp" = "xyes"; then
       echo '#define HAVE_STRCASECMP 1' >> $tmpfile
@@ -13843,7 +13585,6 @@ _EOF_
 #define HAVE_MEMCHR 1
 #define HAVE_MEMMEM 1
 #define HAVE_MEMCMP 1
-#define HAVE_SETLOCALE 1
 #define HAVE_STRCHR 1
 #define HAVE_STRRCHR 1
 #define HAVE_STRCAT 1
@@ -13861,7 +13602,6 @@ _EOF_
 #define HAVE_STRSIGNAL 1
 #define HAVE_VSNPRINTF 1
 #define HAVE_SNPRINTF 1
-#define HAVE_ITOA 1
 #define HAVE_BCOPY 1
 #define HAVE_BCMP 1
 #define HAVE_STRLEN 1
@@ -13880,6 +13620,8 @@ _EOF_
 #define V3_QUICK ${V3_QUICK}
 #define W32_CRIPPLED ${W32_CRIPPLED}
 #define HAVE_SLANG ${HAVE_SLANG}
+#define HAVE_MPI ${HAVE_MPI}
+#define HAVE_PTHREADS ${HAVE_PTHREADS}
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
 #define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
@@ -13951,6 +13693,8 @@ echo \
   Additional include flags:   ${INCLUDE}
   Install path:               ${prefix}
   Use S-Lang:                 ${WILL_USE_SLANG}
+  Use MPI:                    ${WILL_USE_MPI}
+  Use pthreads:               ${WILL_USE_PTHREADS}
 
 ************************************************************************"
 

@@ -36,14 +36,14 @@
 #ifndef TIMER_UTIL_H_INCLUDED
 #define TIMER_UTIL_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "log_util.h"
-#include "table_util.h"
+#include "gaul/log_util.h"
+#include "gaul/table_util.h"
 
 /*
  * Timer structure.

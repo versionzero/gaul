@@ -1,9 +1,9 @@
 /**********************************************************************
-  struggle5_mp.c
+  struggle_mp.c
  **********************************************************************
 
-  struggle5_mp - Test/example program for GAUL.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  struggle - Test/example program for GAUL.
+  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -27,23 +27,15 @@
 
   Synopsis:	Test/example program for GAUL.
 
-		This example shows the use of multiple populations
-		with GAUL's so called "archipelago" scheme.  This is
-		the basic island model of evolution, with the islands'
-		populations distributed over several processors.
+		This program is fairly lean, showing how little
+		application code is needed when using GAUL.  It uses
+		the MPI-parallelised version of ga_evolution().
 
 		This program aims to generate the final sentence from
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is discussed in docs/html/tutorial9.html
-
-		It is likely that you have problems to compile and/or
-		execute this example.  Isuggest the following:
-		1) Download and _correctly_ install a MPI implementation.
-		2) Confirm that MPI programs work okay.
-		3) Use "./configure --enable-mpi=yes" to build GAUL.
-		4) Execute this example with something like "mpirum -v -np 4 ./struggle5_mp"
+		This example is explained in docs/html/tutorial/simple.html
 
  **********************************************************************/
 
@@ -65,12 +57,6 @@ int main(int argc, char **argv)
   }
 
 #else
-
-/*
- * Specify the number of populations (islands) to use on each processor.
- * (This value doesn't need to be constant across all processors.)
- */
-#define GA_STRUGGLE_NUM_POPS_PER_PROC	2
 
 /*
  * The solution string.
@@ -110,8 +96,7 @@ boolean struggle_score(population *pop, entity *entity)
 
 /**********************************************************************
   main()
-  synopsis:	The "struggle5" example modified slightly to use
-		multiple processors.
+  synopsis:	Erm?
   parameters:
   return:
   updated:	19 Aug 2002
@@ -119,21 +104,19 @@ boolean struggle_score(population *pop, entity *entity)
 
 int main(int argc, char **argv)
   {
-  int		i;				/* Loop over populations. */
-  population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of population pointers. */
-  char		*beststring=NULL;		/* Human readable form of best solution. */
-  size_t	beststrlen=0;			/* Length of beststring. */
-  int		rank;				/* MPI process rank. */
+  int		i;			/* Runs. */
+  population	*pop=NULL;		/* Population of solutions. */
+  char		*beststring=NULL;	/* Human readable form of best solution. */
+  size_t	beststrlen=0;		/* Length of beststring. */
 
   MPI_Init(&argc, &argv);
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  random_seed(42*rank);
-
-  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
+  for (i=0; i<50; i++)
     {
-    pops[i] = ga_genesis_char(
-       80,			/* const int              population_size */
+    random_seed(i);
+
+    pop = ga_genesis_char(
+       120,			/* const int              population_size */
        1,			/* const int              num_chromo */
        (int) strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */
@@ -145,35 +128,37 @@ int main(int argc, char **argv)
        NULL,			/* GAadapt                adapt */
        ga_select_one_sus,	/* GAselect_one           select_one */
        ga_select_two_sus,	/* GAselect_two           select_two */
-       ga_mutate_printable_singlepoint_drift,	/* GAmutate       mutate */
+       ga_mutate_printable_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_char_allele_mixing,	/* GAcrossover            crossover */
        NULL,			/* GAreplace		replace */
        NULL			/* vpointer		User data */
             );
 
-    ga_population_set_parameters( pops[i], GA_SCHEME_DARWIN, GA_ELITISM_PARENTS_DIE, 0.75, 0.25, 0.001 );
+    ga_population_set_parameters(
+       pop,			/* population      *pop */
+       GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
+       GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
+       0.9,			/* double  crossover */
+       0.2,			/* double  mutation */
+       0.0              	/* double  migration */
+                              );
+
+    ga_evolution_mp(
+       pop,			/* population      *pop */
+       500			/* const int       max_generations */
+              );
+
+    printf( "The final solution with seed = %d was:\n", i);
+    beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+    printf("%s\n", beststring);
+    printf( "With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
+
+    ga_extinction(pop);
     }
-
-/*
- * The only significant difference between "examples/struggle5" and
- * "examples/struggle5_mp" is in the following statement.
- */
-  ga_evolution_archipelago_mp( GA_STRUGGLE_NUM_POPS_PER_PROC, pops, 250 );
-
-  for (i=0; i<GA_STRUGGLE_NUM_POPS_PER_PROC; i++)
-    {
-    beststring = ga_chromosome_char_to_string(pops[i], ga_get_entity_from_rank(pops[i],0), beststring, &beststrlen);
-    printf( "The best solution on processor %d, island %d with score %f was:\n%s\n",
-            rank, i,
-            ga_get_entity_from_rank(pops[i],0)->fitness,
-            beststring );
-
-    ga_extinction(pops[i]);
-    }
-
-  MPI_Finalize();
 
   s_free(beststring);
+
+  MPI_Finalize();
 
   exit(EXIT_SUCCESS);
   }

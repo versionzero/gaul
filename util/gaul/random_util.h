@@ -41,7 +41,7 @@
 #ifndef RANDOM_UTIL_H_INCLUDED
 #define RANDOM_UTIL_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <float.h>
 #if HAVE_LIMITS_H==1
@@ -52,8 +52,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-/* #include "log_util.h" */
 
 /*
  * Debugging.

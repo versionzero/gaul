@@ -30,7 +30,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 # Kludge:
-INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
+INCLUDES = -I../util/ -I../src/
 
 bin_PROGRAMS = \
 	test_ga test_simplex test_sd \
@@ -40,7 +40,7 @@ bin_PROGRAMS = \
 	goldberg1 goldberg2 \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
-	struggle struggle_forked \
+	struggle struggle_forked struggle_mp \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -69,6 +69,7 @@ royalroad_bitstring_SOURCES = royalroad_bitstring.c
 royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
+struggle_mp_SOURCES = struggle_mp.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
@@ -112,6 +113,7 @@ royalroad_bitstring_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 onemax_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_mp_DEPENDENCIES = ${DEPENDENCIES}
 struggle_dc_DEPENDENCIES = ${DEPENDENCIES}
 struggle_randomsearch_DEPENDENCIES = ${DEPENDENCIES}
 struggle_systematicsearch_DEPENDENCIES = ${DEPENDENCIES}
@@ -161,5 +163,15 @@ struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
 mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+
+# Parallel code:
+struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+
+#struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPIFLAGS@
+#struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+#struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPIFLAGS@
+#struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 

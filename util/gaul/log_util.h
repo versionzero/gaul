@@ -39,14 +39,18 @@
 #ifndef LOG_UTIL_H_INCLUDED
 #define LOG_UTIL_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <time.h>
 
-#include "mpi_util.h"
+#include "gaul/memory_util.h"
+
+#if HAVE_MPI == 1
+#include <mpi.h>
+#endif
 
 /*
  * Constants

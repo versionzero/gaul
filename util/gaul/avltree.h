@@ -34,13 +34,13 @@
 #ifndef AVLTREE_H_INCLUDED
 #define AVLTREE_H_INCLUDED
 
-#include "gaul_util.h"
+#include "gaul/gaul_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "compatibility.h"
-#include "memory_util.h"
+#include "gaul/compatibility.h"
+#include "gaul/memory_util.h"
 
 /*
  * Define datatype for AVL keys.
