@@ -399,7 +399,7 @@ echo \
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}
-  Extra include flags:        ${INCLUDE}
+  Additional include flags:   ${INCLUDE}
   Install path:               ${prefix}
   Use S-Lang:                 ${WILL_USE_SLANG}
 

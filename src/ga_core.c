@@ -428,9 +428,7 @@ boolean ga_entity_seed(population *pop, entity *adam)
   if (!pop) die("Null pointer to population structure passed.");
   if (!pop->seed) die("Population seeding function is not defined.");
 
-  pop->seed(pop, adam);
-
-  return TRUE;
+  return pop->seed(pop, adam);
   }
 
 

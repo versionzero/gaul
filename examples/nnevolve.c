@@ -256,7 +256,7 @@ boolean nnevolve_evaluate2(population *pop, entity *entity)
   updated:	29 Jan 2002
  **********************************************************************/
 
-void nnevolve_seed(population *pop, entity *adam)
+boolean nnevolve_seed(population *pop, entity *adam)
   {
   network_t	*nn=(network_t *)adam->chromosome[0];
 
@@ -267,7 +267,7 @@ void nnevolve_seed(population *pop, entity *adam)
   NN_set_gain(nn, random_float_range(0.95,1.05));
   NN_set_bias(nn, random_float_range(0.95,1.05));
 
-  return;
+  return TRUE;
   }
 
 
@@ -632,7 +632,7 @@ boolean nnevolve_generation_hook(int generation, population *pop)
   updated:	29 Jan 2002
  **********************************************************************/
 
-void nnevolve_chromosome_constructor(population *pop, entity *embryo)
+boolean nnevolve_chromosome_constructor(population *pop, entity *embryo)
   {
   int        num_layers=4;   /* Number of layers in NN. */
   int        neurons[4]={11,20,20,3};  /* Number of neurons in each layer. */
@@ -647,7 +647,7 @@ void nnevolve_chromosome_constructor(population *pop, entity *embryo)
   embryo->chromosome = s_malloc(sizeof(network_t *));
   embryo->chromosome[0] = NN_new(num_layers, neurons);
 
-  return;
+  return TRUE;
   }
 
 

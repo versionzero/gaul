@@ -131,7 +131,7 @@ entity *struggle_adaptation(population *pop, entity *child)
   updated:	08/07/01
  **********************************************************************/
 
-void struggle_seed(population *pop, entity *adam)
+boolean struggle_seed(population *pop, entity *adam)
   {
   int           chromo;         /* Index of chromosome to seed */
   int           point;          /* Index of 'nucleotide' to seed */
@@ -150,7 +150,7 @@ void struggle_seed(population *pop, entity *adam)
       }
     }
 
-  return;
+  return TRUE;
   }
 
 

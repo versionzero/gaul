@@ -67,7 +67,7 @@
  * Prototypes.
  */
 boolean wildfire_score(population *pop, entity *entity);
-void wildfire_seed(population *pop, entity *adam);
+boolean wildfire_seed(population *pop, entity *adam);
 void wildfire_crossover(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
 void wildfire_mutate(population *pop, entity *mother, entity *son);
 

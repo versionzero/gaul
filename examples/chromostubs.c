@@ -71,7 +71,7 @@
   last updated: 01/07/01
  **********************************************************************/
 
-void chromosome_XXX_allocate(population *pop, entity *embryo)
+boolean chromosome_XXX_allocate(population *pop, entity *embryo)
   {
   int		i;	/* Loop variable over all chromosomes. */
 
@@ -87,7 +87,7 @@ void chromosome_XXX_allocate(population *pop, entity *embryo)
   for (i=0; i<pop->num_chromosomes; i++)
     embryo->chromosome[i] = s_malloc(pop->len_chromosomes*sizeof(int));
 
-  return;
+  return TRUE;
   }
 
 
@@ -298,7 +298,7 @@ char *chromosome_XXX_to_staticstring(population *pop, entity *joe)
   last updated: 01/07/01
  **********************************************************************/
 
-void chromosome_XXX_seed(population *pop, entity *adam)
+boolean chromosome_XXX_seed(population *pop, entity *adam)
   {
   int           chromo;         /* Index of chromosome to seed */
   int           point;          /* Index of 'nucleotide' to seed */
@@ -312,7 +312,7 @@ void chromosome_XXX_seed(population *pop, entity *adam)
     for (point=0; point<pop->len_chromosomes; point++)
       ((int *)adam->chromosome[chromo])[point] = random_rand();
 
-  return;
+  return TRUE;
   }
 
 

@@ -42,7 +42,7 @@
 /*
  * Prototypes.
  */
-void chromosome_XXX_allocate(population *pop, entity *embryo);
+boolean chromosome_XXX_allocate(population *pop, entity *embryo);
 void chromosome_XXX_deallocate(population *pop, entity *corpse);
 void chromosome_XXX_replicate( population *pop,
                                entity *parent, entity *child,
@@ -51,7 +51,7 @@ unsigned int chromosome_XXX_to_bytes(population *pop, entity *joe,
                                      byte **bytes, unsigned int *max_bytes);
 void chromosome_XXX_from_bytes(population *pop, entity *joe, byte *bytes);
 char *chromosome_XXX_to_staticstring(population *pop, entity *joe);
-void chromosome_XXX_seed(population *pop, entity *adam);
+boolean chromosome_XXX_seed(population *pop, entity *adam);
 void chromosome_XXX_crossover( population *pop,
                                int *father, int *mother,
                                int *son, int *daughter );

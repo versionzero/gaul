@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_mutate - Genetic algorithm mutation operators.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -593,6 +593,101 @@ void ga_mutate_bitstring_singlepoint( population *pop,
 
 /* The singlepoint mutation. */
   ga_bit_invert(son->chromosome[chromo],point);
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_double_singlepoint_drift()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is adjusted.  (Unit Gaussian distribution.)
+  parameters:
+  return:
+  last updated: 19 Apr 2002
+ **********************************************************************/
+
+void ga_mutate_double_singlepoint_drift( population *pop,
+                                          entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+  double	amount=random_unit_gaussian();	/* The amount of drift. */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/*
+ * Copy unchanged data.
+ */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(double));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+/*
+ * Mutate by tweaking a single nucleotide.
+ */
+  ((double *)son->chromosome[chromo])[point] += amount;
+
+  if (((double *)son->chromosome[chromo])[point]==DBL_MAX) ((double *)son->chromosome[chromo])[point]=0;
+  if (((double *)son->chromosome[chromo])[point]==-1) ((double *)son->chromosome[chromo])[point]=DBL_MAX-1;
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_mutate_double_singlepoint_randomize()
+  synopsis:	Cause a single mutation event in which a single
+		nucleotide is randomized.  (Unit Gaussian distribution.)
+  parameters:
+  return:
+  last updated: 19 Apr 2002
+ **********************************************************************/
+
+void ga_mutate_double_singlepoint_randomize( population *pop,
+                                              entity *father, entity *son )
+  {
+  int		i;		/* Loop variable over all chromosomes */
+  int		chromo;		/* Index of chromosome to mutate */
+  int		point;		/* Index of 'nucleotide' to mutate */
+
+/* Checks */
+  if (!father || !son) die("Null pointer to entity structure passed");
+
+/* Select mutation locus. */
+  chromo = random_int(pop->num_chromosomes);
+  point = random_int(pop->len_chromosomes);
+
+/* Copy unchanging data. */
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    memcpy(son->chromosome[i], father->chromosome[i], pop->len_chromosomes*sizeof(double));
+    if (i!=chromo)
+      {
+      ga_copy_data(pop, son, father, i);
+      }
+    else
+      {
+      ga_copy_data(pop, son, NULL, i);
+      }
+    }
+
+  ((double *)son->chromosome[chromo])[point] = random_unit_gaussian();
 
   return;
   }

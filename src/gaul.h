@@ -92,7 +92,7 @@ typedef void    (*GAdata_ref_incrementor)(vpointer data);
 /*
  * Genome handling.
  */
-typedef void    (*GAchromosome_constructor)(population *pop, entity *entity);
+typedef boolean (*GAchromosome_constructor)(population *pop, entity *entity);
 typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
 typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
 typedef unsigned int    (*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
@@ -107,7 +107,7 @@ typedef char    *(*GAchromosome_to_string)(population *pop, entity *joe);
  * operators.
  */
 typedef boolean (*GAevaluate)(population *pop, entity *entity);
-typedef void    (*GAseed)(population *pop, entity *adam);
+typedef boolean	(*GAseed)(population *pop, entity *adam);
 typedef entity *(*GAadapt)(population *pop, entity *child);
 typedef boolean (*GAselect_one)(population *pop, entity **mother);
 typedef boolean (*GAselect_two)(population *pop, entity **mother, entity **father);

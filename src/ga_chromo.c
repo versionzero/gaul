@@ -59,7 +59,7 @@
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_integer_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_integer_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -77,7 +77,7 @@ void ga_chromosome_integer_allocate(population *pop, entity *embryo)
     embryo->chromosome[i] = &(((int *)embryo->chromosome[i-1])[pop->len_chromosomes]);
     }
 
-  return;
+  return TRUE;
   }
 
 
@@ -267,7 +267,7 @@ char *ga_chromosome_integer_to_staticstring(
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_boolean_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -285,7 +285,7 @@ void ga_chromosome_boolean_allocate(population *pop, entity *embryo)
     embryo->chromosome[i] = &(((boolean *)embryo->chromosome[i-1])[pop->len_chromosomes]);
     }
 
-  return;
+  return TRUE;
   }
 
 
@@ -451,7 +451,7 @@ char *ga_chromosome_boolean_to_staticstring(
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -469,7 +469,7 @@ void ga_chromosome_double_allocate(population *pop, entity *embryo)
     embryo->chromosome[i] = &(((double *)embryo->chromosome[i-1])[pop->len_chromosomes]);
     }
 
-  return;
+  return TRUE;
   }
 
 
@@ -660,7 +660,7 @@ char *ga_chromosome_double_to_staticstring(
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_char_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -678,7 +678,7 @@ void ga_chromosome_char_allocate(population *pop, entity *embryo)
     embryo->chromosome[i] = &(((char *)embryo->chromosome[i-1])[pop->len_chromosomes]);
     }
 
-  return;
+  return TRUE;
   }
 
 
@@ -843,7 +843,7 @@ char *ga_chromosome_char_to_staticstring(
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -858,7 +858,7 @@ void ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   for (i=0; i<pop->num_chromosomes; i++)
     embryo->chromosome[i] = ga_bit_new(pop->len_chromosomes);
 
-  return;
+  return TRUE;
   }
 
 

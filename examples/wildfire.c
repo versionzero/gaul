@@ -346,7 +346,7 @@ boolean wildfire_score(population *pop, entity *entity)
   updated:	12/05/01
  **********************************************************************/
 
-void wildfire_seed(population *pop, entity *adam)
+boolean wildfire_seed(population *pop, entity *adam)
   {
   int		i, j, k;	/* Map square. */
 
@@ -379,7 +379,7 @@ void wildfire_seed(population *pop, entity *adam)
       }
     }
 
-  return;
+  return TRUE;
   }
 
 
