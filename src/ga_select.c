@@ -375,7 +375,7 @@ boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father)
 		severely mess-up the algorithm.
   parameters:
   return:	
-  last updated: 30/04/01
+  last updated: 11 Apr 2002
  **********************************************************************/
 
 boolean ga_select_one_roulette(population *pop, entity **mother)
@@ -398,19 +398,18 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
     total_expval=sum/mean;
-    marker = 0;
+    marker = random_int(pop->orig_size);
     }
 
   selectval = random_double(total_expval)*mean;
 
   do
     {
-    selectval -= pop->entity_iarray[marker]->fitness;
+    marker++;
 
-    if (marker >= pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= pop->entity_iarray[marker]->fitness;
 
     } while (selectval>0.0);
 
@@ -434,7 +433,7 @@ boolean ga_select_one_roulette(population *pop, entity **mother)
 		problem.
   parameters:
   return:	
-  last updated: 30/04/01
+  last updated: 11 Apr 2002
  **********************************************************************/
 
 boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
@@ -457,7 +456,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
   if (pop->select_state == 0)
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
-    marker = 0;
+    marker = random_int(pop->orig_size);
     minval = pop->entity_iarray[pop->orig_size]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
@@ -468,12 +467,11 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
 
   do
     {
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    marker++;
 
-    if (marker == pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
     } while (selectval>0.0);
 
@@ -497,7 +495,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
                 Mother and father may be the same.
   parameters:
   return:	
-  last updated: 30/04/01
+  last updated: 11 Apr 2002
  **********************************************************************/
 
 boolean ga_select_two_roulette( population *pop,
@@ -522,7 +520,7 @@ boolean ga_select_two_roulette( population *pop,
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
     total_expval=sum/mean;
-    marker = 0;
+    marker = random_int(pop->orig_size);
 /*
 printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum, total_expval);
 */
@@ -534,15 +532,11 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 
   do
     {
-/*
-    printf("(m) marker = %d val = %f fitness = %f\n", marker, selectval, pop->entity_iarray[marker]->fitness);
-*/
-    selectval -= pop->entity_iarray[marker]->fitness;
+    marker++;
 
-    if (marker >= pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= pop->entity_iarray[marker]->fitness;
 
     } while (selectval>0.0);
 
@@ -552,15 +546,11 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
 
   do
     {
-/*
-    printf("(f) marker = %d val = %f fitness = %f\n", marker, selectval, pop->entity_iarray[marker]->fitness);
-*/
-    selectval -= pop->entity_iarray[marker]->fitness;
+    marker++;
 
-    if (marker >= pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= pop->entity_iarray[marker]->fitness;
 
     } while (selectval>0.0);
 
@@ -583,7 +573,7 @@ printf("Mean fitness = %f stddev = %f sum = %f expval = %f\n", mean, stddev, sum
                 Mother and father may be the same.
   parameters:
   return:	
-  last updated: 30/04/01
+  last updated: 11 Apr 2002
  **********************************************************************/
 
 boolean ga_select_two_roulette_rebased( population *pop,
@@ -607,7 +597,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
   if (pop->select_state == 0)
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
-    marker = 0;
+    marker = random_int(pop->orig_size);
     minval = pop->entity_iarray[pop->orig_size]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
@@ -620,12 +610,11 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   do
     {
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    marker++;
 
-    if (marker == pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
     } while (selectval>0.0);
 
@@ -635,12 +624,11 @@ boolean ga_select_two_roulette_rebased( population *pop,
 
   do
     {
-    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
+    marker++;
 
-    if (marker == pop->orig_size-1)
-      marker=0;
-    else
-      marker++;
+    if (marker >= pop->orig_size) marker=0;
+
+    selectval -= (pop->entity_iarray[marker]->fitness-minval)/mean;
 
     } while (selectval>0.0);
 
