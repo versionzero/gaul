@@ -1803,6 +1803,15 @@ THREAD_LOCK(global_thread_lock);
 
   return generation;
   }
+#else
+int ga_evolution_threaded(	population		*pop,
+				const int		max_generations )
+  {
+
+  die("Support for ga_evolution_threaded() not compiled.");
+
+  return 0;
+  }
 #endif /* HAVE_PTHREAD */
 
 
