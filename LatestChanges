@@ -1,8 +1,21 @@
 Changes since release 0.1836:
+- Added ga_get_all_populations() which returns array of all currently allocated populations.
+- Added ga_get_all_population_ids() which returns array of all currently allocated populations' indices.
+- Tidied some comments.
+- Corrected prototype for ga_genesis_boolean().
 - More documentation added.
 - ga_bit_copy() now safely handles overlapping sequences of bits.
+- Can now link both GAUL and glib/gtk into the same program.
+- Initial support for new multi-processor algorithms added.
+- By default dumping of statistics is now disabled at compile time.
+- Updated utility routines to sync with other projects.
+- GNU Libtool is now used for library handling.
 
 Changes since release 0.1835:
+- Lots of little bugfixes.
+- More accessor functions added.
+- SunOS compilation.
+- Added version of the struggle example to show usage of multiple populations: examples/struggle5.c
 - Many documentation fixes.
 - Example files now in example directory.  Test code will be located in the test directory instead.
 - Some miscellaneous code tidying.
