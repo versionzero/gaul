@@ -42,6 +42,7 @@
 #include <values.h>
 #include <unistd.h>
 #include <string.h>
+#include <windows.h>
 
 #ifndef errno
 /* Some sytems #define this! */
