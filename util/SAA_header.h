@@ -193,8 +193,8 @@
 # endif
 
 # if defined(__cplusplus) || defined(__DECC)
-typedef bool _Bool;
-typedef boolean _Bool;
+typedef _Bool bool;
+typedef _Bool boolean;
 # else
 /* By defining _Bool as an enum type we get to see symbolic
  * names in gdb.
