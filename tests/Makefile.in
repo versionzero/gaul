@@ -137,12 +137,13 @@ libbtree_a_SOURCES = btree.c
 
 include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
-DEPENDENCIES =  	../util/libmethods.a 	../util/librandom.a 	../util/libstr_util.a 	../src/libgaul.a
+DEPENDENCIES =  	../util/librandom.a 	../util/libmethods.a 	../util/libstr_util.a 	../src/libgaul.a
 
 
-EXTRA_DIST =  	chromostubs.c 	chromostubs.h pingpong_DEPENDENCIES = ${DEPENDENCIES}
+EXTRA_DIST =  	chromostubs.c 	chromostubs.h
 
 
+pingpong_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
@@ -183,7 +184,6 @@ AR = ar
 PROGRAMS =  $(bin_PROGRAMS)
 
 pingpong_OBJECTS =  pingpong.o
-pingpong_DEPENDENCIES = 
 pingpong_LDFLAGS = 
 wildfire_OBJECTS =  wildfire.o
 wildfire_LDFLAGS = 
@@ -418,7 +418,6 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu tests/Makefile
-	$(mkinstalldirs) $(distdir)/../src $(distdir)/../util
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

@@ -57,14 +57,14 @@ libbtree_a_SOURCES = btree.c
 include_HEADERS = btree.h pingpong.h wildfire.h goldberg1.h goldberg2.h
 
 DEPENDENCIES = \
-	../util/libmethods.a \
 	../util/librandom.a \
+	../util/libmethods.a \
 	../util/libstr_util.a \
 	../src/libgaul.a
 
 EXTRA_DIST = \
 	chromostubs.c \
-	chromostubs.h \
+	chromostubs.h
 
 pingpong_DEPENDENCIES = ${DEPENDENCIES}
 wildfire_DEPENDENCIES = ${DEPENDENCIES}

@@ -16,6 +16,7 @@ Changes since release 0.1834:
 - Moved some type definitions into the public header, gaul.h
 - Some additional checks performed by the configure script.
 - All required files will now be distributed.  Why people didn't tell me the recent distribution didn't compile, I don't know...
+- Website fixes.
 
 Changes since release 0.1833:
 - Changes for docs/html/books.html to validate.

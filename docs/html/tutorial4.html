@@ -52,9 +52,9 @@ population *ga_genesis( const int               population_size,
 <p>The &quot;num_chromo&quot; parameter specifies the number of chromosomes in the genome.</p>
 <p>The &quot;len_chromo&quot; parameter specifies the length of each chromosome, but the exact definition of length is dependent on the chromosome type.  Some chromosome types may ignore this value entirely.</p>
 <p><b>Analysis functions</b></p>
-<p>&quot;generation_hook&quot; and &quot;iteration_hook&quot; specify callback functions will be called at the beginning of each generation of evolutionary procedures, and each iteration of deterministic optimisation procedures, respectively.  These may safely be defined as &quot;NULL&quot; functions.</p>
+<p>&quot;generation_hook&quot; and &quot;iteration_hook&quot; specify callback functions will be called at the beginning of each generation of evolutionary procedures, and each iteration of deterministic optimisation procedures, respectively.  These may safely be defined as &quot;NULL&quot; functions.  As described earlier, these functions may also be used to implement custom termination criteria.</p>
 <p><b>Phenome handling functions</b></p>
-<p>&quot;generation_hook&quot; and &quot;iteration_hook&quot; specify callback functions which handle memory allocation for user defined (phenomic) data.  These may safely be defined as &quot;NULL&quot; functions, in which case the phenomes are assummed to be either static data, or empty.</p>
+<p>&quot;data_destructor&quot; and &quot;data_ref_incrementor&quot; specify callback functions which handle memory allocation for user defined (phenomic) data.  These may safely be defined as &quot;NULL&quot; functions, in which case the phenomes are assummed to be either static data, or empty.</p>
 <p><b>GA Operator functions</b></p>
 <p>The remainder of the parameters define the set of genetic algorithm operators.  Either the built-in functions, or custom functions may be used.  It is perfectly safe to modify the specified functions during an evolutionary run.  As an example of this, we swap between single-point and double-point crossover in the code below.  You may wish to dynamically switch the scoring function, this is also possible.</p>
 <p><p>Lower-level functions</b></p>
