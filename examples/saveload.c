@@ -30,7 +30,8 @@
 		This program shows how to write/read populations
 		to/from disk using GAUL.
 
-		This example is explained in docs/html/tutorial15.html
+		This example is explained in
+		http://gaul.sourceforge.net/tutorial/io.html
 
  **********************************************************************/
 

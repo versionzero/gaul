@@ -48,10 +48,11 @@
 		on (at least) the following platforms:
 
 		o Intel x86 (Linux, OpenBSD, FreeBSD)
-		o AMD x86-64 (Linux)
+		o AMD x86-64 (Linux, FreeBSD)
 		o IBM Power3 (AIX)
+		o IBM PowerPC (Linux)
 		o MIPS R4K, R10K, R12K (IRIX)
-		o Alpha EV7 (Linux)
+		o Alpha EV56 (Tru64), EV7 (Linux)
 		o SPARC Ultra-4 (Solaris)
 
 		This code should be thread safe.

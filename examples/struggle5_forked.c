@@ -36,7 +36,10 @@
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is explained in docs/html/tutorial9.html
+		This example is explained in
+		http://gaul.sourceforge.net/tutorial/island.html
+                and
+		http://gaul.sourceforge.net/tutorial/multiprocessor.html
 
  **********************************************************************/
 
