@@ -1,0 +1,91 @@
+Roadmap upto version 1.0
+========================
+
+Releases 0.1838 - 0.1859 are preview releases proir to full version 1.0
+
+These milestone requirements are subject to change ;)
+
+ Milestone  |  Required Additions (besides bug fixing)
+------------+--------------------------------------------------------
+ 0.1838     |  Save/Load populations.
+            |  Save/Load entities.
+            |  Remove limiting maximum population sizes.
+------------+--------------------------------------------------------
+ 0.1839     |  SUS sampling.
+            |  Intro to GAs (mostly) finished.
+------------+--------------------------------------------------------
+ 0.1840     |  De Jong - working examples.
+            |  User data in array, not list.
+------------+--------------------------------------------------------
+ 0.1841     |  ga_evolution_mp() and associated example.
+------------+--------------------------------------------------------
+ 0.1843     |  Tverski similarity routines for bits/booleans/integers
+------------+--------------------------------------------------------
+ 0.1843     |  more replacement operators.
+            |  replacement operators documentation
+------------+--------------------------------------------------------
+ 0.1844     |  Save/Load soup.
+            |  Return number of generations performed from evolutionary functions.
+------------+--------------------------------------------------------
+ 0.1845     |  Linked-list chromosome.
+            |  Linked-list chromosome example.
+            |  Fully document chromosomes.
+------------+--------------------------------------------------------
+ 0.1846     |  More on-line/off-line statistics options.
+            |  Built-in evaluation profiling.
+------------+--------------------------------------------------------
+ 0.1847     |  Boolean chromosome example from Mitchell book.
+------------+--------------------------------------------------------
+ 0.1848     |  Tree chromosome.
+            |  Genetic programming example.
+------------+--------------------------------------------------------
+ 0.1849     |  Distribution of points on sphere example.
+------------+--------------------------------------------------------
+ 0.1850     |  Improve in-code documentation/comments.
+------------+--------------------------------------------------------
+ 0.1851     |  Tidy and rationalise S-Lang interface.
+------------+--------------------------------------------------------
+ 0.1852     |  Confirm compilation on QNX and MacOS X platforms.
+------------+--------------------------------------------------------
+ 0.1853     |  Accessor functions for all fields in population structure.
+            |  Accessor functions for all fields in entity structure.
+------------+--------------------------------------------------------
+ 0.1854     |  Replace qsort routines with something more appropriate.
+            |  User-defined population sorting.
+------------+--------------------------------------------------------
+ 0.1855     |  Comprehensive test suite.
+------------+--------------------------------------------------------
+ 0.1856     |  RPM binary (i386,alpha) and source packages.
+------------+--------------------------------------------------------
+ 0.1857     |  Remove feature "FIXME's"
+------------+--------------------------------------------------------
+ 0.1858     |  Remove optimisation "FIXME's"
+------------+--------------------------------------------------------
+ 0.1859     |  Remove all known bugs ;)
+------------+--------------------------------------------------------
+
+Additional features needed for version 1.0:
+
+* Full tutorial.
+* Full reference guide.
+* Brief guide to S-Lang.
+* GAUL FAQ.
+* S-Lang extension example.
+* S-Lang embedding example.
+* Messy GA example.
+* Debian package.
+* Run-time control of statistic collection.
+* More run-time checking.
+
+Optional Features for version 1.0, or (more likely) later:
+
+* Non-cyclic migration topologies (migration operators).
+* Additional local search algorithms.
+* GUI "workbench" interface.
+* Langauge bindings.
+* Similarity function callbacks.
+* Multi-threaded support.
+* DEE alogorithm.
+
+Stewart Adcock, 13 Mar 2002.
+
