@@ -51,7 +51,8 @@
 		something like:
 		mpicc -o testmpi mpi_util.c -DMPI_UTIL_TEST
 
-  Updated:	04 Feb 2002 SAA	All global variables are now decleared static.
+  Updated:	11 Feb 2002 SAA	Sequential version of mpi_setup() now defines namelen.
+		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	mpi_standard_{send,broadcast,distribute}() renamed to mpi_{send,broadcast,distribute}().  Some debugging output removed.
 		30 Jan 2002 SAA	mpi_init() function written as an alternative to mpi_setup(). mpi_dataype is not enum now.
   		23 Jan 2002 SAA	Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.  mpi_message_tag may now be an arbitrary integer rather than an enumerated type.
@@ -102,7 +103,7 @@ static char	node_name[MAX_LINE_LEN];	/* String containing processor name */
   synopsis:	Initialise MPI stuff for master/slave paradigm.
   parameters:
   return:	TRUE successful.  FALSE otherwise.
-  last updated:	11/01/01
+  last updated:	11 Feb 2002
  **********************************************************************/
 
 boolean mpi_setup( int *argc, char ***argv,
@@ -117,7 +118,13 @@ boolean mpi_setup( int *argc, char ***argv,
   size = 1;
   rank = 0;
   if (gethostname(node_name, MAX_LINE_LEN)<0)
+    {
     strcpy(node_name, "<unknown>");
+    }
+  else
+    {
+    namelen = strlen(node_name);
+    }
 
   master_func(NULL);
 
