@@ -111,7 +111,7 @@ GA_PATCH_VERSION = 7
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-7
 GA_VERSION_STRING = 
-HAVE_MPI = 0
+HAVE_MPI = 1
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -123,8 +123,8 @@ LT_REVISION = 7
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -244,7 +244,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
+CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 

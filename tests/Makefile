@@ -110,7 +110,7 @@ GA_PATCH_VERSION = 7
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-7
 GA_VERSION_STRING = 
-HAVE_MPI = 0
+HAVE_MPI = 1
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -122,8 +122,8 @@ LT_REVISION = 7
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -146,11 +146,11 @@ bin_PROGRAMS = diagnostics
 
 noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang
 
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
@@ -200,7 +200,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
+CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
 DIST_SOURCES = diagnostics.c test_bitstrings.c test_prng.c test_slang.c \
 	test_utils.c
 DIST_COMMON = README Makefile.am Makefile.in

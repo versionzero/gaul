@@ -74,6 +74,15 @@ static int	size=0;					/* Total number of processes. */
 static int	namelen;				/* Length of processor name. */
 static char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name. */
 
+/*
+ * MPI tags.
+ */
+#define GA_TAG_SLAVE_NOTIFICATION	1001
+#define GA_TAG_BUFFER_LEN		1002
+#define GA_TAG_INSTRUCTION		1003
+#define GA_TAG_FITNESS			1004
+#define GA_TAG_CHROMOSOMES		1005
+
 /**********************************************************************
   mpi_init()
   synopsis:	Ensure that MPI is initialised and prepare some global
@@ -179,7 +188,252 @@ static int mpi_get_prev_rank(void)
   return (prev-1);
   }
 
+
+/**********************************************************************
+  gaul_bond_slaves_mpi()
+  synopsis:	Register, set up and synchronise slave processes.
+  parameters:	population *pop
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+static void gaul_bond_slaves_mpi(population *pop, unsigned int buffer_len, unsigned int buffer_max)
+  {
+  int		i;			/* Loop variable over slave processes. */
+  int		mpi_rank;		/* Rank of slave process. */
+  int		mpi_size;		/* Number of slave processes. */
+  MPI_Status	status;			/* MPI status structure. */
+  int		two_int[2];		/* Send buffer. */
+
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+  two_int[0] = buffer_len;
+  two_int[1] = buffer_max;
+
+/*
+ * Listen for all slave processes.
+ */
+  for (i=1; i<mpi_size; i++)
+    {
+    MPI_Recv(&mpi_rank, 1, MPI_INT, MPI_ANY_SOURCE, GA_TAG_SLAVE_NOTIFICATION, MPI_COMM_WORLD, &status);
+    /* FIXME: Check status here. */
+
+/*
+ * Send slave the buffer length that it will require.
+ */
+    MPI_Send(two_int, 2, MPI_INT, status.MPI_SOURCE, GA_TAG_BUFFER_LEN, MPI_COMM_WORLD);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_debond_slaves_mpi()
+  synopsis:	Release and synchronise slave processes.
+  parameters:	population *pop
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+static void gaul_debond_slaves_mpi(population *pop)
+  {
+  int		i;			/* Loop variable over slave processes. */
+  int		instruction=1;		/* New population instruction. */
+  int		mpi_size;		/* Number of slave processes. */
+
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+/*
+ * Send instructions to all slave processes.
+ */
+  for (i=1; i<mpi_size; i++)
+    {
+/*    printf("DEBUG: Sending debond instruction to %d\n", i);*/
+    MPI_Send(&instruction, 1, MPI_INT, i, GA_TAG_INSTRUCTION, MPI_COMM_WORLD);
+    }
+
+  return;
+  }
+
 #endif
+
+
+/**********************************************************************
+  ga_attach_mpi_slave()
+  synopsis:	Slave MPI process routine.
+  parameters:	none
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+void ga_attach_mpi_slave( population *pop )
+  {
+#if HAVE_MPI == 1
+  MPI_Status	status;			/* MPI status structure. */
+  int		single_int;		/* Receive buffer. */
+  byte		*buffer=NULL;		/* Receive buffer. */
+  byte		*chromo=NULL;		/* Chromosome. */
+  boolean	finished=FALSE;		/* Whether this slave is done. */
+  entity	*entity, *adult;	/* Received entity, adapted entity. */
+  unsigned int	buffer_len=0;		/* Length of buffer to receive. */
+  unsigned int	buffer_max=0;		/* Chromosome byte representation length. */
+  int		mpi_rank;		/* Rank of MPI process; should never be 0 here. */
+  int		two_int[2];		/* Send buffer. */
+
+/*
+ * Rank zero process is master.  This handles evolution.  Other processes are slaves
+ * which simply evaluate entities, and should be attached using ga_attach_slave().
+ */
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  if (mpi_rank == 0) die("ga_attach_mpi_slave() called by process with rank=0.");
+
+/*
+ * Send notification to master.
+ */
+/*  printf("DEBUG: Process %d notifying master\n", mpi_rank);*/
+  MPI_Send(&mpi_rank, 1, MPI_INT, 0, GA_TAG_SLAVE_NOTIFICATION, MPI_COMM_WORLD);
+
+/*
+ * Allocate chromosome transfer buffer.
+ */
+  MPI_Recv(two_int, 2, MPI_INT, 0, GA_TAG_BUFFER_LEN, MPI_COMM_WORLD, &status);
+  buffer_len = two_int[0];
+  buffer_max = two_int[1];
+  buffer = s_malloc(buffer_len*sizeof(byte));
+
+/*
+ * Enter task loop.
+ */
+  do
+    {
+/*
+ * Recieve instruction packet.
+ */
+    MPI_Recv(&single_int, 1, MPI_INT, 0, GA_TAG_INSTRUCTION, MPI_COMM_WORLD, &status);
+
+/*    printf("DEBUG: slave %d recieved instruction %d\n", mpi_rank, single_int);*/
+
+    switch (single_int)
+      {
+      case 0:
+        /* No more jobs. */
+/*        printf("DEBUG: slave %d recieved detach instruction.\n", mpi_rank);*/
+        finished=TRUE;
+        break;
+      case 1:
+        /* Prepare for calculations with a new population. */
+/* FIXME: Incomplete. */
+        MPI_Send(&mpi_rank, 1, MPI_INT, 0, GA_TAG_SLAVE_NOTIFICATION, MPI_COMM_WORLD);
+        MPI_Recv(two_int, 2, MPI_INT, 0, GA_TAG_BUFFER_LEN, MPI_COMM_WORLD, &status);
+        break;
+      case 2:
+        /* Evaluation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(buffer, buffer_len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        pop->evaluate(pop, entity);
+        MPI_Send(&(entity->fitness), 1, MPI_DOUBLE, 0, GA_TAG_FITNESS, MPI_COMM_WORLD);
+        ga_entity_dereference(pop, entity);
+        break;
+      case 3:
+        /* Baldwinian adaptation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(buffer, buffer_len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        adult = pop->adapt(pop, entity);
+        MPI_Send(&(adult->fitness), 1, MPI_DOUBLE, 0, GA_TAG_FITNESS, MPI_COMM_WORLD);
+        ga_entity_dereference(pop, entity);
+        ga_entity_dereference(pop, adult);
+        break;
+      case 4:
+        /* Lamarkian adaptation required. */
+        entity = ga_get_free_entity(pop);
+        MPI_Recv(buffer, buffer_len, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        pop->chromosome_from_bytes(pop, entity, buffer);
+        adult = pop->adapt(pop, entity);
+        MPI_Send(&(adult->fitness), 1, MPI_DOUBLE, 0, GA_TAG_FITNESS, MPI_COMM_WORLD);
+        if (buffer_max==0)
+          {
+          pop->chromosome_to_bytes(pop, adult, &chromo, &buffer_max);
+          MPI_Send(chromo, buffer_len, MPI_CHAR, 0, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+          }
+        else
+          {
+          pop->chromosome_to_bytes(pop, adult, &buffer, &buffer_len);
+          MPI_Send(buffer, buffer_len, MPI_CHAR, 0, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+          }
+        ga_entity_dereference(pop, entity);
+        ga_entity_dereference(pop, adult);
+        break;
+      default:
+        dief("Unknown instruction type packet recieved (%d).", single_int);
+      }
+
+    } while (finished==FALSE);
+
+/*
+ * Clean-up and exit.
+ */
+  if (buffer != NULL)
+    s_free(buffer);
+
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_detach_mpi_slaves()
+  synopsis:	Allow all slave processes to continue past the
+		ga_attach_mpi_slave() routine.
+  parameters:	none
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+void ga_detach_mpi_slaves(void)
+  {
+#if HAVE_MPI == 1
+  int		i;			/* Loop variable over slave processes. */
+  int		instruction=0;		/* Detach instruction. */
+  int		mpi_size;		/* Number of slave processes. */
+  int		mpi_rank;		/* Rank of MPI process; should never be 0 here. */
+  int		two_int[2]={0,0};	/* Send buffer. */
+  MPI_Status	status;			/* MPI status structure. */
+
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+
+/*
+ * Listen for all slave processes.
+ * FIXME: This shouldn't be needed really.
+ */
+  for (i=1; i<mpi_size; i++)
+    {
+    MPI_Recv(&mpi_rank, 1, MPI_INT, MPI_ANY_SOURCE, GA_TAG_SLAVE_NOTIFICATION, MPI_COMM_WORLD, &status);
+
+/*
+ * Send slave the buffer length that it will require.
+ */
+    MPI_Send(two_int, 2, MPI_INT, status.MPI_SOURCE, GA_TAG_BUFFER_LEN, MPI_COMM_WORLD);
+    }
+
+  for (i=1; i<mpi_size; i++)
+    {
+/*    printf("DEBUG: Sending detach instruction to %d\n", i);*/
+    MPI_Send(&instruction, 1, MPI_INT, i, GA_TAG_INSTRUCTION, MPI_COMM_WORLD);
+    }
+
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+#endif
+
+  return;
+  }
 
 
 /**********************************************************************
@@ -369,7 +623,7 @@ static void gaul_evaluation_slave_mp(population *pop)
   {
 #if HAVE_MPI == 1
   MPI_Status	status;			/* MPI status structure. */
-  int		int_single;		/* Receive buffer. */
+  int		single_int;		/* Receive buffer. */
   byte		*buffer;		/* Receive buffer. */
   boolean	finished=FALSE;		/* Whether this slave is done. */
   entity	*entity, *adult;	/* Received entity, adapted entity. */
@@ -382,18 +636,18 @@ static void gaul_evaluation_slave_mp(population *pop)
   MPI_Recv(&len, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
   buffer = s_malloc(len*sizeof(byte));
 
-printf("DEBUG: slave %d recieved %d (len)\n", rank, len);
+/*printf("DEBUG: slave %d recieved %d (len)\n", rank, len);*/
 
 /*
  * Instruction packet.
  */
   do
     {
-    MPI_Recv(&int_single, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv(&single_int, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 
-printf("DEBUG: slave %d recieved %d (instruction)\n", rank, len);
+/*printf("DEBUG: slave %d recieved %d (instruction)\n", rank, len);*/
 
-    switch (int_single)
+    switch (single_int)
       {
       case 0:
         /* Evaluation required. */
@@ -496,6 +750,113 @@ static void gaul_ensure_evaluations_mp(population *pop)
     {
     if (pop->entity_iarray[i]->fitness == GA_MIN_FITNESS)
       pop->evaluate(pop, pop->entity_iarray[i]);
+    }
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_ensure_evaluations_mpi()
+  synopsis:	Fitness evaluations.
+		Evaluate all previously unevaluated entities.
+		No adaptation.
+  parameters:	population *pop
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+static void gaul_ensure_evaluations_mpi( population *pop, int *eid,
+                        byte *buffer, unsigned int buffer_len, unsigned int buffer_max )
+  {
+#if HAVE_MPI == 1
+  MPI_Status	status;			/* MPI status structure. */
+  double	single_double;		/* Recieve buffer. */
+  int		instruction=2;		/* Detach instruction. */
+  int		mpi_size;		/* Number of slave processes. */
+  int		process_num;		/* Number of remote processes running calculations. */
+  int		eval_num;		/* Id of entity being processed. */
+  byte		*chromo=NULL;		/* Chromosome in byte form. */
+
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+/*
+ * A process is notifed to begin each fitness evaluation until
+ * all processes are busy, at which point we wait for
+ * results before initiating more.
+ *
+ * Skip evaluations for entities that have been previously evaluated.
+ */
+  process_num = 0;
+  eval_num = 0;
+
+  /* Skip to the next entity which needs evaluating. */
+  while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+
+  while (process_num < mpi_size-1 && eval_num < pop->size)
+    {
+    eid[process_num] = eval_num;
+
+/* Send instruction and required data. */
+    MPI_Send(&instruction, 1, MPI_INT, process_num+1, GA_TAG_INSTRUCTION, MPI_COMM_WORLD);
+    if (buffer_max==0)
+      {
+      pop->chromosome_to_bytes(pop, pop->entity_iarray[eval_num], &chromo, &buffer_max);
+      MPI_Send(&chromo, buffer_len, MPI_CHAR, process_num+1, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+      }
+    else
+      {
+      pop->chromosome_to_bytes(pop, pop->entity_iarray[eval_num], &buffer, &buffer_len);
+      MPI_Send(&buffer, buffer_len, MPI_CHAR, process_num+1, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+      }
+
+    process_num++;
+    eval_num++;
+
+    /* Skip to the next entity which needs evaluating. */
+    while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+    }
+
+  while (process_num > 0)
+    { /* Wait for a process to finish. */
+    MPI_Recv(&single_double, 1, MPI_DOUBLE, MPI_ANY_SOURCE, GA_TAG_FITNESS, MPI_COMM_WORLD, &status);
+    /* FIXME: Check status here. */
+
+    /* Find which entity this process was evaluating. */
+    if (eid[status.MPI_SOURCE-1] == -1) die("Internal error.  eid is -1");
+
+    pop->entity_iarray[eid[status.MPI_SOURCE-1]]->fitness = single_double;
+
+    if (eval_num < pop->size)
+      {       /* New fork. */
+      eid[status.MPI_SOURCE-1] = eval_num;
+
+      MPI_Send(&instruction, 1, MPI_INT, status.MPI_SOURCE, GA_TAG_INSTRUCTION, MPI_COMM_WORLD);
+      if (buffer_max==0)
+        {
+        pop->chromosome_to_bytes(pop, pop->entity_iarray[eval_num], &chromo, &buffer_max);
+        MPI_Send(&chromo, buffer_len, MPI_CHAR, status.MPI_SOURCE, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+        }
+      else
+        {
+        pop->chromosome_to_bytes(pop, pop->entity_iarray[eval_num], &buffer, &buffer_len);
+        MPI_Send(&buffer, buffer_len, MPI_CHAR, status.MPI_SOURCE, GA_TAG_CHROMOSOMES, MPI_COMM_WORLD);
+        }
+
+      eval_num++;
+
+      /* Skip to the next entity which needs evaluating. */
+      while (eval_num < pop->size && pop->entity_iarray[eval_num]->fitness!=GA_MIN_FITNESS) eval_num++;
+      }
+    else
+      {
+      eid[status.MPI_SOURCE-1] = -1;
+      process_num--;
+      }
     }
 
 #else
@@ -861,6 +1222,107 @@ static void gaul_adapt_and_evaluate(population *pop)
  **********************************************************************/
 
 static void gaul_adapt_and_evaluate_mp(population *pop)
+  {
+#if HAVE_MPI == 1
+  int		i;			/* Loop variable over entity ranks. */
+  entity	*adult=NULL;		/* Adapted entity. */
+  int		adultrank;		/* Rank of adapted entity. */
+
+  plog(LOG_FIXME, "Need to parallelise this!");
+
+  if (pop->scheme == GA_SCHEME_DARWIN)
+    {	/* This is pure Darwinian evolution.  Simply assess fitness of all children.  */
+
+    plog(LOG_VERBOSE, "*** Fitness Evaluations ***");
+
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
+    for (i=pop->orig_size; i<pop->size; i++)
+      {
+      pop->evaluate(pop, pop->entity_iarray[i]);
+      }
+
+    return;
+    }
+  else
+    {	/* Some kind of adaptation is required.  First reevaluate parents, as needed, then children. */
+
+    plog(LOG_VERBOSE, "*** Adaptation and Fitness Evaluations ***");
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_PARENTS)!=0 )
+      {
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_PARENTS)!=0 )
+      {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
+      for (i=0; i<pop->orig_size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+
+    if ( (pop->scheme & GA_SCHEME_BALDWIN_CHILDREN)!=0 )
+      { 
+#pragma omp parallel for \
+   shared(pop) private(i,adult) \
+   schedule(static)
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        pop->entity_iarray[i]->fitness=adult->fitness;
+        ga_entity_dereference(pop, adult);
+        }
+      }
+    else if ( (pop->scheme & GA_SCHEME_LAMARCK_CHILDREN)!=0 )
+      {
+#pragma omp parallel for \
+   shared(pop) private(i,adult,adultrank) \
+   schedule(static)
+      for (i=pop->orig_size; i<pop->size; i++)
+        {
+        adult = pop->adapt(pop, pop->entity_iarray[i]);
+        adultrank = ga_get_entity_rank(pop, adult);
+        gaul_entity_swap_rank(pop, i, adultrank);
+        ga_entity_dereference_by_rank(pop, adultrank);
+        }
+      }
+    }
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_adapt_and_evaluate_mpi()
+  synopsis:	Fitness evaluations.
+		Evaluate the new entities produced in the current
+		generation, whilst performing any necessary adaptation.
+		MPI version.
+  parameters:	population *pop
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+static void gaul_adapt_and_evaluate_mpi(population *pop)
   {
 #if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
@@ -1403,6 +1865,82 @@ static void gaul_survival(population *pop)
  **********************************************************************/
 
 static void gaul_survival_mp(population *pop)
+  {
+#if HAVE_MPI == 1
+  int		i;			/* Loop variable over entity ranks. */
+
+  plog(LOG_FIXME, "Need to parallelise this!");
+
+  plog(LOG_VERBOSE, "*** Survival of the fittest ***");
+
+/*
+ * Need to kill parents, or rescore parents?
+ */
+  if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
+    {
+    while (pop->orig_size>(pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES))
+      {
+      pop->orig_size--;
+      ga_entity_dereference_by_rank(pop, pop->orig_size);
+      }
+    }
+  else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
+    {
+    plog(LOG_VERBOSE, "*** Fitness Re-evaluations ***");
+
+#pragma omp parallel for \
+   shared(pop) private(i) \
+   schedule(static)
+    for (i=pop->orig_size; i<pop->size; i++)
+      {
+      pop->evaluate(pop, pop->entity_iarray[i]);
+      }
+    }
+
+/*
+ * Sort all population members by fitness.
+ */
+  sort_population(pop);
+
+/*
+ * Enforce the type of crowding desired.
+ *
+ * Rough crowding doesn't actual check whether two chromosomes are
+ * identical - just assumes they are if they have identical
+ * fitness.  Exact elitism does make the full check.
+ *
+ * FIXME: Crowding code missing!!!
+ */
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+  ga_genocide(pop, pop->stable_size);
+
+#else
+  die("Parallel routine called in code compiled without MPI support.");
+#endif
+
+  return;
+  }
+
+
+/**********************************************************************
+  gaul_survival_mpi()
+  synopsis:	Survival of the fittest.
+		Enforce elitism, apply crowding operator, reduce
+		population back to its stable size and rerank entities,
+		as required.
+
+		*** FIXME: crowding analysis incomplete. ***
+
+  parameters:	population *pop
+  return:	none
+  last updated:	10 May 2004
+ **********************************************************************/
+
+static void gaul_survival_mpi(population *pop)
   {
 #if HAVE_MPI == 1
   int		i;			/* Loop variable over entity ranks. */
@@ -4424,6 +4962,12 @@ int ga_evolution_mpi(	population		*pop,
   {
 #if HAVE_MPI==1
   int		generation=0;		/* Current generation number. */
+  int		mpi_rank;		/* Rank of MPI process; should always by 0 here. */
+  int		mpi_size;		/* Number of MPI processes. */
+  byte		*buffer=NULL;		/* Send buffer. */
+  unsigned int	buffer_len=0;		/* Length of send buffer. */
+  unsigned int	buffer_max=0;		/* Length of send buffer. */
+  int		*eid;			/* Sorage of entity ids being processed. */
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
@@ -4435,29 +4979,42 @@ int ga_evolution_mpi(	population		*pop,
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   if (pop->size < 1) die("Population is empty.");
 
+/*
+ * Rank zero process is master.  This handles evolution.  Other processes are slaves
+ * which simply evaluate entities, and should be attached using ga_attach_slave().
+ */
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  if (mpi_rank != 0) die("ga_evolution_mpi() called by process other than rank=0.");
+
   plog(LOG_VERBOSE, "The evolution has begun!");
 
-  mpi_init();
+/*
+ * Allocate a send buffer of the required length and an array to store
+ * entity ids.
+ */
+  buffer_len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &buffer_max);
+  if (buffer_max == 0)
+  buffer = s_malloc(buffer_len*sizeof(byte));
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+  eid = s_malloc(mpi_size*sizeof(int));
+
+/*
+ * Register, set up and synchronise slave processes.
+ */
+  gaul_bond_slaves_mpi(pop, buffer_len, buffer_max);
 
   pop->generation = 0;
 
 /*
- * Rank zero process is master.  This handles evolution.  Other processes are slaves
- * which simply evaluate entities.
- */
-  if (mpi_ismaster())
-    {
-
-/*
  * Score and sort the initial population members.
  */
-    gaul_ensure_evaluations_mp(pop);
-    sort_population(pop);
+  gaul_ensure_evaluations_mpi(pop, eid, buffer, buffer_len, buffer_max);
+  sort_population(pop);
 
-    plog( LOG_VERBOSE,
-          "Prior to the first generation, population has fitness scores between %f and %f",
-          pop->entity_iarray[0]->fitness,
-          pop->entity_iarray[pop->size-1]->fitness );
+  plog( LOG_VERBOSE,
+        "Prior to the first generation, population has fitness scores between %f and %f",
+        pop->entity_iarray[0]->fitness,
+        pop->entity_iarray[pop->size-1]->fitness );
 
 /*
  * Do all the generations:
@@ -4465,58 +5022,58 @@ int ga_evolution_mpi(	population		*pop,
  * Stop when (a) max_generations reached, or
  *           (b) "pop->generation_hook" returns FALSE.
  */
-    while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
-             generation<max_generations )
-      {
-      generation++;
-      pop->generation = generation;
-      pop->orig_size = pop->size;
+  while ( (pop->generation_hook?pop->generation_hook(generation, pop):TRUE) &&
+           generation<max_generations )
+    {
+    generation++;
+    pop->generation = generation;
+    pop->orig_size = pop->size;
 
-      plog(LOG_DEBUG,
-              "Population size is %d at start of generation %d",
-              pop->orig_size, generation );
+    plog(LOG_DEBUG,
+         "Population size is %d at start of generation %d",
+         pop->orig_size, generation );
 
 /*
  * Crossover step.
  */
-      gaul_crossover(pop);
+    gaul_crossover(pop);
 
 /*
  * Mutation step.
  */
-      gaul_mutation(pop);
+    gaul_mutation(pop);
 
 /*
  * Apply environmental adaptations, score entities, sort entities, etc.
  */
-      gaul_adapt_and_evaluate_mp(pop);
+    gaul_adapt_and_evaluate_mpi(pop);
 
 /*
  * Survival of the fittest.
  */
-      gaul_survival_mp(pop);
+    gaul_survival_mpi(pop);
 
 /*
  * Use callback.
  */
-      plog(LOG_VERBOSE,
-           "After generation %d, population has fitness scores between %f and %f",
-           generation,
-           pop->entity_iarray[0]->fitness,
-           pop->entity_iarray[pop->size-1]->fitness );
+    plog( LOG_VERBOSE,
+          "After generation %d, population has fitness scores between %f and %f",
+          generation,
+          pop->entity_iarray[0]->fitness,
+          pop->entity_iarray[pop->size-1]->fitness );
 
-      }	/* Generation loop. */
+    }	/* Generation loop. */
 
 /*
- * Synchronise the population structures held across the processors.
+ * Register, set up and synchronise slave processes.
  */
-    /*gaul_broadcast_population_mp(pop);*/
-    ga_population_send_every(pop, -1);
-    }
-  else
-    {
-    gaul_evaluation_slave_mp(pop);
-    }
+  gaul_debond_slaves_mpi(pop);
+
+/*
+ * Deallocate send buffer and entity id array.
+ */
+  s_free(buffer);
+  s_free(eid);
 
   return generation;
 #else
@@ -4525,3 +5082,5 @@ int ga_evolution_mpi(	population		*pop,
   return 0;
 #endif
   }
+
+

@@ -154,7 +154,7 @@ extern int errno;
 #define V3_QUICK 1
 #define W32_CRIPPLED 0
 #define HAVE_SLANG 1
-#define HAVE_MPI 0
+#define HAVE_MPI 1
 #define HAVE_PTHREADS 1
 #define USE_OPENMP 0
 #define GAUL_DETERMINISTIC_OPENMP 1

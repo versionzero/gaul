@@ -50,9 +50,14 @@ typedef void    (*GAspecificmutate)(int chromo, int point, int *data);
 /*
  * Prototypes
  */
+void	 ga_attach_mpi_slave( population *pop );
+void	 ga_detach_mpi_slaves(void);
+
 int	ga_evolution(	population		*pop,
 			const int		max_generations );
 int	ga_evolution_mp(	population		*pop,
+			const int		max_generations );
+int	ga_evolution_mpi(	population		*pop,
 			const int		max_generations );
 int	ga_evolution_forked(	population		*pop,
 			const int		max_generations );

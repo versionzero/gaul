@@ -111,7 +111,7 @@ GA_PATCH_VERSION = 7
 GA_UNAME_STRING = 
 GA_VERSION = 0.1846-7
 GA_VERSION_STRING = 
-HAVE_MPI = 0
+HAVE_MPI = 1
 HAVE_PTHREADS = 1
 HAVE_SLANG = 1
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
@@ -123,8 +123,8 @@ LT_REVISION = 7
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
-MPIFLAGS = 
-MPILIBS = 
+MPIFLAGS = -D_REENTRANT
+MPILIBS = -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
 RANLIB = ranlib
@@ -152,7 +152,8 @@ bin_PROGRAMS = \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
 	struggle \
-	struggle_forked struggle_threaded struggle_mp \
+	struggle_forked struggle_threaded \
+	struggle_mp struggle_mpi \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -183,6 +184,7 @@ royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
+struggle_mpi_SOURCES = struggle_mpi.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
@@ -246,46 +248,48 @@ nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 mixed_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
-mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
+test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_bitstring_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+onemax_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_dc_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_threaded_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 
 # Parallel code:
-struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm -llammpio -llamf77mpi -lmpi -llam -lutil -lpthread
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h \
@@ -300,7 +304,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
 	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
 	struggle_threaded$(EXEEXT) struggle_mp$(EXEEXT) \
-	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
+	struggle_mpi$(EXEEXT) struggle_dc$(EXEEXT) \
+	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -386,6 +391,10 @@ struggle_forked_LDFLAGS =
 am_struggle_mp_OBJECTS = struggle_mp-struggle_mp.$(OBJEXT)
 struggle_mp_OBJECTS = $(am_struggle_mp_OBJECTS)
 struggle_mp_LDFLAGS =
+am_struggle_mpi_OBJECTS = struggle_mpi-struggle_mpi.$(OBJEXT)
+struggle_mpi_OBJECTS = $(am_struggle_mpi_OBJECTS)
+struggle_mpi_DEPENDENCIES =
+struggle_mpi_LDFLAGS =
 am_struggle_randomsearch_OBJECTS = struggle_randomsearch.$(OBJEXT)
 struggle_randomsearch_OBJECTS = $(am_struggle_randomsearch_OBJECTS)
 struggle_randomsearch_LDFLAGS =
@@ -445,6 +454,7 @@ DEP_FILES = ./$(DEPDIR)/fitting.Po ./$(DEPDIR)/fitting_sd.Po \
 	./$(DEPDIR)/struggle_dc.Po \
 	./$(DEPDIR)/struggle_forked.Po \
 	./$(DEPDIR)/struggle_mp-struggle_mp.Po \
+	./$(DEPDIR)/struggle_mpi-struggle_mpi.Po \
 	./$(DEPDIR)/struggle_randomsearch.Po \
 	./$(DEPDIR)/struggle_ss.Po \
 	./$(DEPDIR)/struggle_systematicsearch.Po \
@@ -460,7 +470,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro   -I/usr/include/slang/
+CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro -D_REENTRANT  -I/usr/include/slang/
 DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
 	$(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) \
@@ -472,15 +482,15 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
 	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
 	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) struggle_threaded.c \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) \
+	$(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -600,6 +610,10 @@ struggle_mp-struggle_mp.$(OBJEXT): struggle_mp.c
 struggle_mp$(EXEEXT): $(struggle_mp_OBJECTS) $(struggle_mp_DEPENDENCIES) 
 	@rm -f struggle_mp$(EXEEXT)
 	$(LINK) $(struggle_mp_LDFLAGS) $(struggle_mp_OBJECTS) $(struggle_mp_LDADD) $(LIBS)
+struggle_mpi-struggle_mpi.$(OBJEXT): struggle_mpi.c
+struggle_mpi$(EXEEXT): $(struggle_mpi_OBJECTS) $(struggle_mpi_DEPENDENCIES) 
+	@rm -f struggle_mpi$(EXEEXT)
+	$(LINK) $(struggle_mpi_LDFLAGS) $(struggle_mpi_OBJECTS) $(struggle_mpi_LDADD) $(LIBS)
 struggle_randomsearch$(EXEEXT): $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_DEPENDENCIES) 
 	@rm -f struggle_randomsearch$(EXEEXT)
 	$(LINK) $(struggle_randomsearch_LDFLAGS) $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_LDADD) $(LIBS)
@@ -663,6 +677,7 @@ include ./$(DEPDIR)/struggle5_mp-struggle5_mp.Po
 include ./$(DEPDIR)/struggle_dc.Po
 include ./$(DEPDIR)/struggle_forked.Po
 include ./$(DEPDIR)/struggle_mp-struggle_mp.Po
+include ./$(DEPDIR)/struggle_mpi-struggle_mpi.Po
 include ./$(DEPDIR)/struggle_randomsearch.Po
 include ./$(DEPDIR)/struggle_ss.Po
 include ./$(DEPDIR)/struggle_systematicsearch.Po
@@ -730,6 +745,24 @@ struggle_mp-struggle_mp.lo: struggle_mp.c
 	depfile='$(DEPDIR)/struggle_mp-struggle_mp.Plo' tmpdepfile='$(DEPDIR)/struggle_mp-struggle_mp.TPlo' \
 	$(CCDEPMODE) $(depcomp) \
 	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -c -o struggle_mp-struggle_mp.lo `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c
+
+struggle_mpi-struggle_mpi.o: struggle_mpi.c
+	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.o' libtool=no \
+	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Po' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.o `test -f 'struggle_mpi.c' || echo '$(srcdir)/'`struggle_mpi.c
+
+struggle_mpi-struggle_mpi.obj: struggle_mpi.c
+	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.obj' libtool=no \
+	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Po' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.obj `cygpath -w struggle_mpi.c`
+
+struggle_mpi-struggle_mpi.lo: struggle_mpi.c
+	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.lo' libtool=yes \
+	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Plo' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPlo' \
+	$(CCDEPMODE) $(depcomp) \
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.lo `test -f 'struggle_mpi.c' || echo '$(srcdir)/'`struggle_mpi.c
 CCDEPMODE = depmode=gcc3
 
 mostlyclean-libtool:

@@ -41,7 +41,8 @@ bin_PROGRAMS = \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
 	struggle \
-	struggle_forked struggle_threaded struggle_mp \
+	struggle_forked struggle_threaded \
+	struggle_mp struggle_mpi \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -71,6 +72,7 @@ royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
+struggle_mpi_SOURCES = struggle_mpi.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
@@ -170,6 +172,8 @@ mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm @MPILIBS@
 # Parallel code:
 struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 

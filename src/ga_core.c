@@ -269,7 +269,7 @@ population *ga_population_new(	const int stable_size,
 
   newpop->size = 0;
   newpop->stable_size = stable_size;
-  newpop->max_size = stable_size*4;
+  newpop->max_size = (1+stable_size)*4;	/* +1 prevents problems if stable_size is 0. */
   newpop->orig_size = 0;
   newpop->num_chromosomes = num_chromosome;
   newpop->len_chromosomes = len_chromosome;
@@ -1491,7 +1491,7 @@ entity *ga_get_free_entity(population *pop)
     {	/* No, so allocate some more space. */
     plog(LOG_VERBOSE, "No unused entities available -- allocating additional structures.");
 
-    new_max_size = (pop->max_size * 3)/2;
+    new_max_size = (pop->max_size * 3)/2 + 1;
     pop->entity_array = s_realloc(pop->entity_array, new_max_size*sizeof(entity*));
     pop->entity_iarray = s_realloc(pop->entity_iarray, new_max_size*sizeof(entity*));
 

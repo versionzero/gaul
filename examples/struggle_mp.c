@@ -108,12 +108,12 @@ int main(int argc, char **argv)
   population	*pop=NULL;		/* Population of solutions. */
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
-
-  printf("DEBUG: Process %d running\n", getpid());
+  int		rank;			/* MPI rank. */
 
   MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  printf("DEBUG: Process %d initialised\n", getpid());
+  printf("Process %d initialised (rank %d)\n", getpid(), rank);
 
   for (i=0; i<50; i++)
     {

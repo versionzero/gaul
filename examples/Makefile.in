@@ -152,7 +152,8 @@ bin_PROGRAMS = \
 	royalroad royalroad_ss royalroad_bitstring \
 	onemax \
 	struggle \
-	struggle_forked struggle_threaded struggle_mp \
+	struggle_forked struggle_threaded \
+	struggle_mp struggle_mpi \
 	struggle_dc struggle_randomsearch \
 	struggle_systematicsearch struggle_ss \
 	struggle2 struggle3 struggle4 \
@@ -183,6 +184,7 @@ royalroad_ss_SOURCES = royalroad_ss.c
 onemax_SOURCES = onemax.c
 struggle_SOURCES = struggle.c
 struggle_mp_SOURCES = struggle_mp.c
+struggle_mpi_SOURCES = struggle_mpi.c
 struggle_dc_SOURCES = struggle_dc.c
 struggle_randomsearch_SOURCES = struggle_randomsearch.c
 struggle_systematicsearch_SOURCES = struggle_systematicsearch.c
@@ -284,6 +286,8 @@ mixed_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm @MPILIBS@
 # Parallel code:
 struggle_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_mpi_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+struggle_mpi_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_CFLAGS = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 subdir = examples
@@ -300,7 +304,8 @@ bin_PROGRAMS = test_ga$(EXEEXT) test_simplex$(EXEEXT) test_sd$(EXEEXT) \
 	royalroad_ss$(EXEEXT) royalroad_bitstring$(EXEEXT) \
 	onemax$(EXEEXT) struggle$(EXEEXT) struggle_forked$(EXEEXT) \
 	struggle_threaded$(EXEEXT) struggle_mp$(EXEEXT) \
-	struggle_dc$(EXEEXT) struggle_randomsearch$(EXEEXT) \
+	struggle_mpi$(EXEEXT) struggle_dc$(EXEEXT) \
+	struggle_randomsearch$(EXEEXT) \
 	struggle_systematicsearch$(EXEEXT) struggle_ss$(EXEEXT) \
 	struggle2$(EXEEXT) struggle3$(EXEEXT) struggle4$(EXEEXT) \
 	struggle5$(EXEEXT) struggle5_mp$(EXEEXT) \
@@ -386,6 +391,10 @@ struggle_forked_LDFLAGS =
 am_struggle_mp_OBJECTS = struggle_mp-struggle_mp.$(OBJEXT)
 struggle_mp_OBJECTS = $(am_struggle_mp_OBJECTS)
 struggle_mp_LDFLAGS =
+am_struggle_mpi_OBJECTS = struggle_mpi-struggle_mpi.$(OBJEXT)
+struggle_mpi_OBJECTS = $(am_struggle_mpi_OBJECTS)
+struggle_mpi_DEPENDENCIES =
+struggle_mpi_LDFLAGS =
 am_struggle_randomsearch_OBJECTS = struggle_randomsearch.$(OBJEXT)
 struggle_randomsearch_OBJECTS = $(am_struggle_randomsearch_OBJECTS)
 struggle_randomsearch_LDFLAGS =
@@ -445,6 +454,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_dc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_forked.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_mp-struggle_mp.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/struggle_mpi-struggle_mpi.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_randomsearch.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_ss.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/struggle_systematicsearch.Po \
@@ -472,15 +482,15 @@ DIST_SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(struggle5_SOURCES) $(struggle5_forked_SOURCES) \
 	$(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) \
 	$(struggle_forked_SOURCES) $(struggle_mp_SOURCES) \
-	$(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) \
-	$(struggle_systematicsearch_SOURCES) struggle_threaded.c \
-	$(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) \
-	$(wildfire_SOURCES) $(wildfire_forked_SOURCES) \
-	$(wildfire_loadbalancing_SOURCES)
+	$(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) \
+	$(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) \
+	struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) \
+	$(test_simplex_SOURCES) $(wildfire_SOURCES) \
+	$(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 HEADERS = $(noinst_HEADERS)
 
 DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in TODO
-SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
+SOURCES = $(fitting_SOURCES) $(fitting_sd_SOURCES) $(fitting_simplex_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(mixed_SOURCES) $(nnevolve_SOURCES) $(onemax_SOURCES) $(pingpong_SOURCES) $(pingpong_sa_SOURCES) $(pingpong_tabu_SOURCES) $(pingpong_tabu2_SOURCES) $(royalroad_SOURCES) $(royalroad_bitstring_SOURCES) $(royalroad_ss_SOURCES) $(saveload_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_forked_SOURCES) $(struggle5_mp_SOURCES) $(struggle_dc_SOURCES) $(struggle_forked_SOURCES) $(struggle_mp_SOURCES) $(struggle_mpi_SOURCES) $(struggle_randomsearch_SOURCES) $(struggle_ss_SOURCES) $(struggle_systematicsearch_SOURCES) struggle_threaded.c $(test_ga_SOURCES) $(test_sd_SOURCES) $(test_simplex_SOURCES) $(wildfire_SOURCES) $(wildfire_forked_SOURCES) $(wildfire_loadbalancing_SOURCES)
 
 all: all-am
 
@@ -600,6 +610,10 @@ struggle_mp-struggle_mp.$(OBJEXT): struggle_mp.c
 struggle_mp$(EXEEXT): $(struggle_mp_OBJECTS) $(struggle_mp_DEPENDENCIES) 
 	@rm -f struggle_mp$(EXEEXT)
 	$(LINK) $(struggle_mp_LDFLAGS) $(struggle_mp_OBJECTS) $(struggle_mp_LDADD) $(LIBS)
+struggle_mpi-struggle_mpi.$(OBJEXT): struggle_mpi.c
+struggle_mpi$(EXEEXT): $(struggle_mpi_OBJECTS) $(struggle_mpi_DEPENDENCIES) 
+	@rm -f struggle_mpi$(EXEEXT)
+	$(LINK) $(struggle_mpi_LDFLAGS) $(struggle_mpi_OBJECTS) $(struggle_mpi_LDADD) $(LIBS)
 struggle_randomsearch$(EXEEXT): $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_DEPENDENCIES) 
 	@rm -f struggle_randomsearch$(EXEEXT)
 	$(LINK) $(struggle_randomsearch_LDFLAGS) $(struggle_randomsearch_OBJECTS) $(struggle_randomsearch_LDADD) $(LIBS)
@@ -663,6 +677,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_dc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_forked.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_mp-struggle_mp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_mpi-struggle_mpi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_randomsearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_ss.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/struggle_systematicsearch.Po@am__quote@
@@ -730,6 +745,24 @@ struggle_mp-struggle_mp.lo: struggle_mp.c
 @AMDEP_TRUE@	depfile='$(DEPDIR)/struggle_mp-struggle_mp.Plo' tmpdepfile='$(DEPDIR)/struggle_mp-struggle_mp.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mp_CFLAGS) $(CFLAGS) -c -o struggle_mp-struggle_mp.lo `test -f 'struggle_mp.c' || echo '$(srcdir)/'`struggle_mp.c
+
+struggle_mpi-struggle_mpi.o: struggle_mpi.c
+@AMDEP_TRUE@	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Po' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.o `test -f 'struggle_mpi.c' || echo '$(srcdir)/'`struggle_mpi.c
+
+struggle_mpi-struggle_mpi.obj: struggle_mpi.c
+@AMDEP_TRUE@	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Po' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.obj `cygpath -w struggle_mpi.c`
+
+struggle_mpi-struggle_mpi.lo: struggle_mpi.c
+@AMDEP_TRUE@	source='struggle_mpi.c' object='struggle_mpi-struggle_mpi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/struggle_mpi-struggle_mpi.Plo' tmpdepfile='$(DEPDIR)/struggle_mpi-struggle_mpi.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(struggle_mpi_CFLAGS) $(CFLAGS) -c -o struggle_mpi-struggle_mpi.lo `test -f 'struggle_mpi.c' || echo '$(srcdir)/'`struggle_mpi.c
 CCDEPMODE = @CCDEPMODE@
 
 mostlyclean-libtool:
