@@ -2,6 +2,10 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1842:
+McKenzie Keith - Providing Cygwin binaries.  Reporting MingW issues.
+Ben Webb - Tesing Cygwin binaries.
+
 Prior to release 0.1841:
 Daniel Pick - Bug reports and fix.
 McKenzie Keith - Windows DLL compilation.

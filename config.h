@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "25/10/02"
+#define BUILD_DATE_STRING "28/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -332,7 +332,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 1
+#define PATCH_VERSION 2
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -368,7 +368,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1841-1"
+#define VERSION_STRING "0.1841-2"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

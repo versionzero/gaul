@@ -1495,7 +1495,7 @@ test -n "$target_alias" &&
 #AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1841
-PATCH_VERSION=1
+PATCH_VERSION=2
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 #AC_DIVERT_POP()
 
@@ -7876,8 +7876,6 @@ _ACEOF
 
   WILL_USE_SLANG="yes"
   LIBS="$LIBS -lslang"
-  INCLUDES="$INCLUDES -I/usr/include/slang/"
-  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
   echo "$as_me:$LINENO: checking for SLang_init_slang in -lslang" >&5
 echo $ECHO_N "checking for SLang_init_slang in -lslang... $ECHO_C" >&6
 if test "${ac_cv_lib_slang_SLang_init_slang+set}" = set; then
@@ -7935,7 +7933,6 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_slang_SLang_init_slang" >&5
 echo "${ECHO_T}$ac_cv_lib_slang_SLang_init_slang" >&6
 if test $ac_cv_lib_slang_SLang_init_slang = yes; then
   LIBS="$LIBS -lslang"
-     INCLUDES="$INCLUDES -I/usr/include/slang/"
 else
   { { echo "$as_me:$LINENO: error: GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version." >&5
 echo "$as_me: error: GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version." >&2;}
@@ -7952,6 +7949,25 @@ _ACEOF
 
   WILL_USE_SLANG="no"
 fi
+
+#dnl Check for S-Lang.
+#AC_MSG_CHECKING(whether to link S-Lang scripting engine)
+#if test "x$enable_slang" = "xyes"; then
+#  AC_MSG_RESULT(yes)
+#  AC_DEFINE(HAVE_SLANG, 1, [Whether S-Lang is installed.])
+#  WILL_USE_SLANG="yes"
+#  LIBS="$LIBS -lslang"
+#  INCLUDES="$INCLUDES -I/usr/include/slang/"
+#  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
+#  AC_CHECK_LIB(slang, SLang_init_slang,
+#    [LIBS="$LIBS -lslang"
+#     INCLUDES="$INCLUDES -I/usr/include/slang/"],
+#    [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
+#else
+#  AC_MSG_RESULT(no)
+#  AC_DEFINE(HAVE_SLANG, 0, [Whether S-Lang is installed.])
+#  WILL_USE_SLANG="no"
+#fi
 
 echo "$as_me:$LINENO: checking whether to link Electric Fence for memory debugging" >&5
 echo $ECHO_N "checking whether to link Electric Fence for memory debugging... $ECHO_C" >&6

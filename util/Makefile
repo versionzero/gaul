@@ -108,7 +108,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1841
-LT_REVISION = 1
+LT_REVISION = 2
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1841
@@ -116,10 +116,10 @@ MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 1
+PATCH_VERSION = 2
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1841-1
+VERSION = 0.1841-2
 am__include = include
 am__quote = 
 install_sh = /u1/gaul-devel/install-sh
@@ -305,7 +305,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/ -mcpu=pentiumpro
+CFLAGS = -g -O2 -Wall -I../util/ -I../src/ -mcpu=pentiumpro
 DIST_SOURCES = $(liblog_util_la_SOURCES) \
 	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
 	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \
