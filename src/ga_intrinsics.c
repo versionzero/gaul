@@ -36,6 +36,7 @@
   To do: 	More error checking.
 		Add missing wrappers.
 		In particular, need facility for mating/mutating entities.
+		Needs some tidying.
 
  **********************************************************************/
 

@@ -97,17 +97,17 @@ DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
-LT_RELEASE = 0.1835
-LT_REVISION = 020127
+LT_RELEASE = 0.1836
+LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = makeinfo
-MINOR_VERSION = 1835
+MAKEINFO = /net/home/adcock/Code_development/gaul-devel/missing makeinfo
+MINOR_VERSION = 1836
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 020127
+PATCH_VERSION = 1
 RANLIB = ranlib
-VERSION = 0.1835
+VERSION = 0.1836
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -188,7 +188,7 @@ libgaul_la_LIBADD =
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_core.lo \
 ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
 ga_replace.lo ga_seed.lo ga_select.lo ga_similarity.lo ga_utility.lo
-CFLAGS = -g -O2 -Wall -O2 -g  -I/usr/include/slang/ -I/usr/include/slang/ -I../util/ -I../src/
+CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

@@ -798,7 +798,7 @@ double random_exponential(void)
   synopsis:	Diagnostics.
   parameters:
   return:	none
-  last updated:	30/12/00
+  last updated:	25 Jan 2002
  **********************************************************************/
 
 void random_diagnostics(void)
@@ -810,15 +810,21 @@ void random_diagnostics(void)
   printf("RANDOM_DEBUG:              %d\n", RANDOM_DEBUG);
   printf("RANDOM_RAND_MAX:           %u\n", RANDOM_RAND_MAX);
   printf("RANDOM_NUM_STATE_VALS:     %d\n", RANDOM_NUM_STATE_VALS);
+#if HAVE_SLANG==1
+    printf("HAVE_SLANG:                TRUE\n");
+#else
+    printf("HAVE_SLANG:                FALSE\n");
+#endif
   printf("--------------------------------------------------------------\n");
   printf("structure                  sizeof\n");
-  printf("random_state               %Zd\n", sizeof(random_state));
+  printf("random_state:              %Zd\n", sizeof(random_state));
   printf("--------------------------------------------------------------\n");
 
   if (is_initialised)
     {
     printf("Current state\n");
-    printf("j k x:                   %d %d %d\n", current_state.j, current_state.k, current_state.x);
+    printf("j: %d k: %d x: %d v[%d]:\n",
+           current_state.j, current_state.k, current_state.x, RANDOM_NUM_STATE_VALS);
     for (i=0; i<RANDOM_NUM_STATE_VALS; i++) printf("%d ", current_state.v[i]);
     printf("\n");
     }
