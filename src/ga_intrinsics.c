@@ -928,7 +928,7 @@ int ga_population_score_and_sort_slang(int *pop_id)
 int ga_population_sort_slang(int *pop_id)
   {
 
-  quicksort_population(ga_get_population_from_id(*pop_id));
+  sort_population(ga_get_population_from_id(*pop_id));
 
   return TRUE;
   }

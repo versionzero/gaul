@@ -1118,7 +1118,7 @@ double ga_entity_evaluate(population *pop, entity *entity)
 /**********************************************************************
   ga_population_score_and_sort()
   synopsis:	Score and sort entire population.  This is probably
-		a good idea after reading the population from disk!
+		a good idea after changing the fitness function!
 		Note: remember to define the callback functions first.
   parameters:
   return:
@@ -1130,8 +1130,11 @@ boolean ga_population_score_and_sort(population *pop)
   int		i;		/* Loop variable over all entities. */
   double	origfitness;	/* Stored fitness value. */
 
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+
 /*
- * Score and sort the read population members.
+ * Score and sort all of the population members.
  *
  * Note that this will (potentially) use a huge amount of memory more
  * than the original population data if the userdata hasn't been maintained.
@@ -1151,7 +1154,30 @@ boolean ga_population_score_and_sort(population *pop)
 #endif
     }
 
-  quicksort_population(pop);
+  sort_population(pop);
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_sort()
+  synopsis:	Sort entire population (i.e. ensure that the entities
+		are correctly ordered in ranking array -- currently
+		rank is defined only by fitness).
+		Note: remember to define the callback functions first.
+  parameters:
+  return:
+  last updated: 30 May 2002
+ **********************************************************************/
+
+boolean ga_population_sort(population *pop)
+  {
+
+/* Checks. */
+  if (!pop) die("Null pointer to population structure passed.");
+
+  sort_population(pop);
 
   return TRUE;
   }

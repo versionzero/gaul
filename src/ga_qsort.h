@@ -50,11 +50,7 @@
 /*
  * Prototypes.
  */
-void	quicksort_population(population *pop);
+void	sort_population(population *pop);
 boolean	ga_qsort_test(void);
-
-#if HAVE_SLANG==1
-void	ga_population_sort(int *id);
-#endif
 
 #endif	/* GA_QSORT_H_INCLUDED */

@@ -860,7 +860,6 @@ int main(int argc, char **argv)
 /*
  * Initialize random number generator.
  */
-  random_init();
   random_seed(2002002);
 
 /*

@@ -113,6 +113,7 @@ int	ga_rmhc_slang(	int	*pop,
 				int	*entity_id,
 				int	*num_iterations);
 int	ga_population_score_and_sort_slang(int *popid);
+int	ga_population_sort_slang(int *popid);
 
 void	ga_slang_seed(population *pop, entity *adam);
 boolean	ga_slang_select_one(population *pop, entity **mother);

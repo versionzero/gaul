@@ -317,7 +317,7 @@ boolean ga_evolution(	population		*pop,
  */
     plog(LOG_VERBOSE, "*** Sorting ***");
 
-    quicksort_population(pop);
+    sort_population(pop);
 
 /*
  * Enforce the type of elitism desired.
@@ -363,7 +363,7 @@ boolean ga_evolution(	population		*pop,
 
       plog(LOG_VERBOSE, "*** Sorting again ***");
 
-      quicksort_population(pop);	/* FIXME: We could possibly (certianly) choose
+      sort_population(pop);	/* FIXME: We could possibly (certianly) choose
 					 a more optimal sort algorithm here. */
       }
 
@@ -1417,7 +1417,7 @@ boolean ga_evolution_archipelago( const int num_pops,
  * Sort the individuals in each population.
  * Need this to ensure that new immigrants are ranked correctly.
  */
-      quicksort_population(pop);
+      sort_population(pop);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -1616,7 +1616,7 @@ boolean ga_evolution_archipelago( const int num_pops,
  */
         plog(LOG_VERBOSE, "*** Sorting ***");
 
-        quicksort_population(pop);
+        sort_population(pop);
 
 /*
  * Enforce the type of elitism desired.
@@ -1662,7 +1662,7 @@ boolean ga_evolution_archipelago( const int num_pops,
 
           plog(LOG_VERBOSE, "*** Sorting again ***");
 
-          quicksort_population(pop);
+          sort_population(pop);
           }
 
 /*
@@ -1911,7 +1911,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
  * Need this to ensure that new immigrants are ranked correctly.
  * ga_population_score_and_sort(pop) is needed if scores may change during migration.
  */
-      quicksort_population(pop);
+      sort_population(pop);
 
       if (pop->generation_hook?pop->generation_hook(generation, pop):TRUE)
         {
@@ -2110,7 +2110,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
  */
         plog(LOG_VERBOSE, "*** Sorting ***");
 
-        quicksort_population(pop);
+        sort_population(pop);
 
 /*
  * Enforce the type of elitism desired.
@@ -2156,7 +2156,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
 
           plog(LOG_VERBOSE, "*** Sorting again ***");
 
-          quicksort_population(pop);
+          sort_population(pop);
           }
 
 /*

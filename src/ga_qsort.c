@@ -24,10 +24,20 @@
 
  **********************************************************************
 
-  Synopsis:	Sort the population by fitness.  Use the
+  Synopsis:	Sort the population by fitness.
+
+		These functions aren't intended for public use.
+
+		To versions exist.  (1) The older version uses the
 		quicksort algorithm, but since it is inefficient for
-		small arrays we use a shuffle sort to sort blocks
-		of less than 8 elements.
+		small arrays we use a shuffle sort to sort blocks of
+		less than 8 elements.  Unfortunately, platform
+		precision seems to be critical to the final ordering
+		with degenerate fitness scores - resulting in different
+		evolution results on different types of computer, which
+		is unacceptable.  (2) The newer, low-tech, shuffle
+		sort which sucks from a 'fanciness' perspective... but
+		it works.
 
   Implementation note:	I can clearly choose functions to inline better
 			than gcc/egcs can.  (Shame)
@@ -195,6 +205,9 @@ static void qksort_population(entity **array_of_ptrs, int first, int last)
   }
 
 
+/*
+ * Old, quicksort function.
+ */
 void quicksort_population(population *pop)
   {
   int		k;		/* Loop variable. */
@@ -221,17 +234,21 @@ void quicksort_population(population *pop)
   if (last > 7) qksort_population(array_of_ptrs, 0, last);
   
 #if GA_QSORT_DEBUG>2
-  printf("Sorted:\n");
+  printf("Almost sorted:\n");
   for (i=0; i<pop->size; i++)
     printf("%6d: %f\n", i, pop->entity_iarray[i]->fitness);
 #endif
 
 /*
- * A bi-directional bubble sort (shuffle sort, apparently) to
- * complete the sort.
+ * A bi-directional bubble sort (actually called shuffle sort, apparently)
+ * to complete the sort.
  * NB/ Could optimise more by moving this into the qksort_population()
  * function, thus avoiding many unnecessary comparisons.
  */
+/*
+  for (k = 0 ; k < pop->size ; k++)
+    printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
+*/
 
 /*  for (i=0;i<3;i++) */
   while (done == FALSE)
@@ -258,13 +275,88 @@ void quicksort_population(population *pop)
     first++;	/* The first one *MUST* be correct now. */
     }
 
-#if GA_QSORT_DEBUG>0
+#if GA_QSORT_DEBUG>1
 /* Check that the population is correctly sorted. */
+  printf("rank 0 id %d fitness %f.\n", ga_get_entity_id_from_rank(pop, 0), array_of_ptrs[0]->fitness);
   for (k = 1 ; k < pop->size ; k++)
+    {
+    printf("rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
     if ( array_of_ptrs[k-1]->fitness < array_of_ptrs[k]->fitness )
       {
-      plog(LOG_DEBUG, "Population is incorrectly ordered.");
+      plog(LOG_WARNING, "Population is incorrectly ordered.");
       }
+    }
+#endif
+
+#ifdef GA_QSORT_TIME
+  check_timer();
+#endif
+
+  return;
+  }
+
+
+/*
+ * New, shuffle sort function.
+ */
+void sort_population(population *pop)
+  {
+  int		k;		/* Loop variable. */
+  int		first=0, last=pop->size-1;	/* Indices into population. */
+  entity	**array_of_ptrs=pop->entity_iarray;
+  boolean	done=FALSE;	/* Whether shuffle sort is complete. */
+
+  plog(LOG_VERBOSE, "Sorting population with %d members.", pop->size);
+
+#ifdef GA_QSORT_TIME
+  start_timer();
+#endif
+
+/*
+ * A bi-directional bubble sort (actually called shuffle sort, apparently)
+ * algorithm.  We stop when the first pop->stable_size entities are
+ * definitely sorted.
+ */
+/*
+  for (k = 0 ; k < pop->size ; k++)
+    printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
+*/
+
+  while (done == FALSE && first <= pop->stable_size)
+    {
+    for (k = last ; k > first ; k--)
+      {
+      if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness )
+        {
+        swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
+        }
+      }
+    first++;	/* The first one *MUST* be correct now. */
+
+    done = TRUE;
+
+    for (k = first ; k < last ; k++)
+      {
+      if ( array_of_ptrs[k]->fitness < array_of_ptrs[k+1]->fitness )
+        {
+        swap_e(array_of_ptrs[k], array_of_ptrs[k+1]);
+        done = FALSE;
+        }
+      }
+    last--;	/* The last one *MUST* be correct now. */
+    }
+
+#if GA_QSORT_DEBUG>1
+/* Check that the population is correctly sorted. */
+  printf("rank 0 id %d fitness %f.\n", ga_get_entity_id_from_rank(pop, 0), array_of_ptrs[0]->fitness);
+  for (k = 1 ; k < pop->stable_size ; k++)
+    {
+    printf("rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
+    if ( array_of_ptrs[k-1]->fitness < array_of_ptrs[k]->fitness )
+      {
+      plog(LOG_WARNING, "Population is incorrectly ordered.");
+      }
+    }
 #endif
 
 #ifdef GA_QSORT_TIME

@@ -91,8 +91,6 @@ int main(int argc, char **argv)
   int		i;		/* Runs. */
   population	*pop=NULL;	/* Population of solutions. */
 
-  random_init();
-
   for (i=0; i<50; i++)
     {
     random_seed(i);
