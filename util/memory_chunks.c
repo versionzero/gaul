@@ -1263,6 +1263,12 @@ MemChunk *mem_chunk_new_unfreeable(size_t atom_size, unsigned int num_atoms)
   }
 
 
+boolean mem_chunk_has_freeable_atoms(MemChunk *mem_chunk)
+  {
+  return TRUE;
+  }
+
+
 void mem_chunk_destroy(MemChunk *mem_chunk)
   {
 

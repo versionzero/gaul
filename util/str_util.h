@@ -3,7 +3,7 @@
  **********************************************************************
 
   str_util - Portable string handling, analysis and manipulation library.
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -26,7 +26,8 @@
 
   Synopsis:	Header file for my general string utility routines
 
-  Updated:	25 Mar 2002 SAA	Introduced STR_MAX_TOKENS.
+  Updated:	02 Jan 2003 SAA	str_toupper() defined twice, whilst str_tolower() was nopt defined at all.
+  		25 Mar 2002 SAA	Introduced STR_MAX_TOKENS.
   		16 Mar 2002 SAA Check for presence of limits.h on this system.
 		10 Jan 2002 SAA	Added str_split(), str_freev(), str_join() and str_joinv() prototypes.
 		18/09/00 SAA	Tidied.
@@ -81,7 +82,7 @@
 int	str_cpos(const char *str, const char c);
 int	str_cposr(const char *str, const char c);
 void	str_toupper(char *str);
-void	str_toupper(char *str);
+void	str_tolower(char *str);
 boolean	str_isblank(const char *str);
 int	str_stripnewline(char *str);
 int	str_qhash(const char *str);

@@ -219,7 +219,7 @@ typedef short _Bool;
 typedef short _Bool;
 #endif
 
-#define boolean _Bool
+#define boolean bool
 
 #if !defined(TRUE)
 #define TRUE	(0==0)
@@ -334,7 +334,7 @@ typedef unsigned char byte;
 #define CEILING(X)	((X)==(int)(X) ? (X) : (X)>0 ? 1+(int)(X) : -(1+(int)(-(X))))
 #define ROUND(X)        ((X)>0?(int)(0.5+(X)):-(int)(0.5-(X)))
 
-#define SIGN(X)		(((X)<0) ? -1 : 0)		/* get sign, -1, or 1 if >= 0 */
+#define SIGN(X)		(((X)<0) ? -1 : 1)		/* get sign, -1, or 1 if >= 0 */
 #define SIGNZ(X)	(((X)<0) ? -1 : (X)>0 ? 1 : 0)	/* get sign, -1, 0, or 1 */
 
 /*
