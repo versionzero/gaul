@@ -1,19 +1,45 @@
-/*
- * Linked list implementation.
- *
- * Almost functionally equivalent to the glib list functions, based on
- * the 1.2.6 documentation, although there are some differences.  This is
- * a clean-room implementation though, so I may claim copyright and
- * therefore release the code under a license of my choice ;)
- *
- * To do:	Add sorting functions.
- *		Functions for inserting/appending lists etc. (i.e. slink_append_list() )
- *		Converting slists to dlists, and visa versa.
- *		Equivalent of avltree_destroy().
- *		?link_unlink_data() etc like delete functions, except without freeing the element(s).
- *
- * gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lmethods
- */
+/**********************************************************************
+  linkedlist.c
+ **********************************************************************
+
+  linkedlist - Linked list implementation (singly- and doubly- linked).
+  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+
+  The latest version of this program should be available at:
+  http://www.stewart-adcock.co.uk/
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.  Alternatively, if your project
+  is incompatible with the GPL, I will probably agree to requests
+  for permission to use the terms of any other license.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY WHATSOEVER.
+
+  A full copy of the GNU General Public License should be in the file
+  "COPYING" provided with this distribution; if not, see:
+  http://www.gnu.org/
+
+ **********************************************************************
+
+  Synopsis:	Almost functionally equivalent to the glib list
+		functions, based on the 1.2.6 documentation, although
+		there are some differences.  This is a 'clean-room'
+		implementation though, so I may claim copyright and
+		therefore release the code under a license of my
+		choice ;)
+ 
+  To do:       Add sorting functions.
+               Functions for inserting/appending lists etc. (i.e. slink_append_list() )
+               Converting slists to dlists, and visa versa.
+               Equivalent of avltree_destroy().
+               ?link_unlink_data() etc like delete functions, except without freeing the element(s).
+
+  To compile:	gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lmethods
+
+ **********************************************************************/
 
 /*
  * Double-linked list functions are named dlink_*().

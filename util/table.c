@@ -1,19 +1,45 @@
-/*
- * Table data structure. (basically a growable table)
- *
- * Thread-safe
- *
- * Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
- *		21/02/01 SAA	Added table_count_items().
- *		22/01/01 SAA	Added table_lookup_index().
- *		18/01/01 SAA	Frist tidy version.
- *
- * To do:	Add table_compress().
- *
- * Compile test program with something like:
- * gcc table.c -DTABLE_COMPILE_MAIN `glib-config --cflags` -I..
- *             -DVERSION_STRING=NULL -lmethods -lglib -L.
- */
+/**********************************************************************
+  table.c
+ **********************************************************************
+
+  table - Table data structure.
+  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+
+  The latest version of this program should be available at:
+  http://www.stewart-adcock.co.uk/
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.  Alternatively, if your project
+  is incompatible with the GPL, I will probably agree to requests
+  for permission to use the terms of any other license.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY WHATSOEVER.
+
+  A full copy of the GNU General Public License should be in the file
+  "COPYING" provided with this distribution; if not, see:
+  http://www.gnu.org/
+
+ **********************************************************************
+
+  Synopsis:	Table data structure. (basically a growable table)
+
+  Thread-safe
+ 
+  Updated:	27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
+ 		21/02/01 SAA	Added table_count_items().
+ 		22/01/01 SAA	Added table_lookup_index().
+ 		18/01/01 SAA	Frist tidy version.
+ 
+  To do:	Add table_compress().
+ 
+  Compile test program with something like:
+  gcc table.c -DTABLE_COMPILE_MAIN `glib-config --cflags` -I..
+              -DVERSION_STRING=NULL -lmethods -lglib -L.
+
+ **********************************************************************/
 
 #include "table.h"
 

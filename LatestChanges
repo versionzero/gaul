@@ -1,7 +1,10 @@
+Changes since release 0.1832:
+- Added 'GPL'd header' to source files which were missing it.
+
 Changes since release 0.1831:
 
 - Fixed minor bug in ./configure.in, message said "--with-slang=no", but should have said "--enable-slang=no".
-- Add files tests/btree.c and tests/btree.h - code doesn't compile without them!
+- Added files tests/btree.c and tests/btree.h - code doesn't compile without them!
 - Some more, really suspect, functions added to src/ga_utility.c.  ga_entity_dump() and ga_population_dump() also added.
 - New "printable characters"-based mutations etc.
 - A new example program added, tests/struggle.c
@@ -13,4 +16,6 @@ Changes since release 0.1831:
 - Overhauled tests/Makefile.am
 - Fixed serious bug (segfault) in ga_select_roulette_{one|two}().
 - Added ga_crossover_char_{singlepoints|doublepoints}().
+
+Release 0.1831 was uploaded to sourceforge.net on 16th June 2001.
 
