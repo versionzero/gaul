@@ -29,19 +29,21 @@
 		These functions should duplicate user data where
 		appropriate.
 
+  To do:	Merge static crossover functions by passing datatype size.
+
  **********************************************************************/
 
 #include "ga_core.h"
 
 /**********************************************************************
-  ga_singlepoint_crossover_chromosome()
+  ga_singlepoint_crossover_integer_chromosome()
   synopsis:	`Mates' two chromosomes by single-point crossover.
   parameters:
   return:
   last updated: 18/10/00
  **********************************************************************/
 
-void ga_singlepoint_crossover_integer_chromosome( population *pop,
+static void ga_singlepoint_crossover_integer_chromosome( population *pop,
                                          int *father, int *mother,
                                          int *son, int *daughter )
   {
@@ -65,14 +67,14 @@ void ga_singlepoint_crossover_integer_chromosome( population *pop,
 
 
 /**********************************************************************
-  ga_doublepoint_crossover_chromosome()
+  ga_doublepoint_crossover_integer_chromosome()
   synopsis:	`Mates' two chromosomes by double-point crossover.
   parameters:
   return:
   last updated: 31/05/01
  **********************************************************************/
 
-void ga_doublepoint_crossover_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
+static void ga_doublepoint_crossover_integer_chromosome(population *pop, int *father, int *mother, int *son, int *daughter)
   {
   int	location1, location2;	/* Points of crossover. */
   int	tmp;			/* For swapping crossover loci. */
@@ -860,6 +862,145 @@ void ga_crossover_bitstring_allele_mixing( population *pop,
           ga_bit_clear(son->chromosome[i],j);
         }
       }
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_singlepoint_crossover_double_chromosome()
+  synopsis:	`Mates' two chromosomes by single-point crossover.
+  parameters:
+  return:
+  last updated: 07 Nov 2002
+ **********************************************************************/
+
+static void ga_singlepoint_crossover_double_chromosome( population *pop,
+                                         double *father, double *mother,
+                                         double *son, double *daughter )
+  {
+  int	location;	/* Point of crossover */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to chromosome structure passed.");
+
+  /* Choose crossover point and perform operation */
+  location=random_int(pop->len_chromosomes);
+
+  memcpy(son, mother, location*sizeof(double));
+  memcpy(daughter, father, location*sizeof(double));
+
+  memcpy(&(son[location]), &(father[location]), (pop->len_chromosomes-location)*sizeof(double));
+  memcpy(&(daughter[location]), &(mother[location]), (pop->len_chromosomes-location)*sizeof(double));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_doublepoint_crossover_double_chromosome()
+  synopsis:	`Mates' two chromosomes by double-point crossover.
+  parameters:
+  return:
+  last updated: 07 Nov 2002
+ **********************************************************************/
+
+static void ga_doublepoint_crossover_double_chromosome(population *pop,
+                              double *father, double *mother,
+                              double *son, double *daughter)
+  {
+  int	location1, location2;	/* Points of crossover. */
+  int	tmp;			/* For swapping crossover loci. */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to chromosome structure passed.");
+
+  /* Choose crossover point and perform operation */
+  location1=random_int(pop->len_chromosomes);
+  do
+    {
+    location2=random_int(pop->len_chromosomes);
+    } while (location2==location1);
+
+    if (location1 > location2)
+      {
+      tmp = location1;
+      location1 = location2;
+      location2 = tmp;
+      }
+
+  memcpy(son, father, location1*sizeof(double));
+  memcpy(daughter, mother, location1*sizeof(double));
+
+  memcpy(&(son[location1]), &(mother[location1]), (location2-location1)*sizeof(double));
+  memcpy(&(daughter[location1]), &(father[location1]), (location2-location1)*sizeof(double));
+
+  memcpy(&(son[location2]), &(mother[location2]), (pop->len_chromosomes-location2)*sizeof(double));
+  memcpy(&(daughter[location2]), &(father[location2]), (pop->len_chromosomes-location2)*sizeof(double));
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_double_singlepoints()
+  synopsis:	`Mates' two genotypes by single-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 07 Nov 2002
+ **********************************************************************/
+
+void ga_crossover_double_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+  {
+  int		i;	/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_singlepoint_crossover_double_chromosome( pop,
+                        (double *)father->chromosome[i],
+			(double *)mother->chromosome[i],
+			(double *)son->chromosome[i],
+			(double *)daughter->chromosome[i]);
+    }
+
+  return;
+  }
+
+
+/**********************************************************************
+  ga_crossover_double_doublepoints()
+  synopsis:	`Mates' two genotypes by double-point crossover of
+		each chromosome.
+  parameters:
+  return:
+  last updated: 07 Nov 2002
+ **********************************************************************/
+
+void ga_crossover_double_doublepoints( population *pop,
+                                        entity *father, entity *mother,
+                                        entity *son, entity *daughter )
+  {
+  int		i;	/* Loop variable over all chromosomes */
+
+  /* Checks */
+  if (!father || !mother || !son || !daughter)
+    die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    ga_doublepoint_crossover_double_chromosome( pop,
+                        (double *)father->chromosome[i],
+			(double *)mother->chromosome[i],
+			(double *)son->chromosome[i],
+			(double *)daughter->chromosome[i]);
     }
 
   return;

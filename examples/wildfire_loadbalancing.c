@@ -312,6 +312,8 @@ double wildfire_simulation(int map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION], b
   updated:	23 May 2002
  **********************************************************************/
 
+#define NUM_PROC	2
+
 boolean wildfire_score(population *pop, entity *entity)
   {
   int		i;			/* Map square. */
@@ -321,15 +323,15 @@ boolean wildfire_score(population *pop, entity *entity)
   double	fitness;		/* Solution's "fitness". */
   char		buffer[80], *str=NULL;	/* Data from uptime. */
   FILE		*pf;			/* Pipe handle. */
-  double	load1=2.0, load5=2.0, load15=2.0;	/* System loads. */
+  double	load1=2.0*NUM_PROC, load5=2.0*NUM_PROC, load15=2.0*NUM_PROC;	/* System loads. */
 
 /*
  * Load-balancing code!
  */
 
-  while (load1>1.0 || load15>1.6)
+  while (load1>1.0*NUM_PROC || load15>1.5*NUM_PROC)
     {
-    if (str!=NULL)usleep(1000000);
+    if (str!=NULL)usleep(4000000/NUM_PROC);
 
     pf = popen("uptime", "r");
 

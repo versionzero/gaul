@@ -395,6 +395,12 @@ void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *moth
 void	ga_crossover_bitstring_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter );
+void	ga_crossover_double_singlepoints( population *pop,
+                                        entity *father, entity *mother,
+                                        entity *son, entity *daughter );
+void	ga_crossover_double_doublepoints( population *pop,
+                                        entity *father, entity *mother,
+                                        entity *son, entity *daughter );
 
 
 void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
