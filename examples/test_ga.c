@@ -1,8 +1,8 @@
 /**********************************************************************
-  test_simplex.c
+  test_ga.c
  **********************************************************************
 
-  test_simplex - Test/example program for GAUL.
+  test_ga - Test/example program for GAUL.
   Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -168,7 +168,6 @@ boolean test_seed(population *pop, entity *adam)
 int main(int argc, char **argv)
   {
   population		*pop;			/* Population of solutions. */
-  entity		*solution;		/* Optimised solution. */
 
   random_seed(23091975);
 

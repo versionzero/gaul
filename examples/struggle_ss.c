@@ -110,7 +110,8 @@ int main(int argc, char **argv)
        ga_select_two_roulette,		/* GAselect_two           select_two */
        ga_mutate_printable_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_char_allele_mixing,	/* GAcrossover            crossover */
-       ga_replace_by_fitness		/* GAreplace replace */
+       ga_replace_by_fitness,		/* GAreplace		replace */
+       NULL				/* vpointer		User data */
             );
 
   ga_population_set_parameters(

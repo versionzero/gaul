@@ -376,7 +376,8 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        ga_select_two_randomrank,	/* GAselect_two           select_two */
        pingpong_mutate,		/* GAmutate               mutate */
        pingpong_crossover,	/* GAcrossover            crossover */
-       NULL			/* GAreplace              replace */
+       NULL,			/* GAreplace              replace */
+       NULL			/* vpointer		User data */
             );
 
     ga_population_set_parameters(

@@ -133,7 +133,8 @@ NULL, /*goldberg2_ga_callback,*/	/* GAgeneration_hook      generation_hook */
        ga_select_two_bestof2,	/* GAselect_two           select_two */
        ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
        ga_crossover_boolean_singlepoints,	/* GAcrossover            crossover */
-       NULL			/* GAreplace  replace */
+       NULL,			/* GAreplace		replace */
+       NULL			/* vpointer		User data */
             );
 
     ga_population_set_parameters(

@@ -179,7 +179,7 @@ population *ga_genesis_int(	const int		population_size,
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	18 Dec 2001
+  last updated:	18 Jan 2003
  **********************************************************************/
 
 population *ga_genesis(	const int		population_size,
@@ -203,7 +203,8 @@ population *ga_genesis(	const int		population_size,
 
   return ga_genesis_int( population_size, num_chromo, len_chromo, generation_hook, iteration_hook,
                          data_destructor, data_ref_incrementor, evaluate,
-                         seed, adapt, select_one, select_two, mutate, crossover, replace );
+                         seed, adapt, select_one, select_two, mutate, crossover, replace,
+                         userdata );
   }
 
 

@@ -219,7 +219,8 @@ int main(int argc, char **argv)
        ga_select_two_bestof2,		/* GAselect_two           select_two */
        ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
        ga_crossover_double_doublepoints,	/* GAcrossover            crossover */
-       NULL				/* GAreplace              replace */
+       NULL,				/* GAreplace              replace */
+       NULL				/* vpointer	User data */
             );
 
   ga_population_set_parameters(

@@ -315,7 +315,8 @@ int main(int argc, char **argv)
        NULL,			/* GAselect_two           select_two */
        pingpong_mutate,		/* GAmutate               mutate */
        NULL,			/* GAcrossover            crossover */
-       NULL			/* GAreplace              replace */
+       NULL,			/* GAreplace              replace */
+       NULL			/* vpointer		User data */
             );
 
     /* ga_population_set_tabu_parameters() is required instead of

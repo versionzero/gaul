@@ -181,7 +181,8 @@ int main(int argc, char **argv)
        NULL,			/* GAselect_two           select_two */
        NULL,			/* GAmutate               mutate */
        NULL,			/* GAcrossover            crossover */
-       NULL			/* GAreplace replace */
+       NULL,			/* GAreplace		replace */
+       NULL			/* vpointer		User data */
             );
 
   ga_population_set_search_parameters(pop, struggle_scan_chromosome);
