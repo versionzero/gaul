@@ -77,7 +77,8 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
+  Updated:	28 May 2002 SAA	Added extra check into random_seed().
+		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) with more portable printf("%lu", (unsigned long)).
 		14 Mar 2002 SAA	Added random_int_permutation().
 		29 Jan 2002 SAA Fixed some dodgy typecasting.
 		25 Jan 2002 SAA Removed residual comment about HelGA.
@@ -161,14 +162,16 @@ unsigned int random_rand(void)
   synopsis:	Set seed for pseudo random number generator.
 		Uses the linear congruential algorithm to fill
 		state array.
-  parameters:
+  parameters:	const unsigned int seed		Seed value.
   return:	none
-  last updated:	30/12/00
+  last updated:	28 May 2002
  **********************************************************************/
 
 void random_seed(const unsigned int seed)
   { 
   int	i; 
+
+  if (!is_initialised) die("random_init() has not been called.");
 
   current_state.v[0]=(seed & RANDOM_RAND_MAX);
 
