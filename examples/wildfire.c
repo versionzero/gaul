@@ -299,9 +299,10 @@ double wildfire_simulation(int map[WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION], b
 /**********************************************************************
   wildfire_score()
   synopsis:	Score solution.
-  parameters:
-  return:
-  updated:	11/05/01
+  parameters:	population *pop
+		entity *entity
+  return:	Always TRUE
+  updated:	11 Apr 2002
  **********************************************************************/
 
 boolean wildfire_score(population *pop, entity *entity)
@@ -319,9 +320,6 @@ boolean wildfire_score(population *pop, entity *entity)
     }
 
   /* Penalise an incorrect number of cisterns. */
-/*
-  printf("Score = %d - %d\n", (int) entity->fitness, SQU(WILDFIRE_CISTERNS-count));
-*/
   entity->fitness = -0.01*SQU(WILDFIRE_CISTERNS-count);
 
   for(s=0; s<WILDFIRE_NUM_SIMULATIONS; s++)
@@ -591,7 +589,7 @@ int main(int argc, char **argv)
     random_seed(i);
 
     pop = ga_genesis(
-       60,			/* const int              population_size */
+       50,			/* const int              population_size */
        1,			/* const int              num_chromo */
        WILDFIRE_X_DIMENSION*WILDFIRE_Y_DIMENSION,/* const int      len_chromo */
        wildfire_ga_callback,	/* GAgeneration_hook      generation_hook */
@@ -601,9 +599,9 @@ int main(int argc, char **argv)
        wildfire_score,		/* GAevaluate             evaluate */
        wildfire_seed,		/* GAseed                 seed */
        NULL,			/* GAadapt                adapt */
-       ga_select_one_roulette,	/* GAselect_one           select_one */
-       ga_select_two_roulette,	/* GAselect_two           select_two */
-       wildfire_mutate_flip,		/* GAmutate               mutate */
+       ga_select_one_roulette_rebased,	/* GAselect_one           select_one */
+       ga_select_two_roulette_rebased,	/* GAselect_two           select_two */
+       wildfire_mutate_flip,	/* GAmutate               mutate */
        wildfire_crossover,	/* GAcrossover   crossover */
        NULL			/* GAreplace     replace */
             );

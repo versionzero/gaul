@@ -457,7 +457,7 @@ boolean ga_select_one_roulette_rebased(population *pop, entity **mother)
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
     marker = random_int(pop->orig_size);
-    minval = pop->entity_iarray[pop->orig_size]->fitness;
+    minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
     total_expval = (sum-minval*pop->orig_size)/mean;
@@ -598,7 +598,7 @@ boolean ga_select_two_roulette_rebased( population *pop,
     { /* First call of this generation. */
     ga_select_stats(pop, &mean, &stddev, &sum);
     marker = random_int(pop->orig_size);
-    minval = pop->entity_iarray[pop->orig_size]->fitness;
+    minval = pop->entity_iarray[pop->orig_size-1]->fitness;
     mean -= minval;
     if (ISTINY(mean)) die("Degenerate population?");
     total_expval = (sum-minval*pop->orig_size)/mean;
