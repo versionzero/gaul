@@ -29,7 +29,7 @@
 
 		These functions aren't intended for public use.
 
-		To versions exist.  (1) The older version uses the
+		Two versions exist.  (1) The older version uses the
 		quicksort algorithm, but since it is inefficient for
 		small arrays we use a shuffle sort to sort blocks of
 		less than 8 elements.  Unfortunately, platform
@@ -39,9 +39,6 @@
 		is unacceptable.  (2) The newer, low-tech, shuffle
 		sort which sucks from a 'fanciness' perspective... but
 		it works.
-
-  FIXME:	This is often very inefficient because many of the
-		entities will already be in order.
 
  **********************************************************************/
 
@@ -256,13 +253,14 @@ void quicksort_population(population *pop)
 
 /*
  * New, shuffle sort function.
+ * Fairly efficient when much of the population is already in order.
  */
 void sort_population(population *pop)
   {
   int		k;		/* Loop variable. */
   int		first=0, last=pop->size-1;	/* Indices into population. */
   entity	**array_of_ptrs=pop->entity_iarray;
-  boolean	done=FALSE;	/* Whether shuffle sort is complete. */
+  boolean	done=TRUE;	/* Whether shuffle sort is complete. */
 
   plog(LOG_VERBOSE, "Sorting population with %d members.", pop->size);
 
@@ -274,11 +272,23 @@ void sort_population(population *pop)
  * A bi-directional bubble sort (actually called shuffle sort, apparently)
  * algorithm.  We stop when the first pop->stable_size entities are
  * definitely sorted.
+ * Don't bother making any swaps when the fitnesses are within GA_TINY_DOUBLE.
+ * There's an extra bubble-up at the start.
  */
 /*
   for (k = 0 ; k < pop->size ; k++)
     printf("-- rank %d id %d fitness %f.\n", k, ga_get_entity_id_from_rank(pop, k), array_of_ptrs[k]->fitness);
 */
+
+  for (k = last ; k > first ; k--)
+    {
+    if ( array_of_ptrs[k]->fitness > array_of_ptrs[k-1]->fitness+GA_TINY_DOUBLE )
+      {
+      swap_e(array_of_ptrs[k], array_of_ptrs[k-1]);
+      done = FALSE;
+      }
+    }
+  first++;	/* The first one *MUST* be correct now. */
 
   while (done == FALSE && first <= pop->stable_size)
     {
