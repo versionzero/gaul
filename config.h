@@ -20,7 +20,7 @@
 #define GA_MAJOR_VERSION 0
 
 /* Minor version number. */
-#define GA_MINOR_VERSION 1847
+#define GA_MINOR_VERSION 1848
 
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING GA_NUM_PROCESSES
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 6
+#define GA_PATCH_VERSION 0
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.766_FC3 #1 Wed Feb 9 23:05:01 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1847-6"
+#define GA_VERSION_STRING "0.1848-0"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
