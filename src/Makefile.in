@@ -138,6 +138,8 @@ INCLUDES = -I../util/ -I/usr/include/slang/
 
 lib_LTLIBRARIES = libgaul.la
 
+libgaul_la_DEPENDENCIES = gaul.h
+
 libgaul_la_SOURCES = \
     ga_bitstring.c \
     ga_chromo.c \
