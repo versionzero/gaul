@@ -83,4 +83,6 @@ stamp-common: $(srcdir)/gaul/gaul_config.h.in $(top_builddir)/config.status
 # systems without the GNU autotools.
 #dist-hook:
 #	rm -f $(distdir)/gaul/gaul_config.h
+dist-hook:
+	rm -f $(distdir)/gaul/stamp-gaul_config
 

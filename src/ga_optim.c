@@ -1017,6 +1017,8 @@ printf("DEBUG: Thread %d has evaluated entity %d\n", ((threaddata_t *)data)->thr
   ((threaddata_t *)data)->thread_num = -1;	/* Signal that this thread is finished. */
 
   pthread_exit(NULL);
+
+  return NULL;	/* Keep Compaq's C/C++ compiler happy. */
   }
 
 static void gaul_ensure_evaluations_threaded( population *pop, const int max_threads, threaddata_t *threaddata )

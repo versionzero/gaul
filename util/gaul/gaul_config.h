@@ -144,10 +144,10 @@ extern int errno;
 
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1847
-#define GA_PATCH_VERSION 0
-#define GA_VERSION_STRING "0.1847-0"
+#define GA_PATCH_VERSION 1
+#define GA_VERSION_STRING "0.1847-1"
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
-#define GA_BUILD_DATE_STRING "28/06/04"
+#define GA_BUILD_DATE_STRING "30/06/04"
 
 #define V3_QUICK 1
 #define W32_CRIPPLED 0

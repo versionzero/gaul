@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -100,7 +100,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel/gaul-devel-0.1847-0/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,9 +108,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1847
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 0
+GA_PATCH_VERSION = 1
 GA_UNAME_STRING = 
-GA_VERSION = 0.1847-0
+GA_VERSION = 0.1847-1
 GA_VERSION_STRING = 
 HAVE_MPI = 0
 HAVE_PTHREADS = 1
@@ -120,7 +120,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1847
-LT_REVISION = 0
+LT_REVISION = 1
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -132,7 +132,7 @@ RANLIB = ranlib
 STRIP = strip
 USE_OPENMP = 0
 V3_QUICK = 1
-VERSION = 0.1847-0
+VERSION = 0.1847-1
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
@@ -222,7 +222,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -Wall -g -O2 -mcpu=pentiumpro -I/u2/include -I/usr/include/slang/
+CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7 -I/u2/include -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 
@@ -400,6 +400,9 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="${top_distdir}" distdir="$(distdir)" \
+	  dist-hook
 check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
@@ -499,6 +502,8 @@ stamp-common: $(srcdir)/gaul/gaul_config.h.in $(top_builddir)/config.status
 # systems without the GNU autotools.
 #dist-hook:
 #	rm -f $(distdir)/gaul/gaul_config.h
+dist-hook:
+	rm -f $(distdir)/gaul/stamp-gaul_config
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
