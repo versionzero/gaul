@@ -95,7 +95,7 @@ void ga_population_set_gradient_parameters( population		*pop,
 		available to the caller in any obvious way.
   parameters:
   return:
-  last updated:	19 Nov 2002
+  last updated:	28 May 2003
  **********************************************************************/
 
 int ga_steepestascent(	population	*pop,
@@ -122,9 +122,9 @@ int ga_steepestascent(	population	*pop,
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->gradient_params) die("ga_population_set_gradient_params(), or similar, must be used prior to ga_gradient().");
-  if (!pop->simplex_params->to_double) die("Population's genome to double callback is undefined.");
-  if (!pop->simplex_params->from_double) die("Population's genome from double callback is undefined.");
-  if (!pop->simplex_params->gradient) die("Population's first derivatives callback is undefined.");
+  if (!pop->gradient_params->to_double) die("Population's genome to double callback is undefined.");
+  if (!pop->gradient_params->from_double) die("Population's genome from double callback is undefined.");
+  if (!pop->gradient_params->gradient) die("Population's first derivatives callback is undefined.");
 
 /* 
  * Prepare working entity and double arrays.
