@@ -1832,6 +1832,8 @@ int ga_evolution_threaded(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
+
 int ga_evolution_with_stats(	population		*pop,
 					const ga_elitism_type	elitism,
 					const int		max_generations )
@@ -2103,6 +2105,7 @@ int ga_evolution_with_stats(	population		*pop,
 
   return generation;
   }
+#endif
 
 
 /**********************************************************************
@@ -2331,6 +2334,8 @@ int ga_evolution_steady_state(	population		*pop,
   return:
   last updated:	11 Jun 2002
  **********************************************************************/
+
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
 
 int ga_evolution_steady_state_with_stats(	population	*pop,
 						const int	max_iterations )
@@ -2606,6 +2611,7 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
 
   return (iteration<max_iterations);
   }
+#endif
 
 
 /**********************************************************************
@@ -2756,6 +2762,8 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   last updated:	21/12/00
  **********************************************************************/
 
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
+
 entity *old_ga_next_ascent_hill_climbing(	population		*pop,
 					entity			*initial,
 					const int		max_iterations,
@@ -2883,6 +2891,7 @@ entity *old_ga_next_ascent_hill_climbing(	population		*pop,
 
   return best;
   }
+#endif
 
 
 /**********************************************************************
@@ -2898,6 +2907,8 @@ entity *old_ga_next_ascent_hill_climbing(	population		*pop,
   return:	Best solution found.
   last updated:	19/01/01
  **********************************************************************/
+
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *ga_metropolis_mutation(	population		*pop,
 				entity			*initial,
@@ -3028,6 +3039,7 @@ entity *ga_metropolis_mutation(	population		*pop,
 
   return best;
   }
+#endif
 
 
 /**********************************************************************
@@ -3043,6 +3055,8 @@ entity *ga_metropolis_mutation(	population		*pop,
   return:	Best solution found.
   last updated:	21/02/01
  **********************************************************************/
+
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
 
 entity *ga_simulated_annealling_mutation(population	*pop,
 					entity		*initial,
@@ -3180,6 +3194,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 
   return best;
   }
+#endif
 
 
 /**********************************************************************

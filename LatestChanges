@@ -14,6 +14,7 @@ Changes since release 0.1845:
 - Added dummy function to display message if ga_evolution_threaded() not compiled.
 - Added a couple of missing S-Lang intrinsic functions.
 - Added S-Lang test/example code.
+- Prevent some deprecated functions from being compiled.  (Source still exists, so people that _really_ need these may still access them.  For now.)
 
 Changes since release 0.1844:
 - Added some checks in PRNG code to avoid trying to calculate modulus of zero.

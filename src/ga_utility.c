@@ -227,6 +227,8 @@ population *ga_genesis_int(	const int		population_size,
   last updated:	18 Jan 2003
  **********************************************************************/
 
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
+
 population *ga_genesis(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
@@ -251,6 +253,7 @@ population *ga_genesis(	const int		population_size,
                          seed, adapt, select_one, select_two, mutate, crossover, replace,
                          userdata );
   }
+#endif
 
 
 /**********************************************************************
@@ -612,6 +615,8 @@ population *ga_genesis_bitstring(	const int		population_size,
   last updated:	24/03/01
  **********************************************************************/
 
+#ifndef COMPILE_DEPRECATED_FUNCTIONS
+
 entity *ga_allele_search(	population	*pop,
 				const int	chromosomeid,
 				const int	point,
@@ -689,6 +694,7 @@ entity *ga_allele_search(	population	*pop,
 
   return best;
   }
+#endif
 
 
 /**********************************************************************
