@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "29/06/03"
+#define BUILD_DATE_STRING "30/06/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -29,7 +29,7 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 3
+#define GA_PATCH_VERSION 4
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -344,13 +344,13 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.20-18.8 #1 Thu May 29 07:20:39 EDT 2003 i686 athlon i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1844-3"
+#define VERSION_STRING "0.1844-4"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
