@@ -8,6 +8,9 @@ The only non-trivial prerequisite for GAUL is S-Lang.  This may be obtained from
 
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
 
+Installation from Source
+========================
+
 You should be able to work it out, but for any real dummies out there follow the standard GNU make procedure:
 ./configure ; make
 
@@ -19,7 +22,7 @@ If that doesn't work because you don't have the GNU maketools (or because I made
 There are several configuration options available for more advanced users.  For details:
 ./configure --help
 
-On some systems, including Solaris and IRIX, you need to specify GNU make instead the native make.  In this case substitute 'make' with 'gmake'.
+On some systems, including Solaris and IRIX, you may need to specify GNU make instead the native make.  In these cases substitute 'make' with 'gmake'.
 
 If you grabbed this source directly from the CVS archive and are using anything other than Linux, you will probably need to do something like this:
 automake -i ; autoconf ; ./configure --disable-cvs-deps ; gmake
@@ -42,4 +45,11 @@ Potentially supported platforms:
 
 An up-to-date list of supported platforms is available at http://gaul.sourceforge.net/platforms.html
 
-Stewart. 1 Feb 2002
+Installation of Binary RPM
+==========================
+Assuming that the RPM package is in your current directory, and [version] and [arch] relate to the correct version number and computer platform, respectively, become the root user and type:
+rpm -Uvh gaul-devel-[version].[arch].rpm
+
+Of course, this only works on computers using the RPM package management system.
+
+Stewart Adcock, 13 Feb 2002
