@@ -216,7 +216,12 @@ void *memmem(const void *haystack, size_t haystack_len,
 #endif
 
 #ifndef HAVE_MEMCMP
+/* Some systems, such as SunOS do have BCMP instead. */
+# ifdef HAVE_BCMP
+#  define memcmp(A, B, C) bcmp((B), (A), (C))
+# else
 int memcmp(const void *src1, const void *src2, size_t n);
+# endif
 #endif
 
 #ifndef HAVE_STRDUP

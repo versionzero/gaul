@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
+  Updated:	14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
+		10 Apr 2002 SAA	Modified copyright notice.  Not all of my projects are GPL compatible, so I'm relaxing the licensing.
 		20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
 		19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
 		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
@@ -108,9 +109,10 @@
 #if PARALLEL!=1
 /*
  * If threads are used, these must be properly defined somewhere.
- * Unfortunately empty macros cause splint parse errors.
+ * Unfortunately empty macros cause splint parse errors.  They
+ * also cause lots of warnings when using Sun's compilers.
  */
-#ifdef S_SPLINT_S
+#if defined(S_SPLINT_S) || defined(SUN_FORTE_C)
 #define THREAD_LOCK_DEFINE_STATIC(name)	static int name = 0
 #define THREAD_LOCK_DEFINE(name)	int name = 0
 #define THREAD_LOCK_EXTERN(name)	extern int name = 0
@@ -172,7 +174,15 @@
 # include <stdbool.h>
 #else
 
-/* Some platforms already define true and false.  To the
+#if defined(SUN_FORTE_C)
+/*
+ * Sun's handling of _Bool causes lots of warnings unless
+ * the following stuff is skipped.
+ */
+#define boolean int
+#else
+/*
+ * Some platforms already define true and false.  To the
  * best of my knowledge, it is always safe to zap these.
  */
 # ifdef false
@@ -180,15 +190,17 @@
 #  undef true
 # endif
 
-# ifndef __cplusplus
+# if defined(__cplusplus)
+typedef bool _Bool;
+typedef boolean _Bool;
+# else
 /* By defining _Bool as an enum type we get to see symbolic
  * names in gdb.
  */
 typedef enum { false, true } _Bool;
-# else
-typedef bool _Bool;
 # endif
 # define bool _Bool
+# define boolean _Bool
 
 /* According to ISO C99, the boolean stuff must be available
  * in preprocessor directives and __bool_true_false_are_defined
@@ -199,14 +211,19 @@ typedef bool _Bool;
 # define __bool_true_false_are_defined 1
 #endif
 
-#define boolean _Bool
+#endif
+
 #define TRUE  1
 #define FALSE 0
 
 /*
  * Additional types.
  */
+#ifndef SUN_FORTE_C
 typedef void* vpointer;
+#else
+#define vpointer void*
+#endif
 typedef const void *constvpointer;
 typedef unsigned char byte;
 #ifdef BITSPERBYTE

@@ -355,9 +355,31 @@ else
       *) CFLAGS="$CFLAGS -ansi" ;;
       esac
     fi
+
+  else
+
+# Kludges etc. for the Sun C Compiler.
+    if test "x$CC" = "xcc"; then
+      if test "x$target" = "xsparc-sun-solaris2.8"; then
+
+        if test "x$enable_ansi" = "xyes"; then
+          case " $CFLAGS " in
+          *[\ \	]-ansi[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -ansi" ;;
+          esac
+        fi
+      fi
+    fi
   fi
 fi
 changequote([,])dnl
+
+dnl SunOS fixes.
+if test "x$target" = "xsparc-sun-solaris2.7"; then
+  AC_DEFINE(SUN_FORTE_C,2.7)
+elif test "x$target" = "xsparc-sun-solaris2.8"; then
+  AC_DEFINE(SUN_FORTE_C,2.8)
+fi
 
 dnl Checks for standard library functions.
 AC_FUNC_VPRINTF
@@ -412,7 +434,7 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 basename \
                 readline \
                 memcpy memset memmove bcopy memscan \
-                memrev memchr memmem memcmp \
+                memrev memchr memmem memcmp bcmp \
                 min max \
                 index rindex \
                 strchr strrchr strcat strlen \
@@ -428,8 +450,24 @@ dnl Some dodgy work-arounds.
 if test "x$enable_mpi" = "xyes"; then
   AC_DEFINE(HAVE_ITOA,1)	# Avoid symbol conflict with LAM-MPI
 fi
+
 if test "x$CC" != "xicc"; then
   AC_CHECK_FUNCS( sincos )	# I have some problems with implicit definition of sincos() with the Intel C++.
+fi
+
+if test "x$target" = "xsparc-sun-solaris2.7"; then
+  AC_DEFINE(SUN_FORTE_C,2.7)
+  AC_DEFINE(HAVE_BCOPY,1)
+  AC_DEFINE(HAVE_BCMP,1)
+  AC_DEFINE(HAVE_STRLEN,1)
+  AC_DEFINE(HAVE_STRNCMP,1)
+  AC_DEFINE(HAVE_STRNCPY,1)
+  AC_DEFINE(HAVE_STRTOD,1)
+  AC_DEFINE(HAVE_STRTOK,1)
+  AC_DEFINE(HAVE_MEMSET,1)
+  AC_DEFINE(HAVE_USLEEP,1)
+elif test "x$target" = "xsparc-sun-solaris2.8"; then
+  AC_DEFINE(SUN_FORTE_C,2.8)
 fi
 
 dnl Give warning if GNU Make is not being used.

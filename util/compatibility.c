@@ -136,6 +136,11 @@ int ipow(int n, int e)
 
 
 #ifndef HAVE_MEMCPY
+#ifndef HAVE_BCOPY
+/*
+ * Some systems, such as SunOS do have BCOPY instead.
+ * In which case this is defined as a macro in the header.
+ */
 /*
  * Copy LEN characters from SRC to DEST
  */
@@ -165,6 +170,7 @@ void memcpy(char *dest, const char *src, size_t len)
     }
   }
 }
+#endif /* HAVE_BCOPY */
 #endif /* HAVE_MEMCPY */
 
 
@@ -376,14 +382,14 @@ char	*strtok(char *str, char *delim)
  */
 char *strpbrk(const char *s, const char *accept)
   {
-  char *s1;
-  char *s2;
+  const char *s1;
+  const char *s2;
  
-  for (s1 = cs; *s1 != '\0'; ++s1)
+  for (s1 = s; *s1 != '\0'; ++s1)
     {
-    for (s2 = ct; *s2 != '\0'; ++s2)
+    for (s2 = accept; *s2 != '\0'; ++s2)
       {
-      if(*s1 == *s2) return s1;
+      if (*s1 == *s2) return (char *) s1;
       }
     }
      
@@ -770,8 +776,8 @@ void *memscan(void *addr, int c, size_t size)
 /*
  * Set LEN characters in STR to character C
  */
-#if 0
-/* Original version */
+#ifndef USE_OPTIMISED_MEMSET
+/* Original version.  Must use this on Solaris, by the looks of things. */
 char *memset(char *str, int c, size_t len)
   {
   char	*orig = str;
@@ -780,7 +786,8 @@ char *memset(char *str, int c, size_t len)
   
   return orig;
   }
-#endif /* HAVE_MEMSET == 0 */
+
+#else
 
 /* Optimised version */
 void *memset(void *dst0, int c0, size_t bytes)
@@ -839,8 +846,8 @@ void *memset(void *dst0, int c0, size_t bytes)
 
   return dst0;
   }
+#endif
 #endif /* HAVE_MEMSET */
-
 
 #ifndef HAVE_MEMMOVE
 #ifndef HAVE_BCOPY
@@ -931,6 +938,11 @@ void *memmem(const void *haystack, size_t haystack_len,
 
 
 #ifndef HAVE_MEMCMP
+#ifndef HAVE_BCMP
+/*
+ * Some systems, such as SunOS do have BCMP instead.
+ * In which case this is defined as a macro in the header.
+ */
 int memcmp(const void *src1, const void *src2, size_t n)
   {
   const unsigned char *cp1=src1;
@@ -940,6 +952,7 @@ int memcmp(const void *src1, const void *src2, size_t n)
 
   return 0;
   }
+#endif /* HAVE_BCMP */
 #endif /* HAVE_MEMCMP */
 
 
@@ -1491,8 +1504,8 @@ char *readline(char *prompt)
  * The strspn() function calculates the length of the initial segment of s which
  * consists entirely of characters in accept.
  */
-size_t strspn(const *string, const *accept)
-{
+size_t strspn(const char *string, const char *accept)
+  {
   size_t count = 0;
 
   while (strchr(accept, *string)!=0)
@@ -1502,7 +1515,7 @@ size_t strspn(const *string, const *accept)
     }
 
   return count;
-}
+  }
 #endif /* HAVE_STRSPN */
 
 
