@@ -2,6 +2,9 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1845:
+Gad Abraham - Testing Debian package.
+
 Prior to release 0.1843:
 Kalin Kozhuharov - HP-UX/MPP and Hitachi SR8000 testing and compilation reports.
 
