@@ -3,7 +3,7 @@
  **********************************************************************
 
   SAA_header.h - My general header to define a few useful things
-  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	24 Dec 2002 SAA	Prevented double declaration of _Bool.  Changed definitions of TRUE and FALSE to avoid splint warnings.
+  Updated:	07 Jan 2003 SAA	Added wrappers for multi-statement macros, MWRAP_BEGIN and MWRAP_END.
+  		24 Dec 2002 SAA	Prevented double declaration of _Bool.  Changed definitions of TRUE and FALSE to avoid splint warnings.
   		17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
   		14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
   		03 Oct 2002 SAA	Compaq ccc compiler fix.
@@ -384,13 +385,24 @@ typedef unsigned char byte;
 #endif
 
 /*
+ * Wrappers for multi-statement macros.
+ */
+#if defined(__GNUC__)
+#define MWRAP_BEGIN
+#define MWRAP_END
+#else
+#define MWRAP_BEGIN	do
+#define MWRAP_END	while(0==1);
+#endif
+
+/*
  * Development message macros
  */
-#define message(X)	{						\
+#define message(X)	MWRAP_BEGIN {					\
 			printf("MESSAGE: %s\n", (X));			\
 			printf("(\"%s\", %s, line %d)\n",		\
 			__FILE__, __PRETTY_FUNCTION__, __LINE__);	\
-			}
+			} MWRAP_END
 
 #define message_if(X,Y)	if ((X)) {					\
 			printf("MESSAGE: %s\n", (X));			\
@@ -398,23 +410,23 @@ typedef unsigned char byte;
 			__FILE__, __PRETTY_FUNCTION__, __LINE__);	\
 			}
 
-#define message_if_else(X,Y,Z)	{					\
+#define message_if_else(X,Y,Z)	MWRAP_BEGIN {				\
 			printf("MESSAGE: %s\n", (X)?(Y):(Z));		\
 			printf("(\"%s\", %s, line %d)\n",		\
 			__FILE__, __PRETTY_FUNCTION__, __LINE__);	\
-			}
+			} MWRAP_END
 
-#define s_assert(X)     { if(!(X)) { 					\
+#define s_assert(X)     MWRAP_BEGIN { if(!(X)) { 			\
 			printf("Assertion \"%s\" failed:\n", (#X));	\
 			printf("(\"%s\", %s, line %d)\n",		\
 			__FILE__, __PRETTY_FUNCTION__, __LINE__);	\
 			s_breakpoint;					\
-                        } }
+                        } } MWRAP_END
 
 /*
  * die() macro, inspired by perl!
  */
-#define die(X)	{						\
+#define die(X)	MWRAP_BEGIN {						\
                 printf("FATAL ERROR: %s\nin %s at \"%s\" line %d\n",	\
 		(X),					\
                 __PRETTY_FUNCTION__,			\
@@ -422,29 +434,29 @@ typedef unsigned char byte;
                 __LINE__);				\
 		fflush(NULL);				\
                 s_breakpoint;				\
-                }
+		} MWRAP_END
 
 /* Idea: Decrement warn() in favour of helga_log functionality? */
-#define warn(X)         {						\
+#define warn(X)         MWRAP_BEGIN {					\
                         printf("NON-FATAL ERROR: %s\n in %s at \"%s\" line %d\n",	\
 				(X),					\
                                __PRETTY_FUNCTION__,			\
                                __FILE__,				\
                                __LINE__);				\
-                        }
+                        } MWRAP_END
 
-/* #define helga_log(level, format, args...) do {          \
+/* #define helga_log(level, format, args...) MWRAP_BEGIN {          \
         if ( (level) <= helga_log_get_level() )         \
           helga_log_output(level, __PRETTY_FUNCTION__,  \
                            __FILE__, __LINE__,          \
-                           format, ##args); } while(0)
+                           format, ##args); } MWRAP_END
 */
 
 /*
  * Implement my dief macro where possible.
  */
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
-#  define dief(format, args...)	{				\
+#  define dief(format, args...)	MWRAP_BEGIN {			\
 			printf("FATAL ERROR: ");		\
 			printf(format, ##args);			\
 			printf("\nin %s at \"%s\" line %d\n",	\
@@ -453,7 +465,7 @@ typedef unsigned char byte;
 			__LINE__);				\
 			fflush(NULL);				\
 			s_breakpoint;                           \
-			}
+			} MWRAP_END
 # define HAVE_DIEF	1
 #else
 /*

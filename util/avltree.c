@@ -52,7 +52,8 @@
 		A basic test program may be compiled with something like:
 		gcc avltree.c -DAVLTREE_COMPILE_MAIN -g
  
-  Last Updated:	24 Aug 2002 SAA No longer requires memory_util/memory_chunk routines.  This eases many dependency problems.
+  Last Updated:	07 Jan 2003 SAA	Some explicit pointer==NULL checks to keep splint happy.
+  		24 Aug 2002 SAA No longer requires memory_util/memory_chunk routines.  This eases many dependency problems.
   		16 Aug 2002 SAA	Free the node memory chunks when no avltrees remain.
 		24 Apr 2002 SAA	Some renaming for consistency.
 		20 Mar 2002 SAA Replaced use of printf("%Zd", (size_t)) to printf("%lu", (unsigned long)).
@@ -119,12 +120,12 @@ static void		avltree_node_check(AVLNode *node);
 /*
  * Global variables.
  */
-static AVLNode		*node_free_list = NULL;
 static int		AVLnum_trees = 0;	/* Count number of trees in use. */
 static int		buffer_num = -1;
 static int		num_buffers = 0;
 static int		num_used = AVL_NODE_BUFFER_SIZE;
 static AVLNode		**node_buffers = NULL;
+static AVLNode		*node_free_list = NULL;
 
 /*
  * Note that a single coarse thread lock is used when a number of
@@ -177,7 +178,7 @@ static AVLNode *avltree_node_new(AVLKey key, vpointer data)
     }
   else
     {
-    if (node_free_list)
+    if (node_free_list!=NULL)
       {
       node = node_free_list;
       node_free_list = node->right;
@@ -223,7 +224,8 @@ static void avltree_node_free(AVLNode *node)
 
 static void avltree_node_delete(AVLNode *node)
   {
-  if (node)
+	  
+  if (node!=NULL)
     {
     avltree_node_delete(node->right);
     avltree_node_delete(node->left);
@@ -239,7 +241,8 @@ static void avltree_node_delete(AVLNode *node)
  */
 static void avltree_node_destroy(AVLNode *node, AVLDestructorFunc free_func)
   {
-  if (node)
+	  
+  if (node!=NULL)
     {
     avltree_node_destroy(node->right, free_func);
     avltree_node_destroy(node->left, free_func);
@@ -261,7 +264,7 @@ static vpointer avltree_node_ordered_search(AVLNode *node,
   {
   int dir;
 
-  while (node)
+  while (node!=NULL)
     {
     dir = (*search_func)(node->data, userdata);
 
@@ -288,11 +291,11 @@ static boolean avltree_node_search(AVLNode *node,
 
   if ((*search_func)(*node_data, userdata)) return TRUE;
 
-  if (node->left)
+  if (node->left!=NULL)
     if (avltree_node_search(node->left, search_func, userdata, node_data))
       return TRUE;
 
-  if (node->right)
+  if (node->right!=NULL)
     if (avltree_node_search(node->right, search_func, userdata, node_data))
       return TRUE;
 
@@ -313,7 +316,7 @@ static AVLNode *avltree_node_insert(AVLNode *node,
 
   if (key < node->key)
     {
-    if (node->left)
+    if (node->left!=NULL)
       {
       old_balance = node->left->balance;
       node->left = avltree_node_insert(node->left, key, data, inserted);
@@ -330,7 +333,7 @@ static AVLNode *avltree_node_insert(AVLNode *node,
     }
   else if (key > node->key)
     {
-    if (node->right)
+    if (node->right!=NULL)
       {
       old_balance = node->right->balance;
       node->right = avltree_node_insert(node->right, key, data, inserted);
@@ -356,7 +359,7 @@ static AVLNode *avltree_node_insert(AVLNode *node,
     return node;
     }
 
-  if (*inserted && (node->balance < -1 || node->balance > 1))
+  if (*inserted==TRUE && (node->balance < -1 || node->balance > 1))
     node = avltree_node_balance(node);
 
   return node;
@@ -366,14 +369,14 @@ static AVLNode *avltree_node_insert(AVLNode *node,
 static AVLNode *avltree_node_remove(AVLNode *node,
                             AVLKey key, vpointer *removed_data)
   {
-  AVLNode	*new_root;
+  AVLNode	*new_root=NULL;
   int		old_balance;
 
   if (!node) return NULL;
 
   if (key < node->key)
     {
-    if (node->left)
+    if (node->left!=NULL)
       {
       old_balance = node->left->balance;
       node->left = avltree_node_remove(node->left, key, removed_data);
@@ -382,7 +385,7 @@ static AVLNode *avltree_node_remove(AVLNode *node,
     }
   else if (key > node->key)
     {
-    if (node->right)
+    if (node->right!=NULL)
       {
       old_balance = node->right->balance;
       node->right = avltree_node_remove(node->right, key, removed_data);
@@ -402,11 +405,12 @@ static AVLNode *avltree_node_remove(AVLNode *node,
     else
       {
       old_balance = node->right->balance;
-      node->right = avltree_node_remove_leftmost (node->right, &new_root);
+      node->right = avltree_node_remove_leftmost(node->right, &new_root);
+      if (new_root==NULL) die("Internal error.  New root node is NULL.");
       new_root->left = node->left;
       new_root->right = node->right;
       new_root->balance = node->balance;
-      node = avltree_node_restore_right_balance (new_root, old_balance);
+      node = avltree_node_restore_right_balance(new_root, old_balance);
       }
 
     *removed_data = removed_node->data;
@@ -419,17 +423,18 @@ static AVLNode *avltree_node_remove(AVLNode *node,
 
 static AVLNode *avltree_node_balance(AVLNode *node)
   {
+
   if (node->balance < -1)
     {
     if (node->left->balance > 0)
       node->left = avltree_node_rotate_left(node->left);
-    node = avltree_node_rotate_right (node);
+    node = avltree_node_rotate_right(node);
     }
   else if (node->balance > 1)
     {
     if (node->right->balance < 0)
       node->right = avltree_node_rotate_right(node->right);
-    node = avltree_node_rotate_left (node);
+    node = avltree_node_rotate_left(node);
     }
 
   return node;
@@ -460,7 +465,7 @@ static AVLNode *avltree_node_lookup_leftmost(AVLNode *node)
   return avltree_node_lookup_leftmost(node->left);
  */
 
-  while (node->left) node = node->left;
+  while (node->left!=NULL) node = node->left;
 
   return node;
   }
@@ -473,7 +478,7 @@ static AVLNode *avltree_node_lookup_rightmost(AVLNode *node)
   return avltree_node_lookup_rightmost(node->right);
  */
 
-  while (node->right) node = node->right;
+  while (node->right!=NULL) node = node->right;
 
   return node;
   }
@@ -538,7 +543,7 @@ static vpointer avltree_node_lookup(AVLNode *node, AVLKey key)
  */
 static vpointer avltree_node_lookup(AVLNode *node, AVLKey key)
   {
-  while (node && key != node->key)
+  while (node!=NULL && key!=node->key)
     {
     if (key < node->key)
       node = node->left;
@@ -553,12 +558,16 @@ if (node) printf("Found key %p >", node->data); else printf("Not found key >");
   }
 
 
+/*
+ * Recursive node counting routine.
+ * Need an iterative version.
+ */
 static int avltree_node_count(AVLNode *node)
   {
   int count=1;
 
-  if (node->left) count += avltree_node_count(node->left);
-  if (node->right) count += avltree_node_count(node->right);
+  if (node->left!=NULL) count += avltree_node_count(node->left);
+  if (node->right!=NULL) count += avltree_node_count(node->right);
 
   return count;
   }
@@ -570,14 +579,14 @@ static int avltree_node_count(AVLNode *node)
 static boolean avltree_node_traverse(AVLNode *node,
                      AVLTraverseFunc traverse_func, vpointer userdata)
   {
-  if (node->left)
+  if (node->left!=NULL)
     {
     if (avltree_node_traverse(node->left, traverse_func, userdata)) return TRUE;
     }
 
   if ((*traverse_func)(node->key, node->data, userdata)) return TRUE;
 
-  if (node->right)
+  if (node->right!=NULL)
     {
     if (avltree_node_traverse(node->right, traverse_func, userdata)) return TRUE;
     }
@@ -593,12 +602,12 @@ static int avltree_node_height(AVLNode *node)
 
   if (!node) return 0;
 
-  if (node->left)
+  if (node->left!=NULL)
     left_height = avltree_node_height(node->left);
   else
     left_height = 0;
 
-  if (node->right)
+  if (node->right!=NULL)
     right_height = avltree_node_height(node->right);
   else
     right_height = 0;
@@ -683,14 +692,14 @@ static void avltree_node_check(AVLNode *node)
   int right_height;
   int balance;
   
-  if (node)
+  if (node!=NULL)
     {
-    if (node->left)
+    if (node->left!=NULL)
       left_height = avltree_node_height(node->left);
     else
       left_height = 0;
 
-    if (node->right)
+    if (node->right!=NULL)
       right_height = avltree_node_height(node->right);
     else
       right_height = 0;
@@ -699,9 +708,9 @@ static void avltree_node_check(AVLNode *node)
     if (balance != node->balance)
       dief("avltree_node_check: failed: %d ( %d )", balance, node->balance);
       
-    if (node->left)
+    if (node->left!=NULL)
       avltree_node_check(node->left);
-    if (node->right)
+    if (node->right!=NULL)
       avltree_node_check(node->right);
     }
 
@@ -721,7 +730,8 @@ AVLTree *avltree_new(AVLKeyFunc key_generate_func)
 
   AVLnum_trees++;
 
-  if (!(tree = s_malloc(sizeof(AVLTree))) ) die("Unable to allocate memory.");
+  tree = s_malloc(sizeof(AVLTree));
+  if (!tree) die("Unable to allocate memory.");
 
   tree->root = NULL;
   tree->key_generate_func = key_generate_func;
@@ -753,7 +763,7 @@ void avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func)
   {
   if (!tree) return;
 
-  if (free_func)
+  if (free_func!=NULL)
     avltree_node_destroy(tree->root, free_func);
   else
     avltree_node_delete(tree->root);
@@ -864,7 +874,7 @@ vpointer avltree_ordered_search(AVLTree *tree,
 
 vpointer avltree_search(AVLTree *tree, AVLMatchFunc search_func, vpointer userdata)
   {
-  vpointer	nodedata;
+  vpointer	nodedata=NULL;
 
   if (!tree || !tree->root) return NULL;
 
@@ -884,13 +894,13 @@ void avltree_traverse(AVLTree *tree, AVLTraverseFunc traverse_func, vpointer use
 
 int avltree_height(AVLTree *tree)
   {
-  return (tree && tree->root)?avltree_node_height(tree->root):0;
+  return (tree!=NULL && tree->root!=NULL)?avltree_node_height(tree->root):0;
   }
 
 
 int avltree_num_nodes(AVLTree *tree)
   {
-  return (tree && tree->root)?avltree_node_count(tree->root):0;
+  return (tree!=NULL && tree->root!=NULL)?avltree_node_count(tree->root):0;
   }
 
 
@@ -974,17 +984,17 @@ boolean avltree_test(void)
   i = 0;
   for (j = 0; j < 26; j++, i++)
     {
-    chars[i] = 'A' + j;
+    chars[i] = 'A' + (char) j;
     avltree_insert(tree, &chars[i]);
     }
   for (j = 0; j < 26; j++, i++)
     {
-    chars[i] = 'a' + j;
+    chars[i] = 'a' + (char) j;
     avltree_insert(tree, &chars[i]);
     }
   for (j = 0; j < 10; j++, i++)
     {
-    chars[i] = '0' + j;
+    chars[i] = '0' + (char) j;
     avltree_insert(tree, &chars[i]);
     }
 
@@ -1000,7 +1010,7 @@ boolean avltree_test(void)
   printf("\n");
 
   for (i = 0; i < 26; i++)
-    avltree_remove(tree, &chars[i]);
+    if ( !avltree_remove(tree, &chars[i]) ) printf("%c not found.\n", chars[i]);
 
   printf("height: %d\n", avltree_height(tree));
   printf("num nodes: %d\n", avltree_num_nodes(tree));
