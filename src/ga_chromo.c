@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -52,7 +52,8 @@
   last updated: 13/06/01
  **********************************************************************/
 
-boolean ga_chromosome_integer_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_integer_allocate( const population *pop,
+                                        entity *embryo )
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -82,7 +83,8 @@ boolean ga_chromosome_integer_allocate(population *pop, entity *embryo)
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_integer_deallocate(population *pop, entity *corpse)
+void ga_chromosome_integer_deallocate( const population *pop,
+                                       entity *corpse )
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -107,7 +109,7 @@ void ga_chromosome_integer_deallocate(population *pop, entity *corpse)
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_integer_replicate( population *pop,
+void ga_chromosome_integer_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -133,7 +135,7 @@ void ga_chromosome_integer_replicate( population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_integer_to_bytes(population *pop, entity *joe,
+unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
                                      byte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
@@ -167,7 +169,7 @@ unsigned int ga_chromosome_integer_to_bytes(population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_integer_from_bytes(population *pop, entity *joe, byte *bytes)
+void ga_chromosome_integer_from_bytes(const population *pop, entity *joe, byte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -261,7 +263,7 @@ char *ga_chromosome_integer_to_string(
   last updated: 13/06/01
  **********************************************************************/
 
-boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_boolean_allocate(const population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -291,7 +293,7 @@ boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
+void ga_chromosome_boolean_deallocate(const population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -316,7 +318,7 @@ void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
   last updated: 19 Mar 2002
  **********************************************************************/
 
-void ga_chromosome_boolean_replicate( population *pop,
+void ga_chromosome_boolean_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -343,7 +345,7 @@ void ga_chromosome_boolean_replicate( population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_boolean_to_bytes(population *pop, entity *joe,
+unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
@@ -377,7 +379,7 @@ unsigned int ga_chromosome_boolean_to_bytes(population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_boolean_from_bytes(population *pop, entity *joe, byte *bytes)
+void ga_chromosome_boolean_from_bytes(const population *pop, entity *joe, byte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -445,7 +447,7 @@ char *ga_chromosome_boolean_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_double_allocate(const population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -475,7 +477,7 @@ boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_deallocate(population *pop, entity *corpse)
+void ga_chromosome_double_deallocate(const population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -500,7 +502,7 @@ void ga_chromosome_double_deallocate(population *pop, entity *corpse)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_replicate( population *pop,
+void ga_chromosome_double_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -527,7 +529,7 @@ void ga_chromosome_double_replicate( population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
+unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
@@ -561,7 +563,7 @@ unsigned int ga_chromosome_double_to_bytes(population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_double_from_bytes(population *pop, entity *joe, byte *bytes)
+void ga_chromosome_double_from_bytes(const population *pop, entity *joe, byte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -649,7 +651,7 @@ char *ga_chromosome_double_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_char_allocate(const population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -679,7 +681,7 @@ boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_char_deallocate(population *pop, entity *corpse)
+void ga_chromosome_char_deallocate(const population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -706,7 +708,7 @@ void ga_chromosome_char_deallocate(population *pop, entity *corpse)
   last updated: 19 Mar 2002
  **********************************************************************/
 
-void ga_chromosome_char_replicate( population *pop,
+void ga_chromosome_char_replicate( const population *pop,
                                    entity *parent, entity *child,
                                    const int chromosomeid )
   {
@@ -731,7 +733,7 @@ void ga_chromosome_char_replicate( population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
+unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
                                     byte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
@@ -764,7 +766,7 @@ unsigned int ga_chromosome_char_to_bytes(population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
+void ga_chromosome_char_from_bytes(const population *pop, entity *joe, byte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -831,7 +833,7 @@ char *ga_chromosome_char_to_string(
   last updated: 30/06/01
  **********************************************************************/
 
-boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
+boolean ga_chromosome_bitstring_allocate(const population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -858,7 +860,7 @@ boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
+void ga_chromosome_bitstring_deallocate(const population *pop, entity *corpse)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -886,7 +888,7 @@ void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_replicate( population *pop,
+void ga_chromosome_bitstring_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -911,7 +913,8 @@ void ga_chromosome_bitstring_replicate( population *pop,
   last updated: 30/06/01
  **********************************************************************/
 
-unsigned int ga_chromosome_bitstring_to_bytes(population *pop, entity *joe,
+unsigned int ga_chromosome_bitstring_to_bytes(const population *pop,
+                                    entity *joe,
                                      byte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
@@ -955,7 +958,9 @@ unsigned int ga_chromosome_bitstring_to_bytes(population *pop, entity *joe,
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_from_bytes(population *pop, entity *joe, byte *bytes)
+void ga_chromosome_bitstring_from_bytes( const population *pop,
+                                         entity *joe,
+                                         byte *bytes )
   {
   int		i;		/* Loop variable over all chromosomes */
 

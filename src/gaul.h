@@ -129,17 +129,17 @@ typedef void    (*GAdata_ref_incrementor)(vpointer data);
  * Genome handling.
  */
 /* GAchromosome_constructor is used to allocate single chromosomes. */
-typedef boolean (*GAchromosome_constructor)(population *pop, entity *entity);
+typedef boolean (*GAchromosome_constructor)(const population *pop, entity *entity);
 /* GAchromosome_destructor is used to deallocate single chromosomes. */
-typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
+typedef void    (*GAchromosome_destructor)(const population *pop, entity *entity);
 /* GAchromosome_replicate is used to clone single chromosomes. */
-typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
+typedef void    (*GAchromosome_replicate)(const population *pop, entity *parent, entity *child, const int chromosomeid);
 /* GAchromosome_to_bytes is used to pack genomic data into a
  * contiguous block of memory. */
-typedef unsigned int    (*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+typedef unsigned int    (*GAchromosome_to_bytes)(const population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
 /* GAchromosome_from_bytes is used to unpack genomic data from a
  * contiguous block of memory. */
-typedef void    (*GAchromosome_from_bytes)(population *pop, entity *joe, byte *bytes);
+typedef void    (*GAchromosome_from_bytes)(const population *pop, entity *joe, byte *bytes);
 /* GAchromosome_to_string is used to generate a human readable
  * representation of genomic data. */
 typedef char    *(*GAchromosome_to_string)(const population *pop, const entity *joe, char *text, size_t *textlen);
