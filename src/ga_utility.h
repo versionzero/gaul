@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_utility - High-level genetic algorithm routines.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -37,99 +37,8 @@
 #include "gaul.h"
 
 /*
- * Prototypes.
+ * Everything has moved to gaul.h or ga_core.h
  */
-void    ga_diagnostics( void ); 
-population *ga_genesis( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
-population *ga_genesis_int( const int           population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
-population *ga_genesis_boolean( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
-population *ga_genesis_char( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
-population *ga_genesis_double( const int               population_size,
-                        const int               num_chromo,
-                        const int               len_chromo,
-                        GAgeneration_hook       generation_hook,
-                        GAiteration_hook        iteration_hook,
-                        GAdata_destructor       data_destructor,
-                        GAdata_ref_incrementor  data_ref_incrementor,
-                        GAevaluate              evaluate,
-                        GAseed                  seed,
-                        GAadapt                 adapt,
-                        GAselect_one            select_one,
-                        GAselect_two            select_two,
-                        GAmutate                mutate,
-                        GAcrossover             crossover,
-                        GAreplace               replace );
-entity  *ga_allele_search(      population      *pop,
-                                const int       chromosomeid,
-                                const int       point,
-                                const int       min_val, 
-                                const int       max_val, 
-                                entity          *initial );
-void ga_population_dump(population *pop);
-void ga_entity_dump(population *pop, entity *john);
-boolean ga_fitness_mean_stddev( population *pop,
-                             double *average, double *stddev );
-boolean ga_fitness_stats( population *pop,
-                          double *max, double *min,
-                          double *mean, double *median,
-                          double *variance, double *stddev,
-                          double *kurtosis, double *skew );
 
 #endif	/* GA_UTILITY_H_INCLUDED */
 

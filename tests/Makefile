@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /home/stewart
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -64,10 +64,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/gaul-devel/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/gaul-devel/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/gaul-devel/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/gaul-devel/missing --run autoheader
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -95,7 +95,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/gaul-devel/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -121,7 +121,7 @@ STRIP = strip
 VERSION = 0.1842-2
 am__include = include
 am__quote = 
-install_sh = /home/stewart/gaul-devel/install-sh
+install_sh = /home/stewart/Development/gaul-devel/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4

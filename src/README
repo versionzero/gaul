@@ -20,13 +20,15 @@ ga_select.c            Selection operators.
 
 ga_seed.c              Initialisation operators.
 
-ga_sa.c                Simulated Annealling optimisation functions.
+ga_sa.{c,h}            Simulated Annealling optimisation functions.
 
-ga_tabu.c              Tabu Search functions.
+ga_stats.c             Convenience statistical functions.
 
-ga_climbing.c          Hill climbing optimisation functions.
+ga_tabu.{c,h}          Tabu Search functions.
 
-ga_simplex.c           Simplex search functions.
+ga_climbing.{c,h}      Hill climbing optimisation functions.
+
+ga_simplex.{c,h}       Simplex search functions.
 
 ga_replace.c           Crowding, elimination and elitism operators.
 

@@ -3,7 +3,7 @@ dnl gaul/gaul-devel.spec
 dnl ######################################################################
 dnl
 dnl GAUL - Genetic Algorithm Utility Library
-dnl Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+dnl Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
 dnl
 dnl The latest version of this program should be available at:
 dnl http://www.stewart-adcock.co.uk/
@@ -49,7 +49,7 @@ The Genetic Algorithm Utility Library (GAUL) is an open source programming libra
 
 %build
 dnl./configure --includedir=%{prefix}/include/gaul --libdir=%{prefix}/lib/gaul --bindir=%{prefix}/bin/gaul
-./configure
+./configure --prefix=%{prefix}
 make
 
 %install

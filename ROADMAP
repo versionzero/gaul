@@ -1,23 +1,21 @@
 Roadmap upto version 1.0 
 ========================
 
-Release 0.1840 and onwards may be considered to have a stable API (i.e. code written
-to use these releases should also work with version 1.0) with the possible exception of
-the alternative heuristic search protocols (i.e. simulated annealling).
+Release 0.1840 and onwards may be considered to have a stable API
+(i.e. code written to use these releases should also work with version
+1.0) with the possible exception of the alternative heuristic search
+protocols (i.e. simulated annealling).
 
 These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
-------------+--------------------------------------------------------
- 0.1842     |  ga_evolution_threaded() and associated example.
-            |  Updated tutorial documentation.
-            |  Examples for hill-climbing and simplex algorithms.
 ------------+--------------------------------------------------------
  0.1843     |  Linked-list chromosome.
             |  Linked-list chromosome example.
             |  Fully document chromosomes.
             |  ga_evolution_{mpi,pvm}() and associated examples.
             |  ga_evolution_threaded() and associated example.
+            |  Updated tutorial documentation.
 ------------+--------------------------------------------------------
  0.1844     |  De Jong - working examples.
             |  Move prototypes for public functions into src/gaul.h
@@ -83,5 +81,5 @@ Features to be added if enough interest is demonstrated:
 * PVM support.
 * Replica-exchange SA search.
 
-Stewart Adcock, 30 Oct 2002.
+Stewart Adcock, 31 Dec 2002.
 

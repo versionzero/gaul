@@ -48,6 +48,7 @@ libgaul_la_SOURCES = \
     ga_sa.c \
     ga_similarity.c \
     ga_simplex.c \
+    ga_stats.c \
     ga_systematicsearch.c \
     ga_tabu.c \
     ga_utility.c
