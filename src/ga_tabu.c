@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_tabu - A tabu-search algorithm for comparison and local search.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -308,7 +308,7 @@ int ga_tabu(	population		*pop,
 
 /* Checks. */
   if (!pop) die("NULL pointer to population structure passed.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->tabu_params) die("ga_population_set_tabu_params(), or similar, must be used prior to ga_tabu().");

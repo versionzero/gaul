@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_deterministiccrowding - Deterministic crowding.
-  Copyright ©2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -95,7 +95,7 @@ int ga_deterministiccrowding(	population		*pop,
   if (!pop)
     die("NULL pointer to population structure passed.");
   if (pop->size < 1)
-    die("Population is empty (ga_genesis() or equivalent should be called).");
+    die("Population is empty.");
   if (!pop->dc_params)
     die("ga_population_set_deterministiccrowding_params(), or similar, must be used prior to ga_deterministiccrowding().");
 

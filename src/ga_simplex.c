@@ -132,7 +132,7 @@ int ga_simplex(	population		*pop,
  * Checks.
  */
   if (!pop) die("NULL pointer to population structure passed.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
   if (!pop->evaluate) die("Population's evaluation callback is undefined.");
   if (!pop->simplex_params) die("ga_population_set_simplex_params(), or similar, must be used prior to ga_simplex().");
   if (!pop->simplex_params->to_double) die("Population's genome to double callback is undefined.");

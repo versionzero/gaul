@@ -1722,7 +1722,7 @@ int ga_evolution(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -1833,7 +1833,7 @@ int ga_evolution_forked(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
+  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of processes to fork.
@@ -1978,7 +1978,7 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
+  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of threads to use.
@@ -2111,7 +2111,7 @@ int ga_evolution_threaded(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
+  if (pop->size < 1) die("Population is empty.");
   
 /*
  * Look at environment to find number of threads to create.
@@ -2283,7 +2283,7 @@ int ga_evolution_with_stats(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_WARNING, "This should be a deprecated function!");
 
@@ -2563,7 +2563,7 @@ int ga_evolution_steady_state(	population		*pop,
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -2785,7 +2785,7 @@ int ga_evolution_steady_state_with_stats(	population	*pop,
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (!pop->replace) die("Population's replacement callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
@@ -3662,7 +3662,7 @@ int ga_evolution_archipelago( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+    if (pop->size < 1) die("Population is empty.");
 
 /* Set island property. */
     pop->island = island;
@@ -3812,7 +3812,7 @@ int ga_evolution_archipelago_forked( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+    if (pop->size < 1) die("Population is empty.");
 
 /* Set island property. */
     pop->island = island;
@@ -4011,7 +4011,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
     if (!pop->mutate) die("Population's mutation callback is undefined.");
     if (!pop->crossover) die("Population's crossover callback is undefined.");
     if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-    if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+    if (pop->size < 1) die("Population is empty.");
 
 /* Set island property. */
     pop->island = island;
@@ -4208,7 +4208,7 @@ int ga_evolution_mp(	population		*pop,
   if (!pop->mutate) die("Population's mutation callback is undefined.");
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
-  if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called).");
+  if (pop->size < 1) die("Population is empty.");
 
   plog(LOG_VERBOSE, "The evolution has begun!");
 
