@@ -29,6 +29,7 @@
   To do:	Reimplement sub-populations.
 		Rewrite parallel versions.
 		Temperatures should be double-precision floats?
+		Need to fix elitism/crowding stuff.
 
  **********************************************************************/
 
@@ -303,7 +304,8 @@ boolean ga_evolution(	population		*pop,
     quicksort_population(pop);
 
 /*
- * Enforce elitism if desired.
+ * Enforce the type of elitism desired.
+ *
  * Rough elitism doesn't actual check whether two chromosomes are
  * identical - just assumes they are if they have identical
  * fitness.  Exact elitism does make the full check.

@@ -24,10 +24,14 @@
 
  **********************************************************************
 
-  Synopsis:     Routines for performing GA mutation operations.
+  Synopsis:     Routines for performing GA replacement operations.
 
 		These functions should duplicate user data were
 		appropriate.
+
+  To do:	Replace parents if less fit.
+		Replace most similar entities.
+		Replace 'oldest' entities.
 
  **********************************************************************/
 
