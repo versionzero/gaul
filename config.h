@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "16/07/03"
+#define BUILD_DATE_STRING "23/07/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -37,9 +37,6 @@
 /* Define to 1 if you have the `atexit' function. */
 #define HAVE_ATEXIT 1
 
-/* Define to 1 if you have the `basename' function. */
-#define HAVE_BASENAME 1
-
 /* Define to 1 if you have the `bcmp' function. */
 #define HAVE_BCMP 1
 
@@ -60,9 +57,6 @@
 
 /* Define to 1 if you have the `getpwuid' function. */
 #define HAVE_GETPWUID 1
-
-/* Define to 1 if you have the `gettimeofday' function. */
-#define HAVE_GETTIMEOFDAY 1
 
 /* Define to 1 if you have the `index' function. */
 #define HAVE_INDEX 1
@@ -124,17 +118,11 @@
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
 
-/* Define to 1 if you have the `readline' function. */
-/* #undef HAVE_READLINE */
-
 /* Define to 1 if you have the `rindex' function. */
 #define HAVE_RINDEX 1
 
 /* Define to 1 if you have the `select' function. */
 #define HAVE_SELECT 1
-
-/* Define to 1 if you have the `setlocale' function. */
-#define HAVE_SETLOCALE 1
 
 /* Define to 1 if you have the `sincos' function. */
 #define HAVE_SINCOS 1
@@ -344,7 +332,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1

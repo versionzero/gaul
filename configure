@@ -11210,20 +11210,13 @@ done
 
 
 
-
-
-
-
-for ac_func in fdopen gethostname getpwuid gettimeofday select \
+for ac_func in fdopen gethostname getpwuid select \
                atexit on_exit \
                waitpid snooze \
-               basename \
-               readline \
                memcpy memmove memscan \
                memrev memchr memmem memcmp \
                min max \
                index rindex \
-               setlocale \
 	       sincos \
                snprintf \
                strchr strrchr strcat \

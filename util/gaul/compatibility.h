@@ -275,14 +275,6 @@ char *strerror(int errnum);
 void dief(const char *format, ...);
 #endif
 
-#if HAVE_BASENAME != 1
-char *basename(char *path);
-#endif
-
-#if HAVE_READLINE != 1
-char *readline(char *prompt);
-#endif
-
 #if HAVE_STRSPN != 1
 size_t strspn(const char *string, const char *accept);
 #endif

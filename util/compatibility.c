@@ -38,16 +38,6 @@
 		freeciv 1.11.0 - http://www.freeciv.org/
 		glib	1.2.8  - http://www.gtk.org/
 
-		Some functions are based on code from the OPL'd
-		book about autoconf/automake/libtool published by
-		New Riders, see:
-
-		http://sources.redhat.com/autobook/
-
-		Some of these functions were inspired by code from
-		the Apache project (http://www.apache.org/).  But no
-		code was actually stolen from there.
-
  ----------------------------------------------------------------------
   freeciv 1.11.0 copyright notice:
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
@@ -85,25 +75,9 @@
  * files for a list of changes.  These files are distributed with
  * GLib at ftp://ftp.gtk.org/pub/gtk/.
  ----------------------------------------------------------------------
-  Autobook copyright notice:
-   Copyright (C) 2000 Gary V. Vaughan
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- ----------------------------------------------------------------------
-
-  Updated:	07 Jul 2003 SAA Added dpow().
+  Updated:	22 Jul 2003 Removed some unused code and applied my prefered indentation style.
+		07 Jul 2003 SAA Added dpow().
 		10 Jun 2003 SAA	Replaced "#ifndef HAVE_WHATEVER" with "#if HAVE_WHATEVER != 1" which is, apparently, recommended by the autoconf guys.
 		25 Feb 2003 SAA	Tweaked strndup() prototype.
 		24 Dec 2002 SAA	strlen() should have size_t return type, according to POSIX.
@@ -166,11 +140,10 @@ double dpow(double n, int e)
 #if HAVE_MEMCPY != 1
 #if HAVE_BCOPY != 1
 /*
+ * Copy LEN characters from SRC to DEST
+ * 
  * Some systems, such as SunOS do have BCOPY instead.
  * In which case this is defined as a macro in the header.
- */
-/*
- * Copy LEN characters from SRC to DEST
  */
 void memcpy(char *dest, const char *src, size_t len)
 {
@@ -178,26 +151,29 @@ void memcpy(char *dest, const char *src, size_t len)
   const	char	*src_p;
   int		byte_c;
   
-  if (len <= 0) {
+  if (len <= 0)
     return;
-  }
   
   src_p = src;
   dest_p = dest;
   
-  if (src_p <= dest_p && src_p + (len - 1) >= dest_p) {
+  if (src_p <= dest_p && src_p + (len - 1) >= dest_p)
+    {
     /* overlap, must copy right-to-left. */
     src_p += len - 1;
     dest_p += len - 1;
-    for (byte_c = 0; byte_c < len; byte_c++) {
+    for (byte_c = 0; byte_c < len; byte_c++)
       *dest_p-- = *src_p--;
+
     }
-  } else {
-    for (byte_c = 0; byte_c < len; byte_c++) {
+  else
+    {
+    for (byte_c = 0; byte_c < len; byte_c++)
       *dest_p++ = *src_p++;
     }
+
+  return;
   }
-}
 #endif /* HAVE_BCOPY */
 #endif /* HAVE_MEMCPY */
 
@@ -210,9 +186,15 @@ void memcpy(char *dest, const char *src, size_t len)
 char *strchr(const char *str, int c)
   {
 
-  for (; *str != '\0'; str++) if (*str == (char)c) return (char *)str;
+  while ( *str != '\0' )
+    {
+    if (*str == (char)c)
+      return (char *)str;
+    str++;
+    }
   
-  if (c == '\0') return (char *)str;
+  if (c == '\0')
+    return (char *)str;
 
   return NULL;
   }
@@ -229,7 +211,12 @@ char *strrchr(const char *str, int c)
   {
   const char	*pntr = NULL;
   
-  for (; *str != '\0'; str++) if (*str == (char)c) pntr = (char *)str;
+  while ( *str != '\0' )
+    {
+    if (*str == (char)c)
+      pntr = (char *)str;
+    str++;
+    }
   
   if (c == '\0') return (char *)str;
 
@@ -247,7 +234,7 @@ char *strcat(char *str1, const char *str2)
   {
   char	*orig = str1;
   
-  for (; *str1 != '\0'; str1++);
+  while ( *str != '\0' ) str1++;
   
   while (*str2 != '\0') *str1++ = *str2++;
 
@@ -305,12 +292,15 @@ int strcmp(const char *str1, const char *str2)
  */
 int strncmp(const char *str1, const char *str2, size_t len)
   {
-  int	c;
+  int	c=0;
   
-  for (c = 0; c < len; c++, str1++, str2++)
+  while ( c < len )
     {
     if (*str1 != *str2 || *str1 == '\0')
       return *str1 - *str2;
+    c++;
+    str1++;
+    str2++;
     }
   
   return 0;
@@ -327,6 +317,7 @@ char *strcpy(char *str1, const char *str2)
   char	*str_p;
   
   for (str_p = str1; *str2 != '\0'; str_p++, str2++) *str_p = *str2;
+
   *str_p = '\0';
   
   return str1;
@@ -339,22 +330,25 @@ char *strcpy(char *str1, const char *str2)
  * Copy STR2 to STR1 until LEN or null character in source.
  */
 char	*strncpy(char *str1, const char *str2, size_t len)
-{
+  {
   char		*str1_p, null_reached = FALSE;
   int		len_c;
   
-  for (len_c = 0, str1_p = str1; len_c < len; len_c++, str1_p++, str2++) {
-    if (null_reached || *str2 == '\0') {
+  for (len_c = 0, str1_p = str1; len_c < len; len_c++, str1_p++, str2++)
+    {
+    if (null_reached || *str2 == '\0')
+      {
       null_reached = TRUE;
       *str1_p = '\0';
-    }
-    else {
+      }
+    else
+      {
       *str1_p = *str2;
+      }
     }
-  }
   
   return str1;
-}
+  }
 #endif /* HAVE_STRNCPY */
 
 
@@ -366,54 +360,59 @@ char	*strncpy(char *str1, const char *str2, size_t len)
  * This is not thread-safe.
  */
 char	*strtok(char *str, const char *delim)
-{
+  {
   static char	*last_str = "";
   char		*start, *delim_p;
   
   /* no new strings to search? */
-  if (str != NULL) {
+  if (str != NULL)
+    {
     last_str = str;
-  }
-  else {
+    }
+  else
+    {
     /* have we reached end of old one? */
-    if (*last_str == '\0') {
+    if (*last_str == '\0')
       return NULL;
     }
-  }
   
   /* parse through starting token deliminators */
-  for (; *last_str != '\0'; last_str++) {
-    for (delim_p = delim; *delim_p != '\0'; delim_p++) {
-      if (*last_str == *delim_p) {
+  while ( *last_str != '\0' )
+    {
+    for (delim_p = delim; *delim_p != '\0'; delim_p++)
+      {
+      if (*last_str == *delim_p)
 	break;
       }
+    last_str++;
     }
     
     /* is the character NOT in the delim list? */
-    if (*delim_p == '\0') {
+    if (*delim_p == '\0')
       break;
     }
-  }
   
   /* did we reach the end? */
-  if (*last_str == '\0') {
+  if (*last_str == '\0')
     return NULL;
-  }
   
   /* now start parsing through the string, could be '\0' already */
-  for (start = last_str; *last_str != '\0'; last_str++) {
-    for (delim_p = delim; *delim_p != '\0'; delim_p++) {
-      if (*last_str == *delim_p) {
+  for (start = last_str; *last_str != '\0'; last_str++)
+    {
+    for (delim_p = delim; *delim_p != '\0'; delim_p++)
+      {
+      if (*last_str == *delim_p)
+        {
 	/* punch NULL and point last_str past it */
 	*last_str++ = '\0';
 	return start;
+        }
       }
     }
-  }
   
   /* reached the end of the string */
   return start;
-}
+  }
 #endif /* HAVE_STRTOK */
 
 
@@ -441,14 +440,17 @@ char *strpbrk(const char *s, const char *accept)
 
 #if HAVE_STRSEP != 1
 /*
- * If *str is NULL, return NULL.  Otherwise, this find the first token in the string *str, where tokens
- * are delimited by symbols in the string delim.  This token is terminated with a `\0' character (by
- * overwriting the delimiter) and *str is updated to point past the token.  If no delimiter is found,
- * the token is taken to be the entire string *str, and *str is made NULL.
+ * If *str is NULL, return NULL.  Otherwise, this find the first token
+ * in the string *str, where tokens are delimited by symbols in the
+ * string delim.  This token is terminated with a `\0' character (by
+ * overwriting the delimiter) and *str is updated to point past the
+ * token.  If no delimiter is found, the token is taken to be the
+ * entire string *str, and *str is made NULL.
  *
- * Returns a pointer to the token (i.e it returns the original value of *str)
+ * Returns a pointer to the token (i.e returns the original value of *str)
  *
- * The strsep() function was introduced as a replacement for strtok(), which cannot handle empty fields.
+ * The strsep() function was introduced as a replacement for strtok(),
+ * which cannot handle empty fields.
  */
 char *strsep(char **str, const char *delim)
   {
@@ -467,13 +469,18 @@ char *strsep(char **str, const char *delim)
 
 #if HAVE_STRCASECMP != 1
 int strcasecmp(const char *str0, const char *str1)
-{
-  for(; tolower(*str0)==tolower(*str1); str0++, str1++)
+  {
+
+  while( tolower(*str0)==tolower(*str1) )
+    {
     if(*str0=='\0')
       return 0;
+    str0++;
+    str1++;
+    }
 
   return tolower(*str0)-tolower(*str1);
-}
+  }
 #endif /* HAVE_STRCASECMP */
 
 
@@ -1492,66 +1499,6 @@ void dief(const char *format, ...)
   abort();
   }
 #endif /* HAVE_DIEF */
-
-
-#if HAVE_BASENAME != 1
-char *basename(char *path)
-  {
-  /* Search for the last directory separator in PATH.  */
-  char *basename = strrchr (path, '/');
-
-  /* If found, return the address of the following character,
-     or the start of the parameter passed in.  */
-  return basename ? ++basename : (char*)path;
-  }
-#endif /* HAVE_BASENAME */
-
-
-#if HAVE_READLINE != 1
-#ifndef BUFSIZ
-#  define BUFSIZ 256
-#endif
-
-char *readline(char *prompt)
-  {
-  int lim = BUFSIZ;
-  int i = 0;
-  int isdone = 0;
-  char *buf;
-
-  printf("%s", prompt);
-
-  buf = (char *) s_malloc(lim);
-
-  while (!isdone)
-    {
-      int c = getc (stdin);
-
-      switch (c)
-        {
-        case EOF:
-          isdone = 1;
-          break;
-
-        case '\n':
-          isdone = 1;
-          break;
-
-        default:
-          if (i == lim)
-            {
-              lim *= 2;
-              buf = (char *) s_realloc(buf, lim);
-            }
-          buf[i++] = (char) c;
-          break;
-        }
-    }
-  buf[i] = 0;
-
-  return *buf ? buf : NULL;
-  }
-#endif /* HAVE_READLINE */
 
 
 #if HAVE_STRSPN != 1

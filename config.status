@@ -424,10 +424,10 @@ ac_cv_func_snooze=no
 ac_cv_func_index=yes
 ac_cv_func_rindex=yes
 ac_cv_func_waitpid=yes
-ac_cv_func_readline=no
-ac_cv_func_gettimeofday=yes
+ac_cv_func_readline=
+ac_cv_func_gettimeofday=
 ac_cv_func_gethostname=yes
-ac_cv_func_basename=yes
+ac_cv_func_basename=
 
 gaul_header_stdbool_h=yes
 gaul__bool=yes
@@ -897,8 +897,8 @@ ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}""${ac_dD}
 ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1844${ac_dD}
 ${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}6${ac_dD}
-${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"16/07/03"${ac_dD}
+${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_dD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"23/07/03"${ac_dD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1844-6"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
@@ -955,12 +955,10 @@ ${ac_dA}HAVE_STRINGS_H${ac_dB}HAVE_STRINGS_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_FDOPEN${ac_dB}HAVE_FDOPEN${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_GETHOSTNAME${ac_dB}HAVE_GETHOSTNAME${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_GETPWUID${ac_dB}HAVE_GETPWUID${ac_dC}1${ac_dD}
-${ac_dA}HAVE_GETTIMEOFDAY${ac_dB}HAVE_GETTIMEOFDAY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SELECT${ac_dB}HAVE_SELECT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ATEXIT${ac_dB}HAVE_ATEXIT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ON_EXIT${ac_dB}HAVE_ON_EXIT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_WAITPID${ac_dB}HAVE_WAITPID${ac_dC}1${ac_dD}
-${ac_dA}HAVE_BASENAME${ac_dB}HAVE_BASENAME${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMCPY${ac_dB}HAVE_MEMCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMMOVE${ac_dB}HAVE_MEMMOVE${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMCHR${ac_dB}HAVE_MEMCHR${ac_dC}1${ac_dD}
@@ -968,12 +966,14 @@ ${ac_dA}HAVE_MEMMEM${ac_dB}HAVE_MEMMEM${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMCMP${ac_dB}HAVE_MEMCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_INDEX${ac_dB}HAVE_INDEX${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_RINDEX${ac_dB}HAVE_RINDEX${ac_dC}1${ac_dD}
-${ac_dA}HAVE_SETLOCALE${ac_dB}HAVE_SETLOCALE${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SINCOS${ac_dB}HAVE_SINCOS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SNPRINTF${ac_dB}HAVE_SNPRINTF${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCHR${ac_dB}HAVE_STRCHR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRRCHR${ac_dB}HAVE_STRRCHR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCAT${ac_dB}HAVE_STRCAT${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRCMP${ac_dB}HAVE_STRCMP${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRCPY${ac_dB}HAVE_STRCPY${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRPBRK${ac_dB}HAVE_STRPBRK${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -983,9 +983,6 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
-${ac_dA}HAVE_STRCMP${ac_dB}HAVE_STRCMP${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRCPY${ac_dB}HAVE_STRCPY${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRPBRK${ac_dB}HAVE_STRPBRK${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRSEP${ac_dB}HAVE_STRSEP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCASECMP${ac_dB}HAVE_STRCASECMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCASECMP${ac_dB}HAVE_STRNCASECMP${ac_dC}1${ac_dD}
@@ -1030,8 +1027,8 @@ ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}""${ac_uD}
 ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1844${ac_uD}
 ${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}6${ac_uD}
-${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"16/07/03"${ac_uD}
+${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0 2.4.20-19.9smp #1 SMP Tue Jul 15 17:04:18 EDT 2003 i686 i686 i386 GNU/Linux"${ac_uD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"23/07/03"${ac_uD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1844-6"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
@@ -1088,12 +1085,10 @@ ${ac_uA}HAVE_STRINGS_H${ac_uB}HAVE_STRINGS_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_FDOPEN${ac_uB}HAVE_FDOPEN${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_GETHOSTNAME${ac_uB}HAVE_GETHOSTNAME${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_GETPWUID${ac_uB}HAVE_GETPWUID${ac_uC}1${ac_uD}
-${ac_uA}HAVE_GETTIMEOFDAY${ac_uB}HAVE_GETTIMEOFDAY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SELECT${ac_uB}HAVE_SELECT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ATEXIT${ac_uB}HAVE_ATEXIT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ON_EXIT${ac_uB}HAVE_ON_EXIT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_WAITPID${ac_uB}HAVE_WAITPID${ac_uC}1${ac_uD}
-${ac_uA}HAVE_BASENAME${ac_uB}HAVE_BASENAME${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMCPY${ac_uB}HAVE_MEMCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMMOVE${ac_uB}HAVE_MEMMOVE${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMCHR${ac_uB}HAVE_MEMCHR${ac_uC}1${ac_uD}
@@ -1101,12 +1096,14 @@ ${ac_uA}HAVE_MEMMEM${ac_uB}HAVE_MEMMEM${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMCMP${ac_uB}HAVE_MEMCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_INDEX${ac_uB}HAVE_INDEX${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_RINDEX${ac_uB}HAVE_RINDEX${ac_uC}1${ac_uD}
-${ac_uA}HAVE_SETLOCALE${ac_uB}HAVE_SETLOCALE${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SINCOS${ac_uB}HAVE_SINCOS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SNPRINTF${ac_uB}HAVE_SNPRINTF${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCHR${ac_uB}HAVE_STRCHR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRRCHR${ac_uB}HAVE_STRRCHR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCAT${ac_uB}HAVE_STRCAT${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRCMP${ac_uB}HAVE_STRCMP${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRCPY${ac_uB}HAVE_STRCPY${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRPBRK${ac_uB}HAVE_STRPBRK${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1116,9 +1113,6 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
-${ac_uA}HAVE_STRCMP${ac_uB}HAVE_STRCMP${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRCPY${ac_uB}HAVE_STRCPY${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRPBRK${ac_uB}HAVE_STRPBRK${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRSEP${ac_uB}HAVE_STRSEP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCASECMP${ac_uB}HAVE_STRCASECMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCASECMP${ac_uB}HAVE_STRNCASECMP${ac_uC}1${ac_uD}

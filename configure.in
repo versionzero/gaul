@@ -566,16 +566,13 @@ AC_CHECK_HEADERS(pwd.h \
 # Check for some library functions, many of which GAUL doesn't use, but I
 # haven't gone though checking yet.
 #
-AC_CHECK_FUNCS(fdopen gethostname getpwuid gettimeofday select \
+AC_CHECK_FUNCS(fdopen gethostname getpwuid select \
                atexit on_exit \
                waitpid snooze \
-               basename \
-               readline \
                memcpy memmove memscan \
                memrev memchr memmem memcmp \
                min max \
                index rindex \
-               setlocale \
 	       sincos \
                snprintf \
                strchr strrchr strcat \

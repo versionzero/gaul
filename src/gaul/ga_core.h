@@ -116,8 +116,8 @@
 /*
  * Compilation constants.
  */
-#define GA_BOLTZMANN_FACTOR	1.38066e-23
-#define GA_TINY_DOUBLE		1.0e-9
+#define GA_BOLTZMANN_FACTOR	(1.38066e-23)
+#define GA_TINY_DOUBLE		(1.0e-9)
 
 /*
  * MPI message tags.
@@ -296,9 +296,9 @@ struct population_t
 /*
  * Constant definitions.
  */
-#define GA_MULTI_BIT_CHANCE	0.02
-#define GA_ELITISM_MULTIPLIER	0.05
-#define GA_ELITISM_CONSTANT	2.0
+#define GA_MULTI_BIT_CHANCE	(0.02)
+#define GA_ELITISM_MULTIPLIER	(0.05)
+#define GA_ELITISM_CONSTANT	(2.0)
 
 /* Define lower bound on fitness. */
 #define GA_MIN_FITNESS		DBL_MIN
