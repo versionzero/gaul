@@ -2096,7 +2096,8 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
   {
   int		i;
   int		count=0;
-  int		len=0, max_len=0;		/* Length of buffer to send. */
+  int		len=0;		/* Length of buffer to send. */
+  unsigned int	max_len=0;
   byte		*buffer=NULL;
 
 /*
