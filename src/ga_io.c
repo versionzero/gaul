@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_io - Disk I/O routines.
-  Copyright ©2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -219,7 +219,7 @@ static entity *gaul_read_entity_win32(HANDLE file, population *pop)
   if (!ReadFile(file, buffer, sizeof(unsigned int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
 
-  memcpy(&len, sizeof(unsigned int), sizeof(unsigned int));
+  memcpy(&len, buffer, sizeof(unsigned int));
 
   if (!ReadFile(file, buffer, len*sizeof(byte), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
@@ -673,16 +673,24 @@ population *ga_population_read(char *fname)
     }
 
   /* Presently ignored. */
-  if (!ReadFile(file, buffer, 64*sizeof(char), &nread, NULL) || nread > 0)
+  if (!ReadFile(file, buffer, 64*sizeof(char), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
 
 /*
  * Population info.
  */
-  fread(&size, sizeof(int), 1, fp);
-  fread(&stable_size, sizeof(int), 1, fp);
-  fread(&num_chromosomes, sizeof(int), 1, fp);
-  fread(&len_chromosomes, sizeof(int), 1, fp);
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&size, buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&stable_size, buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&num_chromosomes, buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&len_chromosomes, buffer, sizeof(int));
 
 /*
  * Allocate a new population structure.
@@ -697,12 +705,24 @@ population *ga_population_read(char *fname)
 /*
  * GA parameters.
  */
-  fread(&(pop->crossover_ratio), sizeof(double), 1, fp);
-  fread(&(pop->mutation_ratio), sizeof(double), 1, fp);
-  fread(&(pop->migration_ratio), sizeof(double), 1, fp);
-  fread(&(pop->scheme), sizeof(int), 1, fp);
-  fread(&(pop->elitism), sizeof(int), 1, fp);
-  fread(&(pop->island), sizeof(int), 1, fp);
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&crossover_ratio, buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&mutation_ratio, buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&migration_ratio, buffer, sizeof(double));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&scheme, buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&elitism, buffer, sizeof(int));
+  if (!ReadFile(file, buffer, sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&island, buffer, sizeof(int));
 
 /*
  * Callback handling.  Note that user-implemented functions currently
@@ -711,7 +731,9 @@ population *ga_population_read(char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  fread(id, sizeof(int), 18, fp);
+  if (!ReadFile(file, buffer, 18*sizeof(int), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
+  memcpy(&id, buffer, 18*sizeof(int));
 
   pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
   pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
@@ -755,7 +777,8 @@ population *ga_population_read(char *fname)
 /*
  * Footer info.
  */
-  fread(buffer, sizeof(char), 4, fp); 
+  if (!ReadFile(file, buffer, 4*sizeof(char), &nread, NULL) || nread < 1)
+    dief("Unable to read data.  Error %d\n", GetLastError());
   if (strcmp("END", buffer)!=0) die("Corrupt population file?");
 
 /*

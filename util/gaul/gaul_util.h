@@ -154,7 +154,11 @@ typedef void* vpointer;
 
 typedef const void *constvpointer;
 /* byte is already defined on win32 systems. */
-#ifndef byte
+#ifdef USE_WINDOWS_H
+# if USE_WINDOWS_H == 0
+typedef unsigned char byte;
+# endif
+#else
 typedef unsigned char byte;
 #endif
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul_config_win.h - GAUL configuration settings for windows.
-  Copyright ©2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -34,7 +34,7 @@
 #ifndef GAUL_CONFIG_WIN_H_INCLUDED
 #define GAUL_CONFIG_WIN_H_INCLUDED 1
 
-#define USE_WINDOWS_H 0
+#define USE_WINDOWS_H 1
 
 #if defined __CYGWIN32__ && !defined __CYGWIN__
 #  define __CYGWIN__ __CYGWIN32__
