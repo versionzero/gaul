@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -95,19 +95,6 @@ char *strchr(const char *str, int c);
 # endif
 #endif
 
-#if HAVE_STRRCHR != 1
-/* Some systems have rindex() instead */
-# if HAVE_RINDEX == 1
-#  define strrchr rindex
-# else
-char *strrchr(const char *str, int c);
-# endif
-#endif
-
-#if HAVE_STRCAT  != 1
-char *strcat(char *str1, const char *str2);
-#endif
-
 #if HAVE_STRLEN != 1
 size_t strlen(const char *str);
 #endif
@@ -126,10 +113,6 @@ char *strcpy(char *str1, const char *str2);
 
 #if HAVE_STRNCPY != 1
 char *strncpy(char *str1, const char *str2, size_t len);
-#endif
-
-#if HAVE_STRTOK != 1
-char *strtok(char *str, const char *delim);
 #endif
 
 #if HAVE_STRPBRK != 1
@@ -152,22 +135,6 @@ int strncasecmp(const char *str0, const char *str1, size_t n);
 void usleep(unsigned long usec);
 #endif
 
-#if HAVE_STRLCPY != 1
-size_t strlcpy(char *dest, const char *src, size_t n);
-#endif
-
-#if HAVE_STRLCAT != 1
-size_t strlcat(char *dest, const char *src, size_t n);
-#endif
-
-#if HAVE_SNPRINTF != 1
-int snprintf(char *str, size_t n, const char *format, ...);
-#endif
-
-#if HAVE_VSNPRINTF != 1
-int vsnprintf(char *str, size_t n, const char *format, va_list ap);
-#endif
-
 #if HAVE_MEMCPY != 1
 /* Some systems, such as SunOS do have BCOPY instead. */
 # if HAVE_BCOPY == 1
@@ -175,36 +142,6 @@ int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 # else
 void memcpy(char *dest, const char *src, size_t len);
 # endif
-#endif
-
-#if HAVE_MEMMOVE != 1
-/* Some systems, such as SunOS do have BCOPY instead. */
-# if HAVE_BCOPY == 1
-#  define memmove(A, B, C) bcopy((B), (A), (C))
-# else
-void *memmove(void *dst, const void *src, size_t bytes);
-# endif
-#endif
-
-#if HAVE_MEMSCAN != 1
-void *memscan(void *addr, int c, size_t size);
-#endif
-
-#if HAVE_MEMSET != 1
-void *memset(void *dst0, int c0, size_t bytes);
-#endif
-
-#if HAVE_MEMREV != 1
-void *memrev(void *src, size_t bytes);
-#endif
-
-#if HAVE_MEMCHR != 1
-void *memchr(const void *src, int c, size_t bytes);
-#endif
-
-#if HAVE_MEMMEM != 1
-void *memmem(const void *haystack, size_t haystack_len,
-           const void *needle,   size_t needle_len);
 #endif
 
 #if HAVE_MEMCMP != 1
@@ -224,31 +161,11 @@ char *strdup(const char *str);
 char *strndup(const char *str, size_t n);
 #endif
 
-#if HAVE_STRNFILL != 1
-char *strnfill(int length, char fill_char);
-#endif
-
-#if HAVE_STRCATV != 1
-char *strcatv(const char *string1, ...);
-#endif
-
-#if HAVE_STRREV != 1
-void strrev(char *string);
-#endif
-
 #if HAVE_DIEF != 1
 /*
  * HAVE_DIEF is set in "SAA_header.h", not "config.h"
  */
 void dief(const char *format, ...);
-#endif
-
-#if HAVE_STRSPN != 1
-size_t strspn(const char *string, const char *accept);
-#endif
-
-#if HAVE_STRCSPN != 1
-size_t strcspn(const char *string, const char *reject);
 #endif
 
 #if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )

@@ -29,26 +29,7 @@
 
 		Note that some of these functions are POSIX
 		compliant. Some are ANSI compliant.  Some are just
-		plain non-standard.  They do really need to be
-		tidied and rationalised.
-
-		Some of these functions come from or are based on code
-		from the following GPL'd project:
-
-		freeciv 1.11.0 http://www.freeciv.org/ copyright notice:
-
- ----------------------------------------------------------------------
- Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
- ----------------------------------------------------------------------
+		plain non-standard.
 
  **********************************************************************/
 
@@ -156,49 +137,6 @@ char *strchr(const char *str, int c)
 #endif /* HAVE_STRCHR */
 
 
-#if HAVE_STRRCHR != 1
-#if HAVE_RINDEX != 1
-/*
- * Find C in STR by searching backwards through the string
- */
-char *strrchr(const char *str, int c)
-  {
-  const char	*pntr = NULL;
-  
-  while ( *str != '\0' )
-    {
-    if (*str == (char)c)
-      pntr = (char *)str;
-    str++;
-    }
-  
-  if (c == '\0') return (char *)str;
-
-  return (char *)pntr;
-  }
-#endif /* HAVE_RINDEX */
-#endif /* HAVE_STRRCHR */
-
-
-#if HAVE_STRCAT != 1
-/*
- * Concatenate STR2 onto the end of STR1
- */
-char *strcat(char *str1, const char *str2)
-  {
-  char	*orig = str1;
-  
-  while ( *str != '\0' ) str1++;
-  
-  while (*str2 != '\0') *str1++ = *str2++;
-
-  *str1 = '\0';
-  
-  return orig;
-  }
-#endif /* HAVE_STRCAT */
-
-
 #if HAVE_STRLEN  != 1
 /*
  * Return the length in characters of STR
@@ -220,9 +158,10 @@ size_t strlen(const char *str)
 
 #if HAVE_STRCMP != 1
 /*
- * Compare str1 and str2.  It returns
- * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
- * or be greater than str2, respectively.
+ * Compare str1 and str2.
+ *
+ * It returns -1, 0 or 1 if str1 is found, to be less than, to be
+ * equal to, or be greater than str2, respectively.
  */
 int strcmp(const char *str1, const char *str2)
   {
@@ -240,9 +179,10 @@ int strcmp(const char *str1, const char *str2)
 
 #if HAVE_STRNCMP != 1
 /*
- * Compare at most len characters of str1 and str2.  It returns
- * -1, 0 or 1 if str1 is found, to be less than, to be equal to,
- * or be greater than str2, respectively.
+ * Compare at most len characters of str1 and str2.
+ *
+ * It returns -1, 0 or 1 if str1 is found, to be less than, to be
+ * equal to, or be greater than str2, respectively.
  */
 int strncmp(const char *str1, const char *str2, size_t len)
   {
@@ -264,7 +204,9 @@ int strncmp(const char *str1, const char *str2, size_t len)
 
 #if HAVE_STRCPY != 1
 /*
- * Copies STR2 to STR1.  Returns STR1.
+ * Copies str2 to str1.
+ *
+ * Returns str1.
  */
 char *strcpy(char *str1, const char *str2)
   {
@@ -287,7 +229,10 @@ char *strcpy(char *str1, const char *str2)
 
 #if HAVE_STRNCPY != 1
 /*
- * Copy STR2 to STR1 until LEN or null character in source.
+ * Copy str2 to str1 until len characters copied, or a null
+ * character is found in str2.
+ *
+ * Returns str1.
  */
 char	*strncpy(char *str1, const char *str2, size_t len)
   {
@@ -310,70 +255,6 @@ char	*strncpy(char *str1, const char *str2, size_t len)
   return str1;
   }
 #endif /* HAVE_STRNCPY */
-
-
-#if HAVE_STRTOK != 1
-/*
- * Get the next token from STR (pass in NULL on the 2nd, 3rd,
- * etc. calls), tokens are a list of characters deliminated by a
- * character from DELIM.  writes null into STR to end token.
- * This is not thread-safe.
- */
-char	*strtok(char *str, const char *delim)
-  {
-  static char	*last_str = "";
-  char		*start, *delim_p;
-  
-  /* no new strings to search? */
-  if (str != NULL)
-    {
-    last_str = str;
-    }
-  else
-    {
-    /* have we reached end of old one? */
-    if (*last_str == '\0')
-      return NULL;
-    }
-  
-  /* parse through starting token deliminators */
-  while ( *last_str != '\0' )
-    {
-    for (delim_p = delim; *delim_p != '\0'; delim_p++)
-      {
-      if (*last_str == *delim_p)
-	break;
-      }
-    last_str++;
-    }
-    
-    /* is the character NOT in the delim list? */
-    if (*delim_p == '\0')
-      break;
-    }
-  
-  /* did we reach the end? */
-  if (*last_str == '\0')
-    return NULL;
-  
-  /* now start parsing through the string, could be '\0' already */
-  for (start = last_str; *last_str != '\0'; last_str++)
-    {
-    for (delim_p = delim; *delim_p != '\0'; delim_p++)
-      {
-      if (*last_str == *delim_p)
-        {
-	/* punch NULL and point last_str past it */
-	*last_str++ = '\0';
-	return start;
-        }
-      }
-    }
-  
-  /* reached the end of the string */
-  return start;
-  }
-#endif /* HAVE_STRTOK */
 
 
 #if HAVE_STRPBRK != 1
@@ -497,309 +378,6 @@ void usleep(unsigned long usec)
 #endif /* HAVE_USLEEP */
 
 
-#if HAVE_STRLCPY != 1
-/**********************************************************************
- strlcpy() and strlcat() provide (non-standard) functions
- strlcpy() and strlcat(), with semantics following OpenBSD (and
- maybe others).  They are intended as more user-friendly
- versions of stncpy and strncat, in particular easier to
- use safely and correctly, and ensuring nul-terminated results
- while being able to detect truncation.
-
- n is the full size of the destination buffer, including
- space for trailing nul, and including the pre-existing
- string for mystrlcat().  Thus can eg use sizeof(buffer),
- or exact size malloc-ed.
-
- Result is always nul-terminated, whether or not truncation occurs,
- and the return value is the strlen the destination would have had
- without truncation.  Ie, a return value >= input n indicates
- truncation occured.
-
- Will assume that if configure found strlcpy/strlcat they are ok.
- For replacement implementations, will keep it simple rather
- than try for super-efficiency.
-
- Not sure about the asserts below, but they are easier than
- trying to ensure correct behaviour on strange inputs.
- In particular note that n == 0 is prohibited (eg, since there
- must at least be room for a nul); could consider other options.
-***********************************************************************/
-size_t strlcpy(char *dest, const char *src, size_t n)
-  {
-  size_t	len = strlen(src);
-  size_t	num_to_copy = (len >= n) ? n-1 : len;
-
-  assert(dest);
-  assert(src);
-  assert(n>0);
-
-  if (num_to_copy>0)
-    memcpy(dest, src, num_to_copy);
-  dest[num_to_copy] = '\0';
-
-  return len;
-  }
-#endif /* HAVE_STRLCPY */
-
-
-#if HAVE_STRLCAT != 1
-size_t strlcat(char *dest, const char *src, size_t n)
-  {
-  size_t	num_to_copy;
-  size_t	len_src;
-  size_t	len_dest = strlen(dest);
-
-  assert(dest);
-  assert(src);
-  assert(n>0);
-  assert(len_dest<n);
-  /* Otherwise have bad choice of leaving dest not null-terminated
-   * within the specified length n (which should be assumable as
-   * a post-condition of mystrlcat), or modifying dest before end
-   * of existing string (which breaks strcat semantics).
-   */
-       
-  dest += len_dest;
-  n -= len_dest;
-    
-  len_src = strlen(src);
-  num_to_copy = (len_src >= n) ? n-1 : len_src;
-  if (num_to_copy>0)
-    memcpy(dest, src, num_to_copy);
-  dest[num_to_copy] = '\0';
-
-  return len_dest + len_src;
-  }
-#endif /* HAVE_STRLCAT */
-
-
-#if HAVE_VSNPRINTF != 1
-/**********************************************************************
- Convenience function used by check_native_vsnprintf() below.
- (Can test check_native_vsnprintf() by replacing vsnprintf call
- below with vsprintf(), or by changing return value to eg -1.)
-***********************************************************************/
-static int test_snprintf(char *str, size_t n, const char *format, ...)
-  {
-  int ret;
-  va_list ap;
-
-  va_start(ap, format);
-  ret = vsnprintf(str, n, format, ap);
-  va_end(ap);
-  return ret;
-  }
-
-/**********************************************************************
- This function checks, at runtime, whether a native vsnprintf() meets
- our requirements; specifically:
- - Should actually obey the parameter n, rather than, eg, just
-   calling sprintf and ignoring n.
- - On truncation, should return the number of chars (not counting
-   trailing null) which would have been printed, rather than, eg, -1.
- Returns 1 if both ok.
- Also checks whether null-terminates on truncation, but we don't
- base return value on this since it is easy to force this behaviour.
- Reports to stderr if DEBUG set (cannot use freelog since that
- calls my_vsnprintf).
- Could do these checks at configure time, but seems to me easier to
- do at runtime on first call...
-***********************************************************************/
-static int check_native_vsnprintf(void)
-  {
-  char buf[20]   = "abcdefghijkl";   /* 12 + null */
-  char *test_str = "0123456789";
-  const int ntrunc = 5;
-  const char one_past = buf[ntrunc];
-  int test_len = strlen(test_str);
-  int ret;
-
-  ret = test_snprintf(buf, ntrunc, "%s", test_str);
-#if DEBUG
-  if (buf[ntrunc] != one_past) {
-    fprintf(stderr, "debug: test_snprintf wrote past n\n");
-  } else if (buf[ntrunc-1] != '\0') {
-    fprintf(stderr, "debug: test_snprintf did not null-terminate\n");
-  }
-  if (ret != test_len) {
-    fprintf(stderr, "debug: test_snprintf returned %d,"
-	    " not untruncated length %d\n", ret, test_len);
-  }
-#endif
-
-  return (buf[ntrunc]==one_past && ret==test_len);
-  }
-
-
-/**********************************************************************
- vsnprintf() replacement using a big malloc()ed internal buffer,
- originally by David Pfitzner <dwp@mso.anu.edu.au>
-
- Parameter n specifies the maximum number of characters to produce.
- This includes the trailing null, so n should be the actual number
- of characters allocated (or sizeof for char array).  If truncation
- occurs, the result will still be null-terminated.  (I'm not sure
- whether all native vsnprintf() functions null-terminate on
- truncation; this does so even if calls native function.)
-
- Return value: if there is no truncation, returns the number of
- characters printed, not including the trailing null.  If truncation
- does occur, returns the number of characters which would have been
- produced without truncation.
- (Linux man page says returns -1 on truncation, but glibc seems to
- do as above nevertheless; check_native_vsnprintf() above tests this.)
-
- The method is simply to malloc (first time called) a big internal
- buffer, longer than any result is likely to be (for non-malicious
- usage), then vsprintf to that buffer, and copy the appropriate
- number of characters to the destination.  Thus, this is not 100%
- safe.  But somewhat safe, and at least safer than using raw snprintf!
- :-) (And of course if you have the native version it is safe.)
-
- Before rushing to provide a 100% safe replacement version, consider
- the following advantages of this method:
- 
- - It is very simple, so not likely to have many bugs (other than
- arguably the core design bug regarding absolute safety), nor need
- maintenance.
-
- - It uses native vsprintf() (which is required), thus exactly
- duplicates the native format-string parsing/conversions.
-
- - It is *very* portable.  Eg, it does not require mprotect(), nor
- does it do any of its own parsing of the format string, nor use
- any tricks to go through the va_list twice.
-
-***********************************************************************/
-
-/* buffer size: "64k should be big enough for anyone" ;-) */
-#define VSNP_BUF_SIZE (64*1024)
-
-int my_vsnprintf(char *str, size_t n, const char *format, va_list ap)
-{
-  /* This may be overzealous, but I suspect any triggering of these
-   * to be bugs.  (Do this even if call native function.)
-   */
-  assert(str);
-  assert(n>0);
-  assert(format);
-
-#if HAVE_VSNPRINTF == 1
-  {
-    static int native_is_ok = -1; /* set to 0 or 1 on first call */
-
-    if (native_is_ok == -1) {
-      native_is_ok = check_native_vsnprintf();
-    }
-
-    if (native_is_ok) {
-      int ret = vsnprintf(str, n, format, ap);
-      /* Guarantee null-terminated: (native_is_ok means can use ret like this) */
-      if (ret >= n) {
-	str[n-1] = '\0';
-      }
-      return ret;
-    }
-  }
-#endif
-  /* Following is used if don't have native, or if fall through
-   * from above if native doesn't pass checks.
-   */
-  {
-    static char *buf = NULL;
-    int len;
-
-    if (buf==NULL) {
-      buf = s_malloc(VSNP_BUF_SIZE);
-    }
-
-#if HAVE_VSNPRINTF == 1
-    /* This occurs if have native, but didn't pass check:
-     * may just be that native doesn't give the right return,
-     * in which case may be slightly safer to use it here:
-     */
-    vsnprintf(buf, VSNP_BUF_SIZE, format, ap);
-#else
-    vsprintf(buf, format, ap);
-#endif
-
-    /* Check strlen of buf straight away: could be more efficient
-       not to do this and step through instead (eg if n small and
-       len long), but useful anyway to get the return value, and
-       importantly want to abort if vsprintf clobbered the heap!
-       (Don't just use return from vsprintf since not sure if
-       that gives the right thing on all platforms?)
-       Will maintain last char of buffer as null, and use SIZE-2
-       as longest string which we can detect as untruncated.
-       (Don't use freelog() for report since that uses vsnprintf...)
-    */
-    buf[VSNP_BUF_SIZE-1] = '\0';
-    len = strlen(buf);
-    if (len >= VSNP_BUF_SIZE-1) {
-      fprintf(stderr, "Overflow in vsnprintf replacement!"
-	      " (buffer size %d) aborting...\n", VSNP_BUF_SIZE);
-      abort();
-    }
-
-    if (n > len) {
-      memcpy(str, buf, len+1);	/* +1 for terminating null */
-      return len;
-    } else {
-      memcpy(str, buf, n-1);
-      str[n-1] = '\0';
-      return len;		/* truncated */
-    }
-  }
-}
-#endif
-
-
-#if HAVE_SNPRINTF != 1
-int snprintf(char *str, size_t n, const char *format, ...)
-  {
-  int ret;
-  va_list ap;
-
-  assert(format);
-  
-  va_start(ap, format);
-  ret = my_vsnprintf(str, n, format, ap);
-  va_end(ap);
-  return ret;
-  }
-#endif /* HAVE_SNPRINTF */
-
-
-#if HAVE_VSNPRINTF != 1
-int vsnprintf(char *str, size_t n, const char *format, va_list ap)
-  {
-  return my_vsnprintf(str, n, format, ap);
-  }
-#endif /* HAVE_VSNPRINTF */
-
-
-#if HAVE_MEMSCAN != 1
-/*
- * Find a character in an area of memory.
- * Returns the address of the first occurrence of c, or 1 byte past the area if c is not found.
- */
-void *memscan(void *addr, int c, size_t size)
-  {
-  unsigned char *p = (unsigned char*)addr;
-
-  while(size)
-    {
-    if(*p == c) return (void*)p;
-    p++;
-    size--;
-    }
-
-  return (void*)p;
-  }
-#endif /* HAVE_MEMSCAN */
-
-
 #if HAVE_MEMSET != 1
 /*
  * Set LEN characters in STR to character C
@@ -818,6 +396,37 @@ void *memset(void *str, int c, size_t len)
 #else
 
 /* Optimised version */
+/*
+ * Copyright (c) 1990, 1993
+ *      The Regents of the University of California.  All rights reserved.
+ *
+ * This code is derived from software contributed to Berkeley by
+ * Mike Hibler and Chris Torek.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
 void *memset(void *dst0, int c0, size_t bytes)
   {
     size_t t;
@@ -877,53 +486,6 @@ void *memset(void *dst0, int c0, size_t bytes)
 #endif
 #endif /* HAVE_MEMSET */
 
-#if HAVE_MEMMOVE != 1
-#if HAVE_BCOPY != 1
-/*
- * Some systems, such as SunOS do have BCOPY instead.
- * In which case this is defined as a macro in the header.
- */
-void *memmove(void *dst, const void *src, size_t bytes)
-  {
-  unsigned char *dst_p;
-  const unsigned char *src_p;
-
-  if (src == NULL || dst == NULL) return NULL;
-
-  if (dst > src)
-    {	/* To avoid dodgy overwrites must go high to low */
-    src_p = src + bytes;
-    dst_p = dst + bytes;
-    while (bytes-- > 0) *--dst_p = *--src_p;
-    }
-  else if (dst < src)
-    {	/* To avoid dodgy overwrites must go low to high */
-    src_p = src;
-    dst_p = dst;
-    while (bytes-- > 0) *dst_p++ = *src_p++;
-    }
-
-  return dst;
-  }
-#endif /* HAVE_BCOPY */
-#endif /* HAVE_MEMMOVE */
-
-
-#if HAVE_MEMREV != 1
-void *memrev(void *src, size_t bytes)
-  {
-  unsigned char *p1;
-  unsigned char *p2;
-  unsigned char c;
-
-  p1 = (unsigned char *)src;
-  p2 = (unsigned char *)src + bytes;
-  while (p1 < p2) c = *p1, *p1++ = *p2, *p2-- = c;
-
-  return src;
-  }
-#endif /* HAVE_MEMREV */
-
 
 #if HAVE_MEMCMP != 1
 #if HAVE_BCMP != 1
@@ -976,92 +538,6 @@ char *strndup(const char *str, size_t n)
 #endif /* HAVE_STRNDUP */
 
 
-#if HAVE_STRNFILL != 1
-char *strnfill(int length, char fill_char)
-  {
-  char *str, *s, *end;
-
-  str = s_malloc(sizeof(char)*(length+1));
-
-  s = str;
-  end = str + length;
-  while(s < end)
-    *(s++) = fill_char;
-
-  *s = '\0';
-
-  return str;
-  }
-#endif /* HAVE_STRNFILL */
-
-
-#if HAVE_STRCATV != 1
-char *strcatv(const char *string1, ...)
-  {
-  int	  l;
-  va_list args;
-  char	  *s;
-  char	  *concat;
-
-  if (!string1) return NULL;
-
-  l = 1 + strlen(string1);
-  va_start(args, string1);
-  s = va_arg(args, char*);
-  while(s)
-    {
-    l += strlen(s);
-    s = va_arg(args, char*);
-    }
-  va_end(args);
-
-  concat = s_malloc(sizeof(char)*l);
-  concat[0] = 0;
-
-  strcat(concat, string1);
-  va_start(args, string1);
-  s = va_arg(args, char*);
-  while(s)
-    {
-    strcat(concat, s);
-    s = va_arg(args, char*);
-    }
-  va_end(args);
-
-  return concat;
-  }
-#endif /* HAVE_STRCATV */
-
-
-#if HAVE_STRREV != 1
-void strrev(char *string)
-  {
-  if (!string) return;
-
-  if (*string)
-    {
-    char *h, *t;
-
-    h = string;
-    t = string + strlen(string) - 1;
-
-    while(h < t)
-      {
-      char c;
-
-      c = *h;
-      *h = *t;
-      h++;
-      *t = c;
-      t--;
-      }
-    }
-
-  return;
-  }
-#endif /* HAVE_STRREV */
-
-
 #if HAVE_DIEF != 1
 /*
  * Needed as a function because many compilers don't use vararg macros.
@@ -1080,46 +556,6 @@ void dief(const char *format, ...)
   abort();
   }
 #endif /* HAVE_DIEF */
-
-
-#if HAVE_STRSPN != 1
-/*
- * The strspn() function calculates the length of the initial segment of s which
- * consists entirely of characters in accept.
- */
-size_t strspn(const char *string, const char *accept)
-  {
-  size_t count = 0;
-
-  while (strchr(accept, *string)!=0)
-    {
-    count++;
-    string++;
-    }
-
-  return count;
-  }
-#endif /* HAVE_STRSPN */
-
-
-#if HAVE_STRCSPN != 1
-/*
- * The  strcspn()  function  calculates  the  length  of the initial segment of s which
- * consists entirely of characters not in reject.
- */
-size_t strcspn(const char *string, const char *reject)
-  {
-  size_t count = 0;
-
-  while (strchr(reject, *string) == 0)
-    {
-    count++;
-    string++;
-    }
-
-  return count;
-  }
-#endif /* HAVE_STRCSPN */
 
 
 #if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )

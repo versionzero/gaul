@@ -668,25 +668,18 @@ AC_CHECK_HEADERS(pwd.h \
 		 string.h strings.h)
 
 #
-# Check for some library functions, many of which GAUL doesn't use, but I
-# haven't gone though checking yet.
+# Check for some library functions which, if missing, we have replacements for.
+# NB/ Some further functions are checked below.
 #
-AC_CHECK_FUNCS(fdopen gethostname getpwuid select \
-               atexit on_exit \
+AC_CHECK_FUNCS(gethostname \
                waitpid snooze \
-               memcpy memmove memscan \
-               memrev memchr memmem memcmp \
+               memcpy memcmp \
                min max \
-               index rindex \
+               index \
 	       sincos \
-               snprintf \
-               strchr strrchr strcat \
-               strcmp strcpy strpbrk strsep \
+               strchr strcmp strcpy strpbrk strsep \
                strcasecmp strncasecmp \
-               strdup strndup \
-               strnfill strcatv strrev \
-               strspn strcspn \
-               strlcat strlcpy strstr vsnprintf)
+               strdup strndup )
 
 #
 # Some dodgy work-arounds.
@@ -702,21 +695,19 @@ if test "x$CC" = "xcc"; then
     AC_DEFINE(HAVE_STRLEN,1,[Whether strlen() is available])
     AC_DEFINE(HAVE_STRNCMP,1,[Whether strncmp() is available])
     AC_DEFINE(HAVE_STRNCPY,1,[Whether strncpy() is available])
-    AC_DEFINE(HAVE_STRTOD,1,[Whether strtod() is available])
-    AC_DEFINE(HAVE_STRTOK,1,[Whether strtok() is available])
     AC_DEFINE(HAVE_MEMSET,1,[Whether memset() is available])
     AC_DEFINE(HAVE_USLEEP,1,[Whether usleep() is available])
   elif test "x$target" = "xsparc-sun-solaris2.8"; then
     AC_DEFINE( SUN_FORTE_C, 2.8, [Define if using Sun's Forte C Compiler] )
-    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
   else
     AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
-    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
   fi
 else
 # Don't recognise compiler as possibly being Sun's Forte C.
   AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
-  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy strtod strtok memset usleep)
+  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
 fi
 
 #
@@ -923,11 +914,6 @@ _EOF_
     else
       echo '#define HAVE_MEMCPY 0' >> $tmpfile
     fi
-    if test "x$ac_cv_func_memmove" = "xyes"; then
-      echo '#define HAVE_MEMMOVE 1' >> $tmpfile
-    else
-      echo '#define HAVE_MEMMOVE 0' >> $tmpfile
-    fi
     if test "x$ac_cv_func_min" = "xyes"; then
       echo '#define HAVE_MIN 1' >> $tmpfile
     else
@@ -973,6 +959,21 @@ _EOF_
     else
       echo '#define HAVE_STRNCMP 0' >> $tmpfile
     fi
+    if test "x$ac_cv_func_strlen" = "xyes"; then
+      echo '#define HAVE_STRLEN 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRLEN 0' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strpbrk" = "xyes"; then
+      echo '#define HAVE_STRPBRK 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRPBRK 0' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_strsep" = "xyes"; then
+      echo '#define HAVE_STRSEP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRSEP 0' >> $tmpfile
+    fi
     if test "x$ac_cv_func_strcasecmp" = "xyes"; then
       echo '#define HAVE_STRCASECMP 1' >> $tmpfile
     else
@@ -998,35 +999,25 @@ _EOF_
     else
       echo '#define HAVE_INDEX 0' >> $tmpfile
     fi
-    if test "x$ac_cv_func_rindex" = "xyes"; then
-      echo '#define HAVE_RINDEX 1' >> $tmpfile
-    else
-      echo '#define HAVE_RINDEX 0' >> $tmpfile
-    fi
     if test "x$ac_cv_func_waitpid" = "xyes"; then
       echo '#define HAVE_WAITPID 1' >> $tmpfile
     else
       echo '#define HAVE_WAITPID 0' >> $tmpfile
-    fi
-    if test "x$ac_cv_func_readline" = "xyes"; then
-      echo '#define HAVE_READLINE 1' >> $tmpfile
-    else
-      echo '#define HAVE_READLINE 0' >> $tmpfile
-    fi
-    if test "x$ac_cv_func_gettimeofday" = "xyes"; then
-      echo '#define HAVE_GETTIMEOFDAY 1' >> $tmpfile
-    else
-      echo '#define HAVE_GETTIMEOFDAY 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_gethostname" = "xyes"; then
       echo '#define HAVE_GETHOSTNAME 1' >> $tmpfile
     else
       echo '#define HAVE_GETHOSTNAME 0' >> $tmpfile
     fi
-    if test "x$ac_cv_func_basename" = "xyes"; then
-      echo '#define HAVE_BASENAME 1' >> $tmpfile
+    if test "x$ac_cv_func_bcmp" = "xyes"; then
+      echo '#define HAVE_BCMP 1' >> $tmpfile
     else
-      echo '#define HAVE_BASENAME 0' >> $tmpfile
+      echo '#define HAVE_BCMP 0' >> $tmpfile
+    fi
+    if test "x$ac_cv_func_bcopy" = "xyes"; then
+      echo '#define HAVE_BCOPY 1' >> $tmpfile
+    else
+      echo '#define HAVE_BCOPY 0' >> $tmpfile
     fi
 
     if test "x$MEMORY_CHUNKS_MIMIC" = "x1"; then
@@ -1083,8 +1074,6 @@ _EOF_
 #define HAVE_STRSIGNAL 1
 #define HAVE_VSNPRINTF 1
 #define HAVE_SNPRINTF 1
-#define HAVE_BCOPY 1
-#define HAVE_BCMP 1
 #define HAVE_STRLEN 1
 #define HAVE_STRNCPY 1
 #define HAVE_STRTOD 1
@@ -1141,11 +1130,15 @@ ac_cv_header_unistd_h=$ac_cv_header_unistd_h
 ac_cv_header_string_h=$ac_cv_header_string_h
 ac_cv_header_strings_h=$ac_cv_header_strings_h
 
+ac_cv_func_bcmp=$ac_cv_func_bcmp
+ac_cv_func_bcopy=$ac_cv_func_bcopy
+ac_cv_func_gethostname=$ac_cv_func_gethostname
+ac_cv_func_index=$ac_cv_func_index
 ac_cv_func_memcpy=$ac_cv_func_memcpy
-ac_cv_func_memmove=$ac_cv_func_memmove
 ac_cv_func_min=$ac_cv_func_min
 ac_cv_func_max=$ac_cv_func_max
 ac_cv_func_sincos=$ac_cv_func_sincos
+ac_cv_func_snooze=$ac_cv_func_snooze
 ac_cv_func_strdup=$ac_cv_func_strdup
 ac_cv_func_strndup=$ac_cv_func_strndup
 ac_cv_func_strcpy=$ac_cv_func_strcpy
@@ -1154,15 +1147,11 @@ ac_cv_func_strcmp=$ac_cv_func_strcmp
 ac_cv_func_strncmp=$ac_cv_func_strncmp
 ac_cv_func_strcasecmp=$ac_cv_func_strcasecmp
 ac_cv_func_strncasecmp=$ac_cv_func_strncasecmp
+ac_cv_func_strlen=$ac_cv_func_strlen
+ac_cv_func_strpbrk=$ac_cv_func_strpbrk
+ac_cv_func_strsep=$ac_cv_func_strsep
 ac_cv_func_usleep=$ac_cv_func_usleep
-ac_cv_func_snooze=$ac_cv_func_snooze
-ac_cv_func_index=$ac_cv_func_index
-ac_cv_func_rindex=$ac_cv_func_rindex
 ac_cv_func_waitpid=$ac_cv_func_waitpid
-ac_cv_func_readline=$ac_cv_func_readline
-ac_cv_func_gettimeofday=$ac_cv_func_gettimeofday
-ac_cv_func_gethostname=$ac_cv_func_gethostname
-ac_cv_func_basename=$ac_cv_func_basename
 
 gaul_header_stdbool_h=$gaul_header_stdbool_h
 gaul__bool=$gaul__bool

@@ -39,9 +39,6 @@
 /* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
 
-/* Define to 1 if you have the `atexit' function. */
-#undef HAVE_ATEXIT
-
 /* Define to 1 if you have the `bcmp' function. */
 #undef HAVE_BCMP
 
@@ -51,14 +48,8 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if you have the `fdopen' function. */
-#undef HAVE_FDOPEN
-
 /* Define to 1 if you have the `gethostname' function. */
 #undef HAVE_GETHOSTNAME
-
-/* Define to 1 if you have the `getpwuid' function. */
-#undef HAVE_GETPWUID
 
 /* Define to 1 if you have the `index' function. */
 #undef HAVE_INDEX
@@ -75,29 +66,14 @@
 /* Define to 1 if you have the `max' function. */
 #undef HAVE_MAX
 
-/* Define to 1 if you have the `memchr' function. */
-#undef HAVE_MEMCHR
-
 /* Define to 1 if you have the `memcmp' function. */
 #undef HAVE_MEMCMP
 
 /* Define to 1 if you have the `memcpy' function. */
 #undef HAVE_MEMCPY
 
-/* Define to 1 if you have the `memmem' function. */
-#undef HAVE_MEMMEM
-
-/* Define to 1 if you have the `memmove' function. */
-#undef HAVE_MEMMOVE
-
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
-
-/* Define to 1 if you have the `memrev' function. */
-#undef HAVE_MEMREV
-
-/* Define to 1 if you have the `memscan' function. */
-#undef HAVE_MEMSCAN
 
 /* Define to 1 if you have the `memset' function. */
 #undef HAVE_MEMSET
@@ -108,20 +84,11 @@
 /* Whether to use MPI for parallel code. */
 #undef HAVE_MPI
 
-/* Define to 1 if you have the `on_exit' function. */
-#undef HAVE_ON_EXIT
-
 /* Whether libpthread is installed. */
 #undef HAVE_PTHREADS
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H
-
-/* Define to 1 if you have the `rindex' function. */
-#undef HAVE_RINDEX
-
-/* Define to 1 if you have the `select' function. */
-#undef HAVE_SELECT
 
 /* Define to 1 if you have the `sincos' function. */
 #undef HAVE_SINCOS
@@ -131,9 +98,6 @@
 
 /* Define to 1 if you have the `snooze' function. */
 #undef HAVE_SNOOZE
-
-/* Define to 1 if you have the `snprintf' function. */
-#undef HAVE_SNPRINTF
 
 /* Define if you have a working <stdbool.h> header file. */
 #undef HAVE_STDBOOL_H
@@ -147,12 +111,6 @@
 /* Define to 1 if you have the `strcasecmp' function. */
 #undef HAVE_STRCASECMP
 
-/* Define to 1 if you have the `strcat' function. */
-#undef HAVE_STRCAT
-
-/* Define to 1 if you have the `strcatv' function. */
-#undef HAVE_STRCATV
-
 /* Define to 1 if you have the `strchr' function. */
 #undef HAVE_STRCHR
 
@@ -162,9 +120,6 @@
 /* Define to 1 if you have the `strcpy' function. */
 #undef HAVE_STRCPY
 
-/* Define to 1 if you have the `strcspn' function. */
-#undef HAVE_STRCSPN
-
 /* Define to 1 if you have the `strdup' function. */
 #undef HAVE_STRDUP
 
@@ -173,12 +128,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
-
-/* Define to 1 if you have the `strlcat' function. */
-#undef HAVE_STRLCAT
-
-/* Define to 1 if you have the `strlcpy' function. */
-#undef HAVE_STRLCPY
 
 /* Define to 1 if you have the `strlen' function. */
 #undef HAVE_STRLEN
@@ -195,32 +144,11 @@
 /* Define to 1 if you have the `strndup' function. */
 #undef HAVE_STRNDUP
 
-/* Define to 1 if you have the `strnfill' function. */
-#undef HAVE_STRNFILL
-
 /* Define to 1 if you have the `strpbrk' function. */
 #undef HAVE_STRPBRK
 
-/* Define to 1 if you have the `strrchr' function. */
-#undef HAVE_STRRCHR
-
-/* Define to 1 if you have the `strrev' function. */
-#undef HAVE_STRREV
-
 /* Define to 1 if you have the `strsep' function. */
 #undef HAVE_STRSEP
-
-/* Define to 1 if you have the `strspn' function. */
-#undef HAVE_STRSPN
-
-/* Define to 1 if you have the `strstr' function. */
-#undef HAVE_STRSTR
-
-/* Define to 1 if you have the `strtod' function. */
-#undef HAVE_STRTOD
-
-/* Define to 1 if you have the `strtok' function. */
-#undef HAVE_STRTOK
 
 /* Define to 1 if you have the <sys/select.h> header file. */
 #undef HAVE_SYS_SELECT_H
@@ -248,9 +176,6 @@
 
 /* Define to 1 if you have the <values.h> header file. */
 #undef HAVE_VALUES_H
-
-/* Define to 1 if you have the `vsnprintf' function. */
-#undef HAVE_VSNPRINTF
 
 /* Define to 1 if you have the `waitpid' function. */
 #undef HAVE_WAITPID

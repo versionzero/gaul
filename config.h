@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "14/06/04"
+#define GA_BUILD_DATE_STRING "20/06/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,16 +32,13 @@
 #define GA_PATCH_VERSION 8
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
+#define GA_UNAME_STRING "Linux 66-75-244-109.san.rr.com 2.4.22-1.2188.nptl #1 Wed Apr 21 20:36:05 EDT 2004 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
 #define GA_VERSION_STRING "0.1846-8"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
-
-/* Define to 1 if you have the `atexit' function. */
-#define HAVE_ATEXIT 1
 
 /* Define to 1 if you have the `bcmp' function. */
 #define HAVE_BCMP 1
@@ -52,14 +49,8 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
-/* Define to 1 if you have the `fdopen' function. */
-#define HAVE_FDOPEN 1
-
 /* Define to 1 if you have the `gethostname' function. */
 #define HAVE_GETHOSTNAME 1
-
-/* Define to 1 if you have the `getpwuid' function. */
-#define HAVE_GETPWUID 1
 
 /* Define to 1 if you have the `index' function. */
 #define HAVE_INDEX 1
@@ -76,29 +67,14 @@
 /* Define to 1 if you have the `max' function. */
 /* #undef HAVE_MAX */
 
-/* Define to 1 if you have the `memchr' function. */
-#define HAVE_MEMCHR 1
-
 /* Define to 1 if you have the `memcmp' function. */
 #define HAVE_MEMCMP 1
 
 /* Define to 1 if you have the `memcpy' function. */
 #define HAVE_MEMCPY 1
 
-/* Define to 1 if you have the `memmem' function. */
-#define HAVE_MEMMEM 1
-
-/* Define to 1 if you have the `memmove' function. */
-#define HAVE_MEMMOVE 1
-
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
-
-/* Define to 1 if you have the `memrev' function. */
-/* #undef HAVE_MEMREV */
-
-/* Define to 1 if you have the `memscan' function. */
-/* #undef HAVE_MEMSCAN */
 
 /* Define to 1 if you have the `memset' function. */
 #define HAVE_MEMSET 1
@@ -109,20 +85,11 @@
 /* Whether to use MPI for parallel code. */
 #define HAVE_MPI 0
 
-/* Define to 1 if you have the `on_exit' function. */
-#define HAVE_ON_EXIT 1
-
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
-
-/* Define to 1 if you have the `rindex' function. */
-#define HAVE_RINDEX 1
-
-/* Define to 1 if you have the `select' function. */
-#define HAVE_SELECT 1
 
 /* Define to 1 if you have the `sincos' function. */
 #define HAVE_SINCOS 1
@@ -132,9 +99,6 @@
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
-
-/* Define to 1 if you have the `snprintf' function. */
-#define HAVE_SNPRINTF 1
 
 /* Define if you have a working <stdbool.h> header file. */
 #define HAVE_STDBOOL_H 1
@@ -148,12 +112,6 @@
 /* Define to 1 if you have the `strcasecmp' function. */
 #define HAVE_STRCASECMP 1
 
-/* Define to 1 if you have the `strcat' function. */
-#define HAVE_STRCAT 1
-
-/* Define to 1 if you have the `strcatv' function. */
-/* #undef HAVE_STRCATV */
-
 /* Define to 1 if you have the `strchr' function. */
 #define HAVE_STRCHR 1
 
@@ -163,9 +121,6 @@
 /* Define to 1 if you have the `strcpy' function. */
 #define HAVE_STRCPY 1
 
-/* Define to 1 if you have the `strcspn' function. */
-#define HAVE_STRCSPN 1
-
 /* Define to 1 if you have the `strdup' function. */
 #define HAVE_STRDUP 1
 
@@ -174,12 +129,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
-
-/* Define to 1 if you have the `strlcat' function. */
-/* #undef HAVE_STRLCAT */
-
-/* Define to 1 if you have the `strlcpy' function. */
-/* #undef HAVE_STRLCPY */
 
 /* Define to 1 if you have the `strlen' function. */
 #define HAVE_STRLEN 1
@@ -196,32 +145,11 @@
 /* Define to 1 if you have the `strndup' function. */
 #define HAVE_STRNDUP 1
 
-/* Define to 1 if you have the `strnfill' function. */
-/* #undef HAVE_STRNFILL */
-
 /* Define to 1 if you have the `strpbrk' function. */
 #define HAVE_STRPBRK 1
 
-/* Define to 1 if you have the `strrchr' function. */
-#define HAVE_STRRCHR 1
-
-/* Define to 1 if you have the `strrev' function. */
-/* #undef HAVE_STRREV */
-
 /* Define to 1 if you have the `strsep' function. */
 #define HAVE_STRSEP 1
-
-/* Define to 1 if you have the `strspn' function. */
-#define HAVE_STRSPN 1
-
-/* Define to 1 if you have the `strstr' function. */
-#define HAVE_STRSTR 1
-
-/* Define to 1 if you have the `strtod' function. */
-#define HAVE_STRTOD 1
-
-/* Define to 1 if you have the `strtok' function. */
-#define HAVE_STRTOK 1
 
 /* Define to 1 if you have the <sys/select.h> header file. */
 #define HAVE_SYS_SELECT_H 1
@@ -249,9 +177,6 @@
 
 /* Define to 1 if you have the <values.h> header file. */
 #define HAVE_VALUES_H 1
-
-/* Define to 1 if you have the `vsnprintf' function. */
-#define HAVE_VSNPRINTF 1
 
 /* Define to 1 if you have the `waitpid' function. */
 #define HAVE_WAITPID 1
