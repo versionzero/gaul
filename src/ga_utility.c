@@ -81,7 +81,7 @@ void ga_diagnostics(void)
 
 
 /**********************************************************************
-  ga_genesis()
+  ga_genesis_int()
   synopsis:	High-level function to create a new population and
 		perform the basic setup (i.e. initial seeding) required
 		for further optimisation and manipulation.
@@ -91,10 +91,10 @@ void ga_diagnostics(void)
 		Integer-valued chromsomes.
   parameters:
   return:	population, or NULL on failure.
-  last updated:	13/06/01
+  last updated:	18 Dec 2001
  **********************************************************************/
 
-population *ga_genesis(	const int		population_size,
+population *ga_genesis_int(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -167,6 +167,42 @@ population *ga_genesis(	const int		population_size,
     }
 
   return pop;
+  }
+
+
+/**********************************************************************
+  ga_genesis()
+  synopsis:	High-level function to create a new population and
+		perform the basic setup (i.e. initial seeding) required
+		for further optimisation and manipulation.
+		Assumes the use of integer chromosomes is desired.
+		This currently only exists for compatibility with
+		older versions of GAUL.
+		Integer-valued chromsomes.
+  parameters:
+  return:	population, or NULL on failure.
+  last updated:	18 Dec 2001
+ **********************************************************************/
+
+population *ga_genesis(	const int		population_size,
+			const int		num_chromo,
+			const int		len_chromo,
+			GAgeneration_hook	generation_hook,
+			GAiteration_hook	iteration_hook,
+			GAdata_destructor	data_destructor,
+			GAdata_ref_incrementor	data_ref_incrementor,
+			GAevaluate		evaluate,
+			GAseed			seed,
+			GAadapt			adapt,
+			GAselect_one		select_one,
+			GAselect_two		select_two,
+			GAmutate		mutate,
+			GAcrossover		crossover,
+			GAreplace		replace )
+  {
+  return ga_genesis_int( population_size, num_chromo, len_chromo, generation_hook, iteration_hook,
+                         data_destructor, data_ref_incrementor, evaluate,
+                         seed, adapt, select_one, select_two, mutate, crossover, replace );
   }
 
 

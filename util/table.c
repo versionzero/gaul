@@ -28,13 +28,16 @@
 
   Thread-safe.
  
-  Updated:	07/08/01 SAA	Added table_remove_data_all().
+  Updated:	18 Dec 2001 SAA	Added table_get_data_all() and table_get_index_all().
+		07/08/01 SAA	Added table_remove_data_all().
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK etc.
  		21/02/01 SAA	Added table_count_items().
  		22/01/01 SAA	Added table_lookup_index().
  		18/01/01 SAA	Frist tidy version.
  
   To do:	Add table_compress().
+		Need to add more safety checks and create 'fast' versions.
+		Document and comment!
  
   Compile test program with something like:
   gcc table.c -DTABLE_COMPILE_MAIN `glib-config --cflags` -I..
@@ -229,6 +232,50 @@ vpointer table_get_data(TableStruct *table, unsigned int index)
   if (index < 0 || index >= table->next) dief("Invalid index (%d) passed.", index);
 
   return table->data[index];
+  }
+
+
+/* Return array of all stored pointers.  Caller must deallocate the array. */
+vpointer *table_get_data_all(TableStruct *table)
+  {
+  unsigned int  index=0;
+  unsigned int	count=0;
+  vpointer      *data;		/* Array of data to return. */
+
+  if (!table) die("NULL pointer to TableStruct passed.");
+
+  data = (vpointer*) s_malloc(sizeof(vpointer)*(table->size-table->numfree));
+
+  while ( index < table->next)
+    {
+    if (table->data[index] != NULL)
+      data[count++] = table->data[index];
+    index++;
+    }
+
+  return data;
+  }
+
+
+/* Return array of all used indices.  Caller must deallocate the array. */
+unsigned int *table_get_index_all(TableStruct *table)
+  {
+  unsigned int  index=0;
+  unsigned int	count=0;
+  unsigned int  *data;		/* Array of indices to return. */
+
+  if (!table) die("NULL pointer to TableStruct passed.");
+
+  data = (unsigned int*) s_malloc(sizeof(vpointer)*(table->size-table->numfree));
+
+  while ( index < table->next)
+    {
+    if (table->data[index] != NULL)
+      data[count++] = index;
+    index++;
+    }
+
+  return data;
   }
 
 

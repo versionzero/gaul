@@ -65,6 +65,8 @@ vpointer	table_remove_index(TableStruct *table, unsigned int index);
 unsigned int	table_remove_data(TableStruct *table, vpointer data);
 unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
 vpointer	table_get_data(TableStruct *table, unsigned int index);
+vpointer	*table_get_data_all(TableStruct *table);
+unsigned int	*table_get_index_all(TableStruct *table);
 unsigned int	table_lookup_index(TableStruct *table, vpointer data);
 unsigned int	table_add(TableStruct *table, vpointer data);
 unsigned int	table_count_items(TableStruct *table);

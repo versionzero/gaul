@@ -356,7 +356,7 @@ int ga_get_num_populations(void)
 
 /**********************************************************************
   ga_get_population_from_id()
-  synopsis:	Get population pointer from it's internal id.
+  synopsis:	Get population pointer from its internal id.
   parameters:	unsigned int	id for population.
   return:	int
   last updated: 22/01/01
@@ -370,7 +370,7 @@ population *ga_get_population_from_id(unsigned int id)
 
 /**********************************************************************
   ga_get_population_id()
-  synopsis:	Get population internal id from it's pointer.
+  synopsis:	Get population internal id from its pointer.
   parameters:	unsigned int	id for population.
   return:	int
   last updated: 22/01/01
@@ -379,6 +379,37 @@ population *ga_get_population_from_id(unsigned int id)
 unsigned int ga_get_population_id(population *pop)
   {
   return table_lookup_index(pop_table, (vpointer) pop);
+  }
+
+
+/**********************************************************************
+  ga_get_all_population_ids()
+  synopsis:	Get array of internal ids for all currently
+		allocated populations.  The returned array needs to
+		be deallocated by the caller.
+  parameters:	none
+  return:	unsigned int*	array of ids
+  last updated: 18 Dec 2001
+ **********************************************************************/
+
+unsigned int *ga_get_all_population_ids(void)
+  {
+  return table_get_index_all(pop_table);
+  }
+
+
+/**********************************************************************
+  ga_get_all_populations()
+  synopsis:	Get array of all currently allocated populations.  The
+		returned array needs to be deallocated by the caller.
+  parameters:	none
+  return:	population*	array of populations
+  last updated: 18 Dec 2001
+ **********************************************************************/
+
+population *ga_get_all_populations(void)
+  {
+  return (population *) table_get_data_all(pop_table);
   }
 
 

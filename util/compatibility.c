@@ -102,13 +102,15 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	17/12/00 SAA	Added ipow().
+  Updated:	05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
+		17/12/00 SAA	Added ipow().
 		16/11/00 SAA	Use rindex() for strrchr() where available.  Added a few routines from the autobook examples, I don't actually use any of these at the moment, but I thought that they might be useful now that I'm spending some time converting my code to alternative platforms.  Added dief() version because I can't think of anywhere better to put it (I use a macro version of it all the time but it's varargs cause problems for me on some systems, i.e. all non-GNU compilers)
 		15/11/00 SAA	Code brought together from various places.
 
  **********************************************************************/
 
 #include "compatibility.h"
+#ifdef HAVE_IPOW
 #if HAVE_IPOW == 0
 /*
  * Integer power.
@@ -126,8 +128,10 @@ int ipow(int n, int e)
   return result;
   }
 #endif	/* HAVE_IPOW == 0 */
+#endif
 
 
+#ifdef HAVE_MEMCPY
 #if HAVE_MEMCPY == 0
 /*
  * Copy LEN characters from SRC to DEST
@@ -159,8 +163,10 @@ void memcpy(char *dest, const char *src, size_t len)
   }
 }
 #endif /* HAVE_MEMCPY == 0 */
+#endif
 
 
+#ifdef HAVE_STRCHR
 #if HAVE_STRCHR == 0
 /*
  * Find C in STR by searching through the string
@@ -175,8 +181,10 @@ char *strchr(const char *str, int c)
   return NULL;
   }
 #endif /* HAVE_STRCHR == 0 */
+#endif
 
 
+#ifdef HAVE_STRRCHR
 #if HAVE_STRRCHR == 0
 /*
  * Find C in STR by searching backwards through the string
@@ -194,8 +202,10 @@ char *strrchr(const char *str, int c)
   }
 #endif /* HAVE_RINDEX == 0 */
 #endif /* HAVE_STRRCHR == 0 */
+#endif
 
 
+#ifdef HAVE_STRCAT
 #if HAVE_STRCAT == 0
 /*
  * Concatenate STR2 onto the end of STR1
@@ -213,8 +223,10 @@ char *strcat(char *str1, const char *str2)
   return orig;
   }
 #endif /* HAVE_STRCAT == 0 */
+#endif
 
 
+#ifdef HAVE_STRLEN 
 #if HAVE_STRLEN == 0
 /*
  * Return the length in characters of STR
@@ -228,7 +240,10 @@ int	strlen(const char *str)
   return len;
 }
 #endif /* HAVE_STRLEN == 0 */
+#endif
 
+
+#ifdef HAVE_STRCMP
 #if HAVE_STRCMP == 0
 /*
  * Returns -1,0,1 on whether STR1 is <,==,> STR2
@@ -239,7 +254,10 @@ int	strcmp(const char *str1, const char *str2)
   return *str1 - *str2;
 }
 #endif /* HAVE_STRCMP == 0 */
+#endif
 
+
+#ifdef HAVE_STRNCMP
 #if HAVE_STRNCMP == 0
 /*
  * Compare at most LEN chars in STR1 and STR2 and return -1,0,1 or
@@ -258,8 +276,10 @@ int	strncmp(const char *str1, const char *str2, const int len)
   return 0;
 }
 #endif /* HAVE_STRNCMP == 0 */
+#endif
 
 
+#ifdef HAVE_STRCPY
 #if HAVE_STRCPY == 0
 /*
  * Copies STR2 to STR1.  Returns STR1.
@@ -274,8 +294,10 @@ char *strcpy(char *str1, const char *str2)
   return str1;
   }
 #endif /* HAVE_STRCPY == 0 */
+#endif
 
 
+#ifdef HAVE_STRNCPY
 #if HAVE_STRNCPY == 0
 /*
  * Copy STR2 to STR1 until LEN or null
@@ -298,7 +320,10 @@ char	*strncpy(char *str1, const char *str2, const int len)
   return str1;
 }
 #endif /* HAVE_STRNCPY == 0 */
+#endif
 
+
+#ifdef HAVE_STRTOK
 #if HAVE_STRTOK == 0
 /*
  * Get the next token from STR (pass in NULL on the 2nd, 3rd,
@@ -355,9 +380,11 @@ char	*strtok(char *str, char *delim)
   return start;
 }
 #endif /* HAVE_STRTOK == 0 */
+#endif
 
 
-#if HAVE_STRCASECMP==0
+#ifdef HAVE_STRCASECMP
+#if HAVE_STRCASECMP == 0
 int strcasecmp(const char *str0, const char *str1)
 {
   for(; tolower(*str0)==tolower(*str1); str0++, str1++)
@@ -366,10 +393,12 @@ int strcasecmp(const char *str0, const char *str1)
 
   return tolower(*str0)-tolower(*str1);
 }
-#endif /* HAVE_STRCASECMP==0 */
+#endif /* HAVE_STRCASECMP == 0 */
+#endif
 
 
-#if HAVE_STRNCASECMP==0
+#ifdef HAVE_STRNCASECMP
+#if HAVE_STRNCASECMP == 0
 /***************************************************************
   Compare strings like strncmp(), but ignoring case.
   ie, only compares first n chars.
@@ -385,14 +414,15 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 
   return (i==n) ? 0 : (tolower(*str0)-tolower(*str1));
   }
-#endif /* HAVE_STRNCASECMP==0 */
+#endif /* HAVE_STRNCASECMP == 0 */
+#endif
 
 
-
-#if HAVE_USLEEP==0
+#ifdef HAVE_USLEEP
+#if HAVE_USLEEP == 0
 void usleep(unsigned long usec)
 {
-#if HAVE_SNOOZE==1		/* BeOS */
+#if HAVE_SNOOZE == 1		/* BeOS */
   snooze(usec);
 #else
   struct timeval tv;
@@ -401,10 +431,12 @@ void usleep(unsigned long usec)
   select(0, NULL, NULL, NULL, &tv);
 #endif
 }
-#endif /* HAVE_USLEEP==0 */
+#endif /* HAVE_USLEEP == 0 */
+#endif
 
 
-#if HAVE_STRLCPY==0
+#ifdef HAVE_STRLCPY
+#if HAVE_STRLCPY == 0
 /**********************************************************************
  strlcpy() and strlcat() provide (non-standard) functions
  strlcpy() and strlcat(), with semantics following OpenBSD (and
@@ -429,7 +461,7 @@ void usleep(unsigned long usec)
 
  Not sure about the asserts below, but they are easier than
  trying to ensure correct behaviour on strange inputs.
- In particular note that n==0 is prohibited (eg, since there
+ In particular note that n == 0 is prohibited (eg, since there
  must at least be room for a nul); could consider other options.
 ***********************************************************************/
 size_t strlcpy(char *dest, const char *src, size_t n)
@@ -446,9 +478,12 @@ size_t strlcpy(char *dest, const char *src, size_t n)
     return len;
   }
 }
-#endif /* HAVE_STRLCPY==0 */
+#endif /* HAVE_STRLCPY == 0 */
+#endif
 
-#if HAVE_STRLCAT==0
+
+#ifdef HAVE_STRLCAT
+#if HAVE_STRLCAT == 0
 size_t strlcat(char *dest, const char *src, size_t n)
 {
   assert(dest);
@@ -476,10 +511,12 @@ size_t strlcat(char *dest, const char *src, size_t n)
     return len_dest + len_src;
   }
 }
-#endif /* HAVE_STRLCAT==0 */
+#endif /* HAVE_STRLCAT == 0 */
+#endif
 
 
-#if HAVE_VSNPRINTF==1
+#ifdef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF == 1
 /**********************************************************************
  Convenience function used by check_native_vsnprintf() below.
  (Can test check_native_vsnprintf() by replacing vsnprintf call
@@ -537,6 +574,7 @@ static int check_native_vsnprintf(void)
 }
 #endif
 
+
 /**********************************************************************
  vsnprintf() replacement using a big malloc()ed internal buffer,
  originally by David Pfitzner <dwp@mso.anu.edu.au>
@@ -590,7 +628,7 @@ int my_vsnprintf(char *str, size_t n, const char *format, va_list ap)
   assert(n>0);
   assert(format);
 
-#if HAVE_VSNPRINTF==1
+#if HAVE_VSNPRINTF == 1
   {
     static int native_is_ok = -1; /* set to 0 or 1 on first call */
 
@@ -619,7 +657,7 @@ int my_vsnprintf(char *str, size_t n, const char *format, va_list ap)
       buf = s_malloc(VSNP_BUF_SIZE);
     }
 
-#if HAVE_VSNPRINTF==1
+#if HAVE_VSNPRINTF == 1
     /* This occurs if have native, but didn't pass check:
      * may just be that native doesn't give the right return,
      * in which case may be slightly safer to use it here:
@@ -657,8 +695,11 @@ int my_vsnprintf(char *str, size_t n, const char *format, va_list ap)
     }
   }
 }
+#endif
 
-#if HAVE_SNPRINTF==0
+
+#ifdef HAVE_SNPRINTF
+#if HAVE_SNPRINTF == 0
 int snprintf(char *str, size_t n, const char *format, ...)
   {
   int ret;
@@ -672,16 +713,21 @@ int snprintf(char *str, size_t n, const char *format, ...)
   return ret;
   }
 #endif
+#endif
 
-#if HAVE_VSNPRINTF==0
+
+#ifdef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF == 0
 int vsnprintf(char *str, size_t n, const char *format, va_list ap)
   {
   return my_vsnprintf(str, n, format, ap);
   }
 #endif
+#endif
 
 
-#if HAVE_MEMSET==0
+#ifdef HAVE_MEMSET
+#if HAVE_MEMSET == 0
 /*
  * Set LEN characters in STR to character C
  */
@@ -755,9 +801,12 @@ void *memset(void *dst0, int c0, size_t bytes)
   return dst0;
   }
 #endif
+#endif
 
-#if HAVE_MEMMOVE==0
-#if HAVE_BCOPY==0
+
+#ifdef HAVE_MEMMOVE
+#if HAVE_MEMMOVE == 0
+#if HAVE_BCOPY == 0
 /*
  * Some systems, such as SunOS do have BCOPY instead.
  * In which case this is defined as a macro in the header.
@@ -786,8 +835,11 @@ void *memmove(void *dst, const void *src, size_t bytes)
   }
 #endif
 #endif
+#endif
 
-#if HAVE_MEMREV==0
+
+#ifdef HAVE_MEMREV
+#if HAVE_MEMREV == 0
 void *memrev(void *src, size_t bytes)
   {
   unsigned char *p1;
@@ -801,8 +853,11 @@ void *memrev(void *src, size_t bytes)
   return src;
   }
 #endif
+#endif
 
-#if HAVE_MEMCHR==0
+
+#ifdef HAVE_MEMCHR
+#if HAVE_MEMCHR == 0
 void *memchr(const void *src, int c, size_t bytes)
 {
     const unsigned char *cp;
@@ -818,8 +873,10 @@ void *memchr(const void *src, int c, size_t bytes)
     return NULL;
 }
 #endif
+#endif
 
-#if HAVE_MEMMEM==0
+#ifdef HAVE_MEMMEM
+#if HAVE_MEMMEM == 0
 void *memmem(const void *haystack, size_t haystack_len,
            const void *needle,   size_t needle_len)
 {
@@ -839,9 +896,11 @@ void *memmem(const void *haystack, size_t haystack_len,
     return NULL;
 }
 #endif
+#endif
 
 
-#if HAVE_MEMCMP==0
+#ifdef HAVE_MEMCMP
+#if HAVE_MEMCMP == 0
 int memcmp(const void *src1, const void *src2, size_t n)
   {
   const unsigned char *cp1=src1;
@@ -852,9 +911,11 @@ int memcmp(const void *src1, const void *src2, size_t n)
   return 0;
   }
 #endif
+#endif
 
 
-#if HAVE_STRDUP==0
+#ifdef HAVE_STRDUP
+#if HAVE_STRDUP == 0
 char *strdup(const char *str)
   {
   char *new_str;
@@ -867,9 +928,11 @@ char *strdup(const char *str)
   return new_str;
   }
 #endif
+#endif
 
 
-#if HAVE_MEMDUP==0
+#ifdef HAVE_MEMDUP
+#if HAVE_MEMDUP == 0
 void *memdup(const void *mem, int byte_size)
   {
   void *dest;
@@ -884,9 +947,11 @@ void *memdup(const void *mem, int byte_size)
   return dest;
   }
 #endif
+#endif
 
 
-#if HAVE_STRNDUP==0
+#ifdef HAVE_STRNDUP
+#if HAVE_STRNDUP == 0
 char *strndup(const char *str, int n)
   {
   char *new_str=NULL;
@@ -901,9 +966,11 @@ char *strndup(const char *str, int n)
   return new_str;
   }
 #endif
+#endif
 
 
-#if HAVE_STRNFILL==0
+#ifdef HAVE_STRNFILL
+#if HAVE_STRNFILL == 0
 char *strnfill(int length, char fill_char)
   {
   char *str, *s, *end;
@@ -917,6 +984,7 @@ char *strnfill(int length, char fill_char)
 
   return str;
   }
+#endif
 #endif
 
 
@@ -953,7 +1021,8 @@ strdup_printf(const char *format,
 #endif
 
 
-#if HAVE_STRCATV==0
+#ifdef HAVE_STRCATV
+#if HAVE_STRCATV == 0
 char *strcatv(const char *string1, ...)
   {
   int	  l;
@@ -989,9 +1058,10 @@ char *strcatv(const char *string1, ...)
   return concat;
   }
 #endif
+#endif
 
 
-/*#if HAVE_STRTOD==0*/
+/*#if HAVE_STRTOD == 0*/
 #if 0
 double strtod(const char *nptr, char **endptr)
   {
@@ -1034,7 +1104,8 @@ double strtod(const char *nptr, char **endptr)
 #endif
 
 
-#if HAVE_STRSIGNAL==0
+#ifdef HAVE_STRSIGNAL
+#if HAVE_STRSIGNAL == 0
 char *strsignal(int signum)
   {
   switch(signum)
@@ -1137,6 +1208,8 @@ char *strsignal(int signum)
   return "Unknown signal";
   }
 #endif
+#endif
+
 
 #if 0
 int printf_string_upper_bound(const char* format,
@@ -1277,7 +1350,8 @@ int printf_string_upper_bound(const char* format,
 #endif
 
 
-#if HAVE_STRREV==0
+#ifdef HAVE_STRREV
+#if HAVE_STRREV == 0
 void strrev(char *string)
   {
   if (!string) return;
@@ -1303,6 +1377,7 @@ void strrev(char *string)
 
   return;
   }
+#endif
 #endif
 
 
@@ -1466,17 +1541,20 @@ char *strjoin(const char  *separator, ...)
 #endif
 
 
-#if HAVE_STRERROR==0
+#ifdef HAVE_STRERROR
+#if HAVE_STRERROR == 0
 char *strerror(int errnum)
   {
   static char buf[64];
   snprintf(buf, sizeof(buf), "error %d (compiled without strerror)", errnum);
   return buf;
   }
-#endif /* HAVE_STRERROR==0 */
+#endif /* HAVE_STRERROR == 0 */
+#endif
 
 
-#if HAVE_DIEF==0
+#ifdef HAVE_DIEF
+#if HAVE_DIEF == 0
 /*
  * Needed as a function because many compilers don't use vararg macros.
  * HAVE_DIEF is set in "SAA_header.h", not "config.h".
@@ -1495,9 +1573,11 @@ void dief(const char *format, ...)
   abort();
   }
 #endif
+#endif
 
 
-#if HAVE_BASENAME==0
+#ifdef HAVE_BASENAME
+#if HAVE_BASENAME == 0
 char *basename (char *path)
   {
   /* Search for the last directory separator in PATH.  */
@@ -1508,8 +1588,10 @@ char *basename (char *path)
   return basename ? ++basename : (char*)path;
   }
 #endif
+#endif
 
 
+#ifdef HAVE_READLINE
 #if HAVE_READLINE == 0
 #ifndef BUFSIZ
 #  define BUFSIZ 256
@@ -1555,8 +1637,10 @@ char *readline (char *prompt)
   return *buf ? buf : NULL;
 }
 #endif /* HAVE_READLINE == 0 */
+#endif
 
 
+#ifdef HAVE_STRCSPN
 #if HAVE_STRCSPN == 0
 size_t strcspn(const char *string, const char *reject)
 {
@@ -1567,8 +1651,10 @@ size_t strcspn(const char *string, const char *reject)
   return count;
 }
 #endif /* HAVE_STRCSPN == 0 */
+#endif
 
 
+#ifdef HAVE_WAITPID
 #if HAVE_WAITPID == 0
 pid_t waitpid(pid_t pid, int *pstatus, int options)
 {
@@ -1581,21 +1667,26 @@ pid_t waitpid(pid_t pid, int *pstatus, int options)
   return result;
 }
 #endif /* HAVE_WAITPID == 0 */
+#endif
 
 
+#ifdef HAVE_MIN
 #if HAVE_MIN == 0
 int min( int a, int b )
   {
   return a <= b ? a : b;
   }
 #endif
+#endif
 
 
+#ifdef HAVE_MAX
 #if HAVE_MAX == 0
 int max( int a, int b )
   {
   return a >= b ? a : b;
   }
+#endif
 #endif
 
 
@@ -1660,12 +1751,14 @@ strnicmp( char *s1, char *s2, int n )
         return 0;
 }
 #endif /* HAVE_STRNICMP == 0 */
+#endif /* 0 */
 
 
+#ifdef HAVE_SINCOS
+#if HAVE_SINCOS == 0
 /*
  * This is an undocumented GNU extension, which is actually fairly useful.
  */
-#if HAVE_SINCOS == 0
 maybeinline void sincos( double radians, double *s, double *c )
   {
 
@@ -1679,7 +1772,6 @@ maybeinline void sincos( double radians, double *s, double *c )
   return;
   }
 #endif /* HAVE_SINCOS == 0 */
+#endif
 
-
-#endif /* 0 */
 

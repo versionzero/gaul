@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:    	19/03/01 SAA	Removed GNU specific stuff.
+  Updated:    	05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
+		19/03/01 SAA	Removed GNU specific stuff.
 		16/11/00 SAA	I liked the helga_compat.c version, so used it to replace methods/compatibility.c
 		15/11/00 SAA	new version for helga_compat.c
 
@@ -86,185 +87,265 @@
  * Prototypes
  */
 
+#ifdef HAVE_IPOW
 #if HAVE_IPOW == 0
 int ipow(int n, int e);
 #endif
+#endif
 
+#ifdef HAVE_MEMCPY
 #if HAVE_MEMCPY == 0
 void memcpy(char *dest, const char *src, size_t len);
 #endif
+#endif
 
+#ifdef HAVE_STRCHR
 #if HAVE_STRCHR == 0
 char *strchr(const char *str, int c);
 #endif
+#endif
 
-#if HAVE_STRRCHR == 0
+#ifdef HAVE_STRRCHR
+# if HAVE_STRRCHR == 0
 /* Some systems have rindex() instead */
-#if HAVE_RINDEX == 1
-#define strrchr rindex
-#else
+#  if HAVE_RINDEX == 1
+#   define strrchr rindex
+#  else
 char *strrchr(const char *str, int c);
-#endif
+#  endif
+# endif
 #endif
 
+#ifdef HAVE_STRCAT 
 #if HAVE_STRCAT == 0
 char *strcat(char *str1, const char *str2);
 #endif
+#endif
 
+#ifdef HAVE_STRLEN
 #if HAVE_STRLEN == 0
 int strlen(const char *str);
 #endif
+#endif
 
+#ifdef HAVE_STRCMP
 #if HAVE_STRCMP == 0
 int strcmp(const char *str1, const char *str2);
 #endif
+#endif
 
+#ifdef HAVE_STRNCMP
 #if HAVE_STRNCMP == 0
 int strncmp(const char *str1, const char *str2, const int len);
 #endif
+#endif
 
+#ifdef HAVE_STRCPY
 #if HAVE_STRCPY == 0
 char *strcpy(char *str1, const char *str2);
 #endif
+#endif
 
+#ifdef HAVE_STRNCPY
 #if HAVE_STRNCPY == 0
 char *strncpy(char *str1, const char *str2, const int len);
 #endif
+#endif
 
+#ifdef HAVE_STRTOK
 #if HAVE_STRTOK == 0
 char *strtok(char *str, char *delim);
 #endif
+#endif
 
-#if HAVE_STRCASECMP==0
+#ifdef HAVE_STRCASECMP
+#if HAVE_STRCASECMP == 0
 int strcasecmp(const char *str0, const char *str1);
 #endif
+#endif
 
-#if HAVE_STRNCASECMP==0
+#ifdef HAVE_STRNCASECMP
+#if HAVE_STRNCASECMP == 0
 int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
+#endif
 
-#if HAVE_USLEEP==0
+#ifdef HAVE_USLEEP
+#if HAVE_USLEEP == 0
 void usleep(unsigned long usec);
 #endif
+#endif
 
-#if HAVE_STRLCPY==0
+#ifdef HAVE_STRLCPY
+#if HAVE_STRLCPY == 0
 size_t strlcpy(char *dest, const char *src, size_t n);
 #endif
+#endif
 
-#if HAVE_STRLCAT==0
+#ifdef HAVE_STRLCAT
+#if HAVE_STRLCAT == 0
 size_t strlcat(char *dest, const char *src, size_t n);
 #endif
+#endif
 
-#if HAVE_SNPRINTF==0
+#ifdef HAVE_SNPRINTF
+#if HAVE_SNPRINTF == 0
 int snprintf(char *str, size_t n, const char *format, ...);
 #endif
+#endif
 
-#if HAVE_VSNPRINTF==0
+#ifdef HAVE_VSNPRINTF
+#if HAVE_VSNPRINTF == 0
 int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 #endif
+#endif
 
-#if HAVE_MEMSET==0
+#ifdef HAVE_MEMSET
+#if HAVE_MEMSET == 0
 void *memset(void *dst0, int c0, size_t bytes);
 #endif
+#endif
 
-#if HAVE_MEMMOVE==0
+#ifdef HAVE_MEMMOVE
+# if HAVE_MEMMOVE == 0
 /* Some systems, such as SunOS do have BCOPY instead. */
-#if HAVE_BCOPY==1
-#define memmove(A, B, C) bcopy((A), (B), (C))
-#else
+#  if HAVE_BCOPY == 1
+#   define memmove(A, B, C) bcopy((A), (B), (C))
+#  else
 void *memmove(void *dst, const void *src, size_t bytes);
-#endif
+#  endif
+# endif
 #endif
 
-#if HAVE_MEMREV==0
+#ifdef HAVE_MEMREV
+#if HAVE_MEMREV == 0
 void *memrev(void *src, size_t bytes);
 #endif
-
-#if HAVE_MEMCHR==0
-void *memchr(const void *src, int c, size_t bytes);
 #endif
 
-#if HAVE_MEMMEM==0
+#ifdef HAVE_MEMCHR
+#if HAVE_MEMCHR == 0
+void *memchr(const void *src, int c, size_t bytes);
+#endif
+#endif
+
+#ifdef HAVE_MEMMEM
+#if HAVE_MEMMEM == 0
 void *memmem(const void *haystack, size_t haystack_len,
            const void *needle,   size_t needle_len);
 #endif
+#endif
 
-#if HAVE_MEMCMP==0
+#ifdef HAVE_MEMCMP
+#if HAVE_MEMCMP == 0
 int memcmp(const void *src1, const void *src2, size_t n);
 #endif
+#endif
 
-#if HAVE_STRDUP==0
+#ifdef HAVE_STRDUP
+#if HAVE_STRDUP == 0
 char *strdup(const char *str);
 #endif
+#endif
 
-#if HAVE_MEMDUP==0
+#ifdef HAVE_MEMDUP
+#if HAVE_MEMDUP == 0
 void *memdup(const void *mem, int byte_size);
 #endif
+#endif
 
-#if HAVE_STRNDUP==0
+#ifdef HAVE_STRNDUP
+#if HAVE_STRNDUP == 0
 char *strndup(const char *str, int n);
 #endif
-
-#if HAVE_STRNFILL==0
-char *strnfill(int length, char fill_char);
 #endif
 
-#if HAVE_STRCATV==0
+#ifdef HAVE_STRNFILL
+#if HAVE_STRNFILL == 0
+char *strnfill(int length, char fill_char);
+#endif
+#endif
+
+#if HAVE_STRCATV == 0
 char *strcatv(const char *string1, ...);
 #endif
 
-/*#if HAVE_STRTOD==0*/
+/*#if HAVE_STRTOD == 0*/
 #if 0
 double strtod(const char *nptr, char **endptr);
 #endif
 
-#if HAVE_STRSIGNAL==0
+#ifdef HAVE_STRSIGNAL
+#if HAVE_STRSIGNAL == 0
 char *strsignal(int signum);
 #endif
+#endif
 
-#if HAVE_STRREV==0
+#ifdef HAVE_STRREV
+#if HAVE_STRREV == 0
 void strrev(char *string);
 #endif
+#endif
 
-#if HAVE_STRERROR==0
+#ifdef HAVE_STRERROR
+#if HAVE_STRERROR == 0
 char *strerror(int errnum);
 #endif
+#endif
 
-#if HAVE_DIEF==0
-/* HAVE_DIEF is set in "SAA_header.h", not "config.h" */
+#ifdef HAVE_DIEF
+#if HAVE_DIEF == 0
+/*
+ * HAVE_DIEF is set in "SAA_header.h", not "config.h"
+ */
 void dief(const char *format, ...);
 #endif
-
-#if HAVE_BASENAME==0
-char *basename (char *path);
 #endif
 
+#ifdef HAVE_BASENAME
+#if HAVE_BASENAME == 0
+char *basename (char *path);
+#endif
+#endif
+
+#ifdef HAVE_READLINE
 #if HAVE_READLINE == 0
 char *readline (char *prompt);
 #endif
+#endif
 
+#ifdef HAVE_STRCSPN
 #if HAVE_STRCSPN == 0
 size_t strcspn(const char *string, const char *reject);
 #endif
+#endif
 
+#ifdef HAVE_WAITPID
 #if HAVE_WAITPID == 0
 pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
+#endif
 
+#ifdef HAVE_MIN
 #if HAVE_MIN == 0
 int min(int a, int b);
 #endif
+#endif
 
+#ifdef HAVE_MAX
 #if HAVE_MAX == 0
 int max(int a, int b);
+#endif
 #endif
 
 /*if HAVE_STRRUP == 0*/
 /*if HAVE_STRICMP == 0*/
 /*if HAVE_STRNICMP == 0*/
 
+#ifdef HAVE_SINCOS
 #if HAVE_SINCOS == 0
 maybeinline void sincos( double radians, double *s, double *c );
+#endif
 #endif
 
 #endif
