@@ -52,7 +52,7 @@
 
 #include "gaul/memory_chunks.h"
 
-/* MEMORY_ALIGN_SIZE should have been set in config.h */
+/* MEMORY_ALIGN_SIZE should be set in gaul_config.h */
 
 #define MEMORY_AREA_SIZE 4L
 
