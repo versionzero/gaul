@@ -46,8 +46,8 @@
  **********************************************************************/
 
 #include "gaul.h"
-#include "nn_util.h"
-#include "timer_util.h"
+#include "gaul/nn_util.h"
+#include "gaul/timer_util.h"
 
 /*
  * Global data storage.

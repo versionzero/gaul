@@ -525,14 +525,14 @@ int ga_similarity_double_count_match_alleles( const population *pop,
 		const entity *beta	entity containing beta chromosome.
   return:	Returns Tanimoto similarity coefficient.
 		Range: -1/3 to +1
-  last updated:	23 May 2002
+  last updated:	01 Apr 2004
  **********************************************************************/
 
 double ga_similarity_double_tanimoto(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
-  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	ab=0.0, aa=0.0, bb=0.0;	/* Components of the similarity equation. */
   double	*a, *b;		/* Comparison chromosomes. */
 
   /* Checks. */
@@ -546,9 +546,9 @@ double ga_similarity_double_tanimoto(const population *pop,
 
     for (j=0; j<pop->len_chromosomes; j++)
        {
-       aa = a[j]*a[j];
-       ab = a[j]*b[j];
-       bb = b[j]*b[j];
+       aa += a[j]*a[j];
+       ab += a[j]*b[j];
+       bb += b[j]*b[j];
        }
     }
 
@@ -564,14 +564,14 @@ double ga_similarity_double_tanimoto(const population *pop,
 		const entity *beta	entity containing beta chromosome.
   return:	Returns Dice similarity coefficient.
 		Range: -1 to +1
-  last updated:	23 May 2002
+  last updated:	01 Apr 2004
  **********************************************************************/
 
 double ga_similarity_double_dice(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
-  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	ab=0.0, aa=0.0, bb=0.0;	/* Components of the similarity equation. */
   double	*a, *b;			/* Comparison chromosomes. */
 
   /* Checks. */
@@ -585,9 +585,9 @@ double ga_similarity_double_dice(const population *pop,
 
     for (j=0; j<pop->len_chromosomes; j++)
        {
-       aa = a[j]*a[j];
-       ab = a[j]*b[j];
-       bb = b[j]*b[j];
+       aa += a[j]*a[j];
+       ab += a[j]*b[j];
+       bb += b[j]*b[j];
        }
     }
 
@@ -603,14 +603,14 @@ double ga_similarity_double_dice(const population *pop,
 		const entity *beta	entity containing beta chromosome.
   return:	Returns Cosine similarity coefficient.
 		Range: -1 to +1
-  last updated:	23 May 2002
+  last updated:	01 Apr 2004
  **********************************************************************/
 
 double ga_similarity_double_cosine(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
-  int		ab=0, aa=0, bb=0;	/* Components of the similarity equation. */
+  double	ab=0.0, aa=0.0, bb=0.0;	/* Components of the similarity equation. */
   double	*a, *b;			/* Comparison chromosomes. */
 
   /* Checks. */
@@ -624,9 +624,9 @@ double ga_similarity_double_cosine(const population *pop,
 
     for (j=0; j<pop->len_chromosomes; j++)
        {
-       aa = a[j]*a[j];
-       ab = a[j]*b[j];
-       bb = b[j]*b[j];
+       aa += a[j]*a[j];
+       ab += a[j]*b[j];
+       bb += b[j]*b[j];
        }
     }
 

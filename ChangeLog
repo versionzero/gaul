@@ -1,3 +1,1253 @@
+2004-03-29 13:16  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	examples/Makefile, examples/fitting_simplex.c,
+	examples/test_simplex.c, src/Makefile, src/ga_simplex.c,
+	src/gaul/ga_core.h, src/gaul/ga_simplex.h, tests/Makefile,
+	util/Makefile, util/gaul/gaul_config.h: Initial step size for
+	simplex added to ga_population_set_simplex_parameters() parameters.
+	 Patch version bumped up to 4.
+
+2004-03-25 16:04  stewartadcock
+
+	* src/ga_simplex.c: Added a comment indicating a future enhancement
+	that will be useful.
+
+2004-03-25 09:47  stewartadcock
+
+	* LatestChanges, examples/goldberg1.c, examples/goldberg2.c,
+	examples/pingpong.c, examples/pingpong9.c, examples/pingpong_sa.c,
+	examples/pingpong_tabu.c, examples/pingpong_tabu2.c,
+	examples/wildfire.c, examples/wildfire_forked.c,
+	examples/wildfire_loadbalancing.c, src/ga_utility.c, src/gaul.h:
+	*** API CHANGE *** ga_genesis_int() renamed to ga_genesis_integer()
+	for consistency with remainder of integer function names.
+
+2004-03-23 14:33  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.am, Makefile.in, config.h,
+	config.status, configure, configure.in, debian/Makefile,
+	examples/Makefile, src/Makefile, src/ga_select.c, src/gaul.h,
+	tests/Makefile, util/Makefile, util/gaul/gaul_config.h: Added two
+	new selection criteria, based on Stochastic Universal Sampling;
+	ga_select_one_sussq() and ga_select_two_sussq().
+
+2004-03-19 14:20  stewartadcock
+
+	* LatestChanges, examples/fitting.c, examples/fitting_sd.c,
+	examples/fitting_simplex.c, src/ga_select.c, src/ga_simplex.c:
+	Tweaked fitting, fitting_sd and fitting_simplex examples.
+
+2004-03-19 10:22  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	debian/Makefile, examples/Makefile, examples/fitting.c,
+	src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Synchronising with my version.
+
+2003-11-14 15:57  stewartadcock
+
+	* LatestChanges, src/ga_select.c, tests/diagnostics.c,
+	util/gaul/log_util.h: Clean compilation on gcc3.2
+
+2003-11-14 14:56  stewartadcock
+
+	* Makefile, config.h, config.status, debian/Makefile,
+	examples/Makefile, src/Makefile, src/ga_select.c, tests/Makefile,
+	util/Makefile, util/gaul/compatibility.h, util/gaul/gaul_config.h,
+	util/gaul/log_util.h: Fixes for clean(er) compilation.
+
+2003-10-30 21:16  stewartadcock
+
+	* AUTHORS, LatestChanges, util/gaul/gaul_util.h: Fixed incorrect
+	inclusion of stdbool.h on FreeBSD.  -- patch submitted by
+	Ying-Chieh Liao.
+
+2003-10-30 12:42  stewartadcock
+
+	* src/ga_similarity.c: Fixed incorrect comments.
+
+2003-10-30 12:06  stewartadcock
+
+	* src/ga_similarity.c: Fixed/clarified some incorect comments.
+
+2003-10-30 12:06  stewartadcock
+
+	* LatestChanges: Fixed/clarified some incorrect comments.
+
+2003-10-20 10:45  stewartadcock
+
+	* LatestChanges, src/ga_select.c, src/gaul.h: Added
+	ga_select_one_linearrank() and ga_select_two_linearrank(), a
+	selection operator based on a linear probability distribution with
+	respect to rank.
+
+2003-09-26 15:00  stewartadcock
+
+	* LatestChanges, util/gaul/gaul_util.h: Changed license/copyright
+	details
+
+2003-09-26 14:58  stewartadcock
+
+	* LatestChanges, util/avltree.c, util/linkedlist.c,
+	util/log_util.c, util/memory_chunks.c, util/memory_util.c,
+	util/nn_util.c, util/random_util.c, util/table_util.c,
+	util/timer_util.c, util/gaul/avltree.h, util/gaul/compatibility.h,
+	util/gaul/linkedlist.h, util/gaul/log_util.h,
+	util/gaul/memory_chunks.h, util/gaul/memory_util.h,
+	util/gaul/nn_util.h, util/gaul/random_util.h,
+	util/gaul/table_util.h, util/gaul/timer_util.h: Deleted redundant
+	"last updated" comments.
+
+2003-09-23 15:47  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, ROADMAP, config.h,
+	config.h.in, config.status, configure, configure.in,
+	debian/Makefile, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/struggle5_mp.c,
+	examples/struggle_mp.c, src/Makefile, src/Makefile.in,
+	src/ga_core.c, src/ga_optim.c, src/gaul.h, src/gaul/ga_core.h,
+	tests/Makefile, tests/Makefile.in, tests/diagnostics.c,
+	util/Makefile, util/Makefile.in, util/compatibility.c,
+	util/log_util.c, util/mpi_util.c, util/mpi_util_fake.c,
+	util/gaul/avltree.h, util/gaul/compatibility.h,
+	util/gaul/gaul_config.h, util/gaul/linkedlist.h,
+	util/gaul/log_util.h, util/gaul/memory_chunks.h,
+	util/gaul/memory_util.h, util/gaul/mpi_util.h, util/gaul/nn_util.h,
+	util/gaul/random_util.h, util/gaul/table_util.h,
+	util/gaul/timer_util.h: Extensive parallel code rewrite.  Still
+	incomplete.  Nontheless, examples/struggle5_mp works well.
+
+2003-09-23 10:35  stewartadcock
+
+	* src/gaul/ga_chromo.h: Include gaul.h header rather than ga_core.h
+	header.
+
+2003-09-22 14:59  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.h.in, config.status,
+	configure, configure.in, gaul-devel-noslang.spec, gaul-devel.spec,
+	libtool, debian/Makefile, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/struggle5_mp.c, src/Makefile,
+	src/ga_core.c, src/ga_optim.c, src/gaul/ga_optim.h, tests/Makefile,
+	util/Makefile, util/Makefile.am, util/Makefile.in,
+	util/gaul/gaul_config.h: Much MPI stuff stripped out and/or tidied.
+	 First part of the MPI rewrite.
+
+2003-09-17 15:12  stewartadcock
+
+	* util/: gaul/compatibility.h, compatibility.c: Removed some
+	unneeded or unnecessary code.
+
+2003-09-10 14:27  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, libtool,
+	debian/Makefile, examples/Makefile, src/Makefile, src/ga_mutate.c,
+	src/gaul.h, tests/Makefile, util/Makefile, util/gaul/gaul_config.h:
+	Added some new mutation functions.
+
+2003-09-10 09:55  stewartadcock
+
+	* src/gaul.h: Reordered crossover functions for clarity.
+
+2003-09-07 11:27  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, libtool,
+	debian/Makefile, examples/Makefile, src/Makefile,
+	src/ga_bitstring.c, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Tweaked bitstring code.
+
+2003-09-03 15:31  stewartadcock
+
+	* LatestChanges: Updated LatestChanges.
+
+2003-09-03 15:30  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h, util/gaul/gaul_config_win.h: Bumped up
+	patch level.
+
+2003-09-03 15:20  stewartadcock
+
+	* config.h, config.status, util/Makefile, util/Makefile.am,
+	util/Makefile.in, util/nn_util.c, util/str_match.c,
+	util/str_util.c, util/gaul/gaul_config.h, util/gaul/log_util.h,
+	util/gaul/nn_util.h, util/gaul/str_match.h, util/gaul/str_util.h:
+	Removed unneeded string handling functions.
+
+2003-08-27 17:56  stewartadcock
+
+	* debian/changelog: debian package updates.
+
+2003-08-27 17:54  stewartadcock
+
+	* ROADMAP: debian package update.
+
+2003-08-27 10:56  stewartadcock
+
+	* config.status, configure, configure.in, examples/Makefile,
+	src/Makefile, tests/Makefile, util/Makefile: Corrected previous
+	alpha "fix".
+
+2003-08-27 10:48  stewartadcock
+
+	* LatestChanges, Makefile, aclocal.m4, config.h, config.status,
+	configure, configure.in, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/Makefile.am, util/Makefile.in, util/gaul/gaul_config.h: Final
+	preparations for new release: 0.1846
+
+2003-08-26 16:49  stewartadcock
+
+	* util/gaul/gaul_config_win.h, windows/README.TXT: MS Windows stuff
+	added to repository.
+
+2003-08-26 16:21  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	src/ga_core.c, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Initial preparations for new GAUL release
+	0.1846.
+
+2003-08-22 08:44  stewartadcock
+
+	* examples/mixed.c: Fixed some erronerous comments.
+
+2003-08-21 18:57  stewartadcock
+
+	* examples/mixed.c: Previous addition of examples/mixed.c didn't
+	seem to actually add it.
+
+2003-08-21 17:51  stewartadcock
+
+	* tests/test_slang.sl: Fixed some erronerous comments.
+
+2003-08-20 22:01  stewartadcock
+
+	* LatestChanges, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in: Added examples/mixed.c, an example of mixed
+	chromosome types.
+
+2003-08-20 22:00  stewartadcock
+
+	* src/ga_optim.c: Avoid mutation/crossover loops if the respective
+	probabilites are set to zero.
+
+2003-08-20 10:43  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	libtool, debian/Makefile, examples/Makefile, examples/Makefile.in,
+	src/Makefile, src/ga_core.c, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Have really fixed that deterministic
+	crowding segfault now!
+
+2003-08-20 09:58  stewartadcock
+
+	* LatestChanges, Makefile, config.status, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, src/ga_core.c, src/ga_io.c,
+	src/gaul/ga_core.h, tests/Makefile, util/Makefile: Fixed
+	occassional segfault in deterministic crowding code.
+
+2003-08-19 16:27  stewartadcock
+
+	* Makefile, ROADMAP, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	debian/Makefile, examples/Makefile, src/Makefile, tests/Makefile,
+	util/Makefile, util/gaul/gaul_config.h,
+	util/gaul/gaul_config_win.h: Bumped patch version.  Updated
+	roadmap.
+
+2003-08-19 15:38  stewartadcock
+
+	* util/gaul/gaul_config_win.h: Include io.h
+
+2003-08-19 15:18  stewartadcock
+
+	* LatestChanges, src/ga_optim.c, src/ga_utility.c: Prevent some
+	deprecated functions from being compiled.
+
+2003-08-19 14:41  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status,
+	debian/Makefile, examples/Makefile, src/Makefile, src/ga_core.c,
+	src/gaul/ga_optim.h, tests/Makefile, tests/Makefile.am,
+	tests/Makefile.in, tests/test_slang.c, tests/test_slang.sl,
+	util/Makefile, util/gaul/gaul_config.h: Added S-Lang test/example
+	code.
+
+2003-08-19 14:40  stewartadcock
+
+	* src/ga_intrinsics.c: Added a couple of missing S-Lang intrinsic
+	functions.
+
+2003-08-19 14:38  stewartadcock
+
+	* src/ga_optim.c: Display message if ga_evolution_threaded() not
+	compiled.
+
+2003-08-18 12:21  stewartadcock
+
+	* LatestChanges, src/ga_io.c, util/gaul/gaul_config_win.h: Added
+	versions of disk i/o functions using MS Windows API instead of
+	POSIX API.
+
+2003-08-16 09:53  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	debian/Makefile, examples/Makefile, src/Makefile, src/Makefile.am,
+	src/Makefile.in, src/ga_core.c, src/ga_io.c, src/gaul.h,
+	tests/Makefile, util/Makefile, util/gaul/gaul_config.h: Split disk
+	i/o functions into their own source file to facilitate a future
+	native windows port.
+
+2003-08-14 00:55  stewartadcock
+
+	* LatestChanges, configure, libtool, examples/Makefile,
+	examples/Makefile.am, examples/Makefile.in, examples/btree.c,
+	examples/btree.h: removed unused binary tree code.
+
+2003-08-14 00:12  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile, util/gaul/gaul_config.h,
+	util/gaul/gaul_config_win.h: Bumped patch version.
+
+2003-08-14 00:08  stewartadcock
+
+	* LatestChanges, util/gaul/gaul_config_win.h,
+	util/gaul/gaul_util.h: Applied the minor changes required for
+	compilation with Dev-C++ on MS Windows.
+
+2003-08-13 21:09  stewartadcock
+
+	* util/mpi_util_fake.c: Fixed include path.
+
+2003-08-13 10:41  stewartadcock
+
+	* LatestChanges, util/Makefile, util/Makefile.am, util/Makefile.in,
+	util/dstr_util.c, util/gaul/dstr_util.h: Removed unused dynamic
+	string handling code.
+
+2003-08-13 10:32  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, config.h, config.h.in,
+	config.status, configure, configure.in, debian/Makefile,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	src/Makefile.in, src/ga_core.c, src/ga_utility.c, tests/Makefile,
+	tests/Makefile.in, util/Makefile, util/Makefile.in, util/avltree.c,
+	util/dstr_util.c, util/linkedlist.c, util/memory_chunks.c,
+	util/nn_util.c, util/random_util.c, util/table_util.c,
+	util/timer_util.c, util/gaul/gaul_config.h: Prepended "GA_" to some
+	constants' names to reduce occurrance of clashes with external
+	code.
+
+2003-08-08 09:32  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	libtool, debian/Makefile, examples/Makefile, examples/Makefile.in,
+	src/Makefile, src/gaul/ga_core.h, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h, util/gaul/gaul_util.h,
+	util/gaul/log_util.h: Some changes to reduce the number of warnings
+	produced with the icc '-w2' switch.
+
+2003-08-01 14:49  stewartadcock
+
+	* src/gaul/ga_core.h: Fiddling with comments.
+
+2003-08-01 00:24  stewartadcock
+
+	* src/ga_simplex.c: Fixed minor typo in comments.
+
+2003-07-26 11:05  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	libtool, debian/Makefile, examples/Makefile, examples/Makefile.in,
+	src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h, util/gaul/gaul_util.h,
+	util/gaul/log_util.h, util/gaul/mpi_util.h: Merged ISO C99 changes.
+
+2003-07-25 15:44  stewartadcock
+
+	* LatestChanges, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/onemax.c: Added onemax example.
+
+2003-07-25 15:30  stewartadcock
+
+	* LatestChanges, examples/Makefile.am, examples/g_dejong.c,
+	examples/goldberg1.c, examples/goldberg2.c, examples/pingpong.c,
+	examples/pingpong9.c, examples/pingpong_sa.c,
+	examples/pingpong_tabu.c, examples/pingpong_tabu2.c,
+	examples/royalroad.c, examples/royalroad_bitstring.c,
+	examples/royalroad_ss.c, examples/wildfire.c,
+	examples/wildfire_forked.c, examples/wildfire_loadbalancing.c:
+	Removed use of the deprecated ga_genesis() function from the
+	example functions.
+
+2003-07-25 15:15  stewartadcock
+
+	* LatestChanges, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/diagnostics.c, tests/Makefile,
+	tests/Makefile.am, tests/Makefile.in, tests/diagnostics.c,
+	tests/test_bitstrings.c, tests/test_prng.c, tests/test_utils.c:
+	Added a minimal test suite.
+
+2003-07-25 13:57  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	libtool, debian/Makefile, examples/Makefile, examples/Makefile.in,
+	src/Makefile, src/ga_bitstring.c, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Fixed long-standing grey-encoded bitstring
+	bug.
+
+2003-07-24 15:14  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool, debian/Makefile,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Bumped up patch level.
+
+2003-07-24 15:11  stewartadcock
+
+	* Makefile, Makefile.am, Makefile.in, config.status, configure,
+	configure.in, debian/Makefile, debian/Makefile.am, debian/files:
+	Debian files now distributable.
+
+2003-07-24 12:50  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile, util/gaul/gaul_config.h,
+	util/gaul/gaul_util.h: Prepare for release 0.1845
+
+2003-07-24 12:46  stewartadcock
+
+	* src/ga_bitstring.c, LatestChanges: Fixed misplaced s_free() call.
+
+2003-07-23 13:39  stewartadcock
+
+	* config.h, config.h.in, config.status, configure, configure.in,
+	src/gaul/ga_core.h, util/compatibility.c,
+	util/gaul/compatibility.h: Tweaked some defines to avoid unlikely
+	syntax problems.
+
+2003-07-21 14:30  stewartadcock
+
+	* src/ga_gradient.c, src/ga_simplex.c, src/ga_utility.c,
+	util/avltree.c, util/timer_util.c: Some cosmetic code changes.
+
+2003-07-21 09:48  stewartadcock
+
+	* examples/nnevolve.c, util/nn_util.c: Fixed some of the copyright
+	comments.
+
+2003-07-17 15:14  stewartadcock
+
+	* examples/wildfire_loadbalancing.c: 4 processors rather than 2.
+
+2003-07-16 22:34  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.am, Makefile.in, config.h,
+	config.status, configure.in, gaul-devel-noslang.spec,
+	gaul-devel.spec, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/btree.c, examples/btree.h,
+	examples/chromostubs.c, examples/chromostubs.h, examples/dejong.c,
+	examples/dejong.h, examples/diagnostics.c, examples/fitting.c,
+	examples/fitting_sd.c, examples/fitting_simplex.c,
+	examples/g_dejong.c, examples/goldberg1.c, examples/goldberg1.h,
+	examples/goldberg2.c, examples/goldberg2.h, examples/nnevolve.c,
+	examples/pingpong.c, examples/pingpong.h, examples/pingpong9.c,
+	examples/pingpong_sa.c, examples/pingpong_tabu.c,
+	examples/pingpong_tabu2.c, examples/royalroad.c,
+	examples/royalroad_bitstring.c, examples/royalroad_ss.c,
+	examples/saveload.c, examples/struggle.c, examples/struggle2.c,
+	examples/struggle3.c, examples/struggle4.c, examples/struggle5.c,
+	examples/struggle5_forked.c, examples/struggle5_mp.c,
+	examples/struggle_dc.c, examples/struggle_forked.c,
+	examples/struggle_randomsearch.c, examples/struggle_ss.c,
+	examples/struggle_systematicsearch.c, examples/test_ga.c,
+	examples/test_sd.c, examples/test_simplex.c, examples/wildfire.c,
+	examples/wildfire.h, examples/wildfire_forked.c,
+	examples/wildfire_loadbalancing.c, src/Makefile, src/Makefile.am,
+	src/Makefile.in, src/ga_bitstring.c, src/ga_chromo.c,
+	src/ga_climbing.c, src/ga_compare.c, src/ga_core.c,
+	src/ga_crossover.c, src/ga_deterministiccrowding.c,
+	src/ga_gradient.c, src/ga_intrinsics.c, src/ga_mutate.c,
+	src/ga_optim.c, src/ga_qsort.c, src/ga_randomsearch.c,
+	src/ga_replace.c, src/ga_sa.c, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.c, src/ga_simplex.c, src/ga_stats.c,
+	src/ga_systematicsearch.c, src/ga_tabu.c, src/ga_utility.c,
+	src/gaul.h, src/gaul/ga_bitstring.h, src/gaul/ga_chromo.h,
+	src/gaul/ga_climbing.h, src/gaul/ga_core.h,
+	src/gaul/ga_deterministiccrowding.h, src/gaul/ga_gradient.h,
+	src/gaul/ga_intrinsics.h, src/gaul/ga_optim.h, src/gaul/ga_qsort.h,
+	src/gaul/ga_randomsearch.h, src/gaul/ga_sa.h, src/gaul/ga_search.h,
+	src/gaul/ga_similarity.h, src/gaul/ga_simplex.h,
+	src/gaul/ga_systematicsearch.h, src/gaul/ga_tabu.h,
+	src/gaul/ga_utility.h, tests/Makefile, tests/Makefile.am,
+	tests/Makefile.in, util/Makefile, util/Makefile.am,
+	util/Makefile.in, util/avltree.c, util/compatibility.c,
+	util/dstr_util.c, util/linkedlist.c, util/log_util.c,
+	util/log_util_parallel.c, util/memory_chunks.c, util/memory_util.c,
+	util/mpi_util.c, util/mpi_util_fake.c, util/nn_util.c,
+	util/random_util.c, util/str_match.c, util/str_util.c,
+	util/table_util.c, util/timer_util.c, util/gaul/gaul_config.h,
+	util/gaul/gaul_config.h.in: Changed the website referenced in
+	source comments to http://gaul/sourceforge.net/
+
+2003-07-09 15:37  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul/gaul_config.h: Bumped-up patch number.
+
+2003-07-09 15:26  stewartadcock
+
+	* LatestChanges, src/ga_qsort.c: Custom timer code removed from
+	sorting routines.
+
+2003-07-09 15:23  stewartadcock
+
+	* src/Makefile, src/Makefile.am, src/Makefile.in, util/Makefile,
+	util/Makefile.am, util/Makefile.in: Gaul headers now installed in
+	$(includedir)/gaul/
+
+2003-07-09 15:16  stewartadcock
+
+	* src/gaul/ga_bitstring.h, src/gaul/ga_chromo.h,
+	src/gaul/ga_climbing.h, src/gaul/ga_core.h,
+	src/gaul/ga_deterministiccrowding.h, src/gaul/ga_gradient.h,
+	src/gaul/ga_intrinsics.h, src/gaul/ga_optim.h, src/gaul/ga_qsort.h,
+	src/gaul/ga_randomsearch.h, src/gaul/ga_sa.h, src/gaul/ga_search.h,
+	src/gaul/ga_similarity.h, src/gaul/ga_simplex.h,
+	src/gaul/ga_systematicsearch.h, src/gaul/ga_tabu.h,
+	src/gaul/ga_utility.h, util/gaul/avltree.h,
+	util/gaul/compatibility.h, util/gaul/dstr_util.h,
+	util/gaul/gaul_config.h, util/gaul/gaul_config.h.in,
+	util/gaul/gaul_util.h, util/gaul/linkedlist.h,
+	util/gaul/log_util.h, util/gaul/memory_chunks.h,
+	util/gaul/memory_util.h, util/gaul/mpi_util.h, util/gaul/nn_util.h,
+	util/gaul/random_util.h, util/gaul/str_match.h,
+	util/gaul/str_util.h, util/gaul/table_util.h,
+	util/gaul/timer_util.h: Reorganisation of header files.
+
+2003-07-09 15:13  stewartadcock
+
+	* Makefile, Makefile.in, config.status, configure, configure.in,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	src/Makefile.am, src/Makefile.in, src/ga_bitstring.c,
+	src/ga_bitstring.h, src/ga_chromo.c, src/ga_chromo.h,
+	src/ga_climbing.c, src/ga_climbing.h, src/ga_compare.c,
+	src/ga_core.c, src/ga_core.h, src/ga_crossover.c,
+	src/ga_deterministiccrowding.c, src/ga_deterministiccrowding.h,
+	src/ga_gradient.c, src/ga_gradient.h, src/ga_intrinsics.c,
+	src/ga_intrinsics.h, src/ga_mutate.c, src/ga_optim.c,
+	src/ga_optim.h, src/ga_qsort.c, src/ga_qsort.h,
+	src/ga_randomsearch.c, src/ga_randomsearch.h, src/ga_replace.c,
+	src/ga_sa.c, src/ga_sa.h, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.c, src/ga_similarity.h, src/ga_simplex.c,
+	src/ga_simplex.h, src/ga_systematicsearch.c,
+	src/ga_systematicsearch.h, src/ga_tabu.c, src/ga_tabu.h,
+	src/ga_utility.c, src/ga_utility.h, src/gaul.h, tests/Makefile,
+	tests/Makefile.in, util/Makefile, util/Makefile.am,
+	util/Makefile.in, util/avltree.c, util/avltree.h,
+	util/compatibility.c, util/compatibility.h, util/dstr_util.c,
+	util/dstr_util.h, util/gaul_config.h, util/gaul_config.h.in,
+	util/gaul_util.h, util/linkedlist.c, util/linkedlist.h,
+	util/log_util.c, util/log_util.h, util/memory_chunks.c,
+	util/memory_chunks.h, util/memory_util.c, util/memory_util.h,
+	util/mpi_util.c, util/mpi_util.h, util/nn_util.c, util/nn_util.h,
+	util/random_util.c, util/random_util.h, util/stamp-gaul_config,
+	util/str_match.c, util/str_match.h, util/str_util.c,
+	util/str_util.h, util/table_util.c, util/table_util.h,
+	util/timer_util.c, util/timer_util.h, util/gaul/stamp-gaul_config:
+	Reorganised header files.
+
+2003-07-09 13:41  stewartadcock
+
+	* ROADMAP: Roadmap tweaked in preparation of forthcoming release.
+
+2003-07-09 13:29  stewartadcock
+
+	* util/: dstr_util.h, str_match.c: Modified my email adress in a
+	couple of places.
+
+2003-07-09 13:27  stewartadcock
+
+	* Makefile, Makefile.in, aclocal.m4, config.h, config.status,
+	configure, configure.in, libtool, examples/Makefile,
+	examples/Makefile.in, examples/nnevolve.c, src/Makefile,
+	src/Makefile.in, tests/Makefile, tests/Makefile.in, util/Makefile,
+	util/Makefile.am, util/Makefile.in, util/README, util/SAA_header.h,
+	util/avltree.h, util/compatibility.h, util/dstr_util.h,
+	util/gaul_config.h, util/linkedlist.h, util/log_util.h,
+	util/memory_chunks.h, util/memory_util.c, util/memory_util.h,
+	util/mpi_util.h, util/nn_util.h, util/random_util.h,
+	util/str_match.h, util/str_util.h, util/table_util.h,
+	util/timer_util.h: All referneces to SAA_header.h removed.
+
+2003-07-07 14:50  stewartadcock
+
+	* util/: compatibility.c, compatibility.h: Added dpow() utility
+	function.
+
+2003-07-06 17:01  stewartadcock
+
+	* LatestChanges, src/ga_core.c, src/gaul.h: Added population
+	accessor functions; ga_population_get_crossover(),
+	ga_population_get_mutation(), ga_population_get_migration(),
+	ga_population_get_elitism(), ga_population_get_scheme().
+
+2003-07-06 11:11  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/gaul_config.h: Bumped patch version.
+
+2003-07-06 10:28  stewartadcock
+
+	* LatestChanges, src/ga_climbing.c, src/ga_core.c,
+	src/ga_deterministiccrowding.c, src/ga_gradient.c,
+	src/ga_randomsearch.c, src/ga_sa.c, src/ga_simplex.c,
+	src/ga_systematicsearch.c, src/ga_tabu.c: Removed some minor memory
+	leaks from the stochastic optimisation methods code.
+
+2003-07-06 10:18  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, config.h, config.status,
+	configure, libtool, examples/Makefile, examples/Makefile.in,
+	src/Makefile, src/ga_core.c, tests/Makefile, util/Makefile,
+	util/gaul_config.h: All parameters are now copied in
+	ga_population_clone() and ga_population_clone_empty().
+
+2003-07-03 08:36  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.am, Makefile.in, config.h,
+	config.status, configure, configure.in, examples/nnevolve.c,
+	src/ga_seed.c, util/gaul_config.h: Added
+	ga_seed_double_random_unit_gaussian().	Fixed nnevolve.c with
+	respect to new chromosome prototypes.
+
+2003-06-30 16:58  stewartadcock
+
+	* LatestChanges, src/Makefile, src/Makefile.am, src/Makefile.in,
+	src/ga_chromo.h, src/ga_mutate.c: Added gaul.h header to the
+	dependencies for libgaul.la
+
+2003-06-30 16:57  stewartadcock
+
+	* src/: ga_chromo.c, gaul.h: All GAChromosome_* prototypes now take
+	(const population *) arguments.
+
+2003-06-30 10:27  stewartadcock
+
+	* LatestChanges, src/ga_seed.c, src/gaul.h: Added
+	ga_seed_boolean_zero().
+
+2003-06-30 10:24  stewartadcock
+
+	* src/ga_replace.c: Fixed typo in comments.
+
+2003-06-30 10:22  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	configure.in, gaul-devel-noslang.spec, gaul-devel.spec, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile, util/gaul_config.h: Bumped patch
+	version.
+
+2003-06-30 10:22  stewartadcock
+
+	* examples/royalroad_ss.c: Reduced maximum number of iterations to
+	50000.
+
+2003-06-29 13:18  stewartadcock
+
+	* AUTHORS, LatestChanges, Makefile, aclocal.m4, config.h,
+	config.status, configure, libtool, examples/Makefile,
+	examples/Makefile.am, examples/Makefile.in, examples/royalroad.c,
+	examples/royalroad_bitstring.c, examples/royalroad_ss.c,
+	src/Makefile, tests/Makefile, util/Makefile, util/gaul_config.h:
+	Added a new example (royalroad_bitstring) and tidied the output
+	from the original royalroad examples.
+
+2003-06-29 13:10  stewartadcock
+
+	* src/ga_crossover.c: Removed the assumption that sizeof(boolean)
+	== sizeof(int) -- which in fact is not the case on many platforms
+	now.
+
+2003-06-29 12:27  stewartadcock
+
+	* src/ga_bitstring.c: Fixed an embarasing bug in ga_bit_copy(),
+	reported by Henk van Lingen.
+
+2003-06-23 16:36  stewartadcock
+
+	* LatestChanges, examples/royalroad.c, examples/royalroad_ss.c:
+	Different type of elitism in the royalroad examples.
+
+2003-06-23 16:30  stewartadcock
+
+	* src/ga_crossover.c: Double-point crossover fixes.
+
+2003-06-23 15:13  stewartadcock
+
+	* AUTHORS, LatestChanges, Makefile, aclocal.m4, config.h,
+	config.status, configure, configure.in, gaul-devel-noslang.spec,
+	gaul-devel.spec, libtool, examples/Makefile, examples/Makefile.in,
+	src/Makefile, src/ga_crossover.c, tests/Makefile, util/Makefile,
+	util/gaul_config.h: Fixed bug in
+	ga_crossover_bitstring_doublepoints().
+
+2003-06-11 12:51  stewartadcock
+
+	* src/gaul.h: Added some annotations to the header files.
+
+2003-06-11 12:13  stewartadcock
+
+	* src/gaul.h: GAcompare function should return a double-precision
+	value.
+
+2003-06-11 11:53  stewartadcock
+
+	* Makefile, aclocal.m4, config.h, config.status, configure,
+	configure.in, libtool, examples/Makefile, examples/Makefile.in,
+	src/Makefile, tests/Makefile, util/Makefile, util/gaul_config.h:
+	Fixed generation of gaul_config.h
+
+2003-06-11 11:35  stewartadcock
+
+	* util/gaul_config.h.in: Added missing file.
+
+2003-06-11 11:14  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.am, Makefile.in, aclocal.m4,
+	config.h, config.h.in, config.status, configure, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, gaul.m4, libtool,
+	examples/Makefile, examples/Makefile.in, examples/btree.h,
+	examples/dejong.h, src/Makefile, src/Makefile.am, src/Makefile.in,
+	src/ga_bitstring.h, src/ga_core.h, src/ga_intrinsics.h,
+	src/ga_optim.c, src/ga_optim.h, src/ga_qsort.h,
+	src/ga_similarity.h, src/gaul.h, tests/Makefile, tests/Makefile.in,
+	util/Makefile, util/Makefile.am, util/Makefile.in,
+	util/SAA_header.h, util/compatibility.c, util/compatibility.h,
+	util/gaul_config.h, util/gaul_util.h, util/log_util.c,
+	util/mpi_util_fake.c, util/stamp-gaul_config: Significant header
+	file reorganisation.
+
+2003-06-10 22:53  stewartadcock
+
+	* AUTHORS: Added thanks to Gad Abraham for testing the new debian
+	package.
+
+2003-06-09 16:18  stewartadcock
+
+	* src/ga_qsort.c: COmpiler is now better at choosing functions to
+	inline.
+
+2003-06-06 10:08  stewartadcock
+
+	* util/timer_util.c: Minimised calls to time() and clock().
+
+2003-06-06 10:04  stewartadcock
+
+	* util/: timer_util.c, timer_util.c: Minimised calls to time() and
+	clock().
+
+2003-06-06 10:00  stewartadcock
+
+	* util/timer_util.c: Minimised calls to clock() and time().
+
+2003-06-05 18:32  stewartadcock
+
+	* util/random_util.c: Added some checks to avoid trying to
+	calculate modulus of zero.
+
+2003-06-05 18:27  stewartadcock
+
+	* util/: memory_chunks.c, memory_chunks.h, memory_util.c,
+	memory_util.h, str_util.c, timer_util.c, timer_util.h: Synchronised
+	with personal copies.
+
+2003-06-04 10:20  stewartadcock
+
+	* debian/: README.debian, changelog, control, copyright, dirs,
+	files, manpage.1.ex, rules, substvars, watch.ex: Added debian
+	package stuff.
+
+2003-06-03 14:30  stewartadcock
+
+	* util/: SAA_header.h, log_util.c, log_util.h: Work around lack of
+	vararg macros on MacOS X, even with gcc 3.1
+
+2003-06-02 22:26  stewartadcock
+
+	* Makefile, Makefile.am, Makefile.in: Added gaul-devel-noslang.spec
+	to distributed files.
+
+2003-06-02 20:56  stewartadcock
+
+	* Makefile, config.h, config.status, configure, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile: New release!
+
+2003-06-02 16:42  stewartadcock
+
+	* Makefile, config.h, config.status, configure, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile: More preparations for forthcoming
+	release.
+
+2003-06-01 18:17  stewartadcock
+
+	* LatestChanges, config.h, config.status, configure.in,
+	gaul-devel-noslang.spec, gaul-devel.spec, libtool: Preparation for
+	new release.
+
+2003-06-01 18:07  stewartadcock
+
+	* examples/struggle_dc: Removed struggle_dc executable from
+	repository.
+
+2003-06-01 18:00  stewartadcock
+
+	* ROADMAP, examples/struggle_dc.c: Added missing file to
+	repository.
+
+2003-06-01 16:36  stewartadcock
+
+	* gaul-devel-noslang.spec: A version of the RPM spec file added for
+	packages without slang-devel requirement.
+
+2003-06-01 16:31  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel.spec, libtool, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/struggle_dc, src/Makefile,
+	src/Makefile.am, src/Makefile.in, src/ga_core.c, src/ga_core.h,
+	src/ga_systematicsearch.c, tests/Makefile, util/Makefile:
+	Miscellaneous mods for clean compilation on a RH8.0 PC.  Bumped
+	patch version.
+
+2003-05-28 15:37  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	configure.in, gaul-devel.spec, libtool, examples/Makefile,
+	src/Makefile, tests/Makefile, util/Makefile: Bumped patch version.
+
+2003-05-28 15:01  stewartadcock
+
+	* gaul-devel.spec: RPM package improvements.
+
+2003-05-28 15:00  stewartadcock
+
+	* src/ga_gradient.c: FIxed careless bug.
+
+2003-05-22 15:12  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	libtool, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/struggle_dc, src/Makefile,
+	src/Makefile.am, src/Makefile.in, src/ga_compare.c, src/ga_core.h,
+	src/ga_deterministiccrowding.c, src/ga_deterministiccrowding.h,
+	src/gaul.h, tests/Makefile, util/Makefile: Added a Deterministic
+	Crowding algorithm.
+
+2003-05-22 14:44  stewartadcock
+
+	* util/random_util.c: An error message improved.
+
+2003-05-22 10:55  stewartadcock
+
+	* src/ga_core.c: Some uses of GAUL_DEBUG should have been GA_DEBUG.
+
+2003-05-21 17:07  stewartadcock
+
+	* src/ga_similarity.c: Removed a couple of stray comments.
+
+2003-05-20 17:02  stewartadcock
+
+	* src/ga_tabu.c: Corrected typo.
+
+2003-05-20 16:57  stewartadcock
+
+	* LatestChanges, src/ga_simplex.c, src/ga_systematicsearch.c,
+	src/ga_tabu.c, src/ga_gradient.c: Additional sanity checking added.
+
+2003-05-20 09:57  stewartadcock
+
+	* LatestChanges, configure.in, gaul-devel.spec: Bumped patch
+	version.
+
+2003-05-19 14:09  stewartadcock
+
+	* examples/wildfire_loadbalancing.c, src/ga_core.c: Improved some
+	error messages.
+
+2003-05-17 10:45  stewartadcock
+
+	* config.h, config.status, examples/wildfire_loadbalancing.c: Made
+	wildfire_loadbalancing example run for longer.
+
+2003-05-13 12:04  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, configure,
+	libtool, examples/Makefile, examples/Makefile.in,
+	examples/struggle_forked.c, src/Makefile, tests/Makefile,
+	util/Makefile: Gave struggle_forked the same GA parameters as
+	struggle.
+
+2003-05-01 11:47  stewartadcock
+
+	* util/memory_util.h: Fixed s_strndup() macros.
+
+2003-05-01 11:34  stewartadcock
+
+	* util/memory_util.h: s_strndup() macro fixed.
+
+2003-04-19 12:04  stewartadcock
+
+	* LatestChanges, src/ga_select.c, src/gaul.h: Added new selection
+	functions: ga_select_one_best(), ga_select_two_best(),
+	ga_select_one_aggressive(), ga_select_two_aggressive().
+
+2003-04-11 09:32  stewartadcock
+
+	* configure.in, gaul-devel.spec: Bumped up the patch level.
+
+2003-04-10 19:57  stewartadcock
+
+	* Makefile, config.h, config.status, libtool, examples/Makefile,
+	src/Makefile, src/ga_core.c, src/ga_utility.c, src/gaul.h,
+	tests/Makefile, util/Makefile: Added ga_funclookup_label_to_ptr()
+	function.
+
+2003-04-10 15:44  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, libtool,
+	examples/Makefile, src/Makefile, src/ga_core.c, src/gaul.h,
+	tests/Makefile, util/Makefile: Improved function lookup and
+	referencing code.
+
+2003-04-08 23:45  stewartadcock
+
+	* examples/diagnostics.c: Fixed typo in comments.
+
+2003-04-08 23:26  stewartadcock
+
+	* LatestChanges, config.h, config.status, src/ga_intrinsics.c:
+	Fixed bug in ga_slang_replace().
+
+2003-04-06 16:48  stewartadcock
+
+	* README, README: Updated README file.
+
+2003-04-06 16:38  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, config.h, config.h.in,
+	config.status, configure, configure.in, libtool, examples/Makefile,
+	examples/Makefile.in, examples/diagnostics.c, src/Makefile,
+	src/Makefile.am, src/Makefile.in, src/ga_utility.c, src/gaul.h,
+	tests/Makefile, tests/Makefile.in, util/Makefile, util/Makefile.am,
+	util/Makefile.in: Version details may be probed at run-time. 
+	Better namespace compliance for version constants.  diagnostics
+	example modified accordingly.
+
+2003-04-06 15:45  stewartadcock
+
+	* configure.in, gaul-devel.spec: Bumped patch level ready for
+	changes.
+
+2003-04-05 22:33  stewartadcock
+
+	* Makefile, ROADMAP, config.h, config.status, configure,
+	configure.in, gaul-devel.spec, libtool, examples/Makefile,
+	src/Makefile, tests/Makefile, util/Makefile: Prepared for
+	forthcoming 0.1843 release.
+
+2003-03-20 15:59  stewartadcock
+
+	* LatestChanges, examples/struggle.c, examples/struggle2.c,
+	examples/struggle3.c, examples/struggle4.c, examples/struggle5.c,
+	examples/struggle5_forked.c, examples/struggle5_mp.c,
+	examples/struggle_forked.c: The struggle examples all use
+	GA_ELITISM_PARENTS_DIE now.
+
+2003-03-20 14:58  stewartadcock
+
+	* ROADMAP: Pushed back some items in the roadmap.  I feel that it
+	is time for a new release, but realistically may things on this
+	portion of the roadmap won't be developed soon.
+
+2003-03-20 14:53  stewartadcock
+
+	* LatestChanges, ROADMAP, src/ga_intrinsics.c: Added
+	ga_population_get_generation() intrinsic for S-Lang scripting.
+
+2003-03-18 16:41  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	gaul-devel.spec, libtool, examples/Makefile, src/Makefile,
+	tests/Makefile, util/Makefile: Bumped up the patch level.
+
+2003-03-18 16:10  stewartadcock
+
+	* LatestChanges, src/ga_intrinsics.c, src/ga_optim.c, src/gaul.h:
+	Added new elitism option, GA_ELITISM_RESCORE_PARENTS.  This
+	re-evaluates the parent fitness and maintains them in the
+	population if they still have a sufficiently high fitness.
+
+2003-03-18 15:20  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	src/ga_core.c, src/ga_core.h, src/ga_optim.c, src/gaul.h,
+	tests/Makefile, util/Makefile, util/random_util.c: Added
+	ga_population_get_generation() function to access the generation
+	number from within the callbacks used during evolution, e.g. the
+	fitness evaluation function.
+
+2003-02-25 11:27  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status, libtool,
+	examples/Makefile, src/Makefile, src/ga_optim.c, src/ga_optim.h,
+	tests/Makefile: Updates.
+
+2003-02-25 11:26  stewartadcock
+
+	* util/: Makefile, compatibility.c, compatibility.h: Tweaked
+	strndup() prototype in the compatibility routines.
+
+2003-02-06 09:36  stewartadcock
+
+	* src/ga_core.c: Adjusted comments, as suggested by Kalin.
+
+2003-02-03 15:37  stewartadcock
+
+	* LatestChanges, Makefile, Makefile.in, config.h, config.h.in,
+	config.status, configure, configure.in, gaul-devel.spec, libtool,
+	examples/Makefile, examples/Makefile.am, examples/Makefile.in,
+	examples/struggle.c, src/Makefile, src/Makefile.in, src/ga_optim.c,
+	tests/Makefile, tests/Makefile.in, util/Makefile, util/Makefile.in,
+	util/SAA_header.h, util/log_util.c, util/mpi_util.c,
+	util/mpi_util.h, util/mpi_util_fake.c: Extensive changes to
+	parallel code.	Bumped up the patch version again.
+
+2003-02-03 14:26  stewartadcock
+
+	* util/Makefile.am, examples/Makefile.am: Simplified linking
+	requirements for code using GAUL.
+
+2003-02-03 12:29  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status,
+	examples/Makefile, src/Makefile, src/ga_core.c, src/ga_select.c,
+	tests/Makefile, util/Makefile, util/log_util.c: Fixed bug in
+	ga_select_one_sus() causing incorrect number of entities to be
+	selected.
+
+2003-02-03 08:54  stewartadcock
+
+	* config.h, config.status, configure, configure.in: Fixed bug in
+	configure script. (A missing "test" statement in configure.in).
+
+2003-01-28 15:47  stewartadcock
+
+	* AUTHORS, LatestChanges, Makefile, config.h, config.status,
+	configure, configure.in, gaul-devel.spec, libtool,
+	examples/Makefile, examples/Makefile.in, src/Makefile,
+	tests/Makefile, util/Makefile: Bumped patch level.  Added thanks to
+	Kalin Kozhuharov for all his effort with cross-compiling for a
+	Hitachi SR8000 system.
+
+2003-01-18 18:12  stewartadcock
+
+	* Makefile, config.h, config.status, libtool, examples/Makefile,
+	examples/Makefile.in, examples/fitting.c, examples/fitting_sd.c,
+	examples/fitting_simplex.c, examples/goldberg1.c,
+	examples/goldberg2.c, examples/pingpong.c, examples/pingpong9.c,
+	examples/pingpong_sa.c, examples/pingpong_tabu.c,
+	examples/pingpong_tabu2.c, examples/struggle.c,
+	examples/struggle2.c, examples/struggle3.c, examples/struggle5.c,
+	examples/struggle5_forked.c, examples/struggle5_mp.c,
+	examples/struggle_forked.c, examples/struggle_randomsearch.c,
+	examples/struggle_ss.c, examples/struggle_systematicsearch.c,
+	examples/test_ga.c, examples/wildfire.c,
+	examples/wildfire_forked.c, src/Makefile, src/ga_utility.c,
+	tests/Makefile, util/Makefile: Finished converting examples to use
+	the new ga_genesis_XXX() functions.
+
+2003-01-18 17:31  stewartadcock
+
+	* examples/royalroad.c, examples/royalroad_ss.c,
+	examples/saveload.c, examples/test_ga.c, examples/test_sd.c,
+	examples/test_simplex.c, examples/wildfire.c,
+	examples/wildfire_forked.c, examples/wildfire_loadbalancing.c,
+	src/ga_utility.c, src/gaul.h: Changed ga_genesis_XXX() functions so
+	that user data may be passed to the seed operator.
+
+2003-01-17 13:42  stewartadcock
+
+	* src/ga_core.c: Adjusted a type to avoid warning.
+
+2003-01-17 13:37  stewartadcock
+
+	* Makefile, Makefile.am, Makefile.in, README, config.h,
+	config.h.in, config.status, configure, configure.in,
+	gaul-devel.spec, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/btree.c, examples/btree.h,
+	examples/chromostubs.c, examples/chromostubs.h, examples/dejong.c,
+	examples/dejong.h, examples/diagnostics.c, examples/fitting.c,
+	examples/fitting_sd.c, examples/fitting_simplex.c,
+	examples/g_dejong.c, examples/goldberg1.c, examples/goldberg1.h,
+	examples/goldberg2.c, examples/goldberg2.h, examples/nnevolve.c,
+	examples/pingpong.c, examples/pingpong.h, examples/pingpong9.c,
+	examples/pingpong_sa.c, examples/pingpong_tabu.c,
+	examples/pingpong_tabu2.c, examples/royalroad.c,
+	examples/royalroad_ss.c, examples/saveload.c, examples/struggle.c,
+	examples/struggle2.c, examples/struggle3.c, examples/struggle4.c,
+	examples/struggle5.c, examples/struggle5_forked.c,
+	examples/struggle5_mp.c, examples/struggle_forked.c,
+	examples/struggle_randomsearch.c, examples/struggle_ss.c,
+	examples/struggle_systematicsearch.c, examples/test_ga.c,
+	examples/test_sd.c, examples/test_simplex.c, examples/wildfire.c,
+	examples/wildfire.h, examples/wildfire_forked.c,
+	examples/wildfire_loadbalancing.c, src/Makefile, src/Makefile.am,
+	src/Makefile.in, src/ga_bitstring.c, src/ga_bitstring.h,
+	src/ga_chromo.c, src/ga_chromo.h, src/ga_climbing.c,
+	src/ga_climbing.h, src/ga_core.c, src/ga_core.h,
+	src/ga_crossover.c, src/ga_gradient.c, src/ga_gradient.h,
+	src/ga_intrinsics.c, src/ga_intrinsics.h, src/ga_mutate.c,
+	src/ga_optim.c, src/ga_optim.h, src/ga_qsort.c, src/ga_qsort.h,
+	src/ga_randomsearch.c, src/ga_randomsearch.h, src/ga_replace.c,
+	src/ga_sa.c, src/ga_sa.h, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.c, src/ga_similarity.h, src/ga_simplex.c,
+	src/ga_simplex.h, src/ga_stats.c, src/ga_systematicsearch.c,
+	src/ga_systematicsearch.h, src/ga_tabu.c, src/ga_tabu.h,
+	src/ga_utility.c, src/ga_utility.h, src/gaul.h, util/Makefile,
+	util/Makefile.am, util/Makefile.in, util/SAA_header.h,
+	util/avltree.c, util/avltree.h, util/compatibility.c,
+	util/compatibility.h, util/dstr_util.c, util/dstr_util.h,
+	util/linkedlist.c, util/linkedlist.h, util/log_util.c,
+	util/log_util.h, util/log_util_parallel.c, util/memory_chunks.c,
+	util/memory_chunks.h, util/memory_util.c, util/memory_util.h,
+	util/mpi_util.c, util/mpi_util.h, util/mpi_util_fake.c,
+	util/nn_util.c, util/nn_util.h, util/random_util.c,
+	util/random_util.h, util/str_match.c, util/str_match.h,
+	util/str_util.c, util/str_util.h, util/table_util.c,
+	util/table_util.h, util/timer_util.c, util/timer_util.h: Following
+	advice from a lawyer, added text "All rights reserved." to the
+	copyright notice.
+
+2003-01-13 13:51  stewartadcock
+
+	* configure.in, util/SAA_header.h: Sincos problem for Intel C/C++
+	doesn't exist in latest version.
+
+2003-01-13 09:41  stewartadcock
+
+	* Makefile, config.h, config.status, configure, configure.in,
+	libtool, examples/Makefile, src/Makefile, tests/Makefile,
+	util/Makefile: Modified configure.in such that we get clean compile
+	on QNX 6.2
+
+2003-01-09 15:31  stewartadcock
+
+	* LatestChanges, Makefile, config.h, config.status,
+	gaul-devel.spec, libtool, examples/Makefile, examples/Makefile.in,
+	src/Makefile, tests/Makefile, util/Makefile, util/Makefile.am,
+	util/Makefile.in: Tidying makefiles etc.
+
+2003-01-09 00:39  stewartadcock
+
+	* examples/diagnostics.c, src/ga_bitstring.c, src/ga_bitstring.h:
+	Bug-fix in bitstring code.
+
+2003-01-08 22:03  stewartadcock
+
+	* Makefile, config.h, config.status, gaul-devel.spec,
+	examples/Makefile, src/Makefile, tests/Makefile, util/Makefile,
+	util/Makefile.am, util/Makefile.in, util/str_util.c,
+	util/str_util.h: Tweaked string handling functions (which GAUL
+	probably doesn;t use anyway!)
+
+2003-01-08 18:08  stewartadcock
+
+	* LatestChanges: Updated the LatestChanges file.
+
+2003-01-08 18:05  stewartadcock
+
+	* util/: Makefile.am, nn_main.c: Removed the standalone NN
+	simulator from the archive/distribution.  If anyone is interested
+	in the latest version, contact Stewart (stewart@linux-domain.com)
+	directly.
+
+2003-01-08 16:22  stewartadcock
+
+	* gaul-devel.spec: RPM spec file updated.
+
+2003-01-07 10:51  stewartadcock
+
+	* util/: dstr_util.c, dstr_util.h: Substituted files for versions
+	with extra dstr_copy() function.
+
+2003-01-07 10:38  stewartadcock
+
+	* util/: SAA_header.h, avltree.c, avltree.h: Sync with my personal
+	code.
+
+2003-01-07 10:28  stewartadcock
+
+	* LatestChanges, config.h, config.status, examples/Makefile,
+	src/Makefile, src/ga_core.c, src/gaul.h, util/Makefile,
+	util/linkedlist.c, util/linkedlist.h: Changes made after looking at
+	splint (http://www.splint.org/) reports.
+
+2003-01-06 09:51  stewartadcock
+
+	* src/ga_stats.c: Added missing ga_stats.c file to archive.
+
+2003-01-02 22:29  stewartadcock
+
+	* src/ga_search.c: Removed redundant ga_search.c file.
+
+2003-01-02 22:25  stewartadcock
+
+	* Makefile, ROADMAP, config.h, config.status, gaul-devel.spec,
+	examples/Makefile, src/Makefile, src/Makefile.am, src/Makefile.in,
+	src/README, src/ga_core.h, src/ga_utility.c, src/ga_utility.h,
+	src/gaul.h, tests/Makefile: Reorganised some code.  Split stats
+	functions into ga_stats.c from ga_utility.c and added a new
+	ga_fitness_average() function.	Public function prototypes moved
+	into gaul.h
+
+2003-01-02 22:24  stewartadcock
+
+	* util/: SAA_header.h, memory_chunks.c, memory_chunks.h,
+	str_util.h: Sync'd with personal versions of code.  Mostly just
+	code tidying.
+
+2003-01-02 11:08  stewartadcock
+
+	* util/: Makefile, Makefile.am: Just correcting a typo in the
+	comments.
+
+2002-12-31 15:44  stewartadcock
+
+	* ChangeLog: Ran cvs2cl.pl script to update the very out-of-date
+	changelog.
+
 2002-12-24 17:45  stewartadcock
 
 	* LatestChanges, Makefile, config.h, config.status, configure,
@@ -1589,14 +2839,7 @@
 2002-02-12 14:47  stewartadcock
 
 	* docs/: JOBS, Makefile, Makefile.am, README, TODO,
-	why_GA_work.ps.gz, html/books.html, html/chromosomes.html,
-	html/contribute.html, html/documentation.html, html/examples.html,
-	html/index.html, html/installation.html, html/intro.html,
-	html/licence.html, html/platforms.html, html/selection.html,
-	html/supportfunctions.html, html/tutorial1.html,
-	html/tutorial14.html, html/tutorial2.html, html/tutorial3.html,
-	html/tutorial4.html, html/tutorial5.html, html/tutorial6.html,
-	html/tutorial7.html: Moved documentation to its own CVS module.
+	why_GA_work.ps.gz: Moved documentation to its own CVS module.
 
 2002-02-12 14:46  stewartadcock
 
@@ -1669,11 +2912,10 @@
 2002-02-07 16:18  stewartadcock
 
 	* LatestChanges, Makefile, config.h, config.status, configure,
-	docs/Makefile, docs/html/tutorial14.html, docs/html/tutorial5.html,
-	examples/Makefile, examples/Makefile.am, examples/Makefile.in,
-	examples/nnevolve.c, src/Makefile, src/ga_core.h, tests/Makefile,
-	util/Makefile, util/Makefile.in: examples/nnevolve.c is now a
-	sensible example.
+	docs/Makefile, examples/Makefile, examples/Makefile.am,
+	examples/Makefile.in, examples/nnevolve.c, src/Makefile,
+	src/ga_core.h, tests/Makefile, util/Makefile, util/Makefile.in:
+	examples/nnevolve.c is now a sensible example.
 
 2002-02-07 16:16  stewartadcock
 
@@ -1742,10 +2984,10 @@
 
 2002-02-01 11:31  stewartadcock
 
-	* INSTALL, config.h, config.status, docs/html/installation.html,
-	src/Makefile, src/ga_chromo.c, util/Makefile: Fixed silly bug in
-	chromosome<->byte conversion code.  Added comment about the very
-	useful Electric Fence malloc debugger to the docs!
+	* INSTALL, config.h, config.status, src/Makefile, src/ga_chromo.c,
+	util/Makefile: Fixed silly bug in chromosome<->byte conversion
+	code.  Added comment about the very useful Electric Fence malloc
+	debugger to the docs!
 
 2002-02-01 11:29  stewartadcock
 
@@ -1799,8 +3041,7 @@
 
 2002-01-29 21:03  stewartadcock
 
-	* docs/html/documentation.html, docs/html/index.html,
-	examples/Makefile, examples/Makefile.am, examples/Makefile.in,
+	* examples/Makefile, examples/Makefile.am, examples/Makefile.in,
 	examples/btree.c, examples/btree.h, src/Makefile, src/Makefile.in,
 	src/ga_core.c, tests/Makefile, tests/Makefile.in, util/avltree.c,
 	util/avltree.h, util/compatibility.c, util/compatibility.h,
@@ -1820,10 +3061,6 @@
 
 	* gaul.spec, gaul.spec.in: RPM spec file sorted out.
 
-2002-01-29 16:11  stewartadcock
-
-	* docs/html/tutorial7.html: Custom chromosome tutorial started.
-
 2002-01-29 16:10  stewartadcock
 
 	* examples/Makefile, examples/Makefile.am, examples/Makefile.in,
@@ -1832,12 +3069,10 @@
 
 2002-01-29 13:55  stewartadcock
 
-	* docs/html/documentation.html, docs/html/tutorial14.html,
-	docs/html/tutorial6.html, examples/Makefile.am,
-	examples/evolve_nn.c, examples/nn_util.c, examples/nn_util.h,
-	examples/run_examples.csh, util/SAA_header.h, util/linkedlist.c,
-	util/random_util.c, util/random_util.h, util/table.c: Some work on
-	the examples.  Utility files updated.
+	* examples/Makefile.am, examples/evolve_nn.c, examples/nn_util.c,
+	examples/nn_util.h, examples/run_examples.csh, util/SAA_header.h,
+	util/linkedlist.c, util/random_util.c, util/random_util.h,
+	util/table.c: Some work on the examples.  Utility files updated.
 
 2002-01-28 17:14  stewartadcock
 
@@ -1846,9 +3081,7 @@
 
 2002-01-28 17:12  stewartadcock
 
-	* docs/html/documentation.html, docs/html/index.html,
-	docs/html/installation.html, docs/html/platforms.html,
-	util/SAA_header.h, util/table.c: Minor alterations required for
+	* util/: SAA_header.h, table.c: Minor alterations required for
 	clean compilation using Intel C/C++.  Documentation updated
 	accordingly.
 
@@ -1879,23 +3112,6 @@
 	examples/Makefile.am, examples/Makefile.in, src/Makefile.am,
 	src/Makefile.in, src/ga_core.c: Build fixes.  Reduced default debug
 	level.
-
-2002-01-27 16:13  stewartadcock
-
-	* docs/html/: books.html, chromosomes.html, documentation.html,
-	examples.html, index.html, installation.html, intro.html,
-	licence.html, platforms.html, selection.html,
-	supportfunctions.html, tutorial1.html, tutorial2.html,
-	tutorial3.html, tutorial4.html, tutorial5.html, tutorial6.html:
-	Copyright notices on webpages updated to 2002.
-
-2002-01-27 15:49  stewartadcock
-
-	* docs/html/index.html: Corrected poor grammar.
-
-2002-01-25 17:03  stewartadcock
-
-	* docs/html/platforms.html: Supported platforms updated.
 
 2002-01-25 14:46  stewartadcock
 
@@ -1940,23 +3156,16 @@
 
 2002-01-03 10:57  stewartadcock
 
-	* docs/html/index.html, src/ga_core.c, src/ga_core.h,
-	src/ga_utility.c, util/linkedlist.h: Can now safely link glib/GTK+
-	into same program as GAUL.
+	* src/ga_core.c, src/ga_core.h, src/ga_utility.c,
+	util/linkedlist.h: Can now safely link glib/GTK+ into same program
+	as GAUL.
 
 2001-12-19 10:53  stewartadcock
 
 	* ChangeLog, LatestChanges, Makefile.am, Makefile.in, config.h,
 	config.status, configure, configure.in, libtool,
-	docs/html/supportfunctions.html, examples/Makefile.in,
-	src/ga_intrinsics.h, tests/Makefile.am, util/avltree.c,
-	util/compatibility.c: Added some missing stuff.
-
-2001-12-19 10:43  stewartadcock
-
-	* docs/html/: documentation.html, platforms.html,
-	simpletutorial.html, tutorial5.html, tutorial6.html: Tutorial
-	updates.
+	examples/Makefile.in, src/ga_intrinsics.h, tests/Makefile.am,
+	util/avltree.c, util/compatibility.c: Added some missing stuff.
 
 2001-12-19 10:33  stewartadcock
 
@@ -1965,11 +3174,10 @@
 
 2001-12-18 14:32  stewartadcock
 
-	* docs/html/documentation.html, src/ga_core.c, src/ga_core.h,
-	src/ga_utility.c, src/ga_utility.h, util/compatibility.c,
-	util/compatibility.h, util/table.c, util/table.h: - Added
-	ga_get_all_populations() which returns array of all currently
-	allocated populations.
+	* src/ga_core.c, src/ga_core.h, src/ga_utility.c, src/ga_utility.h,
+	util/compatibility.c, util/compatibility.h, util/table.c,
+	util/table.h: - Added ga_get_all_populations() which returns array
+	of all currently allocated populations.
 	
 	- Added ga_get_all_population_ids() which returns array of all
 	currently allocated populations' indices.
@@ -1996,10 +3204,6 @@
 
 	* docs/TODO: Tweaked the TODO list.
 
-2001-12-05 11:31  stewartadcock
-
-	* docs/html/tutorial5.html: Added another tutorial file.
-
 2001-12-05 10:54  stewartadcock
 
 	* docs/TODO, src/ga_core.c, util/SAA_header.h: Ready for release
@@ -2012,16 +3216,14 @@
 
 2001-11-29 16:44  stewartadcock
 
-	* docs/html/platforms.html, examples/Makefile.am,
-	util/SAA_header.h, util/linkedlist.c, util/linkedlist.h,
-	util/memory_util.c, util/memory_util.h, util/random_util.c: Clean
-	compilation on Solaris2.7
+	* examples/Makefile.am, util/SAA_header.h, util/linkedlist.c,
+	util/linkedlist.h, util/memory_util.c, util/memory_util.h,
+	util/random_util.c: Clean compilation on Solaris2.7
 
 2001-11-29 15:57  stewartadcock
 
-	* docs/html/examples.html, docs/html/platforms.html,
-	docs/html/selection.html, docs/html/tutorial4.html,
-	examples/struggle5.c, src/ga_select.c: Applied some tutorial fixes.
+	* examples/struggle5.c, src/ga_select.c: Applied some tutorial
+	fixes.
 
 2001-11-29 14:33  stewartadcock
 
@@ -2030,10 +3232,10 @@
 
 2001-11-29 13:39  stewartadcock
 
-	* docs/Makefile.am, docs/Makefile.in, docs/html/index.html,
-	src/Makefile.am, src/Makefile.in, src/ga_intrinsics.h,
-	tests/Makefile.in, util/Makefile.in: configure.in/Makefile.am fixes
-	for clean compilation with SLang
+	* docs/Makefile.am, docs/Makefile.in, src/Makefile.am,
+	src/Makefile.in, src/ga_intrinsics.h, tests/Makefile.in,
+	util/Makefile.in: configure.in/Makefile.am fixes for clean
+	compilation with SLang
 
 2001-11-22 18:11  stewartadcock
 
@@ -2044,13 +3246,6 @@
 
 	* docs/why_GA_work.ps.gz: Added a useful short report about the
 	schema theorem.
-
-2001-11-22 17:20  stewartadcock
-
-	* docs/html/: chromosomes.html, contribute.html, examples.html,
-	simpletutorial.html, tutorial1.html, tutorial2.html,
-	tutorial3.html, tutorial4.html: Fixed some links in the
-	documentation/webpages.
 
 2001-11-22 16:58  stewartadcock
 
@@ -2099,9 +3294,7 @@
 
 2001-08-08 10:38  stewartadcock
 
-	* LatestChanges, README, docs/TODO, docs/html/documentation.html,
-	docs/html/index.html, docs/html/licence.html,
-	docs/html/license.html, src/ga_core.c, src/ga_core.h,
+	* LatestChanges, README, docs/TODO, src/ga_core.c, src/ga_core.h,
 	src/ga_utility.c, src/ga_utility.h, tests/struggle3.c,
 	tests/wildfire.c, util/table.c: Prepare for release 0.1835
 
@@ -2115,7 +3308,6 @@
 
 	* INSTALL, LatestChanges, README, acconfig.h, config.h,
 	config.h.in, config.status, configure, configure.in, docs/JOBS,
-	docs/html/contribute.html, docs/html/tutorial3.html,
 	src/ga_bitstring.o, src/ga_chromo.c, src/ga_core.h, src/ga_optim.c,
 	src/ga_qsort.c, src/ga_similarity.c, src/ga_utility.c,
 	src/ga_utility.h, src/gaul.h, tests/Makefile.am, tests/Makefile.in,
@@ -2125,9 +3317,7 @@
 
 2001-07-22 06:00  stewartadcock
 
-	* LatestChanges, docs/html/documentation.html,
-	docs/html/index.html, docs/html/intro.html,
-	docs/html/tutorial4.html, tests/Makefile.am, tests/Makefile.in,
+	* LatestChanges, tests/Makefile.am, tests/Makefile.in,
 	tests/struggle5.c: Website updates
 
 2001-07-22 04:30  stewartadcock
@@ -2142,48 +3332,43 @@
 
 2001-07-11 02:56  stewartadcock
 
-	* LatestChanges, config.h, config.status, docs/html/index.html,
-	src/ga_bitstring.o, src/ga_core.c, src/ga_core.h, src/ga_optim.c,
-	src/ga_optim.h, src/ga_utility.c, tests/Makefile.am,
-	tests/Makefile.in, tests/royalroad_ss.o, tests/struggle4.c,
-	tests/struggle_ss.o: Tidied some miscellaneous comments.
+	* LatestChanges, config.h, config.status, src/ga_bitstring.o,
+	src/ga_core.c, src/ga_core.h, src/ga_optim.c, src/ga_optim.h,
+	src/ga_utility.c, tests/Makefile.am, tests/Makefile.in,
+	tests/royalroad_ss.o, tests/struggle4.c, tests/struggle_ss.o:
+	Tidied some miscellaneous comments.
 
 2001-07-08 04:40  stewartadcock
 
-	* LatestChanges, config.h, config.status,
-	docs/html/documentation.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/tutorial1.html,
-	docs/html/tutorial2.html, docs/html/tutorial3.html,
-	docs/html/tutorial4.html, src/ga_bitstring.c, src/ga_bitstring.o,
-	src/ga_core.c, src/ga_core.h, src/ga_intrinsics.c,
-	src/ga_intrinsics.h, src/ga_optim.c, src/ga_utility.c, src/gaul.h,
-	tests/Makefile.am, tests/Makefile.in, tests/struggle.c,
-	tests/struggle2.c, tests/struggle3.c, tests/struggle4.c: - Added
-	version of the struggle example for comparison of the alternative
-	evolutionary schemes: tests/struggle2.c - Added version of the
-	struggle example to show custom termination criteria and some
-	simple statistics: tests/struggle3.c - Added version of the
-	struggle example to show usage of custom operators:
-	tests/struggle4.c - Renamed the SLang intrinsic ga_entity_clone()
-	to ga_entity_clone_wrapper(), and added new, C-callable
-	ga_entity_clone().  - Renamed all ga_copy_entity[_XXX]() functions
-	to ga_entity_copy[_XXX]() for consistency.  - For convenience,
-	added ga_population_clone().  - GA_UTIL_MIN_FITNESS renamed to
-	GA_MIN_FITNESS, and is correctly used everywhere now.  - Fixed
-	chromosome replication bug (I was copying destination to source,
-	doh!).	- Some tutorial-style documentation about the "struggle"
-	examples added.
+	* LatestChanges, config.h, config.status, src/ga_bitstring.c,
+	src/ga_bitstring.o, src/ga_core.c, src/ga_core.h,
+	src/ga_intrinsics.c, src/ga_intrinsics.h, src/ga_optim.c,
+	src/ga_utility.c, src/gaul.h, tests/Makefile.am, tests/Makefile.in,
+	tests/struggle.c, tests/struggle2.c, tests/struggle3.c,
+	tests/struggle4.c: - Added version of the struggle example for
+	comparison of the alternative evolutionary schemes:
+	tests/struggle2.c - Added version of the struggle example to show
+	custom termination criteria and some simple statistics:
+	tests/struggle3.c - Added version of the struggle example to show
+	usage of custom operators: tests/struggle4.c - Renamed the SLang
+	intrinsic ga_entity_clone() to ga_entity_clone_wrapper(), and added
+	new, C-callable ga_entity_clone().  - Renamed all
+	ga_copy_entity[_XXX]() functions to ga_entity_copy[_XXX]() for
+	consistency.  - For convenience, added ga_population_clone().  -
+	GA_UTIL_MIN_FITNESS renamed to GA_MIN_FITNESS, and is correctly
+	used everywhere now.  - Fixed chromosome replication bug (I was
+	copying destination to source, doh!).  - Some tutorial-style
+	documentation about the "struggle" examples added.
 
 2001-07-04 15:01  uid51382
 
-	* LatestChanges, config.h, config.status,
-	docs/html/simpletutorial.html, src/ga_optim.h, src/ga_replace.c,
-	tests/Makefile.am, tests/Makefile.in, tests/pingpong.c,
-	tests/royalroad.c, tests/royalroad_ss.c, tests/royalroad_ss.o,
-	tests/struggle_ss.c, tests/struggle_ss.o: - Tidied pingpong.c -
-	Added missing ga_evolution_steady_state() prototype.  - Added
-	version of the royalroad example which uses a steady state GA
-	instead: tests/royalroad_ss.c
+	* LatestChanges, config.h, config.status, src/ga_optim.h,
+	src/ga_replace.c, tests/Makefile.am, tests/Makefile.in,
+	tests/pingpong.c, tests/royalroad.c, tests/royalroad_ss.c,
+	tests/royalroad_ss.o, tests/struggle_ss.c, tests/struggle_ss.o: -
+	Tidied pingpong.c - Added missing ga_evolution_steady_state()
+	prototype.  - Added version of the royalroad example which uses a
+	steady state GA instead: tests/royalroad_ss.c
 
 2001-07-01 06:52  stewartadcock
 
@@ -2195,19 +3380,15 @@
 2001-07-01 06:36  stewartadcock
 
 	* LatestChanges, README, config.h, config.status, cvsignore,
-	diff.ignore, docs/html/chromosomes.html,
-	docs/html/documentation.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/platforms.html,
-	docs/html/selection.html, docs/html/simpletutorial.html,
-	src/ga_chromo.c, tests/Makefile.am, tests/Makefile.in,
+	diff.ignore, src/ga_chromo.c, tests/Makefile.am, tests/Makefile.in,
 	tests/chromostubs.c, tests/chromostubs.h, tests/struggle.c: - Some
 	more documentation.  - examples/chromostubs.c added.  - .cvsignore
 	updated, thn renamed to cvsignore.
 
 2001-06-30 15:57  stewartadcock
 
-	* LatestChanges, config.h, config.status, docs/html/index.html,
-	src/Makefile.am, src/Makefile.in, src/README, src/ga_bitstring.c,
+	* LatestChanges, config.h, config.status, src/Makefile.am,
+	src/Makefile.in, src/README, src/ga_bitstring.c,
 	src/ga_bitstring.h, src/ga_bitstring.o, src/ga_chromo.c,
 	src/ga_chromo.h, src/ga_core.h, src/ga_crossover.c,
 	src/ga_mutate.c, src/ga_seed.c, src/ga_similarity.c,
@@ -2219,14 +3400,10 @@
 	bitstring chromosomes (incl. the necessary handling routines).	-
 	Added De Jong files.
 
-2001-06-24 06:28  stewartadcock
-
-	* docs/html/platforms.html: docs/html/platforms.html updated.
-
 2001-06-24 06:12  stewartadcock
 
-	* docs/html/index.html, src/ga_select.c: - ga_select_every_one()
-	and ga_select_every_two() really do selct every single/pair of
+	* src/ga_select.c: - ga_select_every_one() and
+	ga_select_every_two() really do selct every single/pair of
 	entities.  - Fixed some links on website.
 
 2001-06-22 07:51  stewartadcock
@@ -2242,25 +3419,21 @@
 
 2001-06-20 14:56  stewartadcock
 
-	* ChangeLog, LatestChanges, config.h, config.status, configure,
-	docs/html/books.html: ChangeLog created with cvs2cl.pl
+	* ChangeLog, LatestChanges, config.h, config.status, configure:
+	ChangeLog created with cvs2cl.pl
 
 2001-06-20 14:03  stewartadcock
 
 	* INSTALL, LatestChanges, Makefile.am, Makefile.in, README,
 	config.h, config.status, configure, configure.in, stamp-h.in,
-	docs/JOBS, docs/README, docs/TODO, docs/html/books.html,
-	docs/html/documentation.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/installation.html,
-	docs/html/intro.html, docs/html/license.html,
-	docs/html/platforms.html, src/Makefile.am, src/Makefile.in,
-	src/ga_core.c, tests/README, tests/struggle.c, util/Makefile.am,
-	util/Makefile.in, util/dstr_util.c, util/dstr_util.h,
-	util/random_util.h, util/str_hash.c, util/str_hash.h,
-	util/str_match.c, util/str_match.h, util/str_perl.c,
-	util/str_perl.h, util/str_util.c, util/str_util.h: Changes for
-	compilation under FreeBSD. (There are still lots of warnings about
-	the use of the deprecated header file "malloc.h")
+	docs/JOBS, docs/README, docs/TODO, src/Makefile.am,
+	src/Makefile.in, src/ga_core.c, tests/README, tests/struggle.c,
+	util/Makefile.am, util/Makefile.in, util/dstr_util.c,
+	util/dstr_util.h, util/random_util.h, util/str_hash.c,
+	util/str_hash.h, util/str_match.c, util/str_match.h,
+	util/str_perl.c, util/str_perl.h, util/str_util.c, util/str_util.h:
+	Changes for compilation under FreeBSD. (There are still lots of
+	warnings about the use of the deprecated header file "malloc.h")
 	
 	Changes for compilation under Solaris.
 	
@@ -2280,59 +3453,54 @@
 
 2001-06-17 12:48  stewartadcock
 
-	* LatestChanges, docs/html/examples.html, docs/html/index.html,
-	tests/btree.c, tests/btree.h, util/avltree.c, util/avltree.h,
-	util/linkedlist.c, util/linkedlist.h, util/str_atof.c,
-	util/table.c, util/table.h: Added 'GPL'd header' to source files
-	which were missing it.
+	* LatestChanges, tests/btree.c, tests/btree.h, util/avltree.c,
+	util/avltree.h, util/linkedlist.c, util/linkedlist.h,
+	util/str_atof.c, util/table.c, util/table.h: Added 'GPL'd header'
+	to source files which were missing it.
 
 2001-06-17 05:22  stewartadcock
 
-	* LatestChanges, configure.in, diff.ignore,
-	docs/html/examples.html: Added LatestChanges file to CVS.  Added
-	tests/struggle info to docs/html/examples.html
+	* LatestChanges, configure.in, diff.ignore: Added LatestChanges
+	file to CVS.  Added tests/struggle info to docs/html/examples.html
 
 2001-06-17 04:57  stewartadcock
 
 	* config.h, config.status, configure, configure.in, docs/TODO,
-	docs/html/index.html, src/Makefile.am, src/Makefile.in,
-	src/ga_chromo.c, src/ga_chromo.h, src/ga_core.c, src/ga_core.h,
-	src/ga_crossover.c, src/ga_mutate.c, src/ga_replace.c,
-	src/ga_seed.c, src/ga_select.c, src/ga_utility.c, src/ga_utility.h,
-	tests/Makefile.am, tests/Makefile.in, tests/README,
-	tests/goldberg1.c, tests/goldberg2.c, tests/pingpong.c,
-	tests/royalroad.c, tests/struggle.c: Lots of minor changes + bug
-	fixes.	- Fixed minor bug in ./configure.in, message said
-	"--with-slang=no", but should have said "--enable-slang=no".  - Add
-	files tests/btree.c and tests/btree.h - code doesn't compile
-	without them! - Some more, really suspect, functions added to
-	src/ga_utility.c.  ga_entity_dump() and ga_population_dump() also
-	added.	- New "printable characters"-based mutations etc.  - A new
-	example program added, tests/struggle.c - src/libga.a renamed to
-	src/libgaul.a - Some additional prototypes added into the header
-	files.	- Examples now use ga_chromosome_XXX_to_staticstring()
-	where appropriate.  - Replaced s_calloc() calls in src/ga_chromo.c
-	with s_malloc() calls.	- Fixed bug in ga_select_stats().  -
-	Overhauled tests/Makefile.am - Fixed serious bug (segfault) in
-	ga_select_roulette_{one|two}().  - Added
-	ga_crossover_char_{singlepoints|doublepoints}().
+	src/Makefile.am, src/Makefile.in, src/ga_chromo.c, src/ga_chromo.h,
+	src/ga_core.c, src/ga_core.h, src/ga_crossover.c, src/ga_mutate.c,
+	src/ga_replace.c, src/ga_seed.c, src/ga_select.c, src/ga_utility.c,
+	src/ga_utility.h, tests/Makefile.am, tests/Makefile.in,
+	tests/README, tests/goldberg1.c, tests/goldberg2.c,
+	tests/pingpong.c, tests/royalroad.c, tests/struggle.c: Lots of
+	minor changes + bug fixes.  - Fixed minor bug in ./configure.in,
+	message said "--with-slang=no", but should have said
+	"--enable-slang=no".  - Add files tests/btree.c and tests/btree.h -
+	code doesn't compile without them! - Some more, really suspect,
+	functions added to src/ga_utility.c.  ga_entity_dump() and
+	ga_population_dump() also added.  - New "printable
+	characters"-based mutations etc.  - A new example program added,
+	tests/struggle.c - src/libga.a renamed to src/libgaul.a - Some
+	additional prototypes added into the header files.  - Examples now
+	use ga_chromosome_XXX_to_staticstring() where appropriate.  -
+	Replaced s_calloc() calls in src/ga_chromo.c with s_malloc() calls.
+	 - Fixed bug in ga_select_stats().  - Overhauled tests/Makefile.am
+	- Fixed serious bug (segfault) in ga_select_roulette_{one|two}(). 
+	- Added ga_crossover_char_{singlepoints|doublepoints}().
 
 2001-06-16 14:44  stewartadcock
 
-	* configure.in, docs/html/index.html, src/ga_utility.c,
-	tests/btree.c, tests/btree.h: some trivial binary tree code added. 
-	Will form base for "tree chromosome" example.
+	* configure.in, src/ga_utility.c, tests/btree.c, tests/btree.h:
+	some trivial binary tree code added.  Will form base for "tree
+	chromosome" example.
 
 2001-06-16 13:42  stewartadcock
 
-	* config.h, config.status, docs/html/books.html,
-	docs/html/examples.html, docs/html/installation.html,
-	src/ga_chromo.c, src/ga_core.h, src/ga_crossover.c,
-	src/ga_mutate.c, src/ga_seed.c, tests/Makefile.am,
-	tests/Makefile.in, tests/goldberg2.c, util/Makefile.am,
-	util/Makefile.in, util/avltree.c, util/linkedlist.c,
-	util/random_util.c, util/random_util.h: Minor tweaks prior to
-	release 0.1836
+	* config.h, config.status, src/ga_chromo.c, src/ga_core.h,
+	src/ga_crossover.c, src/ga_mutate.c, src/ga_seed.c,
+	tests/Makefile.am, tests/Makefile.in, tests/goldberg2.c,
+	util/Makefile.am, util/Makefile.in, util/avltree.c,
+	util/linkedlist.c, util/random_util.c, util/random_util.h: Minor
+	tweaks prior to release 0.1836
 
 2001-06-13 17:13  stewartadcock
 
@@ -2343,21 +3511,18 @@
 2001-06-13 17:04  stewartadcock
 
 	* INSTALL, README, config.h, config.status, configure,
-	configure.in, docs/TODO, docs/html/contribute.html,
-	docs/html/documentation.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/installation.html, src/Makefile.am,
-	src/README, src/ga_chromo.c, src/ga_chromo.h, src/ga_core.c,
-	src/ga_core.h, src/ga_crossover.c, src/ga_intrinsics.c,
-	src/ga_intrinsics.h, src/ga_mutate.c, src/ga_optim.c,
-	src/ga_optim.h, src/ga_qsort.c, src/ga_qsort.h, src/ga_replace.c,
-	src/ga_seed.c, src/ga_select.c, src/ga_similarity.c,
-	src/ga_similarity.h, src/ga_util.c, src/ga_util.h,
-	src/ga_utility.c, src/ga_utility.h, src/gaul.h, tests/goldberg1.c,
-	tests/goldberg1.h, tests/goldberg2.c, tests/goldberg2.h,
-	tests/pingpong.c, tests/pingpong.h, tests/royalroad.c,
-	tests/wildfire.c, tests/wildfire.h: Extensive rewrite to make core
-	routines chromosome datatype agnostic.	Some more documentation
-	added.
+	configure.in, docs/TODO, src/Makefile.am, src/README,
+	src/ga_chromo.c, src/ga_chromo.h, src/ga_core.c, src/ga_core.h,
+	src/ga_crossover.c, src/ga_intrinsics.c, src/ga_intrinsics.h,
+	src/ga_mutate.c, src/ga_optim.c, src/ga_optim.h, src/ga_qsort.c,
+	src/ga_qsort.h, src/ga_replace.c, src/ga_seed.c, src/ga_select.c,
+	src/ga_similarity.c, src/ga_similarity.h, src/ga_util.c,
+	src/ga_util.h, src/ga_utility.c, src/ga_utility.h, src/gaul.h,
+	tests/goldberg1.c, tests/goldberg1.h, tests/goldberg2.c,
+	tests/goldberg2.h, tests/pingpong.c, tests/pingpong.h,
+	tests/royalroad.c, tests/wildfire.c, tests/wildfire.h: Extensive
+	rewrite to make core routines chromosome datatype agnostic.  Some
+	more documentation added.
 
 2001-06-13 07:46  stewartadcock
 
@@ -2370,27 +3535,19 @@
 
 2001-06-13 06:09  stewartadcock
 
-	* configure.in, docs/html/books.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/intro.html, util/SAA_header.h,
-	util/random_util.c, util/random_util.h: Sync'ed to personal CVS. 
-	Lots of minor modifications, but nothing significant.
+	* configure.in, util/SAA_header.h, util/random_util.c,
+	util/random_util.h: Sync'ed to personal CVS.  Lots of minor
+	modifications, but nothing significant.
 
 2001-06-10 12:04  stewartadcock
 
-	* docs/html/examples.html, tests/pingpong, tests/wildfire: Removed
-	executables from the CVS archive.
+	* tests/: pingpong, wildfire: Removed executables from the CVS
+	archive.
 
 2001-06-10 11:50  stewartadcock
 
-	* docs/html/books.html, docs/html/examples.html,
-	docs/html/index.html, docs/html/intro.html, docs/html/license.html,
-	src/ga_optim.c, src/ga_replace.c: Added some documentation of the
+	* src/: ga_optim.c, ga_replace.c: Added some documentation of the
 	example programs.  (Not much though!)
-
-2001-06-10 05:26  stewartadcock
-
-	* docs/html/: books.html, index.html, intro.html, license.html:
-	Actually commited the docs/html stuff this time (whoops).
 
 2001-06-08 13:41  stewartadcock
 

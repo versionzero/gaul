@@ -30,7 +30,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 # Kludge:
-INCLUDES = -I../util/ -I../src/
+INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/
 
 bin_PROGRAMS = \
 	test_ga test_simplex test_sd \

@@ -30,7 +30,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 # Kludge:
-INCLUDES = -I../util/ -I/usr/include/slang/
+INCLUDES = -I../util/ -I../../util/ -I/usr/include/slang/
 
 lib_LTLIBRARIES = libgaul.la
 

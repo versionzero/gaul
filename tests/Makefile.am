@@ -29,7 +29,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 # Kludge:
-INCLUDES = -I../util/ -I../src/ -I/usr/include/slang/
+INCLUDES = -I../util/ -I../../util/ -I../src/ -I../../src/ -I/usr/include/slang/
 
 bin_PROGRAMS = diagnostics
 

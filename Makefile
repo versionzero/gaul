@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /u2
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -66,10 +66,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = .
 
-ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run autoconf
-AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -97,7 +97,7 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-3/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1846-4/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -135,16 +135,16 @@ VERSION = 0.1846-4
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
-install_sh = /u1/adcock/gaul-devel-0.1846-3/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1846-4/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-
 #ACLOCAL_AMFLAGS = -I .
-SUBDIRS = util src tests examples .
+
+#SUBDIRS = util src tests examples .
 #SUBDIRS = util src tests examples extra .
-#SUBDIRS = util src tests examples debian .
+SUBDIRS = util src tests examples debian .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec
