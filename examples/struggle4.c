@@ -282,7 +282,7 @@ int main(int argc, char **argv)
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
 
-  random_seed(42);
+  random_seed(23091975);
 
 /*
  * Allocate a new popuation structure.

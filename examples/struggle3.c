@@ -34,8 +34,6 @@
 		Chapter 3 of Darwin's "The Origin of Species",
 		entitled "Struggle for Existence".
 
-		This example is explained in docs/html/tutorial3.html
-
  **********************************************************************/
 
 /*
@@ -196,7 +194,7 @@ int main(int argc, char **argv)
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
 
-  random_seed(42);
+  random_seed(23091975);
 
   pop = ga_genesis_char(
      120,				/* const int              population_size */
@@ -225,7 +223,7 @@ int main(int argc, char **argv)
      0.0				/* const double		migration */
                             );
 
-  if ( ga_evolution( pop, 1000 ) )
+  if ( ga_evolution( pop, 1000 )<1000 )
     {
     printf("The evolution was stopped because the termination criteria were met.\n" );
     }

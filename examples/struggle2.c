@@ -140,7 +140,7 @@ int main(int argc, char **argv)
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
 
-  random_seed(42);
+  random_seed(23091975);
 
   popd = ga_genesis_char(
      150,			/* const int              population_size */
@@ -177,6 +177,10 @@ int main(int argc, char **argv)
   ga_population_set_scheme(popb, GA_SCHEME_BALDWIN_CHILDREN);
   popl = ga_population_clone(popd);
   ga_population_set_scheme(popl, GA_SCHEME_LAMARCK_CHILDREN);
+
+/*
+ * Evolve each population in turn.
+ */
 
   ga_evolution(
     popd,			/* population          *pop */
