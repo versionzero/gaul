@@ -19,7 +19,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -46,7 +46,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /u2/adcock
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -140,10 +140,11 @@ install_sh = /u1/adcock/gaul-devel-0.1846-3/install-sh
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-#ACLOCAL_AMFLAGS = -I .
 
+#ACLOCAL_AMFLAGS = -I .
+SUBDIRS = util src tests examples .
 #SUBDIRS = util src tests examples extra .
-SUBDIRS = util src tests examples debian .
+#SUBDIRS = util src tests examples debian .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec

@@ -12056,7 +12056,7 @@ LIBS="$LIBS $MPILIBS"
           ac_config_commands="$ac_config_commands default-1"
 
 
-#AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/pp/Makefile],
+#AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile extra/Makefile extra/Jess/Makefile],
                                                             ac_config_files="$ac_config_files Makefile util/Makefile src/Makefile tests/Makefile examples/Makefile debian/Makefile"
           ac_config_commands="$ac_config_commands default"
 cat >confcache <<\_ACEOF

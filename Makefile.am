@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -32,8 +32,9 @@ AUTOMAKE_OPTIONS = 1.4
 
 #ACLOCAL_AMFLAGS = -I .
 
+SUBDIRS = util src tests examples .
 #SUBDIRS = util src tests examples extra .
-SUBDIRS = util src tests examples debian .
+#SUBDIRS = util src tests examples debian .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec

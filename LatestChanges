@@ -19,6 +19,7 @@ Changes since release 0.1846:
 - Changes for clean compilation with gcc 3.2
 - AMD64 fixes.
 - Tweaked fitting, fitting_sd and fitting_simplex examples.
+- Added two new selection criteria, based on Stochastic Universal Sampling; ga_select_one_sussq() and ga_select_two_sussq().  These select entities with probability proportional to their squared fitness.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul - Genetic Algorithm Utility Library.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -316,6 +316,8 @@ boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
 boolean	ga_select_two_roulette_rebased( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_sus( population *pop, entity **mother );
 boolean	ga_select_two_sus( population *pop, entity **mother, entity **father );
+boolean	ga_select_one_sussq( population *pop, entity **mother );
+boolean	ga_select_two_sussq( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_aggressive( population *pop, entity **mother );
 boolean	ga_select_two_aggressive( population *pop, entity **mother, entity **father );
 boolean	ga_select_one_best( population *pop, entity **mother );
