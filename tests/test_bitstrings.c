@@ -44,7 +44,7 @@
 
 int main(int argc, char **argv)
   {
-  boolean	success;
+/*  boolean	success;*/
 
 /*
  * Run GAUL test functions.

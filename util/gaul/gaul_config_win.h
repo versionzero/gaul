@@ -74,77 +74,46 @@ extern int errno;
  * Functions available on this platform:
  */
 
-#define HAVE_MEMCPY 1
-#define HAVE_MEMMOVE 1
-#define HAVE_SINCOS 1
-#define HAVE_STRDUP 1
-#define HAVE_STRNDUP 1
-#define HAVE_STRCPY 1
-#define HAVE_STRNCPY 1
-#define HAVE_STRCMP 1
-#define HAVE_STRNCMP 1
-#define HAVE_STRCASECMP 1
-#define HAVE_STRNCASECMP 1
-#define HAVE_STRICMP 1
-#define HAVE_STRNICMP 1
-#define HAVE_USLEEP 1
-#define HAVE_INDEX 1
-#define HAVE_RINDEX 1
-#define HAVE_WAITPID 1
-#define HAVE_FDOPEN 1
-#define HAVE_GETPWUID 1
-#define HAVE_SELECT 1
-#define HAVE_ATEXIT 1
-#define HAVE_ON_EXIT 1
-#define HAVE_MEMSCAN 1
-#define HAVE_MEMREV 1
-#define HAVE_MEMCHR 1
-#define HAVE_MEMMEM 1
-#define HAVE_MEMCMP 1
-#define HAVE_SETLOCALE 1
-#define HAVE_STRCHR 1
-#define HAVE_STRRCHR 1
-#define HAVE_STRCAT 1
-#define HAVE_STRCATV 1
-#define HAVE_STRREV 1
-#define HAVE_STRSPN 1
-#define HAVE_STRCSPN 1
-#define HAVE_STRERROR 1
-#define HAVE_STRLCAT 1
-#define HAVE_STRLCPY 1
-#define HAVE_STRSTR 1
-#define HAVE_STRPBRK 1
-#define HAVE_STRSEP 1
-#define HAVE_STRNFILL 1
-#define HAVE_STRSIGNAL 1
-#define HAVE_VSNPRINTF 1
-#define HAVE_SNPRINTF 1
-#define HAVE_ITOA 1
-#define HAVE_BCOPY 1
-#define HAVE_BCMP 1
-#define HAVE_STRLEN 1
-#define HAVE_STRNCPY 1
-#define HAVE_STRTOD 1
-#define HAVE_STRTOK 1
-#define HAVE_MEMSET 1
+#define HAVE_MEMCPY	1
+#define HAVE_SINCOS	1
+#define HAVE_STRDUP	1
+#define HAVE_STRNDUP	1
+#define HAVE_STRCPY	1
+#define HAVE_STRNCPY	1
+#define HAVE_STRCMP	1
+#define HAVE_STRNCMP	1
+#define HAVE_STRCASECMP	1
+#define HAVE_STRNCASECMP	1
+#define HAVE_USLEEP	1
+#define HAVE_INDEX	1
+#define HAVE_WAITPID	1
+#define HAVE_STRSPN	1
+#define HAVE_STRCSPN	1
+#define HAVE_STRPBRK	1
+#define HAVE_STRSEP	1
+#define HAVE_STRLEN	1
+#define HAVE_STRNCPY	1
 
 /*
  * Functions not available.
  */
 #define HAVE_IPOW	0
 #define HAVE_DPOW	0
+#define HAVE_BCOPY	0
+#define HAVE_BCMP	0
+#define HAVE_SNOOZE	0
 
 /*
  * These are defined if windows.h is included:
  */
 #if USE_WINDOWS_H == 1
-#define HAVE_MIN 1
-#define HAVE_MAX 1
-#define HAVE_GETHOSTNAME 1
+#define HAVE_MIN	1
+#define HAVE_MAX	1
+#define HAVE_GETHOSTNAME	1
 #else
-#define HAVE_MIN 0
-#define HAVE_MAX 0
-#define HAVE_GETHOSTNAME 0
+#define HAVE_MIN	0
+#define HAVE_MAX	0
+#define HAVE_GETHOSTNAME	0
 #endif
 
 /*

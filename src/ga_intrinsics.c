@@ -1448,7 +1448,7 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_random_search_slang, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_search",
-            (FVOID_STAR) ga_random_search_slang, SLANG_INT_TYPE, 2,
+            (FVOID_STAR) ga_search_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_population_sort",
             (FVOID_STAR) ga_population_sort_slang, SLANG_INT_TYPE, 1,
