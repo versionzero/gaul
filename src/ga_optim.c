@@ -828,8 +828,6 @@ int ga_evolution_forked(	population		*pop,
   if (!pop->crossover) die("Population's crossover callback is undefined.");
   if (pop->scheme != GA_SCHEME_DARWIN && !pop->adapt) die("Population's adaption callback is undefined.");
   if (pop->size < 1) die("Population is empty (ga_genesis() or equivalent should be called first).");
-
-  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d processes will be fork'ed", max_processes);
   
 /*
  * Look at environment to find number of processes to fork.
@@ -837,6 +835,8 @@ int ga_evolution_forked(	population		*pop,
   max_proc_str = getenv(GA_NUM_PROCESSES_ENVVAR_STRING);
   if (max_proc_str) max_processes = atoi(max_proc_str);
   if (max_processes == 0) max_processes = GA_DEFAULT_NUM_PROCESSES;
+
+  plog(LOG_VERBOSE, "The evolution has begun!  Upto %d processes will be fork'ed", max_processes);
 
 /*
  * Allocate memory required for handling the forked processes.
