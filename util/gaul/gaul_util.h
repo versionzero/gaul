@@ -200,10 +200,6 @@ typedef unsigned char byte;
 #define IsApproxZero(x) (fabs(x)<=ApproxZero)
 #define RAD2DEG		57.2957795128		/* 180.0/PI */
 #define DEG2RAD		0.01745329252		/* PI/180.0 */
-/* VOID is already defined on win32 systems. */
-#ifndef VOID
-#define VOID		((void)0)
-#endif
 
 /*
  * Useful macros
