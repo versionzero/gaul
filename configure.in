@@ -83,8 +83,6 @@ AC_DEFINE_UNQUOTED(UNAME_STRING, "`uname -a`", [record compilation platform info
 AC_DEFINE( DEBUG, 0, [Overall debugging level.])
 AC_DEFINE( GA_DEBUG, 0, [Core GAUL debugging level.])
 AC_DEFINE( GA_WRITE_STATS, 0, [Whether to dump certian statistics.])
-AC_DEFINE( HAVE_SLANG, 0, [Whether S-Lang is installed.])
-AC_DEFINE( MEMORY_ALIGN_SIZE, 0, [Memory alignment boundry characteristics.])
 AC_DEFINE( MEMORY_ALLOC_DEBUG, 0, [Whether to use debugging memory allocation routines.])
 AC_DEFINE( MEMORY_ALLOC_SAFE, 1, [Whether to use safe memory allocation routines.])
 AC_DEFINE( MEMORY_PADDING, 0, [Whether to pad memory.])
@@ -255,25 +253,6 @@ else
   AC_MSG_RESULT(no)
 fi
 
-# Check for S-Lang.
-AC_MSG_CHECKING(whether to link S-Lang scripting engine)
-if test "x$enable_slang" = "xyes"; then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_SLANG,1)
-  WILL_USE_SLANG="yes"
-  LIBS="$LIBS -lslang"
-  INCLUDES="$INCLUDES -I/usr/include/slang/"
-  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
-  AC_CHECK_LIB(slang, SLang_init_slang,
-    [LIBS="$LIBS -lslang"
-     INCLUDES="$INCLUDES -I/usr/include/slang/"],
-    [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
-else
-  AC_MSG_RESULT(no)
-  AC_DEFINE(HAVE_SLANG,0)
-  WILL_USE_SLANG="no"
-fi
-
 dnl Compiler specific switches.
 changequote(,)dnl
 # Optimisations etc. for the GNU gcc compiler.
@@ -427,24 +406,6 @@ dnl Stuff.
 AC_C_CONST
 AC_STRUCT_TM
 
-dnl Determine memory alignment characteristics.
-AC_MSG_CHECKING(memory alignment)
-AC_CACHE_VAL(MEMORY_ALIGN_SIZE,
-[AC_TRY_RUN([
-#include <stdio.h>
-#include <stdlib.h>
-int main(void)
-  {
-  FILE *f=fopen("conftestval", "w");
-  if (!f) exit(1);
-  fprintf(f, "%d\n", (unsigned int) sizeof(long)>sizeof(void *)?sizeof(long):sizeof(void *));
-  exit(0);
-  }
-], MEMORY_ALIGN_SIZE=`cat conftestval`, MEMORY_ALIGN_SIZE=0, MEMORY_ALIGN_SIZE=8)])
-AC_MSG_RESULT($MEMORY_ALIGN_SIZE)
-AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, $MEMORY_ALIGN_SIZE)
-# undefine([MEMORY_ALIGN_SIZE])
-
 dnl Get includes setup correctly.
 INCLUDES="$INCLUDES -I../util/"
 CFLAGS="$CFLAGS -I../util/ -I../src/" # FIXME: Kludge!
@@ -468,10 +429,10 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 min max \
                 itoa \
                 index rindex \
+	       	snprintf \
                 strchr strrchr strcat strlen \
                 strcmp strncmp strcpy strncpy strtok strpbrk strsep \
-		stricmp strnicmp \
-                strcasecmp strncasecmp snprintf \
+		strcasecmp strncasecmp stricmp strnicmp \
                 strdup strndup \
 		strnfill strcatv strtod strsignal strrev \
                 strspn strcspn \
@@ -500,6 +461,42 @@ if test "x$target" = "xsparc-sun-solaris2.7"; then
 elif test "x$target" = "xsparc-sun-solaris2.8"; then
   AC_DEFINE(SUN_FORTE_C,2.8)
 fi
+
+# Check for S-Lang.
+AC_MSG_CHECKING(whether to link S-Lang scripting engine)
+if test "x$enable_slang" = "xyes"; then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_SLANG, 1, [Whether S-Lang is installed.])
+  WILL_USE_SLANG="yes"
+  LIBS="$LIBS -lslang"
+  INCLUDES="$INCLUDES -I/usr/include/slang/"
+  CFLAGS="$CFLAGS -I/usr/include/slang/" # FIXME: Kludge!
+  AC_CHECK_LIB(slang, SLang_init_slang,
+    [LIBS="$LIBS -lslang"
+     INCLUDES="$INCLUDES -I/usr/include/slang/"],
+    [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
+else
+  AC_MSG_RESULT(no)
+  AC_DEFINE(HAVE_SLANG, 0, [Whether S-Lang is installed.])
+  WILL_USE_SLANG="no"
+fi
+
+dnl Determine memory alignment characteristics.
+AC_MSG_CHECKING(memory alignment)
+AC_CACHE_VAL(MEMORY_ALIGN_SIZE,
+[AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+  {
+  FILE *f=fopen("conftestval", "w");
+  if (!f) exit(1);
+  fprintf(f, "%d\n", (unsigned int) sizeof(long)>sizeof(void *)?sizeof(long):sizeof(void *));
+  exit(0);
+  }
+], MEM_ALIGN_SIZE=`cat conftestval`, MEM_ALIGN_SIZE=4, MEM_ALIGN_SIZE=8)])
+AC_MSG_RESULT(${MEM_ALIGN_SIZE})
+AC_DEFINE_UNQUOTED(MEMORY_ALIGN_SIZE, ${MEM_ALIGN_SIZE}, [Memory alignment boundry characteristics.])
 
 dnl Give warning if GNU Make is not being used.
 dnl This message is at the bottom so it may be easily spotted!

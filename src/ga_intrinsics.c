@@ -1153,7 +1153,7 @@ void ga_slang_replace(population *pop, entity *child)
   synopsis:	Register the S-Lang intrinsics.
   parameters:	none
   return:	success/failure.
-  last updated:	17/04/01
+  last updated:	02 Oct 2002
  **********************************************************************/
 
 #if HAVE_SLANG==0
@@ -1167,8 +1167,8 @@ boolean ga_intrinsic_sladd(void)
 boolean ga_intrinsic_sladd(void)
   {
   static int    fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
-  static int[]	schemes={GA_SCHEME_DARWIN, GA_SCHEME_LAMARCK_PARENTS, GA_SCHEME_LAMARCK_CHILDREN, GA_SCHEME_LAMARCK_ALL, GA_SCHEME_BALDWIN_PARENTS, GA_SCHEME_BALDWIN_CHILDREN, GA_SCHEME_BALDWIN_ALL};
-  static int[]	elitism={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE};
+  static int	schemes[7]={GA_SCHEME_DARWIN, GA_SCHEME_LAMARCK_PARENTS, GA_SCHEME_LAMARCK_CHILDREN, GA_SCHEME_LAMARCK_ALL, GA_SCHEME_BALDWIN_PARENTS, GA_SCHEME_BALDWIN_CHILDREN, GA_SCHEME_BALDWIN_ALL};
+  static int	elitism[4]={GA_ELITISM_UNKNOWN, GA_ELITISM_PARENTS_SURVIVE, GA_ELITISM_ONE_PARENT_SURVIVES, GA_ELITISM_PARENTS_DIE};
 
   if (  SLadd_intrinsic_variable("GA_SCHEME_DARWIN", &(schemes[0]), SLANG_INT_TYPE, TRUE)
      || SLadd_intrinsic_variable("GA_SCHEME_LAMARCK_PARENTS", &(schemes[1]), SLANG_INT_TYPE, TRUE)

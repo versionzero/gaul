@@ -70,7 +70,7 @@
 #endif
 
 /*
- * Specification for number of processes used in
+ * Specification of number of processes used in
  * multiprocess functions.
  */
 #ifndef GA_NUM_PROCESSES_ENVVAR_STRING
@@ -79,6 +79,18 @@
   
 #ifndef GA_DEFAULT_NUM_PROCESSES
 #define GA_DEFAULT_NUM_PROCESSES        8
+#endif
+
+/*
+ * Specification of number of threads used in
+ * multithreaded functions.
+ */
+#ifndef GA_NUM_THREADS_ENVVAR_STRING
+#define GA_NUM_THREADS_ENVVAR_STRING	"GAUL_NUM_THREADS"
+#endif
+  
+#ifndef GA_DEFAULT_NUM_THREADS
+#define GA_DEFAULT_NUM_THREADS		4
 #endif
 
 /*

@@ -482,7 +482,7 @@ s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t
 s,@AWK@,gawk,;t t
 s,@SET_MAKE@,,;t t
 s,@CC@,gcc,;t t
-s,@CFLAGS@,-g -O2 -I/usr/include/slang/ -Wall -I../util/ -I../src/,;t t
+s,@CFLAGS@,-g -O2 -Wall -I../util/ -I../src/ -I/usr/include/slang/,;t t
 s,@LDFLAGS@,,;t t
 s,@CPPFLAGS@,,;t t
 s,@ac_ct_CC@,gcc,;t t
@@ -783,15 +783,13 @@ ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1840${ac_dD}
 ${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}1${ac_dD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"20/09/02"${ac_dD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"02/10/02"${ac_dD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1840-1"${ac_dD}
 ${ac_dA}MPI_NUM_THREADS_ENVVAR_STRING${ac_dB}MPI_NUM_THREADS_ENVVAR_STRING${ac_dC}"GA_NUM_THREADS"${ac_dD}
-${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0.ucsd.edu 2.4.18-7.80smp #1 SMP Tue Jul 23 17:08:15 EDT 2002 i686 unknown unknown GNU/Linux"${ac_dD}
+${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_dD}
 ${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}0${ac_dD}
 ${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}0${ac_dD}
 ${ac_dA}GA_WRITE_STATS${ac_dB}GA_WRITE_STATS${ac_dC}0${ac_dD}
-${ac_dA}HAVE_SLANG${ac_dB}HAVE_SLANG${ac_dC}0${ac_dD}
-${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}0${ac_dD}
 ${ac_dA}MEMORY_ALLOC_DEBUG${ac_dB}MEMORY_ALLOC_DEBUG${ac_dC}0${ac_dD}
 ${ac_dA}MEMORY_ALLOC_SAFE${ac_dB}MEMORY_ALLOC_SAFE${ac_dC}1${ac_dD}
 ${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
@@ -811,6 +809,8 @@ ${ac_dA}PARALLEL${ac_dB}PARALLEL${ac_dC}0${ac_dD}
 ${ac_dA}MEMORY_ALLOC_SAFE${ac_dB}MEMORY_ALLOC_SAFE${ac_dC}1${ac_dD}
 ${ac_dA}GA_WRITE_STATS${ac_dB}GA_WRITE_STATS${ac_dC}0${ac_dD}
 ${ac_dA}GA_DEBUG${ac_dB}GA_DEBUG${ac_dC}0${ac_dD}
+${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}0${ac_dD}
+${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -820,9 +820,6 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
-${ac_dA}DEBUG${ac_dB}DEBUG${ac_dC}0${ac_dD}
-${ac_dA}MEMORY_PADDING${ac_dB}MEMORY_PADDING${ac_dC}0${ac_dD}
-${ac_dA}HAVE_SLANG${ac_dB}HAVE_SLANG${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_VPRINTF${ac_dB}HAVE_VPRINTF${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ATEXIT${ac_dB}HAVE_ATEXIT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ON_EXIT${ac_dB}HAVE_ON_EXIT${ac_dC}1${ac_dD}
@@ -831,7 +828,6 @@ ${ac_dA}SIZEOF_CHAR${ac_dB}SIZEOF_CHAR${ac_dC}1${ac_dD}
 ${ac_dA}SIZEOF_LONG${ac_dB}SIZEOF_LONG${ac_dC}4${ac_dD}
 ${ac_dA}SIZEOF_INT${ac_dB}SIZEOF_INT${ac_dC}4${ac_dD}
 ${ac_dA}SIZEOF_VOID_P${ac_dB}SIZEOF_VOID_P${ac_dC}4${ac_dD}
-${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}4${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}TIME_WITH_SYS_TIME${ac_dB}TIME_WITH_SYS_TIME${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_ARPA_INET_H${ac_dB}HAVE_ARPA_INET_H${ac_dC}1${ac_dD}
@@ -858,6 +854,10 @@ ${ac_dA}HAVE_SELECT${ac_dB}HAVE_SELECT${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_WAITPID${ac_dB}HAVE_WAITPID${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_USLEEP${ac_dB}HAVE_USLEEP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_BASENAME${ac_dB}HAVE_BASENAME${ac_dC}1${ac_dD}
+${ac_dA}HAVE_MEMCPY${ac_dB}HAVE_MEMCPY${ac_dC}1${ac_dD}
+${ac_dA}HAVE_MEMSET${ac_dB}HAVE_MEMSET${ac_dC}1${ac_dD}
+${ac_dA}HAVE_MEMMOVE${ac_dB}HAVE_MEMMOVE${ac_dC}1${ac_dD}
+${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -867,10 +867,6 @@ CEOF
 /^[ 	]*#[ 	]*define/!b
 t clr
 : clr
-${ac_dA}HAVE_MEMCPY${ac_dB}HAVE_MEMCPY${ac_dC}1${ac_dD}
-${ac_dA}HAVE_MEMSET${ac_dB}HAVE_MEMSET${ac_dC}1${ac_dD}
-${ac_dA}HAVE_MEMMOVE${ac_dB}HAVE_MEMMOVE${ac_dC}1${ac_dD}
-${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMCHR${ac_dB}HAVE_MEMCHR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMMEM${ac_dB}HAVE_MEMMEM${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMCMP${ac_dB}HAVE_MEMCMP${ac_dC}1${ac_dD}
@@ -900,7 +896,8 @@ ${ac_dA}HAVE_STRCSPN${ac_dB}HAVE_STRCSPN${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRERROR${ac_dB}HAVE_STRERROR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRSTR${ac_dB}HAVE_STRSTR${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_VSNPRINTF${ac_dB}HAVE_VSNPRINTF${ac_dC}1${ac_dD}
-${ac_dA}HAVE_SINCOS${ac_dB}HAVE_SINCOS${ac_dC}1${ac_dD}
+${ac_dA}HAVE_SLANG${ac_dB}HAVE_SLANG${ac_dC}1${ac_dD}
+${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}4${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -923,15 +920,13 @@ ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1840${ac_uD}
 ${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}1${ac_uD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"20/09/02"${ac_uD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"02/10/02"${ac_uD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1840-1"${ac_uD}
 ${ac_uA}MPI_NUM_THREADS_ENVVAR_STRING${ac_uB}MPI_NUM_THREADS_ENVVAR_STRING${ac_uC}"GA_NUM_THREADS"${ac_uD}
-${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0.ucsd.edu 2.4.18-7.80smp #1 SMP Tue Jul 23 17:08:15 EDT 2002 i686 unknown unknown GNU/Linux"${ac_uD}
+${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"${ac_uD}
 ${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}0${ac_uD}
 ${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}0${ac_uD}
 ${ac_uA}GA_WRITE_STATS${ac_uB}GA_WRITE_STATS${ac_uC}0${ac_uD}
-${ac_uA}HAVE_SLANG${ac_uB}HAVE_SLANG${ac_uC}0${ac_uD}
-${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}0${ac_uD}
 ${ac_uA}MEMORY_ALLOC_DEBUG${ac_uB}MEMORY_ALLOC_DEBUG${ac_uC}0${ac_uD}
 ${ac_uA}MEMORY_ALLOC_SAFE${ac_uB}MEMORY_ALLOC_SAFE${ac_uC}1${ac_uD}
 ${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
@@ -951,6 +946,8 @@ ${ac_uA}PARALLEL${ac_uB}PARALLEL${ac_uC}0${ac_uD}
 ${ac_uA}MEMORY_ALLOC_SAFE${ac_uB}MEMORY_ALLOC_SAFE${ac_uC}1${ac_uD}
 ${ac_uA}GA_WRITE_STATS${ac_uB}GA_WRITE_STATS${ac_uC}0${ac_uD}
 ${ac_uA}GA_DEBUG${ac_uB}GA_DEBUG${ac_uC}0${ac_uD}
+${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}0${ac_uD}
+${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -960,9 +957,6 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
-${ac_uA}DEBUG${ac_uB}DEBUG${ac_uC}0${ac_uD}
-${ac_uA}MEMORY_PADDING${ac_uB}MEMORY_PADDING${ac_uC}0${ac_uD}
-${ac_uA}HAVE_SLANG${ac_uB}HAVE_SLANG${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_VPRINTF${ac_uB}HAVE_VPRINTF${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ATEXIT${ac_uB}HAVE_ATEXIT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ON_EXIT${ac_uB}HAVE_ON_EXIT${ac_uC}1${ac_uD}
@@ -971,7 +965,6 @@ ${ac_uA}SIZEOF_CHAR${ac_uB}SIZEOF_CHAR${ac_uC}1${ac_uD}
 ${ac_uA}SIZEOF_LONG${ac_uB}SIZEOF_LONG${ac_uC}4${ac_uD}
 ${ac_uA}SIZEOF_INT${ac_uB}SIZEOF_INT${ac_uC}4${ac_uD}
 ${ac_uA}SIZEOF_VOID_P${ac_uB}SIZEOF_VOID_P${ac_uC}4${ac_uD}
-${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}4${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}TIME_WITH_SYS_TIME${ac_uB}TIME_WITH_SYS_TIME${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_ARPA_INET_H${ac_uB}HAVE_ARPA_INET_H${ac_uC}1${ac_uD}
@@ -998,6 +991,10 @@ ${ac_uA}HAVE_SELECT${ac_uB}HAVE_SELECT${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_WAITPID${ac_uB}HAVE_WAITPID${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_USLEEP${ac_uB}HAVE_USLEEP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_BASENAME${ac_uB}HAVE_BASENAME${ac_uC}1${ac_uD}
+${ac_uA}HAVE_MEMCPY${ac_uB}HAVE_MEMCPY${ac_uC}1${ac_uD}
+${ac_uA}HAVE_MEMSET${ac_uB}HAVE_MEMSET${ac_uC}1${ac_uD}
+${ac_uA}HAVE_MEMMOVE${ac_uB}HAVE_MEMMOVE${ac_uC}1${ac_uD}
+${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1007,10 +1004,6 @@ CEOF
 /^[ 	]*#[ 	]*undef/!b
 t clr
 : clr
-${ac_uA}HAVE_MEMCPY${ac_uB}HAVE_MEMCPY${ac_uC}1${ac_uD}
-${ac_uA}HAVE_MEMSET${ac_uB}HAVE_MEMSET${ac_uC}1${ac_uD}
-${ac_uA}HAVE_MEMMOVE${ac_uB}HAVE_MEMMOVE${ac_uC}1${ac_uD}
-${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMCHR${ac_uB}HAVE_MEMCHR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMMEM${ac_uB}HAVE_MEMMEM${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMCMP${ac_uB}HAVE_MEMCMP${ac_uC}1${ac_uD}
@@ -1040,7 +1033,8 @@ ${ac_uA}HAVE_STRCSPN${ac_uB}HAVE_STRCSPN${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRERROR${ac_uB}HAVE_STRERROR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRSTR${ac_uB}HAVE_STRSTR${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_VSNPRINTF${ac_uB}HAVE_VSNPRINTF${ac_uC}1${ac_uD}
-${ac_uA}HAVE_SINCOS${ac_uB}HAVE_SINCOS${ac_uC}1${ac_uD}
+${ac_uA}HAVE_SLANG${ac_uB}HAVE_SLANG${ac_uC}1${ac_uD}
+${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}4${ac_uD}
 s,^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out

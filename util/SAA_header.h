@@ -119,21 +119,30 @@
  * also cause lots of warnings when using Sun's and Compaq's
  * compilers.
  */
-#if defined(__GNUC__)
-#define THREAD_LOCK_DEFINE_STATIC(name)
-#define THREAD_LOCK_DEFINE(name)
-#define THREAD_LOCK_EXTERN(name)
-#define THREAD_LOCK(name)
-#define THREAD_UNLOCK(name)
-#define THREAD_TRYLOCK(name)		0
+# if defined(__GNUC__)
+#  define THREAD_LOCK_DEFINE_STATIC(name)
+#  define THREAD_LOCK_DEFINE(name)
+#  define THREAD_LOCK_EXTERN(name)
+#  define THREAD_LOCK(name)
+#  define THREAD_UNLOCK(name)
+#  define THREAD_TRYLOCK(name)		0
+# else
+#  define THREAD_LOCK_DEFINE_STATIC(name)	static int (name) = 0
+#  define THREAD_LOCK_DEFINE(name)	int (name) = 0
+#  define THREAD_LOCK_EXTERN(name)	extern int (name)
+#  define THREAD_LOCK(name)		(name) = 1
+#  define THREAD_UNLOCK(name)		(name) = 0
+#  define THREAD_TRYLOCK(name)		0
+# endif
 #else
-#define THREAD_LOCK_DEFINE_STATIC(name)	static int name = 0
-#define THREAD_LOCK_DEFINE(name)	int name = 0
-#define THREAD_LOCK_EXTERN(name)	extern int name
-#define THREAD_LOCK(name)		name = 1
-#define THREAD_UNLOCK(name)		name = 0
-#define THREAD_TRYLOCK(name)		0
-#endif
+#  define THREAD_LOCK_DEFINE_STATIC(name)       static pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
+#  define THREAD_LOCK_DEFINE(name)      pthread_mutex_t (name) = PTHREAD_MUTEX_INITIALIZER
+#  define THREAD_LOCK_EXTERN(name)      extern pthread_mutex_t (name)
+#  define THREAD_LOCK(name)             pthread_mutex_lock((name))
+#  define THREAD_UNLOCK(name)           pthread_mutex_unlock((name))
+#  define THREAD_TRYLOCK(name)          pthread_mutex_trylock((name))
+#  define thread_mutex_new(name)	pthread_mutex_init((name), NULL)
+#  define thread_mutex_free(name)	pthread_mutex_destroy((name))
 #endif
 
 /*

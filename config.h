@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "20/09/02"
+#define BUILD_DATE_STRING "02/10/02"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -119,10 +119,10 @@
 #define HAVE_SELECT 1
 
 /* Define to 1 if you have the `sincos' function. */
-#define HAVE_SINCOS 1
+/* #undef HAVE_SINCOS */
 
 /* Whether S-Lang is installed. */
-#define HAVE_SLANG 0
+#define HAVE_SLANG 1
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -278,7 +278,7 @@
 #define MAJOR_VERSION 0
 
 /* Memory alignment boundry characteristics. */
-#define MEMORY_ALIGN_SIZE 0
+#define MEMORY_ALIGN_SIZE 4
 
 /* Whether to use debugging memory allocation routines. */
 #define MEMORY_ALLOC_DEBUG 0
@@ -344,7 +344,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* record compilation platform information. */
-#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-7.80smp #1 SMP Tue Jul 23 17:08:15 EDT 2002 i686 unknown unknown GNU/Linux"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
