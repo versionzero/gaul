@@ -209,7 +209,6 @@ entity *ga_get_entity_from_id(population *pop, const unsigned int id);
 entity *ga_get_entity_from_rank(population *pop, const unsigned int rank);
 int	ga_get_entity_rank_from_id(population *pop, int id);
 int	ga_get_entity_id_from_rank(population *pop, int rank);
-boolean ga_entity_setup(population *pop, entity *e);
 boolean	ga_entity_dereference_by_rank(population *pop, int rank);
 boolean ga_entity_dereference(population *p, entity *dying);
 boolean ga_entity_dereference_by_id(population *pop, int id);

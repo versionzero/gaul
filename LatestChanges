@@ -11,6 +11,7 @@ Changes since release 0.1847:
 - Added ga_seed_bitstring_zero() selection function.
 - Updated function lookup tables.
 - Fixed bug in ga_select_one_roundrobin() for case that mutation rate is greater than one.
+- *** API CHANGE *** ga_entity_setup() removed from public API.
 
 Changes since release 0.1846:
 - Removed the unused string handling and manipulation functions.

@@ -1253,14 +1253,14 @@ entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
 
 /**********************************************************************
   ga_entity_setup()
-  synopsis:	Allocates/prepares an entity structure for use.
+  synopsis:	Prepares a pre-allocated entity structure for use.
 		Chromosomes are allocated, but will contain garbage.
   parameters:
   return:
   last updated: 18 Mar 2002
  **********************************************************************/
 
-boolean ga_entity_setup(population *pop, entity *joe)
+static boolean ga_entity_setup(population *pop, entity *joe)
   {
 
   if (!joe)
