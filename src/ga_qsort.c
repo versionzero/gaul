@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_qsort - GA population sorting routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -39,9 +39,6 @@
 		is unacceptable.  (2) The newer, low-tech, shuffle
 		sort which sucks from a 'fanciness' perspective... but
 		it works.
-
-  Implementation note:	I can clearly choose functions to inline better
-			than gcc/egcs can.  (Shame)
 
   FIXME:	This is often very inefficient because many of the
 		entities will already be in order.
@@ -106,7 +103,7 @@ double check_timer(void)
   Return:	nought be returned.
  **********************************************************************/
 
-maybeinline static int partition(entity **array_of_ptrs, int first, int last, double pivot)
+static int partition(entity **array_of_ptrs, int first, int last, double pivot)
   {
 #if GA_QSORT_DEBUG>2
   printf("DEBUG: partitioning first %d last %d at %f\n", first, last, pivot);
@@ -128,7 +125,7 @@ maybeinline static int partition(entity **array_of_ptrs, int first, int last, do
   }
 
 
-maybeinline static boolean find_pivot(entity **array_of_ptrs, int first, int last, double *pivot_ptr)
+static boolean find_pivot(entity **array_of_ptrs, int first, int last, double *pivot_ptr)
   {
   double a, b;
 
