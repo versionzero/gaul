@@ -689,7 +689,7 @@ void ga_crossover_char_doublepoints( population *pop,
 
 void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
   {
-  int		i;	/* Loop variable over all chromosomes. */
+  int		i;		/* Loop variable over all chromosomes. */
   int		location;	/* Point of crossover. */
 
   /* Checks */
@@ -720,16 +720,18 @@ void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity
   ga_crossover_bitstring_doublepoints()
   synopsis:	`Mates' two genotypes by double-point crossover of
 		each chromosome.
-  parameters:
+  parameters:	population *		Population structure.
+		entity *father, *mother	Parent entities.
+		entity *son, *daughter	Child entities.
   return:
-  last updated: 30/06/01
+  last updated:	23 Jun 2003
  **********************************************************************/
 
 void ga_crossover_bitstring_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
-  int	i;		/* Loop variable over all chromosomes. */
+  int	i;			/* Loop variable over all chromosomes. */
   int	location1, location2;	/* Points of crossover. */
   int	tmp;			/* For swapping crossover loci. */
 
@@ -763,9 +765,9 @@ void ga_crossover_bitstring_doublepoints( population *pop,
     ga_bit_copy(son->chromosome[i], father->chromosome[i],
                   location1, location1, location2-location1);
 
-    ga_bit_copy(daughter->chromosome[i], mother->chromosome[i],
+    ga_bit_copy(son->chromosome[i], mother->chromosome[i],
                   location2, location2, pop->len_chromosomes-location2);
-    ga_bit_copy(son->chromosome[i], father->chromosome[i],
+    ga_bit_copy(daughter->chromosome[i], father->chromosome[i],
                   location2, location2, pop->len_chromosomes-location2);
     }
 

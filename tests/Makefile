@@ -44,7 +44,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /home/stewart
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -64,10 +64,10 @@ pkglibdir = $(libdir)/gaul-devel
 pkgincludedir = $(includedir)/gaul-devel
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run autoheader
+ACLOCAL = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoconf
+AUTOMAKE = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -95,11 +95,11 @@ target_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1844/missing --run tar
+AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1844/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_DATE_STRING = 
-CC = gcc
+CC = icc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -107,14 +107,14 @@ GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1844
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
 GA_NUM_THREADS_ENVVAR_STRING = GA_NUM_THREADS
-GA_PATCH_VERSION = 2
-GA_VERSION = 0.1844-2
+GA_PATCH_VERSION = 3
+GA_VERSION = 0.1844-3
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1844
-LT_REVISION = 2
+LT_REVISION = 3
 MPIFLAGS = 
 MPILIBS = 
 OBJDUMP = @OBJDUMP@
@@ -123,11 +123,11 @@ RANLIB = ranlib
 STRIP = strip
 UNAME_STRING = 
 V3_QUICK = 1
-VERSION = 0.1844-2
+VERSION = 0.1844-3
 VERSION_STRING = 
 am__include = include
 am__quote = 
-install_sh = /home/stewart/Development/gaul-devel-0.1844/install-sh
+install_sh = /u1/adcock/gaul-devel-0.1844/install-sh
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
