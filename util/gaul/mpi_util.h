@@ -115,10 +115,10 @@ typedef int mpi_datatype;
                         mpi_abort(127);			\
 			fflush(NULL);					\
                         }
-# define dief(format, args...)	{				\
+# define dief(format, ...)	{				\
 			int flubberrank = mpi_get_rank();	\
 			printf("FATAL ERROR: (process %d) ", flubberrank);	\
-			printf(format, ##args);			\
+			printf(format , ##__VA_ARGS__);			\
 			printf("\nin %s at \"%s\" line %d\n",	\
 			__PRETTY_FUNCTION__,			\
 			__FILE__,				\

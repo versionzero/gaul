@@ -1,4 +1,6 @@
-Changes since release 0.1844:
+Changes since release 0.1845:
+- Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
+- Remove presence of ophan ';'s to be ISO C99 compliant.
 - Fixed grey-encoded bitstring bug.
 - Coded a minimal test suite.  examples/diagnostics stripped down and included as part of this suite now.
 - Removed use of the deprecated ga_genesis() function from the examples.

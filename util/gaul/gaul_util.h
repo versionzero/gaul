@@ -54,8 +54,10 @@
  * Unfortunately empty macros cause splint parse errors.  They
  * also cause lots of warnings when using Sun's and Compaq's
  * compilers.
+ * In addition, ISO C99 standard doesn't allow extraneous ';'s
+ * so we must define some dummy expressions.
  */
-# if defined(__GNUC__)
+# if defined(__GNUC__) && !defined(_ISOC99_SOURCE)
 #  define THREAD_LOCK_DEFINE_STATIC(name)
 #  define THREAD_LOCK_DEFINE(name)
 #  define THREAD_LOCK_EXTERN(name)
@@ -344,20 +346,20 @@ typedef unsigned char byte;
                                __LINE__);				\
                         } MWRAP_END
 
-/* #define helga_log(level, format, args...) MWRAP_BEGIN {          \
+/* #define helga_log(level, format, ...) MWRAP_BEGIN {          \
         if ( (level) <= helga_log_get_level() )         \
           helga_log_output(level, __PRETTY_FUNCTION__,  \
                            __FILE__, __LINE__,          \
-                           format, ##args); } MWRAP_END
+                           format , ##__VA_ARGS__); } MWRAP_END
 */
 
 /*
  * Implement my dief macro where possible.
  */
 #if ( defined(__GNUC__) || defined(__INTEL_COMPILER) ) && !defined(__APPLE_CPP__) && !defined(__APPLE_CC__)
-#  define dief(format, args...)	MWRAP_BEGIN {			\
+#  define dief(format, ...)	MWRAP_BEGIN {			\
 			printf("FATAL ERROR: ");		\
-			printf(format, ##args);			\
+			printf(format , ##__VA_ARGS__);		\
 			printf("\nin %s at \"%s\" line %d\n",	\
 			__PRETTY_FUNCTION__,			\
 			__FILE__,				\
