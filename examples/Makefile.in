@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -113,12 +113,7 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = diagnostics \
-	pingpong wildfire \
-	goldberg1 goldberg2 \
-	royalroad royalroad_ss \
-	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss \
-	nnevolve
+bin_PROGRAMS = diagnostics 	pingpong wildfire 	goldberg1 goldberg2 	royalroad royalroad_ss 	struggle struggle2 struggle3 struggle4 struggle5 struggle5_mp struggle_ss 	nnevolve
 
 
 diagnostics_SOURCES = diagnostics.c
@@ -141,25 +136,13 @@ lib_LIBRARIES = libbtree.a
 
 libbtree_a_SOURCES = btree.c
 
-noinst_HEADERS = \
-	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
+noinst_HEADERS =  	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 
 
-DEPENDENCIES = \
-	../util/librandom.a \
-	../util/liblog_util.a \
-	../util/libstuff.a \
-	../util/libmpi_util_fake.a \
-	../util/libnn_util.a \
-	../util/libstr_util.a \
-	../util/libtimer_util.a \
-	../src/libgaul.la
+DEPENDENCIES =  	../util/librandom.a 	../util/liblog_util.a 	../util/libstuff.a 	../util/libmpi_util_fake.a 	../util/libnn_util.a 	../util/libstr_util.a 	../util/libtimer_util.a 	../src/libgaul.la
 
 
-EXTRA_DIST = \
-	chromostubs.c \
-	chromostubs.h \
-	wine.data wine.names
+EXTRA_DIST =  	chromostubs.c 	chromostubs.h 	wine.data wine.names
 
 
 diagnostics_DEPENDENCIES = ${DEPENDENCIES}
@@ -256,11 +239,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-DEP_FILES =  .deps/btree.P .deps/diagnostics.P .deps/goldberg1.P \
-.deps/goldberg2.P .deps/nnevolve.P .deps/pingpong.P .deps/royalroad.P \
-.deps/royalroad_ss.P .deps/struggle.P .deps/struggle2.P \
-.deps/struggle3.P .deps/struggle4.P .deps/struggle5.P \
-.deps/struggle5_mp.P .deps/struggle_ss.P .deps/wildfire.P
 SOURCES = $(libbtree_a_SOURCES) $(diagnostics_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(royalroad_ss_SOURCES) $(struggle_SOURCES) $(struggle2_SOURCES) $(struggle3_SOURCES) $(struggle4_SOURCES) $(struggle5_SOURCES) $(struggle5_mp_SOURCES) $(struggle_ss_SOURCES) $(nnevolve_SOURCES)
 OBJECTS = $(libbtree_a_OBJECTS) $(diagnostics_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(royalroad_ss_OBJECTS) $(struggle_OBJECTS) $(struggle2_OBJECTS) $(struggle3_OBJECTS) $(struggle4_OBJECTS) $(struggle5_OBJECTS) $(struggle5_mp_OBJECTS) $(struggle_ss_OBJECTS) $(nnevolve_OBJECTS)
 
@@ -268,9 +246,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu examples/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps examples/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -307,6 +285,9 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+.c.o:
+	$(COMPILE) -c $<
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -322,6 +303,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
@@ -463,53 +447,16 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = examples
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu examples/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
 info-am:
 info: info-am
 dvi-am:
@@ -548,19 +495,19 @@ distclean-generic:
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-binPROGRAMS \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
 clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
-		clean-binPROGRAMS clean-tags clean-depend clean-generic \
+		clean-binPROGRAMS clean-tags clean-generic \
 		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-libLIBRARIES distclean-compile \
 		distclean-libtool distclean-binPROGRAMS distclean-tags \
-		distclean-depend distclean-generic clean-am
+		distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
@@ -568,8 +515,7 @@ distclean: distclean-am
 maintainer-clean-am:  maintainer-clean-libLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
 		maintainer-clean-binPROGRAMS maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -583,13 +529,11 @@ distclean-libtool clean-libtool maintainer-clean-libtool \
 mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 tags mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
-distdir mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+distdir info-am info dvi-am dvi check check-am installcheck-am \
+installcheck install-exec-am install-exec install-data-am install-data \
+install-am install uninstall-am uninstall all-redirect all-am all \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

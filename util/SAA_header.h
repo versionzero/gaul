@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
+  Updated:	20 Mar 2002 SAA	HAVE_DIEF was incorrectly defined when the dief() macro is unavailable.
+		19 Mar 2002 SAA	Moved most parallel specific stuff to mpi_util.h
 		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
   		26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
 		30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
@@ -42,7 +43,7 @@
 		09/02/01 SAA	VERSION_STRING is now guaranteed to be defined.
 		11/01/01 SAA	System headers are now included after the PARALLEL stuff is sorted out.  This is so that _REENTRANT is correctly defined prior to stdlib.h being included for multi-threaded applications.  If appropriate, _GNU_SOURCE is defined prior to system includes too.  BUILD_DATE constant renamed to BUILD_DATE_STRING for consistency in configure scripts.  If HAVE_CONFIG_H is defined, then include config.h header here.  Added ISSET_BIT() macro.
 		04/01/00 SAA	die()/dief() now flush all open output streams.
-		11/12/00 SAA	The Kai C++ compiler (KCC) doesn't sem to like the true/false declarations, so they are not made if LINUX_KAI_SOURCE is defined - this is going to cause problems.
+		11/12/00 SAA	The Kai C++ compiler (KCC) doesn't seem to like the true/false declarations, so they are not made if LINUX_KAI_SOURCE is defined - this is going to cause problems.
 		15/11/00 SAA	Replaced PARALLEL compiler constant boolean, integer valued constant.  Tweaks for SGI's MIPSPro CC compiler.
 		27/10/00 SAA	'OKAY' redefined as '2' so that gprof works when exit(OKAY) is encountered.
 		18/10/00 SAA	If this is parallel code, transparently include the MPI headers.
@@ -423,14 +424,14 @@ typedef unsigned char byte;
 			fflush(NULL);				\
 			s_breakpoint;                           \
 			}
-# define HAVE_DIEF	0
+# define HAVE_DIEF	1
 #else
 /*
  * void dief(const char *format, ...);
  * is defined in compatibility.c because vararg macros are not
  * implemented in many inferior compilers ;)
  */
-# define HAVE_DIEF	1
+# undef HAVE_DIEF
 #endif
 		
 #endif

@@ -1,7 +1,7 @@
 # Generated automatically from Makefile.in by configure.
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -73,7 +73,7 @@ AUTOCONF = autoconf
 AUTOMAKE = automake
 AUTOHEADER = autoheader
 
-INSTALL = /usr/bin/install -c
+INSTALL = .././install-sh -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL_PROGRAM}
@@ -85,31 +85,31 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = i686-pc-linux
-build_triplet = i686-pc-linux-gnu
-host_alias = i686-pc-linux
-host_triplet = i686-pc-linux-gnu
-target_alias = i686-pc-linux
-target_triplet = i686-pc-linux-gnu
+build_alias = rs6000-ibm-aix
+build_triplet = rs6000-ibm-aix
+host_alias = rs6000-ibm-aix
+host_triplet = rs6000-ibm-aix
+target_alias = rs6000-ibm-aix
+target_triplet = rs6000-ibm-aix
 AS = @AS@
-CC = gcc
+CC = cc
 DLLTOOL = @DLLTOOL@
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1837
-LT_REVISION = 4
+LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = /u1/gaul-devel/missing makeinfo
+MAKEINFO = makeinfo
 MINOR_VERSION = 1837
 MPICC = echo
 MPIFLAGS = > /dev/null
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 4
+PATCH_VERSION = 5
 RANLIB = ranlib
-VERSION = 0.1837-4
+VERSION = 0.1837-5
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -117,48 +117,13 @@ lib_LTLIBRARIES = libgaul.la
 
 lib_LIBRARIES = libgaul.a
 
-libgaul_a_SOURCES = \
-    ga_bitstring.c \
-    ga_chromo.c \
-    ga_core.c \
-    ga_crossover.c \
-    ga_intrinsics.c \
-    ga_mutate.c \
-    ga_optim.c \
-    ga_qsort.c \
-    ga_replace.c \
-    ga_seed.c \
-    ga_select.c \
-    ga_similarity.c \
-    ga_utility.c
+libgaul_a_SOURCES =      ga_bitstring.c     ga_chromo.c     ga_core.c     ga_crossover.c     ga_intrinsics.c     ga_mutate.c     ga_optim.c     ga_qsort.c     ga_replace.c     ga_seed.c     ga_select.c     ga_similarity.c     ga_utility.c
 
 
-libgaul_la_SOURCES = \
-    ga_bitstring.c \
-    ga_chromo.c \
-    ga_core.c \
-    ga_crossover.c \
-    ga_intrinsics.c \
-    ga_mutate.c \
-    ga_optim.c \
-    ga_qsort.c \
-    ga_replace.c \
-    ga_seed.c \
-    ga_select.c \
-    ga_similarity.c \
-    ga_utility.c
+libgaul_la_SOURCES =      ga_bitstring.c     ga_chromo.c     ga_core.c     ga_crossover.c     ga_intrinsics.c     ga_mutate.c     ga_optim.c     ga_qsort.c     ga_replace.c     ga_seed.c     ga_select.c     ga_similarity.c     ga_utility.c
 
 
-include_HEADERS = \
-    ga_bitstring.h \
-    ga_chromo.h \
-    ga_core.h \
-    ga_intrinsics.h \
-    ga_optim.h \
-    ga_qsort.h \
-    ga_similarity.h \
-    ga_utility.h \
-    gaul.h
+include_HEADERS =      ga_bitstring.h     ga_chromo.h     ga_core.h     ga_intrinsics.h     ga_optim.h     ga_qsort.h     ga_similarity.h     ga_utility.h     gaul.h
 
 
 #libgaul_la_DEPENDENCIES = \
@@ -178,7 +143,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS = 
 libgaul_a_LIBADD = 
 libgaul_a_OBJECTS =  ga_bitstring.o ga_chromo.o ga_core.o ga_crossover.o \
 ga_intrinsics.o ga_mutate.o ga_optim.o ga_qsort.o ga_replace.o \
@@ -190,7 +155,7 @@ libgaul_la_LIBADD =
 libgaul_la_OBJECTS =  ga_bitstring.lo ga_chromo.lo ga_core.lo \
 ga_crossover.lo ga_intrinsics.lo ga_mutate.lo ga_optim.lo ga_qsort.lo \
 ga_replace.lo ga_seed.lo ga_select.lo ga_similarity.lo ga_utility.lo
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
+CFLAGS = -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -204,10 +169,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-DEP_FILES =  .deps/ga_bitstring.P .deps/ga_chromo.P .deps/ga_core.P \
-.deps/ga_crossover.P .deps/ga_intrinsics.P .deps/ga_mutate.P \
-.deps/ga_optim.P .deps/ga_qsort.P .deps/ga_replace.P .deps/ga_seed.P \
-.deps/ga_select.P .deps/ga_similarity.P .deps/ga_utility.P
 SOURCES = $(libgaul_a_SOURCES) $(libgaul_la_SOURCES)
 OBJECTS = $(libgaul_a_OBJECTS) $(libgaul_la_OBJECTS)
 
@@ -215,9 +176,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: # Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps src/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -254,6 +215,9 @@ uninstall-libLIBRARIES:
 	  rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+.c.o:
+	$(COMPILE) -c $<
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -269,6 +233,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
@@ -368,53 +335,16 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
 info-am:
 info: info-am
 dvi-am:
@@ -455,20 +385,19 @@ distclean-generic:
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-libLTLIBRARIES \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
 clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
-		clean-libLTLIBRARIES clean-tags clean-depend \
-		clean-generic mostlyclean-am
+		clean-libLTLIBRARIES clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-libLIBRARIES distclean-compile \
 		distclean-libtool distclean-libLTLIBRARIES \
-		distclean-tags distclean-depend distclean-generic \
-		clean-am
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
@@ -476,8 +405,7 @@ distclean: distclean-am
 maintainer-clean-am:  maintainer-clean-libLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
 		maintainer-clean-libLTLIBRARIES maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -492,14 +420,12 @@ mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
 clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
 uninstall-libLTLIBRARIES install-libLTLIBRARIES \
 uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
