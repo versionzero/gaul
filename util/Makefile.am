@@ -3,8 +3,8 @@
 # methods Makefile.am
 #######################################################################
 #
-# methods - General collection of c-programming utitily routines.
-# Copyright ©2000-2001, Stewart Adcock <stewart@linux-domain.com>
+# methods - General collection of C-programming utitily routines.
+# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -32,6 +32,9 @@ AUTOMAKE_OPTIONS = 1.4
 lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
+lib_LTLIBRARIES = libstuff.la \
+	libmpi_util.la libnn_util.la librandom.la libstr_util.la libtimer_util.la
+
 bin_PROGRAMS = nn
 
 nn_SOURCES = \
@@ -45,13 +48,30 @@ libstuff_a_SOURCES = \
 	memory_util.c \
 	table_util.c
 
+libstuff_la_SOURCES = \
+	avltree.c \
+	compatibility.c \
+	log_util.c \
+	linkedlist.c \
+	memory_util.c \
+	table_util.c
+
 libmpi_util_a_SOURCES = \
+	mpi_util.c 
+
+libmpi_util_la_SOURCES = \
 	mpi_util.c 
 
 libnn_util_a_SOURCES = \
 	nn_util.c
 
+libnn_util_la_SOURCES = \
+	nn_util.c
+
 librandom_a_SOURCES = \
+	random_util.c
+
+librandom_la_SOURCES = \
 	random_util.c
 
 libstr_util_a_SOURCES = \
@@ -59,7 +79,15 @@ libstr_util_a_SOURCES = \
 	dstr_util.c \
 	str_match.c
 
+libstr_util_la_SOURCES = \
+	str_util.c \
+	dstr_util.c \
+	str_match.c
+
 libtimer_util_a_SOURCES = \
+	timer_util.c
+
+libtimer_util_la_SOURCES = \
 	timer_util.c
 
 include_HEADERS = \
@@ -80,18 +108,24 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lmethods -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lstuff -lrandom -lm
 
 libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
+libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS = @MPIFLAGS@
+libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_a_LIBFLAGS = @MPIFLAGS@
+libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 librandom_a_LIBFLAGS = -lm @MPIFLAGS@
+librandom_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libstr_util_a_LIBFLAGS = @MPIFLAGS@
+libstr_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libtimer_util_a_LIBFLAGS = @MPIFLAGS@
+libtimer_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 

@@ -73,11 +73,11 @@ include_HEADERS = \
     ga_utility.h \
     gaul.h
 
-libgaul_la_DEPENDENCIES = \
-	../util/libstuff.a \
-	../util/libmpi_util.a \
-	../util/librandom.a \
-	../util/libstr_util.a
+#libgaul_la_DEPENDENCIES = \
+#	../util/libstuff.a \
+#	../util/libmpi_util.a \
+#	../util/librandom.a \
+#	../util/libstr_util.a
 
 libgaul_la_LIBFLAGS = -lm
 libgaul_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0

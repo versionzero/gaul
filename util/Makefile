@@ -15,8 +15,8 @@
 # methods Makefile.am
 #######################################################################
 #
-# methods - General collection of c-programming utitily routines.
-# Copyright ©2000-2001, Stewart Adcock <stewart@linux-domain.com>
+# methods - General collection of C-programming utitily routines.
+# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://www.stewart-adcock.co.uk/
@@ -117,6 +117,10 @@ lib_LIBRARIES = libstuff.a \
 	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
 
 
+lib_LTLIBRARIES = libstuff.la \
+	libmpi_util.la libnn_util.la librandom.la libstr_util.la libtimer_util.la
+
+
 bin_PROGRAMS = nn
 
 nn_SOURCES = \
@@ -132,7 +136,20 @@ libstuff_a_SOURCES = \
 	table_util.c
 
 
+libstuff_la_SOURCES = \
+	avltree.c \
+	compatibility.c \
+	log_util.c \
+	linkedlist.c \
+	memory_util.c \
+	table_util.c
+
+
 libmpi_util_a_SOURCES = \
+	mpi_util.c 
+
+
+libmpi_util_la_SOURCES = \
 	mpi_util.c 
 
 
@@ -140,7 +157,15 @@ libnn_util_a_SOURCES = \
 	nn_util.c
 
 
+libnn_util_la_SOURCES = \
+	nn_util.c
+
+
 librandom_a_SOURCES = \
+	random_util.c
+
+
+librandom_la_SOURCES = \
 	random_util.c
 
 
@@ -150,7 +175,17 @@ libstr_util_a_SOURCES = \
 	str_match.c
 
 
+libstr_util_la_SOURCES = \
+	str_util.c \
+	dstr_util.c \
+	str_match.c
+
+
 libtimer_util_a_SOURCES = \
+	timer_util.c
+
+
+libtimer_util_la_SOURCES = \
 	timer_util.c
 
 
@@ -173,19 +208,25 @@ include_HEADERS = \
      timer_util.h
 
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lmethods -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lstuff -lrandom -lm
 
 libstuff_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libmpi_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 librandom_a_LIBFLAGS = -lm -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+librandom_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libstr_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libstr_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libtimer_util_a_LIBFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
+libtimer_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -210,6 +251,21 @@ libstr_util_a_OBJECTS =  str_util.o dstr_util.o str_match.o
 libtimer_util_a_LIBADD = 
 libtimer_util_a_OBJECTS =  timer_util.o
 AR = ar
+LTLIBRARIES =  $(lib_LTLIBRARIES)
+
+libstuff_la_LIBADD = 
+libstuff_la_OBJECTS =  avltree.lo compatibility.lo log_util.lo \
+linkedlist.lo memory_util.lo table_util.lo
+libmpi_util_la_LIBADD = 
+libmpi_util_la_OBJECTS =  mpi_util.lo
+libnn_util_la_LIBADD = 
+libnn_util_la_OBJECTS =  nn_util.lo
+librandom_la_LIBADD = 
+librandom_la_OBJECTS =  random_util.lo
+libstr_util_la_LIBADD = 
+libstr_util_la_OBJECTS =  str_util.lo dstr_util.lo str_match.lo
+libtimer_util_la_LIBADD = 
+libtimer_util_la_OBJECTS =  timer_util.lo
 PROGRAMS =  $(bin_PROGRAMS)
 
 nn_OBJECTS =  nn_main.o
@@ -234,8 +290,8 @@ DEP_FILES =  .deps/avltree.P .deps/compatibility.P .deps/dstr_util.P \
 .deps/mpi_util.P .deps/nn_main.P .deps/nn_util.P .deps/random_util.P \
 .deps/str_match.P .deps/str_util.P .deps/table_util.P \
 .deps/timer_util.P
-SOURCES = $(libstuff_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES) $(nn_SOURCES)
-OBJECTS = $(libstuff_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS) $(nn_OBJECTS)
+SOURCES = $(libstuff_a_SOURCES) $(libmpi_util_a_SOURCES) $(libnn_util_a_SOURCES) $(librandom_a_SOURCES) $(libstr_util_a_SOURCES) $(libtimer_util_a_SOURCES) $(libstuff_la_SOURCES) $(libmpi_util_la_SOURCES) $(libnn_util_la_SOURCES) $(librandom_la_SOURCES) $(libstr_util_la_SOURCES) $(libtimer_util_la_SOURCES) $(nn_SOURCES)
+OBJECTS = $(libstuff_a_OBJECTS) $(libmpi_util_a_OBJECTS) $(libnn_util_a_OBJECTS) $(librandom_a_OBJECTS) $(libstr_util_a_OBJECTS) $(libtimer_util_a_OBJECTS) $(libstuff_la_OBJECTS) $(libmpi_util_la_OBJECTS) $(libnn_util_la_OBJECTS) $(librandom_la_OBJECTS) $(libstr_util_la_OBJECTS) $(libtimer_util_la_OBJECTS) $(nn_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -341,6 +397,49 @@ libtimer_util.a: $(libtimer_util_a_OBJECTS) $(libtimer_util_a_DEPENDENCIES)
 	-rm -f libtimer_util.a
 	$(AR) cru libtimer_util.a $(libtimer_util_a_OBJECTS) $(libtimer_util_a_LIBADD)
 	$(RANLIB) libtimer_util.a
+
+mostlyclean-libLTLIBRARIES:
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+
+distclean-libLTLIBRARIES:
+
+maintainer-clean-libLTLIBRARIES:
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+libstuff.la: $(libstuff_la_OBJECTS) $(libstuff_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libstuff_la_LDFLAGS) $(libstuff_la_OBJECTS) $(libstuff_la_LIBADD) $(LIBS)
+
+libmpi_util.la: $(libmpi_util_la_OBJECTS) $(libmpi_util_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libmpi_util_la_LDFLAGS) $(libmpi_util_la_OBJECTS) $(libmpi_util_la_LIBADD) $(LIBS)
+
+libnn_util.la: $(libnn_util_la_OBJECTS) $(libnn_util_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libnn_util_la_LDFLAGS) $(libnn_util_la_OBJECTS) $(libnn_util_la_LIBADD) $(LIBS)
+
+librandom.la: $(librandom_la_OBJECTS) $(librandom_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(librandom_la_LDFLAGS) $(librandom_la_OBJECTS) $(librandom_la_LIBADD) $(LIBS)
+
+libstr_util.la: $(libstr_util_la_OBJECTS) $(libstr_util_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libstr_util_la_LDFLAGS) $(libstr_util_la_OBJECTS) $(libstr_util_la_LIBADD) $(LIBS)
+
+libtimer_util.la: $(libtimer_util_la_OBJECTS) $(libtimer_util_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libtimer_util_la_LDFLAGS) $(libtimer_util_la_OBJECTS) $(libtimer_util_la_LIBADD) $(LIBS)
 
 mostlyclean-binPROGRAMS:
 
@@ -475,7 +574,8 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-libLIBRARIES install-binPROGRAMS
+install-exec-am: install-libLIBRARIES install-libLTLIBRARIES \
+		install-binPROGRAMS
 install-exec: install-exec-am
 
 install-data-am: install-includeHEADERS
@@ -484,16 +584,16 @@ install-data: install-data-am
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-libLIBRARIES uninstall-binPROGRAMS \
-		uninstall-includeHEADERS
+uninstall-am: uninstall-libLIBRARIES uninstall-libLTLIBRARIES \
+		uninstall-binPROGRAMS uninstall-includeHEADERS
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) \
-		$(DESTDIR)$(includedir)
+	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(libdir) \
+		$(DESTDIR)$(bindir) $(DESTDIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -506,26 +606,29 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-binPROGRAMS \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-libtool mostlyclean-libLTLIBRARIES \
+		mostlyclean-binPROGRAMS mostlyclean-tags \
+		mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
 clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
-		clean-binPROGRAMS clean-tags clean-depend clean-generic \
-		mostlyclean-am
+		clean-libLTLIBRARIES clean-binPROGRAMS clean-tags \
+		clean-depend clean-generic mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-libLIBRARIES distclean-compile \
-		distclean-libtool distclean-binPROGRAMS distclean-tags \
-		distclean-depend distclean-generic clean-am
+		distclean-libtool distclean-libLTLIBRARIES \
+		distclean-binPROGRAMS distclean-tags distclean-depend \
+		distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-libLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-libLTLIBRARIES \
 		maintainer-clean-binPROGRAMS maintainer-clean-tags \
 		maintainer-clean-depend maintainer-clean-generic \
 		distclean-am
@@ -539,13 +642,15 @@ clean-libLIBRARIES maintainer-clean-libLIBRARIES uninstall-libLIBRARIES \
 install-libLIBRARIES mostlyclean-compile distclean-compile \
 clean-compile maintainer-clean-compile mostlyclean-libtool \
 distclean-libtool clean-libtool maintainer-clean-libtool \
-mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
-maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
-uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
+mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
+clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
+uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-binPROGRAMS \
+distclean-binPROGRAMS clean-binPROGRAMS maintainer-clean-binPROGRAMS \
+uninstall-binPROGRAMS install-binPROGRAMS uninstall-includeHEADERS \
+install-includeHEADERS tags mostlyclean-tags distclean-tags clean-tags \
+maintainer-clean-tags distdir mostlyclean-depend distclean-depend \
+clean-depend maintainer-clean-depend info-am info dvi-am dvi check \
+check-am installcheck-am installcheck install-exec-am install-exec \
 install-data-am install-data install-am install uninstall-am uninstall \
 all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
