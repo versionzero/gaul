@@ -148,7 +148,7 @@ void ga_chromosome_integer_replicate( population *pop,
   synopsis:	Convert to contiguous form.  In this case, a trivial
 		process.
   parameters:
-  return:
+  return:	Number of bytes processed.
   last updated: 13/06/01
  **********************************************************************/
 

@@ -35,6 +35,7 @@
 
   To do: 	More error checking.
 		Add missing wrappers.
+		In particular, need facility for mating/mutating entities.
 
  **********************************************************************/
 
@@ -290,14 +291,14 @@ int ga_entity_clone_wrapper(int *popid, int *parent)
 
 
 /**********************************************************************
-  ga_entity_copy_chromosome()
+  ga_entity_copy_chromosome_wrapper()
   synopsis:	Copy genetic data between entity structures.
   parameters:
   return:
-  last updated: 20/12/00
+  last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_chromosome(int *popid, int *parent, int *child, int *chromosome)
+int ga_entity_copy_chromosome_wrapper(int *popid, int *parent, int *child, int *chromosome)
   {
   population	*pop;			/* Active population structure. */
 
@@ -311,14 +312,14 @@ int ga_entity_copy_chromosome(int *popid, int *parent, int *child, int *chromoso
 
 
 /**********************************************************************
-  ga_entity_copy_all_chromosomes()
+  ga_entity_copy_all_chromosomes_wrapper()
   synopsis:	Copy genetic data between entity structures.
   parameters:
   return:
-  last updated: 20/12/00
+  last updated: 29 Nov 2001
  **********************************************************************/
 
-int ga_entity_copy_all_chromosomes(int *popid, int *parent, int *child)
+int ga_entity_copy_all_chromosomes_wrapper(int *popid, int *parent, int *child)
   {
   population	*pop;			/* Active population structure. */
 
@@ -370,7 +371,6 @@ int ga_entity_migrate(int *srcpopid, int *destpopid, int *jacques)
 boolean ga_singlepoint_crossover_chromosome(int *father, int *mother, int *son, int *daughter)
   {
   }
-#endif
 
 
 /**********************************************************************
@@ -424,6 +424,7 @@ int ga_crossover_chromosome_mixing_wrapper(int *popid,
 
   return TRUE;
   }
+#endif
 
 
 /**********************************************************************
@@ -1152,10 +1153,10 @@ boolean ga_intrinsic_sladd(void)
             (FVOID_STAR) ga_entity_clone_wrapper, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_copy_chromosome",
-            (FVOID_STAR) ga_entity_copy_chromosome, SLANG_INT_TYPE, 4,
+            (FVOID_STAR) ga_entity_copy_chromosome_wrapper, SLANG_INT_TYPE, 4,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_copy_all_chromosomes",
-            (FVOID_STAR) ga_entity_copy_all_chromosomes, SLANG_INT_TYPE, 3,
+            (FVOID_STAR) ga_entity_copy_all_chromosomes_wrapper, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_evolution",
             (FVOID_STAR) ga_evolution_wrapper, SLANG_INT_TYPE, 4,
@@ -1235,12 +1236,14 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_entity_migrate",
             (FVOID_STAR) ga_entity_migrate, SLANG_INT_TYPE, 3,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+/*
       || SLadd_intrinsic_function("ga_crossover_chromosome_singlepoints",
             (FVOID_STAR) ga_crossover_chromosome_singlepoints_wrapper, SLANG_INT_TYPE, 5,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_crossover_chromosome_mixing",
             (FVOID_STAR) ga_crossover_chromosome_mixing_wrapper, SLANG_INT_TYPE, 5,
             SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
+*/
      );
   }
 #endif

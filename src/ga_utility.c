@@ -699,7 +699,7 @@ boolean ga_fitness_stats( population *pop,
   int           i;                      /* Loop over all entities. */
   double	sum=0.0,sum2=0.0,sum3=0.0,sum4=0.0;	/* Sum and stuff. */
   double	m2=0.0,m3=0.0,m4=0.0;	/* Distribution moments. */
-  double	tmp;			/* Used to save some lookups. */
+  double	tmp=0.0;		/* Used to save some lookups. */
 
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");

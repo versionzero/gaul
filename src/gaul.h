@@ -75,9 +75,50 @@ typedef enum ga_elitism_type_t
   } ga_elitism_type;
 
 /*
+ * Callback function typedefs.
+ */
+/*
+ * Analysis and termination.
+ */
+typedef boolean (*GAgeneration_hook)(const int generation, population *pop);
+typedef boolean (*GAiteration_hook)(const int iteration, entity *entity);
+
+/*
+ * Phenome (A general purpose data cache) handling.
+ */
+typedef void    (*GAdata_destructor)(vpointer data);
+typedef void    (*GAdata_ref_incrementor)(vpointer data);
+
+/*
+ * Genome handling.
+ */
+typedef void    (*GAchromosome_constructor)(population *pop, entity *entity);
+typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
+typedef void    (*GAchromosome_replicate)(population *pop, entity *parent, entity *child, const int chromosomeid);
+typedef unsigned int    (*GAchromosome_to_bytes)(population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+typedef void    (*GAchromosome_from_bytes)(population *pop, entity *joe, byte *bytes);
+typedef char    *(*GAchromosome_to_string)(population *pop, entity *joe);
+
+/*
+ * GA operations.
+ *
+ * FIXME: Adaptation prototype should match the mutation prototype so that
+ * the adaptation local optimisation algorithms may be used as mutation
+ * operators.
+ */
+typedef boolean (*GAevaluate)(population *pop, entity *entity);
+typedef void    (*GAseed)(population *pop, entity *adam);
+typedef entity *(*GAadapt)(population *pop, entity *child);
+typedef boolean (*GAselect_one)(population *pop, entity **mother);
+typedef boolean (*GAselect_two)(population *pop, entity **mother, entity **father);
+typedef void    (*GAmutate)(population *pop, entity *mother, entity *daughter);
+typedef void    (*GAcrossover)(population *pop, entity *mother, entity *father, entity *daughter, entity *son);
+typedef void    (*GAreplace)(population *pop, entity *child);
+
+/*
  * Include remainder of this library's headers.
  * These should, mostly, contain private definitions etc.
- * But they currently contain everything.
+ * But they currently contain almost everything.
  */
 #include "ga_core.h"
 
