@@ -335,7 +335,7 @@ int ga_entity_copy_all_chromosomes(int *popid, int *parent, int *child)
 		delete the original.  The caller should do that, if
 		required.
 		FIXME: Need check to confirm that populations are
-		compatiable.
+		compatible.
   parameters:
   return:
   last updated:	14/02/01

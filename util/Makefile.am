@@ -13,7 +13,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.  Alternatively, if your project
-# is incompatiable with the GPL, I will probably agree to requests
+# is incompatible with the GPL, I will probably agree to requests
 # for permission to use the terms of any other license.
 #
 # This program is distributed in the hope that it will be useful, but

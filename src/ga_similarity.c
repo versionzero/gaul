@@ -68,7 +68,7 @@
   synopsis:	Compares two genotypes.  Simple memcmp() comparison of
 		the chromosomes.
   parameters:	population *pop	Population of entities (you may use
-			differing populations if they are "compatiable")
+			differing populations if they are "compatible")
 		entity *alpha	Test entity.
 		entity *beta	Test entity.
   return:	Returns TRUE if all chromosomes are identical.
@@ -133,7 +133,7 @@ int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
   synopsis:	Measures the Hamming coefficient of the genomes of
 		a pair of entities.
   parameters:	population *pop	Population of entities (you may use
-			differing populations if they are "compatiable")
+			differing populations if they are "compatible")
 		entity *alpha	Test entity.
 		entity *beta	Test entity.
   return:	double	similarity
@@ -177,7 +177,7 @@ double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
   synopsis:	Measures the Euclidean coefficient of the genomes of
 		a pair of entities.
   parameters:	population *pop	Population of entities (you may use
-			differing populations if they are "compatiable")
+			differing populations if they are "compatible")
 		entity *alpha	Test entity.
 		entity *beta	Test entity.
   return:	double	similarity

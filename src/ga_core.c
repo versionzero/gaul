@@ -1182,7 +1182,7 @@ entity *ga_get_free_entity(population *pop)
 		If these entities are in differing populations, no
 		problems will occur provided that the
 		data_ref_incrementor callbacks are identical or at least
-		compatiable.
+		compatible.
   parameters:
   return:
   last updated: 18/12/00
@@ -1302,7 +1302,7 @@ boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, in
   ga_entity_copy()
   synopsis:	Er..., copy entire entity structure.  This is safe
 		for copying between popultions provided that they
-		are compatiable.
+		are compatible.
   parameters:
   return:
   last updated:	22/01/01
@@ -1322,7 +1322,7 @@ boolean ga_entity_copy(population *pop, entity *dest, entity *src)
   ga_entity_clone()
   synopsis:	Clone an entity structure.
 		Safe for cloning into a different population, provided
-		that the populations are compatiable.
+		that the populations are compatible.
   parameters:	population	*pop	Population.
 		entity	*parent		The original entity.
   return:	entity	*dolly		The new entity.

@@ -91,7 +91,7 @@ restrictions:
 
  **********************************************************************
 
-  Synopsis:	Perl compatiable regular expressions.
+  Synopsis:	Perl compatible regular expressions.
 
 		This uses an internal version of the PCRE library,
 		which supports regular expressions whose syntax and
