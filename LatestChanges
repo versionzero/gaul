@@ -7,6 +7,9 @@ Changes since release 0.1842:
 - Public function prototypes added to the gaul.h header.
 - Fixed/standardised RPM spec file.
 - Removed standalone neural network simulator from archive and distribution.
+- Modified copyright notices.
+- HP-UX fixes.
+- *** API CHANGE *** Changed parameters to the ga_genesis_XXX() functions.  This enables userdata field of the population structure to be defined prior to use by the seeding operator.
 
 Changes since release 0.1841:
 - Hill climbing (random ascent and next ascent) algorithms completely rewritten.

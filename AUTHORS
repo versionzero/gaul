@@ -2,6 +2,9 @@ Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
 Stewart would like to thank the following people:
 
+Prior to release 0.1843:
+Kalin Kozhuharov - HP-UX/MPP and Hitachi SR8000 testing and compilation reports.
+
 Prior to release 0.1842:
 McKenzie Keith - Providing Cygwin binaries.  Reporting MingW issues.
 Ben Webb - Tesing Cygwin binaries.

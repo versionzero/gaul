@@ -5,7 +5,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Record date of compilation. */
-#define BUILD_DATE_STRING "18/01/03"
+#define BUILD_DATE_STRING "28/01/03"
 
 /* Overall debugging level. */
 #define DEBUG 0
@@ -338,7 +338,7 @@
 #define PARALLEL 0
 
 /* Patch level. */
-#define PATCH_VERSION 3
+#define PATCH_VERSION 4
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -368,13 +368,13 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Record compilation platform information. */
-#define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.18-19.8.0 #1 Thu Dec 12 04:37:40 EST 2002 i686 athlon i386 GNU/Linux"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-19.8.0smp #1 SMP Thu Dec 12 04:36:25 EST 2002 i686 i686 i386 GNU/Linux"
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1842-3"
+#define VERSION_STRING "0.1842-4"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0
