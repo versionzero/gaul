@@ -32,11 +32,11 @@
 
  **********************************************************************/
 
-#include <stdlib.h>
-
 #define NO_PARALLEL
 
 #include "SAA_header.h"
+
+#include <stdlib.h>
 
 /*
  * Forced over-ride of the PARALLEL constant.

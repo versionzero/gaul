@@ -148,7 +148,7 @@ boolean mpi_setup( int *argc, char ***argv,
   /* Find the number of threads to spawn. */
   env_num_threads=getenv(MPI_NUM_THREADS_ENVVAR_STRING);
 
-  plog(LOG_VERBOSE, "Single-processor, multi-threaded version. (Using pthreads));
+  plog(LOG_VERBOSE, "Single-processor, multi-threaded version. (Using pthreads)");
 
   if (env_num_threads)
     {

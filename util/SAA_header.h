@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
+  Updated:	07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
+  		01 Jul 2002 SAA	Use the GNU-extensions provided by the Intel C/C++ compiler.
 		14 Jun 2002 SAA	Don't redefine TRUE,FALSE if already defined.
 		31 May 2002 SAA	Clean compilation with Compaq's ccc compiler.
 		14 May 2002 SAA	Adaptations for clean compilation with Sun's Forte Developer 6 C/C++ compilers.
@@ -194,15 +195,18 @@
 #  undef true
 # endif
 
-# if defined(__cplusplus) || defined(__DECC)
+# if !defined(_ISOC99_SOURCE)
+#  if defined(__cplusplus) || defined(__DECC)
 typedef _Bool bool;
 typedef _Bool boolean;
-# else
+#  else
 /* By defining _Bool as an enum type we get to see symbolic
  * names in gdb.
  */
 typedef enum { false, true } _Bool;
+#  endif
 # endif
+
 # define bool _Bool
 # define boolean _Bool
 

@@ -103,7 +103,7 @@ LT_RELEASE = 0.1839
 LT_REVISION = 1
 MAINT = #
 MAJOR_VERSION = 0
-MAKEINFO = /u1/gaul-devel/missing makeinfo
+MAKEINFO = makeinfo
 MINOR_VERSION = 1839
 MPICC = echo
 MPIFLAGS = > /dev/null
@@ -271,7 +271,7 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 HEADERS =  $(noinst_HEADERS)
 
-DIST_COMMON =  README Makefile.am Makefile.in
+DIST_COMMON =  README Makefile.am Makefile.in TODO
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

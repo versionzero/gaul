@@ -43,11 +43,11 @@
  * Includes.
  */
 
+#include "SAA_header.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#include "SAA_header.h"
 
 #ifndef NN_DEBUG
 # ifdef DEBUG

@@ -21,11 +21,11 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1839-1"
-#define BUILD_DATE_STRING "22/07/02"
+#define BUILD_DATE_STRING "07/08/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1839
 #define PATCH_VERSION 1
-#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-7.80smp #1 SMP Tue Jul 23 17:08:15 EDT 2002 i686 unknown unknown GNU/Linux"
 
 #define AVLTREE_KEY_TYPE void *
 #define PARALLEL 0
@@ -65,7 +65,7 @@
 #define AVLTREE_KEY_TYPE void *
 
 /* Date of compilation */
-#define BUILD_DATE_STRING "22/07/02"
+#define BUILD_DATE_STRING "07/08/02"
 
 /* Define if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -81,6 +81,9 @@
 
 /* Define if you have the `bcopy' function. */
 #define HAVE_BCOPY 1
+
+/* Define if you have the <dlfcn.h> header file. */
+#define HAVE_DLFCN_H 1
 
 /* Define if you don't have `vprintf' but do have `_doprnt.' */
 /* #undef HAVE_DOPRNT */
@@ -362,7 +365,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* System information */
-#define UNAME_STRING "Linux chemcca0 2.4.9-31smp #1 SMP Tue Feb 26 06:55:00 EST 2002 i686 unknown"
+#define UNAME_STRING "Linux chemcca0.ucsd.edu 2.4.18-7.80smp #1 SMP Tue Jul 23 17:08:15 EDT 2002 i686 unknown unknown GNU/Linux"
 
 /* Define to skip error checking in vector routines */
 #define V3_QUICK 1
