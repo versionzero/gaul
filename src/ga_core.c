@@ -1507,7 +1507,7 @@ void ga_population_append_receive( population *pop, int src_node )
       {
       entity = ga_get_free_entity(pop);
       mpi_receive(&(entity->fitness), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_ENTITYFITNESS);
-      mpi_send(buffer, len, MPI_TYPE_BYTE, src_node, GA_TAG_ENTITYCHROMOSOME);
+      mpi_receive(buffer, len, MPI_TYPE_BYTE, src_node, GA_TAG_ENTITYCHROMOSOME);
       pop->chromosome_from_bytes(pop, entity, buffer);
 /*      printf("DEBUG: Node %d received entity %d/%d (%d) with fitness %f\n",
              mpi_get_rank(), i, num_to_recv, pop->size, entity->fitness);

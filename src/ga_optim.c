@@ -1390,13 +1390,17 @@ boolean ga_evolution_archipelago( const int num_pops,
       for(i=0; i<pops[island]->size; i++)
         {
         if (random_boolean_prob(pops[island]->migration_ratio))
+	  {
           ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
+/*	  printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
+	  }
         }
       }
     for(i=0; i<pop0_osize; i++)
       {
       if (random_boolean_prob(pops[0]->migration_ratio))
         ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
+/*        printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[island]->entity_iarray[i]->fitness);*/
       }
 
     for(island=0; island<num_pops; island++)
@@ -1738,6 +1742,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
   int		pop0_osize;		/* Required for correct migration. */
   boolean	*send_mask;		/* Whether particular entities need to be sent. */
   int		send_count;		/* Number of entities to send. */
+  int		max_size=0;		/* Largest maximum size of populations. */
 #if GA_WRITE_STATS==TRUE
   FILE		*STATS_OUT;		/* Filehandle for stats log. */
   char		stats_fname[80];	/* Filename for stats log. */
@@ -1786,12 +1791,10 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
   fclose(STATS_OUT);
 #endif
 
-  /* Allocate send_mask array.  On initial loop, size may exceed stable_size. */
-  send_mask = s_malloc(max(pops[0]->stable_size,pops[0]->size)*sizeof(boolean));
-
   for (island=0; island<num_pops; island++)
     {
     pop = pops[island];
+
 /*
  * Score and sort the initial population members.
  */
@@ -1801,7 +1804,12 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
           island, mpi_get_rank(),
           pop->entity_iarray[0]->fitness,
           pop->entity_iarray[pop->size-1]->fitness );
+
+    max_size = max(max_size, pop->max_size);
     }
+
+  /* Allocate send_mask array. */
+  send_mask = s_malloc(max_size*sizeof(boolean));
 
 /* Do all the generations: */
   while ( generation<max_generations && complete==FALSE)
@@ -1835,16 +1843,25 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
       for(i=0; i<pops[island]->size; i++)
         {
         if (random_boolean_prob(pops[island]->migration_ratio))
+	  {
           ga_entity_clone(pops[island-1], pops[island]->entity_iarray[i]);
+/*	  printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), island, i, pops[island]->entity_iarray[i]->fitness);*/
+	  }
         }
       }
 
     if (mpi_get_num_processes()<2)
       {	/* No parallel stuff initialized, or only 1 processor. */
-      for(i=0; i<pop0_osize; i++)
-        {
-        if (random_boolean_prob(pops[0]->migration_ratio))
-          ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
+      if (num_pops>1)
+        { /* There is more than one island. */
+        for(i=0; i<pop0_osize; i++)
+          {
+          if (random_boolean_prob(pops[0]->migration_ratio))
+            {
+            ga_entity_clone(pops[num_pops-1], pops[0]->entity_iarray[i]);
+/*	    printf("%d, %d: Cloned %d %f\n", mpi_get_rank(), 0, i, pops[0]->entity_iarray[i]->fitness);*/
+            }
+	  }
 	}
       }
     else
@@ -1856,6 +1873,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
           {
           send_mask[i] = random_boolean_prob(pops[0]->migration_ratio);
 	  send_count += send_mask[i];
+/*	  if (send_mask[i]) printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[num_pops-1]->entity_iarray[i]->fitness);*/
           }
 
         ga_population_send_by_mask(pops[0], mpi_get_prev_rank(), send_count, send_mask);
@@ -1871,6 +1889,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
           {
           send_mask[i] = random_boolean_prob(pops[0]->migration_ratio);
 	  send_count += send_mask[i];
+/*	  if (send_mask[i]) printf("%d, 0: Cloned %d %f\n", mpi_get_rank(), i, pops[num_pops-1]->entity_iarray[i]->fitness);*/
           }
 
         ga_population_send_by_mask(pops[0], mpi_get_prev_rank(), send_count, send_mask);
@@ -1886,6 +1905,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
 /*
  * Sort the individuals in each population.
  * Need this to ensure that new immigrants are ranked correctly.
+ * ga_population_score_and_sort(pop) is needed if scores may change during migration.
  */
       quicksort_population(pop);
 
