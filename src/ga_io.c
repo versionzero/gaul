@@ -32,6 +32,7 @@
 		Remove excessive use of malloc()/free() in posix versions.
 		Support for longer chromosomes in win32 versions.
 		It is fair to say that the file formats are embarrasingly poor.
+		Alternative optimisation function parameters not saved.
 
  **********************************************************************/
 

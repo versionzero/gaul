@@ -211,7 +211,7 @@ typedef struct
   } ga_gradient_t;
 
 /*
- * Search parameter structure.
+ * Systematic search parameter structure.
  */
 typedef struct
   {
@@ -219,6 +219,14 @@ typedef struct
   int			chromosome_state;	/* Permutation counter. */
   int			allele_state;		/* Permutation counter. */
   } ga_search_t;
+
+/*
+ * Probabilistic sampling parameter structure.
+ */
+typedef struct
+  {
+  int			**num_states;		/* Number of states for each allele. */
+  } ga_sampling_t;
 
 /*
  * Population Structure.
@@ -266,6 +274,7 @@ struct population_t
   ga_dc_t		*dc_params;		/* Parameters for deterministic crowding. */
   ga_gradient_t		*gradient_params;	/* Parameters for gradient methods. */
   ga_search_t		*search_params;		/* Parameters for systematic search. */
+  ga_sampling_t		*sampling_params;	/* Parameters for probabilistic sampling. */
 
 /*
  * Scoring function and the other callbacks are defined here.

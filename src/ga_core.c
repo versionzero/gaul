@@ -295,8 +295,10 @@ population *ga_population_new(	const int stable_size,
   newpop->sa_params = NULL;
   newpop->climbing_params = NULL;
   newpop->simplex_params = NULL;
+  newpop->dc_params = NULL;
   newpop->gradient_params = NULL;
   newpop->search_params = NULL;
+  newpop->sampling_params = NULL;
   
 /*
  * Clean the callback functions.
@@ -502,6 +504,17 @@ population *ga_population_clone_empty(population *pop)
     newpop->search_params->scan_chromosome = pop->search_params->scan_chromosome;
     newpop->search_params->chromosome_state = 0;
     newpop->search_params->allele_state = 0;
+    }
+
+  if (newpop->sampling_params == NULL)
+    {
+    newpop->sampling_params = NULL;
+    }
+  else
+    {
+    newpop->sampling_params = NULL;
+
+    plog(LOG_FIXME, "Probabilistic sampling paramters not copied.");
     }
 
 /*
@@ -2436,6 +2449,8 @@ boolean ga_extinction(population *extinct)
     if (extinct->simplex_params) s_free(extinct->simplex_params);
     if (extinct->gradient_params) s_free(extinct->gradient_params);
     if (extinct->search_params) s_free(extinct->search_params);
+    if (extinct->dc_params) s_free(extinct->dc_params);
+    if (extinct->sampling_params) s_free(extinct->sampling_params);
 
     s_free(extinct);
     }
