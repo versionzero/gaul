@@ -103,7 +103,7 @@ boolean royalroad_score(population *pop, entity *entity)
   for(i=0; i<NBLOCKS; i++) {
     total = 0;
     for(j=i*(BLOCKSIZE + GAPSIZE); j<i*(BLOCKSIZE+GAPSIZE)+BLOCKSIZE; j++)
-      if(((boolean *)entity->chromosome[0])[j] == 1) total++;  // count the bits in the block
+      if(((boolean *)entity->chromosome[0])[j] == 1) total++;  /* count the bits in the block. */
     if(total > MSTAR && total < BLOCKSIZE)
       score -= (total-MSTAR)*RR_V;
     else if(total <= MSTAR)
@@ -123,8 +123,8 @@ boolean royalroad_score(population *pop, entity *entity)
 
 /* now do the higher-level blocks. */
 
-  n = NBLOCKS;		// n is now number of filled low level blocks
-  proceed = 1;		// should we look at the next higher level?
+  n = NBLOCKS;		/* n is now number of filled low level blocks. */
+  proceed = 1;		/* should we look at the next higher level? */
   level = 0;
   while ((n > 1) && proceed) {
     proceed = 0;

@@ -64,10 +64,10 @@ goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
 
-pingpong_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
-wildfire_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
-goldberg1_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
-goldberg2_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
-royalroad_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
-struggle_LDADD = -L../src/ -L../util/ -lm -lgaul -lmethods -lrandom -lstr_util
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm 
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 

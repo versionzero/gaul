@@ -126,7 +126,7 @@ int main(int argc, char **argv)
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
        GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       500		/* const int               max_generations */
+       1000		/* const int               max_generations */
               );
 
     printf("The final solution with seed = %d was:\n", i);
