@@ -417,9 +417,9 @@ char *ga_chromosome_boolean_to_staticstring(
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * textlen);
     }
 
@@ -436,6 +436,7 @@ char *ga_chromosome_boolean_to_staticstring(
         text[k++] = ((boolean *)joe->chromosome[i])[j]?'1':'0';
         }
       }
+    text[k] = '\0';
     }
 
   return text;
@@ -792,10 +793,10 @@ void ga_chromosome_char_from_bytes(population *pop, entity *joe, byte *bytes)
 
 /**********************************************************************
   ga_chromosome_char_to_staticstring()
-  synopsis:	Convert to human readable form.
+  synopsis:	Convert genetic data into human readable form.
   parameters:
   return:
-  last updated: 16/06/01
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 char *ga_chromosome_char_to_staticstring(
@@ -811,7 +812,7 @@ char *ga_chromosome_char_to_staticstring(
 
   if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * textlen);
     }
 
@@ -1005,9 +1006,9 @@ char *ga_chromosome_bitstring_to_staticstring(population *pop, entity *joe)
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (textlen < pop->len_chromosomes * pop->num_chromosomes)
+  if (textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
-    textlen = pop->len_chromosomes * pop->num_chromosomes;
+    textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * textlen);
     }
 
@@ -1024,6 +1025,7 @@ char *ga_chromosome_bitstring_to_staticstring(population *pop, entity *joe)
         text[k++] = ga_bit_get(joe->chromosome[i],j)?'1':'0';
         }
       }
+    text[k] = '\0';
     }
 
   return text;

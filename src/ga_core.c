@@ -463,19 +463,15 @@ population *ga_population_clone(population *pop)
   synopsis:	Gets the number of populations.
   parameters:	none
   return:	int	number of populations, -1 for undefined table.
-  last updated: 13/06/01
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 int ga_get_num_populations(void)
   {
-  int	num;
+  int	num=-1;
 
   THREAD_LOCK(pop_table_lock);
-  if (!pop_table)
-    {
-    num=-1;
-    }
-  else
+  if (pop_table)
     {
     num = table_count_items(pop_table);
     }
@@ -490,26 +486,44 @@ int ga_get_num_populations(void)
   synopsis:	Get population pointer from its internal id.
   parameters:	unsigned int	id for population.
   return:	int
-  last updated: 22/01/01
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 population *ga_get_population_from_id(unsigned int id)
   {
-  return (population *) table_get_data(pop_table, id);
+  population	*pop=NULL;	/* The population pointer to return. */
+
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table)
+    {
+    pop = (population *) table_get_data(pop_table, id);
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return pop;
   }
 
 
 /**********************************************************************
   ga_get_population_id()
-  synopsis:	Get population internal id from its pointer.
-  parameters:	unsigned int	id for population.
-  return:	int
-  last updated: 22/01/01
+  synopsis:	Get population's internal id from its pointer.
+  parameters:	population	population pointer to lookup.
+  return:	unsigned int	internal id for population (or -1 for no match).
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 unsigned int ga_get_population_id(population *pop)
   {
-  return table_lookup_index(pop_table, (vpointer) pop);
+  unsigned int	id=-1;	/* Internal population id. */
+
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table && pop)
+    {
+    id = table_lookup_index(pop_table, (vpointer) pop);
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return id;
   }
 
 
@@ -519,13 +533,22 @@ unsigned int ga_get_population_id(population *pop)
 		allocated populations.  The returned array needs to
 		be deallocated by the caller.
   parameters:	none
-  return:	unsigned int*	array of ids
-  last updated: 18 Dec 2001
+  return:	unsigned int*	array of population ids (or NULL)
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 unsigned int *ga_get_all_population_ids(void)
   {
-  return table_get_index_all(pop_table);
+  unsigned int	*ids=NULL;	/* Array of ids. */
+
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table)
+    {
+    ids = table_get_index_all(pop_table);
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return ids;
   }
 
 
@@ -535,12 +558,21 @@ unsigned int *ga_get_all_population_ids(void)
 		returned array needs to be deallocated by the caller.
   parameters:	none
   return:	population**	array of population pointers
-  last updated: 18 Dec 2001
+  last updated: 15 Aug 2002
  **********************************************************************/
 
 population **ga_get_all_populations(void)
   {
-  return (population **) table_get_data_all(pop_table);
+  population	**pops=NULL;	/* Array of all population pointers. */
+
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table)
+    {
+    pops = (population **) table_get_data_all(pop_table);
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return pops;
   }
 
 
@@ -2541,16 +2573,30 @@ void ga_population_set_crossover(	population	*pop,
   synopsis:	Return a population structure to user for analysis or
 		whatever.  But remove it from the population table.
 		(Like ga_extinction, except doesn't purge memory.)
-  parameters:
-  return:
-  last updated:	19/01/01
+  parameters:   unsigned int	population id
+  return:       population *	population pointer (or NULL)
+  last updated:	15 Aug 2002
  **********************************************************************/
 
 population *ga_transcend(unsigned int id)
   {
+  population	*pop=NULL;	/* Transcending population. */
+
   plog(LOG_VERBOSE, "This population has achieved transcendance!");
 
-  return (population *) table_remove_index(pop_table, id);
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table)
+    {
+    pop = (population *) table_remove_index(pop_table, id);
+    if (table_count_items(pop_table) < 1)
+      {
+      table_destroy(pop_table);
+      pop_table=NULL;
+      }
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return pop;
   }
 
 
@@ -2558,18 +2604,27 @@ population *ga_transcend(unsigned int id)
   ga_resurect()
   synopsis:	Restores a population structure into the population
 		table from an external source.
-  parameters:
-  return:
-  last updated:	19/01/01
+  parameters:	population *	population pointer
+  return:       unsigned int	population id (or -1)
+  last updated:	15 Aug 2002
  **********************************************************************/
 
 unsigned int ga_resurect(population *pop)
   {
+  unsigned int	id=-1;	/* New internal id code. */
+
   if (!pop) die("Null pointer to population structure passed.");
 
   plog(LOG_VERBOSE, "The population has been restored!");
 
-  return table_add(pop_table, pop);
+  THREAD_LOCK(pop_table_lock);
+  if (pop_table)
+    {
+    id = table_add(pop_table, pop);
+    }
+  THREAD_UNLOCK(pop_table_lock);
+
+  return id;
   }
 
 
@@ -2579,12 +2634,12 @@ unsigned int ga_resurect(population *pop)
 		it from the population table.
   parameters:
   return:
-  last updated:	12 Jun 2002
+  last updated:	15 Aug 2002
  **********************************************************************/
 
 boolean ga_extinction(population *extinct)
   {
-  unsigned int		id;		/* Internal index for this extinct population. */
+  unsigned int	id = TABLE_ERROR_INDEX;	/* Internal index for this extinct population. */
 
   if (!extinct) die("Null pointer to population structure passed.");
 
@@ -2594,7 +2649,15 @@ boolean ga_extinction(population *extinct)
  * Remove this population from the population table.
  */
   THREAD_LOCK(pop_table_lock);
-  id = table_remove_data(pop_table, extinct);
+  if (pop_table)
+    {
+    id = table_remove_data(pop_table, extinct);
+    if (table_count_items(pop_table) < 1)
+      {
+      table_destroy(pop_table);
+      pop_table=NULL;
+      }
+    }
   THREAD_UNLOCK(pop_table_lock);
 
 /*

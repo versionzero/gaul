@@ -59,6 +59,9 @@ noinst_LTLIBRARIES = libbtree.la
 
 libbtree_la_SOURCES = btree.c
 
+# Kludge to force compilation of the binaries.
+libbtree_la_DEPENDENCIES = ${EXTRA_PROGRAMS}
+
 noinst_HEADERS = \
 	btree.h goldberg1.h goldberg2.h pingpong.h wildfire.h
 

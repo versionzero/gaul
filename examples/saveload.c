@@ -240,7 +240,7 @@ int main(int argc, char **argv)
   ga_population_write(pop, filename_out);
 
   printf("Population has been saved as \"%s\"\n", filename_out);
-  
+
   ga_extinction(pop);
 
   exit(2);
