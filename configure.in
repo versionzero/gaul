@@ -48,7 +48,7 @@ PACKAGE=gaul-devel
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1847
-GA_PATCH_VERSION=1
+GA_PATCH_VERSION=3
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
@@ -115,6 +115,9 @@ debug_default=no
 AC_ARG_ENABLE(g,
        [  --enable-g=[yes/no]             compile with symbolic debug information. [default=yes]],,
        enable_g=yes)
+AC_ARG_ENABLE(ccoptim,
+       [  --enable-ccoptim=[yes/no]             compile with guessed compiler optimisation flags. [default=yes]],,
+       enable_ccoptim=yes)
 AC_ARG_ENABLE(debug,
        [  --enable-debug=[no/minimum/yes] turn on debugging. [default=$debug_default]],,
        enable_debug=$debug_default)
@@ -297,7 +300,7 @@ fi
 AC_DEFINE_UNQUOTED( HAVE_MPI, ${result}, [Whether to use MPI for parallel code.])
 # Reset CFLAGS and LIBS variables.
 LIBS=$old_LIBS
-CFLAGS=$old_CFALGS
+CFLAGS=$old_CFLAGS
 
 AC_MSG_CHECKING(whether to disable memory chunk allocation)
 if test "x$enable_memory_chunks" = "xyes"; then
@@ -454,130 +457,25 @@ AC_SUBST(MEMORY_CHUNKS_MIMIC)
 #
 # Compiler specific switches.
 #
-changequote(,)dnl
-case $CC in
-  gcc)
-    # Optimisations etc. for the GNU gcc compiler.
-    case " $CFLAGS " in
-      *[\ \	]-Wall[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -Wall" ;;
-    esac
-
-    if test "x$enable_g" = "xyes"; then
+if test "x$enable_ccoptim" = "xyes"; then
+  changequote(,)dnl
+  case $CC in
+    gcc)
+      # Optimisations etc. for the GNU gcc compiler.
       case " $CFLAGS " in
-        *[\ \	]-g[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -g" ;;
+        *[\ \	]-Wall[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -Wall" ;;
       esac
-
-      case " $CFLAGS " in
-        *[\ \	]-O2[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O2" ;;
-      esac
-
-    else
-      case " $CFLAGS " in
-        *[\ \	]-O3[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O3" ;;
-      esac
-
-    fi
-
-    if test "x$enable_prof" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-pg[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -pg" ;;
-      esac
-    fi
-
-    if test "x$enable_missing_prototypes" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
-      esac
-    fi
-
-    if test "x$enable_ansi" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-ansi[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -ansi" ;;
-      esac
-
-      case " $CFLAGS " in
-        *[\ \	]-pedantic[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -pedantic" ;;
-      esac
-    fi
-    ;;
-
-  icc)
-# Optimisations etc. for the Intel C++ compiler.
-
-    case " $CFLAGS " in
-      *[\ \	]-w1[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -w2" ;;
-    esac
-
-    if test "x$enable_g" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-g[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -g" ;;
-      esac
-
-      case " $CFLAGS " in
-        *[\ \	]-O2[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O2" ;;
-      esac
-
-    else
-
-      case " $CFLAGS " in
-        *[\ \	]-O3[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -O3" ;;
-      esac
-
-    fi
-
-    case " $CFLAGS " in
-      *[\ \	]-ipo[\ \	]*) ;;
-      *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
-    esac
-
-    if test "x$enable_openmp" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-openmp[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -openmp -openmp_report2" ;;
-      esac
-    fi
-
-    if test "x$enable_parallel" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-parallel[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -parallel -parthreshold50 -par_report3" ;;
-      esac
-    fi
-
-    if test "x$enable_prof" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-qp[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -qp" ;;
-      esac
-    fi
-
-    if test "x$enable_ansi" = "xyes"; then
-      case " $CFLAGS " in
-        *[\ \	]-ansi[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -ansi" ;;
-      esac
-    fi
-    ;;
-
-  ccc)
-# Kludges etc. for the Compaq C Compiler
 
       if test "x$enable_g" = "xyes"; then
         case " $CFLAGS " in
           *[\ \	]-g[\ \	]*) ;;
-          *) CFLAGS="$CFLAGS -g3" ;;
+          *) CFLAGS="$CFLAGS -g" ;;
+        esac
+
+        case " $CFLAGS " in
+          *[\ \	]-O2[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O2" ;;
         esac
 
       else
@@ -588,18 +486,124 @@ case $CC in
 
       fi
 
-      case " $CFLAGS " in
-        *[\ \	]-Wall[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -Wall" ;;
-      esac
+      if test "x$enable_prof" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-pg[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -pg" ;;
+        esac
+      fi
 
-      case " $CFLAGS " in
-        *[\ \	]-misalign[\ \	]*) ;;
-        *) CFLAGS="$CFLAGS -misalign" ;;
-      esac
+      if test "x$enable_missing_prototypes" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-Wmissing-prototypes[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -Wmissing-prototypes" ;;
+        esac
+      fi
+
+      if test "x$enable_ansi" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-ansi[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -ansi" ;;
+        esac
+
+        case " $CFLAGS " in
+          *[\ \	]-pedantic[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -pedantic" ;;
+        esac
+      fi
     ;;
 
-  pgcc)
+    icc)
+# Optimisations etc. for the Intel C++ compiler.
+
+      case " $CFLAGS " in
+        *[\ \	]-w1[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -w2" ;;
+      esac
+
+      if test "x$enable_g" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-g[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -g" ;;
+        esac
+
+        case " $CFLAGS " in
+          *[\ \	]-O2[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O2" ;;
+        esac
+
+      else
+
+        case " $CFLAGS " in
+          *[\ \	]-O3[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -O3" ;;
+        esac
+
+      fi
+
+      case " $CFLAGS " in
+        *[\ \	]-ipo[\ \	]*) ;;
+        *) CFLAGS="$CFLAGS -ipo -ipo_obj" ;;
+      esac
+
+      if test "x$enable_openmp" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-openmp[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -openmp -openmp_report2" ;;
+        esac
+      fi
+
+      if test "x$enable_parallel" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-parallel[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -parallel -parthreshold50 -par_report3" ;;
+        esac
+      fi
+
+      if test "x$enable_prof" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-qp[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -qp" ;;
+        esac
+      fi
+
+      if test "x$enable_ansi" = "xyes"; then
+        case " $CFLAGS " in
+          *[\ \	]-ansi[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -ansi" ;;
+        esac
+      fi
+      ;;
+
+    ccc)
+# Kludges etc. for the Compaq C Compiler
+
+        if test "x$enable_g" = "xyes"; then
+          case " $CFLAGS " in
+            *[\ \	]-g[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -g3" ;;
+          esac
+
+        else
+          case " $CFLAGS " in
+            *[\ \	]-O3[\ \	]*) ;;
+            *) CFLAGS="$CFLAGS -O3" ;;
+          esac
+
+        fi
+
+        case " $CFLAGS " in
+          *[\ \	]-Wall[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -Wall" ;;
+        esac
+
+        case " $CFLAGS " in
+          *[\ \	]-misalign[\ \	]*) ;;
+          *) CFLAGS="$CFLAGS -misalign" ;;
+        esac
+      ;;
+
+    pgcc)
 # The Portland Group C compiler.
 # Note: Should consider use of -tp flags to specify processor type.
 # I should also consider investigating the pgcc profiling options.
@@ -639,8 +643,9 @@ case $CC in
     fi
     ;;
 
-esac
-changequote([,])dnl
+  esac
+  changequote([,])dnl
+fi
 
 #
 # Check type sizes.
@@ -715,47 +720,51 @@ fi
 # Some processor specific stuff.
 #
 AC_MSG_CHECKING(whether to apply processor specific optimisations)
-case "$target" in
-  i586-*-*)
-    AC_MSG_RESULT(yes - i586)
-    case "$CC" in
-      icc)
-        case " $CFLAGS " in
-          *[\ \	]-tpp[1-9\ \	]*) ;;
-	  # -axK
-          *) CFLAGS="$CFLAGS -tpp6" ;;
-        esac
-        ;;
-      gcc)
-        case " $CFLAGS " in
-          *[\ \	]-mcpu=*) ;;
-          *) CFLAGS="$CFLAGS -mcpu=pentium" ;;
-        esac
-        ;;
-    esac
-    ;;
-  i686-*-*)
-    AC_MSG_RESULT(yes - i686)
-    case "$CC" in
-      icc)
-        case " $CFLAGS " in
-          *[\ \	]-tpp[1-9\ \	]*) ;;
-	  # -axW
-          *) CFLAGS="$CFLAGS -tpp7" ;;
-        esac
-        ;;
-      gcc)
-        case " $CFLAGS " in
-          *[\ \	]-mcpu=*) ;;
-          *) CFLAGS="$CFLAGS -mcpu=pentiumpro" ;;
-        esac
-        ;;
-    esac
-    ;;
-  *)
-    AC_MSG_RESULT(no - none defined for ${target})
-    ;;
-esac
+if test "x$enable_ccoptim" = "xyes"; then
+  case "$target" in
+    i586-*-*)
+      AC_MSG_RESULT(yes - i586)
+      case "$CC" in
+        icc)
+          case " $CFLAGS " in
+            *[\ \	]-tpp[1-9\ \	]*) ;;
+	    # -axK
+            *) CFLAGS="$CFLAGS -tpp6" ;;
+          esac
+          ;;
+        gcc)
+          case " $CFLAGS " in
+            *[\ \	]-mcpu=*) ;;
+            *) CFLAGS="$CFLAGS -mcpu=pentium" ;;
+          esac
+          ;;
+      esac
+      ;;
+    i686-*-*)
+      AC_MSG_RESULT(yes - i686)
+      case "$CC" in
+        icc)
+          case " $CFLAGS " in
+            *[\ \	]-tpp[1-9\ \	]*) ;;
+	    # -axW
+            *) CFLAGS="$CFLAGS -tpp7" ;;
+          esac
+          ;;
+        gcc)
+          case " $CFLAGS " in
+            *[\ \	]-mcpu=*) ;;
+            *) CFLAGS="$CFLAGS -mcpu=pentiumpro" ;;
+          esac
+          ;;
+      esac
+      ;;
+    *)
+      AC_MSG_RESULT(no - none defined for ${target})
+      ;;
+  esac
+else
+  AC_MSG_RESULT(no disabled)
+fi
 
 dnl GAUL_MEMORY_ALIGN_SIZE
 dnl Determine memory alignment characteristics.

@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "30/06/04"
+#define GA_BUILD_DATE_STRING "04/08/04"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 1
+#define GA_PATCH_VERSION 3
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux chemcca0 2.4.20-18.9smp #1 SMP Thu May 29 06:55:05 EDT 2003 i686 i686 i386 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1847-1"
+#define GA_VERSION_STRING "0.1847-3"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -57,6 +57,9 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
+
+/* Define to 1 if you have the `m' library (-lm). */
+/* #undef HAVE_LIBM */
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
 /* #undef HAVE_LIBMPI */
