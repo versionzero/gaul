@@ -2016,7 +2016,7 @@ entity *ga_random_mutation_hill_climbing(	population	*pop,
   current = ga_get_free_entity(pop);	/* The 'working' solution. */
   best = ga_get_free_entity(pop);	/* The best solution so far. */
 
-/* Do we need to generate a random solution? */
+/* Do we need to generate a random starting solution? */
   if (!initial)
     {
     plog(LOG_VERBOSE, "Will perform RMHC optimisation with random starting solution.");
@@ -2157,7 +2157,7 @@ entity *ga_next_ascent_hill_climbing(	population		*pop,
 
   plog(LOG_FIXME, "NAHC algorithm is not parallelised.");
 
-/* Do we need to generate a random solution? */
+/* Do we need to generate a random starting solution? */
   if (!initial)
     {
     plog(LOG_VERBOSE, "Will perform NAHC optimisation with random starting solution.");
@@ -2298,7 +2298,7 @@ entity *ga_metropolis_mutation(	population		*pop,
 
   plog(LOG_FIXME, "Metropolis algorithm is not parallelised.");
 
-/* Do we need to generate a random solution? */
+/* Do we need to generate a random starting solution? */
   if (!initial)
     {
     plog(LOG_VERBOSE, "Will perform metropolis optimisation at %d degrees with random starting solution.", temperature);
@@ -2443,7 +2443,7 @@ entity *ga_simulated_annealling_mutation(population	*pop,
 
   plog(LOG_FIXME, "Simulated annealling algorithm is not parallelised.");
 
-/* Do we need to generate a random solution? */
+/* Do we need to generate a random starting solution? */
   if (!initial)
     {
     plog(LOG_VERBOSE, "Will perform %d steps of MC/SA optimisation between %d and %d degrees with random starting solution.", max_iterations, initial_temperature, final_temperature);
