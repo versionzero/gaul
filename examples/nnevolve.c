@@ -799,14 +799,14 @@ void nnevolve_setup_data(void)
 
 
 /**********************************************************************
-  nnevolve_show_message()
+  nnevolve_display_message()
   synopsis:	Display an introductory message.
   parameters:	none
   return:	none
   updated:	09 Aug 2002
  **********************************************************************/
 
-void nnevolve_show_message(void)
+void nnevolve_display_message(void)
   {
 
   printf("nnevolve - GAUL example: Evolve a fixed topology neural network.\n");
