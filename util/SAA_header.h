@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
+  Updated:	17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
+  		14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
   		03 Oct 2002 SAA	Compaq ccc compiler fix.
   		18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
   		09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
@@ -190,6 +191,9 @@
  */
 #if defined(HAVE_STDBOOL_H)
 # include <stdbool.h>
+# if !defined(HAVE__BOOL)
+typedef short _Bool;
+# endif
 #else
 
 # if !defined(__bool_true_false_are_defined)
@@ -208,9 +212,10 @@ typedef short _Bool;
  */
 #  define __bool_true_false_are_defined 1
 # endif
+
+# define bool _Bool
 #endif
 
-#define bool _Bool
 #define boolean _Bool
 
 #if !defined(TRUE)
