@@ -60,4 +60,7 @@ double	ga_similarity_bitstring_euclidean(const population *pop,
 double	ga_similarity_bitstring_cosine(const population *pop,
                                   const entity *alpha, const entity *beta);
 
+double	ga_similarity_double_tanimoto(const population *pop,
+                                  const entity *alpha, const entity *beta);
+
 #endif	/* GA_SIMILARITY_H_INCLUDED */

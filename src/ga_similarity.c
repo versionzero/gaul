@@ -203,7 +203,9 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   byte		*a;		/* Comparison bitstring. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha) die("Null pointer to entity structure passed");
+  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
 
@@ -236,7 +238,9 @@ int ga_similarity_bitstring_count_match_alleles( const population *pop,
   byte		*a, *b;		/* Comparison bitstrings. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
+  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
   b = (byte*)(beta->chromosome[chromosomeid]);
@@ -272,7 +276,9 @@ int ga_similarity_bitstring_count_and_alleles( const population *pop,
   byte		*a, *b;		/* Comparison bitstrings. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
+  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
   b = (byte*)(beta->chromosome[chromosomeid]);
@@ -290,8 +296,8 @@ int ga_similarity_bitstring_count_and_alleles( const population *pop,
   ga_similarity_integer_count_match_alleles()
   synopsis:	Compares two chromosomes and counts matching alleles.
   parameters:	const population *pop	Population.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+		const entity *alpha	Alpha chromosome.
+		const entity *beta	Beta chromosome.
 		const int chromosomeid	Chromosome to consider.
   return:	Returns number of matching alleles.
   last updated:	14 May 2002
@@ -306,7 +312,9 @@ int ga_similarity_integer_count_match_alleles( const population *pop,
   int		*a, *b;		/* Comparison integer arrays. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
+  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
 
   a = (int*)(alpha->chromosome[chromosomeid]);
   b = (int*)(beta->chromosome[chromosomeid]);
@@ -336,6 +344,7 @@ double ga_similarity_bitstring_tanimoto(const population *pop,
   int		n=0;		/* Number of ones both entities' chromosomes. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -367,6 +376,7 @@ double ga_similarity_bitstring_dice(const population *pop,
   int		n=0;		/* Number of ones both entities' chromosomes. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -398,6 +408,7 @@ double ga_similarity_bitstring_euclidean(const population *pop,
   int		n=0;		/* Number of ones both entities' chromosomes. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -429,6 +440,7 @@ double ga_similarity_bitstring_hamming(const population *pop,
   int		n=0;		/* Number of ones both entities' chromosomes. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -460,6 +472,7 @@ double ga_similarity_bitstring_cosine(const population *pop,
   int		n=0;		/* Number of ones both entities' chromosomes. */
 
   /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -472,6 +485,77 @@ double ga_similarity_bitstring_cosine(const population *pop,
   if (a==0 || b==0) return 0;
 
   return n/sqrt((double)(a*b));
+  }
+
+
+/**********************************************************************
+  ga_similarity_double_count_match_alleles()
+  synopsis:	Compares two "double" chromosomes and counts matching
+		alleles.  A match is defined to be when
+		x+GAUL_TINY_DOUBLE>y>x-GAUL_TINY_DOUBLE
+  parameters:	const population *pop	Population.
+		const entity *alpha	Alpha chromosome.
+		const entity *beta	Beta chromosome.
+		const int chromosomeid	Chromosome to consider.
+  return:	Returns number of matching alleles.
+  last updated:	23 May 2002
+ **********************************************************************/
+
+int ga_similarity_double_count_match_alleles( const population *pop,
+                                      const entity *alpha, const entity *beta,
+                                      const int chromosomeid )
+  {
+  int		i;		/* Loop variable over all alleles. */
+  int		count=0;	/* Number of matching alleles. */
+  double	*a, *b;		/* Comparison bitstrings. */
+
+  /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
+  if (!alpha || !beta) die("Null pointer to entity structure passed");
+  if (chromosomeid<0 || chromosomeid>pop->num_chromosomes0 die("Invalid chromosome index passed");
+
+  a = (double*)(alpha->chromosome[chromosomeid]);
+  b = (double*)(beta->chromosome[chromosomeid]);
+
+  for ( i=0; i<pop->len_chromosomes; i++ )
+    {
+    if (a[i]+GAUL_TINY_DOUBLE>b[i] && b[i]>a[i]-GAUL_TINY_DOUBLE) count++;
+    }
+
+  return count;
+  }
+
+
+/**********************************************************************
+  ga_similarity_double_tanimoto()
+  synopsis:	Compares the chromosomes of two entities.
+  parameters:	const population *pop	The population.
+		const entity *alpha	Alpha chromosome.
+		const entity *beta	Beta chromosome.
+  return:	Returns Tanimoto similarity coefficient.
+		Range: -1/3 to +1
+  last updated:	23 May 2002
+ **********************************************************************/
+
+double ga_similarity_double_tanimoto(const population *pop,
+                                      const entity *alpha, const entity *beta)
+  {
+  int           i;              /* Loop variable over all chromosomes. */
+  int		a=0, b=0;	/* Number of ones in the individual entities' chromosomes. */
+  int		n=0;		/* Number of ones both entities' chromosomes. */
+
+  /* Checks. */
+  if (!pop) die("Null pointer to population structure passed");
+  if (!alpha || !beta) die("Null pointer to entity structure passed");
+
+  for (i=0; i<pop->num_chromosomes; i++)
+    {
+    n += ga_similarity_bitstring_count_and_alleles( pop, alpha, beta, i );
+    a += ga_similarity_bitstring_count_1_alleles( pop, alpha, i );
+    b += ga_similarity_bitstring_count_1_alleles( pop, beta, i );
+    }
+
+  return (double) n/(a+b-n);
   }
 
 
