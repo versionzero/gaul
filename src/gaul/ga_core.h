@@ -210,11 +210,11 @@ typedef struct
  */
 typedef struct
   {
-  boolean	perturb_random;		/* Whether to perturb random rather than best. */
-  int		num_perturbed;		/* Number to perturb. */
-  int		crossover_method;	/* Crossover strategy. */
-  double	weighting_factor;	/* Crossover weighting factor. */
-  double	crossover_factor;	/* Crossover ratio. */
+  ga_de_strategy_type	strategy;		/* Selection strategy. */
+  ga_de_crossover_type	crossover_method;	/* Crossover strategy. */
+  int			num_perturbed;		/* Number to perturb. */
+  double		weighting_factor;	/* Crossover weighting factor. */
+  double		crossover_factor;	/* Crossover ratio. */
   } ga_de_t;
 
 /*

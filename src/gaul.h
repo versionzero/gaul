@@ -89,11 +89,29 @@ typedef enum ga_elitism_type_t
   {
   GA_ELITISM_UNKNOWN = 0,
   GA_ELITISM_NULL = 0,
-  GA_ELITISM_PARENTS_SURVIVE=1,
-  GA_ELITISM_ONE_PARENT_SURVIVES=2,
-  GA_ELITISM_PARENTS_DIE=3,
-  GA_ELITISM_RESCORE_PARENTS=4
+  GA_ELITISM_PARENTS_SURVIVE = 1,
+  GA_ELITISM_ONE_PARENT_SURVIVES = 2,
+  GA_ELITISM_PARENTS_DIE = 3,
+  GA_ELITISM_RESCORE_PARENTS = 4
   } ga_elitism_type;
+
+/*
+ * Stategies available with Differential Evolution implementation.
+ */
+typedef enum de_strategy_t
+  {
+  GA_DE_STRATEGY_UNKNOWN = 0,
+  GA_DE_STRATEGY_BEST = 1,
+  GA_DE_STRATEGY_RAND = 2,
+  GA_DE_STRATEGY_RANDTOBEST = 3
+  } ga_de_strategy_type;
+
+typedef enum de_crossover_t
+  {
+  GA_DE_CROSSOVER_UNKNOWN = 0,
+  GA_DE_CROSSOVER_BINOMIAL = 1,
+  GA_DE_CROSSOVER_EXPONENTIAL = 2
+  } ga_de_crossover_type;
 
 /**********************************************************************
  * Callback function typedefs.

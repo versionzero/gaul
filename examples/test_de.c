@@ -26,7 +26,7 @@
  **********************************************************************
 
   Synopsis:	Test/example program for GAUL demonstrating use
-		of the genetic algorithm.
+		of the differential evolution algorithm.
 
 		This program aims to solve a function of the form
 		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0
@@ -34,6 +34,36 @@
  **********************************************************************/
 
 #include "gaul.h"
+
+struct strategies_t
+  {
+  char			*label; 
+  ga_de_strategy_type	strategy;
+  ga_de_crossover_type	crossover;
+  int			num_perturbed;
+  double		weighting_factor;
+  double		crossover_factor;
+  };
+
+static struct strategies_t strategy[]={
+        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.3,  0.5 },
+        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.3,  0.5 },
+        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.3,  0.5 },
+        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.1,  0.4 },
+        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.1,  0.4 },
+        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.1,  0.4 },
+        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.3,  0.5 },
+        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.3,  0.5 },
+        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.3,  0.5 },
+        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.3,  0.5 },
+        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.3,  0.5 },
+        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.1,  0.4 },
+        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.1,  0.4 },
+        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.1,  0.4 },
+        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.3,  0.5 },
+        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.3,  0.5 },
+        { NULL, 0, 0, 0, 0.0, 0.0 } };
+
 
 /**********************************************************************
   test_score()
@@ -63,13 +93,14 @@ boolean test_score(population *pop, entity *entity)
   synopsis:	Generation callback
   parameters:
   return:
-  updated:	25 Nov 2002
+  updated:	21 Mar 2005
  **********************************************************************/
 
 boolean test_generation_callback(int generation, population *pop)
   {
 
-  printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
+  if ( generation%10 == 0)
+    printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
             generation,
             ((double *)pop->entity_iarray[0]->chromosome[0])[0],
             ((double *)pop->entity_iarray[0]->chromosome[0])[1],
@@ -112,36 +143,45 @@ boolean test_seed(population *pop, entity *adam)
   synopsis:	Main function.
   parameters:
   return:
-  updated:	25 Nov 2002
+  updated:	21 Mar 2005
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  population		*pop;			/* Population of solutions. */
+  population		*pop;		/* Population of solutions. */
+  int			i=0;		/* Loop variable over strategies. */
 
   random_seed(23091975);
 
   log_init(LOG_NORMAL, NULL, NULL, FALSE);
 
-  pop = ga_genesis_double(
-       40,			/* const int              population_size */
-       1,			/* const int              num_chromo */
-       4,			/* const int              len_chromo */
-       test_generation_callback,/* GAgeneration_hook      generation_hook */
-       NULL,			/* GAiteration_hook       iteration_hook */
-       NULL,			/* GAdata_destructor      data_destructor */
-       NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-       test_score,		/* GAevaluate             evaluate */
-       test_seed,		/* GAseed                 seed */
-       NULL,			/* GAadapt                adapt */
-       ga_select_one_bestof2,	/* GAselect_one           select_one */
-       ga_select_two_bestof2,	/* GAselect_two           select_two */
-       ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
-       ga_crossover_double_doublepoints,	/* GAcrossover            crossover */
-       NULL,			/* GAreplace              replace */
-       NULL			/* vpointer	User data */
+  while ( strategy[i].label != NULL )
+    {
+    printf( "Strategy %s ; C = %f ; F = %f\n",
+            strategy[i].label,
+            strategy[i].crossover_factor,
+            strategy[i].weighting_factor );
+
+    pop = ga_genesis_double(
+         40,			/* const int              population_size */
+         1,			/* const int              num_chromo */
+         4,			/* const int              len_chromo */
+         test_generation_callback,/* GAgeneration_hook      generation_hook */
+         NULL,			/* GAiteration_hook       iteration_hook */
+         NULL,			/* GAdata_destructor      data_destructor */
+         NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+         test_score,		/* GAevaluate             evaluate */
+         test_seed,		/* GAseed                 seed */
+         NULL,			/* GAadapt                adapt */
+         NULL,			/* GAselect_one           select_one */
+         NULL,			/* GAselect_two           select_two */
+         NULL,			/* GAmutate               mutate */
+         NULL,			/* GAcrossover            crossover */
+         NULL,			/* GAreplace              replace */
+         NULL			/* vpointer               User data */
             );
 
+#if 0
   ga_population_set_parameters(
        pop,				/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
@@ -150,22 +190,29 @@ int main(int argc, char **argv)
        0.2,				/* double  mutation */
        0.0      		        /* double  migration */
                               );
+#endif
 
-  ga_population_set_differentialevolution_parameters(pop);
+    ga_population_set_differentialevolution_parameters(
+        pop, strategy[i].strategy, strategy[i].crossover,
+        strategy[i].num_perturbed, strategy[i].weighting_factor, strategy[i].crossover_factor
+        );
 
-  ga_differentialevolution(
-       pop,				/* population	*pop */
-       500				/* const int	max_generations */
+    ga_differentialevolution(
+         pop,				/* population	*pop */
+         50				/* const int	max_generations */
               );
 
-  printf( "Final: A = %f B = %f C = %f D = %f (fitness = %f)\n",
+    printf( "Final: A = %f B = %f C = %f D = %f (fitness = %f)\n",
             ((double *)pop->entity_iarray[0]->chromosome[0])[0],
             ((double *)pop->entity_iarray[0]->chromosome[0])[1],
             ((double *)pop->entity_iarray[0]->chromosome[0])[2],
             ((double *)pop->entity_iarray[0]->chromosome[0])[3],
             pop->entity_iarray[0]->fitness );
 
-  ga_extinction(pop);
+    ga_extinction(pop);
+
+    i++;
+    }
 
   exit(EXIT_SUCCESS);
   }

@@ -40,7 +40,13 @@
 /*
  * Prototypes.
  */
-void ga_population_set_differentialevolution_parameters( population		*pop );
+
+void ga_population_set_differentialevolution_parameters( population *pop,
+                                                         const ga_de_strategy_type strategy,
+                                                         const ga_de_crossover_type crossover,
+                                                         const int num_perturbed,
+                                                         const double weighting_factor,
+                                                         const double crossover_factor );
 int ga_differentialevolution(    population              *pop,
 	        const int               max_generations );
 
