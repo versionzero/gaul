@@ -206,18 +206,18 @@ void	memory_set_verbose(int i);
  * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
  * Debug versions.
  */
-void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, char*, char*, int, char*);
-void	*s_free_debug(void*, char*, char*, int);
+void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, const char*, const char*, const int, const char*);
+void	*s_free_debug(void*, const char*, const char*, const int);
 
 /*
  * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
  * Safe versions.
  */
-void	*s_malloc_safe(size_t, char*, char*, int);
-void	*s_calloc_safe(size_t, size_t, char*, char*, int);
-void	*s_realloc_safe(void*, size_t, char*, char*, int);
-char	*s_strdup_safe(const char*, char*, char*, int);
-char	*s_strndup_safe(const char*, size_t, char*, char*, int);
+void	*s_malloc_safe(size_t, const char*, const char*, const int);
+void	*s_calloc_safe(size_t, size_t, const char*, const char*, const int);
+void	*s_realloc_safe(void*, size_t, const char*, const char*, const int);
+char	*s_strdup_safe(const char*, const char*, const char*, const int);
+char	*s_strndup_safe(const char*, size_t, const char*, const char*, const int);
 void	s_free_safe(void*, const char*, const char*, const int);
 
 #endif

@@ -560,8 +560,8 @@ static void free_padded(mem_record *mr)
  **********************************************************************/
 
 void *s_alloc_debug(memory_alloc_type type, size_t memsize, int numvars, void *mptr,
-		char *name, char *file, int line,
-		char *label)
+		const char *name, const char *file, const int line,
+		const char *label)
   {
   mem_record	*j=NULL;			/* Current memory record. */
   size_t	size_low, size_high;		/* Padding amount. */
@@ -918,7 +918,7 @@ printf("INSERT (2) mtemp = %p j = %p j->mptr = %p\n", mtemp, j, j->mptr);
   last updated: 17/07/00
  **********************************************************************/
 
-void *s_free_debug(void *mptr, char *name, char *file, int line)
+void *s_free_debug(void *mptr, const char *name, const char *file, const int line)
   {
   mem_record	*j;	/* Index of current memory record. */
 
@@ -1437,7 +1437,7 @@ void memory_set_padding(int i)
  **********************************************************************/
 
 void *s_malloc_safe(	size_t size,
-			char *funcname, char *filename, int linenum)
+			const char *funcname, const char *filename, const int linenum)
   {
   void	*ptr;	/* Pointer to new memory */
    
@@ -1473,7 +1473,7 @@ void *s_malloc_safe(	size_t size,
  **********************************************************************/
 
 void *s_calloc_safe(	size_t num, size_t size,
-			char *funcname, char *filename, int linenum)
+			const char *funcname, const char *filename, const int linenum)
   {
   void	*ptr;	/* Pointer to new memory */
 
@@ -1509,7 +1509,7 @@ void *s_calloc_safe(	size_t num, size_t size,
  **********************************************************************/
 
 void *s_realloc_safe(	void *oldptr, size_t size,
-			char *funcname, char *filename, int linenum)
+			const char *funcname, const char *filename, const int linenum)
   {
   void	*ptr;	/* Pointer to new memory */
    
@@ -1538,7 +1538,7 @@ void *s_realloc_safe(	void *oldptr, size_t size,
  **********************************************************************/
 
 char *s_strdup_safe(	const char *src,
-			char *funcname, char *filename, int linenum)
+			const char *funcname, const char *filename, const int linenum)
   {
   void		*dest;	/* Pointer to new string */
   size_t	len;	/* String length */
@@ -1586,7 +1586,7 @@ char *s_strdup_safe(	const char *src,
  **********************************************************************/
 
 char *s_strndup_safe(	const char *src, size_t length,
-			char *funcname, char *filename, int linenum )
+			const char *funcname, const char *filename, const int linenum )
   {
   void		*dest;	/* Pointer to new string */
   size_t	len;	/* String length */
