@@ -38,8 +38,6 @@
 		operators since a given team member is unable to
 		play twice.
 
-  Last Updated:	23/04/01 SAA	First version (actually second due to incorrect use of 'rm').
-
  **********************************************************************/
 
 #include "pingpong.h"
@@ -49,7 +47,7 @@
   synopsis:	Score solution.
   parameters:
   return:
-  updated:	23/04/01
+  updated:	03/07/01
  **********************************************************************/
 
 boolean pingpong_score(population *pop, entity *entity)
@@ -301,12 +299,15 @@ boolean pingpong_ga_callback(int generation, population *pop)
   {
   int		i;		/* Team member. */
   int		score[25];	/* Scores. */
-  int		loss=0;
-  double	lossscore=0;
+  int		loss=0;		/* Number of matches lost. */
+  double	lossscore=0;	/* Average score in lost matches. */
+  entity	*best;		/* Top ranked solution. */
+
+  best = ga_get_entity_from_rank(pop, 0);
 
   for (i=0; i<25; i++)
     {
-    score[i] = (((int *)pop->entity_iarray[0]->chromosome[0])[i] - i)*4 + 2;
+    score[i] = (((int *)best->chromosome[0])[i] - i)*4 + 2;
     if (score[i] > 0)
       {
       loss++;
@@ -317,16 +318,16 @@ boolean pingpong_ga_callback(int generation, population *pop)
 
     printf( "%d: %f %d %d %d %d %d %d %d %d %d\n",
             generation,
-            pop->entity_iarray[0]->fitness,
-            ((int *)pop->entity_iarray[0]->chromosome[0])[0],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[1],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[2],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[3],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[4],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[5],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[6],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[7],
-            ((int *)pop->entity_iarray[0]->chromosome[0])[8] );
+            best->fitness,
+            ((int *)best->chromosome[0])[0],
+            ((int *)best->chromosome[0])[1],
+            ((int *)best->chromosome[0])[2],
+            ((int *)best->chromosome[0])[3],
+            ((int *)best->chromosome[0])[4],
+            ((int *)best->chromosome[0])[5],
+            ((int *)best->chromosome[0])[6],
+            ((int *)best->chromosome[0])[7],
+            ((int *)best->chromosome[0])[8] );
 
   printf( "     %d %d %d %d %d %d %d %d %d   Ave. loss = %f    wins = %d\n",
           score[0], score[1], score[2],
@@ -395,7 +396,7 @@ NULL, /*pingpong_ga_callback,*/	/* GAgeneration_hook      generation_hook */
     }
 
   printf("The final solution found was:\n");
-  printf("%s\n", ga_chromosome_integer_to_staticstring(pop, pop->entity_iarray[0]));
+  printf("%s\n", ga_chromosome_integer_to_staticstring(pop, ga_get_entity_from_rank(pop,0)));
 
   ga_extinction(pop);
 

@@ -53,6 +53,7 @@ void ga_replace_by_fitness(population *pop, entity *child)
   entity	*tmp;		/* For swapping. */
   boolean	finished=FALSE;	/* Shuffling finished. */
 
+  /* Find child's current rank, which will be somewhere near the bottom. */
   i=pop->size;
   do
     {
@@ -67,7 +68,7 @@ void ga_replace_by_fitness(population *pop, entity *child)
     pop->entity_iarray[pop->orig_size-1] = child;
     child = tmp;
 
-    /* Shuffle into rightful position. */
+    /* Shuffle entity to rightful location. */
     j = pop->orig_size-1;
     while (j>0 && finished==FALSE)
       {
@@ -82,12 +83,11 @@ void ga_replace_by_fitness(population *pop, entity *child)
         finished=TRUE;
         }
       }
+    i = pop->orig_size-1;
     }
 
   /* Kill off an entity. */
   ga_entity_dereference_by_rank(pop, i);
-
-  /* Shuffle entity to rightful location. */
 
   return;
   }

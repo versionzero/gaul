@@ -28,7 +28,10 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad struggle
+bin_PROGRAMS = pingpong wildfire \
+		goldberg1 goldberg2 \
+		royalroad_ss royalroad \
+		struggle struggle_ss
 
 #CFLAGS = -g -Wall -O
 
@@ -41,7 +44,9 @@ wildfire_SOURCES = wildfire.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
+royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_ss_SOURCES = struggle_ss.c
 
 libbtree_a_SOURCES = btree.c
 
@@ -60,12 +65,16 @@ wildfire_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm 
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 

@@ -118,7 +118,7 @@ int main(int argc, char **argv)
        1000                        /* const int         max_generations */
               );
 </pre>
-<p>The function &quot;ga_evolution()&quot; performs the standard generation-based GA.  An alternative is &quot;ga_evolution_ss()&quot; which performs the standard steady-state GA.</p>
+<p>The function &quot;ga_evolution()&quot; performs the standard generation-based GA.  An alternative is &quot;ga_evolution_steady_state()&quot; which performs the standard steady-state GA.</p>
 <p>And finally, we deallocate the population structure, and are finished:<p>
 <pre>
   printf( "The best final solution is:\n", i);
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
   exit(0);
   }
 </pre>
-<p>The &quot;ga_get_entity_from_rank()&quot; function may be used to extract particular solutions from the population structure.  The ranking runs from 0 to &quot;population&quot;.size-1.</p>
+<p>The &quot;ga_get_entity_from_rank()&quot; function may be used to extract particular solutions from the population structure.  The ranks run from 0 to &quot;population.size&quot;-1, inclusive.</p>
 </td>
 </tr>
 </table>

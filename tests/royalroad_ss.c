@@ -165,10 +165,13 @@ boolean royalroad_score(population *pop, entity *entity)
 boolean royalroad_ga_callback(int generation, population *pop)
   {
 
-  printf( "generation = %d best score = %f highestlevel = %d\n",
-          generation,
-          ga_get_entity_from_rank(pop,0)->fitness,
-          highestlevel );
+  if (generation % 1000 == 0)
+    {
+    printf( "generation = %d best score = %f highestlevel = %d\n",
+            generation,
+            ga_get_entity_from_rank(pop,0)->fitness,
+            highestlevel );
+    }
 
   return TRUE;
   }
@@ -217,23 +220,21 @@ int main(int argc, char **argv)
      ga_select_one_bestof2,	/* GAselect_one           select_one */
      ga_select_two_bestof2,	/* GAselect_two           select_two */
      ga_mutate_boolean_singlepoint,	/* GAmutate               mutate */
-     /*ga_mutate_boolean_multipoint,*/	/* GAmutate               mutate */
      ga_crossover_boolean_doublepoints,	/* GAcrossover            crossover */
-     NULL			/* GAreplace              replace */
+     ga_replace_by_fitness		/* GAreplace              replace */
             );
 
   ga_population_set_parameters(
        pop,		/* population      *pop */
-       0.9,		/* double  crossover */
+       1.0,		/* double  crossover */
        0.1,		/* double  mutation */
        0.0              /* double  migration */
                               );
 
-  ga_evolution(
+  ga_evolution_steady_state(
        pop,		/* population              *pop */
        GA_CLASS_DARWIN,	/* const ga_class_type     class */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
-       10000		/* const int               max_generations */
+       500000		/* const int               max_iterations */
               );
 
   printf("The final solution with seed = %d was: \n", seed);

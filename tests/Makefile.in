@@ -111,7 +111,8 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = 1.4
 
-bin_PROGRAMS = pingpong wildfire goldberg1 goldberg2 royalroad struggle
+bin_PROGRAMS = pingpong wildfire 		goldberg1 goldberg2 		royalroad_ss royalroad 		struggle struggle_ss
+
 
 #CFLAGS = -g -Wall -O
 
@@ -124,7 +125,9 @@ wildfire_SOURCES = wildfire.c
 goldberg1_SOURCES = goldberg1.c
 goldberg2_SOURCES = goldberg2.c
 royalroad_SOURCES = royalroad.c
+royalroad_ss_SOURCES = royalroad_ss.c
 struggle_SOURCES = struggle.c
+struggle_ss_SOURCES = struggle_ss.c
 
 libbtree_a_SOURCES = btree.c
 
@@ -138,14 +141,18 @@ wildfire_DEPENDENCIES = ${DEPENDENCIES}
 goldberg1_DEPENDENCIES = ${DEPENDENCIES}
 goldberg2_DEPENDENCIES = ${DEPENDENCIES}
 royalroad_DEPENDENCIES = ${DEPENDENCIES}
+royalroad_ss_DEPENDENCIES = ${DEPENDENCIES}
 struggle_DEPENDENCIES = ${DEPENDENCIES}
+struggle_ss_DEPENDENCIES = ${DEPENDENCIES}
 
 pingpong_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm 
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 struggle_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lmethods -lrandom -lstr_util -lm
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -169,10 +176,14 @@ goldberg1_OBJECTS =  goldberg1.o
 goldberg1_LDFLAGS = 
 goldberg2_OBJECTS =  goldberg2.o
 goldberg2_LDFLAGS = 
+royalroad_ss_OBJECTS =  royalroad_ss.o
+royalroad_ss_LDFLAGS = 
 royalroad_OBJECTS =  royalroad.o
 royalroad_LDFLAGS = 
 struggle_OBJECTS =  struggle.o
 struggle_LDFLAGS = 
+struggle_ss_OBJECTS =  struggle_ss.o
+struggle_ss_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -187,9 +198,10 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/btree.P .deps/goldberg1.P .deps/goldberg2.P \
-.deps/pingpong.P .deps/royalroad.P .deps/struggle.P .deps/wildfire.P
-SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_SOURCES) $(struggle_SOURCES)
-OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_OBJECTS) $(struggle_OBJECTS)
+.deps/pingpong.P .deps/royalroad.P .deps/royalroad_ss.P \
+.deps/struggle.P .deps/struggle_ss.P .deps/wildfire.P
+SOURCES = $(libbtree_a_SOURCES) $(pingpong_SOURCES) $(wildfire_SOURCES) $(goldberg1_SOURCES) $(goldberg2_SOURCES) $(royalroad_ss_SOURCES) $(royalroad_SOURCES) $(struggle_SOURCES) $(struggle_ss_SOURCES)
+OBJECTS = $(libbtree_a_OBJECTS) $(pingpong_OBJECTS) $(wildfire_OBJECTS) $(goldberg1_OBJECTS) $(goldberg2_OBJECTS) $(royalroad_ss_OBJECTS) $(royalroad_OBJECTS) $(struggle_OBJECTS) $(struggle_ss_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -296,6 +308,10 @@ goldberg2: $(goldberg2_OBJECTS) $(goldberg2_DEPENDENCIES)
 	@rm -f goldberg2
 	$(LINK) $(goldberg2_LDFLAGS) $(goldberg2_OBJECTS) $(goldberg2_LDADD) $(LIBS)
 
+royalroad_ss: $(royalroad_ss_OBJECTS) $(royalroad_ss_DEPENDENCIES)
+	@rm -f royalroad_ss
+	$(LINK) $(royalroad_ss_LDFLAGS) $(royalroad_ss_OBJECTS) $(royalroad_ss_LDADD) $(LIBS)
+
 royalroad: $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
 	@rm -f royalroad
 	$(LINK) $(royalroad_LDFLAGS) $(royalroad_OBJECTS) $(royalroad_LDADD) $(LIBS)
@@ -303,6 +319,10 @@ royalroad: $(royalroad_OBJECTS) $(royalroad_DEPENDENCIES)
 struggle: $(struggle_OBJECTS) $(struggle_DEPENDENCIES)
 	@rm -f struggle
 	$(LINK) $(struggle_LDFLAGS) $(struggle_OBJECTS) $(struggle_LDADD) $(LIBS)
+
+struggle_ss: $(struggle_ss_OBJECTS) $(struggle_ss_DEPENDENCIES)
+	@rm -f struggle_ss
+	$(LINK) $(struggle_ss_LDFLAGS) $(struggle_ss_OBJECTS) $(struggle_ss_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

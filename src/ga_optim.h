@@ -47,11 +47,13 @@ typedef void    (*GAspecificmutate)(int chromo, int point, int *data);
 /*
  * Prototypes
  */
-
 boolean ga_evolution(	population		*pop,
 			const ga_class_type	class,
 			const ga_elitism_type	elitism,
 			const int		max_generations );
+boolean ga_evolution_steady_state(	population		*pop,
+			const ga_class_type	class,
+			const int		max_iterations );
 entity	*ga_random_mutation_hill_climbing(	population	*pop,
 			entity			*initial,
 			const int		num_iterations);
