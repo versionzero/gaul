@@ -283,4 +283,7 @@ int strnicmp( char *s1, char *s2, int n );
 maybeinline void sincos( double radians, double *s, double *c );
 #endif
 
+#ifndef HAVE_ITOA
+void itoa (const int n, char *s);
+
 #endif

@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
+  Updated:	13 Mar 2002 SAA	Added itoa().
+		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
   		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
 		17/12/00 SAA	Added ipow().
@@ -1563,5 +1564,38 @@ maybeinline void sincos( double radians, double *s, double *c )
   return;
   }
 #endif /* HAVE_SINCOS */
+
+
+#ifndef HAVE_ITOA
+/*
+ * Convert an integer to a string.
+ */
+void itoa (const int n, char *s)
+  {
+  int   i=0, number=n;
+  char	c, *end=s;
+
+  if (n < 0) {number = -number;}
+
+  do
+    {
+    *end++ = (number % 10) + '0';
+    } while ((number /= 10) > 0);
+
+  if (n < 0) {*end++ = '-';}
+
+  *end-- = '\0';
+
+  while ( *s < *end )
+    {
+    c = *s;
+    *s++ = *end;
+    *end++ = c;
+    }
+
+  return;
+  }
+#endif /* HAVE_ITOA */
+
 
 
