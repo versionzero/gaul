@@ -13,10 +13,11 @@ Homepage:              http://gaul.souceforge.net/
 Documentation:         http://gaul.souceforge.net/documentation.html
 Development homepage:  http://souceforge.net/projects/gaul/
 
-All existing documentation, including a tutorial and a FAQ, is available
-at the website.  Note that reference documentation is still being written.
-In the mean-time you are welcome to join the mailing list,
-gaul-devel@lists.sourceforge.net, where all of your questions can be answered.
+All existing documentation, including a reference guide, on-line
+tutorial and a FAQ, is available at the website.  Note that reference
+documentation is still being written.  In the mean-time you are welcome
+to join the mailing list, gaul-devel@lists.sourceforge.net, where all
+of your questions can be answered.
 
 Introduction to GAUL
 --------------------
@@ -36,9 +37,10 @@ Current features include:
  * Darwinian, Lamarckian or Baldwinian evolutionary schemes.
  * Both steady-state and generation-based GAs included.
  * The island model of evolution is available.
- * Chromosome datatype agnostic. A selection of common chromosome types are built-in.
+ * Chromosome datatype agnostic. A selection of common chromosome types is built-in.
  * Includes most of the usual crossover, mutation and selection operators.
- * Allows user-defined crossover, mutation, selection, adaptation and replacement operators.
+ * Allows user-defined GA operators, icluding:
+     o crossover, mutation, selection, adaptation, replacement.
  * Availability of multiple chromosome genomes.
  * Full support for multiple, simultaneously evolved, populations.
  * Choice of high-level or low-level interface functions.
@@ -96,5 +98,5 @@ miniature GAUL logo to your web page:
 
 The 'gaul_button.png' graphic may be downloaded from the GAUL web page.
 
-Stewart Adcock, 12 May 2004.
+Stewart Adcock, 17 Jun 2004.
 
