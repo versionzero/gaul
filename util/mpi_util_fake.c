@@ -44,25 +44,6 @@
 #undef PARALLEL
 #define PARALLEL	0
 
-typedef int *MPI_Comm;
-typedef int *MPI_Datatype;
-typedef struct {
-	int             MPI_SOURCE;
-        int             MPI_TAG;
-        int             MPI_ERROR;
-  } MPI_Status;
-
-int MPI_Init(int *a, char ***b) {return 0;}
-int MPI_Comm_size(MPI_Comm a, int *b) {return 0;}
-int MPI_Comm_rank(MPI_Comm a, int *b) {return 0;}
-int MPI_Get_processor_name(char *a, int *b) {return 0;}
-int MPI_Abort(MPI_Comm a, int b) {exit(b); return 0;}
-int MPI_Barrier(MPI_Comm a) {return 0;}
-int MPI_Finalize(void) {return 0;}
-int MPI_Recv(void *a, int b, MPI_Datatype c, int d, int e, MPI_Comm f, MPI_Status *g) {return 0;}
-int MPI_Send(void *a, int b, MPI_Datatype c, int d, int e, MPI_Comm f) {return 0;}
-int MPI_SSend(void *a, int b, MPI_Datatype c, int d, int e, MPI_Comm f) {return 0;}
-int MPI_Bcast(void *a, int b, MPI_Datatype c, int d, MPI_Comm e) {return 0;}
 
 #include "mpi_util.c"
 

@@ -100,7 +100,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1842/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = hcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -109,18 +109,18 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1842
-LT_REVISION = 4
+LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1842
-MPICC = mpicc
 MPIFLAGS = 
+MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 4
+PATCH_VERSION = 5
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1842-4
+VERSION = 0.1842-5
 am__include = include
 am__quote = 
 install_sh = /u1/adcock/gaul-devel-0.1842/install-sh
@@ -128,13 +128,11 @@ install_sh = /u1/adcock/gaul-devel-0.1842/install-sh
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-lib_LTLIBRARIES = libstuff.la \
-	libnn_util.la \
-	liblog_util.la liblog_util_parallel.la \
-	libmpi_util.la libmpi_util_fake.la
+lib_LTLIBRARIES = libgaul_util.la \
+	libnn_util.la
 
 
-libstuff_la_SOURCES = \
+libgaul_util_la_SOURCES = \
 	avltree.c \
 	compatibility.c \
 	linkedlist.c \
@@ -144,22 +142,8 @@ libstuff_la_SOURCES = \
 	str_util.c \
 	dstr_util.c \
 	str_match.c \
-	timer_util.c
-
-
-liblog_util_parallel_la_SOURCES = \
-	log_util_parallel.c
-
-
-liblog_util_la_SOURCES = \
-	log_util.c
-
-
-libmpi_util_fake_la_SOURCES = \
-	mpi_util_fake.c 
-
-
-libmpi_util_la_SOURCES = \
+	timer_util.c \
+	log_util.c \
 	mpi_util.c 
 
 
@@ -186,20 +170,8 @@ include_HEADERS = \
      timer_util.h
 
 
-libstuff_a_LIBFLAGS = 
-libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-liblog_util_a_LIBFLAGS = 
-liblog_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-liblog_util_parallel_a_LIBFLAGS = 
-liblog_util_parallel_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libmpi_util_a_LIBFLAGS = 
-libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
-libmpi_util_fake_a_LIBFLAGS = 
-libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+libgaul_util_a_LIBFLAGS = 
+libgaul_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
 libnn_util_a_LIBFLAGS = 
 libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
@@ -209,26 +181,14 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
-liblog_util_la_LIBADD =
-am_liblog_util_la_OBJECTS = log_util.lo
-liblog_util_la_OBJECTS = $(am_liblog_util_la_OBJECTS)
-liblog_util_parallel_la_LIBADD =
-am_liblog_util_parallel_la_OBJECTS = log_util_parallel.lo
-liblog_util_parallel_la_OBJECTS = $(am_liblog_util_parallel_la_OBJECTS)
-libmpi_util_la_LIBADD =
-am_libmpi_util_la_OBJECTS = mpi_util.lo
-libmpi_util_la_OBJECTS = $(am_libmpi_util_la_OBJECTS)
-libmpi_util_fake_la_LIBADD =
-am_libmpi_util_fake_la_OBJECTS = mpi_util_fake.lo
-libmpi_util_fake_la_OBJECTS = $(am_libmpi_util_fake_la_OBJECTS)
+libgaul_util_la_LIBADD =
+am_libgaul_util_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
+	memory_util.lo table_util.lo random_util.lo str_util.lo \
+	dstr_util.lo str_match.lo timer_util.lo log_util.lo mpi_util.lo
+libgaul_util_la_OBJECTS = $(am_libgaul_util_la_OBJECTS)
 libnn_util_la_LIBADD =
 am_libnn_util_la_OBJECTS = nn_util.lo
 libnn_util_la_OBJECTS = $(am_libnn_util_la_OBJECTS)
-libstuff_la_LIBADD =
-am_libstuff_la_OBJECTS = avltree.lo compatibility.lo linkedlist.lo \
-	memory_util.lo table_util.lo random_util.lo str_util.lo \
-	dstr_util.lo str_match.lo timer_util.lo
-libstuff_la_OBJECTS = $(am_libstuff_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -241,11 +201,9 @@ DEP_FILES = ./$(DEPDIR)/avltree.Plo \
 	./$(DEPDIR)/compatibility.Plo \
 	./$(DEPDIR)/dstr_util.Plo \
 	./$(DEPDIR)/linkedlist.Plo ./$(DEPDIR)/log_util.Plo \
-	./$(DEPDIR)/log_util_parallel.Plo \
 	./$(DEPDIR)/memory_util.Plo \
-	./$(DEPDIR)/mpi_util.Plo \
-	./$(DEPDIR)/mpi_util_fake.Plo \
-	./$(DEPDIR)/nn_util.Plo ./$(DEPDIR)/random_util.Plo \
+	./$(DEPDIR)/mpi_util.Plo ./$(DEPDIR)/nn_util.Plo \
+	./$(DEPDIR)/random_util.Plo \
 	./$(DEPDIR)/str_match.Plo ./$(DEPDIR)/str_util.Plo \
 	./$(DEPDIR)/table_util.Plo \
 	./$(DEPDIR)/timer_util.Plo
@@ -256,15 +214,12 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
-DIST_SOURCES = $(liblog_util_la_SOURCES) \
-	$(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) \
-	$(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) \
-	$(libstuff_la_SOURCES)
+CFLAGS = -g -O2  -I../util/ -I../src/ -I/usr/include/slang/
+DIST_SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
 DIST_COMMON = README $(include_HEADERS) Makefile.am Makefile.in
-SOURCES = $(liblog_util_la_SOURCES) $(liblog_util_parallel_la_SOURCES) $(libmpi_util_la_SOURCES) $(libmpi_util_fake_la_SOURCES) $(libnn_util_la_SOURCES) $(libstuff_la_SOURCES)
+SOURCES = $(libgaul_util_la_SOURCES) $(libnn_util_la_SOURCES)
 
 all: all-am
 
@@ -303,18 +258,10 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-liblog_util.la: $(liblog_util_la_OBJECTS) $(liblog_util_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(liblog_util_la_LDFLAGS) $(liblog_util_la_OBJECTS) $(liblog_util_la_LIBADD) $(LIBS)
-liblog_util_parallel.la: $(liblog_util_parallel_la_OBJECTS) $(liblog_util_parallel_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(liblog_util_parallel_la_LDFLAGS) $(liblog_util_parallel_la_OBJECTS) $(liblog_util_parallel_la_LIBADD) $(LIBS)
-libmpi_util.la: $(libmpi_util_la_OBJECTS) $(libmpi_util_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libmpi_util_la_LDFLAGS) $(libmpi_util_la_OBJECTS) $(libmpi_util_la_LIBADD) $(LIBS)
-libmpi_util_fake.la: $(libmpi_util_fake_la_OBJECTS) $(libmpi_util_fake_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libmpi_util_fake_la_LDFLAGS) $(libmpi_util_fake_la_OBJECTS) $(libmpi_util_fake_la_LIBADD) $(LIBS)
+libgaul_util.la: $(libgaul_util_la_OBJECTS) $(libgaul_util_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libgaul_util_la_LDFLAGS) $(libgaul_util_la_OBJECTS) $(libgaul_util_la_LIBADD) $(LIBS)
 libnn_util.la: $(libnn_util_la_OBJECTS) $(libnn_util_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libnn_util_la_LDFLAGS) $(libnn_util_la_OBJECTS) $(libnn_util_la_LIBADD) $(LIBS)
-libstuff.la: $(libstuff_la_OBJECTS) $(libstuff_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libstuff_la_LDFLAGS) $(libstuff_la_OBJECTS) $(libstuff_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -327,10 +274,8 @@ include ./$(DEPDIR)/compatibility.Plo
 include ./$(DEPDIR)/dstr_util.Plo
 include ./$(DEPDIR)/linkedlist.Plo
 include ./$(DEPDIR)/log_util.Plo
-include ./$(DEPDIR)/log_util_parallel.Plo
 include ./$(DEPDIR)/memory_util.Plo
 include ./$(DEPDIR)/mpi_util.Plo
-include ./$(DEPDIR)/mpi_util_fake.Plo
 include ./$(DEPDIR)/nn_util.Plo
 include ./$(DEPDIR)/random_util.Plo
 include ./$(DEPDIR)/str_match.Plo

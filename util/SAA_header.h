@@ -26,7 +26,8 @@
 
  **********************************************************************
 
-  Updated:	07 Jan 2003 SAA	Added wrappers for multi-statement macros, MWRAP_BEGIN and MWRAP_END.
+  Updated:	03 Feb 2003 SAA	Replaced if PARALLEL!=1 directive with ifndef HAVE_PTHREADS.
+ 		07 Jan 2003 SAA	Added wrappers for multi-statement macros, MWRAP_BEGIN and MWRAP_END.
   		24 Dec 2002 SAA	Prevented double declaration of _Bool.  Changed definitions of TRUE and FALSE to avoid splint warnings.
   		17 Oct 2002 SAA	Fixed brain-dead logic that wasn't applicable for Cygwin.
   		14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
@@ -118,7 +119,7 @@
 # endif
 #endif
 
-#if PARALLEL!=1
+#ifndef USE_PTHREADS
 /*
  * If threads are used, these must be properly defined somewhere.
  * Unfortunately empty macros cause splint parse errors.  They

@@ -1495,7 +1495,7 @@ test -n "$target_alias" &&
 
 MAJOR_VERSION=0
 MINOR_VERSION=1842
-PATCH_VERSION=4
+PATCH_VERSION=5
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 
 
@@ -7673,46 +7673,56 @@ _ACEOF
 echo "$as_me:$LINENO: result: ${enable_num_threads}" >&5
 echo "${ECHO_T}${enable_num_threads}" >&6
 
-echo "$as_me:$LINENO: checking for type of parallelisation" >&5
-echo $ECHO_N "checking for type of parallelisation... $ECHO_C" >&6
-result=0
-
+echo "$as_me:$LINENO: checking for pthreads use" >&5
+echo $ECHO_N "checking for pthreads use... $ECHO_C" >&6
 if test "x$enable_threads" != "xyes"; then
+  echo "$as_me:$LINENO: result: don't use" >&5
+echo "${ECHO_T}don't use" >&6
   enable_threads=no
 else
-  echo "$as_me:$LINENO: result: pthreads" >&5
-echo "${ECHO_T}pthreads" >&6
-  result=1
-fi
+  echo "$as_me:$LINENO: result: use" >&5
+echo "${ECHO_T}use" >&6
 
-if test "x$enable_mpi" != "xyes"; then
-  enable_mpi=no
-else
-  echo "$as_me:$LINENO: result: MPI" >&5
-echo "${ECHO_T}MPI" >&6
-  result=2
-fi
-
-if test "x$enable_pvm" != "xyes"; then
-  enable_pvm=no
-else
-  echo "$as_me:$LINENO: result: PVM3" >&5
-echo "${ECHO_T}PVM3" >&6
-  result=3
-fi
-
-cat >>confdefs.h <<_ACEOF
-#define PARALLEL ${result}
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREADS 1
 _ACEOF
 
+fi
 
-if test "x$enable_threads" = "xno"; then
-  if test "x$enable_mpi" = "xno"; then
-    if test "x$enable_pvm" = "xno"; then
-      echo "$as_me:$LINENO: result: none" >&5
-echo "${ECHO_T}none" >&6
-    fi
-  fi
+echo "$as_me:$LINENO: checking for MPI use" >&5
+echo $ECHO_N "checking for MPI use... $ECHO_C" >&6
+if test "x$enable_mpi" != "xyes"; then
+  echo "$as_me:$LINENO: result: don't use" >&5
+echo "${ECHO_T}don't use" >&6
+  enable_mpi=no
+  MPIFLAGS=""
+  MPILIBS=""
+else
+  echo "$as_me:$LINENO: result: use" >&5
+echo "${ECHO_T}use" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MPI 1
+_ACEOF
+
+  MPIFLAGS=""
+  MPILIBS=""
+fi
+
+echo "$as_me:$LINENO: checking for PVM3 use" >&5
+echo $ECHO_N "checking for PVM3 use... $ECHO_C" >&6
+if test "x$enable_pvm" != "xyes"; then
+	echo "$as_me:$LINENO: result: don't use" >&5
+echo "${ECHO_T}don't use" >&6
+  enable_pvm=no
+else
+  echo "$as_me:$LINENO: result: use" >&5
+echo "${ECHO_T}use" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PVM3 1
+_ACEOF
+
 fi
 
 echo "$as_me:$LINENO: checking whether to disable memory chunk allocation" >&5
@@ -7815,20 +7825,6 @@ cat >>confdefs.h <<_ACEOF
 #define MEMORY_PADDING ${result}
 _ACEOF
 
-
-echo "$as_me:$LINENO: checking how to compile MPI code" >&5
-echo $ECHO_N "checking how to compile MPI code... $ECHO_C" >&6
-if test "x$enable_mpi" = "xyes"; then
-  MPICC="mpicc"
-  MPIFLAGS=""
-  echo "$as_me:$LINENO: result: mpicc" >&5
-echo "${ECHO_T}mpicc" >&6
-else
-  MPICC="echo"
-  MPIFLAGS="> /dev/null"
-  echo "$as_me:$LINENO: result: skip" >&5
-echo "${ECHO_T}skip" >&6
-fi
 
 echo "$as_me:$LINENO: checking whether to cripple GAUL for windows" >&5
 echo $ECHO_N "checking whether to cripple GAUL for windows... $ECHO_C" >&6
@@ -12233,8 +12229,8 @@ s,@MAJOR_VERSION@,$MAJOR_VERSION,;t t
 s,@MINOR_VERSION@,$MINOR_VERSION,;t t
 s,@PATCH_VERSION@,$PATCH_VERSION,;t t
 s,@VERSION@,$VERSION,;t t
-s,@MPICC@,$MPICC,;t t
 s,@MPIFLAGS@,$MPIFLAGS,;t t
+s,@MPILIBS@,$MPILIBS,;t t
 s,@LT_RELEASE@,$LT_RELEASE,;t t
 s,@LT_CURRENT@,$LT_CURRENT,;t t
 s,@LT_REVISION@,$LT_REVISION,;t t

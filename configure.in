@@ -44,15 +44,15 @@ dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
 MAJOR_VERSION=0
 MINOR_VERSION=1842
-PATCH_VERSION=4
+PATCH_VERSION=5
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(PATCH_VERSION)
 AC_SUBST(VERSION)
-AC_SUBST(MPICC)
 AC_SUBST(MPIFLAGS)
+AC_SUBST(MPILIBS)
 
 dnl libtool versioning
 LT_RELEASE=$MAJOR_VERSION.$MINOR_VERSION
@@ -166,37 +166,36 @@ AC_MSG_CHECKING(for default number of threads to create in threaded code)
 AC_DEFINE_UNQUOTED(GA_DEFAULT_NUM_THREADS, ${enable_num_threads}, [Default number of threads.])
 AC_MSG_RESULT(${enable_num_threads})
 
-AC_MSG_CHECKING(for type of parallelisation)
-result=0
-
+AC_MSG_CHECKING(for pthreads use)
 if test "x$enable_threads" != "xyes"; then
+  AC_MSG_RESULT(don't use)
   enable_threads=no
 else
-  AC_MSG_RESULT(pthreads)
-  result=1
+  AC_MSG_RESULT(use)
+  AC_DEFINE( HAVE_PTHREADS, 1, [Define to use pthreads for parallel code.])
 fi
 
+dnl Setup MPI compilation
+AC_MSG_CHECKING(for MPI use)
 if test "x$enable_mpi" != "xyes"; then
+  AC_MSG_RESULT(don't use)
   enable_mpi=no
+  MPIFLAGS=""
+  MPILIBS=""
 else
-  AC_MSG_RESULT(MPI)
-  result=2
+  AC_MSG_RESULT(use)
+  AC_DEFINE( HAVE_MPI, 1, [Define to use MPI for parallel code.])
+  MPIFLAGS=""
+  MPILIBS=""
 fi
 
+AC_MSG_CHECKING(for PVM3 use)
 if test "x$enable_pvm" != "xyes"; then
+	AC_MSG_RESULT(don't use)
   enable_pvm=no
 else
-  AC_MSG_RESULT(PVM3)
-  result=3
-fi
-AC_DEFINE_UNQUOTED(PARALLEL, ${result}, [type of parallelisation])
-
-if test "x$enable_threads" = "xno"; then
-  if test "x$enable_mpi" = "xno"; then
-    if test "x$enable_pvm" = "xno"; then
-      AC_MSG_RESULT(none)
-    fi
-  fi
+  AC_MSG_RESULT(use)
+  AC_DEFINE( HAVE_PVM3, 1, [Define to use PVM3 for parallel code.])
 fi
 
 AC_MSG_CHECKING(whether to disable memory chunk allocation)
@@ -256,18 +255,6 @@ else
   result=0
 fi
 AC_DEFINE_UNQUOTED( MEMORY_PADDING, ${result}, [Whether to pad memory.] )
-
-dnl Setup MPI compilation
-AC_MSG_CHECKING(how to compile MPI code)
-if test "x$enable_mpi" = "xyes"; then
-  MPICC="mpicc"
-  MPIFLAGS=""
-  AC_MSG_RESULT(mpicc)
-else
-  MPICC="echo"
-  MPIFLAGS="> /dev/null"
-  AC_MSG_RESULT(skip)
-fi
 
 dnl Whether we need to cripple GAUL so that it works with windows.
 dnl This is always the case if MingW is being used.

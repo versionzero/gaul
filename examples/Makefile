@@ -19,7 +19,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -99,7 +99,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1842/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = hcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,18 +108,18 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1842
-LT_REVISION = 4
+LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1842
-MPICC = mpicc
 MPIFLAGS = 
+MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 4
+PATCH_VERSION = 5
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1842-4
+VERSION = 0.1842-5
 am__include = include
 am__quote = 
 install_sh = /u1/adcock/gaul-devel-0.1842/install-sh
@@ -224,40 +224,37 @@ saveload_DEPENDENCIES = ${DEPENDENCIES}
 nnevolve_DEPENDENCIES = ${DEPENDENCIES}
 
 # Serial code:
-diagnostics_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-test_ga_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-test_sd_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-test_simplex_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-fitting_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-pingpong_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-wildfire_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm 
-goldberg2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-royalroad_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle2_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle3_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle4_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle5_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm
-saveload_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lstuff -lm 
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -llog_util -lmpi_util_fake -lnn_util -lstuff -lm 
-
-# Parallel code:
-struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -llog_util_parallel -lmpi_util -lstuff -lm
-struggle5_mp_LINK = mpicc $(struggle5_mp_LDADD) -o struggle5_mp 
+diagnostics_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+fitting_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+fitting_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+fitting_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+pingpong_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+pingpong_tabu_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+pingpong_tabu2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_randomsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_systematicsearch_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle3_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
+struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 subdir = examples
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -416,7 +413,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -O2  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libbtree_la_SOURCES) $(diagnostics_SOURCES) \
 	$(fitting_SOURCES) $(fitting_sd_SOURCES) \
 	$(fitting_simplex_SOURCES) $(goldberg1_SOURCES) \
@@ -547,7 +544,7 @@ struggle5_forked$(EXEEXT): $(struggle5_forked_OBJECTS) $(struggle5_forked_DEPEND
 	$(LINK) $(struggle5_forked_LDFLAGS) $(struggle5_forked_OBJECTS) $(struggle5_forked_LDADD) $(LIBS)
 struggle5_mp$(EXEEXT): $(struggle5_mp_OBJECTS) $(struggle5_mp_DEPENDENCIES) 
 	@rm -f struggle5_mp$(EXEEXT)
-	$(struggle5_mp_LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
+	$(LINK) $(struggle5_mp_LDFLAGS) $(struggle5_mp_OBJECTS) $(struggle5_mp_LDADD) $(LIBS)
 struggle_forked$(EXEEXT): $(struggle_forked_OBJECTS) $(struggle_forked_DEPENDENCIES) 
 	@rm -f struggle_forked$(EXEEXT)
 	$(LINK) $(struggle_forked_LDFLAGS) $(struggle_forked_OBJECTS) $(struggle_forked_LDADD) $(LIBS)

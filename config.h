@@ -109,6 +109,9 @@
 /* Define to 1 if you have the `min' function. */
 /* #undef HAVE_MIN */
 
+/* Define to use MPI for parallel code. */
+#define HAVE_MPI 1
+
 /* Define to 1 if you have the <netdb.h> header file. */
 #define HAVE_NETDB_H 1
 
@@ -117,6 +120,12 @@
 
 /* Define to 1 if you have the `on_exit' function. */
 #define HAVE_ON_EXIT 1
+
+/* Define to use pthreads for parallel code. */
+/* #undef HAVE_PTHREADS */
+
+/* Define to use PVM3 for parallel code. */
+/* #undef HAVE_PVM3 */
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #define HAVE_PWD_H 1
@@ -334,11 +343,8 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
-/* type of parallelisation */
-#define PARALLEL 2
-
 /* Patch level. */
-#define PATCH_VERSION 4
+#define PATCH_VERSION 5
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -374,7 +380,7 @@
 #define V3_QUICK 1
 
 /* Version string. */
-#define VERSION_STRING "0.1842-4"
+#define VERSION_STRING "0.1842-5"
 
 /* Whether to cripple GAUL so it works on windows. */
 #define W32_CRIPPLED 0

@@ -2959,6 +2959,7 @@ int ga_evolution_archipelago_mp( const int num_pops,
 			population		**pops,
 			const int		max_generations )
   {
+#ifdef HAVE_MPI
   int		generation=0;		/* Current generation number. */
   int		island;			/* Current island number. */
   int		i;			/* Loop over members of population. */
@@ -3144,6 +3145,11 @@ int ga_evolution_archipelago_mp( const int num_pops,
   s_free(send_mask);
 
   return generation;
+#else
+  plog(LOG_WARNING, "Attempt to use parallel function without compiled support.");
+
+  return 0;
+#endif
   }
 
 

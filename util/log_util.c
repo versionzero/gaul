@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - general logging services.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,7 +25,7 @@
 
  **********************************************************************
 
-  Synopsis:	Helga's routines for logging and debug messages.
+  Synopsis:	Portable routines for logging and debug messages.
 
 		These functions can be tested by compiling with
 		something like:
@@ -33,7 +33,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	03 Oct 2002 SAA	Increased dimensions of log_text arrays to avoid warnings on the Compaq C compiler.
+  Updated:	03 Feb 2003 SAA	Tweaks relating to changes in mpi_util.c
+		03 Oct 2002 SAA	Increased dimensions of log_text arrays to avoid warnings on the Compaq C compiler.
 		01 Jul 2002 SAA	Use the GNU-extentions provided by the Intel C/C++ compiler.
 		28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
 		26 Feb 2002 SAA Removed s_strdup() warning from log_init().
@@ -109,7 +110,7 @@ void log_init(	enum log_level_type	level,
 
   if (oldfname) s_free(oldfname);
 
-#if PARALLEL==2
+#ifdef HAVE_MPI
   plog(LOG_VERBOSE, "Log started. (parallel with MPI)");
 #else
   plog(LOG_VERBOSE, "Log started.");
@@ -240,7 +241,7 @@ void log_output(	const enum	log_level_type level,
 
 /* Next few lines could be optimised (in terms of number of 'if' statements) */
 
-#if PARALLEL==2
+#ifdef HAVE_MPI
     fprintf(fh, "%d: %s%s%s%s\n",
              mpi_get_rank(),
              log_date?"":ctime(&t), log_date?"":" - ",
@@ -263,7 +264,7 @@ void log_output(	const enum	log_level_type level,
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
     {
-#if PARALLEL==2
+#ifdef HAVE_MPI
     if (mpi_get_rank() >= 0)
       fprintf(stdout, "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",
@@ -312,7 +313,7 @@ void plog(const enum log_level_type level, const char *format, ...)
     vsnprintf(message, LOG_MAX_LEN, format, ap);
     va_end(ap);
 
-#if PARALLEL==2
+#ifdef HAVE_MPI
     if (mpi_get_rank() >= 0)
       printf( "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",

@@ -108,6 +108,9 @@
 /* Define to 1 if you have the `min' function. */
 #undef HAVE_MIN
 
+/* Define to use MPI for parallel code. */
+#undef HAVE_MPI
+
 /* Define to 1 if you have the <netdb.h> header file. */
 #undef HAVE_NETDB_H
 
@@ -116,6 +119,12 @@
 
 /* Define to 1 if you have the `on_exit' function. */
 #undef HAVE_ON_EXIT
+
+/* Define to use pthreads for parallel code. */
+#undef HAVE_PTHREADS
+
+/* Define to use PVM3 for parallel code. */
+#undef HAVE_PVM3
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H
@@ -332,9 +341,6 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
-
-/* type of parallelisation */
-#undef PARALLEL
 
 /* Patch level. */
 #undef PATCH_VERSION

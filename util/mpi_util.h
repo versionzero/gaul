@@ -3,7 +3,7 @@
  **********************************************************************
 
   mpi_util - Generalised message passing.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -26,9 +26,10 @@
  **********************************************************************
 
   Synopsis:	Header file for some abstract message passing functions
-		using the MPI API.
+		using MPI and other message-parsing APIs.
 
-  Updated:	31 May 2002 SAA	Fixed some empty parameter declarations.
+  Updated:	03 Feb 2003 SAA	Extensive rewriting.
+  		31 May 2002 SAA	Fixed some empty parameter declarations.
 		19 Mar 2002 SAA	Moved some stuff from SAA_header.h to here.
 		15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to here from SAA_header.h
 		30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
@@ -52,46 +53,28 @@
 #include "compatibility.h"
 #include "log_util.h"
 
-/* PARALLEL library to use.
- * In most cases, we just wish to check whether PARALLEL > 0,
- * i.e. this is a parallel program.
- *
- * PARALLEL==0/undefined        None.
- * PARALLEL==1                  Pthreads.
- * PARALLEL==2                  MPI 1.2.x
- * PARALLEL==3                  PVM
- * PARALLEL==4                  BSP
- * PARALLEL==5                  OpenMP
- *
- * Transparently include MPI/whatever header in all files if this is parallel
- * code.
- * (This is required for the parallel version of die() and dief() macros -
- *  especially in the case of serial routines used by parallel programs.)
+/*
+ * Includes for the various parallel libraries that we may be using.
  */
-#ifdef NO_PARALLEL
-# undef PARALLEL
-# define PARALLEL       0
-#else
-# ifndef PARALLEL
-#  define PARALLEL      0
-# else
-#  if PARALLEL==1
-#   include <pthread.h>
-#   define _REENTRANT
-#  endif
-#  if PARALLEL==2
-#   include <mpi.h>
-#  endif
-#  if PARALLEL==3
-#   include <pvm3.h>
-#  endif
-#  if PARALLEL==4
-#   include <bsp.h>
-#  endif
-#  if PARALLEL==5
-#   include <omp.h>
-#  endif
-# endif
+#ifdef HAVE_PTHREADS
+# include <pthread.h>
+# define _REENTRANT
+#endif
+
+#ifdef HAVE_MPI
+# include <mpi.h>
+#endif
+
+#ifdef HAVE_PVM3
+# include <pvm3.h>
+#endif
+
+#ifdef HAVE_BSP
+# include <bsp.h>
+#endif
+
+#ifdef HAVE_OPENMP
+# include <omp.h>
 #endif
 
 /*
@@ -107,10 +90,6 @@
 #define MPI_TAG_ANY	-1
 #define MPI_SOURCE_ANY	-1
 
-/*
- * Message datatypes.
- */
-#if PARALLEL == 0 || PARALLEL == 1 || PARALLEL == 2
 typedef int mpi_datatype;
 #define MPI_TYPE_UNKNOWN	0
 #define MPI_TYPE_INT		1
@@ -118,38 +97,14 @@ typedef int mpi_datatype;
 #define MPI_TYPE_CHAR		3
 #define MPI_TYPE_BYTE		4
 
-#if 0
-/* Use the MPI datatype definitions. */
-typedef MPI_Datatype mpi_datatype;
-#define MPI_TYPE_UNKNOWN	(MPI_Datatype) 0
-#define MPI_TYPE_INT		(MPI_Datatype) MPI_INT
-#define MPI_TYPE_DOUBLE		(MPI_Datatype) MPI_DOUBLE
-#define MPI_TYPE_CHAR		(MPI_Datatype) MPI_CHAR
-#define MPI_TYPE_BYTE		(MPI_Datatype) MPI_BYTE
-#endif
-
-#else
-#if PARALLEL == 3 || PARALLEL == 4
-/* For PVM and BSP, use size of the primitives. */
-typedef size_t mpi_datatype;
-#define MPI_TYPE_UNKNOWN	(size_t) 0
-#define MPI_TYPE_INT		SIZEOF_INT
-#define MPI_TYPE_DOUBLE		SIZEOF_DOUBLE
-#define MPI_TYPE_CHAR		SIZEOF_CHAR
-#define MPI_TYPE_BYTE		SIZEOF_BYTE
-
-#endif
-#endif
-
 /*
- * Improved (parallel-aware) macros.
+ * Improved (i.e. parallel-aware) macros.
  */
-#if PARALLEL==2
+#ifdef HAVE_MPI
 # undef die
 # undef dief
 # define die(X)          {					\
-			int flubberrank;			\
-			mpi_get_rank(&flubberrank);		\
+			int flubberrank = mpi_get_rank();	\
                         printf(							\
 		"FATAL ERROR: (process %d) %s\nin %s at \"%s\" line %d\n",	\
 				flubberrank,				\
@@ -161,8 +116,7 @@ typedef size_t mpi_datatype;
 			fflush(NULL);					\
                         }
 # define dief(format, args...)	{				\
-			int flubberrank;			\
-			mpi_get_rank(&flubberrank);		\
+			int flubberrank = mpi_get_rank();	\
 			printf("FATAL ERROR: (process %d) ", flubberrank);	\
 			printf(format, ##args);			\
 			printf("\nin %s at \"%s\" line %d\n",	\
@@ -205,6 +159,7 @@ boolean mpi_distribute(void *buf, const int count,
 boolean mpi_receive(void *buf, const int count,
                                const mpi_datatype type, const int node,
                                int tag);
+
 #ifndef MPI_UTIL_COMPILE_MAIN
 /*
 boolean mpi_send_test(int node);

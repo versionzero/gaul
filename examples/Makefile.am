@@ -137,7 +137,7 @@ pingpong_sa_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 wildfire_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 wildfire_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 wildfire_loadbalancing_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+goldberg1_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 goldberg2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 royalroad_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
@@ -151,10 +151,7 @@ struggle4_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle5_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle5_forked_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 struggle_ss_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
-nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm 
-
-# Parallel code:
+saveload_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
+nnevolve_LDADD = -L../src/ -L../util/ -lgaul -lnn_util -lgaul_util -lm
 struggle5_mp_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
-struggle5_mp_LINK = @MPICC@ $(struggle5_mp_LDADD) -o struggle5_mp @MPIFLAGS@
 

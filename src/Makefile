@@ -99,7 +99,7 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /u1/adcock/gaul-devel-0.1842/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = hcc
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
@@ -108,18 +108,18 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1842
-LT_REVISION = 4
+LT_REVISION = 5
 MAINT = #
 MAJOR_VERSION = 0
 MINOR_VERSION = 1842
-MPICC = mpicc
 MPIFLAGS = 
+MPILIBS = 
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 4
+PATCH_VERSION = 5
 RANLIB = ranlib
 STRIP = strip
-VERSION = 0.1842-4
+VERSION = 0.1842-5
 am__include = include
 am__quote = 
 install_sh = /u1/adcock/gaul-devel-0.1842/install-sh
@@ -218,7 +218,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O2 -Wall -mcpu=pentiumpro  -I../util/ -I../src/ -I/usr/include/slang/
+CFLAGS = -g -O2  -I../util/ -I../src/ -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
