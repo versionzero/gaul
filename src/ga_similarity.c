@@ -34,21 +34,23 @@
 		if the differing values are equivalent (e.g. if the
 		modulus is significant rather than the actual value.)
 
-		Interested parties are directed the documentation.
-		http://gaul.sourceforge.net/similarity.pdf
-
 		It is probably best not to use the following functions,
-		i.e. they may be deprecated/removed soon:
-		boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
-		int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
-		double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta)
-		double ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *beta)
+		i.e. they should be deprecated and are likely to be
+		deleted soon:
+		boolean ga_compare_genome()
+		int ga_count_match_alleles()
+		double ga_genome_hamming_similarity()
+		double ga_genome_euclidian_similarity()
 
   References:	A general reference that I've found useful in the past
 		but maybe is tricky to obtain, but is:
 		Bradshaw J., "Introduction to Tversky similarity
 		measure", MUG '97 - 11th annual Daylight user group
 		meeting.
+
+		Interested parties are additionally directed toward
+		the documentation:
+		http://gaul.sourceforge.net/similarity.pdf
 
   To do:	Equivalent functions for the other chromosome types.
 
@@ -177,8 +179,8 @@ double ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *be
   ga_similarity_bitstring_count_1_alleles()
   synopsis:	Counts "1"s in a bitstring chromosome.
   parameters:	const population *pop	Population.
-		const int *alpha	Alpha chromosome.
-		const int chromosomeid	Chromosome to consider.
+		const entity *alpha	entity containing alpha chromosome.
+		const int chromosomeid	Index of chromosome to consider.
   return:	Returns number of alleles with value "1".
   last updated:	16 May 2002
  **********************************************************************/
@@ -193,7 +195,8 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha) die("Null pointer to entity structure passed");
-  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
+  if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes)
+    die("Invalid chromosome index passed");
 
   a = (byte*)(alpha->chromosome[chromosomeid]);
 
@@ -210,9 +213,9 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   ga_similarity_bitstring_count_match_alleles()
   synopsis:	Compares two bitstring chromosomes and counts matching alleles.
   parameters:	const population *pop	Population.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
-		const int chromosomeid	Chromosome to consider.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
+		const int chromosomeid	Index of chromosome to consider.
   return:	Returns number of matching alleles.
   last updated:	14 May 2002
  **********************************************************************/
@@ -248,9 +251,9 @@ int ga_similarity_bitstring_count_match_alleles( const population *pop,
 		which both have value of "1".  i.e. Count bits set
 		after AND operation.
   parameters:	const population *pop	Population.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
-		const int chromosomeid	Chromosome to consider.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
+		const int chromosomeid	Index of chromosome to consider.
   return:	Returns number of alleles set in both bitstrings.
   last updated:	14 May 2002
  **********************************************************************/
@@ -284,9 +287,9 @@ int ga_similarity_bitstring_count_and_alleles( const population *pop,
   ga_similarity_integer_count_match_alleles()
   synopsis:	Compares two chromosomes and counts matching alleles.
   parameters:	const population *pop	Population.
-		const entity *alpha	Alpha chromosome.
-		const entity *beta	Beta chromosome.
-		const int chromosomeid	Chromosome to consider.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
+		const int chromosomeid	Index of chromosome to consider.
   return:	Returns number of matching alleles.
   last updated:	14 May 2002
  **********************************************************************/
@@ -317,9 +320,9 @@ int ga_similarity_integer_count_match_alleles( const population *pop,
 /**********************************************************************
   ga_similarity_bitstring_tanimoto()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const int length	Chromosome length.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Tanimoto similarity coefficient.
   last updated:	16 May 2002
  **********************************************************************/
@@ -349,9 +352,9 @@ double ga_similarity_bitstring_tanimoto(const population *pop,
 /**********************************************************************
   ga_similarity_bitstring_dice()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const int length	Chromosome length.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Dice similarity coefficient.
   last updated:	16 May 2002
  **********************************************************************/
@@ -381,9 +384,9 @@ double ga_similarity_bitstring_dice(const population *pop,
 /**********************************************************************
   ga_similarity_bitstring_euclidean()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const int length	Chromosome length.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Euclidean similarity coefficient.
   last updated:	16 May 2002
  **********************************************************************/
@@ -413,9 +416,9 @@ double ga_similarity_bitstring_euclidean(const population *pop,
 /**********************************************************************
   ga_similarity_bitstring_hamming()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const int length	Chromosome length.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Hamming similarity coefficient.
   last updated:	16 May 2002
  **********************************************************************/
@@ -445,9 +448,9 @@ double ga_similarity_bitstring_hamming(const population *pop,
 /**********************************************************************
   ga_similarity_bitstring_cosine()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const int length	Chromosome length.
-		const int *alpha	Alpha chromosome.
-		const int *beta		Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Cosine similarity coefficient.
   last updated:	16 May 2002
  **********************************************************************/
@@ -482,9 +485,9 @@ double ga_similarity_bitstring_cosine(const population *pop,
 		alleles.  A match is defined to be when
 		x+GA_TINY_DOUBLE>y>x-GA_TINY_DOUBLE
   parameters:	const population *pop	Population.
-		const entity *alpha	Alpha chromosome.
-		const entity *beta	Beta chromosome.
-		const int chromosomeid	Chromosome to consider.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
+		const int chromosomeid	Index of chromosome to consider.
   return:	Returns number of matching alleles.
   last updated:	23 May 2002
  **********************************************************************/
@@ -517,9 +520,9 @@ int ga_similarity_double_count_match_alleles( const population *pop,
 /**********************************************************************
   ga_similarity_double_tanimoto()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const population *pop	The population.
-		const entity *alpha	Alpha chromosome.
-		const entity *beta	Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Tanimoto similarity coefficient.
 		Range: -1/3 to +1
   last updated:	23 May 2002
@@ -556,9 +559,9 @@ double ga_similarity_double_tanimoto(const population *pop,
 /**********************************************************************
   ga_similarity_double_dice()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const population *pop	The population.
-		const entity *alpha	Alpha chromosome.
-		const entity *beta	Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Tanimoto similarity coefficient.
 		Range: -1 to +1
   last updated:	23 May 2002
@@ -595,9 +598,9 @@ double ga_similarity_double_dice(const population *pop,
 /**********************************************************************
   ga_similarity_double_cosine()
   synopsis:	Compares the chromosomes of two entities.
-  parameters:	const population *pop	The population.
-		const entity *alpha	Alpha chromosome.
-		const entity *beta	Beta chromosome.
+  parameters:	const population *pop	Population.
+		const entity *alpha	entity containing alpha chromosome.
+		const entity *beta	entity containing beta chromosome.
   return:	Returns Tanimoto similarity coefficient.
 		Range: -1 to +1
   last updated:	23 May 2002
