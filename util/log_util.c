@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - general logging services.
-  Copyright ©2000-2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -32,7 +32,8 @@
 
 		These functions are thread-safe.
 
-  Updated:	26 Feb 2002 SAA Removed s_strdup() warning from log_init().
+  Updated:	28 May 2002 SAA	Changed some misleading comments and removed some inline function requests.
+		26 Feb 2002 SAA Removed s_strdup() warning from log_init().
 		04 Feb 2002 SAA	All global variables are now decleared static.
 		31 Jan 2002 SAA	Removed dependency on str_util.c.  Removed memory leak.
 		27/02/01 SAA	gpointer replaced with vpointer and G_LOCK etc. replaced with THREAD_LOCK.
@@ -149,11 +150,7 @@ void log_set_level(const enum log_level_type level)
   last updated:	28/05/00
  **********************************************************************/
 
-#ifdef __GNUC__
-inline enum log_level_type log_get_level(void)
-#else
 enum log_level_type log_get_level(void)
-#endif
   {
   return log_level;
   }
@@ -161,8 +158,8 @@ enum log_level_type log_get_level(void)
 
 /**********************************************************************
   log_set_file()
-  synopsis:	Adjust log file level.
-  parameters:	int	level	New logging level.
+  synopsis:	Adjust log file.
+  parameters:	const char *fname	Filename for output.
   return:	none
   last updated:	31 Jan 2002
  **********************************************************************/
