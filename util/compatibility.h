@@ -26,7 +26,8 @@
 
   Synopsis:	Compatibility/Portability stuff.
 
-  Updated:	13 Mar 2002 SAA	Use index() for strchr(), when available.
+  Updated:	10 Apr 2002 SAA	Use bcopy() for memcpy(), when available.  Fixed memmove() bug.  Added memscan(), strpbrk() and strsep().
+		13 Mar 2002 SAA	Use index() for strchr(), when available.
 		10 Jan 2002 SAA	Removed stuff relating to strsplit(), strfreev(), strjoin(), strjoinv().  Added stuff for strspn().
 	    	09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.
 		05 Dec 2001 SAA Only explicitely requested things will be compiled now, i.e. needs HAVE_THING == 0.
@@ -94,10 +95,6 @@
 int ipow(int n, int e);
 #endif
 
-#ifndef HAVE_MEMCPY
-void memcpy(char *dest, const char *src, size_t len);
-#endif
-
 #ifndef HAVE_STRCHR
 # ifdef HAVE_INDEX
 #  define strchr index
@@ -143,6 +140,14 @@ char *strncpy(char *str1, const char *str2, const int len);
 char *strtok(char *str, char *delim);
 #endif
 
+#ifndef HAVE_STRPBRK
+char *strpbrk(const char *s, const char *accept);
+#endif
+
+#ifndef HAVE_STRSEP
+char *strsep(char **str, const char *delim);
+#endif
+
 #ifndef HAVE_STRCASECMP
 int strcasecmp(const char *str0, const char *str1);
 #endif
@@ -171,17 +176,30 @@ int snprintf(char *str, size_t n, const char *format, ...);
 int vsnprintf(char *str, size_t n, const char *format, va_list ap);
 #endif
 
-#ifndef HAVE_MEMSET
-void *memset(void *dst0, int c0, size_t bytes);
+#ifndef HAVE_MEMCPY
+/* Some systems, such as SunOS do have BCOPY instead. */
+# ifdef HAVE_BCOPY
+#  define memcpy(A, B, C) bcopy((B), (A), (C))
+# else
+void memcpy(char *dest, const char *src, size_t len);
+# endif
 #endif
 
 #ifndef HAVE_MEMMOVE
 /* Some systems, such as SunOS do have BCOPY instead. */
 # ifdef HAVE_BCOPY
-#  define memmove(A, B, C) bcopy((A), (B), (C))
+#  define memmove(A, B, C) bcopy((B), (A), (C))
 # else
 void *memmove(void *dst, const void *src, size_t bytes);
 # endif
+#endif
+
+#ifndef HAVE_MEMSCAN
+void *memscan(void *addr, int c, size_t size);
+#endif
+
+#ifndef HAVE_MEMSET
+void *memset(void *dst0, int c0, size_t bytes);
 #endif
 
 #ifndef HAVE_MEMREV

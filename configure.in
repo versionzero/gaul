@@ -40,12 +40,12 @@ AC_CANONICAL_SYSTEM
 
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
+#AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1837
 PATCH_VERSION=5
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
-AC_DIVERT_POP()
+#AC_DIVERT_POP()
 
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
@@ -356,14 +356,13 @@ AC_CHECK_FUNCS( fdopen gethostname getpwuid gettimeofday select \
                 waitpid usleep snooze \
                 basename \
                 readline \
-                memcpy memset \
-                memmove bcopy \
+                memcpy memset memmove bcopy memscan \
                 memrev memchr memmem memcmp \
                 min max \
                 sincos \
                 index rindex \
                 strchr strrchr strcat strlen \
-                strcmp strncmp strcpy strncpy strtok \
+                strcmp strncmp strcpy strncpy strtok strpbrk strsep \
 		stricmp strnicmp \
                 strcasecmp strncasecmp snprintf \
                 strdup strndup \

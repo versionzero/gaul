@@ -102,7 +102,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  ----------------------------------------------------------------------
 
-  Updated:	14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
+  Updated:	09 Apr 2002 SAA	Added memscan(), strpbrk() and strsep().
+		14 Mar 2002 SAA	Changes to readline() for clean compilation under AIX.
 		13 Mar 2002 SAA	Added itoa().  Use index() for strchr(), when available.
 		10 Jan 2002 SAA Removed strsplit(), strjoin(), strjoinv(), strfreev() which I think were amiga functions because they aren't really needed in any of my recent code.  Added strspn() replacement.
   		09 Jan 2002 SAA Reversed brain-dead change from 05 Dec 2001.  Uncommented strtod() stuff.  Some code tidying.
@@ -367,6 +368,54 @@ char	*strtok(char *str, char *delim)
   return start;
 }
 #endif /* HAVE_STRTOK */
+
+
+#ifndef HAVE_STRPBRK
+/*
+ * Locate the first occurrence in the string s of any of the characters in the string accept.
+ */
+char *strpbrk(const char *s, const char *accept)
+  {
+  char *s1;
+  char *s2;
+ 
+  for (s1 = cs; *s1 != '\0'; ++s1)
+    {
+    for (s2 = ct; *s2 != '\0'; ++s2)
+      {
+      if(*s1 == *s2) return s1;
+      }
+    }
+     
+  return NULL;
+  }
+#endif /* HAVE_STRPBRK */
+
+
+#ifndef HAVE_STRCASECMP
+/*
+ * If *str is NULL, return NULL.  Otherwise, this find the first token in the string *str, where tokens
+ * are delimited by symbols in the string delim.  This token is terminated with a `\0' character (by
+ * overwriting the delimiter) and *str is updated to point past the token.  If no delimiter is found,
+ * the token is taken to be the entire string *str, and *str is made NULL.
+ *
+ * Returns a pointer to the token (i.e it returns the original value of *str)
+ *
+ * The strsep() function was introduced as a replacement for strtok(), which cannot handle empty fields.
+ */
+char *strsep(char **str, const char *delim)
+  {
+  char *s = *str, *end;
+
+  if (!s) return NULL;
+
+  end = strpbrk(s, delim);
+  if (end) *end++ = '\0';
+  *str = end;
+
+  return s;
+  }
+#endif /* HAVE_STRSEP */
 
 
 #ifndef HAVE_STRCASECMP
@@ -694,6 +743,27 @@ int vsnprintf(char *str, size_t n, const char *format, va_list ap)
   return my_vsnprintf(str, n, format, ap);
   }
 #endif /* HAVE_VSNPRINTF */
+
+
+#ifndef HAVE_MEMSCAN
+/*
+ * Find a character in an area of memory.
+ * Returns the address of the first occurrence of c, or 1 byte past the area if c is not found.
+ */
+void *memscan(void *addr, int c, size_t size)
+  {
+  unsigned char *p = (unsigned char*)addr;
+
+  while(size)
+    {
+    if(*p == c) return (void*)p;
+    p++;
+    size--;
+    }
+
+  return (void*)p;
+  }
+#endif /* HAVE_MEMSCAN */
 
 
 #ifndef HAVE_MEMSET

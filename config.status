@@ -141,7 +141,7 @@ do
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:5758: error: ambiguous option: $1
+    { { echo "$as_me:5759: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -160,7 +160,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:5777: error: unrecognized option: $1
+  -*) { { echo "$as_me:5778: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -203,7 +203,7 @@ do
   "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
-  *) { { echo "$as_me:5826: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:5827: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -437,7 +437,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:6068: creating $ac_file" >&5
+    { echo "$as_me:6069: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -455,7 +455,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:6086: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:6087: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -468,7 +468,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:6099: error: cannot find input file: $f" >&5
+           { { echo "$as_me:6100: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -530,7 +530,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   * )   ac_file_in=$ac_file.in ;;
   esac
 
-  test x"$ac_file" != x- && { echo "$as_me:6160: creating $ac_file" >&5
+  test x"$ac_file" != x- && { echo "$as_me:6161: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
 
   # First look for the input files in the build tree, otherwise in the
@@ -541,7 +541,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:6171: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:6172: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -554,7 +554,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:6184: error: cannot find input file: $f" >&5
+           { { echo "$as_me:6185: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -576,7 +576,7 @@ ${ac_dA}MINOR_VERSION${ac_dB}MINOR_VERSION${ac_dC}1837${ac_dD}
 ${ac_dA}PATCH_VERSION${ac_dB}PATCH_VERSION${ac_dC}5${ac_dD}
 ${ac_dA}V3_QUICK${ac_dB}V3_QUICK${ac_dC}1${ac_dD}
 ${ac_dA}AVLTREE_KEY_TYPE${ac_dB}AVLTREE_KEY_TYPE${ac_dC}void *${ac_dD}
-${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"20/03/02"${ac_dD}
+${ac_dA}BUILD_DATE_STRING${ac_dB}BUILD_DATE_STRING${ac_dC}"10/04/02"${ac_dD}
 ${ac_dA}VERSION_STRING${ac_dB}VERSION_STRING${ac_dC}"0.1837-5"${ac_dD}
 ${ac_dA}MPI_NUM_THREADS_ENVVAR_STRING${ac_dB}MPI_NUM_THREADS_ENVVAR_STRING${ac_dC}"GA_NUM_THREADS"${ac_dD}
 ${ac_dA}UNAME_STRING${ac_dB}UNAME_STRING${ac_dC}"Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"${ac_dD}
@@ -669,6 +669,8 @@ ${ac_dA}HAVE_STRNCMP${ac_dB}HAVE_STRNCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCPY${ac_dB}HAVE_STRCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRTOK${ac_dB}HAVE_STRTOK${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRPBRK${ac_dB}HAVE_STRPBRK${ac_dC}1${ac_dD}
+${ac_dA}HAVE_STRSEP${ac_dB}HAVE_STRSEP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRCASECMP${ac_dB}HAVE_STRCASECMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCASECMP${ac_dB}HAVE_STRNCASECMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SNPRINTF${ac_dB}HAVE_SNPRINTF${ac_dC}1${ac_dD}
@@ -699,7 +701,7 @@ ${ac_uA}MINOR_VERSION${ac_uB}MINOR_VERSION${ac_uC}1837${ac_uD}
 ${ac_uA}PATCH_VERSION${ac_uB}PATCH_VERSION${ac_uC}5${ac_uD}
 ${ac_uA}V3_QUICK${ac_uB}V3_QUICK${ac_uC}1${ac_uD}
 ${ac_uA}AVLTREE_KEY_TYPE${ac_uB}AVLTREE_KEY_TYPE${ac_uC}void *${ac_uD}
-${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"20/03/02"${ac_uD}
+${ac_uA}BUILD_DATE_STRING${ac_uB}BUILD_DATE_STRING${ac_uC}"10/04/02"${ac_uD}
 ${ac_uA}VERSION_STRING${ac_uB}VERSION_STRING${ac_uC}"0.1837-5"${ac_uD}
 ${ac_uA}MPI_NUM_THREADS_ENVVAR_STRING${ac_uB}MPI_NUM_THREADS_ENVVAR_STRING${ac_uC}"GA_NUM_THREADS"${ac_uD}
 ${ac_uA}UNAME_STRING${ac_uB}UNAME_STRING${ac_uC}"Linux chemcca0 2.4.9-13smp #1 SMP Tue Oct 30 19:57:16 EST 2001 i686 unknown"${ac_uD}
@@ -792,6 +794,8 @@ ${ac_uA}HAVE_STRNCMP${ac_uB}HAVE_STRNCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCPY${ac_uB}HAVE_STRCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRTOK${ac_uB}HAVE_STRTOK${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRPBRK${ac_uB}HAVE_STRPBRK${ac_uC}1${ac_uD}
+${ac_uA}HAVE_STRSEP${ac_uB}HAVE_STRSEP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRCASECMP${ac_uB}HAVE_STRCASECMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCASECMP${ac_uB}HAVE_STRNCASECMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SNPRINTF${ac_uB}HAVE_SNPRINTF${ac_uC}1${ac_uD}
@@ -823,7 +827,7 @@ CEOF
   rm -f $tmp/in
   if test x"$ac_file" != x-; then
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
-      { echo "$as_me:6301: $ac_file is unchanged" >&5
+      { echo "$as_me:6302: $ac_file is unchanged" >&5
 echo "$as_me: $ac_file is unchanged" >&6;}
     else
       ac_dir=`$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \

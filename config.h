@@ -21,7 +21,7 @@
 
 /* #undef VERSION */
 #define VERSION_STRING "0.1837-5"
-#define BUILD_DATE_STRING "20/03/02"
+#define BUILD_DATE_STRING "10/04/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1837
 #define PATCH_VERSION 5
@@ -124,6 +124,9 @@
 
 /* Define if you have the `memrev' function. */
 /* #undef HAVE_MEMREV */
+
+/* Define if you have the `memscan' function. */
+/* #undef HAVE_MEMSCAN */
 
 /* Define if you have the `memset' function. */
 #define HAVE_MEMSET 1
@@ -230,11 +233,17 @@
 /* Define if you have the `strnicmp' function. */
 /* #undef HAVE_STRNICMP */
 
+/* Define if you have the `strpbrk' function. */
+#define HAVE_STRPBRK 1
+
 /* Define if you have the `strrchr' function. */
 #define HAVE_STRRCHR 1
 
 /* Define if you have the `strrev' function. */
 /* #undef HAVE_STRREV */
+
+/* Define if you have the `strsep' function. */
+#define HAVE_STRSEP 1
 
 /* Define if you have the `strsignal' function. */
 #define HAVE_STRSIGNAL 1

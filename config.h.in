@@ -124,6 +124,9 @@
 /* Define if you have the `memrev' function. */
 #undef HAVE_MEMREV
 
+/* Define if you have the `memscan' function. */
+#undef HAVE_MEMSCAN
+
 /* Define if you have the `memset' function. */
 #undef HAVE_MEMSET
 
@@ -229,11 +232,17 @@
 /* Define if you have the `strnicmp' function. */
 #undef HAVE_STRNICMP
 
+/* Define if you have the `strpbrk' function. */
+#undef HAVE_STRPBRK
+
 /* Define if you have the `strrchr' function. */
 #undef HAVE_STRRCHR
 
 /* Define if you have the `strrev' function. */
 #undef HAVE_STRREV
+
+/* Define if you have the `strsep' function. */
+#undef HAVE_STRSEP
 
 /* Define if you have the `strsignal' function. */
 #undef HAVE_STRSIGNAL
