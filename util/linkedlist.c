@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation (singly- and doubly- linked).
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,12 +25,10 @@
 
  **********************************************************************
 
-  Synopsis:	Almost functionally equivalent to the glib list
-		functions, based on the 1.2.6 documentation, although
-		there are some differences.  This is a 'clean-room'
-		implementation though, so I may claim copyright and
-		therefore release the code under a license of my
-		choice ;)
+  Synopsis:	Linked list implementations.
+
+		Single-linked list functions are named slink_*().
+		Double-linked list functions are named dlink_*().
 
 		MP-safe.
 
@@ -43,11 +41,6 @@
   To compile:	gcc linkedlist.c -DLINKEDLIST_COMPILE_MAIN -g -L . -lstuff
 
  **********************************************************************/
-
-/*
- * Double-linked list functions are named dlink_*().
- * Single-linked list functions are named slink_*().
- */
 
 #include "gaul/linkedlist.h"
 
@@ -716,8 +709,8 @@ DLList *dlink_delete_link(DLList *list, DLList *link)
       
   if (link == list) list = list->next;
       
-  link->next = NULL;
   link->prev = NULL;
+  link->next = NULL;
   
   return list;
   }
@@ -809,7 +802,8 @@ vpointer dlink_pth_data(DLList *list, const int index)
 
 DLList *dlink_find(DLList *list, vpointer data)
   {
-  while (list && list->data != data) list = list->next;
+  while (list && list->data != data)
+    list = list->next;
   
   return list;
   }
@@ -860,7 +854,8 @@ DLList *dlink_last(DLList *list)
   {
   if (!list) return NULL;
 
-  while (list->next) list = list->next;
+  while (list->next)
+    list = list->next;
   
   return list;
   }
@@ -905,8 +900,7 @@ boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
   }
 
 
-boolean dlink_foreach_reverse(DLList *list,
-                       LLForeachFunc func, vpointer userdata)
+boolean dlink_foreach_reverse(DLList *list, LLForeachFunc func, vpointer userdata)
   {
 
   if (!func) die("Null pointer to LLForeachFunc passed.");
@@ -943,8 +937,8 @@ DLList *dlink_insert_sorted(DLList *list, vpointer data, LLCompareFunc func)
     this_list = this_list->next;
     }
 
-  new_element->next = this_list;
   new_element->prev = prev_list;
+  new_element->next = this_list;
 
   if (this_list)
     {

@@ -2260,7 +2260,7 @@ int ga_evolution_threaded(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-#ifndef COMPILE_DEPRECATED_FUNCTIONS
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 int ga_evolution_with_stats(	population		*pop,
 					const ga_elitism_type	elitism,
@@ -2763,7 +2763,7 @@ int ga_evolution_steady_state(	population		*pop,
   last updated:	11 Jun 2002
  **********************************************************************/
 
-#ifndef COMPILE_DEPRECATED_FUNCTIONS
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 int ga_evolution_steady_state_with_stats(	population	*pop,
 						const int	max_iterations )

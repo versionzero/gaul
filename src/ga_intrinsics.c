@@ -195,52 +195,6 @@ static int ga_entity_read_slang(int *pop_id, char *fname)
 
 
 /**********************************************************************
-  ga_entity_compare_genome_slang()
-  synopsis:	Compares two genotypes.
-  parameters:
-  return:
-  last updated:	22/01/01
- **********************************************************************/
-
-static int ga_entity_compare_genome_slang(int *pop_id, int *jack, int *jill)
-  {
-  population	*pop;			/* Active population structure. */
-
-  pop = ga_get_population_from_id(*pop_id);
-
-/* Are Jack and Jill genetic twins? */
-  return ga_compare_genome(pop,
-                           ga_get_entity_from_id(pop, *jack),
-                           ga_get_entity_from_id(pop, *jill));
-  }
-
-
-/**********************************************************************
-  ga_entity_cross_compare_genome_slang()
-  synopsis:	Compares two genotypes from potentially differing
-		populations.  The populations must still have
-		consistent chromosome maps.
-  parameters:
-  return:
-  last updated:	07/02/01
- **********************************************************************/
-
-static int ga_entity_cross_compare_genome_slang(int *jackpop_id, int *jack,
-                                           int *jillpop_id, int *jill)
-  {
-  population	*jackpop, *jillpop;	/* Population structures. */
-
-  jackpop = ga_get_population_from_id(*jackpop_id);
-  jillpop = ga_get_population_from_id(*jillpop_id);
-
-/* Are Jack and Jill genetic twins? */
-  return ga_compare_genome(jackpop,
-                           ga_get_entity_from_id(jackpop, *jack),
-                           ga_get_entity_from_id(jillpop, *jill));
-  }
-
-
-/**********************************************************************
   ga_entity_kill_slang()
   synopsis:	Marks an entity structure as unused (dereferences it).
 		Any contents of entities data field are freed.
@@ -1380,9 +1334,6 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_entity_read",
             (FVOID_STAR) ga_entity_read_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_STRING_TYPE)
-      || SLadd_intrinsic_function("ga_entity_compare_genome",
-            (FVOID_STAR) ga_entity_compare_genome_slang, SLANG_INT_TYPE, 3,
-            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_INT_TYPE)
       || SLadd_intrinsic_function("ga_entity_kill",
             (FVOID_STAR) ga_entity_kill_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)

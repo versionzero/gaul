@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_similarity - Genetic algorithm genome/chromosome comparison routines.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -70,6 +70,7 @@
   last updated:	19/12/00
  **********************************************************************/
 
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
   {
   int		i;		/* Loop variable over all chromosomes. */
@@ -91,10 +92,11 @@ boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
 
   return TRUE;
   }
+#endif
 
 
 /**********************************************************************
-  ga_count_matching_alleles()
+  ga_count_match_alleles()
   synopsis:	Compares two chromosomes and counts matching alleles.
   parameters:	const int length	Chromosome length.
 		const int *alpha	Alpha chromosome.
@@ -102,6 +104,8 @@ boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
   return:	Returns number of matching alleles.
   last updated:	13/02/01
  **********************************************************************/
+
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
   {
@@ -116,6 +120,7 @@ int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
 
   return count;
   }
+#endif
 
 
 /**********************************************************************
@@ -129,6 +134,8 @@ int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
   return:	double	similarity
   last updated:	13/02/01
  **********************************************************************/
+
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
 
 double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta)
   {
@@ -155,6 +162,7 @@ double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
 
   return (double) match/total_length;
   }
+#endif
 
 
 /**********************************************************************
@@ -169,10 +177,13 @@ double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
   last updated:	13/02/01
  **********************************************************************/
 
+#ifdef COMPILE_DEPRECATED_FUNCTIONS
+
 double ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *beta)
   {
   return sqrt(ga_genome_hamming_similarity(pop, alpha, beta));
   }
+#endif
 
 
 /**********************************************************************

@@ -206,7 +206,6 @@ boolean	ga_population_sort(population *pop);
 double	ga_population_convergence_genotypes( population *pop );
 double	ga_population_convergence_chromsomes( population *pop );
 double	ga_population_convergence_alleles( population *pop );
-boolean ga_compare_genome(population *pop, entity *alpha, entity *beta);
 int ga_get_entity_rank(population *pop, entity *e);
 int ga_get_entity_id(population *pop, entity *e);
 entity *ga_get_entity_from_id(population *pop, const unsigned int id);

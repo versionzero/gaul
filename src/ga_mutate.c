@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_mutate - Genetic algorithm mutation operators.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -949,9 +949,6 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
       if (random_boolean_prob(GA_MULTI_BIT_CHANCE))
         {
         ((double *)son->chromosome[chromo])[point] += amount;
-
-/* FIXME: We are ignoring overflow/underflow. */
-
         }
       }
     }

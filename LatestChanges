@@ -31,6 +31,7 @@ Changes since release 0.1846:
 - Added a configure option to make use of Intel's icc compiler's autoparallelisation features more easily.
 - Added sanity checking into ga_get_entity_from_rank().
 - Deleted code relating to usused ga_genesis_t and deprecated soup files.
+- ga_compare_genome(), ga_count_match_alleles(), ga_genome_hamming_similarity() and ga_genome_euclidian_similarity() deprecated.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.
