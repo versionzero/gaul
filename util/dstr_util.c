@@ -3,7 +3,7 @@
  **********************************************************************
 
   dstr_util - Dynamic string library.
-  Copyright ©1999-2000, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©1999-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -28,7 +28,8 @@
 
 		These routines still require a lot of work (and testing).
 
-  Updated:      13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
+  Updated:      14 Mar 2002 SAA	Changes for clean compilation under AIX.
+		13 Mar 2002 SAA	dstr_diagnostics() changed.  Thread locking variable renamed.
 		20/06/01 SAA	Added a couple of casts for clean compilation on Solaris.
 		27/02/01 SAA	G_LOCK etc. replaced with THREAD_LOCK etc..
 		16/01/01 SAA	Defining the constant DSTR_NO_CHUNKS will disable the use of chunks for memory handling.
@@ -89,7 +90,11 @@ void dstr_diagnostics(void)
 
   printf("--------------------------------------------------------------\n");
   printf("DSTR_DEBUG:                %d\n", DSTR_DEBUG);
-  printf("DSTR_NO_CHUNKS:            %d\n", DSTR_NO_CHUNKS);
+#ifdef DSTR_NO_CHUNKS
+  printf("DSTR_NO_CHUNKS:            defined\n");
+#else
+  printf("DSTR_NO_CHUNKS:            undefined\n");
+#endif
 
   printf("--------------------------------------------------------------\n");
   printf("structure          sizeof\n");
