@@ -25,7 +25,8 @@
 
  **********************************************************************
 
-  Updated:	03 Oct 2002 SAA	Compaq ccc compiler fix.
+  Updated:	14 Oct 2002 SAA	HAVE__BOOL should now be defined if the compiler has a built-in _Bool type, otherwise assume that this is not the case.
+  		03 Oct 2002 SAA	Compaq ccc compiler fix.
   		18 Sep 2002 SAA	SUN_FORTE_C is sometimes set to 0 instead of being undefined.
   		09 Aug 2002 SAA	Use unicode encoding of the copyright symbol in comments.  Added constant MAX_FNAME_LEN.
   		07 Aug 2002 SAA	Modification of _Bool stuff for clean compilation using gcc version 3.2
@@ -187,12 +188,12 @@
 /*
  * Define boolean type sensibly.
  */
-#ifdef HAVE_STDBOOL_H
+#if defined(HAVE_STDBOOL_H)
 # include <stdbool.h>
 #else
 
 # if !defined(__bool_true_false_are_defined)
-#  if !defined(_Bool)
+#  if !defined(HAVE__BOOL)
 typedef short _Bool;
 #  endif
 

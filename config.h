@@ -130,6 +130,9 @@
 /* Define to 1 if you have the `snprintf' function. */
 #define HAVE_SNPRINTF 1
 
+/* Define if you have a working <stdbool.h> header file. */
+#define HAVE_STDBOOL_H 1
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
@@ -274,6 +277,9 @@
 /* Define to 1 if you have the `waitpid' function. */
 #define HAVE_WAITPID 1
 
+/* Define if compiler has built-in _Bool type. */
+#define HAVE__BOOL 1
+
 /* Major version number. */
 #define MAJOR_VERSION 0
 
@@ -294,9 +300,6 @@
 
 /* Environment variable used to request threads. */
 #define MPI_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
-
-/* Name of package */
-/* #undef PACKAGE */
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
@@ -351,9 +354,6 @@
 
 /* Whether to skip expensive sanity checking in vector routines. */
 #define V3_QUICK 1
-
-/* Version number of package */
-/* #undef VERSION */
 
 /* Version string. */
 #define VERSION_STRING "0.1840-4"

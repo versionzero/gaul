@@ -8,6 +8,9 @@ Changes since release 0.1840:
 - Updated configuration files for successful compilation on RedHat 8.0
 - Improved configuration with respect to some simple platform specific optimisations.
 - RPM spec file improved considerably.
+- Simulated annealling algorithm completely rewritten.
+- Tabu search algorithm completely rewritten.
+- Three new examples added to demonstrate Tabu-searching and Simualted Annealling.
 
 Changes since release 0.1839:
 - Added ga_mutate_char_allpoint().
