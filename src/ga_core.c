@@ -57,6 +57,7 @@
 		More "if (!pop) die("Null pointer to population structure passed.");" checks are needed.
 		Genome distance measures (tanimoto, euclidean, tverski etc.)
 		Population/entity iterator functions.
+		ga_get_struct_whatever() should be renamed to ga_struct_get_whatever().
 
  **********************************************************************/
 
@@ -2082,6 +2083,104 @@ boolean ga_genocide(population *pop, int target_size)
 /*printf("Dereferencing entity with rank %d\n", pop->size-1);*/
     ga_entity_dereference_by_rank(pop, pop->size-1);
     }
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_entity_get_fitness()
+  synopsis:	Gets an entity's fitness.
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+double ga_entity_get_fitness(entity *e)
+  {
+
+  return e?e->fitness:GA_MIN_FITNESS;
+  }
+
+
+/**********************************************************************
+  ga_entity_set_fitness()
+  synopsis:	Gets an entity's fitness.
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+boolean ga_entity_set_fitness(entity *e, double fitness)
+  {
+  if (!e) return FALSE;
+
+  e->fitness=fitness;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_get_stablesize()
+  synopsis:	Gets a population's stable size.
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+int ga_population_get_stablesize(population *pop)
+  {
+
+  return pop?pop->stable_size:0;
+  }
+
+
+/**********************************************************************
+  ga_population_get_size()
+  synopsis:	Gets a population's current size.
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+int ga_population_get_size(population *pop)
+  {
+
+  return pop?pop->size:0;
+  }
+
+
+/**********************************************************************
+  ga_population_get_maxsize()
+  synopsis:	Gets a population's maximum size. (I don't know why
+		anyone would need this function, but it is here for
+		completeness.)
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+int ga_population_get_maxsize(population *pop)
+  {
+
+  return pop?pop->max_size:0;
+  }
+
+
+/**********************************************************************
+  ga_population_set_stablesize()
+  synopsis:	Gets a population's stable size.
+  parameters:
+  return:
+  last updated: 23 May 2002
+ **********************************************************************/
+
+boolean ga_population_set_stablesize(population *pop, int stable_size)
+  {
+  if (!pop) return FALSE;
+
+  pop->stable_size = stable_size;
 
   return TRUE;
   }

@@ -328,6 +328,13 @@ boolean	ga_seed_bitstring_random(population *pop, entity *adam);
 
 void	ga_replace_by_fitness(population *pop, entity *child);
 
+double	ga_entity_get_fitness(entity *e);
+boolean	ga_entity_set_fitness(entity *e, double fitness);
+int	ga_population_get_stablesize(population *pop);
+int	ga_population_get_size(population *pop);
+int	ga_population_get_maxsize(population *pop);
+boolean	ga_population_set_stablesize(population *pop, int stable_size);
+
 
 #include "ga_utility.h"	/* Hmm. */
 
