@@ -54,6 +54,8 @@
 		29 Nov 2001 SAA Renamed and some comments added.  Some code generalised.  Introduced use of memory_util library.  All this is in preparation of optimisation using GAUL.
 
   To do:	Need to define data from external sources.
+		Alternative switching functions.
+		Automated functions for "leave-one-out" validation.
 
  **********************************************************************/
 
