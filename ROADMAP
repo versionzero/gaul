@@ -1,7 +1,7 @@
 Roadmap upto version 1.0 
 ========================
 
-Releases 0.1839 - 0.1859 are preview releases prior to full version 1.0
+Releases 0.1839 - 0.1856 are preview releases prior to full version 1.0
 
 Release 0.1840 and onwards may be considered to have a stable API. (i.e. code written
 to use these releases should also work with version 1.0)
@@ -12,7 +12,7 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1840     |  Similarity routines for continuous chromosome types.
             |  ga_evolution_forked() and associated example.
-            |  Optimise the evolution functions with respect to fitness evaluations during Lamarkian/Baldwinian schemes.
+            |  Optimise the evolution functions with respect to fitness evaluations during Lamarckian/Baldwinian schemes.
             |  Fix elitism options.
             |  Move selection of evolutionary scheme and elitism mode out of ga_evolution_[XXX]() calls.
             |    *** This will break compatibility! ***
@@ -44,6 +44,7 @@ These milestone requirements are subject to change ;)
             |  Built-in evaluation profiling.
 ------------+--------------------------------------------------------
  0.1847     |  Boolean chromosome example from Mitchell book.
+            |  Comprehensive test suite.
 ------------+--------------------------------------------------------
  0.1848     |  Tree chromosome.
             |  Genetic programming example.
@@ -52,25 +53,19 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1850     |  Improve in-code documentation/comments.
 ------------+--------------------------------------------------------
- 0.1851     |  Tidy and rationalise S-Lang interface.
+ 0.1851     |  Tidy and rationalise S-Lang interface, and provide examples.
 ------------+--------------------------------------------------------
- 0.1852     |  Confirm compilation on QNX and MacOS X platforms.
-------------+--------------------------------------------------------
- 0.1853     |  Accessor functions for all fields in population structure.
+ 0.1852     |  Accessor functions for all fields in population structure.
             |  Accessor functions for all fields in entity structure.
 ------------+--------------------------------------------------------
  0.1854     |  Replace qsort routines with something more appropriate.
             |  User-defined population sorting.
 ------------+--------------------------------------------------------
- 0.1855     |  Comprehensive test suite.
+ 0.1855     |  Remove feature "FIXME's"
+            |  Remove optimisation "FIXME's"
+            |  Remove all known bugs ;)
 ------------+--------------------------------------------------------
  0.1856     |  RPM/.deb binary (i386,alpha) and source packages.
-------------+--------------------------------------------------------
- 0.1857     |  Remove feature "FIXME's"
-------------+--------------------------------------------------------
- 0.1858     |  Remove optimisation "FIXME's"
-------------+--------------------------------------------------------
- 0.1859     |  Remove all known bugs ;)
 ------------+--------------------------------------------------------
 
 Additional features needed for version 1.0:
@@ -96,5 +91,5 @@ Optional Features for version 1.0, or (more likely) later:
 * DEE algorithm.
 * PVM support.
 
-Stewart Adcock, 06 May 2002.
+Stewart Adcock, 17 Jun 2002.
 
