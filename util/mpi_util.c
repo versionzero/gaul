@@ -86,16 +86,17 @@
  * Having this stuff stored removes the need for quite a number
  * of MPI calls.
  *
- * Size is used to inticate that MPI has been initialized.  Appears much quicker
- * than using MPI_Initialized().  (Also isn't restricted to MPI only).
+ * Size is used to inticate that MPI has been initialized.  Appears to be
+ * much more rapid than using MPI_Initialized().  (Also isn't restricted
+ * to MPI only).
  */
-static int	rank=-1;				/* Current process's rank */
-static int	size=0;					/* Total number of processes */
-static int	namelen;				/* Length of processor name */
+static int	rank=-1;				/* Current process's rank. */
+static int	size=0;					/* Total number of processes. */
+static int	namelen;				/* Length of processor name. */
 #if PARALLEL == 2
-istatic char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name */
+static char	node_name[MPI_MAX_PROCESSOR_NAME];	/* String containing processor name. */
 #else
-static char	node_name[MAX_LINE_LEN];	/* String containing processor name */
+static char	node_name[MAX_LINE_LEN];		/* String containing processor name. */
 #endif
 
 /**********************************************************************

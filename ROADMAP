@@ -55,7 +55,7 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1855     |  Comprehensive test suite.
 ------------+--------------------------------------------------------
- 0.1856     |  RPM binary (i386,alpha) and source packages.
+ 0.1856     |  RPM/.deb binary (i386,alpha) and source packages.
 ------------+--------------------------------------------------------
  0.1857     |  Remove feature "FIXME's"
 ------------+--------------------------------------------------------

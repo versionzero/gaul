@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
+  Updated:	15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to mpi_util.h and allowed over-ride of PARALLEL in config.h by definition of NO_PARALLEL constant.
+  		26 Feb 2002 SAA	Added definition of ONE_MINUS_TINY.
 		30 Jan 2002 SAA	Parallel versions of the die() and deif() macros do not directly call MPI routines now.
 		29 Jan 2002 SAA Changes for removal of splint (http://www.splint.org/) warnings/errors.
 		28 Jan 2002 SAA Minor modifications to play nicely with the Intel C/C++ compiler.  Needed a kludge to workaround a problem in the GNU make tools.
@@ -116,24 +117,26 @@
  * (This is required for the parallel version of die() and dief() macros -
  *  especially in the case of serial routines used by parallel programs.)
  */
-#ifndef PARALLEL
-#define PARALLEL	0
-#endif
-#if PARALLEL==1
-#include <pthread.h>
-#define _REENTRANT
-#endif
-#if PARALLEL==2
-#include <mpi.h>
-#endif
-#if PARALLEL==3
-#include <pvm3.h>
-#endif
-#if PARALLEL==4
-#include <bsp.h>
-#endif
-#if PARALLEL==5
-#include <omp.h>
+#if !defined(PARALLEL) || defined(NO_PARALLEL)
+# undef PARALLEL
+# define PARALLEL	0
+#else
+# if PARALLEL==1
+#  include <pthread.h>
+#  define _REENTRANT
+# endif
+# if PARALLEL==2
+#  include <mpi.h>
+# endif
+# if PARALLEL==3
+#  include <pvm3.h>
+# endif
+# if PARALLEL==4
+#  include <bsp.h>
+# endif
+# if PARALLEL==5
+#  include <omp.h>
+# endif
 #endif
 
 #if PARALLEL!=1
@@ -417,22 +420,6 @@ typedef unsigned char byte;
 /*
  * die() macro, inspired by perl!
  */
-#if PARALLEL==2
-#include "mpi_util.h"
-#define die(X)          {						\
-			int flubberrank;			\
-			mpi_get_rank(&flubberrank);		\
-                        printf(							\
-		"FATAL ERROR: (process %d) %s\nin %s at \"%s\" line %d\n",	\
-				flubberrank,				\
-				(X),					\
-                               __PRETTY_FUNCTION__,			\
-                               __FILE__,				\
-                               __LINE__);				\
-                        mpi_abort(127);			\
-			fflush(NULL);					\
-                        }
-#else
 #define die(X)	{						\
                 printf("FATAL ERROR: %s\nin %s at \"%s\" line %d\n",	\
 		(X),					\
@@ -442,7 +429,6 @@ typedef unsigned char byte;
 		fflush(NULL);				\
                 s_breakpoint;				\
                 }
-#endif
 
 /* Idea: Decrement warn() in favour of helga_log functionality? */
 #define warn(X)         {						\
@@ -464,22 +450,6 @@ typedef unsigned char byte;
  * Implement my dief macro where possible.
  */
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
-# if PARALLEL==2
-#include "mpi_util.h"
-/* Special version for MPI programs. */
-#  define dief(format, args...)	{				\
-			int flubberrank;			\
-			mpi_get_rank(&flubberrank);		\
-			printf("FATAL ERROR: (process %d) ", flubberrank);	\
-			printf(format, ##args);			\
-			printf("\nin %s at \"%s\" line %d\n",	\
-			__PRETTY_FUNCTION__,			\
-			__FILE__,				\
-			__LINE__);				\
-			fflush(NULL);				\
-                        mpi_abort(127);				\
-			}
-# else
 #  define dief(format, args...)	{				\
 			printf("FATAL ERROR: ");		\
 			printf(format, ##args);			\
@@ -490,7 +460,6 @@ typedef unsigned char byte;
 			fflush(NULL);				\
 			s_breakpoint;                           \
 			}
-# endif
 # define HAVE_DIEF	0
 #else
 /*

@@ -113,7 +113,6 @@ struct entity_t
   double	fitness;	/* Fitness score. */
   vpointer	*chromosome;	/* The chromosomes (the genotype). */
   vpointer	data;		/* User data containing physical properties. (the phenotype) */
-  boolean	allocated;	/* Whether this structure in the buffer is used. */
   };
 
 /*
@@ -130,11 +129,18 @@ struct population_t
   int		size;			/* Actual population size. */
   int		orig_size;		/* Number of parents (entities at start of generation). */
   int		island;			/* Population's island. */
+  int		free_index;		/* Next potentially free entity index. */
 
+#if 0
 /*  int		max_entity;*/		/* Number of allocated entities. */
   entity	*entity_array;		/* The population as an array
                                            (malloc'ed in one go! */
-  entity	**entity_iarray;	/* The population as an indexed array. */
+#endif
+
+  MemChunk	*entity_chunk;		/* Buffer for entity structures. */
+  entity	**entity_array;		/* The population in id order. */
+  entity	**entity_iarray;	/* The population sorted by fitness. */
+
   int		num_chromosomes;	/* Number of chromosomes in genotype - should be an array of lengths. */
   int		len_chromosomes;	/* Maximum length of each chromosome. */
   vpointer	data;			/* User data. */

@@ -30,10 +30,12 @@
 AUTOMAKE_OPTIONS = 1.4
 
 lib_LIBRARIES = libstuff.a \
-	libmpi_util.a libnn_util.a librandom.a libstr_util.a libtimer_util.a
+	libnn_util.a librandom.a libstr_util.a libtimer_util.a \
+	libmpi_util.a libmpi_util_fake.a
 
 lib_LTLIBRARIES = libstuff.la \
-	libmpi_util.la libnn_util.la librandom.la libstr_util.la libtimer_util.la
+	libnn_util.la librandom.la libstr_util.la libtimer_util.la \
+	libmpi_util.la libmpi_util_fake.la
 
 bin_PROGRAMS = nn
 
@@ -55,6 +57,12 @@ libstuff_la_SOURCES = \
 	linkedlist.c \
 	memory_util.c \
 	table_util.c
+
+libmpi_util_fake_a_SOURCES = \
+	mpi_util_fake.c 
+
+libmpi_util_fake_la_SOURCES = \
+	mpi_util_fake.c 
 
 libmpi_util_a_SOURCES = \
 	mpi_util.c 
@@ -108,24 +116,26 @@ include_HEADERS = \
      memory_chunks.c \
      timer_util.h
 
-nn_LDADD = -L./ -L../src/ -lnn_util -lstr_util -lstuff -lrandom -lm
+nn_LDADD = -L./ -L../src/ -lnn_util -lmpi_util_fake -lstr_util -lstuff -lrandom -lm
 
-libstuff_a_LIBFLAGS = -lm @MPIFLAGS@
+libstuff_a_LIBFLAGS = -lm
 libstuff_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-libnn_util_a_LIBFLAGS = @MPIFLAGS@
+libnn_util_a_LIBFLAGS =
 libnn_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-libmpi_util_a_LIBFLAGS = @MPIFLAGS@
+libmpi_util_a_LIBFLAGS =
 libmpi_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-librandom_a_LIBFLAGS = -lm @MPIFLAGS@
+libmpi_util_fake_a_LIBFLAGS =
+libmpi_util_fake_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
+
+librandom_a_LIBFLAGS = -lm
 librandom_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-libstr_util_a_LIBFLAGS = @MPIFLAGS@
+libstr_util_a_LIBFLAGS =
 libstr_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
 
-libtimer_util_a_LIBFLAGS = @MPIFLAGS@
+libtimer_util_a_LIBFLAGS =
 libtimer_util_la_LDFLAGS = -version-info ${MAJOR_VERSION}:${MINOR_VERSION}:0
-
 

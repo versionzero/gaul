@@ -51,18 +51,11 @@
 			Evolution will continue if ga_evolution() is
 			called again without calling ga_genesis() again.
 
-  To do:	Reading/writing 'soup'.
+  To do:	Reading/writing 'soup' files.
 		Replace the send_mask int array with a bit vector.
-		Use Memory Chunks for efficient memory allocation?
-		Instead of using a 'allocated' flag for each entity, keep a list of unused entities.  (Or use mem_chunks).
-		Use table structure for maintainance of multiple populations.
 		All functions here should be based on entity/population _pointers_ while the functions in ga_intrinsics should be based on _handles_.
-		ga_population_new() should return the reference pointer not the handle.
-		Consider using the table structure, coupled with memory chunks, for handling the entities within a population.  This should be as efficient as the current method, and will remove the need for a maximum population size.
 		More "if (!pop) die("Null pointer to population structure passed.");" checks are needed.
-		Use a list of structures containing info about user defined crossover and mutation functions.
 		Genome distance measures (tanimoto, euclidean, tverski etc.)
-
 		Population/entity iterator functions.
 
  **********************************************************************/
@@ -144,52 +137,53 @@ static void destruct_list(population *pop, SLList *list)
 		const int num_chromosome	Num. of chromosomes.
 		const int len_chromosome	Size of chromosomes (may be ignored).
   return:	population *	new population structure.
-  last updated: 13 Feb 2002
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 population *ga_population_new(	const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome)
   {
-  int		i;		/* Loop variable. */
   population	*newpop=NULL;	/* New population structure. */
   unsigned int	pop_id;		/* Handle for new population structure. */
+  int		i;		/* Loop over (unassigned) entities. */
 
   if ( !(newpop = s_malloc(sizeof(population))) )
     die("Unable to allocate memory");
 
   newpop->size = 0;
   newpop->stable_size = stable_size;
-  newpop->max_size = stable_size*3;
+  newpop->max_size = stable_size*4;
   newpop->orig_size = 0;
   newpop->num_chromosomes = num_chromosome;
   newpop->len_chromosomes = len_chromosome;
   newpop->data = NULL;
+  newpop->free_index = newpop->max_size-1;
 
   newpop->crossover_ratio = 1.0;
   newpop->mutation_ratio = 1.0;
   newpop->migration_ratio = 1.0;
 
-  if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity))) )
+  if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
 
   if ( !(newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*))) )
     die("Unable to allocate memory");
-  
-  for (i=0; i<newpop->max_size; i++)
-    {
-    newpop->entity_array[i].allocated=FALSE;
-    newpop->entity_array[i].data=NULL;
-    newpop->entity_array[i].fitness=GA_MIN_FITNESS;	/* Lower bound on fitness */
 
-    newpop->entity_array[i].chromosome=NULL;
-
-/*    newpop->entity_iarray[i] = &(newpop->entity_array[i]);*/
-    }
+  newpop->entity_chunk = mem_chunk_new(sizeof(entity), 512);
 
 /*
+ * Wipe the entity arrays.
+ */
+  for (i=0; i<newpop->max_size; i++)
+    {
+    newpop->entity_array[i] = NULL;
+    newpop->entity_iarray[i] = NULL;
+    }
+  
+/*
  * Clean the callback functions.
- * Prevents eronerous callbacks - helpful when debugging!
+ * Prevents erronerous callbacks - helpful when debugging!
  */
   newpop->generation_hook = NULL;
   newpop->iteration_hook = NULL;
@@ -238,7 +232,7 @@ population *ga_population_new(	const int stable_size,
 		correspond.
   parameters:	population *	original population structure.
   return:	population *	new population structure.
-  last updated: 07/07/01
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 population *ga_population_clone(population *pop)
@@ -260,6 +254,7 @@ population *ga_population_clone(population *pop)
   newpop->num_chromosomes = pop->num_chromosomes;
   newpop->len_chromosomes = pop->len_chromosomes;
   newpop->data = pop->data;
+  newpop->free_index = pop->max_size-1;
 
   newpop->crossover_ratio = pop->crossover_ratio;
   newpop->mutation_ratio = pop->mutation_ratio;
@@ -291,23 +286,28 @@ population *ga_population_clone(population *pop)
   newpop->replace = pop->replace;
 
 /*
+ * Allocate arrays etc.
+ */
+  newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*));
+  newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*));
+  newpop->entity_chunk = mem_chunk_new(sizeof(entity), 512);
+  
+/*
  * Clone each of the constituent entities.
  */
-  newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity));
-  newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*));
-  
-  for (i=0; i<newpop->max_size; i++)
-    {
-    newpop->entity_array[i].allocated=FALSE;
-    newpop->entity_array[i].data=NULL;
-    newpop->entity_array[i].fitness=GA_MIN_FITNESS;
-    newpop->entity_array[i].chromosome=NULL;
-    }
-
   for (i=0; i<pop->size; i++)
     {
     newentity = ga_get_free_entity(newpop);
     ga_entity_copy(newpop, newentity, pop->entity_iarray[i]);
+    }
+
+/*
+ * Wipe the unassigned portions of the entity arrays.
+ */
+  for (i=pop->size; i<newpop->max_size; i++)
+    {
+    newpop->entity_array[i] = NULL;
+    newpop->entity_iarray[i] = NULL;
     }
 
 /*
@@ -884,7 +884,7 @@ int ga_get_entity_rank(population *pop, entity *e)
 		rank unless the population has been sorted.
   parameters:
   return:
-  last updated: 16/03/01
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 int ga_get_entity_rank_from_id(population *pop, int id)
@@ -893,7 +893,7 @@ int ga_get_entity_rank_from_id(population *pop, int id)
 
   while (rank < pop->size)
     {
-    if (pop->entity_iarray[rank] == &(pop->entity_array[id])) return rank;
+    if (pop->entity_iarray[rank] == pop->entity_array[id]) return rank;
     rank++;
     }
 
@@ -906,7 +906,7 @@ int ga_get_entity_rank_from_id(population *pop, int id)
   synopsis:	Gets an entity's id from its rank.
   parameters:
   return:
-  last updated: 16/03/01
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 int ga_get_entity_id_from_rank(population *pop, int rank)
@@ -915,7 +915,7 @@ int ga_get_entity_id_from_rank(population *pop, int rank)
 
   while (id < pop->max_size)
     {
-    if (&(pop->entity_array[id]) == pop->entity_iarray[rank]) return id;
+    if (pop->entity_array[id] == pop->entity_iarray[rank]) return id;
     id++;
     }
 
@@ -925,8 +925,7 @@ int ga_get_entity_id_from_rank(population *pop, int rank)
 
 /**********************************************************************
   ga_get_entity_id()
-  synopsis:	Gets an entity's internal index (subscript into the
-		entity_array buffer).
+  synopsis:	Gets an entity's internal index.
   parameters:	population *pop
 		entity *e
   return:	entity id
@@ -942,7 +941,7 @@ int ga_get_entity_id(population *pop, entity *e)
 
   while (id < pop->max_size)
     {
-    if (&(pop->entity_array[id]) == e) return id;
+    if (pop->entity_array[id] == e) return id;
     id++;
     }
 
@@ -953,16 +952,19 @@ int ga_get_entity_id(population *pop, entity *e)
 /**********************************************************************
   ga_get_entity_from_id()
   synopsis:	Gets a pointer to an entity from it's internal index
-		(subscript into the entity_array buffer).
-		FIXME: Add some error checking.
+		(subscript in the entity_array array).
   parameters:
   return:
-  last updated: 22/01/01
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 entity *ga_get_entity_from_id(population *pop, const unsigned int id)
   {
-  return &(pop->entity_array[id]);
+  if (!pop) die("Null pointer to population structure passed.");
+
+  if (id<0 || id>pop->max_size) return NULL;
+
+  return pop->entity_array[id];
   }
 
 
@@ -990,29 +992,24 @@ entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
 		Chromosomes are allocated, but will contain garbage.
   parameters:
   return:
-  last updated: 19/12/00
+  last updated: 18 Mar 2002
  **********************************************************************/
 
 boolean ga_entity_setup(population *pop, entity *joe)
   {
 
   if (!joe) die("Null pointer to entity structure passed.");
+  if (!pop->chromosome_constructor) die("Chromosome constructor not defined.");
 
 /* Allocate chromosome structures. */
-  if (joe->chromosome==NULL)
-    {
-    if (!pop->chromosome_constructor) die("Chromosome constructor not defined.");
-
-    pop->chromosome_constructor(pop, joe);
-    }
+  joe->chromosome = NULL;
+  pop->chromosome_constructor(pop, joe);
 
 /* Physical characteristics currently undefined. */
   joe->data=NULL;
 
-  joe->fitness=GA_MIN_FITNESS;	/* Lower bound on fitness */
-
-/* Mark it as used. */
-  joe->allocated=TRUE;
+/* No fitness evaluated yet. */
+  joe->fitness=GA_MIN_FITNESS;
 
   return TRUE;
   }
@@ -1029,16 +1026,13 @@ boolean ga_entity_setup(population *pop, entity *joe)
 		Note, no error checking in the interests of speed.
   parameters:
   return:
-  last updated:	16/03/01
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 boolean ga_entity_dereference_by_rank(population *pop, int rank)
   {
   int		i;	/* Loop variable over the indexed array. */
   entity	*dying=pop->entity_iarray[rank];	/* Dead entity. */
-
-/* Bye bye entity. */
-  dying->allocated=FALSE;
 
 /* Clear user data. */
   if (dying->data)
@@ -1053,6 +1047,61 @@ boolean ga_entity_dereference_by_rank(population *pop, int rank)
 /* Update entity_iarray[], so there are no gaps! */
   for (i=rank; i<pop->size; i++)
     pop->entity_iarray[i] = pop->entity_iarray[i+1];
+
+/* Release memory. */
+  mem_chunk_free(pop->entity_chunk, dying);
+
+/* Release index. */
+  pop->entity_array[ga_get_entity_id(pop, dying)] = NULL;
+
+/*
+  printf("ENTITY %d DEREFERENCED.\n", ga_get_entity_id(dying));
+  printf("New pop size = %d\n", pop->size);
+*/
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_entity_dereference_by_id()
+  synopsis:	Marks an entity structure as unused.
+		Deallocation is expensive.  It is better to re-use this
+		memory.  So, that is what we do.
+		Any contents of entities data field are freed.
+		If rank is known, this is much quicker than the plain
+		ga_entity_dereference() function, while this index
+		based version is still almost as fast.
+		Note, no error checking in the interests of speed.
+  parameters:
+  return:
+  last updated:	18 Mar 2002
+ **********************************************************************/
+
+boolean ga_entity_dereference_by_id(population *pop, int id)
+  {
+  int		i;	/* Loop variable over the indexed array. */
+  entity	*dying=pop->entity_array[id];	/* Dead entity. */
+
+/* Clear user data. */
+  if (dying->data)
+    {
+    destruct_list(pop, dying->data);
+    dying->data=NULL;
+    }
+
+/* Population size is one less now! */
+  pop->size--;
+
+/* Update entity_iarray[], so there are no gaps! */
+  for (i=ga_get_entity_rank(pop, dying); i<pop->size; i++)
+    pop->entity_iarray[i] = pop->entity_iarray[i+1];
+
+/* Release memory. */
+  mem_chunk_free(pop->entity_chunk, dying);
+
+/* Release index. */
+  pop->entity_array[id] = NULL;
 
 /*
   printf("ENTITY %d DEREFERENCED.\n", ga_get_entity_id(dying));
@@ -1069,9 +1118,10 @@ boolean ga_entity_dereference_by_rank(population *pop, int rank)
 		Deallocation is expensive.  It is better to re-use this
 		memory.  So, that is what we do.
 		Any contents of entities data field are freed.
-		If rank is known, this above
-		ga_entity_dereference_by_rank() function is much
-		quicker.
+		If rank is known, the above
+		ga_entity_dereference_by_rank() or
+		ga_entity_dereference_by_id() functions are much
+		faster.
   parameters:
   return:
   last updated:	16/03/01
@@ -1154,78 +1204,58 @@ void ga_entity_blank(population *p, entity *entity)
 
 entity *ga_get_free_entity(population *pop)
   {
-  static int	index=0;	/* Current position in entity array. */
   int		new_max_size;	/* Increased maximum number of entities. */
   int		i;
-  int		*entity_indices;	/* Offsets within entity buffer. */
+  entity	*new;		/* Unused entity structure. */
 
 /*
   plog(LOG_DEBUG, "Locating free entity structure.");
 */
 
 /*
- * Do we have any free structures?
+ * Do we have room for any new structures?
  */
   if (pop->max_size == (pop->size+1))
-    {	/* No. */
+    {	/* No, so allocate some more space. */
     plog(LOG_VERBOSE, "No unused entities available -- allocating additional structures.");
 
-/*
- * Note that doing this offset calculation stuff may seem overly expensive, but
- * it the only available techinique that is guarenteed to be portable.
- * Memory is freed as soon as possible to reduce page faults with large populations.
- */
-    entity_indices = s_malloc(pop->max_size*sizeof(int));
-    for (i=0; i<pop->max_size; i++)
-      {
-      entity_indices[i] = pop->entity_iarray[i]-pop->entity_array;
-      }
-
-    s_free(pop->entity_iarray);
-
     new_max_size = (pop->size * 3)/2;
-    pop->entity_array = s_realloc(pop->entity_array, new_max_size*sizeof(entity));
-    pop->entity_iarray = s_malloc(new_max_size*sizeof(entity*));
-
-    for (i=0; i<pop->max_size; i++)
-      {
-      pop->entity_iarray[i] = pop->entity_array+entity_indices[i];
-      }
-
-    s_free(entity_indices);
+    pop->entity_array = s_realloc(pop->entity_array, new_max_size*sizeof(entity*));
+    pop->entity_iarray = s_realloc(pop->entity_iarray, new_max_size*sizeof(entity*));
 
     for (i=pop->max_size; i<new_max_size; i++)
       {
-      pop->entity_array[i].allocated=FALSE;
-      pop->entity_array[i].data=NULL;
-      pop->entity_array[i].fitness=GA_MIN_FITNESS;
-      pop->entity_array[i].chromosome=NULL;
+      pop->entity_array[i] = NULL;
+      pop->entity_iarray[i] = NULL;
       }
 
     pop->max_size = new_max_size;
+    pop->free_index = new_max_size-1;
     }
 
-/* Find unused entity structure */
-  while (pop->entity_array[index].allocated==TRUE)
+/* Find unused entity index. */
+  while (pop->entity_array[pop->free_index]!=NULL)
     {
-    if (index == 0) index=pop->max_size;
-    index--;
+    if (pop->free_index == 0) pop->free_index=pop->max_size;
+    pop->free_index--;
     }
 
-/* Prepare it */
-  ga_entity_setup(pop, &(pop->entity_array[index]));
+/* Prepare it. */
+  new = mem_chunk_alloc(pop->entity_chunk);
+  pop->entity_array[pop->free_index] = new;
+  ga_entity_setup(pop, new);
 
 /* Store in lowest free slot in entity_iarray */
-  pop->entity_iarray[pop->size] = &(pop->entity_array[index]);
+  pop->entity_iarray[pop->size] = new;
 
 /* Population is bigger now! */
   pop->size++;
 
 /*
-  printf("ENTITY %d ALLOCATED.\n", index);
+  printf("ENTITY %d ALLOCATED.\n", pop->free_index);
 */
 
-  return &(pop->entity_array[index]);
+  return new;
   }
 
 
@@ -1945,34 +1975,6 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 #endif
 
 
-#if 0
-/**********************************************************************
-  ga_recv_entities()
-  synopsis:	Handle immigration.
-  parameters:
-  return:
-  last updated: 08/08/00
- **********************************************************************/
-
-boolean ga_recv_entities(entity *migrant)
-  {
-  int		i;		/* Loop over all chromosomes */
-
-  /* Checks */
-  if (!migrant) die("Null pointer to entity structure passed");
-
-  /* Ensure destination structure is ready */
-  ga_entity_setup(migrant);
-
-  for (i=0; i<pop->num_chromosomes; i++)
-    {
-    }
-
-  return TRUE;
-  }
-#endif
-
-
 /**********************************************************************
   Environmental operator function.
  **********************************************************************/
@@ -2079,7 +2081,7 @@ unsigned int ga_resurect(population *pop)
   synopsis:	Purge all memory used by a population.
   parameters:
   return:
-  last updated:	12/07/00
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 boolean ga_extinction(population *extinct)
@@ -2124,12 +2126,13 @@ boolean ga_extinction(population *extinct)
     {
     for (i=0; i<extinct->max_size; i++)
       {
-      if (extinct->entity_array[i].chromosome)
+      if (extinct->entity_array[i] && extinct->entity_array[i]->chromosome)
         {
-        extinct->chromosome_destructor(extinct, &(extinct->entity_array[i]));
+        extinct->chromosome_destructor(extinct, extinct->entity_array[i]);
         }
       }
 
+    mem_chunk_destroy(extinct->entity_chunk);
     s_free(extinct->entity_array);
     s_free(extinct->entity_iarray);
     s_free(extinct);

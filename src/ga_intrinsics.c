@@ -665,15 +665,15 @@ double ga_entity_get_fitness(int *pop, int *id)
 
 /**********************************************************************
   ga_entity_isallocated()
-  synopsis:	Access entity's allocated field.
+  synopsis:	Determine whether the given entity id is used.
   parameters:
   return:
-  last updated:	22/01/01
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 int ga_entity_isallocated(int *pop, int *id)
   {
-  return ga_get_entity_from_id(ga_get_population_from_id(*pop), *id)->allocated;
+  return ga_get_entity_from_id(ga_get_population_from_id(*pop), *id) != NULL;
   }
 
 
@@ -710,7 +710,7 @@ int ga_genocide_wrapper(int *pop, int *target_size)
   synopsis:	Wrapper around ga_allele_search() for the scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	24/03/01
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 int ga_allele_search_wrapper(	int	*pop_id,
@@ -725,7 +725,7 @@ int ga_allele_search_wrapper(	int	*pop_id,
 
   pop = ga_get_population_from_id(*pop_id);
 
-  initial = &(pop->entity_array[*entity_id]);
+  initial = ga_get_entity_from_id(pop, *entity_id);
 
   final = ga_allele_search( pop,
                             *chromosomeid, *point, *min_val, *max_val,
@@ -741,7 +741,7 @@ int ga_allele_search_wrapper(	int	*pop_id,
 		scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	22/01/01
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 int ga_metropolis_wrapper(	int	*pop_id,
@@ -754,7 +754,7 @@ int ga_metropolis_wrapper(	int	*pop_id,
 
   pop = ga_get_population_from_id(*pop_id);
 
-  initial = &(pop->entity_array[*entity_id]);
+  initial = ga_get_entity_from_id(pop, *entity_id);
 
   final = ga_metropolis_mutation( pop, initial,
                          *num_iterations, *temperature );
@@ -769,7 +769,7 @@ int ga_metropolis_wrapper(	int	*pop_id,
 		for the scripted API.
   parameters:
   return:	Index of best solution found (A new entity).
-  last updated:	22/01/01
+  last updated:	18 Mar 2002
  **********************************************************************/
 
 int ga_sa_wrapper(	int	*pop_id,
@@ -783,7 +783,7 @@ int ga_sa_wrapper(	int	*pop_id,
 
   pop = ga_get_population_from_id(*pop_id);
 
-  initial = &(pop->entity_array[*entity_id]);
+  initial = ga_get_entity_from_id(pop, *entity_id);
 
   final = ga_simulated_annealling_mutation( pop, initial,
                          *num_iterations, *initial_temperature, *final_temperature );
@@ -829,7 +829,7 @@ int ga_nahc_wrapper(	int	*pop_id,
 
   pop = ga_get_population_from_id(*pop_id);
 
-  initial = &(pop->entity_array[*entity_id]);
+  initial = ga_get_entity_from_id(pop, *entity_id);
 
   final = ga_next_ascent_hill_climbing( pop, initial,
                                         *num_iterations,
@@ -857,7 +857,7 @@ int ga_rmhc_wrapper(	int	*pop_id,
 
   pop = ga_get_population_from_id(*pop_id);
 
-  initial = &(pop->entity_array[*entity_id]);
+  initial = ga_get_entity_from_id(pop, *entity_id);
 
   final = ga_random_mutation_hill_climbing( pop, initial,
                                             *num_iterations );

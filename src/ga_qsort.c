@@ -295,8 +295,8 @@ boolean ga_qsort_test(void)
 /* Randomly assigned fitnesses */
   for (i=0; i<50000; i++)
     {
-    pop->entity_array[i].fitness=(double) rand()/RAND_MAX;
-    pop->entity_iarray[i]=&(pop->entity_array[i]);
+    pop->entity_array[i]->fitness=(double) rand()/RAND_MAX;
+    pop->entity_iarray[i]=pop->entity_array[i];
     }
   pop->size=50000;
 

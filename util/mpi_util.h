@@ -27,7 +27,8 @@
   Synopsis:	Header file for some abstract message passing functions
 		using the MPI API.
 
-  Updated:	30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
+  Updated:	15 Mar 2002 SAA	Moved parallel-aware die()/dief() macros to here from SAA_header.h
+		30 Jan 2002 SAA	Removed residual HelGA stuff.  mpi_datatype is not enum now.
 		23 Jan 2002 SAA Removed all checkpointing support since that didn't work anyway.  Removed residual traces of population sending code.
 		02/02/01 SAA	Converted from helga_mpi.h to mpi_util.h
 		11/01/01 SAA	SAA_header.h includes the parallel library header files as necessary.
@@ -94,6 +95,39 @@ typedef size_t mpi_datatype;
 
 #endif
 #endif
+#endif
+
+/*
+ * Improved (parallel-aware) macros.
+ */
+#if PARALLEL==2
+# undef die
+# undef dief
+# define die(X)          {					\
+			int flubberrank;			\
+			mpi_get_rank(&flubberrank);		\
+                        printf(							\
+		"FATAL ERROR: (process %d) %s\nin %s at \"%s\" line %d\n",	\
+				flubberrank,				\
+				(X),					\
+                               __PRETTY_FUNCTION__,			\
+                               __FILE__,				\
+                               __LINE__);				\
+                        mpi_abort(127);			\
+			fflush(NULL);					\
+                        }
+# define dief(format, args...)	{				\
+			int flubberrank;			\
+			mpi_get_rank(&flubberrank);		\
+			printf("FATAL ERROR: (process %d) ", flubberrank);	\
+			printf(format, ##args);			\
+			printf("\nin %s at \"%s\" line %d\n",	\
+			__PRETTY_FUNCTION__,			\
+			__FILE__,				\
+			__LINE__);				\
+			fflush(NULL);				\
+                        mpi_abort(127);				\
+			}
 #endif
 
 /*

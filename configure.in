@@ -43,7 +43,7 @@ dnl are available for $ac_help expansion.
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1837
-PATCH_VERSION=3
+PATCH_VERSION=4
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
 AC_DIVERT_POP()
 
@@ -51,6 +51,7 @@ AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(PATCH_VERSION)
 AC_SUBST(VERSION)
+AC_SUBST(MPICC)
 AC_SUBST(MPIFLAGS)
 
 # libtool versioning
@@ -225,15 +226,27 @@ else
   AC_MSG_RESULT(no)
 fi
 
-dnl Check for MPI versions.
-dnl FIXME: Need to think about how to handle MPI sensibly.  This
-dnl is currently nothing more than a kludge!
-# For LAM on chemcca0 / desktop.
-MPIFLAGS="-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
-# For MPICH on chemcca40.
-#MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -L/usr/share/mpi/lib -lmpich"
-# For non-MPI machines.
-#MPIFLAGS=""
+#dnl Check for MPI versions.
+#dnl FIXME: Need to think about how to handle MPI sensibly.  This
+#dnl is currently nothing more than a kludge!
+## For LAM on chemcca0 / desktop.
+#MPIFLAGS="-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
+## For MPICH on chemcca40.
+##MPIFLAGS="-DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 -DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -L/usr/share/mpi/lib -lmpich"
+## For non-MPI machines.
+##MPIFLAGS=""
+
+dnl Setup MPI compilation
+AC_MSG_CHECKING(how to compile MPI code)
+if test "x$enable_mpi" = "xyes"; then
+  MPICC="mpicc"
+  MPIFLAGS=""
+  AC_MSG_RESULT(mpicc)
+else
+  MPICC="echo"
+  MPIFLAGS="> /dev/null"
+  AC_MSG_RESULT(skip)
+fi
 
 dnl Electric Fence has to be last library linked.
 AC_MSG_CHECKING(whether to link Electric Fence for memory debugging)
