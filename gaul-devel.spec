@@ -29,8 +29,8 @@
 %define PATCH			2
 %define prefix			/usr/local/
 
-Summary:	Genetic Algorithm Utility Library
 Name:		gaul-devel
+Summary:	Genetic Algorithm Utility Library
 Version:	%{PACKAGE_VERSION}
 Release:	%{RELEASE}
 Copyright:	(c) 2000-2002 Stewart Adcock.  Licensed under the terms of the GPL.
@@ -62,6 +62,9 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-, root, root)
+%{_bindir}/*
+%{_libdir}/*
+%{_includedir}/*
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
