@@ -13544,87 +13544,133 @@ _EOF_
     cat >> $tmpfile << _EOF_
 
 /*
- * Explicitely tested functions for this platform:
+ * Explicitly tested functions for this platform:
  */
 
 _EOF_
 
     if test "x$ac_cv_func_memcpy" = "xyes"; then
       echo '#define HAVE_MEMCPY 1' >> $tmpfile
+    else
+      echo '#define HAVE_MEMCPY 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_memmove" = "xyes"; then
       echo '#define HAVE_MEMMOVE 1' >> $tmpfile
+    else
+      echo '#define HAVE_MEMMOVE 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_min" = "xyes"; then
       echo '#define HAVE_MIN 1' >> $tmpfile
+    else
+      echo '#define HAVE_MIN 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_max" = "xyes"; then
       echo '#define HAVE_MAX 1' >> $tmpfile
+    else
+      echo '#define HAVE_MAX 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_sincos" = "xyes"; then
       echo '#define HAVE_SINCOS 1' >> $tmpfile
+    else
+      echo '#define HAVE_SINCOS 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strdup" = "xyes"; then
       echo '#define HAVE_STRDUP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRDUP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strndup" = "xyes"; then
       echo '#define HAVE_STRNDUP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRNDUP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcpy" = "xyes"; then
       echo '#define HAVE_STRCPY 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRCPY 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncpy" = "xyes"; then
       echo '#define HAVE_STRNCPY 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRNCPY 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcmp" = "xyes"; then
       echo '#define HAVE_STRCMP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRCMP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncmp" = "xyes"; then
       echo '#define HAVE_STRNCMP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRNCMP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcasecmp" = "xyes"; then
       echo '#define HAVE_STRCASECMP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRCASECMP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncasecmp" = "xyes"; then
       echo '#define HAVE_STRNCASECMP 1' >> $tmpfile
+    else
+      echo '#define HAVE_STRNCASECMP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_usleep" = "xyes"; then
       echo '#define HAVE_USLEEP 1' >> $tmpfile
+    else
+      echo '#define HAVE_USLEEP 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_snooze" = "xyes"; then
       echo '#define HAVE_SNOOZE 1' >> $tmpfile
+    else
+      echo '#define HAVE_SNOOZE 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_index" = "xyes"; then
       echo '#define HAVE_INDEX 1' >> $tmpfile
+    else
+      echo '#define HAVE_INDEX 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_rindex" = "xyes"; then
       echo '#define HAVE_RINDEX 1' >> $tmpfile
+    else
+      echo '#define HAVE_RINDEX 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_waitpid" = "xyes"; then
       echo '#define HAVE_WAITPID 1' >> $tmpfile
+    else
+      echo '#define HAVE_WAITPID 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_readline" = "xyes"; then
       echo '#define HAVE_READLINE 1' >> $tmpfile
+    else
+      echo '#define HAVE_READLINE 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_gettimeofday" = "xyes"; then
       echo '#define HAVE_GETTIMEOFDAY 1' >> $tmpfile
+    else
+      echo '#define HAVE_GETTIMEOFDAY 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_gethostname" = "xyes"; then
       echo '#define HAVE_GETHOSTNAME 1' >> $tmpfile
+    else
+      echo '#define HAVE_GETHOSTNAME 0' >> $tmpfile
     fi
     if test "x$ac_cv_func_basename" = "xyes"; then
       echo '#define HAVE_BASENAME 1' >> $tmpfile
+    else
+      echo '#define HAVE_BASENAME 0' >> $tmpfile
     fi
 
     if test "x$MEMORY_CHUNKS_MIMIC" = "x1"; then
       echo '#define MEMORY_CHUNKS_MIMIC 1' >> $tmpfile
+    else
+      echo '#define MEMORY_CHUNKS_MIMIC 0' >> $tmpfile
     fi
 
     cat >> $tmpfile << _EOF_
 
 /*
  * These functions were not explicitely tested.
- * The probably will be tested in futre versions, but
+ * The probably will be tested in future versions, but
  * for now they are not needed.
  */
 #define HAVE_FDOPEN 1

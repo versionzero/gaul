@@ -523,7 +523,7 @@ population *ga_population_clone_empty(population *pop)
     {
     newpop->sampling_params = NULL;
 
-    plog(LOG_FIXME, "Probabilistic sampling paramters not copied.");
+    plog(LOG_FIXME, "Probabilistic sampling parameters not copied.");
     }
 
 /*
@@ -1189,7 +1189,7 @@ entity *ga_get_entity_from_id(population *pop, const unsigned int id)
   {
   if ( !pop ) die("Null pointer to population structure passed.");
 
-  if (id>pop->max_size) return NULL;
+  if ( id>pop->max_size ) return NULL;
 
   return pop->entity_array[id];
   }
@@ -1201,14 +1201,17 @@ entity *ga_get_entity_from_id(population *pop, const unsigned int id)
 		(subscript into the entity_iarray buffer).
 		Note that this only relates to fitness ranking if
 		the population has been properly sorted.
-		FIXME: Add some error checking.
   parameters:
   return:
-  last updated: 22/01/01
+  last updated: 29 Apr 2004
  **********************************************************************/
 
 entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
   {
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  if ( rank>pop->size ) return NULL;
+
   return pop->entity_iarray[rank];
   }
 

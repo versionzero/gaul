@@ -68,11 +68,13 @@ extern int errno;
 #define HAVE__BOOL 1
 
 /*
- * Explicitely tested functions for this platform:
+ * Explicitly tested functions for this platform:
  */
 
 #define HAVE_MEMCPY 1
 #define HAVE_MEMMOVE 1
+#define HAVE_MIN 0
+#define HAVE_MAX 0
 #define HAVE_SINCOS 1
 #define HAVE_STRDUP 1
 #define HAVE_STRNDUP 1
@@ -83,14 +85,19 @@ extern int errno;
 #define HAVE_STRCASECMP 1
 #define HAVE_STRNCASECMP 1
 #define HAVE_USLEEP 1
+#define HAVE_SNOOZE 0
 #define HAVE_INDEX 1
 #define HAVE_RINDEX 1
 #define HAVE_WAITPID 1
+#define HAVE_READLINE 0
+#define HAVE_GETTIMEOFDAY 0
 #define HAVE_GETHOSTNAME 1
+#define HAVE_BASENAME 0
+#define MEMORY_CHUNKS_MIMIC 0
 
 /*
  * These functions were not explicitely tested.
- * The probably will be tested in futre versions, but
+ * The probably will be tested in future versions, but
  * for now they are not needed.
  */
 #define HAVE_FDOPEN 1
