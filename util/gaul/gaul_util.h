@@ -153,7 +153,10 @@ typedef void* vpointer;
 #endif
 
 typedef const void *constvpointer;
+/* byte is already defined on win32 systems. */
+#ifndef byte
 typedef unsigned char byte;
+#endif
 
 #ifdef BITSPERBYTE
 # define BYTEBITS	BITSPERBYTE
@@ -184,9 +187,7 @@ typedef unsigned char byte;
 #ifndef NULL
 #define NULL		((void*)0)
 #endif
-#define VOID		((void)0)
 #define NULL_CHAR	('\0')
-#define ERROR           (-5)
 #define OKAY		2
 #define TINY            (1.0e-8)
 #define ONE_MINUS_TINY  (1.0 - TINY)
@@ -198,6 +199,13 @@ typedef unsigned char byte;
 #define IsApproxZero(x) (fabs(x)<=ApproxZero)
 #define RAD2DEG		57.2957795128		/* 180.0/PI */
 #define DEG2RAD		0.01745329252		/* PI/180.0 */
+/* VOID and ERROR are already defined on win32 systems. */
+#ifndef VOID
+#define VOID		((void)0)
+#endif
+#ifndef ERROR
+#define ERROR           (-5)
+#endif
 
 /*
  * Useful macros

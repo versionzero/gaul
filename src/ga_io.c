@@ -143,7 +143,8 @@ static void gaul_write_entity_win32(HANDLE file,
   {
   byte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
   unsigned int	len, max_len=0;		/* Length of buffer. */
-  byte		**bufptr;		/* Pointer into buffer. */
+  byte		*bufptr;		/* Pointer into buffer. */
+  DWORD		nwrote;			/* Number of bytes written. */
 
   memcpy(buffer, &(entity->fitness), sizeof(double));
   bufptr = buffer+sizeof(double)+sizeof(int);
@@ -206,21 +207,22 @@ static entity *gaul_read_entity_win32(HANDLE file, population *pop)
   byte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
   unsigned int	len;		/* Length of buffer. */
   entity	*entity;	/* New entity read from disk. */
+  DWORD		nread;		/* Number of bytes read. */
 
   entity = ga_get_free_entity(pop);
 
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
-    die("Unable to read data.  Error %d\n", GetLastError());
+    dief("Unable to read data.  Error %d\n", GetLastError());
 
   memcpy(&(entity->fitness), buffer, sizeof(double));
 
   if (!ReadFile(file, buffer, sizeof(unsigned int), &nread, NULL) || nread < 1)
-    die("Unable to read data.  Error %d\n", GetLastError());
+    dief("Unable to read data.  Error %d\n", GetLastError());
 
   memcpy(&len, sizeof(unsigned int), sizeof(unsigned int));
 
   if (!ReadFile(file, buffer, len*sizeof(byte), &nread, NULL) || nread < 1)
-    die("Unable to read data.  Error %d\n", GetLastError());
+    dief("Unable to read data.  Error %d\n", GetLastError());
 
   pop->chromosome_from_bytes(pop, entity, buffer);
 
@@ -367,6 +369,7 @@ boolean ga_population_write(population *pop, char *fname)
   int		id[18];			/* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
   char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
+  DWORD		nwrote;			/* Number of bytes written. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -475,7 +478,7 @@ boolean ga_population_write(population *pop, char *fname)
  */
   for (i=0; i<pop->size; i++)
     {
-    gaul_write_entity_posix(fp, pop, pop->entity_iarray[i]);
+    gaul_write_entity_win32(file, pop, pop->entity_iarray[i]);
     }
 
 /*
@@ -644,6 +647,7 @@ population *ga_population_read(char *fname)
   int		count=0;		/* Number of unrecognised hook functions. */
   char		*format_str="FORMAT: GAUL POPULATION 002";	/* Format tag. */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
+  DWORD		nread;			/* Number of bytes read. */
 
 /* Checks. */
   if ( !fname ) die("Null pointer to filename passed.");
@@ -660,17 +664,17 @@ population *ga_population_read(char *fname)
  * Program info.
  */
   if (!ReadFile(file, buffer, strlen(format_str), &nread, NULL) || nread != strlen(format_str))
-    die("Unable to read data.  Error %d\n", GetLastError());
+    dief("Unable to read data.  Error %d\n", GetLastError());
 
   if (strncmp(format_str, buffer, strlen(format_str))!=0)
     {
-    fclose(fp);
+    CloseHandle(file);
     die("Invalid file format");
     }
 
   /* Presently ignored. */
   if (!ReadFile(file, buffer, 64*sizeof(char), &nread, NULL) || nread > 0)
-    die("Unable to read data.  Error %d\n", GetLastError());
+    dief("Unable to read data.  Error %d\n", GetLastError());
 
 /*
  * Population info.
@@ -821,6 +825,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
   char		buffer[BUFFER_SIZE];	/* String buffer. */
   char		*format_str="FORMAT: GAUL ENTITY 001";	/* Format tag. */
   HANDLE	file;			/* Filehandle. */
+  DWORD		nwrote;			/* Number of bytes written. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -922,8 +927,8 @@ entity *ga_entity_read(population *pop, char *fname)
   char		*format_str="FORMAT: GAUL ENTITY 001";	/* Format tag. */
   char		format_str_in[32];	/* Input format tag. */
   HANDLE	file;			/* Filehandle. */
-  DWORD		nread;			/* Size of input. */
   entity	*entity;		/* Input entity. */
+  DWORD		nread;			/* Number of bytes read. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -951,7 +956,7 @@ entity *ga_entity_read(population *pop, char *fname)
 
   entity = gaul_read_entity_win32(file, pop);
 
-  if (!ReadFile(fileIn, buffer, 4, &nread, NULL) && nread < 1)
+  if (!ReadFile(file, buffer, 4, &nread, NULL) && nread < 1)
     dief("Unable to open entity file \"%s\" for input due to error %d.",
          fname, GetLastError());
 
