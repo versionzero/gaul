@@ -34,7 +34,7 @@
 		of function f(x)=x^10, normalized to the range [0,1].
 
 		FIXME: This code is derived from the description
-		of the problem in Gallops, I need to aquire the
+		of the problem in Gallops, I need to acquire the
 		goldberg book and check this.
 
  **********************************************************************/
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 
     random_seed(i);
 
-    pop = ga_genesis_integer(
+    pop = ga_genesis_boolean(
        20,			/* const int              population_size */
        1,			/* const int              num_chromo */
        10,			/* const int              len_chromo */
@@ -148,13 +148,13 @@ NULL, /*goldberg1_ga_callback,*/	/* GAgeneration_hook      generation_hook */
 
     ga_evolution(
        pop,		/* population              *pop */
-       20		/* const int               max_generations */
+       50		/* const int               max_generations */
               );
 
     goldberg1_ga_callback(i, pop);
 
     printf("The final solution with seed = %d was:\n", i);
-    beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
+    beststring = ga_chromosome_boolean_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
     printf("%s\n", beststring);
     printf("With score = %f\n", ga_get_entity_from_rank(pop,0)->fitness);
     }
