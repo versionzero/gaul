@@ -22,6 +22,7 @@ Changes since release 0.1846:
 - Added two new selection criteria, based on Stochastic Universal Sampling; ga_select_one_sussq() and ga_select_two_sussq().  These select entities with probability proportional to their squared fitness.
 - *** API CHANGE *** ga_genesis_int() renamed to ga_genesis_integer() for consistency with remainder of integer function names.
 - *** API CHANGE *** Initial step size for simplex added to ga_population_set_simplex_parameters() parameters.
+- Fixed long-standing memory chunk bug exhibited on Solaris, IRIX, HP/UX and possibly other (64-bit) OSes.
 
 Changes since release 0.1845:
 - Use ISO C99 style variadic argument macros instead of GCC extension style variadic argument macros.

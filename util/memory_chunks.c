@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -34,10 +34,10 @@
 		This is thread safe.
 
 		Define MEMORY_CHUNKS_MIMIC to allow your favourite
-		memory debugger to function properly.  Defining
-		MEMORY_CHUNKS_MIMIC will cause a number of memory
-		leaks if you rely on mem_chunk_clean(),
-	       	mem_chunk_reset() or mem_chunk_free() to implicitely
+		memory debugger to function properly.  However, note
+		that by defining MEMORY_CHUNKS_MIMIC a number of memory
+		leaks will occur if you rely on mem_chunk_clean(),
+	       	mem_chunk_reset() or mem_chunk_free() to implicitly
 	       	deallocate all memory atoms (which would normally be
 		a valid thing to do).
  
@@ -79,31 +79,25 @@ typedef struct FreeAtom_t
 
 typedef struct MemArea_t
   {
-  struct MemArea_t *next;	/* the next mem area */
-  struct MemArea_t *prev;	/* the previous mem area */
-  size_t	index;		/* the current index into the "mem" array */
-  size_t	free;		/* the number of free bytes in this mem area */
-  unsigned int	used;		/* the number of atoms allocated from this area */
-  unsigned char	mem[MEMORY_AREA_SIZE];  /* the mem array from which atoms get allocated
-			      * the actual size of this array is determined by
-			      *  the mem chunk "area_size". ANSI says that it
-			      *  must be declared to be the maximum size it
-			      *  can possibly be (even though the actual size
-			      *  will, almost certianly, be less).
-			      */
+  struct MemArea_t *next;	/* The next memory area */
+  struct MemArea_t *prev;	/* The previous memory area */
+  size_t	index;		/* The current index into the "mem" array */
+  size_t	free;		/* The number of free bytes in this memory area */
+  unsigned int	used;		/* The number of atoms allocated from this area */
+  unsigned char	*mem;		/* The mem array from which atoms get allocated. */
   } MemArea;
 
 struct MemChunk_t
   {
-  unsigned int	num_mem_areas;		/* the total number of memory areas */
-  unsigned int	num_unused_areas;	/* the number of areas that may be deallocated */
-  size_t	atom_size;		/* the size of an atom (used in mimic routines) */
-  size_t	area_size;		/* the size of a memory area */
-  MemArea	*mem_area;		/* the current memory area */
-  MemArea	*mem_areas;		/* a list of all the mem areas owned by this chunk */
-  MemArea	*free_mem_area;		/* the free area...which is about to be destroyed */
-  FreeAtom	*free_atoms;		/* the free atoms list */
-  tree_t	*mem_tree;		/* tree of mem areas sorted by memory address */
+  unsigned int	num_mem_areas;		/* The total number of memory areas */
+  unsigned int	num_unused_areas;	/* The number of areas that may be deallocated */
+  size_t	atom_size;		/* The size of an atom (used in mimic routines) */
+  size_t	area_size;		/* The size of a memory area */
+  MemArea	*mem_area;		/* The current memory area */
+  MemArea	*mem_areas;		/* A list of all the memory areas owned by this chunk */
+  MemArea	*free_mem_area;		/* Free area... which is about to be destroyed */
+  FreeAtom	*free_atoms;		/* Free atoms list */
+  tree_t	*mem_tree;		/* Tree of memory areas sorted by memory address */
   long		num_atoms_alloc;	/* The number of allocated atoms (only used in mimic routines) */
   };
 
@@ -212,6 +206,8 @@ static node_t *node_new(Key_t key, void *data)
         }
 
       node_buffers[buffer_num] = malloc(sizeof(node_t)*_NODE_BUFFER_SIZE);
+
+      if (!node_buffers[buffer_num]) die("Unable to allocate memory.");
 
       node = node_buffers[buffer_num];
       num_used = 1;
@@ -555,7 +551,8 @@ static tree_t *tree_new(void)
 
   num_trees++;
 
-  if (!(tree = malloc(sizeof(tree_t))) ) die("Unable to allocate memory.");
+  if (!(tree = malloc(sizeof(tree_t))) )
+    die("Unable to allocate memory.");
 
   tree->root = NULL;
 
@@ -670,6 +667,7 @@ static int check_pad_high(MemChunk *mem_chunk, void *mem)
 
 boolean mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk)
   {
+
   return mem_chunk->mem_tree?TRUE:FALSE;
   }
 
@@ -683,7 +681,7 @@ static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
  * This also ensures that the minimum atom_size is okay for the
  * FreeAtom list.
  */
-  if (atom_size % MEMORY_ALIGN_SIZE)
+  if (atom_size % MEMORY_ALIGN_SIZE > 0)
     {
     atom_size += MEMORY_ALIGN_SIZE - (atom_size % MEMORY_ALIGN_SIZE);
     printf("DEBUG: modified MemChunk atom size.\n");
@@ -755,7 +753,7 @@ void mem_chunk_destroy_real(MemChunk *mem_chunk)
   {
   MemArea *mem_areas;
   MemArea *temp_area;
-  
+
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
   mem_areas = mem_chunk->mem_areas;
@@ -799,11 +797,11 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
        *  reference this area have been removed. This occurs when
        *  the ammount of free memory is less than the allocatable size.
        * If the chunk should be freed, then we place it in the "free_mem_area".
-       * This is so we make sure not to free the mem area here and then
+       * This is so we make sure not to free the memory area here and then
        *  allocate it again a few lines down.
        * If we don't allocate a chunk a few lines down then the "free_mem_area"
        *  will be freed.
-       * If there is already a "free_mem_area" then we'll just free this mem area.
+       * If there is already a "free_mem_area" then we'll just free this memory area.
        */
       if (temp_area->used==0)
         {
@@ -861,9 +859,9 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
         }
     }
 
-  /* If there isn't a current mem area or the current mem area is out of space
-   *  then allocate a new mem area. We'll first check and see if we can use
-   *  the "free_mem_area". Otherwise we'll just malloc the mem area.
+  /* If there isn't a current memory area or the current memory area is out of
+   * space then allocate a new memory area. We'll first check and see if we can
+   * use the "free_mem_area".  Otherwise we'll just malloc the memory area.
    */
   if ((!mem_chunk->mem_area) ||
       ((mem_chunk->mem_area->index + mem_chunk->atom_size) > mem_chunk->area_size))
@@ -875,9 +873,14 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
         }
       else
         {
-          mem_chunk->mem_area = (MemArea*) malloc(sizeof(MemArea) -
-                                                       MEMORY_AREA_SIZE +
-                                                       mem_chunk->area_size);
+          mem_chunk->mem_area = (MemArea*) malloc(sizeof(MemArea)+
+                                                  MEMORY_ALIGN_SIZE-(sizeof(MemArea)%MEMORY_ALIGN_SIZE)+
+                                                  mem_chunk->area_size);
+          mem_chunk->mem_area->mem = (unsigned char*) (mem_chunk->mem_area+
+                                                       sizeof(MemArea)+
+                                                       MEMORY_ALIGN_SIZE-(sizeof(MemArea)%MEMORY_ALIGN_SIZE));
+
+          if (!mem_chunk->mem_area) die("Unable to allocate memory.");
 
           mem_chunk->num_mem_areas++;
           mem_chunk->mem_area->next = mem_chunk->mem_areas;
@@ -899,7 +902,7 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
 /*
  * Get the memory and modify the state variables appropriately.
  */
-  mem = (vpointer) &mem_chunk->mem_area->mem[mem_chunk->mem_area->index];
+  mem = (vpointer) &(mem_chunk->mem_area->mem[mem_chunk->mem_area->index]);
   mem_chunk->mem_area->index += mem_chunk->atom_size;
   mem_chunk->mem_area->free -= mem_chunk->atom_size;
   mem_chunk->mem_area->used++;
@@ -979,8 +982,7 @@ void mem_chunk_clean_real(MemChunk *mem_chunk)
       if (!(mem_area = ordered_search(mem_chunk->mem_tree, mem)) ) die("mem_area not found.");
 
 /*
- * If this mem area is unused then delete the
- *  area and list node and decrement the free mem.
+ * If this memory area is unused, delete the area, list node and decrement the free mem.
  */
       if (mem_area->used==0)
         {

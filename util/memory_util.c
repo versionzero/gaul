@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -38,19 +38,18 @@
 		replaces the standard malloc routines, transparently.
 
 		Has an easy-to-use memory chunk implementation.
+		(see memory_chunk.c)
 		Chunks are created/destroyed using
 		mem_chunk_new() and mem_chunk_destroy().
 		Individual atoms are created/destroyed using
 		mem_chunk_alloc() and mem_chunk_free().
-		This may be disabled by defining MEMORY_NO_CHUNKS at
-		compile time.
 
 		Compile the code with MEMORY_ALLOC_SAFE for simple
 		wrappers around the standard system allocation memory
 		routines.  Compile with MEMORY_ALLOC_DEBUG for fully
 		auditing wrappers.  Compile with neither for the
 		standard routines only.  When MEMORY_ALLOC_DEBUG is
-		defined or MEMORY_NO_CHUNKS is not defined, my AVL
+		defined or MEMORY_CHUNKS_MIMIC is not defined, my AVL
 		tree implementation is required.
 
 		The tree lookup key (AVLKey) must be capable of
@@ -97,15 +96,6 @@
 #include "gaul/memory_util.h"
 
 /*
- * Integrated chunk handling implementation.
- */
-#if 0
-#if !defined(MEMORY_NO_CHUNKS)
-#include "memory_chunks.c"
-#endif
-#endif
-
-/*
  * The memory table structure.
  */
 typedef struct mem_record_t
@@ -130,9 +120,6 @@ typedef struct mem_record_t
 
 THREAD_LOCK_DEFINE_STATIC(memory_mem_record_chunk);
 THREAD_LOCK_DEFINE_STATIC(memory_memtree);
-/*
-THREAD_LOCK_DEFINE_STATIC(memory_global);
-*/
 
 static MemChunk *mem_record_chunk=NULL;	/* the memory record buffer. */
 static AVLTree	*memtree=NULL;		/* the global memory allocation tree. */
