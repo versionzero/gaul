@@ -106,8 +106,9 @@
 #include "ga_randomsearch.h"
 #include "ga_sa.h"
 #include "ga_similarity.h"
-#include "ga_tabu.h"
+#include "ga_systematicsearch.h"
 #include "ga_simplex.h"
+#include "ga_tabu.h"
 
 /*
  * Compilation constants.
@@ -185,6 +186,14 @@ typedef struct
   GAto_double	to_double;	/* Convert chromosome to double array. */
   GAfrom_double	from_double;	/* Convert chromosome from double array. */
   } ga_simplex_t;
+
+/*
+ * Search parameter structure.
+ */
+typedef struct
+  {
+  GAscan_chromosome	scan_chromosome;	/* Allele searching function. */
+  } ga_search_t;
 
 /*
  * Population Structure.
@@ -345,6 +354,10 @@ population *ga_transcend(unsigned int id);
 unsigned int ga_resurect(population *pop);
 boolean ga_extinction(population *extinct);
 boolean ga_genocide(population *pop, int target_size);
+boolean ga_population_set_data(population *pop, vpointer data);
+vpointer ga_population_get_data(population *pop);
+boolean ga_entity_set_data(population *pop, entity *e, vpointer data);
+vpointer ga_entity_get_data(population *pop, entity *e);
 
 
 boolean ga_select_one_random(population *pop, entity **mother);

@@ -287,6 +287,7 @@ population *ga_population_new(	const int stable_size,
   newpop->sa_params = NULL;
   newpop->climbing_params = NULL;
   newpop->simplex_params = NULL;
+  newpop->search_params = NULL;
   
 /*
  * Clean the callback functions.
@@ -2994,6 +2995,79 @@ boolean ga_population_set_stablesize(population *pop, int stable_size)
   pop->stable_size = stable_size;
 
   return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_set_data()
+  synopsis:	Sets the population's user data.
+  parameters:
+  return:
+  last updated: 08 Nov 2002
+ **********************************************************************/
+
+boolean ga_population_set_data(population *pop, vpointer data)
+  {
+  if (!pop) return FALSE;
+
+  pop->data = data;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_population_get_data()
+  synopsis:	Gets the population's user data.
+  parameters:
+  return:
+  last updated: 08 Nov 2002
+ **********************************************************************/
+
+vpointer ga_population_get_data(population *pop)
+  {
+  if (!pop) return FALSE;
+
+  return pop->data;
+  }
+
+
+/**********************************************************************
+  ga_entity_set_data()
+  synopsis:	Sets the entity's user data.
+  parameters:
+  return:
+  last updated: 08 Nov 2002
+ **********************************************************************/
+
+boolean ga_entity_set_data(population *pop, entity *e, vpointer data)
+  {
+  if (!pop) return FALSE;
+  if (!e) return FALSE;
+
+  if (e->data && pop->data_destructor)
+    pop->data_destructor(pop, e);
+
+  e->data = data;
+
+  return TRUE;
+  }
+
+
+/**********************************************************************
+  ga_entity_get_data()
+  synopsis:	Gets the entity's user data.
+  parameters:
+  return:
+  last updated: 08 Nov 2002
+ **********************************************************************/
+
+vpointer ga_entity_get_data(population *pop, entity *e)
+  {
+  if (!pop) return FALSE;
+  if (!e) return FALSE;
+
+  return e->data;
   }
 
 
