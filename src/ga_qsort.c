@@ -370,7 +370,7 @@ boolean ga_qsort_test(void)
 */
 
 #if GA_QSORT_COMPILE_MAIN
-  exit(OKAY);
+  exit(EXIT_SUCCESS);
 #else
   return TRUE;
 #endif
