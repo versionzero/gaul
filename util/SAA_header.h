@@ -11,7 +11,7 @@
   This program is free software; you can redistribute it and/or modify
   it either under the terms of version 2 of the GNU General Public
   License as published by the Free Software Foundation, or (at your
-  option) any license approved by the Open Source Initiative.
+  option) any other license approved by the Open Source Initiative.
 
   This program is distributed in the hope that it will be useful, but
   WITHOUT ANY WARRANTY WHATSOEVER.
