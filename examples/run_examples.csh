@@ -61,9 +61,9 @@ setenv WKDIR /tmp/gaul-tests/${unique}
 mkdir -p $WKDIR >& /dev/null
 cd $WKDIR
 
-if (-e examples.log ) rm -f examples.log
+#if (-e examples.log ) rm -f examples.log
 
-echo ">>> Running GAUL example programs."
+echo ">>> Running GAUL example programs." >! examples.log
 foreach f ( diagnostics struggle struggle2 struggle3 struggle4 struggle5 struggle_ss royalroad goldberg1 goldberg2 pingpong nnevolve wildfire )
   echo ">> Running ${f}" >>& examples.log
   time $GAUL_TEST_DIR/$f >>& examples.log
