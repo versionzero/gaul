@@ -34,7 +34,7 @@
 		(c) Enables saving and restoring state.
 
 		SLang intrinsic function wrappers are provided if the
-		HAVE_SLANG constant is set to 1.
+		HELGA_USE_SLANG constant is set to 1.
 
 		The algorithm I selected is the Mitchell and Moore
 		variant of the standard additive number generator.
@@ -68,7 +68,7 @@
 		something like:
 		gcc -o testrand random_util.c -DRANDOM_UTIL_TEST
 
-  Updated:	05/06/01 SAA	Removed last remaining Helga stuff.
+  Updated:	12/06/01 SAA	Added chi squared test to random_test().
 		30/04/01 SAA	Added random_cauchy() and random_exponential().  Removed calls to plog() so that  these functions may be used in a stand alone fashion.
 		21/02/01 SAA	Added double random_double_1() for convenience.
 		02/02/01 SAA	Converted from helga_random to random_util.
@@ -605,14 +605,21 @@ void random_diagnostics(void)
 
 #define NUM_BINS 200
 #define NUM_SAMPLES 1000000
+#define NUM_CHISQ 20
 
 boolean random_test(void)
   {
-  int		i;			/* Loop variable. */
+  int		i, j, k;		/* Loop variables. */
   double	r;			/* Pseudo-random number. */
   long		bins[NUM_BINS];		/* Bin. */
   double	sum=0,sumsq=0;		/* Stats. */
   int		numtrue=0, numfalse=0;	/* Count booleans. */
+  int		rchi=100;		/* Number of bins in chisq test. */
+  int		nchi=1000;		/* Number of samples in chisq test. */
+  double	chisq;			/* Chisq error. */
+  double	elimit = 2*sqrt((double)rchi);	/* Chisq error limit. */
+  double	nchi_rchi = (double)nchi / (double)rchi;	/* Speed calculation. */
+  FILE		*rfile=NULL;		/* Handle for file of random integers. */
 
   random_init();
 
@@ -732,6 +739,45 @@ boolean random_test(void)
   for (i=0;i<NUM_BINS;i++)
     printf("%d %ld\n", i, bins[i]);
 
+/*
+ * Chi squared test.  This is the standard basic test for randomness of a PRNG.
+ * We would expect any moethod to fail about about one out of ten runs.
+ * The error is r*t/N - N and should be within 2*sqrt(r) of r.
+ */
+
+  printf("Chi Squared Test of Random Integers.  We would expect a couple of failures.\n");
+
+  if (rchi>NUM_BINS) die("Internal error: too few bins.");
+
+  for (j=0;j<NUM_CHISQ;j++)
+    {
+    printf("Run %d. chisq should be within %f of %d.\n", j, elimit, rchi);
+    for(k=0; k<10; k++)
+      {
+      memset(bins, 0, rchi*sizeof(long));
+      chisq = 0.0;
+
+      for(i=0; i<nchi; i++)
+        bins[random_int(rchi)]++;
+
+      for(i=0; i<rchi; i++)
+        chisq += SQU((double)bins[i] - nchi_rchi);
+
+      chisq /= nchi_rchi;
+
+      printf("chisq = %f - %s\n", chisq, fabs(chisq - rchi)>elimit?"FAILED":"PASSED");
+      }
+    }
+
+  printf("Creating file (\"randtest.dat\") of 10000 random integer numbers for external analysis.\n");
+
+  rfile = fopen("randtest.dat", "w");
+
+  for (i=0; i<10000; i++)
+    fprintf(rfile, "%d %d\n", i, random_rand());
+
+  fclose(rfile);
+
   return TRUE;
   }
 
@@ -741,7 +787,7 @@ boolean random_test(void)
 
   FIXME: Problem with unsigned vs. signed ints.
  **********************************************************************/
-#if HAVE_SLANG==1
+#if HELGA_USE_SLANG==1
 
 /* These function don't need wrappers:
 void random_tseed(void)

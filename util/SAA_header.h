@@ -24,7 +24,8 @@
 
  **********************************************************************
 
-  Updated:	30/04/01 SAA	Added ISTINY() macro.
+  Updated:	11/06/01 SAA	Added 'byte' type definition for more readable code.  I Assume that the sizeof of a char is always 1 byte, but reading the ANSI definitions, that seems perfectly reasonable.
+		30/04/01 SAA	Added ISTINY() macro.
 		11/03/01 SAA	Added maybeinline definition.
 		27/02/01 SAA	Added vpointer and constvpointer because I was, on occassion, including glib just for gpointer and gconstpointer!
 		09/02/01 SAA	VERSION_STRING is now guaranteed to be defined.
@@ -187,6 +188,8 @@ static const boolean true  = (0==0);	/* 1 */
 
 typedef void* vpointer;
 typedef const void *constvpointer;
+typedef unsigned char byte;
+#define BYTEBITS	CHARBITS
 
 /*
  * Useful constants

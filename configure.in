@@ -111,9 +111,6 @@ AC_ARG_ENABLE(debug,
 AC_ARG_ENABLE(memory_debug,
        [  --enable-memory-debug      turn on memory access debugging [default=no]],,
        enable_memory_debug=no)
-AC_ARG_ENABLE(molstruct_debug,
-       [  --enable-molstruct-debug   turn on molstruct library checking [default=no]],,
-       enable_molstruct_debug=no)
 AC_ARG_ENABLE(ansi,
        [  --enable-ansi              turn on strict ansi [default=no]],,
        enable_ansi=no)
@@ -194,21 +191,6 @@ else
   else
     AC_DEFINE(GA_DEBUG,1)
     AC_DEFINE(DEBUG,1)
-    AC_MSG_RESULT(partial)
-  fi
-fi
-
-AC_MSG_CHECKING(whether to enable molstruct library debugging)
-if test "x$enable_molstruct_debug" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  AC_DEFINE(MOLSTRUCT_DEBUG,2)
-  AC_MSG_RESULT(yes)
-else
-  if test "x$enable_molstruct_debug" = "xno"; then
-    AC_DEFINE(MOLSTRUCT_DEBUG,0)
-    AC_MSG_RESULT(no)
-  else
-    AC_DEFINE(MOLSTRUCT_DEBUG,1)
     AC_MSG_RESULT(partial)
   fi
 fi

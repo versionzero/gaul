@@ -39,6 +39,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 /* #include "log_util.h" */
@@ -76,7 +77,7 @@ typedef struct random_state_t
  * Function prototypes.
  */
 
-unsigned int	random_rand(void);
+unsigned int	 random_rand(void);
 void	random_seed(const unsigned int seed);
 void	random_tseed(void);
 void	random_init(void);
@@ -98,7 +99,7 @@ void	random_diagnostics(void);
 boolean	random_test(void);
 
 
-#if HAVE_SLANG==1
+#if HELGA_USE_SLANG==1
 
 /* These functions don't need wrappers:
 void	random_init(void)
@@ -126,7 +127,7 @@ double	random_double_wrapper(double *max);
 double	random_double_range_wrapper(double *min, double *max);
 double	random_gaussian_wrapper(double *mean, double *stddev);
 
-#endif	/* HAVE_SLANG==1 */
+#endif	/* HELGA_USE_SLANG==1 */
 
 #endif	/* RANDOM_UTIL_H_INCLUDED */
 
