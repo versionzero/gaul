@@ -185,7 +185,7 @@
  * Sun's handling of _Bool causes lots of warnings unless
  * the following stuff is skipped.
  */
-#define boolean int
+# define boolean int
 #else
 /*
  * Some platforms already define true and false.  To the
@@ -196,7 +196,8 @@
 #  undef true
 # endif
 
-# if !defined(_ISOC99_SOURCE)
+/*# if !defined(_ISOC99_SOURCE) */
+# if !defined(__bool_true_false_are_defined)
 #  if defined(__cplusplus) || defined(__DECC)
 typedef _Bool bool;
 typedef _Bool boolean;

@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001, Stewart Adcock <stewart@bellatrix.pcl.ox.ac.uk>
+  Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
 
   The latest version of this program should be available at:
   http://www.stewart-adcock.co.uk/
@@ -22,19 +22,21 @@
   "COPYING" provided with this distribution; if not, see:
   http://www.gnu.org/
 
+ **********************************************************************
+
+ Last Updated:	15 Aug 2002 SAA	Rearranged order of include directives for clarity and consistency.  Also some tidying.
+
  **********************************************************************/
 
-#ifndef INCLUDED_MEMORY_CHUNKS_H
-#define INCLUDED_MEMORY_CHUNKS_H
+#ifndef MEMORY_CHUNKS_H_INCLUDED
+#define MEMORY_CHUNKS_H_INCLUDED
+
+#include "SAA_header.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-#include "SAA_header.h"
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#else
+#include "avltree.h"
 
 #ifndef MEMORY_ALIGN_SIZE
 #define MEMORY_ALIGN_SIZE       MAX(sizeof(void *), sizeof(long))
@@ -43,10 +45,6 @@
 #ifndef MEMORY_PADDING
 #define MEMORY_PADDING	FALSE
 #endif
-
-#endif
-
-#include "avltree.h"
 
 /*
  * Data types.
@@ -69,4 +67,5 @@ void		mem_chunk_reset(MemChunk *mem_chunk);
 boolean		mem_chunk_test(void);
 void		mem_chunk_diagnostics(void);
 
-#endif
+#endif /* MEMORY_CHUNKS_H_INCLUDED */
+
