@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - general logging services.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -47,13 +47,14 @@
  *
  * NB/ log_filename and log_callback are meaningless on non-GNU C systems.
  */
-THREAD_LOCK_DEFINE_STATIC(log_global_lock);
-THREAD_LOCK_DEFINE_STATIC(log_callback_lock);
-
 static char		*log_filename=NULL;		/* Log filename */
 static log_func		log_callback=NULL;		/* Callback function for log */
 static enum log_level_type	log_level=LOG_NONE;	/* Logging level */
 static boolean		log_date=TRUE;			/* Whether to display date in logs */
+
+THREAD_LOCK_DEFINE_STATIC(gaul_log_callback_lock);
+THREAD_LOCK_DEFINE_STATIC(gaul_log_global_lock);
+THREAD_LOCK_DEFINE_STATIC(gaul_log_verbose_lock);
 
 #if HAVE_MPI == 1
 static int mpi_get_rank(void)
@@ -85,7 +86,7 @@ void log_init(	enum log_level_type	level,
   {
   char	*oldfname=NULL;
 
-  THREAD_LOCK(log_global_lock);
+  THREAD_LOCK(gaul_log_global_lock);
   log_level = level;
   if (fname)
     {
@@ -93,11 +94,11 @@ void log_init(	enum log_level_type	level,
     log_filename = s_strdup(fname);
     }
   log_date = date;
-  THREAD_UNLOCK(log_global_lock);
+  THREAD_UNLOCK(gaul_log_global_lock);
 
-  THREAD_LOCK(log_callback_lock);
-  log_callback = func;
-  THREAD_UNLOCK(log_callback_lock);
+  THREAD_LOCK(gaul_log_callback_lock);
+    log_callback = func;
+  THREAD_UNLOCK(gaul_log_callback_lock);
 
   if (oldfname) s_free(oldfname);
 
@@ -122,10 +123,10 @@ void log_init(	enum log_level_type	level,
 
 void log_set_level(const enum log_level_type level)
   {
-  THREAD_LOCK(log_global_lock);
+  THREAD_LOCK(gaul_log_verbose_lock);
   log_level = level;
   plog(LOG_VERBOSE, "Log level adjusted to %d.", level);
-  THREAD_UNLOCK(log_global_lock);
+  THREAD_UNLOCK(gaul_log_verbose_lock);
 
   return;
   }
@@ -157,10 +158,10 @@ void log_set_file(const char *fname)
   {
   char	*oldfname=NULL;
 
-  THREAD_LOCK(log_global_lock);
+  THREAD_LOCK(gaul_log_global_lock);
   if (log_filename != fname) oldfname = log_filename;
   log_filename = s_strdup(fname);
-  THREAD_UNLOCK(log_global_lock);
+  THREAD_UNLOCK(gaul_log_global_lock);
 
   if (oldfname) s_free(oldfname);
 
@@ -216,12 +217,15 @@ void log_output(	const enum	log_level_type level,
   va_end(ap);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback_lock);
-  if (log_callback) log_callback(level, func_name, file_name, line_num, message);
-  THREAD_UNLOCK(log_callback_lock);
+  THREAD_LOCK(gaul_log_callback_lock);
+  if (log_callback)
+    log_callback(level, func_name, file_name, line_num, message);
+  THREAD_UNLOCK(gaul_log_callback_lock);
 
 /* Write to file? */
-  THREAD_LOCK(log_global_lock);
+  printf("DEBUG: Locking\n");
+  THREAD_LOCK(gaul_log_global_lock);
+  printf("DEBUG: Continuing\n");
   if (log_filename)
     {
     if ( !(fh=fopen(log_filename, "a+")) )
@@ -229,8 +233,6 @@ void log_output(	const enum	log_level_type level,
       fprintf(stdout, "FATAL: Unable to open logfile \"%s\" for appending.\n", log_filename);
       abort();	/* FIXME: Find more elegant method */
       }
-
-/* Next few lines could be optimised (in terms of number of 'if' statements) */
 
 #if HAVE_MPI == 1
     fprintf(fh, "%d: %s%s%s%s\n",
@@ -250,7 +252,9 @@ void log_output(	const enum	log_level_type level,
 /*    fflush(fh);*/
     fclose(fh);
     }
-  THREAD_UNLOCK(log_global_lock);
+  printf("DEBUG: Unlocking\n");
+  THREAD_UNLOCK(gaul_log_global_lock);
+  printf("DEBUG: Unlocked\n");
 
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
@@ -294,9 +298,10 @@ void plog(const enum log_level_type level, const char *format, ...)
   t = time(&t);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback_lock);
-  if (log_callback) log_callback(level, "unknown", "unknown", 0, message);
-  THREAD_UNLOCK(log_callback_lock);
+  THREAD_LOCK(gaul_log_callback_lock);
+  if (log_callback)
+    log_callback(level, "unknown", "unknown", 0, message);
+  THREAD_UNLOCK(gaul_log_callback_lock);
 
   if ( (level) <= log_level )
     {
@@ -336,9 +341,10 @@ void log_wrapper(int *level, char *message)
   t = time(&t);
 
 /* Call a callback? */
-  THREAD_LOCK(log_callback_lock);
-  if (log_callback) log_callback(*level, "[SLang]", "unknown", 0, message);
-  THREAD_UNLOCK(log_callback_lock);
+  THREAD_LOCK(gaul_log_callback_lock);
+  if (log_callback)
+    log_callback(*level, "[SLang]", "unknown", 0, message);
+  THREAD_UNLOCK(gaul_log_callback_lock);
 
   if ( *level <= log_level )
     {

@@ -1575,7 +1575,7 @@ PACKAGE=gaul-devel
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1846
-GA_PATCH_VERSION=7
+GA_PATCH_VERSION=8
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
@@ -8658,7 +8658,7 @@ echo "${ECHO_T}yes" >&6
   WILL_USE_SLANG="yes"
   HAVE_SLANG=1
   LIBS="$LIBS -lslang -lm"
-  INCLUDE="$INCLUDE -I/usr/include/slang/"	# FIXME: Need to detect slang.h location properly.
+  INCLUDES="$INCLUDES -I/usr/include/slang/"	# FIXME: Need to detect slang.h location properly.
   echo "$as_me:$LINENO: checking for SLang_init_slang in -lslang" >&5
 echo $ECHO_N "checking for SLang_init_slang in -lslang... $ECHO_C" >&6
 if test "${ac_cv_lib_slang_SLang_init_slang+set}" = set; then
@@ -12144,8 +12144,8 @@ _ACEOF
 fi
 
 # Where the linker must look!
-CFLAGS="$CFLAGS $MPIFLAGS $INCLUDE"
-LIBS="$LIBS"
+CFLAGS="$CFLAGS $INCLUDES"
+#LIBS="$LIBS"
 #LIBS="$LIBS $MPILIBS"
 
 #
@@ -13857,7 +13857,7 @@ echo \
   Debugging level:            ${debug}
   C compiler:                 ${CC}
   C compiler flags:           ${CFLAGS}
-  Additional include flags:   ${INCLUDE}
+  Additional include flags:   ${INCLUDES}
   Install path:               ${prefix}
   Use S-Lang:                 ${WILL_USE_SLANG}
   Use MPI:                    ${WILL_USE_MPI}

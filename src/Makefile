@@ -45,7 +45,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /u2
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -107,9 +107,9 @@ GA_BUILD_DATE_STRING =
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1846
 GA_NUM_PROCESSES_ENVVAR_STRING = GA_NUM_PROCESSES
-GA_PATCH_VERSION = 7
+GA_PATCH_VERSION = 8
 GA_UNAME_STRING = 
-GA_VERSION = 0.1846-7
+GA_VERSION = 0.1846-8
 GA_VERSION_STRING = 
 HAVE_MPI = 0
 HAVE_PTHREADS = 1
@@ -119,7 +119,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1846
-LT_REVISION = 7
+LT_REVISION = 8
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -131,7 +131,7 @@ RANLIB = ranlib
 STRIP = strip
 USE_OPENMP = 0
 V3_QUICK = 1
-VERSION = 0.1846-7
+VERSION = 0.1846-8
 W32_CRIPPLED = 0
 am__include = include
 am__quote = 
@@ -244,7 +244,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7   -I/usr/include/slang/
+CFLAGS =  -w2 -g -O2 -ipo -ipo_obj -tpp7 -I/u2/include -I/usr/include/slang/
 DIST_SOURCES = $(libgaul_la_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 
