@@ -26,13 +26,14 @@
 
 %define PACKAGE_VERSION 0
 %define RELEASE 1838
-%define PATCH	1
+%define PATCH	2
 
 Summary: Genetic Algorithm Utility Library
 Name: gaul-devel
 Version: %{PACKAGE_VERSION}
 Release: %{RELEASE}
 Copyright: Copyright: (c) 2000-2002 Stewart Adcock, released under GPL.  See COPYING.
+Vendor: "Stewart Adcock" <gaul@linux-domain.com>
 Group: Scientific/Engineering
 Source: gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}.tar.gz
 URL: http://gaul.sourceforge.net/

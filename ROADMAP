@@ -13,6 +13,8 @@ These milestone requirements are subject to change ;)
 ------------+--------------------------------------------------------
  0.1840     |  De Jong - working examples.
             |  User data in array, not list.
+            |  GAmutate and GAadapt should be interchangable.
+            |  Move prototypes for public functions into src/gaul.h
 ------------+--------------------------------------------------------
  0.1841     |  ga_evolution_mp() and associated example.
             |  Use MemChunks in chromosome allocation.

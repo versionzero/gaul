@@ -206,7 +206,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS = 
 libbtree_a_LIBADD = 
 libbtree_a_OBJECTS =  btree.o
 AR = ar
@@ -242,7 +242,7 @@ struggle_ss_OBJECTS =  struggle_ss.o
 struggle_ss_LDFLAGS = 
 nnevolve_OBJECTS =  nnevolve.o
 nnevolve_LDFLAGS = 
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
+CFLAGS = -g -O2 -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

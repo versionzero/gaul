@@ -27,7 +27,7 @@
   Synopsis:	Public header file for GAUL.
 
 		This file should be included by any code that will
-		be linking to libga.
+		be linking to libgaul.
 
 		This file is a bit empty at the moment, but prototypes
 		for all of the public functions will be moved into here

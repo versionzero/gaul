@@ -272,7 +272,7 @@ LIBRARIES =  $(lib_LIBRARIES)
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
-LIBS =  -lslang -lslang
+LIBS = 
 libstuff_a_LIBADD = 
 libstuff_a_OBJECTS =  avltree.o compatibility.o linkedlist.o \
 memory_util.o table_util.o
@@ -319,7 +319,7 @@ PROGRAMS =  $(bin_PROGRAMS)
 nn_OBJECTS =  nn_main.o
 nn_DEPENDENCIES = 
 nn_LDFLAGS = 
-CFLAGS = -g -O2 -I/usr/include/slang/ -Wall -O2 -g -I../util/ -I../src/
+CFLAGS = -g -O2 -Wall -O2 -g -I../util/ -I../src/
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
