@@ -1,32 +1,32 @@
-#######################################################################
-# gaul/gaul-devel.spec
-#######################################################################
-#
-# GAUL - Genetic Algorithm Utility Library
-# Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
-#
-# The latest version of this program should be available at:
-# http://www.stewart-adcock.co.uk/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.  Alternatively, if your project
-# is incompatible with the GPL, I will probably agree to requests
-# for permission to use the terms of any other license.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY WHATSOEVER.
-#
-# A full copy of the GNU General Public License should be in the file
-# "COPYING" provided with this distribution; if not, see:
-# http://www.gnu.org/
-#
-#######################################################################
+dnl ######################################################################
+dnl gaul/gaul-devel.spec
+dnl ######################################################################
+dnl
+dnl GAUL - Genetic Algorithm Utility Library
+dnl Copyright ©2001-2002, Stewart Adcock <stewart@linux-domain.com>
+dnl
+dnl The latest version of this program should be available at:
+dnl http://www.stewart-adcock.co.uk/
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.  Alternatively, if your project
+dnl is incompatible with the GPL, I will probably agree to requests
+dnl for permission to use the terms of any other license.
+dnl
+dnl This program is distributed in the hope that it will be useful, but
+dnl WITHOUT ANY WARRANTY WHATSOEVER.
+dnl
+dnl A full copy of the GNU General Public License should be in the file
+dnl "COPYING" provided with this distribution; if not, see:
+dnl http://www.gnu.org/
+dnl
+dnl ######################################################################
 
 %define PACKAGE_VERSION 	0
 %define RELEASE			1842
-%define PATCH			1
+%define PATCH			2
 %define prefix			/usr/local/
 
 Name:		gaul-devel
@@ -48,7 +48,7 @@ The Genetic Algorithm Utility Library (GAUL) is an open source programming libra
 %setup -n gaul-devel-%{PACKAGE_VERSION}.%{RELEASE}-%{PATCH}
 
 %build
-#./configure --includedir=%{prefix}/include/gaul --libdir=%{prefix}/lib/gaul --bindir=%{prefix}/bin/gaul
+dnl./configure --includedir=%{prefix}/include/gaul --libdir=%{prefix}/lib/gaul --bindir=%{prefix}/bin/gaul
 ./configure
 make
 
@@ -67,6 +67,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Tue Dec 24 2002 Stewart Adcock <stewart@linux-domain.com>
+- 0.1842-2
+- Use 'dnl' not '#' for comments.
+
 * Fri Dec 20 2002 Stewart Adcock <stewart@linux-domain.com>
 - 0.1842-0
 - Improved description.

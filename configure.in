@@ -41,12 +41,10 @@ AC_CANONICAL_SYSTEM
 
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
-#AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1842
-PATCH_VERSION=1
+PATCH_VERSION=2
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
-#AC_DIVERT_POP()
 
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
@@ -55,7 +53,7 @@ AC_SUBST(VERSION)
 AC_SUBST(MPICC)
 AC_SUBST(MPIFLAGS)
 
-# libtool versioning
+dnl libtool versioning
 LT_RELEASE=$MAJOR_VERSION.$MINOR_VERSION
 LT_CURRENT=0
 LT_REVISION=$PATCH_VERSION
@@ -65,7 +63,7 @@ AC_SUBST(LT_REVISION)
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
-# Specify a configuration file
+dnl Specify a configuration file
 AM_CONFIG_HEADER(config.h)
 
 AC_DEFINE_UNQUOTED(MAJOR_VERSION, $MAJOR_VERSION, [Major version number.])
@@ -87,15 +85,14 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl Initialize libtool with module loading capability.
-#AC_LIBTOOL_DLOPEN
+dnl Initialize libtool.
 AC_PROG_LIBTOOL
 
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
 
-#dnl figure debugging default, prior to $ac_help setup
-#dnl
+dnl figure debugging default, prior to $ac_help setup
+#
 #AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 #if test `expr $MINOR_VERSION \% 2` = 1 ; then
 #	debug_default=yes
@@ -103,6 +100,7 @@ AM_MAINTAINER_MODE
 #	debug_default=partial
 #fi
 #AC_DIVERT_POP()
+#
 dnl Debugging default.
 debug_default=no
 
@@ -506,7 +504,7 @@ AC_STRUCT_TM
 dnl Get includes setup correctly.
 INCLUDE="$INCLUDE -I../util/ -I../src/ -I/usr/include/slang/"	# FIXME: Need to detect slang.h location.
 
-# Checks for header files.
+dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS(arpa/inet.h netdb.h netinet/in.h pwd.h sys/ioctl.h \
