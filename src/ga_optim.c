@@ -1825,7 +1825,7 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
  * Migration Cycle.
  * 1) Migration that doesn't require inter-process communication.
  * 2) Migration that requires migration from 'even' processes.
- * 3) Migration that requires migration for 'odd' processes.
+ * 3) Migration that requires migration from 'odd' processes.
  * (Special case due to odd number of nodes is okay)
  */
     plog( LOG_VERBOSE, "*** Migration Cycle ***" );
@@ -2175,3 +2175,4 @@ boolean ga_evolution_archipelago_mp( const int num_pops,
 
   return (generation<max_generations);
   }
+

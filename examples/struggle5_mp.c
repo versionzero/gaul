@@ -55,7 +55,7 @@
  * Specify the number of populations (islands) to use on each processor.
  * (This value doesn't need to be constant across all processors.)
  */
-#define GA_STRUGGLE_NUM_POPS_PER_PROC	2
+#define GA_STRUGGLE_NUM_POPS_PER_PROC	5
 
 /*
  * The solution string.
@@ -107,7 +107,9 @@ int main(int argc, char **argv)
   int		i;					/* Loop over populations. */
   population	*pops[GA_STRUGGLE_NUM_POPS_PER_PROC];	/* Array of populations. */
 
+/*
   log_set_level(LOG_DEBUG);
+*/
 
   mpi_init(&argc, &argv);
 
@@ -135,12 +137,13 @@ int main(int argc, char **argv)
             );
 
     ga_population_set_parameters( pops[i], 0.75, 0.25, 0.001);
-    ga_population_set_parameters( pops[i], 0.75, 0.25, 0.1);
     }
 
 /*
  * Test chromosome packing.
+ * FIXME: Move to test suite.
  */
+#if 0
   for (i=0; i<pops[0]->size; i++)
     {
     int len;
@@ -154,6 +157,7 @@ int main(int argc, char **argv)
     
     printf("E %d len %d match %d\n", i, len, memcmp(buffer1, buffer2, len));
     }
+#endif
 
 /*
  * The only significant difference between "examples/struggle5" and

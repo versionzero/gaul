@@ -1379,8 +1379,10 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
   len = (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &max_len);
   mpi_send(&len, 1, MPI_TYPE_INT, dest_node, GA_TAG_ENTITYLEN);
 
+/*
   printf("DEBUG: Node %d sending %d entities of length %d to %d\n",
            mpi_get_rank(), num_to_send, len, dest_node);
+*/
 
 /*
  * Send required entities individually.
@@ -1389,14 +1391,12 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
     {
     if (send_mask[i])
       {
-      printf("DEBUG: Node %d sending entity %d/%d (%d/%d) with fitness %f\n",
-             mpi_get_rank(), count, num_to_send, i, pop->size, pop->entity_iarray[i]->fitness);
+/* printf("DEBUG: Node %d sending entity %d/%d (%d/%d) with fitness %f\n",
+             mpi_get_rank(), count, num_to_send, i, pop->size, pop->entity_iarray[i]->fitness); */
       mpi_send(&(pop->entity_iarray[i]->fitness), 1, MPI_TYPE_DOUBLE, dest_node, GA_TAG_ENTITYFITNESS);
       if (len != (int) pop->chromosome_to_bytes(pop, pop->entity_iarray[i], &buffer, &max_len))
 	die("Internal length mismatch");
-      printf("> %d 1\n", mpi_get_rank());
       mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
-      printf("> %d 2\n", mpi_get_rank());
       count++;
       }
     }
@@ -1404,10 +1404,13 @@ void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send
   if (count != num_to_send)
     die("Incorrect value for num_to_send");
 
-  if (buffer);
-    s_free(buffer);
+/*
+ * We only need to deallocate the buffer if it was allocated (i.e. if
+ * the "chromosome_to_bytes" callback set max_len).
+ */
+  if (max_len) s_free(buffer);
 
-  printf("DEBUG: Node %d finished sending\n", mpi_get_rank());
+/*  printf("DEBUG: Node %d finished sending\n", mpi_get_rank());*/
 
   return;
   }
@@ -1453,7 +1456,11 @@ void ga_population_send_every( population *pop, int dest_node )
     mpi_send(buffer, len, MPI_TYPE_BYTE, dest_node, GA_TAG_ENTITYCHROMOSOME);
     }
 
-  s_free(buffer);
+/*
+ * We only need to deallocate the buffer if it was allocated (i.e. if
+ * the "chromosome_to_bytes" callback set max_len).
+ */
+  if (max_len) s_free(buffer);
 
   return;
   }
@@ -1484,8 +1491,10 @@ void ga_population_append_receive( population *pop, int src_node )
   mpi_receive(&num_to_recv, 1, MPI_TYPE_INT, src_node, GA_TAG_NUMENTITIES);
   mpi_receive(&len, 1, MPI_TYPE_INT, src_node, GA_TAG_ENTITYLEN);
 
+/*
   printf("DEBUG: Node %d anticipating %d entities of length %d from %d\n",
            mpi_get_rank(), num_to_recv, len, src_node);
+*/
 
   if (num_to_recv>0)
     {
@@ -1497,19 +1506,18 @@ void ga_population_append_receive( population *pop, int src_node )
     for (i=0; i<num_to_recv; i++)
       {
       entity = ga_get_free_entity(pop);
-      printf("< %d 1\n", mpi_get_rank());
       mpi_receive(&(entity->fitness), 1, MPI_TYPE_DOUBLE, src_node, GA_TAG_ENTITYFITNESS);
-      printf("< %d 2\n", mpi_get_rank());
       mpi_send(buffer, len, MPI_TYPE_BYTE, src_node, GA_TAG_ENTITYCHROMOSOME);
       pop->chromosome_from_bytes(pop, entity, buffer);
-      printf("DEBUG: Node %d received entity %d/%d (%d) with fitness %f\n",
+/*      printf("DEBUG: Node %d received entity %d/%d (%d) with fitness %f\n",
              mpi_get_rank(), i, num_to_recv, pop->size, entity->fitness);
+ */
       }
 
     s_free(buffer);
     }
 
-  printf("DEBUG: Node %d finished receiving\n", mpi_get_rank());
+/*  printf("DEBUG: Node %d finished receiving\n", mpi_get_rank());*/
 
   return;
   }
@@ -1630,6 +1638,8 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
   int		j;			/* Loop over chromosomes. */
   entity	*tmpentity;		/* Entity ptr for swapping. */
 
+  plog(LOG_FIXME, "Warning... untested code.");
+
   maxnode = mpi_find_global_max(MAX(localnew->fitness, local->fitness), &global_max);
 
   buffer_size = pop->num_chromosomes*pop->len_chromosomes;
@@ -1650,11 +1660,11 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
       buffer_ptr += pop->len_chromosomes;
       }
 
-    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
+    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, GA_TAG_BESTSYNC );
     }
   else
     {
-    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, HELGA_TAG_BESTSYNC );
+    mpi_distribute( buffer, buffer_size, MPI_TYPE_INT, maxnode, GA_TAG_BESTSYNC );
 
     for (j=0; j<pop->num_chromosomes; j++)
       {
@@ -1699,6 +1709,8 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
   int		index=0;		/* Index of entity to send. */
   entity	*immigrant;		/* New entity. */
 
+  plog(LOG_FIXME, "Warning... untested code.");
+
 /* Checks */
   if (!pop) die("Null pointer to population structure passed.");
   if (!send_mask) die("Null pointer to int array.");
@@ -1738,12 +1750,12 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
 /* Send data to next node. */
   plog(LOG_DEBUG, "Sending %d to node %d.", send_count, next);
-  mpi_send( &send_count, 1, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONINFO );
+  mpi_send( &send_count, 1, MPI_TYPE_INT, next, GA_TAG_MIGRATIONINFO );
 
   if (send_count > 0)
     {
     plog(LOG_DEBUG, "Sending %d ints to node %d.", send_size, next);
-    mpi_send( buffer, send_size, MPI_TYPE_INT, next, HELGA_TAG_MIGRATIONDATA );
+    mpi_send( buffer, send_size, MPI_TYPE_INT, next, GA_TAG_MIGRATIONDATA );
     }
 
 /*
@@ -1753,7 +1765,7 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 /* Recieve data from previous node. */
   plog(LOG_DEBUG, "Recieving messages from node %d.", prev);
 
-  mpi_receive( &recv_count, 1, MPI_TYPE_INT, prev, HELGA_TAG_MIGRATIONINFO );
+  mpi_receive( &recv_count, 1, MPI_TYPE_INT, prev, GA_TAG_MIGRATIONINFO );
 
   plog(LOG_DEBUG, "Will be recieving %d entities = %d ints (%Zd bytes).",
             recv_count,
@@ -1768,7 +1780,7 @@ boolean ga_sendrecv_entities( population *pop, int *send_mask, int send_count )
 
     buffer_ptr = buffer;
 
-    mpi_receive( buffer, recv_size, MPI_TYPE_INT, prev, HELGA_TAG_MIGRATIONDATA );
+    mpi_receive( buffer, recv_size, MPI_TYPE_INT, prev, GA_TAG_MIGRATIONDATA );
 
     for (i=0; i<recv_count; i++)
       {
