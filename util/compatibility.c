@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -475,7 +475,12 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 void usleep(unsigned long usec)
   {
 #if W32_CRIPPLED == 1
-  /* FIXME: Need to add windows code for sleeping here. */
+# if USE_WINDOWS_H == 1
+  Sleep(usec/1000);		/* Windows sleep is in milliseconds. */
+#else
+  int	i;
+  for (i=0; i<usec*10; i++);	/* A completely dodgy kludge.  Just introduces an arbitrary length delay. */
+# endif
 #else
   #if HAVE_SNOOZE == 1		/* i.e. BeOS, AtheOS, Syllable. */
   snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
