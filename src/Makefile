@@ -98,7 +98,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LT_CURRENT = 0
 LT_RELEASE = 0.1837
-LT_REVISION = 2
+LT_REVISION = 3
 MAINT = #
 MAJOR_VERSION = 0
 MAKEINFO = makeinfo
@@ -106,9 +106,9 @@ MINOR_VERSION = 1837
 MPIFLAGS = -llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil
 OBJDUMP = @OBJDUMP@
 PACKAGE = gaul-devel
-PATCH_VERSION = 2
+PATCH_VERSION = 3
 RANLIB = ranlib
-VERSION = 0.1837-2
+VERSION = 0.1837-3
 
 AUTOMAKE_OPTIONS = 1.4
 

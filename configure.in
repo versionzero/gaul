@@ -38,18 +38,13 @@ PACKAGE=gaul-devel
 
 AC_CANONICAL_SYSTEM
 
-# Save these values here, since automake will set these later
-#cflags_set=${CFLAGS+set}
-#includes_set=${INCLUDES+set}
-
 dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion.
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
 MAJOR_VERSION=0
 MINOR_VERSION=1837
-PATCH_VERSION=2
+PATCH_VERSION=3
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATCH_VERSION
-#VERSION=$MAJOR_VERSION.$MINOR_VERSION
 AC_DIVERT_POP()
 
 AC_SUBST(MAJOR_VERSION)
@@ -86,7 +81,6 @@ AC_DEFINE_UNQUOTED(UNAME_STRING,"`uname -a`")
 
 dnl Checks for programs.
 AC_PROG_CC
-#AM_PROG_CC_STDC
 AC_PROG_INSTALL
 
 dnl Initialize libtool with module loading capability.
@@ -215,7 +209,6 @@ fi
 
 AC_MSG_CHECKING(whether to enable run-time profiling)
 if test "x$enable_prof" = "xyes"; then
-#  test "$cflags_set" = set || CFLAGS="$CFLAGS -pg"
   CFLAGS="$CFLAGS -pg"
   AC_MSG_RESULT(yes)
 else
@@ -242,7 +235,7 @@ MPIFLAGS="-llammpi++ -llammpio -lpmpi -llamf77mpi -lmpi -llam -lnsl -lutil"
 # For non-MPI machines.
 #MPIFLAGS=""
 
-dnl Electric Fence has to be last library.
+dnl Electric Fence has to be last library linked.
 AC_MSG_CHECKING(whether to link Electric Fence for memory debugging)
 if test -n "$with_efence"; then
   AC_MSG_RESULT(yes)
@@ -303,6 +296,7 @@ AC_FUNC_VPRINTF
 
 AC_CHECK_FUNCS(atexit on_exit)
 
+dnl Check type sizes.
 AC_CHECK_SIZEOF(double, 4)
 AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(long, 4)
@@ -383,14 +377,14 @@ echo \
 "************************************************************************
   GAUL has been configured successfully.  In summary:
 
-  Version:                  ${VERSION}
-  Source code location:     ${srcdir}
-  Host System Type:         ${host}
-  Compiler:	            ${CC}
-  Compiler flags:           ${CFLAGS}
-  Extra include flags:      ${INCLUDE}
-  Install path:             ${prefix}
-  Use S-Lang:               ${WILL_USE_SLANG}
+  Version:                    ${VERSION}
+  Source code location:       ${srcdir}
+  Host System Type:           ${host}
+  C compiler:                 ${CC}
+  C compiler flags:           ${CFLAGS}
+  Extra include flags:        ${INCLUDE}
+  Install path:               ${prefix}
+  Use S-Lang:                 ${WILL_USE_SLANG}
 
 ************************************************************************"
 

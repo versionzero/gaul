@@ -35,11 +35,11 @@
 #define GA_WRITE_STATS 0
 
 /* #undef VERSION */
-#define VERSION_STRING "0.1837-2"
+#define VERSION_STRING "0.1837-3"
 #define BUILD_DATE_STRING "16/03/02"
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 1837
-#define PATCH_VERSION 2
+#define PATCH_VERSION 3
 #define UNAME_STRING "Linux desktop.stewart-adcock.co.uk 2.4.9-13 #1 Tue Oct 30 19:32:27 EST 2001 i686 unknown"
 
 #define AVLTREE_KEY_TYPE void *
