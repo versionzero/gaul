@@ -89,7 +89,7 @@ static boolean struggle_score(population *pop, entity *entity)
 
 int main(int argc, char **argv)
   {
-  int		i, j;			/* Loop over runs. */
+  int		i;			/* Loop over runs. */
   population	*pop=NULL;		/* Population of solutions. */
   char		*beststring=NULL;	/* Human readable form of best solution. */
   size_t	beststrlen=0;		/* Length of beststring. */
@@ -126,18 +126,15 @@ int main(int argc, char **argv)
        0.0              	/* double  migration */
                               );
 
-  for (j=0; j<50; j++)
-    {
     ga_evolution(
        pop,			/* population      *pop */
-       50			/* const int       max_generations */
+       500			/* const int       max_generations */
               );
 
-    printf( "The %d solution with seed = %d was:\n", j, i );
+    printf( "The solution with seed = %d was:\n", i );
     beststring = ga_chromosome_char_to_string(pop, ga_get_entity_from_rank(pop,0), beststring, &beststrlen);
     printf("%s\n", beststring);
     printf( "With score = %f\n", ga_entity_get_fitness(ga_get_entity_from_rank(pop,0)) );
-}
 
     ga_extinction(pop);
     }
