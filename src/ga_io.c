@@ -121,7 +121,7 @@ static entity *gaul_read_entity_posix(FILE *fp, population *pop)
   fread(&(entity->fitness), sizeof(double), 1, fp);
   fread(&len, sizeof(unsigned int), 1, fp);
   buffer = s_malloc(sizeof(byte)*len);
-  fread(buffer, sizeof(byte), (size_t) len, fp);
+  fread(buffer, sizeof(byte), len, fp);
   pop->chromosome_from_bytes(pop, entity, buffer);
 
   s_free(buffer);
@@ -540,7 +540,7 @@ population *ga_population_read(char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  fread(id, sizeof(int), 18, fp);
+  fread(id, sizeof(int), 19, fp);
 
   pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
   pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
@@ -586,7 +586,8 @@ population *ga_population_read(char *fname)
  * Footer info.
  */
   fread(buffer, sizeof(char), 4, fp); 
-  if (strcmp("END", buffer)!=0) die("Corrupt population file?");
+  if (strcmp("END", buffer)!=0)
+    die("Corrupt population file?");
 
 /*
  * Close file.
@@ -709,9 +710,9 @@ population *ga_population_read(char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  if (!ReadFile(file, buffer, 18*sizeof(int), &nread, NULL) || nread < 1)
+  if (!ReadFile(file, buffer, 19*sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&id, buffer, 18*sizeof(int));
+  memcpy(&id, buffer, 19*sizeof(int));
 
   pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
   pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
