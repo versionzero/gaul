@@ -8,6 +8,9 @@ Changes since release 0.1848:
 - Optimisation of alternative search functions when applied to double-array chromosomes.
 - Fixed bug in src/ga_intrinsics.c - minimum fitness was stored in int not double.
 - Removed debugging messages from the simplex code.
+- Split the gaul-devel archive/package into seperate gaul-devel (containing libs and tests) and gaul-examples (containing example programs).
+- Some example programs renamed.
+- A few further test programs added.
 
 Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.

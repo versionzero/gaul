@@ -1,9 +1,9 @@
 /**********************************************************************
-  saveload.c
+  test_io.c
  **********************************************************************
 
-  saveload - Test/example program for GAUL.
-  Copyright ©2002-2004, Stewart Adcock <stewart@linux-domain.com>
+  test_io - Test program for GAUL.
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,13 +25,8 @@
 
  **********************************************************************
 
-  Synopsis:	Test/example program for GAUL.
-
-		This program shows how to write/read populations
-		to/from disk using GAUL.
-
-		This example is explained in
-		http://gaul.sourceforge.net/tutorial/io.html
+  Synopsis:	Test program for routines used to write/read
+		populations to/from disk using GAUL.
 
  **********************************************************************/
 
