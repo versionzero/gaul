@@ -15,7 +15,7 @@
 @SET_MAKE@
 
 #######################################################################
-# gaul/src/Makefile.am
+# gaul-devel/src/Makefile.am
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.

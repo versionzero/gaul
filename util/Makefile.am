@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 #######################################################################
-# util/Makefile.am
+# gaul-devel/util/Makefile.am
 #######################################################################
 #
 # util - General collection of C-programming utility routines.

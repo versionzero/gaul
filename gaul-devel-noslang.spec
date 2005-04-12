@@ -12,7 +12,7 @@ BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroo
 #Requires:	none
 
 ########################################################################
-# gaul/gaul-devel-noslang.spec
+# gaul-devel/gaul-devel-noslang.spec
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library

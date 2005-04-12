@@ -15,11 +15,11 @@
 @SET_MAKE@
 
 #######################################################################
-# gaul/tests/Makefile.am
+# gaul-devel/tests/Makefile.am
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
 #
 # The latest version of this program should be available at:
 # http://gaul.sourceforge.net/
@@ -40,7 +40,7 @@
 #
 #######################################################################
 
-SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_prng.c test_slang.c test_utils.c
+SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c test_slang.c test_utils.c
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -67,7 +67,9 @@ host_triplet = @host@
 target_triplet = @target@
 bin_PROGRAMS = gaul_diagnostics$(EXEEXT)
 noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
-	test_bitstrings$(EXEEXT) test_slang$(EXEEXT)
+	test_bitstrings$(EXEEXT) test_slang$(EXEEXT) test_io$(EXEEXT) \
+	test_ga$(EXEEXT) test_de$(EXEEXT) test_sd$(EXEEXT) \
+	test_simplex$(EXEEXT)
 subdir = tests
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -87,9 +89,24 @@ gaul_diagnostics_DEPENDENCIES =
 test_bitstrings_SOURCES = test_bitstrings.c
 test_bitstrings_OBJECTS = test_bitstrings.$(OBJEXT)
 test_bitstrings_DEPENDENCIES =
+test_de_SOURCES = test_de.c
+test_de_OBJECTS = test_de.$(OBJEXT)
+test_de_DEPENDENCIES =
+test_ga_SOURCES = test_ga.c
+test_ga_OBJECTS = test_ga.$(OBJEXT)
+test_ga_DEPENDENCIES =
+test_io_SOURCES = test_io.c
+test_io_OBJECTS = test_io.$(OBJEXT)
+test_io_DEPENDENCIES =
 test_prng_SOURCES = test_prng.c
 test_prng_OBJECTS = test_prng.$(OBJEXT)
 test_prng_DEPENDENCIES =
+test_sd_SOURCES = test_sd.c
+test_sd_OBJECTS = test_sd.$(OBJEXT)
+test_sd_DEPENDENCIES =
+test_simplex_SOURCES = test_simplex.c
+test_simplex_OBJECTS = test_simplex.$(OBJEXT)
+test_simplex_DEPENDENCIES =
 test_slang_SOURCES = test_slang.c
 test_slang_OBJECTS = test_slang.$(OBJEXT)
 test_slang_DEPENDENCIES =
@@ -107,10 +124,12 @@ LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_prng.c \
+SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
+	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
 	test_slang.c test_utils.c
-DIST_SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c \
-	test_prng.c test_slang.c test_utils.c
+DIST_SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
+	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
+	test_slang.c test_utils.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -255,6 +274,11 @@ test_prng_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_utils_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_bitstrings_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_slang_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_io_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all: all-am
 
 .SUFFIXES:
@@ -329,9 +353,24 @@ gaul_diagnostics$(EXEEXT): $(gaul_diagnostics_OBJECTS) $(gaul_diagnostics_DEPEND
 test_bitstrings$(EXEEXT): $(test_bitstrings_OBJECTS) $(test_bitstrings_DEPENDENCIES) 
 	@rm -f test_bitstrings$(EXEEXT)
 	$(LINK) $(test_bitstrings_LDFLAGS) $(test_bitstrings_OBJECTS) $(test_bitstrings_LDADD) $(LIBS)
+test_de$(EXEEXT): $(test_de_OBJECTS) $(test_de_DEPENDENCIES) 
+	@rm -f test_de$(EXEEXT)
+	$(LINK) $(test_de_LDFLAGS) $(test_de_OBJECTS) $(test_de_LDADD) $(LIBS)
+test_ga$(EXEEXT): $(test_ga_OBJECTS) $(test_ga_DEPENDENCIES) 
+	@rm -f test_ga$(EXEEXT)
+	$(LINK) $(test_ga_LDFLAGS) $(test_ga_OBJECTS) $(test_ga_LDADD) $(LIBS)
+test_io$(EXEEXT): $(test_io_OBJECTS) $(test_io_DEPENDENCIES) 
+	@rm -f test_io$(EXEEXT)
+	$(LINK) $(test_io_LDFLAGS) $(test_io_OBJECTS) $(test_io_LDADD) $(LIBS)
 test_prng$(EXEEXT): $(test_prng_OBJECTS) $(test_prng_DEPENDENCIES) 
 	@rm -f test_prng$(EXEEXT)
 	$(LINK) $(test_prng_LDFLAGS) $(test_prng_OBJECTS) $(test_prng_LDADD) $(LIBS)
+test_sd$(EXEEXT): $(test_sd_OBJECTS) $(test_sd_DEPENDENCIES) 
+	@rm -f test_sd$(EXEEXT)
+	$(LINK) $(test_sd_LDFLAGS) $(test_sd_OBJECTS) $(test_sd_LDADD) $(LIBS)
+test_simplex$(EXEEXT): $(test_simplex_OBJECTS) $(test_simplex_DEPENDENCIES) 
+	@rm -f test_simplex$(EXEEXT)
+	$(LINK) $(test_simplex_LDFLAGS) $(test_simplex_OBJECTS) $(test_simplex_LDADD) $(LIBS)
 test_slang$(EXEEXT): $(test_slang_OBJECTS) $(test_slang_DEPENDENCIES) 
 	@rm -f test_slang$(EXEEXT)
 	$(LINK) $(test_slang_LDFLAGS) $(test_slang_OBJECTS) $(test_slang_LDADD) $(LIBS)
@@ -347,7 +386,12 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diagnostics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_bitstrings.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_de.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_ga.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_io.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_prng.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_sd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_simplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_slang.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_utils.Po@am__quote@
 

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 #######################################################################
-# gaul/Makefile.am
+# gaul-devel/Makefile.am
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility Library

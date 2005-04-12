@@ -12,7 +12,7 @@ Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroot
 
 ########################################################################
-# gaul/gaul-devel.spec
+# gaul-devel/gaul-devel.spec
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library

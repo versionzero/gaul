@@ -47,14 +47,15 @@
   parameters:	population *pop		Population to set parameters of.
 		const GAcompare		Callback to compare two entities.
   return:	none
-  last updated: 21 Mar 2005
+  last updated: 12 Apr 2005
  **********************************************************************/
 
 void ga_population_set_differentialevolution_parameters( population *pop,
                                                          const ga_de_strategy_type strategy,
                                                          const ga_de_crossover_type crossover,
                                                          const int num_perturbed,
-                                                         const double weighting_factor,
+                                                         const double weighting_min,
+                                                         const double weighting_max,
                                                          const double crossover_factor )
   {
 
@@ -68,7 +69,8 @@ void ga_population_set_differentialevolution_parameters( population *pop,
   pop->de_params->strategy = strategy;
   pop->de_params->crossover_method = crossover;
   pop->de_params->num_perturbed = num_perturbed;
-  pop->de_params->weighting_factor = weighting_factor;
+  pop->de_params->weighting_min = weighting_min;
+  pop->de_params->weighting_max = weighting_max;
   pop->de_params->crossover_factor = crossover_factor;
 
   return;
@@ -108,7 +110,7 @@ static void _gaul_pick_random_entities(int *permutation, int num, int size, int 
   synopsis:	Performs differential evolution.
   parameters:
   return:
-  last updated:	25 Feb 2005
+  last updated:	12 Apr 2005
  **********************************************************************/
 
 int ga_differentialevolution(	population		*pop,
@@ -120,6 +122,7 @@ int ga_differentialevolution(	population		*pop,
   int		*permutation;		/* Permutation array for random selections. */
   entity	*tmpentity;		/* New entity. */
   int		L, n;			/* Allele indices. */
+  double	weighting_factor;	/* Weighting multiplier. */
 
 /* Checks. */
   if (!pop)
@@ -181,6 +184,18 @@ int ga_differentialevolution(	population		*pop,
               pop->orig_size, generation );
 
 /*
+ * Determine weighting factor.
+ */
+    if (pop->de_params->weighting_min == pop->de_params->weighting_max)
+      {
+      weighting_factor = pop->de_params->weighting_min;
+      }
+    else
+      {
+      weighting_factor = random_double_range(pop->de_params->weighting_min, pop->de_params->weighting_max);
+      }
+
+/*
  * Find best solution.
  */
     best = 0;
@@ -235,16 +250,16 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -257,20 +272,20 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -283,24 +298,24 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
 
 
               n = (n+1)%pop->len_chromosomes;
@@ -320,16 +335,16 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -341,20 +356,20 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -366,24 +381,24 @@ int ga_differentialevolution(	population		*pop,
 
             ((double *)tmpentity->chromosome[0])[n] =
               ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-              + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
+              + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] =
                   ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                  + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                    + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
-                                                    - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
+                  + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                    + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
+                                    - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -401,19 +416,19 @@ int ga_differentialevolution(	population		*pop,
             _gaul_pick_random_entities(permutation, 2, pop->orig_size, i);
 
             ((double *)tmpentity->chromosome[0])[n] +=
-              pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                              - ((double *)tmpentity->chromosome[0])[n]
-                                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                              - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+              weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                              - ((double *)tmpentity->chromosome[0])[n]
+                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                              - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] +=
-                  pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                                  - ((double *)tmpentity->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+                  weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                  - ((double *)tmpentity->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -424,23 +439,23 @@ int ga_differentialevolution(	population		*pop,
             _gaul_pick_random_entities(permutation, 4, pop->orig_size, i);
 
             ((double *)tmpentity->chromosome[0])[n] +=
-              pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                              - ((double *)tmpentity->chromosome[0])[n]
-                                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                              + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                              - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                              - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+              weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                              - ((double *)tmpentity->chromosome[0])[n]
+                              + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                              + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                              - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                              - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
             for (L=1; L<pop->len_chromosomes; L++)
               {
               if ( random_boolean() )
                 ((double *)tmpentity->chromosome[0])[n] +=
-                  pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                                  - ((double *)tmpentity->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+                  weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                  - ((double *)tmpentity->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               }
@@ -471,8 +486,8 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -489,10 +504,10 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -508,12 +523,12 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -537,8 +552,8 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -555,10 +570,10 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -575,12 +590,12 @@ int ga_differentialevolution(	population		*pop,
               {
               ((double *)tmpentity->chromosome[0])[n] =
                 ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                + pop->de_params->weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                  + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
-                                                  - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
+                + weighting_factor*(((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                  + ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[4]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[5]]->chromosome[0])[n]
+                                  - ((double *)pop->entity_iarray[permutation[6]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -604,10 +619,10 @@ int ga_differentialevolution(	population		*pop,
             do
               {
               ((double *)tmpentity->chromosome[0])[n] +=
-                pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                                - ((double *)tmpentity->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
+                weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                - ((double *)tmpentity->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;
@@ -623,12 +638,12 @@ int ga_differentialevolution(	population		*pop,
             do
               {
               ((double *)tmpentity->chromosome[0])[n] +=
-                pop->de_params->weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
-                                                - ((double *)tmpentity->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
-                                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
-                                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
+                weighting_factor*(((double *)pop->entity_iarray[best]->chromosome[0])[n]
+                                - ((double *)tmpentity->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[0]]->chromosome[0])[n]
+                                + ((double *)pop->entity_iarray[permutation[1]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[2]]->chromosome[0])[n]
+                                - ((double *)pop->entity_iarray[permutation[3]]->chromosome[0])[n]);
 
               n = (n+1)%pop->len_chromosomes;
               L++;

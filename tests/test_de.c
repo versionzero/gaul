@@ -41,27 +41,44 @@ struct strategies_t
   ga_de_strategy_type	strategy;
   ga_de_crossover_type	crossover;
   int			num_perturbed;
-  double		weighting_factor;
   double		crossover_factor;
+  double		weighting_factor;
+  double		weighting_factor2;
   };
 
 static struct strategies_t strategy[]={
-        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
-        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
-        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.5,  0.8 },
-        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
-        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
-        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.5,  0.8 },
-        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.5,  0.8 },
-        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.5,  0.8 },
-        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
-        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
-        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.5,  0.8 },
-        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
-        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
-        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.5,  0.8 },
-        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.5,  0.8 },
-        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.5,  0.8 },
+        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 0.5, 0.5 },
+        { "DE/best/1/exp (DE0)",     GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 2.0, 0.0 },
+        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 0.5, 0.5 },
+        { "DE/best/2/exp",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 2.0, 0.0 },
+        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.8, 0.5, 0.5 },
+        { "'DE/best/3/exp'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.8, 2.0, 0.0 },
+        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 0.5, 0.5 },
+        { "DE/rand/1/exp (DE1)",     GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 2.0, 0.0 },
+        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 0.5, 0.5 },
+        { "DE/rand/2/exp",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 2.0, 0.0 },
+        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.8, 0.5, 0.5 },
+        { "'DE/rand/3/exp'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_EXPONENTIAL, 3, 0.8, 2.0, 0.0 },
+        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 0.5, 0.5 },
+        { "DE/rand-to-best/1/exp",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 1, 0.8, 2.0, 0.0 },
+        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 0.5, 0.5 },
+        { "'DE/rand-to-best/2/exp'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_EXPONENTIAL, 2, 0.8, 2.0, 0.0 },
+        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 0.5, 0.5 },
+        { "DE/best/1/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 2.0, 0.0 },
+        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 0.5, 0.5 },
+        { "DE/best/2/bin",           GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 2.0, 0.0 },
+        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.8, 0.5, 0.5 },
+        { "'DE/best/3/bin'",         GA_DE_STRATEGY_BEST,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.8, 2.0, 0.0 },
+        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 0.5, 0.5 },
+        { "DE/rand/1/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 2.0, 0.0 },
+        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 0.5, 0.5 },
+        { "DE/rand/2/bin",           GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 2.0, 0.0 },
+        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.8, 0.5, 0.5 },
+        { "'DE/rand/3/bin'",         GA_DE_STRATEGY_RAND,       GA_DE_CROSSOVER_BINOMIAL,    3, 0.8, 2.0, 0.0 },
+        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 0.5, 0.5 },
+        { "DE/rand-to-best/1/bin",   GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    1, 0.8, 2.0, 0.0 },
+        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 0.5, 0.5 },
+        { "'DE/rand-to-best/2/bin'", GA_DE_STRATEGY_RANDTOBEST, GA_DE_CROSSOVER_BINOMIAL,    2, 0.8, 2.0, 0.0 },
         { NULL, 0, 0, 0, 0.0, 0.0 } };
 
 
@@ -177,10 +194,20 @@ int main(int argc, char **argv)
 
   while ( strategy[i].label != NULL )
     {
-    printf( "Strategy %s ; C = %f ; F = %f\n",
+    if ( strategy[i].weighting_factor != strategy[i].weighting_factor2 )
+      {
+      printf( "Strategy %s ; C = %f ; F = rand( %f, %f )\n",
             strategy[i].label,
             strategy[i].crossover_factor,
-            strategy[i].weighting_factor );
+            strategy[i].weighting_factor, strategy[i].weighting_factor2 );
+      }
+    else
+      {
+      printf( "Strategy %s ; C = %f ; F = %f\n",
+              strategy[i].label,
+              strategy[i].crossover_factor,
+              strategy[i].weighting_factor );
+      }
 
     pop = ga_genesis_double(
          40,			/* const int              population_size */
@@ -203,7 +230,8 @@ int main(int argc, char **argv)
 
     ga_population_set_differentialevolution_parameters(
         pop, strategy[i].strategy, strategy[i].crossover,
-        strategy[i].num_perturbed, strategy[i].weighting_factor, strategy[i].crossover_factor
+        strategy[i].num_perturbed, strategy[i].weighting_factor, strategy[i].weighting_factor2,
+        strategy[i].crossover_factor
         );
 
     ga_differentialevolution(

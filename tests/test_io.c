@@ -189,7 +189,7 @@ int main(int argc, char **argv)
   if (filename_in == NULL)
     {
     pop = ga_genesis_char(
-       100,			/* const int              population_size */
+       40,			/* const int              population_size */
        1,			/* const int              num_chromo */
        strlen(target_text),	/* const int              len_chromo */
        NULL,		 	/* GAgeneration_hook      generation_hook */

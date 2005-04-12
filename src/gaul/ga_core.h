@@ -213,8 +213,9 @@ typedef struct
   ga_de_strategy_type	strategy;		/* Selection strategy. */
   ga_de_crossover_type	crossover_method;	/* Crossover strategy. */
   int			num_perturbed;		/* Number to perturb. */
-  double		weighting_factor;	/* Crossover weighting factor. */
   double		crossover_factor;	/* Crossover ratio. */
+  double		weighting_min;		/* Minimum crossover weighting factor. */
+  double		weighting_max;		/* Maximum crossover weighting factor. */
   } ga_de_t;
 
 /*

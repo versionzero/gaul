@@ -1,5 +1,5 @@
 dnl ***************************************************************
-dnl gaul/configure.in
+dnl gaul-devel/configure.in
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
@@ -32,37 +32,31 @@ dnl
 dnl ***************************************************************
 
 #
-# We require autoconf 2.5 or above
+# We require autoconf 2.57 or above
 #
-AC_PREREQ(2.5)
+AC_PREREQ(2.57)
 
 #
-# init autoconf (and check for presence of gaul.h - the public header file)
-# Specify a configuration file
+# init autoconf
 #
-AC_INIT(src/gaul.h)
+AC_INIT(gaul-devel, 0.1848, gaul@linux-domain.com)
+
+# Specify a configuration file
 AM_CONFIG_HEADER(config.h util/gaul/gaul_config.h)
 AC_CANONICAL_SYSTEM
 
-PACKAGE=gaul-devel
-
+PACKAGE="gaul-devel"
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1848
 GA_PATCH_VERSION=1
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
-# Ugly kludge.  What is the proper way to do this?
-#
-#ACLOCAL="$ACLOCAL -I ."
-#ACLOCAL="aclocal -I ."
-
-#
 # libtool versioning
 #
 LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 LT_CURRENT=0
-LT_REVISION=$GA_PATCH_VERSION
+LT_REVISION=${GA_PATCH_VERSION}
 AC_SUBST(LT_RELEASE)
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
@@ -74,13 +68,16 @@ AC_SUBST(LT_REVISION)
 AC_DEFINE_UNQUOTED(GA_MAJOR_VERSION, ${GA_MAJOR_VERSION}, [Major version number.])
 AC_DEFINE_UNQUOTED(GA_MINOR_VERSION, ${GA_MINOR_VERSION}, [Minor version number.])
 AC_DEFINE_UNQUOTED(GA_PATCH_VERSION, ${GA_PATCH_VERSION}, [Patch level.])
+AC_SUBST(GA_MAJOR_VERSION)
+AC_SUBST(GA_MINOR_VERSION)
+AC_SUBST(GA_PATCH_VERSION)
 
 AC_DEFINE_UNQUOTED(GA_UNAME_STRING, "`uname -a`", [Record compilation platform information.])
 AC_DEFINE_UNQUOTED(GA_BUILD_DATE_STRING, "`date +%d/%m/%y`", [Record date of compilation.])
 AC_DEFINE_UNQUOTED(GA_VERSION_STRING, "${GA_VERSION}", [Version string.])
 
 # Initialise Automake.
-AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, no-define)
+AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, gaul@linux-domain.com)
 
 # Checks for programs.
 AC_PROG_CC

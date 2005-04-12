@@ -15,7 +15,7 @@
 
 
 #######################################################################
-# util/Makefile.am
+# gaul-devel/util/Makefile.am
 #######################################################################
 #
 # util - General collection of C-programming utility routines.
@@ -114,19 +114,19 @@ HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/stewart/gaul-devel/missing --run aclocal-1.9
+ACLOCAL = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run aclocal-1.9
 AMDEP_FALSE = #
 AMDEP_TRUE = 
-AMTAR = ${SHELL} /home/stewart/gaul-devel/missing --run tar
+AMTAR = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run tar
 AR = ar
 AS = as
-AUTOCONF = ${SHELL} /home/stewart/gaul-devel/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/stewart/gaul-devel/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/stewart/gaul-devel/missing --run automake-1.9
+AUTOCONF = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall  -I/usr/include/slang/
+CFLAGS = -g -O2 -Wall -I/home/stewart/Local/include -I/usr/include/slang/
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -143,8 +143,8 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = grep -E
 EXEEXT = 
-F77 = 
-FFLAGS = 
+F77 = g77
+FFLAGS = -g -O2
 GA_BUILD_DATE_STRING = 
 GA_MAJOR_VERSION = 0
 GA_MINOR_VERSION = 1848
@@ -162,14 +162,14 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS =  -lpthread -lpthread -lslang -lm -lslang -lefence
+LIBS = -lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
 LT_CURRENT = 0
 LT_RELEASE = 0.1848
 LT_REVISION = 1
-MAKEINFO = ${SHELL} /home/stewart/gaul-devel/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run makeinfo
 MEMORY_ALLOC_DEBUG = 0
 MEMORY_ALLOC_SAFE = 1
 MEMORY_CHUNKS_MIMIC = 0
@@ -178,11 +178,11 @@ MPILIBS =
 OBJDUMP = objdump
 OBJEXT = o
 PACKAGE = gaul-devel
-PACKAGE_BUGREPORT = 
-PACKAGE_NAME = 
-PACKAGE_STRING = 
-PACKAGE_TARNAME = 
-PACKAGE_VERSION = 
+PACKAGE_BUGREPORT = gaul@linux-domain.com
+PACKAGE_NAME = gaul-devel
+PACKAGE_STRING = gaul-devel 0.1848
+PACKAGE_TARNAME = gaul-devel
+PACKAGE_VERSION = 0.1848
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SET_MAKE = 
@@ -198,7 +198,7 @@ ac_ct_AS =
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 ac_ct_DLLTOOL = 
-ac_ct_F77 = 
+ac_ct_F77 = g77
 ac_ct_OBJDUMP = 
 ac_ct_RANLIB = ranlib
 ac_ct_STRIP = strip
@@ -226,14 +226,14 @@ host_os = linux-gnu
 host_vendor = redhat
 includedir = ${prefix}/include
 infodir = ${prefix}/info
-install_sh = /home/stewart/gaul-devel/install-sh
+install_sh = /home/stewart/Development/gaul-devel-0.1848-1/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localstatedir = ${prefix}/var
 mandir = ${prefix}/man
 mkdir_p = mkdir -p --
 oldincludedir = /usr/include
-prefix = /usr/local
+prefix = /home/stewart/Local/
 program_transform_name = s,x,x,
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com

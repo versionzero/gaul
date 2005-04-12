@@ -15,7 +15,7 @@
 @SET_MAKE@
 
 #######################################################################
-# util/Makefile.am
+# gaul-devel/util/Makefile.am
 #######################################################################
 #
 # util - General collection of C-programming utility routines.
