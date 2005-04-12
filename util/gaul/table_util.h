@@ -67,22 +67,22 @@ typedef struct TableStruct_t
 /*
  * Prototypes.
  */
-TableStruct	*table_new(void);
-void		table_destroy(TableStruct *table);
-boolean		table_set_size(TableStruct *table, unsigned int size);
-vpointer	table_remove_index(TableStruct *table, unsigned int index);
-unsigned int	table_remove_data(TableStruct *table, vpointer data);
-unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
-vpointer	table_get_data(TableStruct *table, unsigned int index);
-vpointer	*table_get_data_all(TableStruct *table);
-unsigned int	*table_get_index_all(TableStruct *table);
-unsigned int	table_lookup_index(TableStruct *table, vpointer data);
-unsigned int	table_add(TableStruct *table, vpointer data);
-unsigned int	table_count_items(TableStruct *table);
-void		table_diagnostics(void);
+FUNCPROTO TableStruct	*table_new(void);
+FUNCPROTO void		table_destroy(TableStruct *table);
+FUNCPROTO boolean		table_set_size(TableStruct *table, unsigned int size);
+FUNCPROTO vpointer	table_remove_index(TableStruct *table, unsigned int index);
+FUNCPROTO unsigned int	table_remove_data(TableStruct *table, vpointer data);
+FUNCPROTO unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
+FUNCPROTO vpointer	table_get_data(TableStruct *table, unsigned int index);
+FUNCPROTO vpointer	*table_get_data_all(TableStruct *table);
+FUNCPROTO unsigned int	*table_get_index_all(TableStruct *table);
+FUNCPROTO unsigned int	table_lookup_index(TableStruct *table, vpointer data);
+FUNCPROTO unsigned int	table_add(TableStruct *table, vpointer data);
+FUNCPROTO unsigned int	table_count_items(TableStruct *table);
+FUNCPROTO void		table_diagnostics(void);
 
 #ifndef TABLE_COMPILE_MAIN
-boolean	table_test(void);
+FUNCPROTO boolean	table_test(void);
 #endif
 
 #endif /* TABLE_UTIL_H_INCLUDED */

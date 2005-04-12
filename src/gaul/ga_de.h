@@ -41,14 +41,14 @@
  * Prototypes.
  */
 
-void ga_population_set_differentialevolution_parameters( population *pop,
+FUNCPROTO void ga_population_set_differentialevolution_parameters( population *pop,
                                                          const ga_de_strategy_type strategy,
                                                          const ga_de_crossover_type crossover,
                                                          const int num_perturbed,
                                                          const double weighting_min,
                                                          const double weighting_max,
                                                          const double crossover_factor );
-int ga_differentialevolution(    population              *pop,
+FUNCPROTO int ga_differentialevolution(    population              *pop,
 	        const int               max_generations );
 
 #endif	/* GA_DE_H_INCLUDED */

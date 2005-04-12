@@ -65,29 +65,29 @@ typedef struct AVLTree_t
  * Prototypes.
  */
 
-void		avltree_init_openmp(void);
-AVLTree		*avltree_new(AVLKeyFunc key_generate_func);
-void		avltree_delete(AVLTree *tree);
-void		avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func);
-boolean		avltree_insert(AVLTree *tree, vpointer data);
-vpointer	avltree_remove(AVLTree *tree, vpointer data);
-vpointer	avltree_remove_key(AVLTree *tree, AVLKey key);
-vpointer	avltree_lookup(AVLTree *tree, vpointer data);
-vpointer	avltree_lookup_lowest(AVLTree *tree);
-vpointer	avltree_lookup_highest(AVLTree *tree);
-vpointer	avltree_lookup_key(AVLTree *tree, AVLKey key);
-vpointer	avltree_ordered_search(AVLTree *tree,
+FUNCPROTO void		avltree_init_openmp(void);
+FUNCPROTO AVLTree		*avltree_new(AVLKeyFunc key_generate_func);
+FUNCPROTO void		avltree_delete(AVLTree *tree);
+FUNCPROTO void		avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func);
+FUNCPROTO boolean		avltree_insert(AVLTree *tree, vpointer data);
+FUNCPROTO vpointer	avltree_remove(AVLTree *tree, vpointer data);
+FUNCPROTO vpointer	avltree_remove_key(AVLTree *tree, AVLKey key);
+FUNCPROTO vpointer	avltree_lookup(AVLTree *tree, vpointer data);
+FUNCPROTO vpointer	avltree_lookup_lowest(AVLTree *tree);
+FUNCPROTO vpointer	avltree_lookup_highest(AVLTree *tree);
+FUNCPROTO vpointer	avltree_lookup_key(AVLTree *tree, AVLKey key);
+FUNCPROTO vpointer	avltree_ordered_search(AVLTree *tree,
                          AVLSearchFunc search_func, vpointer userdata);
-vpointer	avltree_search(AVLTree *tree,
+FUNCPROTO vpointer	avltree_search(AVLTree *tree,
                          AVLMatchFunc search_func, vpointer userdata);
-void		avltree_traverse(AVLTree *tree,
+FUNCPROTO void		avltree_traverse(AVLTree *tree,
 			 AVLTraverseFunc traverse_func, vpointer userdata);
-int		avltree_height(AVLTree *tree);
-int		avltree_num_nodes(AVLTree *tree);
-void		avltree_diagnostics(void);
+FUNCPROTO int		avltree_height(AVLTree *tree);
+FUNCPROTO int		avltree_num_nodes(AVLTree *tree);
+FUNCPROTO void		avltree_diagnostics(void);
 
 #ifndef AVLTREE_COMPILE_MAIN
-boolean		avltree_test(void);
+FUNCPROTO boolean		avltree_test(void);
 #endif
 
 #endif /* AVLTREE_H_INCLUDED */

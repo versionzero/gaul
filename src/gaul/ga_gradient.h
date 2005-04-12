@@ -40,13 +40,13 @@
 /*
  * Prototypes.
  */
-void ga_population_set_gradient_parameters( population		*pop,
+FUNCPROTO void ga_population_set_gradient_parameters( population		*pop,
                                         const GAto_double	to_double,
                                         const GAfrom_double	from_double,
                                         const GAgradient	gradient,
 					const int		dimensions,
 					const double		step_size);
-int ga_steepestascent(    population              *pop,
+FUNCPROTO int ga_steepestascent(    population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );
 

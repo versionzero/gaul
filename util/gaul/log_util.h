@@ -68,31 +68,39 @@ enum log_level_type {
  * Function prototypes
  */
 /* Function definition for custom output function: */
-typedef void	(*log_func)(const enum log_level_type level,
+FUNCPROTO typedef void	(*log_func)(const enum log_level_type level,
                           const char *func_name,
                           const char *file_name,
                           const int line_num,
                           const char *message);
 
-void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
-void	log_set_level(enum log_level_type level);
-void	log_set_file(const char *fname);
+FUNCPROTO void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
+FUNCPROTO void	log_set_level(enum log_level_type level);
+FUNCPROTO void	log_set_file(const char *fname);
 /*#if defined(__GNUC__) || defined(__INTEL_COMPILER)*/
 #if defined(__GNUC__)
-extern	inline enum log_level_type	log_get_level(void);
+#  if defined(WIN32)
+FUNCPROTO inline enum log_level_type	log_get_level(void);
+#  else
+FUNCPROTO extern	inline enum log_level_type	log_get_level(void);
+#  endif
 #else
 /*
- * The intel compiler will inlinen this anyway, depending upon IPO options.
+ * The intel compiler will inline this anyway, depending upon IPO options.
  * Other compiler probably won't.
  */
-extern	enum log_level_type	log_get_level(void);
+#  if defined(WIN32)
+FUNCPROTO enum log_level_type	log_get_level(void);
+#  else
+FUNCPROTO extern	enum log_level_type	log_get_level(void);
+#  endif
 #endif
 
 /*
  * This is the actual logging function, but isn't intended to be used
  * directly.
  */
-void	log_output( const enum log_level_type level,
+FUNCPROTO void	log_output( const enum log_level_type level,
                           const char *func_name,
                           const char *file_name,
                           const int line_num,
@@ -113,14 +121,14 @@ void	log_output( const enum log_level_type level,
 	                   __FILE__, __LINE__,		\
 	                   ##__VA_ARGS__); }
 #else
-void plog( const enum log_level_type level, const char *format, ... );
+FUNCPROTO void plog( const enum log_level_type level, const char *format, ... );
 #endif
 
 /*
  * SLang intrinsic function with equivalent functionality.
  */
 #if HAVE_SLANG==1
-void	log_wrapper(int *level, char *message);
+FUNCPROTO void	log_wrapper(int *level, char *message);
 #endif
 
 #endif /* LOG_UTIL_H_INCLUDED */

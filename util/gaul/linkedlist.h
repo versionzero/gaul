@@ -62,70 +62,70 @@ typedef struct SLList_t
  * Function prototypes.
  */
 
-void	linkedlist_init_openmp(void);
-SLList	*slink_new(void);
-void	slink_free_all(SLList *list);
-void	slink_free(SLList *list);
-SLList	*slink_append(SLList *list, vpointer data);
-SLList	*slink_prepend(SLList *list, vpointer data);
-SLList	*slink_insert_next(SLList *list, vpointer data);
-SLList	*slink_insert_index(SLList *list, vpointer data, int index);
-SLList	*slink_delete_data(SLList *list, vpointer data);
-SLList	*slink_delete_all_data(SLList *list, vpointer data);
-SLList	*slink_delete_link(SLList *list, SLList *link);
-SLList	*slink_clone(SLList *list);
-SLList	*slink_reverse(SLList *list);
-SLList	*slink_nth(SLList *list, const int index);
-vpointer	slink_nth_data(SLList *list, const int index);
-SLList	*slink_find(SLList *list, vpointer data);
-SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
-int	slink_index_link(SLList *list, SLList *link);
-int	slink_index_data(SLList *list, vpointer data);
-SLList	*slink_last(SLList *list);
-int	slink_size(SLList *list);
-boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
-SLList	*slink_sort_merge (SLList      *l1, 
+FUNCPROTO void	linkedlist_init_openmp(void);
+FUNCPROTO SLList	*slink_new(void);
+FUNCPROTO void	slink_free_all(SLList *list);
+FUNCPROTO void	slink_free(SLList *list);
+FUNCPROTO SLList	*slink_append(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_prepend(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_insert_next(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_insert_index(SLList *list, vpointer data, int index);
+FUNCPROTO SLList	*slink_delete_data(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_delete_all_data(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_delete_link(SLList *list, SLList *link);
+FUNCPROTO SLList	*slink_clone(SLList *list);
+FUNCPROTO SLList	*slink_reverse(SLList *list);
+FUNCPROTO SLList	*slink_nth(SLList *list, const int index);
+FUNCPROTO vpointer	slink_nth_data(SLList *list, const int index);
+FUNCPROTO SLList	*slink_find(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
+FUNCPROTO int	slink_index_link(SLList *list, SLList *link);
+FUNCPROTO int	slink_index_data(SLList *list, vpointer data);
+FUNCPROTO SLList	*slink_last(SLList *list);
+FUNCPROTO int	slink_size(SLList *list);
+FUNCPROTO boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
+FUNCPROTO SLList	*slink_sort_merge (SLList      *l1, 
 		     SLList      *l2,
 		     LLCompareFunc compare_func);
-SLList	*slink_sort(SLList       *list,
+FUNCPROTO SLList	*slink_sort(SLList       *list,
 	      LLCompareFunc compare_func);
-DLList	*dlink_new(void);
-void	dlink_free_all(DLList *list);
-void	dlink_free(DLList *list);
-DLList	*dlink_append(DLList *list, vpointer data);
-DLList	*dlink_prepend(DLList *list, vpointer data);
-DLList	*dlink_insert_next(DLList *list, vpointer data);
-DLList	*dlink_insert_prev(DLList *list, vpointer data);
-DLList	*dlink_insert_index(DLList	*list,
+FUNCPROTO DLList	*dlink_new(void);
+FUNCPROTO void	dlink_free_all(DLList *list);
+FUNCPROTO void	dlink_free(DLList *list);
+FUNCPROTO DLList	*dlink_append(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_prepend(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_insert_next(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_insert_prev(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_insert_index(DLList	*list,
 	       vpointer	 data,
 	       int	 index);
-DLList	*dlink_delete_all_data(DLList *list, vpointer data);
-DLList	*dlink_delete_data(DLList *list, vpointer data);
-DLList	*dlink_delete_link(DLList *list, DLList *link);
-DLList	*dlink_clone(DLList *list);
-DLList	*dlink_reverse(DLList *list);
-DLList	*dlink_nth(DLList *list, const int index);
-DLList	*dlink_pth(DLList *list, const int index);
-vpointer	dlink_nth_data(DLList *list, const int index);
-vpointer	dlink_pth_data(DLList *list, const int index);
-DLList	*dlink_find(DLList *list, vpointer data);
-DLList	*dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func);
-int	dlink_index_link(DLList *list, DLList *link);
-int	dlink_index_data(DLList *list, vpointer data);
-DLList	*dlink_last(DLList *list);
-DLList	*dlink_first(DLList *list);
-int	dlink_size(DLList *list);
-boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
-boolean	dlink_foreach_reverse(DLList *list,
+FUNCPROTO DLList	*dlink_delete_all_data(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_delete_data(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_delete_link(DLList *list, DLList *link);
+FUNCPROTO DLList	*dlink_clone(DLList *list);
+FUNCPROTO DLList	*dlink_reverse(DLList *list);
+FUNCPROTO DLList	*dlink_nth(DLList *list, const int index);
+FUNCPROTO DLList	*dlink_pth(DLList *list, const int index);
+FUNCPROTO vpointer	dlink_nth_data(DLList *list, const int index);
+FUNCPROTO vpointer	dlink_pth_data(DLList *list, const int index);
+FUNCPROTO DLList	*dlink_find(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func);
+FUNCPROTO int	dlink_index_link(DLList *list, DLList *link);
+FUNCPROTO int	dlink_index_data(DLList *list, vpointer data);
+FUNCPROTO DLList	*dlink_last(DLList *list);
+FUNCPROTO DLList	*dlink_first(DLList *list);
+FUNCPROTO int	dlink_size(DLList *list);
+FUNCPROTO boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
+FUNCPROTO boolean	dlink_foreach_reverse(DLList *list,
                        LLForeachFunc func, vpointer userdata);
-DLList	*dlink_sort_merge(DLList       *l1, 
+FUNCPROTO DLList	*dlink_sort_merge(DLList       *l1, 
 		   DLList       *l2,
 		   LLCompareFunc compare_func);
-DLList	*dlink_sort(DLList       *list,
+FUNCPROTO DLList	*dlink_sort(DLList       *list,
 	     LLCompareFunc compare_func);
-void linkedlist_diagnostics(void);
+FUNCPROTO void linkedlist_diagnostics(void);
 #ifndef LINKEDLIST_COMPILE_MAIN
-boolean linkedlist_test(void);
+FUNCPROTO boolean linkedlist_test(void);
 #endif
 
 #define slink_insert_prev(X,Y)	slink_prepend((X), (Y));

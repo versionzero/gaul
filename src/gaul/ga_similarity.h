@@ -48,22 +48,22 @@ double	ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
 /*
  * Prototypes.
  */
-double	ga_similarity_bitstring_tanimoto(const population *pop,
+FUNCPROTO double	ga_similarity_bitstring_tanimoto(const population *pop,
                                   const entity *alpha, const entity *beta);
-double	ga_similarity_bitstring_dice(const population *pop,
+FUNCPROTO double	ga_similarity_bitstring_dice(const population *pop,
                                   const entity *alpha, const entity *beta);
-double	ga_similarity_bitstring_hamming(const population *pop,
+FUNCPROTO double	ga_similarity_bitstring_hamming(const population *pop,
                                   const entity *alpha, const entity *beta);
-double	ga_similarity_bitstring_euclidean(const population *pop,
+FUNCPROTO double	ga_similarity_bitstring_euclidean(const population *pop,
                                   const entity *alpha, const entity *beta);
-double	ga_similarity_bitstring_cosine(const population *pop,
+FUNCPROTO double	ga_similarity_bitstring_cosine(const population *pop,
                                   const entity *alpha, const entity *beta);
 
-double	ga_similarity_double_tanimoto(const population *pop,
+FUNCPROTO double	ga_similarity_double_tanimoto(const population *pop,
                                   const entity *alpha, const entity *beta);
-double	ga_similarity_double_dice(const population *pop,
+FUNCPROTO double	ga_similarity_double_dice(const population *pop,
                                       const entity *alpha, const entity *beta);
-double	ga_similarity_double_cosine(const population *pop,
+FUNCPROTO double	ga_similarity_double_cosine(const population *pop,
                                       const entity *alpha, const entity *beta);
 
 #endif	/* GA_SIMILARITY_H_INCLUDED */

@@ -57,35 +57,35 @@ typedef struct MemChunk_t MemChunk;
  * Prototypes.
  */
 
-void		mem_chunk_init_openmp(void);
+FUNCPROTO void		mem_chunk_init_openmp(void);
 
-MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
-MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
-boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);
-boolean		mem_chunk_isempty_real(MemChunk *mem_chunk);
-void		mem_chunk_destroy_real(MemChunk *mem_chunk);
-void		*mem_chunk_alloc_real(MemChunk *mem_chunk);
-void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
-void		mem_chunk_clean_real(MemChunk *mem_chunk);
-void		mem_chunk_reset_real(MemChunk *mem_chunk);
-boolean		mem_chunk_test_real(void);
-boolean		mem_chunk_check_all_bounds_real(MemChunk *mem_chunk);
-boolean		mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem);
-void		mem_chunk_diagnostics_real(void);
+FUNCPROTO MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
+FUNCPROTO MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
+FUNCPROTO boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_isempty_real(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_destroy_real(MemChunk *mem_chunk);
+FUNCPROTO void		*mem_chunk_alloc_real(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
+FUNCPROTO void		mem_chunk_clean_real(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_reset_real(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_test_real(void);
+FUNCPROTO boolean		mem_chunk_check_all_bounds_real(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem);
+FUNCPROTO void		mem_chunk_diagnostics_real(void);
 
-MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
-MemChunk	*mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms);
-boolean		mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk);
-boolean		mem_chunk_isempty_mimic(MemChunk *mem_chunk);
-void		mem_chunk_destroy_mimic(MemChunk *mem_chunk);
-void		*mem_chunk_alloc_mimic(MemChunk *mem_chunk);
-void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
-void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
-void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
-boolean		mem_chunk_test_mimic(void);
-boolean		mem_chunk_check_all_bounds_mimic(MemChunk *mem_chunk);
-boolean		mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem);
-void		mem_chunk_diagnostics_mimic(void);
+FUNCPROTO MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
+FUNCPROTO MemChunk	*mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms);
+FUNCPROTO boolean		mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_isempty_mimic(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_destroy_mimic(MemChunk *mem_chunk);
+FUNCPROTO void		*mem_chunk_alloc_mimic(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
+FUNCPROTO void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
+FUNCPROTO void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_test_mimic(void);
+FUNCPROTO boolean		mem_chunk_check_all_bounds_mimic(MemChunk *mem_chunk);
+FUNCPROTO boolean		mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem);
+FUNCPROTO void		mem_chunk_diagnostics_mimic(void);
 
 /*
  * Exposed API.

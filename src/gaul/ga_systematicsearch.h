@@ -40,9 +40,9 @@
 /*
  * Prototypes.
  */
-void ga_population_set_search_parameters( population              *pop,
+FUNCPROTO void ga_population_set_search_parameters( population              *pop,
                                         GAscan_chromosome	scan_chromosome);
-int ga_search(population *pop, entity *initial);
+FUNCPROTO int ga_search(population *pop, entity *initial);
 
 #endif	/* GA_SYSTEMATICSEARCH_H_INCLUDED */
 

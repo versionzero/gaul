@@ -81,71 +81,74 @@ typedef struct random_state_t
  * Function prototypes.
  */
 
-unsigned int	 random_rand(void);
-void	random_seed(const unsigned int seed);
-void	random_tseed(void);
-void	random_init(void);
-boolean	random_isinit(void);
-char	*random_get_state_str(void);
-unsigned int random_get_state_str_len(void);
-void	random_set_state_str(char *state);
-random_state	random_get_state(void);
-void	random_set_state(random_state state);
-boolean	random_boolean(void);
-boolean	random_boolean_prob(const double prob);
-unsigned int	random_int(const unsigned int max);
-int	random_int_range(const int min, const int max);
-double	random_double_full(void);
-double	random_double(const double max);
-double	random_double_range(const double min, const double max);
-double	random_double_1(void);
-double	random_unit_uniform(void);
-double	random_gaussian(const double mean, const double stddev);
-double	random_unit_gaussian(void);
-void	random_diagnostics(void);
-boolean	random_test(void);
+FUNCPROTO unsigned int	 random_rand(void);
+FUNCPROTO void	random_seed(const unsigned int seed);
+FUNCPROTO void	random_tseed(void);
+FUNCPROTO void	random_init(void);
+FUNCPROTO boolean	random_isinit(void);
+FUNCPROTO char	*random_get_state_str(void);
+FUNCPROTO unsigned int random_get_state_str_len(void);
+FUNCPROTO void	random_set_state_str(char *state);
+FUNCPROTO random_state	random_get_state(void);
+FUNCPROTO void	random_set_state(random_state state);
 
-float	random_float_full(void);
-float	random_float(const float max);
-float	random_float_range(const float min, const float max);
-float	random_float_1(void);
-float	random_float_unit_uniform(void);
-float	random_float_gaussian(const float mean, const float stddev);
-float	random_float_unit_gaussian(void);
-float	random_float_cauchy(void);
-float	random_float_exponential(void);
+FUNCPROTO boolean	random_boolean(void);
+FUNCPROTO boolean	random_boolean_prob(const double prob);
 
-void	random_int_permutation(const int size, int *iarray, int *oarray);
+FUNCPROTO unsigned int	random_int(const unsigned int max);
+FUNCPROTO int	random_int_range(const int min, const int max);
+
+FUNCPROTO double	random_double_full(void);
+FUNCPROTO double	random_double(const double max);
+FUNCPROTO double	random_double_range(const double min, const double max);
+FUNCPROTO double	random_double_1(void);
+FUNCPROTO double	random_unit_uniform(void);
+FUNCPROTO double	random_gaussian(const double mean, const double stddev);
+FUNCPROTO double	random_unit_gaussian(void);
+FUNCPROTO void	random_diagnostics(void);
+FUNCPROTO boolean	random_test(void);
+
+FUNCPROTO float	random_float_full(void);
+FUNCPROTO float	random_float(const float max);
+FUNCPROTO float	random_float_range(const float min, const float max);
+FUNCPROTO float	random_float_1(void);
+FUNCPROTO float	random_float_unit_uniform(void);
+FUNCPROTO float	random_float_gaussian(const float mean, const float stddev);
+FUNCPROTO float	random_float_unit_gaussian(void);
+FUNCPROTO float	random_float_cauchy(void);
+FUNCPROTO float	random_float_exponential(void);
+
+FUNCPROTO void	random_int_permutation(const int size, int *iarray, int *oarray);
 
 #define random_int_full	random_rand
 
 #if HAVE_SLANG==1
 
 /* These functions don't need wrappers:
-void	random_init(void)
-boolean	random_isinit(void)
-unsigned int	random_get_state_str(void);
-char	*random_get_state_str_len(void);
-void	random_set_state_str(char *state);
-double	random_double_1(void);
-boolean	random_boolean(void)
-double	random_unit_uniform(void)
-double	random_unit_gaussian(void)
-void	random_diagnostics(void)
-boolean	random_test(void)
+FUNCPROTO void	random_init(void)
+FUNCPROTO boolean	random_isinit(void)
+FUNCPROTO unsigned int	random_get_state_str(void);
+FUNCPROTO char	*random_get_state_str_len(void);
+FUNCPROTO void	random_set_state_str(char *state);
+FUNCPROTO double	random_double_1(void);
+FUNCPROTO boolean	random_boolean(void)
+FUNCPROTO double	random_unit_uniform(void)
+FUNCPROTO double	random_unit_gaussian(void)
+FUNCPROTO void	random_diagnostics(void)
+FUNCPROTO boolean	random_test(void)
 */
 /* These functions aren't defined as intrinsics anyway:
 State fetching/setting stuff.
 */
 
-int	random_rand_wrapper(void);
-void	random_seed_wrapper(int *seed);
-boolean	random_boolean_prob_wrapper(double *prob);
-int	random_int_wrapper(int *max);
-int	random_int_range_wrapper(int *min, int *max);
-double	random_double_wrapper(double *max);
-double	random_double_range_wrapper(double *min, double *max);
-double	random_gaussian_wrapper(double *mean, double *stddev);
+FUNCPROTO int	random_rand_wrapper(void);
+FUNCPROTO void	random_seed_wrapper(int *seed);
+FUNCPROTO boolean	random_boolean_prob_wrapper(double *prob);
+FUNCPROTO int	random_int_wrapper(int *max);
+FUNCPROTO int	random_int_range_wrapper(int *min, int *max);
+FUNCPROTO double	random_double_wrapper(double *max);
+FUNCPROTO double	random_double_range_wrapper(double *min, double *max);
+FUNCPROTO double	random_gaussian_wrapper(double *mean, double *stddev);
 
 #endif	/* HAVE_SLANG==1 */
 

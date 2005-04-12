@@ -50,34 +50,34 @@ typedef void    (*GAspecificmutate)(int chromo, int point, int *data);
 /*
  * Prototypes
  */
-void	 ga_attach_mpi_slave( population *pop );
-void	 ga_detach_mpi_slaves(void);
+FUNCPROTO void	 ga_attach_mpi_slave( population *pop );
+FUNCPROTO void	 ga_detach_mpi_slaves(void);
 
-int	ga_evolution(	population		*pop,
+FUNCPROTO int	ga_evolution(	population		*pop,
 			const int		max_generations );
-int	ga_evolution_mp(	population		*pop,
+FUNCPROTO int	ga_evolution_mp(	population		*pop,
 			const int		max_generations );
-int	ga_evolution_mpi(	population		*pop,
+FUNCPROTO int	ga_evolution_mpi(	population		*pop,
 			const int		max_generations );
-int	ga_evolution_forked(	population		*pop,
+FUNCPROTO int	ga_evolution_forked(	population		*pop,
 			const int		max_generations );
-int	ga_evolution_threaded(	population		*pop,
+FUNCPROTO int	ga_evolution_threaded(	population		*pop,
 			const int		max_generations );
-int	ga_evolution_steady_state(	population		*pop,
+FUNCPROTO int	ga_evolution_steady_state(	population		*pop,
 			const int		max_iterations );
-int	ga_evolution_archipelago( const int num_pops,
+FUNCPROTO int	ga_evolution_archipelago( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-int	ga_evolution_archipelago_forked( const int num_pops,
+FUNCPROTO int	ga_evolution_archipelago_forked( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-int	ga_evolution_archipelago_threaded( const int num_pops,
+FUNCPROTO int	ga_evolution_archipelago_threaded( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-int	ga_evolution_archipelago_mp( const int num_pops,
+FUNCPROTO int	ga_evolution_archipelago_mp( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-int	ga_evolution_archipelago_mpi( const int num_pops,
+FUNCPROTO int	ga_evolution_archipelago_mpi( const int num_pops,
                         population              **pops,
                         const int               max_generations );
 

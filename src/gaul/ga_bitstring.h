@@ -48,34 +48,34 @@
 /*
  * Prototypes.
  */
-byte *ga_bit_new( int length );
-void ga_bit_free( byte *bstr );
-void ga_bit_set( byte *bstr, int n );
-void ga_bit_clear( byte *bstr, int n );
-void ga_bit_invert( byte *bstr, int n );
-boolean ga_bit_get( byte *bstr, int n );
-void ga_bit_randomize( byte *bstr, int n );
-void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length );
-size_t ga_bit_sizeof( int length );
-byte *ga_bit_clone( byte *dest, byte *src, int length );
+FUNCPROTO byte *ga_bit_new( int length );
+FUNCPROTO void ga_bit_free( byte *bstr );
+FUNCPROTO void ga_bit_set( byte *bstr, int n );
+FUNCPROTO void ga_bit_clear( byte *bstr, int n );
+FUNCPROTO void ga_bit_invert( byte *bstr, int n );
+FUNCPROTO boolean ga_bit_get( byte *bstr, int n );
+FUNCPROTO void ga_bit_randomize( byte *bstr, int n );
+FUNCPROTO void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length );
+FUNCPROTO size_t ga_bit_sizeof( int length );
+FUNCPROTO byte *ga_bit_clone( byte *dest, byte *src, int length );
 
 /* Integer conversion. */
-unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length );
-void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value );
-int ga_bit_decode_binary_int( byte *bstr, int n, int length );
-void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value );
-int ga_bit_decode_gray_int( byte *bstr, int n, int length );
-unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
-void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value );
+FUNCPROTO unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length );
+FUNCPROTO void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value );
+FUNCPROTO int ga_bit_decode_binary_int( byte *bstr, int n, int length );
+FUNCPROTO void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value );
+FUNCPROTO int ga_bit_decode_gray_int( byte *bstr, int n, int length );
+FUNCPROTO unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
+FUNCPROTO void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value );
 
 /* Real conversion. */
-double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent );
-void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value );
-double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent );
-void ga_bit_encode_grayy_real( byte *bstr, int n, int mantissa, int exponent, double value );
+FUNCPROTO double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent );
+FUNCPROTO void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value );
+FUNCPROTO double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent );
+FUNCPROTO void ga_bit_encode_grayy_real( byte *bstr, int n, int mantissa, int exponent, double value );
 
 /* Test. */
-boolean ga_bit_test( void );
+FUNCPROTO boolean ga_bit_test( void );
 
 #endif	/* GA_BITSTRING_H_INCLUDED */
 

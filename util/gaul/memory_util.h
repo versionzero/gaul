@@ -180,23 +180,23 @@ typedef enum memory_alloc_type_t
 /*
  * Prototypes
  */
-void	memory_init_openmp(void);
+FUNCPROTO void	memory_init_openmp(void);
 
-void	memory_open_log(const char *fname);
-void	memory_write_log(const char *text);
+FUNCPROTO void	memory_open_log(const char *fname);
+FUNCPROTO void	memory_write_log(const char *text);
 
-void	memory_display_status(void);
-void	memory_display_table(void);
+FUNCPROTO void	memory_display_status(void);
+FUNCPROTO void	memory_display_table(void);
 
-int	memory_total(void);
-void	memory_print_alloc_to(void *pnt);
-int	memory_alloc_to(void *pnt);
-void	memory_set_pnt_label(void *pnt, char *label);
-int	memory_check_all_bounds(void);
-int	memory_check_bounds(void *pnt);
-void	memory_set_strict(int i);
-boolean	memory_set_bounds(int i);
-void	memory_set_verbose(int i);
+FUNCPROTO int	memory_total(void);
+FUNCPROTO void	memory_print_alloc_to(void *pnt);
+FUNCPROTO int	memory_alloc_to(void *pnt);
+FUNCPROTO void	memory_set_pnt_label(void *pnt, char *label);
+FUNCPROTO int	memory_check_all_bounds(void);
+FUNCPROTO int	memory_check_bounds(void *pnt);
+FUNCPROTO void	memory_set_strict(int i);
+FUNCPROTO boolean	memory_set_bounds(int i);
+FUNCPROTO void	memory_set_verbose(int i);
 
 /*
  * Prototypes for [unrecommended] direct access to functions.
@@ -206,19 +206,19 @@ void	memory_set_verbose(int i);
  * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
  * Debug versions.
  */
-void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, const char*, const char*, const int, const char*);
-void	*s_free_debug(void*, const char*, const char*, const int);
+FUNCPROTO void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, const char*, const char*, const int, const char*);
+FUNCPROTO void	*s_free_debug(void*, const char*, const char*, const int);
 
 /*
  * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
  * Safe versions.
  */
-void	*s_malloc_safe(size_t, const char*, const char*, const int);
-void	*s_calloc_safe(size_t, size_t, const char*, const char*, const int);
-void	*s_realloc_safe(void*, size_t, const char*, const char*, const int);
-char	*s_strdup_safe(const char*, const char*, const char*, const int);
-char	*s_strndup_safe(const char*, size_t, const char*, const char*, const int);
-void	s_free_safe(void*, const char*, const char*, const int);
+FUNCPROTO void	*s_malloc_safe(size_t, const char*, const char*, const int);
+FUNCPROTO void	*s_calloc_safe(size_t, size_t, const char*, const char*, const int);
+FUNCPROTO void	*s_realloc_safe(void*, size_t, const char*, const char*, const int);
+FUNCPROTO char	*s_strdup_safe(const char*, const char*, const char*, const int);
+FUNCPROTO char	*s_strndup_safe(const char*, size_t, const char*, const char*, const int);
+FUNCPROTO void	s_free_safe(void*, const char*, const char*, const int);
 
 #endif
 

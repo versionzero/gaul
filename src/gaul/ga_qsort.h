@@ -47,7 +47,7 @@
 #endif
 
 /*
- * Prototypes.
+ * Private prototypes.
  */
 void	sort_population(population *pop);
 boolean	ga_qsort_test(void);

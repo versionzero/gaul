@@ -40,12 +40,12 @@
 /*
  * Prototypes.
  */
-void ga_population_set_simplex_parameters( population		*pop,
+FUNCPROTO void ga_population_set_simplex_parameters( population		*pop,
 					const int		dimensions,
 					const double		step,
                                         const GAto_double	to_double,
                                         const GAfrom_double	from_double);
-int ga_simplex( population              *pop,
+FUNCPROTO int ga_simplex( population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );
 

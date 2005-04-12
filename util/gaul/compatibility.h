@@ -80,59 +80,59 @@
  */
 
 #if HAVE_IPOW != 1
-int ipow(int n, int e);
+FUNCPROTO int ipow(int n, int e);
 #endif
 
 #if HAVE_DPOW != 1
-double dpow(double n, int e);
+FUNCPROTO double dpow(double n, int e);
 #endif
 
 #if HAVE_STRCHR != 1
 # if HAVE_INDEX == 1
 #  define strchr index
 # else
-char *strchr(const char *str, int c);
+FUNCPROTO char *strchr(const char *str, int c);
 # endif
 #endif
 
 #if HAVE_STRLEN != 1
-size_t strlen(const char *str);
+FUNCPROTO size_t strlen(const char *str);
 #endif
 
 #if HAVE_STRCMP != 1
-int strcmp(const char *str1, const char *str2);
+FUNCPROTO int strcmp(const char *str1, const char *str2);
 #endif
 
 #if HAVE_STRNCMP != 1
-int strncmp(const char *str1, const char *str2, size_t len);
+FUNCPROTO int strncmp(const char *str1, const char *str2, size_t len);
 #endif
 
 #if HAVE_STRCPY != 1
-char *strcpy(char *str1, const char *str2);
+FUNCPROTO char *strcpy(char *str1, const char *str2);
 #endif
 
 #if HAVE_STRNCPY != 1
-char *strncpy(char *str1, const char *str2, size_t len);
+FUNCPROTO char *strncpy(char *str1, const char *str2, size_t len);
 #endif
 
 #if HAVE_STRPBRK != 1
-char *strpbrk(const char *s, const char *accept);
+FUNCPROTO char *strpbrk(const char *s, const char *accept);
 #endif
 
 #if HAVE_STRSEP != 1
-char *strsep(char **str, const char *delim);
+FUNCPROTO char *strsep(char **str, const char *delim);
 #endif
 
 #if HAVE_STRCASECMP != 1
-int strcasecmp(const char *str0, const char *str1);
+FUNCPROTO int strcasecmp(const char *str0, const char *str1);
 #endif
 
 #if HAVE_STRNCASECMP != 1
-int strncasecmp(const char *str0, const char *str1, size_t n);
+FUNCPROTO int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
 
 #if HAVE_USLEEP != 1
-void usleep(unsigned long usec);
+FUNCPROTO void usleep(unsigned long usec);
 #endif
 
 #if HAVE_MEMCPY != 1
@@ -140,7 +140,7 @@ void usleep(unsigned long usec);
 # if HAVE_BCOPY == 1
 #  define memcpy(A, B, C) bcopy((B), (A), (C))
 # else
-void memcpy(char *dest, const char *src, size_t len);
+FUNCPROTO void memcpy(char *dest, const char *src, size_t len);
 # endif
 #endif
 
@@ -149,44 +149,44 @@ void memcpy(char *dest, const char *src, size_t len);
 # if HAVE_BCMP == 1
 #  define memcmp(A, B, C) bcmp((B), (A), (C))
 # else
-int memcmp(const void *src1, const void *src2, size_t n);
+FUNCPROTO int memcmp(const void *src1, const void *src2, size_t n);
 # endif
 #endif
 
 #if HAVE_STRDUP != 1
-char *strdup(const char *str);
+FUNCPROTO char *strdup(const char *str);
 #endif
 
 #if HAVE_STRNDUP != 1
-char *strndup(const char *str, size_t n);
+FUNCPROTO char *strndup(const char *str, size_t n);
 #endif
 
 #if HAVE_DIEF != 1
 /*
  * HAVE_DIEF is set in "SAA_header.h", not "config.h"
  */
-void dief(const char *format, ...);
+FUNCPROTO void dief(const char *format, ...);
 #endif
 
 #if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )
 /* FIXME: Need to add a Windows compatible version of this function. */
-pid_t waitpid(pid_t pid, int *pstatus, int options);
+FUNCPROTO pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
 
 #if HAVE_MIN != 1
-int min(int a, int b);
+FUNCPROTO int min(int a, int b);
 #endif
 
 #if HAVE_MAX != 1
-int max(int a, int b);
+FUNCPROTO int max(int a, int b);
 #endif
 
 #if HAVE_SINCOS != 1
-void sincos( double radians, double *s, double *c );
+FUNCPROTO void sincos( double radians, double *s, double *c );
 #endif
 
 #if HAVE_GETHOSTNAME != 1
-int gethostname(char *name, size_t len);
+FUNCPROTO int gethostname(char *name, size_t len);
 #endif
 
 #endif /* COMPATIBILITY_H_INCLUDED */

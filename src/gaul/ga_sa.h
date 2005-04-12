@@ -40,12 +40,12 @@
 /*
  * Prototypes.
  */
-boolean ga_sa_boltzmann_acceptance(population *pop, entity *original, entity *new);
-boolean ga_sa_linear_acceptance(population *pop, entity *original, entity *new);
-void ga_population_set_sa_temperature(population *pop, const double temp);
-double ga_population_get_sa_temperature(population *pop);
-void ga_population_set_sa_parameters(population *pop, GAsa_accept sa_accept, const double initial_temp, const double final_temp, const double temp_step, const int temp_freq);
-int ga_sa(population *pop, entity *initial, const int max_iterations);
+FUNCPROTO boolean ga_sa_boltzmann_acceptance(population *pop, entity *original, entity *new);
+FUNCPROTO boolean ga_sa_linear_acceptance(population *pop, entity *original, entity *new);
+FUNCPROTO void ga_population_set_sa_temperature(population *pop, const double temp);
+FUNCPROTO double ga_population_get_sa_temperature(population *pop);
+FUNCPROTO void ga_population_set_sa_parameters(population *pop, GAsa_accept sa_accept, const double initial_temp, const double final_temp, const double temp_step, const int temp_freq);
+FUNCPROTO int ga_sa(population *pop, entity *initial, const int max_iterations);
 
 #endif	/* GA_SA_H_INCLUDED */
 

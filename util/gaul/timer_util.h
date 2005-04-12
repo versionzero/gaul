@@ -54,18 +54,18 @@ typedef struct
 /*
  * Prototypes.
  */
-void	timer_diagnostics(void);
-void	timer_start(chrono_t *t);
-double	timer_check(chrono_t *t);
+FUNCPROTO void	timer_diagnostics(void);
+FUNCPROTO void	timer_start(chrono_t *t);
+FUNCPROTO double	timer_check(chrono_t *t);
 
 /*
  * SLang intrinsic function with equivalent functionality.
  */
 #if HAVE_SLANG==1
-int	timer_new_slang(void);
-void	timer_free_slang(int *t_handle);
-void	timer_start_slang(int *t_handle);
-double	timer_check_slang(int *t_handle);
+FUNCPROTO int	timer_new_slang(void);
+FUNCPROTO void	timer_free_slang(int *t_handle);
+FUNCPROTO void	timer_start_slang(int *t_handle);
+FUNCPROTO double	timer_check_slang(int *t_handle);
 #endif
 
 #endif /* TIMER_UTIL_H_INCLUDED */
