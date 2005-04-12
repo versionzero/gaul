@@ -2,7 +2,7 @@
   test_de.c
  **********************************************************************
 
-  test_de - Test/example program for GAUL.
+  test_de - Test program for GAUL.
   Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -25,8 +25,7 @@
 
  **********************************************************************
 
-  Synopsis:	Test/example program for GAUL demonstrating use
-		of the differential evolution algorithm.
+  Synopsis:	Test program for GAUL's differential evolution algorithm.
 
 		This program aims to solve a function of the form
 		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0

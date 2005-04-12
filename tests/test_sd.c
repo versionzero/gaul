@@ -2,8 +2,8 @@
   test_sd.c
  **********************************************************************
 
-  test_sd - Test/example program for GAUL.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  test_sd - Test program for GAUL.
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -25,13 +25,10 @@
 
  **********************************************************************
 
-  Synopsis:	Test/example program for GAUL demonstrating use
-		of the steepest ascent algorithm.
+  Synopsis:	Test program for GAUL's steepest ascent algorithm.
 
 		This program aims to solve a function of the form
 		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0
-
-  Last Updated:	25 Nov 2002 SAA	Based on examples/test_simplex.c
 
  **********************************************************************/
 
