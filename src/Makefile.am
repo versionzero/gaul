@@ -81,7 +81,6 @@ nobase_include_HEADERS = \
     gaul/ga_simplex.h \
     gaul/ga_systematicsearch.h \
     gaul/ga_tabu.h \
-    gaul/ga_utility.h \
     gaul.h
 
 libgaul_la_LIBFLAGS = -lm
