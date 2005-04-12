@@ -36,20 +36,6 @@
 #define GAUL_H_INCLUDED
 
 /**********************************************************************
- * Preparation for Windows DLL generation.
- **********************************************************************/
-
-#ifdef WIN32
-#  ifdef BUILDING_DLL
-#    define FUNCPROTO __declspec (dllexport)
-#  else
-#    define FUNCPROTO __declspec (dllimport)
-#  endif
-#else
-#  define FUNCPROTO
-#endif
-
-/**********************************************************************
  * Include requisite headers.
  **********************************************************************/
 

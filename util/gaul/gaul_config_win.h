@@ -34,6 +34,16 @@
 #ifndef GAUL_CONFIG_WIN_H_INCLUDED
 #define GAUL_CONFIG_WIN_H_INCLUDED 1
 
+/**********************************************************************
+ * Preparation for Windows DLL generation.
+ **********************************************************************/
+
+#ifdef BUILDING_DLL
+#  define FUNCPROTO __declspec (dllexport)
+#else
+#  define FUNCPROTO __declspec (dllimport)
+#endif
+
 #  if defined __CYGWIN32__ && !defined __CYGWIN__
 #    define __CYGWIN__ __CYGWIN32__
 #  endif

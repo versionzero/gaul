@@ -162,7 +162,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang
+LIBS = -L/home/stewart/Local/lib -lpthread -lpthread -lslang -lm -lslang
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
@@ -296,7 +296,6 @@ nobase_include_HEADERS = \
     gaul/ga_simplex.h \
     gaul/ga_systematicsearch.h \
     gaul/ga_tabu.h \
-    gaul/ga_utility.h \
     gaul.h
 
 libgaul_la_LIBFLAGS = -lm

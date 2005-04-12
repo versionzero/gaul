@@ -47,6 +47,20 @@
 #  define WIN32
 #endif
 
+/**********************************************************************
+ * Preparation for Windows DLL generation.
+ **********************************************************************/
+
+#ifdef WIN32
+#  ifdef BUILDING_DLL
+#    define FUNCPROTO __declspec (dllexport)
+#  else
+#    define FUNCPROTO __declspec (dllimport)
+#  endif
+#else
+#  define FUNCPROTO
+#endif
+
 
 #include <pwd.h>
 #include <sys/select.h>
