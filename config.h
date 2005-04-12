@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 1
+#define GA_PATCH_VERSION 2
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.10-1.770_FC3 #1 Thu Feb 24 18:09:38 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1848-1"
+#define GA_VERSION_STRING "0.1848-2"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0

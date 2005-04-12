@@ -432,7 +432,7 @@ gaul__bool=yes
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1848
-GA_PATCH_VERSION=1
+GA_PATCH_VERSION=2
 GA_VERSION_STRING=
 
 V3_QUICK=
@@ -545,7 +545,7 @@ s,@DEFS@,-DHAVE_CONFIG_H,;t t
 s,@ECHO_C@,,;t t
 s,@ECHO_N@,-n,;t t
 s,@ECHO_T@,,;t t
-s,@LIBS@,-lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang,;t t
+s,@LIBS@,-lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang -lpthread -lpthread -lslang -lm -lslang,;t t
 s,@build@,x86_64-redhat-linux-gnu,;t t
 s,@build_cpu@,x86_64,;t t
 s,@build_vendor@,redhat,;t t
@@ -560,16 +560,16 @@ s,@target_vendor@,redhat,;t t
 s,@target_os@,linux-gnu,;t t
 s,@LT_RELEASE@,0.1848,;t t
 s,@LT_CURRENT@,0,;t t
-s,@LT_REVISION@,1,;t t
+s,@LT_REVISION@,2,;t t
 s,@GA_MAJOR_VERSION@,0,;t t
 s,@GA_MINOR_VERSION@,1848,;t t
-s,@GA_PATCH_VERSION@,1,;t t
+s,@GA_PATCH_VERSION@,2,;t t
 s,@INSTALL_PROGRAM@,${INSTALL},;t t
 s,@INSTALL_SCRIPT@,${INSTALL},;t t
 s,@INSTALL_DATA@,${INSTALL} -m 644,;t t
 s,@CYGPATH_W@,echo,;t t
 s,@PACKAGE@,gaul-devel,;t t
-s,@VERSION@,0.1848-1,;t t
+s,@VERSION@,0.1848-2,;t t
 s,@ACLOCAL@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run aclocal-1.9,;t t
 s,@AUTOCONF@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run autoconf,;t t
 s,@AUTOMAKE@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-1/missing --run automake-1.9,;t t
@@ -627,7 +627,7 @@ s,@F77@,g77,;t t
 s,@FFLAGS@,-g -O2,;t t
 s,@ac_ct_F77@,g77,;t t
 s,@LIBTOOL@,$(SHELL) $(top_builddir)/libtool,;t t
-s,@GA_VERSION@,0.1848-1,;t t
+s,@GA_VERSION@,0.1848-2,;t t
 s,@GA_VERSION_STRING@,,;t t
 s,@MPIFLAGS@,,;t t
 s,@MPILIBS@,,;t t
@@ -961,10 +961,10 @@ ${ac_dA}PACKAGE_STRING${ac_dB}PACKAGE_STRING${ac_dC}"gaul-devel 0.1848"${ac_dD}
 ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}"gaul@linux-domain.com"${ac_dD}
 ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1848${ac_dD}
-${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}1${ac_dD}
+${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}2${ac_dD}
 ${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux whitebox.linux-domain.com 2.6.10-1.770_FC3 #1 Thu Feb 24 18:09:38 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_dD}
 ${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"12/04/05"${ac_dD}
-${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1848-1"${ac_dD}
+${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1848-2"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_STAT_H${ac_dB}HAVE_SYS_STAT_H${ac_dC}1${ac_dD}
@@ -1072,10 +1072,10 @@ ${ac_uA}PACKAGE_STRING${ac_uB}PACKAGE_STRING${ac_uC}"gaul-devel 0.1848"${ac_uD}
 ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}"gaul@linux-domain.com"${ac_uD}
 ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1848${ac_uD}
-${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}1${ac_uD}
+${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}2${ac_uD}
 ${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux whitebox.linux-domain.com 2.6.10-1.770_FC3 #1 Thu Feb 24 18:09:38 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_uD}
 ${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"12/04/05"${ac_uD}
-${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1848-1"${ac_uD}
+${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1848-2"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_STAT_H${ac_uB}HAVE_SYS_STAT_H${ac_uC}1${ac_uD}
