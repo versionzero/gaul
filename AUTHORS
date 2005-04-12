@@ -4,6 +4,7 @@ Stewart would like to thank the following people:
 
 Prior to release 0.1849:
 Al Cripps - Suggested fixes and compilation instructions for MS VC++.
+Marie-Pierre Brungard - Patch for building DLL.
 
 Prior to release 0.1848:
 Al Cripps - Suggested fix in memory_chunks.c for MS VC++.
