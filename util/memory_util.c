@@ -210,7 +210,7 @@ static mem_record *mem_record_new(void)
   THREAD_LOCK(memory_mem_record_chunk);
   if (!mem_record_chunk) mem_record_chunk = mem_chunk_new(sizeof(mem_record), 1024);
 
-  mr = mem_chunk_alloc(mem_record_chunk);
+  mr = (mem_record *)mem_chunk_alloc(mem_record_chunk);
   THREAD_UNLOCK(memory_mem_record_chunk);
 
   num_mem++;

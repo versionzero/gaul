@@ -1577,7 +1577,7 @@ entity *ga_get_free_entity(population *pop)
     }
 
 /* Prepare it. */
-  fresh = mem_chunk_alloc(pop->entity_chunk);
+  fresh = (entity *)mem_chunk_alloc(pop->entity_chunk);
 
   pop->entity_array[pop->free_index] = fresh;
   ga_entity_setup(pop, fresh);

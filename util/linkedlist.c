@@ -92,7 +92,7 @@ SLList *slink_new(void)
   if (!slist_chunk)
     slist_chunk = mem_chunk_new(sizeof(SLList), 512);
 
-  element = mem_chunk_alloc(slist_chunk);
+  element = (SLList *)mem_chunk_alloc(slist_chunk);
   THREAD_UNLOCK(slist_chunk_lock);
 
   element->next = NULL;
@@ -493,7 +493,7 @@ DLList *dlink_new(void)
   if (!dlist_chunk)
     dlist_chunk = mem_chunk_new(sizeof(DLList), 512);
 
-  element = mem_chunk_alloc(dlist_chunk);
+  element = (DLList *)mem_chunk_alloc(dlist_chunk);
   THREAD_UNLOCK(dlist_chunk_lock);
 
   element->prev = NULL;
