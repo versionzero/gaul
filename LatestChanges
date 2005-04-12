@@ -11,6 +11,7 @@ Changes since release 0.1848:
 - Split the gaul-devel archive/package into seperate gaul-devel (containing libs and tests) and gaul-examples (containing example programs).
 - Some example programs renamed.
 - A few further test programs added.
+- Removed redundant gaul/ga_utility.h header.
 
 Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.
