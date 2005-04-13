@@ -205,7 +205,7 @@ int main(int argc, char **argv)
   ga_simplex(
        pop,				/* population		*pop */
        solution,			/* entity		*solution */
-       1000				/* const int		max_iterations */
+       10000				/* const int		max_iterations */
             );
 
   ga_extinction(pop);

@@ -48,6 +48,9 @@ FUNCPROTO void ga_population_set_simplex_parameters( population		*pop,
 FUNCPROTO int ga_simplex( population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );
+FUNCPROTO int ga_simplex_double( population              *pop,
+		entity                  *initial,
+	        const int               max_iterations );
 
 #endif	/* GA_SIMPLEX_H_INCLUDED */
 

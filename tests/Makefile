@@ -40,7 +40,7 @@
 #
 #######################################################################
 
-SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c test_slang.c test_utils.c
+SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c test_simplex2.c test_slang.c test_utils.c
 
 srcdir = .
 top_srcdir = ..
@@ -69,7 +69,7 @@ bin_PROGRAMS = gaul_diagnostics$(EXEEXT)
 noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
 	test_bitstrings$(EXEEXT) test_slang$(EXEEXT) test_io$(EXEEXT) \
 	test_ga$(EXEEXT) test_de$(EXEEXT) test_sd$(EXEEXT) \
-	test_simplex$(EXEEXT)
+	test_simplex$(EXEEXT) test_simplex2$(EXEEXT)
 subdir = tests
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -107,6 +107,9 @@ test_sd_DEPENDENCIES =
 test_simplex_SOURCES = test_simplex.c
 test_simplex_OBJECTS = test_simplex.$(OBJEXT)
 test_simplex_DEPENDENCIES =
+test_simplex2_SOURCES = test_simplex2.c
+test_simplex2_OBJECTS = test_simplex2.$(OBJEXT)
+test_simplex2_DEPENDENCIES =
 test_slang_SOURCES = test_slang.c
 test_slang_OBJECTS = test_slang.$(OBJEXT)
 test_slang_DEPENDENCIES =
@@ -126,10 +129,10 @@ LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
 	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
-	test_slang.c test_utils.c
+	test_simplex2.c test_slang.c test_utils.c
 DIST_SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
 	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
-	test_slang.c test_utils.c
+	test_simplex2.c test_slang.c test_utils.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -279,6 +282,7 @@ test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm
 test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
+test_simplex2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm 
 all: all-am
 
 .SUFFIXES:
@@ -371,6 +375,9 @@ test_sd$(EXEEXT): $(test_sd_OBJECTS) $(test_sd_DEPENDENCIES)
 test_simplex$(EXEEXT): $(test_simplex_OBJECTS) $(test_simplex_DEPENDENCIES) 
 	@rm -f test_simplex$(EXEEXT)
 	$(LINK) $(test_simplex_LDFLAGS) $(test_simplex_OBJECTS) $(test_simplex_LDADD) $(LIBS)
+test_simplex2$(EXEEXT): $(test_simplex2_OBJECTS) $(test_simplex2_DEPENDENCIES) 
+	@rm -f test_simplex2$(EXEEXT)
+	$(LINK) $(test_simplex2_LDFLAGS) $(test_simplex2_OBJECTS) $(test_simplex2_LDADD) $(LIBS)
 test_slang$(EXEEXT): $(test_slang_OBJECTS) $(test_slang_DEPENDENCIES) 
 	@rm -f test_slang$(EXEEXT)
 	$(LINK) $(test_slang_LDFLAGS) $(test_slang_OBJECTS) $(test_slang_LDADD) $(LIBS)
@@ -392,6 +399,7 @@ include ./$(DEPDIR)/test_io.Po
 include ./$(DEPDIR)/test_prng.Po
 include ./$(DEPDIR)/test_sd.Po
 include ./$(DEPDIR)/test_simplex.Po
+include ./$(DEPDIR)/test_simplex2.Po
 include ./$(DEPDIR)/test_slang.Po
 include ./$(DEPDIR)/test_utils.Po
 

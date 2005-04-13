@@ -70,8 +70,10 @@ void ga_population_set_simplex_parameters( population		*pop,
   {
 
   if ( !pop ) die("Null pointer to population structure passed.");
+/*
   if ( !to_double ) die("Null pointer to GAto_double callback passed.");
   if ( !from_double ) die("Null pointer to GAfrom_double callback passed.");
+*/
 
   plog( LOG_VERBOSE, "Population's simplex-search parameters set" );
 
@@ -202,14 +204,6 @@ int ga_simplex(	population		*pop,
         putative_d[i][j] = putative_d[0][j] +
                 random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
-/*
- * Alternative is to perturb by unit step in one dimension:
-    if (random_boolean())
-      putative_d[i][i-1] -= 1.0;
-    else
-      putative_d[i][i-1] += 1.0;
-*/
-
       pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
       pop->evaluate(pop, putative[i]);
       }
@@ -278,15 +272,13 @@ int ga_simplex(	population		*pop,
     for (j = 0; j < pop->simplex_params->dimensions; j++)
       {
       average[j] = 0.0;
-      }
 
-/*    for (i = 1; i < num_points; i++)*/
-    for (i = 0; i < num_points-1; i++)
-      {
-      for (j = 0; j < pop->simplex_params->dimensions; j++)
+      for (i = 0; i < num_points-1; i++)
         {
         average[j] += putative_d[i][j];
         }
+
+      average[j] /= num_points-1;
       }
 
 /*
@@ -297,8 +289,6 @@ int ga_simplex(	population		*pop,
 /*printf("DEBUG: average = ");*/
     for (j = 0; j < pop->simplex_params->dimensions; j++)
       {
-      /* Finish calculating average here to avoid an extra loop. */
-      average[j] /= pop->simplex_params->dimensions;
       if ( average[j]-TINY > putative_d[pop->simplex_params->dimensions][j] ||
            average[j]+TINY < putative_d[pop->simplex_params->dimensions][j] )
         restart_needed = FALSE;
@@ -431,7 +421,7 @@ int ga_simplex(	population		*pop,
 /*
  * Perform a contraction of the simplex along one dimension, away from worst point.
  */
-      for (j = 0; j < num_points; j++)
+      for (j = 0; j < pop->simplex_params->dimensions; j++)
         new1_d[j] = (1.0 - pop->simplex_params->beta) * average[j] +
                    pop->simplex_params->beta * putative_d[num_points-1][j];
 
@@ -447,6 +437,7 @@ int ga_simplex(	population		*pop,
         did_replace = TRUE;
 
 /*printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->simplex_params->dimensions]->fitness);*/
+
         i = 0;
         while (putative[i]->fitness > new1->fitness) i++;
 
@@ -498,6 +489,7 @@ int ga_simplex(	population		*pop,
 */
 
         }
+
       }
     else
       {
@@ -567,7 +559,6 @@ int ga_simplex(	population		*pop,
   }
 
 
-#if 0
 /**********************************************************************
   ga_simplex_double()
   synopsis:	Performs optimisation on the passed entity by using a
@@ -583,10 +574,8 @@ int ga_simplex(	population		*pop,
 		Only double chromosomes may be used.
   parameters:
   return:
-  last updated:	25 Feb 2005
+  last updated:	13 Apr 2005
  **********************************************************************/
-
-Remove dimensions param, and use of seperate double arrays.
 
 int ga_simplex_double(	population		*pop,
 		entity			*initial,
@@ -597,7 +586,6 @@ int ga_simplex_double(	population		*pop,
   entity	**putative;		/* Current working solutions. */
   entity	*new1, *new2;		/* New putative solutions. */
   entity	*tmpentity;		/* Used to swap working solutions. */
-  double	*tmpdoubleptr;		/* Used to swap working solutions. */
   int		num_points;		/* Number of search points. */
   double	*average;		/* Vector average of solutions. */
   int           first=0, last;		/* Indices into solution arrays. */
@@ -618,7 +606,7 @@ int ga_simplex_double(	population		*pop,
  */
   num_points = pop->len_chromosomes+1;
   putative = s_malloc(sizeof(entity *)*num_points);
-  average = s_malloc(sizeof(double *)*num_points);
+  average = s_malloc(sizeof(double)*pop->len_chromosomes);
 
   for (i=1; i<num_points; i++)
     {
@@ -655,7 +643,7 @@ int ga_simplex_double(	population		*pop,
  */
 #pragma omp parallel \
    if (GAUL_DETERMINISTIC_OPENMP==0) \
-   shared(pop,num_points,putative_d,putative) private(i,j)
+   shared(pop,num_points,putative) private(i,j)
     {
 #pragma omp single \
    nowait
@@ -666,8 +654,9 @@ int ga_simplex_double(	population		*pop,
     for (i=1; i<num_points; i++)
       {
       for (j=0; j<pop->len_chromosomes; j++)
-        (double *)putative[i]->chromosome)[j] = putative[0]->chromosome)[j] +
-                random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
+        ((double *)putative[i]->chromosome[0])[j]
+            = ((double *)putative[0]->chromosome[0])[j] +
+              random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
       pop->evaluate(pop, putative[i]);
       }
@@ -727,18 +716,14 @@ int ga_simplex_double(	population		*pop,
  * Exploration will proceed along the vector from the least fit point
  * to that vector average.
  */
-    for (j = 0; j < pop->len_chromosome; j++)
+    for (j = 0; j < pop->len_chromosomes; j++)
       {
       average[j] = 0.0;
-      }
 
-/*    for (i = 1; i < num_points; i++)*/
-    for (i = 0; i < num_points-1; i++)
-      {
-      for (j = 0; j < pop->len_chromosome; j++)
-        {
-        average[j] += putative_d[i][j];
-        }
+      for (i = 0; i < num_points-1; i++)
+        average[j] += ((double *)putative[i]->chromosome[0])[j];
+
+      average[j] /= num_points-1;
       }
 
 /*
@@ -747,12 +732,11 @@ int ga_simplex_double(	population		*pop,
  */
     restart_needed = TRUE;
 /*printf("DEBUG: average = ");*/
+
     for (j = 0; j < pop->len_chromosomes; j++)
       {
-      /* Finish calculating average here to avoid an extra loop. */
-      average[j] /= pop->len_chromosomes;
-      if ( average[j]-TINY > putative_d[pop->len_chromosomes][j] ||
-           average[j]+TINY < putative_d[pop->len_chromosomes][j] )
+      if ( average[j]-TINY > ((double *)putative[pop->len_chromosomes]->chromosome[0])[j] ||
+           average[j]+TINY < ((double *)putative[pop->len_chromosomes]->chromosome[0])[j] )
         restart_needed = FALSE;
       
       /*printf("%f ", average[j]/pop->len_chromosomes);*/
@@ -770,10 +754,10 @@ int ga_simplex_double(	population		*pop,
     for (i=1; i<num_points; i++)
       {
       for (j=0; j<pop->len_chromosomes; j++)
-        putative_d[i][j] = putative_d[0][j] +
-                 random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
+        ((double *)putative[i]->chromosome[0])[j]
+           = ((double *)putative[0]->chromosome[0])[j] +
+              random_double_range(-pop->simplex_params->step,pop->simplex_params->step);
 
-      pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
       pop->evaluate(pop, putative[i]);
       }
     }
@@ -782,15 +766,13 @@ int ga_simplex_double(	population		*pop,
  * Simplex reflection - Extrapolate by a factor alpha away from worst point.
  */
    for (j = 0; j < pop->len_chromosomes; j++)
-     {
-     new1_d[j] = (1.0 + pop->simplex_params->alpha) * average[j] -
-                pop->simplex_params->alpha * putative_d[num_points-1][j];
-     }
+     ((double *)new1->chromosome[0])[j]
+         = (1.0 + pop->simplex_params->alpha) * average[j] -
+           pop->simplex_params->alpha * ((double *)putative[num_points-1]->chromosome[0])[j];
 
 /*
  * Evaluate the function at this reflected point.  
  */
-    pop->simplex_params->from_double(pop, new1, new1_d);
     pop->evaluate(pop, new1);
 
     if (new1->fitness > putative[0]->fitness)
@@ -802,10 +784,10 @@ int ga_simplex_double(	population		*pop,
 /*printf("DEBUG: new1 (%f) is fitter than p0 ( %f )\n", new1->fitness, putative[0]->fitness);*/
 
       for (j = 0; j < pop->len_chromosomes; j++)
-        new2_d[j] = (1.0 + pop->simplex_params->alpha) * new1_d[j] -
-                    pop->simplex_params->alpha * putative_d[num_points-1][j];
+        ((double *)new2->chromosome[0])[j]
+            = (1.0 + pop->simplex_params->alpha) * ((double *)new1->chromosome[0])[j] -
+              pop->simplex_params->alpha * ((double *)putative[num_points-1]->chromosome[0])[j];
 
-      pop->simplex_params->from_double(pop, new2, new2_d);
       pop->evaluate(pop, new2);
 
       if (new2->fitness > putative[0]->fitness)
@@ -817,19 +799,13 @@ int ga_simplex_double(	population		*pop,
 /*printf("DEBUG: new2 (%f) is fitter than p0 ( %f )\n", new2->fitness, putative[0]->fitness);*/
 
         tmpentity = putative[pop->len_chromosomes];
-        tmpdoubleptr = putative_d[pop->len_chromosomes];
 
         for (j = pop->len_chromosomes; j > 0; j--)
-          {
           putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
-          }
 
         putative[0] = new2;
-        putative_d[0] = new2_d;
 
         new2 = tmpentity;
-        new2_d = tmpdoubleptr;
         }
       else
         {
@@ -838,19 +814,15 @@ int ga_simplex_double(	population		*pop,
  * reflected solution.
  */
         tmpentity = putative[pop->len_chromosomes];
-        tmpdoubleptr = putative_d[len_chromosomes];
 
         for (j = pop->len_chromosomes; j > 0; j--)
           {
           putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
           }
 
         putative[0] = new1;
-        putative_d[0] = new1_d;
 
         new1 = tmpentity;
-        new1_d = tmpdoubleptr;
         }
       }
     else if (new1->fitness < putative[pop->len_chromosomes-1]->fitness)
@@ -869,25 +841,23 @@ int ga_simplex_double(	population		*pop,
  * least fit.
  */
 /*printf("DEBUG: but fitter than p(n) ( %f )\n", putative[pop->len_chromosomes]->fitness);*/
+
         did_replace = TRUE;
 
         tmpentity = putative[pop->len_chromosomes];
-        tmpdoubleptr = putative_d[pop->len_chromosomes];
 
         putative[pop->len_chromosomes] = new1;
-        putative_d[pop->len_chromosomes] = new1_d;
 
         new1 = tmpentity;
-        new1_d = tmpdoubleptr;
         }
 /*
  * Perform a contraction of the simplex along one dimension, away from worst point.
  */
-      for (j = 0; j < num_points; j++)
-        new1_d[j] = (1.0 - pop->simplex_params->beta) * average[j] +
-                   pop->simplex_params->beta * putative_d[num_points-1][j];
+      for (j = 0; j < pop->len_chromosomes; j++)
+        ((double *)new1->chromosome[0])[j]
+                = (1.0 - pop->simplex_params->beta) * average[j] +
+                  pop->simplex_params->beta * ((double *)putative[num_points-1]->chromosome[0])[j];
 
-      pop->simplex_params->from_double(pop, new1, new1_d);
       pop->evaluate(pop, new1);
 
       if (new1->fitness > putative[pop->len_chromosomes]->fitness)
@@ -899,23 +869,18 @@ int ga_simplex_double(	population		*pop,
         did_replace = TRUE;
 
 /*printf("DEBUG: contracted new1 (%f) is fitter than p(n) ( %f )\n", new1->fitness, putative[pop->len_chromosomes]->fitness);*/
+
         i = 0;
         while (putative[i]->fitness > new1->fitness) i++;
 
-        tmpentity = putative[len_chromosomes];
-        tmpdoubleptr = putative_d[pop->len_chromosomes];
+        tmpentity = putative[pop->len_chromosomes];
 
         for (j = pop->len_chromosomes; j > i; j--)
-          {
           putative[j]=putative[j-1];
-          putative_d[j]=putative_d[j-1];
-          }
 
         putative[i] = new1;
-        putative_d[i] = new1_d;
 
         new1 = tmpentity;
-        new1_d = tmpdoubleptr;
         }
 
       if (did_replace == FALSE)
@@ -929,10 +894,11 @@ int ga_simplex_double(	population		*pop,
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->len_chromosomes; j++)
-            putative_d[i][j] = average[j] +
-                               pop->simplex_params->gamma * (putative_d[i][j] - average[j]);
+            ((double *)putative[i]->chromosome[0])[j]
+                = average[j] +
+                  pop->simplex_params->gamma
+                    * (((double *)putative[i]->chromosome[0])[j] - average[j]);
 
-          pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
           pop->evaluate(pop, putative[i]);
           }
 
@@ -941,15 +907,17 @@ int ga_simplex_double(	population		*pop,
         for (i = 1; i < num_points; i++)
           {
           for (j = 0; j < pop->len_chromosomes; j++)
-            putative_d[i][j] = putative_d[0][j] +
-                               pop->simplex_params->gamma * (putative_d[i][j] - putative_d[0][j]);
+            ((double *)putative[i]->chromosome[0])[j]
+                = ((double *)putative[0]->chromosome[0])[j] +
+                  pop->simplex_params->gamma
+                    * (((double *)putative[i]->chromosome[0])[j] - ((double *)putative[0]->chromosome[0])[j]);
 
-          pop->simplex_params->from_double(pop, putative[i], putative_d[i]);
           pop->evaluate(pop, putative[i]);
           }
 */
 
         }
+
       }
     else
       {
@@ -970,19 +938,13 @@ int ga_simplex_double(	population		*pop,
 /*printf("DEBUG: new1 inserted at position %d\n", i);*/
 
       tmpentity = putative[pop->len_chromosomes];
-      tmpdoubleptr = putative_d[pop->len_chromosomes];
 
       for (j = pop->len_chromosomes; j > i; j--)
-        {
         putative[j]=putative[j-1];
-        putative_d[j]=putative_d[j-1];
-        }
 
       putative[i] = new1;
-      putative_d[i] = new1_d;
 
       new1 = tmpentity;
-      new1_d = tmpdoubleptr;
       }
 
 /*
@@ -1012,10 +974,7 @@ int ga_simplex_double(	population		*pop,
     }
 
   s_free(putative);
-  s_free(putative_d);
-  s_free(putative_d_buffer);
 
   return iteration;
   }
 
-#endif
