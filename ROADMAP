@@ -11,25 +11,26 @@ These milestone requirements are subject to change ;)
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
  0.1850     |  Boolean chromosome example from Mitchell book.
-            |  Operator functions for the linked-list chromosome.
-            |  Linked-list chromosome example.
             |  More on-line/off-line statistics options.
             |  Move prototypes for all public functions into src/gaul.h
             |  Mersenne twister for PRNG.
             |  User data in array, not list.
-            |  Rewritten convergence testing functions.
+            |  Ant colony optimisation
+            |  Particle swarm optimisation
 ------------+--------------------------------------------------------
  0.1851     |  Binary tree chromosome.
+            |  Operator functions for the linked-list chromosome.
+            |  Linked-list chromosome example.
             |  De Jong - working examples.
-            |  Parallel search heuristics (i.e. Parallel Tabu-search etc.)
+            |  More replacement operators.
+            |  Replacement operators documentation
+            |  Rewritten convergence testing functions.
+------------+--------------------------------------------------------
+ 0.1852     |  Cellular GAs.
+            |  Parallel search heuristics (i.e., Parallel Tabu-search etc.)
             |  Genetic programming example.
             |  ES examples.
             |  Checkpoint files.
-            |  More replacement operators.
-            |  Replacement operators documentation
-------------+--------------------------------------------------------
- 0.1852     |  Cellular GAs.
-            |  Swarm algorithms.
 ------------+--------------------------------------------------------
  0.1853     |  Tidy and rationalise S-Lang interface, and provide examples.
 ------------+--------------------------------------------------------
@@ -66,7 +67,6 @@ Features to be added if enough interest is demonstrated:
 * PVM support.
 * Replica-exchange SA search.
 * EDAs.
-* Differential Evolution algorithms.
 
-Stewart Adcock, 17 Feb 2007.
+Stewart Adcock, 14 Apr 2005.
 
