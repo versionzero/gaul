@@ -224,7 +224,9 @@ typedef struct
 typedef struct
   {
   int		dimensions;	/* Size of double array. */
-  double	step_size;	/* Step size, or initial step size. */
+  double	step_size;	/* Step size, (or initial step size). */
+  double	alpha;		/* Step size scale-down factor. */
+  double	beta;		/* Step size scale-up factor. */
   GAto_double	to_double;	/* Convert chromosome to double array. */
   GAfrom_double	from_double;	/* Convert chromosome from double array. */
   GAgradient	gradient;	/* Return gradients array. */

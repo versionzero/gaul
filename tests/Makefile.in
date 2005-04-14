@@ -40,7 +40,7 @@
 #
 #######################################################################
 
-SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c test_simplex2.c test_slang.c test_utils.c
+SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c test_ga.c test_io.c test_prng.c test_sd.c test_sd2.c test_simplex.c test_simplex2.c test_slang.c test_utils.c
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -69,7 +69,7 @@ bin_PROGRAMS = gaul_diagnostics$(EXEEXT)
 noinst_PROGRAMS = test_prng$(EXEEXT) test_utils$(EXEEXT) \
 	test_bitstrings$(EXEEXT) test_slang$(EXEEXT) test_io$(EXEEXT) \
 	test_ga$(EXEEXT) test_de$(EXEEXT) test_sd$(EXEEXT) \
-	test_simplex$(EXEEXT) test_simplex2$(EXEEXT)
+	test_sd2$(EXEEXT) test_simplex$(EXEEXT) test_simplex2$(EXEEXT)
 subdir = tests
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -104,6 +104,9 @@ test_prng_DEPENDENCIES =
 test_sd_SOURCES = test_sd.c
 test_sd_OBJECTS = test_sd.$(OBJEXT)
 test_sd_DEPENDENCIES =
+test_sd2_SOURCES = test_sd2.c
+test_sd2_OBJECTS = test_sd2.$(OBJEXT)
+test_sd2_DEPENDENCIES =
 test_simplex_SOURCES = test_simplex.c
 test_simplex_OBJECTS = test_simplex.$(OBJEXT)
 test_simplex_DEPENDENCIES =
@@ -128,11 +131,11 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
-	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
-	test_simplex2.c test_slang.c test_utils.c
+	test_ga.c test_io.c test_prng.c test_sd.c test_sd2.c \
+	test_simplex.c test_simplex2.c test_slang.c test_utils.c
 DIST_SOURCES = $(gaul_diagnostics_SOURCES) test_bitstrings.c test_de.c \
-	test_ga.c test_io.c test_prng.c test_sd.c test_simplex.c \
-	test_simplex2.c test_slang.c test_utils.c
+	test_ga.c test_io.c test_prng.c test_sd.c test_sd2.c \
+	test_simplex.c test_simplex2.c test_slang.c test_utils.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -281,6 +284,7 @@ test_io_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_sd2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_simplex2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 all: all-am
@@ -372,6 +376,9 @@ test_prng$(EXEEXT): $(test_prng_OBJECTS) $(test_prng_DEPENDENCIES)
 test_sd$(EXEEXT): $(test_sd_OBJECTS) $(test_sd_DEPENDENCIES) 
 	@rm -f test_sd$(EXEEXT)
 	$(LINK) $(test_sd_LDFLAGS) $(test_sd_OBJECTS) $(test_sd_LDADD) $(LIBS)
+test_sd2$(EXEEXT): $(test_sd2_OBJECTS) $(test_sd2_DEPENDENCIES) 
+	@rm -f test_sd2$(EXEEXT)
+	$(LINK) $(test_sd2_LDFLAGS) $(test_sd2_OBJECTS) $(test_sd2_LDADD) $(LIBS)
 test_simplex$(EXEEXT): $(test_simplex_OBJECTS) $(test_simplex_DEPENDENCIES) 
 	@rm -f test_simplex$(EXEEXT)
 	$(LINK) $(test_simplex_LDFLAGS) $(test_simplex_OBJECTS) $(test_simplex_LDADD) $(LIBS)
@@ -398,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_io.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_prng.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_sd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_sd2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_simplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_simplex2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_slang.Po@am__quote@

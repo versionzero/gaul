@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_gradient - Gradient methods for comparison and local search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -47,6 +47,9 @@ FUNCPROTO void ga_population_set_gradient_parameters( population		*pop,
 					const int		dimensions,
 					const double		step_size);
 FUNCPROTO int ga_steepestascent(    population              *pop,
+		entity                  *initial,
+	        const int               max_iterations );
+FUNCPROTO int ga_steepestascent_double(    population              *pop,
 		entity                  *initial,
 	        const int               max_iterations );
 

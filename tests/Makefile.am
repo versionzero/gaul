@@ -35,7 +35,7 @@ bin_PROGRAMS = gaul_diagnostics
 
 noinst_PROGRAMS = test_prng test_utils test_bitstrings test_slang \
 		test_io \
-		test_ga test_de test_sd test_simplex test_simplex2
+		test_ga test_de test_sd test_sd2 test_simplex test_simplex2
 
 gaul_diagnostics_SOURCES = diagnostics.c
 
@@ -48,6 +48,7 @@ test_io_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_ga_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_de_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_sd_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
+test_sd2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_simplex_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 test_simplex2_LDADD = -L../src/ -L../util/ -lgaul -lgaul_util -lm @MPILIBS@
 

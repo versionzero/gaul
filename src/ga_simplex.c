@@ -571,7 +571,9 @@ int ga_simplex(	population		*pop,
 		in which case a random starting structure will be
 		generated, however the final solution will not be
 		available to the caller in any obvious way.
-		Only double chromosomes may be used.
+
+		Only double chromosomes may be used in this optimised
+		version of the algorithm.
   parameters:
   return:
   last updated:	13 Apr 2005
