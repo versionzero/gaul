@@ -27,9 +27,6 @@
 
   Synopsis:     A simulated annealling algorithm for comparison and search.
 
-  		A novel population-based SA is also provided.
-		(or at least it will be!)
-
  **********************************************************************/
 
 #include "gaul/ga_sa.h"
