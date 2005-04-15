@@ -959,7 +959,7 @@ static boolean test_avltree_traverse(AVLKey key, vpointer data, vpointer userdat
 /* check. */
   if (key != test_avltree_generate(data))
     {
-    printf("failure (%p %p) ", key, test_avltree_generate(data));
+    printf("failure (%ld %ld) ", key, test_avltree_generate(data));
     failed=TRUE;
     }
 

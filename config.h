@@ -20,7 +20,7 @@
 #define GA_MAJOR_VERSION 0
 
 /* Minor version number. */
-#define GA_MINOR_VERSION 1848
+#define GA_MINOR_VERSION 1849
 
 /* Environment variable used to request processes. */
 #define GA_NUM_PROCESSES_ENVVAR_STRING GA_NUM_PROCESSES
@@ -29,13 +29,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 3
+#define GA_PATCH_VERSION 0
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1848-3"
+#define GA_VERSION_STRING "0.1849-0"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -209,13 +209,13 @@
 #define PACKAGE_NAME "gaul-devel"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gaul-devel 0.1848"
+#define PACKAGE_STRING "gaul-devel 0.1849"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gaul-devel"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.1848"
+#define PACKAGE_VERSION "0.1849"
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1

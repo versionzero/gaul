@@ -39,7 +39,7 @@ AC_PREREQ(2.57)
 #
 # init autoconf
 #
-AC_INIT(gaul-devel, 0.1848, gaul@linux-domain.com)
+AC_INIT(gaul-devel, 0.1849, gaul@linux-domain.com)
 
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h util/gaul/gaul_config.h)
@@ -47,8 +47,8 @@ AC_CANONICAL_SYSTEM
 
 PACKAGE="gaul-devel"
 GA_MAJOR_VERSION=0
-GA_MINOR_VERSION=1848
-GA_PATCH_VERSION=3
+GA_MINOR_VERSION=1849
+GA_PATCH_VERSION=0
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
