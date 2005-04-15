@@ -948,10 +948,10 @@ static AVLKey test_avltree_generate(constvpointer data)
  * Simple casting from char to AVLKey... should work ;)
  * (It works when AVLKey is the default unsigned long...)
  */
-/*
   return (AVLKey) *((char *)data);
-*/
+/*
   return (AVLKey) (data);
+*/
   }
 
 static boolean test_avltree_traverse(AVLKey key, vpointer data, vpointer userdata)

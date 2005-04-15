@@ -160,7 +160,7 @@ extern int errno;
 #define GA_PATCH_VERSION 3
 #define GA_VERSION_STRING "0.1848-3"
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
-#define GA_BUILD_DATE_STRING "14/04/05"
+#define GA_BUILD_DATE_STRING "15/04/05"
 
 #define V3_QUICK 
 #define W32_CRIPPLED 0
@@ -169,7 +169,7 @@ extern int errno;
 #define HAVE_PTHREADS 1
 #define USE_OPENMP 0
 #define GAUL_DETERMINISTIC_OPENMP 1
-#define AVLTREE_KEY_TYPE void *
+#define AVLTREE_KEY_TYPE unsigned long
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 #define USE_CHROMO_CHUNKS 0
