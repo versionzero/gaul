@@ -1,0 +1,44 @@
+Binary encoding of integers:
+Orig val = -30 new val = -30 PASSED
+Orig val = -7 new val = -7 PASSED
+Orig val = 16 new val = 16 PASSED
+Orig val = 39 new val = 39 PASSED
+Orig val = 62 new val = 62 PASSED
+Orig val = 85 new val = 85 PASSED
+Orig val = 108 new val = 108 PASSED
+Orig val = 131 new val = 131 PASSED
+Orig val = 154 new val = 154 PASSED
+Orig val = 177 new val = 177 PASSED
+Binary encoding of reals:
+Orig val = -0.300000 new val = -0.300000 PASSED
+Orig val = -0.140000 new val = -0.140000 PASSED
+Orig val = 0.020000 new val = 0.020000 PASSED
+Orig val = 0.180000 new val = 0.180000 PASSED
+Orig val = 0.340000 new val = 0.340000 PASSED
+Orig val = 0.500000 new val = 0.500000 PASSED
+Orig val = 0.660000 new val = 0.660000 PASSED
+Orig val = 0.820000 new val = 0.820000 PASSED
+Orig val = 0.980000 new val = 0.980000 PASSED
+Orig val = 1.140000 new val = 1.140000 PASSED
+Gray encoding of integers:
+Orig val = -30 new val = -30 PASSED
+Orig val = -7 new val = -7 PASSED
+Orig val = 16 new val = 16 PASSED
+Orig val = 39 new val = 39 PASSED
+Orig val = 62 new val = 62 PASSED
+Orig val = 85 new val = 85 PASSED
+Orig val = 108 new val = 108 PASSED
+Orig val = 131 new val = 131 PASSED
+Orig val = 154 new val = 154 PASSED
+Orig val = 177 new val = 177 PASSED
+Gray encoding of reals:
+Orig val = -0.300000 new val = -0.300000 PASSED
+Orig val = -0.140000 new val = -0.140000 PASSED
+Orig val = 0.020000 new val = 0.020000 PASSED
+Orig val = 0.180000 new val = 0.180000 PASSED
+Orig val = 0.340000 new val = 0.340000 PASSED
+Orig val = 0.500000 new val = 0.500000 PASSED
+Orig val = 0.660000 new val = 0.660000 PASSED
+Orig val = 0.820000 new val = 0.820000 PASSED
+Orig val = 0.980000 new val = 0.980000 PASSED
+Orig val = 1.140000 new val = 1.140000 PASSED
