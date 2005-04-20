@@ -464,7 +464,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LT_RELEASE LT_CURRENT LT_REVISION GA_MAJOR_VERSION GA_MINOR_VERSION GA_PATCH_VERSION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL GA_VERSION GA_VERSION_STRING MPIFLAGS MPILIBS GA_UNAME_STRING GA_BUILD_DATE_STRING V3_QUICK W32_CRIPPLED HAVE_SLANG HAVE_MPI HAVE_PTHREADS USE_OPENMP USE_CHROMO_CHUNKS GA_NUM_PROCESSES_ENVVAR_STRING MEMORY_ALLOC_DEBUG MEMORY_ALLOC_SAFE MEMORY_CHUNKS_MIMIC LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LT_RELEASE LT_CURRENT LT_REVISION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL GA_MAJOR_VERSION GA_MINOR_VERSION GA_LT_MINOR_VERSION GA_PATCH_VERSION GA_VERSION GA_VERSION_STRING MPIFLAGS MPILIBS GA_UNAME_STRING GA_BUILD_DATE_STRING V3_QUICK W32_CRIPPLED HAVE_SLANG HAVE_MPI HAVE_PTHREADS USE_OPENMP USE_CHROMO_CHUNKS GA_NUM_PROCESSES_ENVVAR_STRING MEMORY_ALLOC_DEBUG MEMORY_ALLOC_SAFE MEMORY_CHUNKS_MIMIC LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1647,8 +1647,12 @@ GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
 # libtool versioning
+# libtool on some systems can't handle a minor version of
+# >255, so we can't use this:
+#LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 #
-LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
+GA_LT_MINOR_VERSION=49
+LT_RELEASE=${GA_MAJOR_VERSION}.${GA_LT_MINOR_VERSION}
 LT_CURRENT=0
 LT_REVISION=${GA_PATCH_VERSION}
 
@@ -1671,11 +1675,13 @@ _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define GA_PATCH_VERSION ${GA_PATCH_VERSION}
+#define GA_LT_MINOR_VERSION ${GA_LT_MINOR_VERSION}
 _ACEOF
 
 
-
+cat >>confdefs.h <<_ACEOF
+#define GA_PATCH_VERSION ${GA_PATCH_VERSION}
+_ACEOF
 
 
 
@@ -3841,7 +3847,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3844 "configure"' > conftest.$ac_ext
+  echo '#line 3850 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5655,7 +5661,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5658:" \
+echo "$as_me:5664:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6689,11 +6695,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6692: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6698: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6696: \$? = $ac_status" >&5
+   echo "$as_me:6702: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6922,11 +6928,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6925: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6931: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6929: \$? = $ac_status" >&5
+   echo "$as_me:6935: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6982,11 +6988,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6985: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6991: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6989: \$? = $ac_status" >&5
+   echo "$as_me:6995: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8316,7 +8322,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 8319 "configure"' > conftest.$ac_ext
+    echo '#line 8325 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9187,7 +9193,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9190 "configure"
+#line 9196 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9285,7 +9291,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9288 "configure"
+#line 9294 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11464,11 +11470,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11467: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11473: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11471: \$? = $ac_status" >&5
+   echo "$as_me:11477: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -11524,11 +11530,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11527: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11533: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11531: \$? = $ac_status" >&5
+   echo "$as_me:11537: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12035,7 +12041,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 12038 "configure"' > conftest.$ac_ext
+    echo '#line 12044 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -12906,7 +12912,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12909 "configure"
+#line 12915 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13004,7 +13010,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13007 "configure"
+#line 13013 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13831,11 +13837,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13834: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13840: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13838: \$? = $ac_status" >&5
+   echo "$as_me:13844: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13891,11 +13897,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13894: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13900: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13898: \$? = $ac_status" >&5
+   echo "$as_me:13904: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15205,7 +15211,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 15208 "configure"' > conftest.$ac_ext
+    echo '#line 15214 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -15946,11 +15952,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15949: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15955: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15953: \$? = $ac_status" >&5
+   echo "$as_me:15959: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16179,11 +16185,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16182: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16188: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16186: \$? = $ac_status" >&5
+   echo "$as_me:16192: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16239,11 +16245,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16242: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16248: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16246: \$? = $ac_status" >&5
+   echo "$as_me:16252: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17573,7 +17579,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 17576 "configure"' > conftest.$ac_ext
+    echo '#line 17582 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -18444,7 +18450,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18447 "configure"
+#line 18453 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18542,7 +18548,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18545 "configure"
+#line 18551 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -20526,6 +20532,7 @@ GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
 cat >>confdefs.h <<_ACEOF
 #define GA_NUM_THREADS_ENVVAR_STRING ${GA_NUM_THREADS_ENVVAR_STRING}
 _ACEOF
+
 
 
 
@@ -24807,6 +24814,7 @@ gaul__bool=$gaul__bool
 
 GA_MAJOR_VERSION=$GA_MAJOR_VERSION
 GA_MINOR_VERSION=$GA_MINOR_VERSION
+GA_LT_MINOR_VERSION=$GA_LT_MINOR_VERSION
 GA_PATCH_VERSION=$GA_PATCH_VERSION
 GA_VERSION_STRING=$GA_VERSION_STRING
 
@@ -24944,9 +24952,6 @@ s,@target_os@,$target_os,;t t
 s,@LT_RELEASE@,$LT_RELEASE,;t t
 s,@LT_CURRENT@,$LT_CURRENT,;t t
 s,@LT_REVISION@,$LT_REVISION,;t t
-s,@GA_MAJOR_VERSION@,$GA_MAJOR_VERSION,;t t
-s,@GA_MINOR_VERSION@,$GA_MINOR_VERSION,;t t
-s,@GA_PATCH_VERSION@,$GA_PATCH_VERSION,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
@@ -25010,6 +25015,10 @@ s,@F77@,$F77,;t t
 s,@FFLAGS@,$FFLAGS,;t t
 s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
+s,@GA_MAJOR_VERSION@,$GA_MAJOR_VERSION,;t t
+s,@GA_MINOR_VERSION@,$GA_MINOR_VERSION,;t t
+s,@GA_LT_MINOR_VERSION@,$GA_LT_MINOR_VERSION,;t t
+s,@GA_PATCH_VERSION@,$GA_PATCH_VERSION,;t t
 s,@GA_VERSION@,$GA_VERSION,;t t
 s,@GA_VERSION_STRING@,$GA_VERSION_STRING,;t t
 s,@MPIFLAGS@,$MPIFLAGS,;t t
@@ -25973,6 +25982,7 @@ _EOF_
 
 #define GA_MAJOR_VERSION ${GA_MAJOR_VERSION}
 #define GA_MINOR_VERSION ${GA_MINOR_VERSION}
+#define GA_LT_MINOR_VERSION ${GA_LT_MINOR_VERSION}
 #define GA_PATCH_VERSION ${GA_PATCH_VERSION}
 #define GA_VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
 #define GA_UNAME_STRING "`uname -a`"

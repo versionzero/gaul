@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "15/04/05"
+#define GA_BUILD_DATE_STRING "20/04/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -15,6 +15,9 @@
 
 /* Default number of threads. */
 #define GA_DEFAULT_NUM_THREADS 4
+
+/* Minor version number for libtool. */
+#define GA_LT_MINOR_VERSION 49
 
 /* Major version number. */
 #define GA_MAJOR_VERSION 0

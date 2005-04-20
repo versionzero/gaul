@@ -432,6 +432,7 @@ gaul__bool=yes
 
 GA_MAJOR_VERSION=0
 GA_MINOR_VERSION=1849
+GA_LT_MINOR_VERSION=49
 GA_PATCH_VERSION=0
 GA_VERSION_STRING=
 
@@ -558,24 +559,21 @@ s,@target@,x86_64-redhat-linux-gnu,;t t
 s,@target_cpu@,x86_64,;t t
 s,@target_vendor@,redhat,;t t
 s,@target_os@,linux-gnu,;t t
-s,@LT_RELEASE@,0.1849,;t t
+s,@LT_RELEASE@,0.49,;t t
 s,@LT_CURRENT@,0,;t t
 s,@LT_REVISION@,0,;t t
-s,@GA_MAJOR_VERSION@,0,;t t
-s,@GA_MINOR_VERSION@,1849,;t t
-s,@GA_PATCH_VERSION@,0,;t t
 s,@INSTALL_PROGRAM@,${INSTALL},;t t
 s,@INSTALL_SCRIPT@,${INSTALL},;t t
 s,@INSTALL_DATA@,${INSTALL} -m 644,;t t
 s,@CYGPATH_W@,echo,;t t
 s,@PACKAGE@,gaul-devel,;t t
 s,@VERSION@,0.1849-0,;t t
-s,@ACLOCAL@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run aclocal-1.9,;t t
-s,@AUTOCONF@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run autoconf,;t t
-s,@AUTOMAKE@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run automake-1.9,;t t
-s,@AUTOHEADER@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run autoheader,;t t
-s,@MAKEINFO@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run makeinfo,;t t
-s,@install_sh@,/home/stewart/Development/gaul-devel-0.1848-2/install-sh,;t t
+s,@ACLOCAL@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run aclocal-1.9,;t t
+s,@AUTOCONF@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run autoconf,;t t
+s,@AUTOMAKE@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run automake-1.9,;t t
+s,@AUTOHEADER@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run autoheader,;t t
+s,@MAKEINFO@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run makeinfo,;t t
+s,@install_sh@,/home/stewart/Development/gaul-devel-0.1849-0/install-sh,;t t
 s,@STRIP@,strip,;t t
 s,@ac_ct_STRIP@,strip,;t t
 s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t
@@ -583,7 +581,7 @@ s,@mkdir_p@,mkdir -p --,;t t
 s,@AWK@,gawk,;t t
 s,@SET_MAKE@,,;t t
 s,@am__leading_dot@,.,;t t
-s,@AMTAR@,${SHELL} /home/stewart/Development/gaul-devel-0.1848-2/missing --run tar,;t t
+s,@AMTAR@,${SHELL} /home/stewart/Development/gaul-devel-0.1849-0/missing --run tar,;t t
 s,@am__tar@,${AMTAR} chof - "$$tardir",;t t
 s,@am__untar@,${AMTAR} xf -,;t t
 s,@CC@,gcc,;t t
@@ -627,6 +625,10 @@ s,@F77@,g77,;t t
 s,@FFLAGS@,-g -O2,;t t
 s,@ac_ct_F77@,g77,;t t
 s,@LIBTOOL@,$(SHELL) $(top_builddir)/libtool,;t t
+s,@GA_MAJOR_VERSION@,0,;t t
+s,@GA_MINOR_VERSION@,1849,;t t
+s,@GA_LT_MINOR_VERSION@,49,;t t
+s,@GA_PATCH_VERSION@,0,;t t
 s,@GA_VERSION@,0.1849-0,;t t
 s,@GA_VERSION_STRING@,,;t t
 s,@MPIFLAGS@,,;t t
@@ -961,9 +963,10 @@ ${ac_dA}PACKAGE_STRING${ac_dB}PACKAGE_STRING${ac_dC}"gaul-devel 0.1849"${ac_dD}
 ${ac_dA}PACKAGE_BUGREPORT${ac_dB}PACKAGE_BUGREPORT${ac_dC}"gaul@linux-domain.com"${ac_dD}
 ${ac_dA}GA_MAJOR_VERSION${ac_dB}GA_MAJOR_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_MINOR_VERSION${ac_dB}GA_MINOR_VERSION${ac_dC}1849${ac_dD}
+${ac_dA}GA_LT_MINOR_VERSION${ac_dB}GA_LT_MINOR_VERSION${ac_dC}49${ac_dD}
 ${ac_dA}GA_PATCH_VERSION${ac_dB}GA_PATCH_VERSION${ac_dC}0${ac_dD}
 ${ac_dA}GA_UNAME_STRING${ac_dB}GA_UNAME_STRING${ac_dC}"Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_dD}
-${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"15/04/05"${ac_dD}
+${ac_dA}GA_BUILD_DATE_STRING${ac_dB}GA_BUILD_DATE_STRING${ac_dC}"20/04/05"${ac_dD}
 ${ac_dA}GA_VERSION_STRING${ac_dB}GA_VERSION_STRING${ac_dC}"0.1849-0"${ac_dD}
 ${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_SYS_TYPES_H${ac_dB}HAVE_SYS_TYPES_H${ac_dC}1${ac_dD}
@@ -991,7 +994,6 @@ ${ac_dA}W32_CRIPPLED${ac_dB}W32_CRIPPLED${ac_dC}0${ac_dD}
 ${ac_dA}HAVE_SLANG${ac_dB}HAVE_SLANG${ac_dC}1${ac_dD}
 ${ac_dA}USE_CHROMO_CHUNKS${ac_dB}USE_CHROMO_CHUNKS${ac_dC}0${ac_dD}
 ${ac_dA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_dC}GA_NUM_PROCESSES${ac_dD}
-${ac_dA}GA_NUM_THREADS_ENVVAR_STRING${ac_dB}GA_NUM_THREADS_ENVVAR_STRING${ac_dC}GA_NUM_THREADS${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1001,6 +1003,7 @@ CEOF
 /^[	 ]*#[	 ]*define/!b
 t clr
 : clr
+${ac_dA}GA_NUM_THREADS_ENVVAR_STRING${ac_dB}GA_NUM_THREADS_ENVVAR_STRING${ac_dC}GA_NUM_THREADS${ac_dD}
 ${ac_dA}SIZEOF_DOUBLE${ac_dB}SIZEOF_DOUBLE${ac_dC}8${ac_dD}
 ${ac_dA}SIZEOF_CHAR${ac_dB}SIZEOF_CHAR${ac_dC}1${ac_dD}
 ${ac_dA}SIZEOF_LONG${ac_dB}SIZEOF_LONG${ac_dC}8${ac_dD}
@@ -1038,7 +1041,6 @@ ${ac_dA}HAVE_BCOPY${ac_dB}HAVE_BCOPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_BCMP${ac_dB}HAVE_BCMP${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRLEN${ac_dB}HAVE_STRLEN${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRNCMP${ac_dB}HAVE_STRNCMP${ac_dC}1${ac_dD}
-${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 CEOF
   sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1048,6 +1050,7 @@ CEOF
 /^[	 ]*#[	 ]*define/!b
 t clr
 : clr
+${ac_dA}HAVE_STRNCPY${ac_dB}HAVE_STRNCPY${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_MEMSET${ac_dB}HAVE_MEMSET${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_USLEEP${ac_dB}HAVE_USLEEP${ac_dC}1${ac_dD}
 ${ac_dA}MEMORY_ALIGN_SIZE${ac_dB}MEMORY_ALIGN_SIZE${ac_dC}8${ac_dD}
@@ -1072,9 +1075,10 @@ ${ac_uA}PACKAGE_STRING${ac_uB}PACKAGE_STRING${ac_uC}"gaul-devel 0.1849"${ac_uD}
 ${ac_uA}PACKAGE_BUGREPORT${ac_uB}PACKAGE_BUGREPORT${ac_uC}"gaul@linux-domain.com"${ac_uD}
 ${ac_uA}GA_MAJOR_VERSION${ac_uB}GA_MAJOR_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_MINOR_VERSION${ac_uB}GA_MINOR_VERSION${ac_uC}1849${ac_uD}
+${ac_uA}GA_LT_MINOR_VERSION${ac_uB}GA_LT_MINOR_VERSION${ac_uC}49${ac_uD}
 ${ac_uA}GA_PATCH_VERSION${ac_uB}GA_PATCH_VERSION${ac_uC}0${ac_uD}
 ${ac_uA}GA_UNAME_STRING${ac_uB}GA_UNAME_STRING${ac_uC}"Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"${ac_uD}
-${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"15/04/05"${ac_uD}
+${ac_uA}GA_BUILD_DATE_STRING${ac_uB}GA_BUILD_DATE_STRING${ac_uC}"20/04/05"${ac_uD}
 ${ac_uA}GA_VERSION_STRING${ac_uB}GA_VERSION_STRING${ac_uC}"0.1849-0"${ac_uD}
 ${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_SYS_TYPES_H${ac_uB}HAVE_SYS_TYPES_H${ac_uC}1${ac_uD}
@@ -1102,7 +1106,6 @@ ${ac_uA}W32_CRIPPLED${ac_uB}W32_CRIPPLED${ac_uC}0${ac_uD}
 ${ac_uA}HAVE_SLANG${ac_uB}HAVE_SLANG${ac_uC}1${ac_uD}
 ${ac_uA}USE_CHROMO_CHUNKS${ac_uB}USE_CHROMO_CHUNKS${ac_uC}0${ac_uD}
 ${ac_uA}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uB}GA_NUM_PROCESSES_ENVVAR_STRING${ac_uC}GA_NUM_PROCESSES${ac_uD}
-${ac_uA}GA_NUM_THREADS_ENVVAR_STRING${ac_uB}GA_NUM_THREADS_ENVVAR_STRING${ac_uC}GA_NUM_THREADS${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1112,6 +1115,7 @@ CEOF
 /^[	 ]*#[	 ]*undef/!b
 t clr
 : clr
+${ac_uA}GA_NUM_THREADS_ENVVAR_STRING${ac_uB}GA_NUM_THREADS_ENVVAR_STRING${ac_uC}GA_NUM_THREADS${ac_uD}
 ${ac_uA}SIZEOF_DOUBLE${ac_uB}SIZEOF_DOUBLE${ac_uC}8${ac_uD}
 ${ac_uA}SIZEOF_CHAR${ac_uB}SIZEOF_CHAR${ac_uC}1${ac_uD}
 ${ac_uA}SIZEOF_LONG${ac_uB}SIZEOF_LONG${ac_uC}8${ac_uD}
@@ -1149,7 +1153,6 @@ ${ac_uA}HAVE_BCOPY${ac_uB}HAVE_BCOPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_BCMP${ac_uB}HAVE_BCMP${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRLEN${ac_uB}HAVE_STRLEN${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRNCMP${ac_uB}HAVE_STRNCMP${ac_uC}1${ac_uD}
-${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 CEOF
   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
@@ -1159,6 +1162,7 @@ CEOF
 /^[	 ]*#[	 ]*undef/!b
 t clr
 : clr
+${ac_uA}HAVE_STRNCPY${ac_uB}HAVE_STRNCPY${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_MEMSET${ac_uB}HAVE_MEMSET${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_USLEEP${ac_uB}HAVE_USLEEP${ac_uC}1${ac_uD}
 ${ac_uA}MEMORY_ALIGN_SIZE${ac_uB}MEMORY_ALIGN_SIZE${ac_uC}8${ac_uD}
@@ -1712,6 +1716,7 @@ _EOF_
 
 #define GA_MAJOR_VERSION ${GA_MAJOR_VERSION}
 #define GA_MINOR_VERSION ${GA_MINOR_VERSION}
+#define GA_LT_MINOR_VERSION ${GA_LT_MINOR_VERSION}
 #define GA_PATCH_VERSION ${GA_PATCH_VERSION}
 #define GA_VERSION_STRING "${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}"
 #define GA_UNAME_STRING "`uname -a`"

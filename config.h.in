@@ -15,6 +15,9 @@
 /* Default number of threads. */
 #undef GA_DEFAULT_NUM_THREADS
 
+/* Minor version number for libtool. */
+#undef GA_LT_MINOR_VERSION
+
 /* Major version number. */
 #undef GA_MAJOR_VERSION
 
