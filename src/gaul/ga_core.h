@@ -400,8 +400,5 @@ struct population_t
  */
 boolean gaul_population_fill(population *pop, int num);
 
-/* Final includes. */
-#include "gaul/ga_utility.h"	/* Hmm. */
-
 #endif	/* GA_CORE_H_INCLUDED */
 
