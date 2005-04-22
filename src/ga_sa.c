@@ -41,11 +41,11 @@
 
 boolean ga_sa_boltzmann_acceptance( population	*pop,
 				entity		*original,
-				entity		*new )
+				entity		*putative )
   {
 
-  return ( original->fitness < new->fitness ||
-           random_boolean_prob(exp((new->fitness-original->fitness)
+  return ( original->fitness < putative->fitness ||
+           random_boolean_prob(exp((putative->fitness-original->fitness)
            /(GA_BOLTZMANN_FACTOR*pop->sa_params->temperature))) );
   }
 
@@ -60,10 +60,10 @@ boolean ga_sa_boltzmann_acceptance( population	*pop,
 
 boolean ga_sa_linear_acceptance( population	*pop,
 				entity		*original,
-				entity		*new )
+				entity		*putative )
   {
 
-  return ( original->fitness < new->fitness+pop->sa_params->temperature );
+  return ( original->fitness < putative->fitness+pop->sa_params->temperature );
   }
 
 
