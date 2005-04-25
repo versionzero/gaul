@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -83,8 +83,10 @@ boolean ga_chromosome_integer_allocate( population *pop,
   embryo->chromosome[0] = mem_chunk_alloc(pop->chromo_chunk);
   THREAD_UNLOCK(pop->chromo_chunk_lock);
 #else
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(int *));
-  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(int));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(int *))) )
+    die("Unable to allocate memory");
+  if ( !(embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(int))) )
+    die("Unable to allocate memory");
 #endif
 
   for (i=1; i<pop->num_chromosomes; i++)
@@ -309,8 +311,10 @@ boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(boolean *));
-  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(boolean));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(boolean *))) )
+    die("Unable to allocate memory");
+  if ( !(embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(boolean))) )
+    die("Unable to allocate memory");
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -493,8 +497,10 @@ boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(double *));
-  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(double));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(double *))) )
+    die("Unable to allocate memory");
+  if ( !(embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(double))) )
+    die("Unable to allocate memory");
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -697,8 +703,10 @@ boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(char *));
-  embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(char));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(char *))) )
+    die("Unable to allocate memory");
+  if ( !(embryo->chromosome[0] = s_malloc(pop->num_chromosomes*pop->len_chromosomes*sizeof(char))) )
+    die("Unable to allocate memory");
 
   for (i=1; i<pop->num_chromosomes; i++)
     {
@@ -879,7 +887,8 @@ boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(byte *));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(byte *))) )
+    die("Unable to allocate memory");
 
   for (i=0; i<pop->num_chromosomes; i++)
     embryo->chromosome[i] = ga_bit_new(pop->len_chromosomes);
@@ -1079,7 +1088,8 @@ boolean ga_chromosome_list_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(DLList *));
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(DLList *))) )
+    die("Unable to allocate memory");
 
   for (i=0; i<pop->num_chromosomes; i++)
     embryo->chromosome[i] = NULL;

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_select - Genetic algorithm selection operators.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -877,8 +877,10 @@ boolean ga_select_two_sus(population *pop, entity **mother, entity **father)
       die("Internal error.  Permutation buffer not NULL.");
 */
 
-    pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size);
-    ordered = s_malloc(sizeof(int)*pop->orig_size);
+    if ( !(pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size)) )
+      die("Unable to allocate memory");
+    if ( !(ordered = s_malloc(sizeof(int)*pop->orig_size)) )
+      die("Unable to allocate memory");
     for (i=0; i<pop->orig_size;i++)
       ordered[i]=i;
     random_int_permutation(pop->orig_size, ordered, pop->selectdata.permutation);
@@ -1021,8 +1023,10 @@ boolean ga_select_two_sussq(population *pop, entity **mother, entity **father)
       die("Internal error.  Permutation buffer not NULL.");
 */
 
-    pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size);
-    ordered = s_malloc(sizeof(int)*pop->orig_size);
+    if ( !(pop->selectdata.permutation = s_malloc(sizeof(int)*pop->orig_size)) )
+      die("Unable to allocate memory");
+    if ( !(ordered = s_malloc(sizeof(int)*pop->orig_size)) )
+      die("Unable to allocate memory");
     for (i=0; i<pop->orig_size;i++)
       ordered[i]=i;
     random_int_permutation(pop->orig_size, ordered, pop->selectdata.permutation);
@@ -1213,11 +1217,11 @@ boolean ga_select_one_roundrobin(population *pop, entity **mother)
 
   if (!pop) die("Null pointer to population structure passed.");
 
-  pop->select_state++;
-
   *mother = pop->entity_iarray[pop->select_state%pop->orig_size];
 
-  return pop->select_state>(pop->orig_size*pop->mutation_ratio);
+  pop->select_state++;
+
+  return pop->select_state>=(pop->orig_size*pop->mutation_ratio);
   }
 
 

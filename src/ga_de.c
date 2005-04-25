@@ -64,7 +64,10 @@ void ga_population_set_differentialevolution_parameters( population *pop,
   plog( LOG_VERBOSE, "Population's differential evolution parameters set" );
 
   if (pop->de_params == NULL)
-    pop->de_params = s_malloc(sizeof(ga_de_t));
+    {
+    if ( !(pop->de_params = s_malloc(sizeof(ga_de_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->de_params->strategy = strategy;
   pop->de_params->crossover_method = crossover;
@@ -162,7 +165,9 @@ int ga_differentialevolution(	population		*pop,
 /*
  * Prepare arrays to store permutations.
  */
-  permutation = s_malloc(sizeof(int)*pop->size);
+  if ( !(permutation = s_malloc(sizeof(int)*pop->size)) )
+    die("Unable to allocate memory");
+
   for (i=0; i<pop->size; i++)
     permutation[i]=i;
 

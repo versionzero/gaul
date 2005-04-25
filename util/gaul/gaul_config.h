@@ -7,7 +7,7 @@
  ********************************************************************/
 
 #ifndef GAUL_CONFIG_H_INCLUDED
-#define GAUL_CONFIG_H_INCLUDED 1
+#define GAUL_CONFIG_H_INCLUDED
 
 /***********************************************************************
 ## gaul_config.h.in -- Process this file with configure to produce gaul_config.h
@@ -62,6 +62,7 @@
 #endif
 
 
+/* util/gaul/gaul_config.h.in */
 #include <pwd.h>
 #include <sys/select.h>
 #include <sys/signal.h>
@@ -158,10 +159,10 @@ extern int errno;
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1849
 #define GA_LT_MINOR_VERSION 49
-#define GA_PATCH_VERSION 0
-#define GA_VERSION_STRING "0.1849-0"
+#define GA_PATCH_VERSION 1
+#define GA_VERSION_STRING "0.1849-1"
 #define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
-#define GA_BUILD_DATE_STRING "20/04/05"
+#define GA_BUILD_DATE_STRING "25/04/05"
 
 #define V3_QUICK 
 #define W32_CRIPPLED 0

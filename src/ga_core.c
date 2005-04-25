@@ -295,6 +295,8 @@ population *ga_population_new(	const int stable_size,
   newpop->island = -1;
   newpop->generation = 0;
 
+  newpop->fitness_dimensions = 0;
+
   newpop->crossover_ratio = GA_DEFAULT_CROSSOVER_RATIO;
   newpop->mutation_ratio = GA_DEFAULT_MUTATION_RATIO;
   newpop->migration_ratio = GA_DEFAULT_MIGRATION_RATIO;
@@ -339,6 +341,7 @@ population *ga_population_new(	const int stable_size,
   newpop->dc_params = NULL;
   newpop->gradient_params = NULL;
   newpop->search_params = NULL;
+  newpop->de_params = NULL;
   newpop->sampling_params = NULL;
   
 /*
@@ -415,7 +418,8 @@ population *ga_population_clone_empty(population *pop)
 /*
  * Allocate new structure.
  */
-  newpop = s_malloc(sizeof(population));
+  if ( !(newpop = s_malloc(sizeof(population))) )
+    die("Unable to allocate memory");
 
 /*
  * Clone parameters.
@@ -428,6 +432,10 @@ population *ga_population_clone_empty(population *pop)
   newpop->len_chromosomes = pop->len_chromosomes;
   newpop->data = pop->data;
   newpop->free_index = pop->max_size-1;
+  newpop->island = -1;
+  newpop->generation = 0;
+
+  newpop->fitness_dimensions = 0;
 
   newpop->crossover_ratio = pop->crossover_ratio;
   newpop->mutation_ratio = pop->mutation_ratio;
@@ -481,7 +489,8 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->tabu_params = s_malloc(sizeof(ga_tabu_t));
+    if ( !(newpop->tabu_params = s_malloc(sizeof(ga_tabu_t))) )
+      die("Unable to allocate memory");
 
     newpop->tabu_params->tabu_accept = pop->tabu_params->tabu_accept;
     newpop->tabu_params->list_length = pop->tabu_params->list_length;
@@ -494,7 +503,9 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->sa_params = s_malloc(sizeof(ga_sa_t));
+    if ( !(newpop->sa_params = s_malloc(sizeof(ga_sa_t))) )
+      die("Unable to allocate memory");
+
     newpop->sa_params->sa_accept = pop->sa_params->sa_accept;
     newpop->sa_params->initial_temp = pop->sa_params->initial_temp;
     newpop->sa_params->final_temp = pop->sa_params->final_temp;
@@ -509,7 +520,8 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->climbing_params = s_malloc(sizeof(ga_climbing_t));
+    if ( !(newpop->climbing_params = s_malloc(sizeof(ga_climbing_t))) )
+      die("Unable to allocate memory");
 
     newpop->climbing_params->mutate_allele = pop->climbing_params->mutate_allele;
     }
@@ -520,7 +532,8 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->simplex_params = s_malloc(sizeof(ga_simplex_t));
+    if ( !(newpop->simplex_params = s_malloc(sizeof(ga_simplex_t))) )
+      die("Unable to allocate memory");
 
     newpop->climbing_params->mutate_allele = pop->climbing_params->mutate_allele;
     newpop->simplex_params->to_double = pop->simplex_params->to_double;
@@ -534,7 +547,8 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->dc_params = s_malloc(sizeof(ga_dc_t));
+    if ( !(newpop->dc_params = s_malloc(sizeof(ga_dc_t))) )
+      die("Unable to allocate memory");
 
     newpop->dc_params->compare = pop->dc_params->compare;
     }
@@ -545,7 +559,8 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->gradient_params = s_malloc(sizeof(ga_gradient_t));
+    if ( !(newpop->gradient_params = s_malloc(sizeof(ga_gradient_t))) )
+      die("Unable to allocate memory");
 
     newpop->gradient_params->to_double = newpop->gradient_params->to_double;
     newpop->gradient_params->from_double = newpop->gradient_params->from_double;
@@ -560,11 +575,29 @@ population *ga_population_clone_empty(population *pop)
     }
   else
     {
-    newpop->search_params = s_malloc(sizeof(ga_search_t));
+    if ( !(newpop->search_params = s_malloc(sizeof(ga_search_t))) )
+      die("Unable to allocate memory");
 
     newpop->search_params->scan_chromosome = pop->search_params->scan_chromosome;
     newpop->search_params->chromosome_state = 0;
     newpop->search_params->allele_state = 0;
+    }
+
+  if (pop->de_params == NULL)
+    {
+    newpop->de_params = NULL;
+    }
+  else
+    {
+    if ( !(newpop->de_params = s_malloc(sizeof(ga_de_t))) )
+      die("Unable to allocate memory");
+
+    newpop->de_params->strategy = pop->de_params->strategy;
+    newpop->de_params->crossover_method = pop->de_params->crossover_method;
+    newpop->de_params->num_perturbed = pop->de_params->num_perturbed;
+    newpop->de_params->crossover_factor = pop->de_params->crossover_factor;
+    newpop->de_params->weighting_min = pop->de_params->weighting_min;
+    newpop->de_params->weighting_max = pop->de_params->weighting_max;
     }
 
   if (newpop->sampling_params == NULL)
@@ -581,8 +614,10 @@ population *ga_population_clone_empty(population *pop)
 /*
  * Allocate arrays etc.
  */
-  newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*));
-  newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*));
+  if ( !(newpop->entity_array = s_malloc(newpop->max_size*sizeof(entity*))) )
+    die("Unable to allocate memory");
+  if ( !(newpop->entity_iarray = s_malloc(newpop->max_size*sizeof(entity*))) )
+    die("Unable to allocate memory");
   newpop->entity_chunk = mem_chunk_new(sizeof(entity), 512);
   
 /*
@@ -1310,11 +1345,12 @@ entity *ga_get_entity_from_rank(population *pop, const unsigned int rank)
 		Chromosomes are allocated, but will contain garbage.
   parameters:
   return:
-  last updated: 18 Mar 2002
+  last updated: 24 Apr 2005
  **********************************************************************/
 
 static boolean ga_entity_setup(population *pop, entity *joe)
   {
+  int	i;	/* Loop variable over the fitness vector. */
 
   if (!joe)
     die("Null pointer to entity structure passed.");
@@ -1329,7 +1365,21 @@ static boolean ga_entity_setup(population *pop, entity *joe)
   joe->data=NULL;
 
 /* No fitness evaluated yet. */
-  joe->fitness=GA_MIN_FITNESS;
+  joe->fitness = GA_MIN_FITNESS;
+
+  if ( pop->fitness_dimensions > 0 )
+    { /* this population is being used for multiobjective optimisation. */
+    if ( !(joe->fitvector = s_malloc(sizeof(double)*pop->fitness_dimensions)) )
+      die("Unable to allocate memory");
+
+    /* Clear multiobjective fitness vector. */
+    for (i=0; i<pop->fitness_dimensions; i++)
+      joe->fitvector[i] = GA_MIN_FITNESS;
+    }
+  else
+    {
+    joe->fitvector = NULL;
+    }
 
   return TRUE;
   }
@@ -1362,6 +1412,10 @@ boolean ga_entity_dereference_by_rank(population *pop, int rank)
     destruct_list(pop, dying->data);
     dying->data=NULL;
     }
+
+/* Free multiobjective fitness vector. */
+  if ( dying->fitvector != NULL )
+    s_free(dying->fitvector);
 
   THREAD_LOCK(pop->lock);
 
@@ -1418,8 +1472,12 @@ boolean ga_entity_dereference_by_id(population *pop, int id)
   if (dying->data)
     {
     destruct_list(pop, dying->data);
-    dying->data=NULL;
+    dying->data = NULL;
     }
+
+/* Free multiobjective fitness vector. */
+  if ( dying->fitvector != NULL )
+    s_free(dying->fitvector);
 
   THREAD_LOCK(pop->lock);
 
@@ -1513,6 +1571,8 @@ void ga_entity_clear_data(population *p, entity *entity, const int chromosome)
 
 void ga_entity_blank(population *p, entity *entity)
   {
+  int	i;	/* Loop variable over the fitness vector. */
+
   if (entity->data)
     {
     destruct_list(p, entity->data);
@@ -1520,6 +1580,10 @@ void ga_entity_blank(population *p, entity *entity)
     }
 
   entity->fitness=GA_MIN_FITNESS;
+
+/* Clear multiobjective fitness vector. */
+  for (i=0; i<p->fitness_dimensions; i++)
+    entity->fitvector[i] = GA_MIN_FITNESS;
 
 /*  printf("ENTITY %d CLEARED.\n", ga_get_entity_id(p, entity));*/
 
@@ -1959,7 +2023,8 @@ void ga_population_append_receive( population *pop, int src_node )
 
   if (num_to_recv>0)
     {
-    buffer = s_malloc(len*sizeof(byte));
+    if ( !(buffer = s_malloc(len*sizeof(byte))) )
+      die("Unable to allocate memory");
 
 /*
  * Receive all entities individually.
@@ -2130,7 +2195,8 @@ entity *ga_multiproc_compare_entities( population *pop, entity *localnew, entity
   maxnode = mpi_find_global_max(MAX(localnew->fitness, local->fitness), &global_max);
 
   buffer_size = pop->num_chromosomes*pop->len_chromosomes;
-  buffer_ptr = buffer = s_malloc(buffer_size*sizeof(int));
+  if ( !(buffer_ptr = buffer = s_malloc(buffer_size*sizeof(int))) )
+    die("Unable to allocate memory");
 
   if (maxnode == mpi_get_rank())
     {
@@ -2730,6 +2796,7 @@ boolean ga_extinction(population *extinct)
     if (extinct->simplex_params) s_free(extinct->simplex_params);
     if (extinct->gradient_params) s_free(extinct->gradient_params);
     if (extinct->search_params) s_free(extinct->search_params);
+    if (extinct->de_params) s_free(extinct->de_params);
     if (extinct->sampling_params) s_free(extinct->sampling_params);
 
     THREAD_LOCK_FREE(extinct->lock);
@@ -3027,6 +3094,43 @@ int ga_population_get_island(population *pop)
   if ( !pop ) return 0;
 
   return pop->island;
+  }
+
+
+/**********************************************************************
+  ga_population_get_fitness_dimensions()
+  synopsis:	Get number of dimensions in fitness vector, for
+		multiobjective optimisation.
+  parameters:
+  return:
+  last updated: 24 Apr 2005
+ **********************************************************************/
+
+int ga_population_get_fitness_dimensions(population *pop)
+  {
+
+  if ( !pop ) die("Null pointer to population structure passed.");
+
+  return pop->fitness_dimensions;
+  }
+
+
+/**********************************************************************
+  ga_population_set_fitness_dimensions()
+  synopsis:	Set number of dimensions in fitness vector, for
+		multiobjective optimisation.
+  parameters:
+  return:
+  last updated: 24 Apr 2005
+ **********************************************************************/
+
+boolean ga_population_set_fitness_dimensions(population *pop, int num)
+  {
+  if ( !pop ) return FALSE;
+
+  pop->fitness_dimensions = num;
+
+  return TRUE;
   }
 
 

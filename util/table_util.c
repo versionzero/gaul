@@ -3,7 +3,7 @@
  **********************************************************************
 
   table_util - Data table routines.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -83,7 +83,8 @@ TableStruct *table_new(void)
   {
   TableStruct *table;
 
-  table = s_malloc(sizeof(TableStruct));
+  if ( !(table = s_malloc(sizeof(TableStruct))) )
+    die("Unable to allocate memory");
 
   table->data = NULL;
   table->unused = NULL;
@@ -232,7 +233,8 @@ vpointer *table_get_data_all(TableStruct *table)
 
   if (!table) die("NULL pointer to TableStruct passed.");
 
-  data = (vpointer*) s_malloc(sizeof(vpointer)*(table->size-table->numfree));
+  if ( !(data = (vpointer*) s_malloc(sizeof(vpointer)*(table->size-table->numfree))) )
+    die("Unable to allocate memory");
 
   while ( index < table->next)
     {
@@ -254,7 +256,8 @@ unsigned int *table_get_index_all(TableStruct *table)
 
   if (!table) die("NULL pointer to TableStruct passed.");
 
-  data = (unsigned int*) s_malloc(sizeof(vpointer)*(table->size-table->numfree));
+  if ( !(data = (unsigned int*) s_malloc(sizeof(vpointer)*(table->size-table->numfree))) )
+    die("Unable to allocate memory");
 
   while ( index < table->next)
     {

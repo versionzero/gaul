@@ -3,7 +3,7 @@
  **********************************************************************
 
   nn_util - Simple multi-layer Neural Network routines.
-  Copyright ©2001-2003, The Regents of the University of California.
+  Copyright ©2001-2005, The Regents of the University of California.
   All rights reserved.
   Primary author: "Stewart Adcock" <stewart@linux-domain.com>
 
@@ -160,8 +160,11 @@ network_t *NN_new(int num_layers, int *neurons)
   int		l;		/* Layer index. */
   int		i;		/* Neuron index. */
 
-  network = (network_t*) s_malloc(sizeof(network_t));
-  network->layer = (layer_t*) s_malloc(num_layers*sizeof(layer_t));
+  if ( !(network = (network_t*) s_malloc(sizeof(network_t))) )
+    die("Unable to allocate memory");
+  if ( !(network->layer = (layer_t*) s_malloc(num_layers*sizeof(layer_t))) )
+    die("Unable to allocate memory");
+
   network->num_layers = num_layers;
 
   network->layer[0].neurons     = neurons[0];
@@ -216,14 +219,19 @@ network_t *NN_clone(network_t *src)
   int		l;		/* Layer index. */
   int		i;		/* Neuron index. */
 
-  network = (network_t*) s_malloc(sizeof(network_t));
-  network->layer = (layer_t*) s_malloc(src->num_layers*sizeof(layer_t));
+  if ( !(network = (network_t*) s_malloc(sizeof(network_t))) )
+    die("Unable to allocate memory");
+  if ( !(network->layer = (layer_t*) s_malloc(src->num_layers*sizeof(layer_t))) )
+    die("Unable to allocate memory");
+
   network->num_layers = src->num_layers;
 
   network->layer[0].neurons     = src->layer[0].neurons;
-  network->layer[0].output      = (float*) s_malloc((src->layer[0].neurons+1)*sizeof(float));
+  if ( !(network->layer[0].output      = (float*) s_malloc((src->layer[0].neurons+1)*sizeof(float))) )
+    die("Unable to allocate memory");
   memcpy(network->layer[0].output, src->layer[0].output, src->layer[0].neurons+1);
-  network->layer[0].error       = (float*) s_malloc((src->layer[0].neurons+1)*sizeof(float));
+  if ( !(network->layer[0].error       = (float*) s_malloc((src->layer[0].neurons+1)*sizeof(float))) )
+    die("Unable to allocate memory");
   memcpy(network->layer[0].error, src->layer[0].error, src->layer[0].neurons+1);
   network->layer[0].weight      = NULL;
   network->layer[0].weight_save  = NULL;
@@ -232,21 +240,29 @@ network_t *NN_clone(network_t *src)
   for (l=1; l<src->num_layers; l++)
     {
     network->layer[l].neurons     = src->layer[l].neurons;
-    network->layer[l].output      = (float*)  s_malloc((src->layer[l].neurons+1)*sizeof(float));
+    if ( !(network->layer[l].output      = (float*)  s_malloc((src->layer[l].neurons+1)*sizeof(float))) )
+      die("Unable to allocate memory");
     memcpy(network->layer[l].output, src->layer[l].output, src->layer[l].neurons+1);
-    network->layer[l].error       = (float*)  s_malloc((src->layer[l].neurons+1)*sizeof(float));
+    if ( !(network->layer[l].error       = (float*)  s_malloc((src->layer[l].neurons+1)*sizeof(float))) )
+      die("Unable to allocate memory");
     memcpy(network->layer[l].error, src->layer[l].error, src->layer[l].neurons+1);
-    network->layer[l].weight      = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*));
-    network->layer[l].weight_save  = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*));
-    network->layer[l].weight_change = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*));
+    if ( !(network->layer[l].weight      = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*))) )
+      die("Unable to allocate memory");
+    if ( !(network->layer[l].weight_save  = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*))) )
+      die("Unable to allocate memory");
+    if ( !(network->layer[l].weight_change = (float**) s_malloc((src->layer[l].neurons+1)*sizeof(float*))) )
+      die("Unable to allocate memory");
       
     for (i=1; i<=src->layer[l].neurons; i++)
       {
-      network->layer[l].weight[i]      = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float));
+      if ( !(network->layer[l].weight[i]      = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float))) )
+        die("Unable to allocate memory");
       memcpy(network->layer[l].weight[i], src->layer[l].weight[i], src->layer[l-1].neurons+1);
-      network->layer[l].weight_save[i]  = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float));
+      if ( !(network->layer[l].weight_save[i]  = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float))) )
+        die("Unable to allocate memory");
       memcpy(network->layer[l].weight_save[i], src->layer[l].weight_save[i], src->layer[l-1].neurons+1);
-      network->layer[l].weight_change[i] = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float));
+      if ( !(network->layer[l].weight_change[i] = (float*) s_malloc((src->layer[l-1].neurons+1)*sizeof(float))) )
+        die("Unable to allocate memory");
       memcpy(network->layer[l].weight_change[i], src->layer[l].weight_change[i], src->layer[l-1].neurons+1);
       }
     }
@@ -505,7 +521,8 @@ network_t *NN_read_compat(const char *fname)
   if (strncmp(fmt_str, fmt_str_in, strlen(fmt_str)))
     die("Invalid neural network file header")
 
-  network = (network_t*) s_malloc(sizeof(network_t));
+  if ( !(network = (network_t*) s_malloc(sizeof(network_t))) )
+    die("Unable to allocate memory");
 
   fread(&(network->momentum), sizeof(float), 1, fp);
   fread(&(network->gain), sizeof(float), 1, fp);
@@ -513,7 +530,8 @@ network_t *NN_read_compat(const char *fname)
   fread(&(network->bias), sizeof(float), 1, fp);
 
   fread(&(network->num_layers), sizeof(int), 1, fp);
-  network->layer = (layer_t*) s_malloc(network->num_layers*sizeof(layer_t));
+  if ( !(network->layer = (layer_t*) s_malloc(network->num_layers*sizeof(layer_t))) )
+    die("Unable to allocate memory");
 
   fread(&(network->layer[0].neurons), sizeof(int), 1, fp);
   network->layer[0].output      = (float*) s_calloc(network->layer[0].neurons+1, sizeof(float));
@@ -575,7 +593,8 @@ network_t *NN_read(const char *fname)
     return NN_read_compat(fname);
     }
 
-  network = (network_t*) s_malloc(sizeof(network_t));
+  if ( !(network = (network_t*) s_malloc(sizeof(network_t))) )
+    die("Unable to allocate memory");
 
   fread(&(network->momentum), sizeof(float), 1, fp);
   fread(&(network->gain), sizeof(float), 1, fp);
@@ -584,7 +603,8 @@ network_t *NN_read(const char *fname)
   fread(&(network->decay), sizeof(float), 1, fp);
 
   fread(&(network->num_layers), sizeof(int), 1, fp);
-  network->layer = (layer_t*) s_malloc(network->num_layers*sizeof(layer_t));
+  if ( !(network->layer = (layer_t*) s_malloc(network->num_layers*sizeof(layer_t))) )
+    die("Unable to allocate memory");
 
   fread(&(network->layer[0].neurons), sizeof(int), 1, fp);
   network->layer[0].output      = (float*) s_calloc(network->layer[0].neurons+1, sizeof(float));
@@ -1380,7 +1400,8 @@ void NN_evaluate(network_t *network)
   float	*output;	/* Output results. */
   float	evalerror=0;	/* Network's output error. */
 
-  output = (float *) s_malloc(network->layer[network->num_layers-1].neurons*sizeof(float));
+  if ( !(output = (float *) s_malloc(network->layer[network->num_layers-1].neurons*sizeof(float))) )
+    die("Unable to allocate memory");
 
   printf("\n\nItem  Field  Actual  Prediction\n\n");
   for (item=0; item<num_eval_data; item++)
@@ -1419,7 +1440,8 @@ void NN_predict(network_t *network)
   int		item;		/* Loop variable over evaluation data. */
   float	*output;	/* Output results. */
 
-  output = (float *) s_malloc(network->layer[network->num_layers-1].neurons*sizeof(float));
+  if ( !(output = (float *) s_malloc(network->layer[network->num_layers-1].neurons*sizeof(float))) )
+    die("Unable to allocate memory");
 
   printf("\n\nItem  Field  Prediction\n\n");
   for (item=0; item<num_eval_data; item++)
@@ -1575,11 +1597,13 @@ int NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int 
       *labels = (char **) s_realloc(*labels, sizeof(char *) * *max_data);
       }
 
-    (*labels)[*num_data] = (char *) s_malloc(sizeof(char)*label_len+1);
+    if ( !((*labels)[*num_data] = (char *) s_malloc(sizeof(char)*label_len+1)) )
+      die("Unable to allocate memory");
     fread((*labels)[*num_data], sizeof(char), label_len, fp);
     (*labels)[*num_data][label_len] = '\0';
 
-    (*data)[*num_data] = (float *) s_malloc(sizeof(float)*size);
+    if ( !((*data)[*num_data] = (float *) s_malloc(sizeof(float)*size)) )
+      die("Unable to allocate memory");
     fread((*data)[*num_data], sizeof(float), size, fp);
 
     (*num_data)++;
@@ -1676,7 +1700,8 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)
       dief("Label mismatch \"%s\" to \"%s\"", (*labels)[*num_prop], line);
 
-    (*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float));
+    if ( !((*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float))) )
+      die("Unable to allocate memory");
 
     line = strtok(&(line[strlen((*labels)[*num_prop])]), " ");
     (*data)[*num_prop][0] = (float) atof(line);
@@ -1704,7 +1729,8 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)
       dief("Label mismatch \"%s\" to \"%s\"", (*labels)[*num_prop], line);
 
-    (*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float));
+    if ( !((*data)[*num_prop] = (float *) s_malloc((*dimensions)*sizeof(float))) )
+      die("Unable to allocate memory");
 
     line = strtok(&(line[strlen((*labels)[*num_prop])]), " ");
     (*data)[*num_prop][0] = (float) atof(line);

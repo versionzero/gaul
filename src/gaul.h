@@ -57,6 +57,7 @@
 
 /**********************************************************************
  * Forward declarations.
+ * (These datatypes are actually declared in src/gaul/ga_core.h)
  **********************************************************************/
 
 /* The entity datatype stores single individuals. */

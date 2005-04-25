@@ -1,3 +1,8 @@
+Changes since release 0.1849:
+- Differential evolution parameters copied along with populations.
+- Checks added around all memory allocations.
+- Support for vector fitnesses added.
+
 Changes since release 0.1848:
 - Changes required for compilation with MS VC++ - thanks to Al Cripps.
 - Added support for user defined ranking callback.
@@ -12,6 +17,7 @@ Changes since release 0.1848:
 - Some example programs renamed.
 - A few further test programs added.
 - Removed redundant gaul/ga_utility.h header.
+- Removed use of C++ reserved words.
 
 Changes since release 0.1847:
 - Roulette wheel and Stochastic Universal Sampling selection functions are now thread safe.

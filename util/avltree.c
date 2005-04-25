@@ -3,7 +3,7 @@
  **********************************************************************
 
   avltree - AVL tree implementation.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -190,7 +190,8 @@ static AVLNode *avltree_node_new(AVLKey key, vpointer data)
         node_buffers = s_realloc(node_buffers, sizeof(AVLNode *)*num_buffers);
         }
 
-      node_buffers[buffer_num] = s_malloc(sizeof(AVLNode)*AVL_NODE_BUFFER_SIZE);
+      if ( !(node_buffers[buffer_num] = s_malloc(sizeof(AVLNode)*AVL_NODE_BUFFER_SIZE)) )
+        die("Unable to allocate memory");
 
       node = node_buffers[buffer_num];
       num_used = 1;

@@ -55,7 +55,10 @@ void ga_population_set_hillclimbing_parameters( population              *pop,
         "Population's hill-climbing parameters: " );
 
   if (pop->climbing_params == NULL)
-    pop->climbing_params = s_malloc(sizeof(ga_climbing_t));
+    {
+    if ( !(pop->climbing_params = s_malloc(sizeof(ga_climbing_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->climbing_params->mutate_allele = mutate_allele;
 

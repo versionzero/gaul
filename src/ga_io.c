@@ -120,7 +120,10 @@ static entity *gaul_read_entity_posix(FILE *fp, population *pop)
 
   fread(&(entity->fitness), sizeof(double), 1, fp);
   fread(&len, sizeof(unsigned int), 1, fp);
-  buffer = s_malloc(sizeof(byte)*len);
+
+  if ( !(buffer = s_malloc(sizeof(byte)*len)) )
+    die("Unable to allocate memory");
+
   fread(buffer, sizeof(byte), len, fp);
   pop->chromosome_from_bytes(pop, entity, buffer);
 

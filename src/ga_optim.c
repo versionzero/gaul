@@ -303,7 +303,8 @@ void ga_attach_mpi_slave( population *pop )
   MPI_Recv(two_int, 2, MPI_INT, 0, GA_TAG_BUFFER_LEN, MPI_COMM_WORLD, &status);
   buffer_len = two_int[0];
   buffer_max = two_int[1];
-  buffer = s_malloc(buffer_len*sizeof(byte));
+  if ( !(buffer = s_malloc(buffer_len*sizeof(byte))) )
+    die("Unable to allocate memory");
 
 /* printf("DEBUG: slave buffer len %d %d\n", buffer_len, buffer_max);*/
 
@@ -640,7 +641,8 @@ static void gaul_evaluation_slave_mp(population *pop)
  * FIXME: This length data shouldn't be needed!
  */
   MPI_Recv(&len, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-  buffer = s_malloc(len*sizeof(byte));
+  if ( !(buffer = s_malloc(len*sizeof(byte))) )
+    die("Unable to allocate memory");
 
 /*printf("DEBUG: slave %d recieved %d (len)\n", rank, len);*/
 
@@ -2534,9 +2536,13 @@ int ga_evolution_forked(	population		*pop,
  * Open pipes for reporting fitnesses.
  * Clear pid and eid arrays.
  */
-  pid = s_malloc(max_processes*sizeof(pid_t));
-  eid = s_malloc(max_processes*sizeof(int));
-  evalpipe = s_malloc(2*max_processes*sizeof(int));
+  if ( !(pid = s_malloc(max_processes*sizeof(pid_t))) )
+    die("Unable to allocate memory");
+  if ( !(eid = s_malloc(max_processes*sizeof(int))) )
+    die("Unable to allocate memory");
+  if ( !(evalpipe = s_malloc(2*max_processes*sizeof(int))) )
+    die("Unable to allocate memory");
+
   for (i=0; i<max_processes; i++)
     {
     if (pipe(&evalpipe[2*i])==-1) die("Unable to open pipe");
@@ -2678,7 +2684,9 @@ int ga_evolution_threaded(	population		*pop,
 /*
  * Allocate memory required for handling the threads.
  */
-  threaddata = s_malloc(sizeof(threaddata_t)*max_threads);
+  if ( !(threaddata = s_malloc(sizeof(threaddata_t)*max_threads)) )
+    die("Unable to allocate memory");
+
   for (i=0; i<max_threads; i++)
     threaddata[i].pop = pop;
 
@@ -2822,10 +2830,15 @@ int ga_evolution_threaded(	population		*pop,
  * Allocate memory required for handling the threads.
  * Initially use eid array to pass thread enumerations.
  */
-  tid = s_malloc(max_threads*sizeof(pthread_t));
-  mid = s_malloc(max_threads*sizeof(pthread_mutex_t));
-  cid = s_malloc(max_threads*sizeof(pthread_cond_t));
-  eid = s_malloc(max_threads*sizeof(int));
+  if ( !(tid = s_malloc(max_threads*sizeof(pthread_t))) )
+    die("Unable to allocate memory");
+  if ( !(mid = s_malloc(max_threads*sizeof(pthread_mutex_t))) )
+    die("Unable to allocate memory");
+  if ( !(cid = s_malloc(max_threads*sizeof(pthread_cond_t))) )
+    die("Unable to allocate memory");
+  if ( !(eid = s_malloc(max_threads*sizeof(int))) )
+    die("Unable to allocate memory");
+
   for (i=0; i<max_threads; i++)
     {
     eid[i] = i;
@@ -4564,10 +4577,14 @@ int ga_evolution_archipelago_mpi( const int num_pops,
  */
   buffer_len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &buffer_max);
   if (buffer_max == 0)
-    buffer = s_malloc(buffer_len*sizeof(byte));
+    {
+    if ( !(buffer = s_malloc(buffer_len*sizeof(byte))) )
+      die("Unable to allocate memory");
+    }
 
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-  eid = s_malloc(mpi_size*sizeof(int));
+  if ( !(eid = s_malloc(mpi_size*sizeof(int))) )
+    die("Unable to allocate memory");
 
 /*
  * Register, set up and synchronise slave processes.
@@ -4755,7 +4772,9 @@ int ga_evolution_archipelago_threaded( const int num_pops,
 /*
  * Allocate memory required for handling the threads.
  */
-  threaddata = s_malloc(sizeof(threaddata_t)*max_threads);
+  if ( !(threaddata = s_malloc(sizeof(threaddata_t)*max_threads)) )
+    die("Unable to allocate memory");
+
   pop->generation = 0;
 
   for (current_island=0; current_island<num_pops; current_island++)
@@ -4932,9 +4951,13 @@ int ga_evolution_archipelago_forked( const int num_pops,
  * Open pipes for reporting fitnesses.
  * Clear pid and eid arrays.
  */
-  pid = s_malloc(max_processes*sizeof(pid_t));
-  eid = s_malloc(max_processes*sizeof(int));
-  evalpipe = s_malloc(2*max_processes*sizeof(int));
+  if ( !(pid = s_malloc(max_processes*sizeof(pid_t))) )
+    die("Unable to allocate memory");
+  if ( !(eid = s_malloc(max_processes*sizeof(int))) )
+    die("Unable to allocate memory");
+  if ( !(evalpipe = s_malloc(2*max_processes*sizeof(int))) )
+    die("Unable to allocate memory");
+
   for (i=0; i<max_processes; i++)
     {
     if (pipe(&evalpipe[2*i])==-1) die("Unable to open pipe");
@@ -5154,7 +5177,8 @@ int ga_evolution_archipelago_mp( const int num_pops,
     }
 
   /* Allocate send_mask array. */
-  send_mask = s_malloc(max_size*sizeof(boolean));
+  if ( !(send_mask = s_malloc(max_size*sizeof(boolean))) )
+    die("Unable to allocate memory");
 
 /* Do all the generations: */
   while ( generation<max_generations && complete==FALSE)
@@ -5478,9 +5502,13 @@ int ga_evolution_mpi(	population		*pop,
  */
   buffer_len = pop->chromosome_to_bytes(pop, pop->entity_iarray[0], &buffer, &buffer_max);
   if (buffer_max == 0)
-    buffer = s_malloc(buffer_len*sizeof(byte));
+    {
+    if ( !(buffer = s_malloc(buffer_len*sizeof(byte))) )
+      die("Unable to allocate memory");
+    }
 
-  eid = s_malloc(mpi_size*sizeof(int));
+  if ( !(eid = s_malloc(mpi_size*sizeof(int))) )
+    die("Unable to allocate memory");
 
 /*
  * Register, set up and synchronise slave processes.

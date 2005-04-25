@@ -34,8 +34,7 @@
   To do:	Mappings.
 
   FIXME:	Performance of gray encoding/decoding is dreadful now
-  		that it uses malloc/free.  There is also a bug in these
-		routines.
+  		that it uses malloc/free.
 
  **********************************************************************/
 

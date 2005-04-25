@@ -900,12 +900,13 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
           mem_chunk->mem_area = (MemArea*) malloc(sizeof(MemArea)+
                                                   MEMORY_ALIGN_SIZE-(sizeof(MemArea)%MEMORY_ALIGN_SIZE)+
                                                   mem_chunk->area_size);
+
+          if (!mem_chunk->mem_area) die("Unable to allocate memory.");
+
           mem_chunk->mem_area->mem = ((unsigned char*) (mem_chunk->mem_area)+
                                      sizeof(MemArea)+
                                      MEMORY_ALIGN_SIZE-
                                      (sizeof(MemArea)%MEMORY_ALIGN_SIZE));
-
-          if (!mem_chunk->mem_area) die("Unable to allocate memory.");
 
           mem_chunk->num_mem_areas++;
           mem_chunk->mem_area->next = mem_chunk->mem_areas;

@@ -1,7 +1,7 @@
 Name:		gaul-devel
 Summary:	Genetic Algorithm Utility Library
 Version:	0.1849
-Release:	0
+Release:	1
 License:	Copyright (c) 2000-2005, Stewart Adcock.  Licensed under terms of the GNU GPL.
 Vendor:		Stewart Adcock
 Packager:	"Stewart Adcock" <gaul@linux-domain.com>

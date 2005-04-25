@@ -46,9 +46,9 @@
  * Include the platform specific configuration file:
  */
 #ifdef WIN32
-#include "gaul/gaul_config_win.h"
+# include "gaul/gaul_config_win.h"
 #else
-#include "gaul/gaul_config.h"
+# include "gaul/gaul_config.h"
 #endif
 
 /*

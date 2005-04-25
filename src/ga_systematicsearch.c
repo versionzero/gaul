@@ -48,7 +48,10 @@ void ga_population_set_search_parameters( population              *pop,
   if ( !scan_chromosome ) die("Null pointer to GAscan_chromosome callback passed.");
 
   if (pop->search_params == NULL)
-    pop->search_params = s_malloc(sizeof(ga_search_t));
+    {
+    if ( !(pop->search_params = s_malloc(sizeof(ga_search_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->search_params->scan_chromosome = scan_chromosome;
   pop->search_params->chromosome_state = 0;

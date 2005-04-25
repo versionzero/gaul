@@ -149,6 +149,9 @@ struct entity_t
   double	fitness;	/* Fitness score. */
   vpointer	*chromosome;	/* The chromosomes (the genotype). */
   vpointer	data;		/* User data containing physical properties. (the phenotype) */
+
+/* Additional stuff for multiobjective optimisation: */
+  double	*fitvector;	/* Fitness vector. */
   };
 
 /*
@@ -284,6 +287,8 @@ struct population_t
   int		island;			/* Population's island. */
   int		free_index;		/* Next potentially free entity index. */
   int		generation;		/* For ga_population_get_generation(). */
+
+  int		fitness_dimensions;	/* Size of fitness vector (for multiobjective optimisation). */
 
   MemChunk	*entity_chunk;		/* Buffer for entity structures. */
   entity	**entity_array;		/* The population in id order. */

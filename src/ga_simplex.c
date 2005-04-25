@@ -78,7 +78,10 @@ void ga_population_set_simplex_parameters( population		*pop,
   plog( LOG_VERBOSE, "Population's simplex-search parameters set" );
 
   if (pop->simplex_params == NULL)
-    pop->simplex_params = s_malloc(sizeof(ga_simplex_t));
+    {
+    if ( !(pop->simplex_params = s_malloc(sizeof(ga_simplex_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->simplex_params->to_double = to_double;
   pop->simplex_params->from_double = from_double;
@@ -144,9 +147,12 @@ int ga_simplex(	population		*pop,
  * The space for the average and new arrays are allocated simultaneously.
  */
   num_points = pop->simplex_params->dimensions+1;
-  putative = s_malloc(sizeof(entity *)*num_points);
-  putative_d = s_malloc(sizeof(double *)*num_points);
-  putative_d_buffer = s_malloc(sizeof(double)*pop->simplex_params->dimensions*num_points*3);
+  if ( !(putative = s_malloc(sizeof(entity *)*num_points)) )
+    die("Unable to allocate memory");
+  if ( !(putative_d = s_malloc(sizeof(double *)*num_points)) )
+    die("Unable to allocate memory");
+  if ( !(putative_d_buffer = s_malloc(sizeof(double)*pop->simplex_params->dimensions*num_points*3)) )
+    die("Unable to allocate memory");
 
   putative_d[0] = putative_d_buffer;
   average = &(putative_d_buffer[num_points*pop->simplex_params->dimensions]);
@@ -607,8 +613,10 @@ int ga_simplex_double(	population		*pop,
  * The space for the average and new arrays are allocated simultaneously.
  */
   num_points = pop->len_chromosomes+1;
-  putative = s_malloc(sizeof(entity *)*num_points);
-  average = s_malloc(sizeof(double)*pop->len_chromosomes);
+  if ( !(putative = s_malloc(sizeof(entity *)*num_points)) )
+    die("Unable to allocate memory");
+  if ( !(average = s_malloc(sizeof(double)*pop->len_chromosomes)) )
+    die("Unable to allocate memory");
 
   for (i=1; i<num_points; i++)
     {

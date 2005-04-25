@@ -51,7 +51,10 @@ void ga_population_set_deterministiccrowding_parameters( population		*pop,
   plog( LOG_VERBOSE, "Population's deterministic crowding parameters set" );
 
   if (pop->dc_params == NULL)
-    pop->dc_params = s_malloc(sizeof(ga_dc_t));
+    {
+    if ( !(pop->dc_params = s_malloc(sizeof(ga_dc_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->dc_params->compare = compare;
 
@@ -126,8 +129,11 @@ int ga_deterministiccrowding(	population		*pop,
 /*
  * Prepare arrays to store permutations.
  */
-  permutation = s_malloc(sizeof(int)*pop->size);
-  ordered = s_malloc(sizeof(int)*pop->size);
+  if ( !(permutation = s_malloc(sizeof(int)*pop->size)) )
+    die("Unable to allocate memory");
+  if ( !(ordered = s_malloc(sizeof(int)*pop->size)) )
+    die("Unable to allocate memory");
+
   for (i=0; i<pop->size;i++)
     ordered[i]=i;
 

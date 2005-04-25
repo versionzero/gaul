@@ -135,7 +135,10 @@ void ga_population_set_sa_parameters( population              *pop,
         initial_temp, final_temp, temp_step, temp_freq );
 
   if (pop->sa_params == NULL)
-    pop->sa_params = s_malloc(sizeof(ga_sa_t));
+    {
+    if ( !(pop->sa_params = s_malloc(sizeof(ga_sa_t))) )
+      die("Unable to allocate memory");
+    }
 
   pop->sa_params->sa_accept = sa_accept;
   pop->sa_params->initial_temp = initial_temp;
