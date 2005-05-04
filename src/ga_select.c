@@ -35,7 +35,7 @@
 		complete.
 
 		On the first call to these routines in a given
-		generation, pop->select_state is gauranteed to be set
+		generation, pop->select_state is guaranteed to be set
 		to zero.  These routines are then free to modify this
 		value, for example, to store the number of selections
 		performed in this generation.
