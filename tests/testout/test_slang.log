@@ -1,0 +1,15 @@
+Initialising S-Lang.
+Interpreting S-Lang script "test_slang.sl".
+>> This is an S-Lang GAUL test script.
+>> See source for documentation.
+>> Creating population.
+>> Defining evolutionary parameters.
+>> Evolution.
+>> best fitness = 869.88
+>> Writing population.
+>> Genocide.
+>> Extinction.
+>> Reading population.
+>> best fitness = 869.88
+>> The S-Lang GAUL test script is complete.
+The S-Lang script contained a "test_slang_quit()" call.

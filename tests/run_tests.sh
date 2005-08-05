@@ -33,35 +33,39 @@
 echo "Running GAUL tests:"
 
 #
-# Simple test programs with deterministic output.
+# Simple tests for programs with deterministic output.
+# We look for files named "(1).out" in the testout subdirectory,
+# where (1) is the name of a test program, and run them all.
 #
 
-for f in *.out
+for f in testout/*.out
   do
     BASENAME=`basename $f .out`
     echo -n "$BASENAME... "
-    ./$BASENAME > $BASENAME.output
-    if [ `expr 1 + \`diff $f $BASENAME.output | wc -l\`` -gt 1 ]; then
+    ./$BASENAME > /tmp/$$.$BASENAME.output
+    if [ `expr 1 + \`diff $f /tmp/$$.$BASENAME.output | wc -l\`` -gt 1 ]; then
       echo "FAILED - please check on the output of the $BASENAME executable."
     else
       echo "PASSED"
     fi
+    rm /tmp/$$.$BASENAME.output
   done
 
 #
-# S-Lang test script.
+# S-Lang test script special case.
 #
 
 echo -n "test_slang... "
-./test_slang --script test_slang.sl > test_slang.output
-if [ `expr 1 + \`diff test_slang.log test_slang.output | wc -l\`` -gt 1 ]; then
+./test_slang --script test_slang.sl > /tmp/$$.test_slang.output
+if [ `expr 1 + \`diff testout/test_slang.log /tmp/$$.test_slang.output | wc -l\`` -gt 1 ]; then
   echo "FAILED - please check on the output of './test_slang --script test_slang.sl'."
 else
   echo "PASSED"
 fi
+rm /tmp/$$.test_slang.output
 
 #
-# Random number generator test.
+# Random number generator test script special case.
 #
 
 echo -n "test_prng... "
