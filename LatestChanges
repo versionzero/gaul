@@ -2,6 +2,8 @@ Changes since release 0.1849:
 - Differential evolution parameters copied along with populations.
 - Checks added around all memory allocations.
 - Support for vector fitnesses added.
+- Multi-objective GA varients added.
+- S-lang intrinsic ga_entity_set_fitness() added.
 
 Changes since release 0.1848:
 - Changes required for compilation with MS VC++ - thanks to Al Cripps.

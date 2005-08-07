@@ -303,6 +303,8 @@ FUNCPROTO int	ga_population_get_generation(population *pop);
 
 FUNCPROTO double	ga_entity_get_fitness(entity *e);
 FUNCPROTO boolean	ga_entity_set_fitness(entity *e, double fitness);
+FUNCPROTO int ga_population_get_fitness_dimensions(population *pop);
+FUNCPROTO boolean ga_population_set_fitness_dimensions(population *pop, int num);
 FUNCPROTO int	ga_population_get_stablesize(population *pop);
 FUNCPROTO int	ga_population_get_size(population *pop);
 FUNCPROTO int	ga_population_get_maxsize(population *pop);
