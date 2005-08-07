@@ -283,7 +283,7 @@ struct population_t
   int		max_size;		/* Current maximum population size. */
   int		stable_size;		/* Requested population size. */
   int		size;			/* Actual population size. */
-  int		orig_size;		/* Number of parents (entities at start of generation). */
+  int		orig_size;		/* Number of parents (entities at end of previous generation). */
   int		island;			/* Population's island. */
   int		free_index;		/* Next potentially free entity index. */
   int		generation;		/* For ga_population_get_generation(). */

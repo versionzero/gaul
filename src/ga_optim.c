@@ -38,7 +38,6 @@
 
   To do:	Finish rewriting parallel versions, ga_evolution_mp() in particular.
 		Write ga_evolution_pvm().
-		Need to fix elitism/crowding stuff.
 		Remove much duplicated code.
 		OpenMOSIX fix.  See below.
 		gaul_adapt_and_evaluate_forked() and gaul_adapt_and_evaluate_threaded() are only parallelized for the case that no adaptation occurs.
@@ -1827,33 +1826,66 @@ printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num
 /**********************************************************************
   gaul_survival()
   synopsis:	Survival of the fittest.
-		Enforce elitism, apply crowding operator, reduce
+		Enforce elitism, reduce
 		population back to its stable size and rerank entities,
 		as required.
-
-		*** FIXME: crowding analysis incomplete. ***
-
   parameters:	population *pop
   return:	none
-  last updated:	18 Mar 2003
+  last updated:	25 Apr 2005
  **********************************************************************/
 
 static void gaul_survival(population *pop)
   {
-  int		i;			/* Loop variable over entity ranks. */
+  int		i, j, k;	/* Loop variable over entity ranks. */
+  boolean	save_entity;	/* Whether entity should survive. */
+  int		*set;		/* The best entities for each objective. */
+  boolean	*dominated;	/* Whether each entity is Pareto dominated. */
+  int		paretocount;	/* Size of Pareto set. */
+  boolean	dominance;	/* Used in determining dominance. */
 
   plog(LOG_VERBOSE, "*** Survival of the fittest ***");
 
+  if (pop->elitism == GA_ELITISM_PARENTS_SURVIVE)
+    {
 /*
- * Need to kill parents, or rescore parents?
+ * Sort all population members by fitness.
  */
-  if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
+    sort_population(pop);
+
+/*
+ * Ensure that any very bad solutions are not retained.
+ */
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+    ga_genocide(pop, pop->stable_size);
+    }
+  else if (pop->elitism == GA_ELITISM_PARENTS_DIE || pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES)
     {
     while (pop->orig_size>(pop->elitism == GA_ELITISM_ONE_PARENT_SURVIVES))
       {
       pop->orig_size--;
       ga_entity_dereference_by_rank(pop, pop->orig_size);
       }
+
+/*
+ * Sort all population members by fitness.
+ */
+    sort_population(pop);
+
+/*
+ * Ensure that any very bad solutions are not retained.
+ */
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
+/*
+ * Least fit population members die to restore the
+ * population size to its stable size.
+ */
+    ga_genocide(pop, pop->stable_size);
     }
   else if (pop->elitism == GA_ELITISM_RESCORE_PARENTS)
     {
@@ -1867,69 +1899,157 @@ static void gaul_survival(population *pop)
       if ( pop->evaluate(pop, pop->entity_iarray[i]) == FALSE )
         pop->entity_iarray[i]->fitness = GA_MIN_FITNESS;
       }
-    }
 
 /*
  * Sort all population members by fitness.
  */
-  sort_population(pop);
+    sort_population(pop);
 
 /*
- * Enforce the type of crowding desired.
- *
- * Rough crowding doesn't actual check whether two chromosomes are
- * identical - just assumes they are if they have identical
- * fitness.  Exact elitism does make the full check.
+ * Ensure that any very bad solutions are not retained.
  */
-#if 0
-    if (pop->elitism == GA_ELITISM_EXACT || pop->elitism == GA_ELITISM_ROUGH)
-      { /* Fatal version */
-      i = 1;
-
-      while (i<pop->size && i<pop->stable_size)
-        {
-        if (pop->entity_iarray[i]->fitness==pop->entity_iarray[i-1]->fitness &&
-            (pop->elitism != GA_ELITISM_EXACT ||
-             ga_compare_genome(pop, pop->entity_iarray[i], pop->entity_iarray[i-1])) )
-          {
-          ga_entity_dereference_by_rank(pop, i);
-          }
-        else
-          {
-          i++;
-          }
-        }
-      }
-    else if (pop->elitism == GA_ELITISM_EXACT_COMP || pop->elitism == GA_ELITISM_ROUGH_COMP)
-      { /* Increased competition version */
-      i = MIN(pop->size, pop->stable_size);
-      elitism_penalty = fabs(pop->entity_iarray[0]->fitness*GA_ELITISM_MULTIPLIER)
-                        + GA_ELITISM_CONSTANT;
-
-      while (i>0)
-        {
-        if (pop->entity_iarray[i]->fitness==pop->entity_iarray[i-1]->fitness &&
-            (pop->elitism != GA_ELITISM_EXACT_COMP ||
-             ga_compare_genome(pop, pop->entity_iarray[i], pop->entity_iarray[i-1])) )
-          {
-          pop->entity_iarray[i]->fitness -= elitism_penalty;
-          }
-        i--;
-        }
-
-      plog(LOG_VERBOSE, "*** Sorting again ***");
-
-      sort_population(pop);     /* FIXME: We could possibly (certianly) choose
-                                         a more optimal sort algorithm here. */
-      }
-#endif
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
 
 /*
  * Least fit population members die to restore the
  * population size to its stable size.
  */
-  ga_genocide(pop, pop->stable_size);
-  ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+    ga_genocide(pop, pop->stable_size);
+    }
+  else if (pop->elitism == GA_ELITISM_BEST_SET_SURVIVE)
+    {
+/* Find the best entities along each dimension of the fitness vector. */
+    if ( !(set = s_malloc(sizeof(int)*pop->fitness_dimensions)) )
+      die("Unable to allocate memory");
+
+/*
+ * Sort all population members by fitness.
+ */
+    sort_population(pop);
+
+/*
+ * Ensure that any very bad solutions are not retained.
+ */
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
+    for (i=0; i<pop->fitness_dimensions; i++)
+      set[i]=0;
+
+#pragma omp parallel for \
+   shared(pop,set) private(i,j) \
+   schedule(static)
+    for (j=1; j<pop->size; j++)
+      {
+      for (i=0; i<pop->fitness_dimensions && set[i]==pop->orig_size; i++)
+        {
+        if ( pop->entity_iarray[j]->fitvector[i] >
+             pop->entity_iarray[set[i]]->fitvector[i] )
+          set[i]=j;
+        }
+      }
+
+/* Allow all parents in the best set to survive.  Make up to
+ * population's stable size with the fittest of the remainder.
+ */
+    k=pop->size;
+    while (k > 0 && pop->size > pop->stable_size)
+      {
+      k--;
+      save_entity = FALSE;
+      for (i=0; i<pop->fitness_dimensions; i++)
+        {
+        if (set[i] == k)
+          save_entity = TRUE;
+        }
+      if ( save_entity == FALSE )
+        ga_entity_dereference_by_rank(pop, k);
+      }
+
+    s_free(set);
+    }
+  else if (pop->elitism == GA_ELITISM_PARETO_SET_SURVIVE)
+    {
+/* 
+ * Find the Pareto set (i.e., all non-dominated entities) according
+ * to the fitness vector.  An entity is dominated if at least one other
+ * entity is better in all objectives.
+ */
+    if ( !(dominated = s_malloc(sizeof(int)*pop->size)) )
+      die("Unable to allocate memory");
+
+/*
+ * Sort all population members by fitness.
+ */
+    sort_population(pop);
+
+/*
+ * Ensure that any very bad solutions are not retained.
+ */
+    ga_genocide_by_fitness(pop, GA_MIN_FITNESS);
+
+    paretocount=pop->size;
+
+#pragma omp parallel for \
+   shared(pop,dominated) private(j) \
+   schedule(static)
+    for (j=0; j<pop->size; j++)
+      {
+      dominated[j] = FALSE;
+      }
+
+#pragma omp parallel for \
+   shared(pop,paretocount,dominated) private(i,j,k,dominance) \
+   schedule(static)
+    for (j=0; j<pop->size; j++)
+      {
+      for (k=0; k<pop->size && dominated[j] == FALSE; k++)
+        {
+        if ( k!=j )
+          {
+/* Is k better than j in all dimensions? */
+          dominance = TRUE;
+          for (i=0; i<pop->fitness_dimensions && dominance == TRUE; i++)
+            {
+            if ( pop->entity_iarray[j]->fitvector[i] >
+                 pop->entity_iarray[k]->fitvector[i] )
+              {
+              dominance = FALSE;
+              }
+            }
+          if (dominance == TRUE)
+            {
+            dominated[j] = TRUE;
+            paretocount--;
+            }
+          }
+        }
+      }
+
+/* Debug message: */
+/*
+    printf("Pareto set contains %d entities: ", paretocount);
+    for (j=0; j<pop->size; j++)
+      {
+      if (dominated[j] == FALSE)
+        printf(" %d", j);
+      }
+    printf("\n");
+*/
+
+/*
+ * Allow all entities in the Pareto set to survive.  Make up to
+ * population's stable size with the fittest of the remainder.
+ */
+    i = pop->size;
+    while ( i > 0 && pop->size > pop->stable_size )
+      {
+      i--;
+      if ( dominated[i] )
+        ga_entity_dereference_by_rank(pop, i);
+      }
+
+    s_free(dominated);
+    }
 
   return;
   }
@@ -1938,12 +2058,9 @@ static void gaul_survival(population *pop)
 /**********************************************************************
   gaul_survival_mp()
   synopsis:	Survival of the fittest.
-		Enforce elitism, apply crowding operator, reduce
+		Enforce elitism, reduce
 		population back to its stable size and rerank entities,
 		as required.
-
-		*** FIXME: crowding analysis incomplete. ***
-
   parameters:	population *pop
   return:	none
   last updated:	18 Mar 2003
@@ -1989,16 +2106,6 @@ static void gaul_survival_mp(population *pop)
   sort_population(pop);
 
 /*
- * Enforce the type of crowding desired.
- *
- * Rough crowding doesn't actual check whether two chromosomes are
- * identical - just assumes they are if they have identical
- * fitness.  Exact elitism does make the full check.
- *
- * FIXME: Crowding code missing!!!
- */
-
-/*
  * Least fit population members die to restore the
  * population size to its stable size.
  */
@@ -2013,12 +2120,9 @@ static void gaul_survival_mp(population *pop)
 /**********************************************************************
   gaul_survival_mpi()
   synopsis:	Survival of the fittest.
-		Enforce elitism, apply crowding operator, reduce
+		Enforce elitism, reduce
 		population back to its stable size and rerank entities,
 		as required.
-
-		*** FIXME: crowding analysis incomplete. ***
-
   parameters:	population *pop
   return:	none
   last updated:	10 May 2004
@@ -2063,16 +2167,6 @@ static void gaul_survival_mpi(population *pop)
   sort_population(pop);
 
 /*
- * Enforce the type of crowding desired.
- *
- * Rough crowding doesn't actual check whether two chromosomes are
- * identical - just assumes they are if they have identical
- * fitness.  Exact elitism does make the full check.
- *
- * FIXME: Crowding code missing!!!
- */
-
-/*
  * Least fit population members die to restore the
  * population size to its stable size.
  */
@@ -2087,13 +2181,10 @@ static void gaul_survival_mpi(population *pop)
 /**********************************************************************
   gaul_survival_forked()
   synopsis:	Survival of the fittest.
-		Enforce elitism, apply crowding operator, reduce
+		Enforce elitism, reduce
 		population back to its stable size and rerank entities,
 		as required.
-		Forked processing version.
-
-		*** FIXME: crowding analysis incomplete. ***
-
+		This is the forked processing version.
   parameters:	population *pop
   return:	none
   last updated:	18 Mar 2003
@@ -2217,16 +2308,6 @@ static void gaul_survival_forked(population *pop,
   sort_population(pop);
 
 /*
- * Enforce the type of crowding desired.
- *
- * Rough crowding doesn't actual check whether two chromosomes are
- * identical - just assumes they are if they have identical
- * fitness.  Exact elitism does make the full check.
- *
- * FIXME: Crowding code missing!!!
- */
-
-/*
  * Least fit population members die to restore the
  * population size to its stable size.
  */
@@ -2241,13 +2322,10 @@ static void gaul_survival_forked(population *pop,
 /**********************************************************************
   gaul_survival_threaded()
   synopsis:	Survival of the fittest.
-		Enforce elitism, apply crowding operator, reduce
+		Enforce elitism, reduce
 		population back to its stable size and rerank entities,
 		as required.
-		Threaded processing version.
-
-		*** FIXME: crowding analysis incomplete. ***
-
+		This is the threaded processing version.
   parameters:	population *pop
   return:	none
   last updated:	18 Mar 2003
@@ -2356,16 +2434,6 @@ printf("DEBUG: Thread %d finished.  num_threads=%d eval_num=%d/%d\n", thread_num
  * Sort all population members by fitness.
  */
   sort_population(pop);
-
-/*
- * Enforce the type of crowding desired.
- *
- * Rough crowding doesn't actual check whether two chromosomes are
- * identical - just assumes they are if they have identical
- * fitness.  Exact elitism does make the full check.
- *
- * FIXME: Crowding code missing!!!
- */
 
 /*
  * Least fit population members die to restore the

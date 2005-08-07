@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "25/04/05"
+#define GA_BUILD_DATE_STRING "05/08/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,13 +32,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 1
+#define GA_PATCH_VERSION 2
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux whitebox.linux-domain.com 2.6.11-1.14_FC3 #1 Thu Apr 7 19:25:50 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
+#define GA_UNAME_STRING "Linux whitebox64.linux-domain.com 2.6.12-1.1398_FC4 #1 Fri Jul 15 00:51:38 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1849-1"
+#define GA_VERSION_STRING "0.1849-2"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
@@ -212,13 +212,13 @@
 #define PACKAGE_NAME "gaul-devel"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gaul-devel 0.1849-1"
+#define PACKAGE_STRING "gaul-devel 0.1849-2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gaul-devel"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.1849-1"
+#define PACKAGE_VERSION "0.1849-2"
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1

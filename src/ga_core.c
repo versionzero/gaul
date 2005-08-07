@@ -1368,7 +1368,7 @@ static boolean ga_entity_setup(population *pop, entity *joe)
   joe->fitness = GA_MIN_FITNESS;
 
   if ( pop->fitness_dimensions > 0 )
-    { /* this population is being used for multiobjective optimisation. */
+    { /* This population is being used for multiobjective optimisation. */
     if ( !(joe->fitvector = s_malloc(sizeof(double)*pop->fitness_dimensions)) )
       die("Unable to allocate memory");
 

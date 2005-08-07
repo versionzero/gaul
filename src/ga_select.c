@@ -60,9 +60,6 @@
 		you are free to use whichever value you like in
 		user-defined functions.)
 
-  To do:	Reimplement stochastic universal selection etc. using this callback mechanism.
-		Reimplement probability ranges: mutation_prob = mutation_max - (mutation_max-mutation_min)*i/pop->orig_size;
-
  **********************************************************************/
 
 #include "gaul/ga_core.h"
