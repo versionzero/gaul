@@ -778,6 +778,21 @@ static double ga_entity_get_fitness_slang(int *pop, int *id)
 
 
 /**********************************************************************
+  ga_entity_set_fitness_slang()
+  synopsis:	Access entity's fitness field.
+  parameters:
+  return:
+  last updated:	07 Aug 2005
+ **********************************************************************/
+
+static int ga_entity_set_fitness_slang(int *pop, int *id, double *fitness)
+  {
+  ga_get_entity_from_id(ga_get_population_from_id(*pop), *id)->fitness = *fitness;
+  return TRUE;
+  }
+
+
+/**********************************************************************
   ga_entity_isallocated_slang()
   synopsis:	Determine whether the given entity id is used.
   parameters:
@@ -1470,6 +1485,9 @@ boolean ga_intrinsic_sladd(void)
       || SLadd_intrinsic_function("ga_entity_get_fitness",
             (FVOID_STAR) ga_entity_get_fitness_slang, SLANG_DOUBLE_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
+      || SLadd_intrinsic_function("ga_entity_set_fitness",
+            (FVOID_STAR) ga_entity_set_fitness_slang, SLANG_INT_TYPE, 3,
+            SLANG_INT_TYPE, SLANG_INT_TYPE, SLANG_DOUBLE_TYPE)
       || SLadd_intrinsic_function("ga_entity_isallocated",
             (FVOID_STAR) ga_entity_isallocated_slang, SLANG_INT_TYPE, 2,
             SLANG_INT_TYPE, SLANG_INT_TYPE)
