@@ -114,6 +114,7 @@ boolean test_score(population *pop, entity *entity)
 
 boolean test_generation_callback(int generation, population *pop)
   {
+  entity	*entity;	/* Top ranked entity. */
 
 /*
  * This is a easy method for implementing randomly selected
@@ -131,18 +132,22 @@ boolean test_generation_callback(int generation, population *pop)
 */
 
 /*
- * Write rank 1 solution every tenth generation.  Note, that this is
- * not neccesarily the best solution because DE doesn't require the
- * population to be sorted, as genetic algorithms usually do.
+ * Write top ranked solution every tenth generation.  Note, that this
+ * is not neccesarily the best solution because DE doesn't require
+ * the population to be sorted, as genetic algorithms usually do.
  */
   if ( generation%10 == 0)
+    {
+    entity = ga_get_entity_from_rank(pop, 0);
+
     printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
             generation,
-            ((double *)pop->entity_iarray[0]->chromosome[0])[0],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[1],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[2],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[3],
-            pop->entity_iarray[0]->fitness );
+            ((double *)entity->chromosome[0])[0],
+            ((double *)entity->chromosome[0])[1],
+            ((double *)entity->chromosome[0])[2],
+            ((double *)entity->chromosome[0])[3],
+            ga_entity_get_fitness(entity) );
+    }
 
   return TRUE;
   }
@@ -185,6 +190,7 @@ boolean test_seed(population *pop, entity *adam)
 int main(int argc, char **argv)
   {
   population		*pop;		/* Population of solutions. */
+  entity		*best;		/* Fittest entity. */
   int			i=0;		/* Loop variable over strategies. */
 
   random_seed(23091975);
@@ -238,12 +244,14 @@ int main(int argc, char **argv)
          50				/* const int	max_generations */
               );
 
+    best = ga_get_entity_from_rank(pop,0);
+
     printf( "Final: A = %f B = %f C = %f D = %f (fitness = %f)\n",
-            ((double *)pop->entity_iarray[0]->chromosome[0])[0],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[1],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[2],
-            ((double *)pop->entity_iarray[0]->chromosome[0])[3],
-            pop->entity_iarray[0]->fitness );
+            ((double *)best->chromosome[0])[0],
+            ((double *)best->chromosome[0])[1],
+            ((double *)best->chromosome[0])[2],
+            ((double *)best->chromosome[0])[3],
+            ga_entity_get_fitness(best) );
 
     ga_extinction(pop);
 

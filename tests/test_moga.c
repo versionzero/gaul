@@ -1,8 +1,8 @@
 /**********************************************************************
-  test_ga.c
+  test_moga.c
  **********************************************************************
 
-  test_ga - Test program for GAUL.
+  test_moga - Test program for GAUL.
   Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
@@ -25,10 +25,14 @@
 
  **********************************************************************
 
-  Synopsis:	Test program for GAUL's basic genetic algorithm.
+  Synopsis:	Test program for GAUL's multiobjective genetic
+		algorithm.
 
 		This program aims to solve a function of the form
 		(0.75-A)+(0.95-B)^2+(0.23-C)^3+(0.71-D)^4 = 0
+
+		The values of the individual terms, A, B, C and D, are
+		the multiobjective terms.
 
  **********************************************************************/
 
@@ -40,7 +44,7 @@
   synopsis:	Fitness function.
   parameters:
   return:
-  updated:	25 Nov 2002
+  updated:	05 Aug 2005
  **********************************************************************/
 
 boolean test_score(population *pop, entity *entity)
@@ -52,7 +56,12 @@ boolean test_score(population *pop, entity *entity)
   C = ((double *)entity->chromosome[0])[2];
   D = ((double *)entity->chromosome[0])[3];
 
-  ga_entity_set_fitness(entity, -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D)));
+  entity->fitvector[0] = fabs(0.75-A);
+  entity->fitvector[1] = fabs(0.95-B);
+  entity->fitvector[2] = fabs(0.23-C);
+  entity->fitvector[3] = fabs(0.71-D);
+
+  entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
 
   return TRUE;
   }
@@ -63,22 +72,21 @@ boolean test_score(population *pop, entity *entity)
   synopsis:	Generation callback
   parameters:
   return:
-  updated:	25 Nov 2002
+  last updated: 05 Aug 2005
  **********************************************************************/
 
 boolean test_generation_callback(int generation, population *pop)
   {
-  entity		*best;		/* Fittest entity. */
+  entity	*entity = ga_get_entity_from_rank(pop, 0);	/* The best entity. */
 
-  best = ga_get_entity_from_rank(pop, 0);
-
-  printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
+  printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f) pop_size %d\n",
             generation,
-            ((double *)best->chromosome[0])[0],
-            ((double *)best->chromosome[0])[1],
-            ((double *)best->chromosome[0])[2],
-            ((double *)best->chromosome[0])[3],
-            ga_entity_get_fitness(best) );
+            ((double *)entity->chromosome[0])[0],
+            ((double *)entity->chromosome[0])[1],
+            ((double *)entity->chromosome[0])[2],
+            ((double *)entity->chromosome[0])[3],
+            ga_entity_get_fitness(entity),
+            pop->size );
 
   return TRUE;
   }
@@ -115,17 +123,20 @@ boolean test_seed(population *pop, entity *adam)
   synopsis:	Main function.
   parameters:
   return:
-  updated:	25 Nov 2002
+  updated:	05 Aug 2005
  **********************************************************************/
 
 int main(int argc, char **argv)
   {
-  population		*pop;		/* Population of solutions. */
+  population		*pop;			/* Population of solutions. */
 
   random_seed(23091975);
 
+/* "Best Set" Multiobjective GA. */
+  printf("Using the Best Set Multiobjective GA varient.\n");
+
   pop = ga_genesis_double(
-       200,			/* const int              population_size */
+       100,			/* const int              population_size */
        1,			/* const int              num_chromo */
        4,			/* const int              len_chromo */
        test_generation_callback,/* GAgeneration_hook      generation_hook */
@@ -146,20 +157,61 @@ int main(int argc, char **argv)
   ga_population_set_parameters(
        pop,				/* population      *pop */
        GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
-       GA_ELITISM_PARENTS_SURVIVE,	/* const ga_elitism_type   elitism */
+       GA_ELITISM_BEST_SET_SURVIVE,	/* const ga_elitism_type   elitism */
        0.8,				/* double  crossover */
        0.2,				/* double  mutation */
        0.0      		        /* double  migration */
                               );
 
+  ga_population_set_fitness_dimensions(pop, 4);
+
   ga_evolution(
        pop,				/* population	*pop */
-       500				/* const int	max_generations */
+       200				/* const int	max_generations */
+              );
+
+  ga_extinction(pop);
+
+/* "Pareto Set" Multiobjective GA. */
+  printf("Using the Pareto Set Multiobjective GA varient.\n");
+
+  pop = ga_genesis_double(
+       100,			/* const int              population_size */
+       1,			/* const int              num_chromo */
+       4,			/* const int              len_chromo */
+       test_generation_callback,/* GAgeneration_hook      generation_hook */
+       NULL,			/* GAiteration_hook       iteration_hook */
+       NULL,			/* GAdata_destructor      data_destructor */
+       NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+       test_score,		/* GAevaluate             evaluate */
+       test_seed,		/* GAseed                 seed */
+       NULL,			/* GAadapt                adapt */
+       ga_select_one_bestof2,	/* GAselect_one           select_one */
+       ga_select_two_bestof2,	/* GAselect_two           select_two */
+       ga_mutate_double_singlepoint_drift,	/* GAmutate               mutate */
+       ga_crossover_double_doublepoints,	/* GAcrossover            crossover */
+       NULL,			/* GAreplace              replace */
+       NULL			/* vpointer	User data */
+            );
+
+  ga_population_set_parameters(
+       pop,				/* population      *pop */
+       GA_SCHEME_DARWIN,		/* const ga_scheme_type     scheme */
+       GA_ELITISM_PARETO_SET_SURVIVE,	/* const ga_elitism_type   elitism */
+       0.8,				/* double  crossover */
+       0.2,				/* double  mutation */
+       0.0      		        /* double  migration */
+                              );
+
+  ga_population_set_fitness_dimensions(pop, 4);
+
+  ga_evolution(
+       pop,				/* population	*pop */
+       200				/* const int	max_generations */
               );
 
   ga_extinction(pop);
 
   exit(EXIT_SUCCESS);
   }
-
 

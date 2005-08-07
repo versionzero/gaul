@@ -52,20 +52,23 @@ static char *target_text="When we reflect on this struggle, we may console ourse
 static boolean struggle_score(population *pop, entity *entity)
   {
   int		k;		/* Loop variable over all alleles. */
+  double	fitness;	/* Fitness of entity. */
 
-  entity->fitness = 0.0;
+  fitness = 0.0;
 
   /* Loop over alleles in chromosome. */
   for (k = 0; k < pop->len_chromosomes; k++)
     {
     if ( ((char *)entity->chromosome[0])[k] == target_text[k])
-      entity->fitness+=1.0;
+      fitness+=1.0;
     /*
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    entity->fitness += (127.0-abs((int)((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    fitness += (127.0-abs((int)((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
     }
+
+  ga_entity_set_fitness(entity, fitness);
 
   return TRUE;
   }
