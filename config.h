@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "05/08/05"
+#define GA_BUILD_DATE_STRING "07/08/05"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -32,13 +32,13 @@
 #define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
 
 /* Patch level. */
-#define GA_PATCH_VERSION 2
+#define GA_PATCH_VERSION 3
 
 /* Record compilation platform information. */
 #define GA_UNAME_STRING "Linux whitebox64.linux-domain.com 2.6.12-1.1398_FC4 #1 Fri Jul 15 00:51:38 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1849-2"
+#define GA_VERSION_STRING "0.1849-3"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0

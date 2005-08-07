@@ -159,10 +159,10 @@ extern int errno;
 #define GA_MAJOR_VERSION 0
 #define GA_MINOR_VERSION 1849
 #define GA_LT_MINOR_VERSION 49
-#define GA_PATCH_VERSION 2
-#define GA_VERSION_STRING "0.1849-2"
+#define GA_PATCH_VERSION 3
+#define GA_VERSION_STRING "0.1849-3"
 #define GA_UNAME_STRING "Linux whitebox64.linux-domain.com 2.6.12-1.1398_FC4 #1 Fri Jul 15 00:51:38 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
-#define GA_BUILD_DATE_STRING "05/08/05"
+#define GA_BUILD_DATE_STRING "07/08/05"
 
 #define V3_QUICK 
 #define W32_CRIPPLED 0
