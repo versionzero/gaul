@@ -8,7 +8,9 @@
 *.deps
 *.dat
 *.gmo
+*.err
 *.log
+*.obj
 *.orig
 *.pot
 *.rej

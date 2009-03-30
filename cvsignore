@@ -44,4 +44,6 @@ cvs2cl.pl
 *.a
 *.la
 *.il
+*.obj
+*/*.obj
 

@@ -1,0 +1,309 @@
+!define BLANK ""
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_bitstring.obj" : "D:\Stew&
+art's Source\gaul-devel-0.1851-0\SRC\ga_bitstring.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_bitstring.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src &
+-w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_chromo.obj" : "D:\Stewart&
+'s Source\gaul-devel-0.1851-0\SRC\ga_chromo.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_chromo.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4&
+ -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_climbing.obj" : "D:\Stewa&
+rt's Source\gaul-devel-0.1851-0\SRC\ga_climbing.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_climbing.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -&
+w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_compare.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\SRC\ga_compare.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_compare.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w&
+4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_core.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\SRC\ga_core.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_core.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -&
+e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_crossover.obj" : "D:\Stew&
+art's Source\gaul-devel-0.1851-0\SRC\ga_crossover.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_crossover.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src &
+-w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_de.obj" : "D:\Stewart's S&
+ource\gaul-devel-0.1851-0\SRC\ga_de.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_de.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -e2&
+5 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_deterministiccrowding.obj&
+" : "D:\Stewart's Source\gaul-devel-0.1851-0\SRC\ga_deterministiccrowding.c"&
+ .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_deterministiccrowding.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\&
+util;..\src -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_gradient.obj" : "D:\Stewa&
+rt's Source\gaul-devel-0.1851-0\SRC\ga_gradient.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_gradient.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -&
+w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_intrinsics.obj" : "D:\Ste&
+wart's Source\gaul-devel-0.1851-0\SRC\ga_intrinsics.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_intrinsics.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src&
+ -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_io.obj" : "D:\Stewart's S&
+ource\gaul-devel-0.1851-0\SRC\ga_io.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_io.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -e2&
+5 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_mutate.obj" : "D:\Stewart&
+'s Source\gaul-devel-0.1851-0\SRC\ga_mutate.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_mutate.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4&
+ -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_optim.obj" : "D:\Stewart'&
+s Source\gaul-devel-0.1851-0\SRC\ga_optim.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_optim.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 &
+-e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_qsort.obj" : "D:\Stewart'&
+s Source\gaul-devel-0.1851-0\SRC\ga_qsort.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_qsort.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 &
+-e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_randomsearch.obj" : "D:\S&
+tewart's Source\gaul-devel-0.1851-0\SRC\ga_randomsearch.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_randomsearch.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\s&
+rc -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_rank.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\SRC\ga_rank.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_rank.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -&
+e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_replace.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\SRC\ga_replace.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_replace.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w&
+4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_sa.obj" : "D:\Stewart's S&
+ource\gaul-devel-0.1851-0\SRC\ga_sa.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_sa.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -e2&
+5 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_seed.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\SRC\ga_seed.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_seed.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -&
+e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_select.obj" : "D:\Stewart&
+'s Source\gaul-devel-0.1851-0\SRC\ga_select.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_select.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4&
+ -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_similarity.obj" : "D:\Ste&
+wart's Source\gaul-devel-0.1851-0\SRC\ga_similarity.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_similarity.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src&
+ -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_simplex.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\SRC\ga_simplex.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_simplex.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w&
+4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_stats.obj" : "D:\Stewart'&
+s Source\gaul-devel-0.1851-0\SRC\ga_stats.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_stats.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 &
+-e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_systematicsearch.obj" : "&
+D:\Stewart's Source\gaul-devel-0.1851-0\SRC\ga_systematicsearch.c" .AUTODEPE&
+ND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_systematicsearch.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;&
+..\src -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_tabu.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\SRC\ga_tabu.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_tabu.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 -&
+e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_utility.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\SRC\ga_utility.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\SRC\ga_utility.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w&
+4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\avltree.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\UTIL\avltree.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\avltree.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 &
+-e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\compatibility.obj" : "D:\Ste&
+wart's Source\gaul-devel-0.1851-0\UTIL\compatibility.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\compatibility.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\sr&
+c -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\linkedlist.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\UTIL\linkedlist.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\linkedlist.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -&
+w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\log_util.obj" : "D:\Stewart'&
+s Source\gaul-devel-0.1851-0\UTIL\log_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\log_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4&
+ -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\memory_chunks.obj" : "D:\Ste&
+wart's Source\gaul-devel-0.1851-0\UTIL\memory_chunks.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\memory_chunks.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\sr&
+c -w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\memory_util.obj" : "D:\Stewa&
+rt's Source\gaul-devel-0.1851-0\UTIL\memory_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\memory_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src &
+-w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\nn_util.obj" : "D:\Stewart's&
+ Source\gaul-devel-0.1851-0\UTIL\nn_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\nn_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -w4 &
+-e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\random_util.obj" : "D:\Stewa&
+rt's Source\gaul-devel-0.1851-0\UTIL\random_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\random_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src &
+-w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\table_util.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\UTIL\table_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\table_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -&
+w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\timer_util.obj" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\UTIL\timer_util.c" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ *wcc386 ..\UTIL\timer_util.c -i=C:\WATCOM\h;C:\WATCOM\h\nt;..\util;..\src -&
+w4 -e25 -dBUILDING_DLL -zq -od -d2 -bd -6r -bt=nt -mf
+
+"D:\Stewart's Source\gaul-devel-0.1851-0\watcom\gaul-devel.dll" : "D:\Stewar&
+t's Source\gaul-devel-0.1851-0\watcom\ga_bitstring.obj" "D:\Stewart's Source&
+\gaul-devel-0.1851-0\watcom\ga_chromo.obj" "D:\Stewart's Source\gaul-devel-0&
+.1851-0\watcom\ga_climbing.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\wat&
+com\ga_compare.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_core.&
+obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_crossover.obj" "D:\S&
+tewart's Source\gaul-devel-0.1851-0\watcom\ga_de.obj" "D:\Stewart's Source\g&
+aul-devel-0.1851-0\watcom\ga_deterministiccrowding.obj" "D:\Stewart's Source&
+\gaul-devel-0.1851-0\watcom\ga_gradient.obj" "D:\Stewart's Source\gaul-devel&
+-0.1851-0\watcom\ga_intrinsics.obj" "D:\Stewart's Source\gaul-devel-0.1851-0&
+\watcom\ga_io.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_mutate&
+.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_optim.obj" "D:\Stew&
+art's Source\gaul-devel-0.1851-0\watcom\ga_qsort.obj" "D:\Stewart's Source\g&
+aul-devel-0.1851-0\watcom\ga_randomsearch.obj" "D:\Stewart's Source\gaul-dev&
+el-0.1851-0\watcom\ga_rank.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\wat&
+com\ga_replace.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_sa.ob&
+j" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_seed.obj" "D:\Stewart'&
+s Source\gaul-devel-0.1851-0\watcom\ga_select.obj" "D:\Stewart's Source\gaul&
+-devel-0.1851-0\watcom\ga_similarity.obj" "D:\Stewart's Source\gaul-devel-0.&
+1851-0\watcom\ga_simplex.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watco&
+m\ga_stats.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_systemati&
+csearch.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_tabu.obj" "D&
+:\Stewart's Source\gaul-devel-0.1851-0\watcom\ga_utility.obj" "D:\Stewart's &
+Source\gaul-devel-0.1851-0\watcom\avltree.obj" "D:\Stewart's Source\gaul-dev&
+el-0.1851-0\watcom\compatibility.obj" "D:\Stewart's Source\gaul-devel-0.1851&
+-0\watcom\linkedlist.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\lo&
+g_util.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\memory_chunks.ob&
+j" "D:\Stewart's Source\gaul-devel-0.1851-0\watcom\memory_util.obj" "D:\Stew&
+art's Source\gaul-devel-0.1851-0\watcom\nn_util.obj" "D:\Stewart's Source\ga&
+ul-devel-0.1851-0\watcom\random_util.obj" "D:\Stewart's Source\gaul-devel-0.&
+1851-0\watcom\table_util.obj" "D:\Stewart's Source\gaul-devel-0.1851-0\watco&
+m\timer_util.obj" .AUTODEPEND
+ @D:
+ cd D:\Stewart's Source\gaul-devel-0.1851-0\watcom
+ @%write gaul-devel.lk1 FIL ga_bitstring.obj,ga_chromo.obj,ga_climbing.obj,g&
+a_compare.obj,ga_core.obj,ga_crossover.obj,ga_de.obj,ga_deterministiccrowdin&
+g.obj,ga_gradient.obj,ga_intrinsics.obj,ga_io.obj,ga_mutate.obj,ga_optim.obj&
+,ga_qsort.obj,ga_randomsearch.obj,ga_rank.obj,ga_replace.obj,ga_sa.obj,ga_se&
+ed.obj,ga_select.obj,ga_similarity.obj,ga_simplex.obj,ga_stats.obj,ga_system&
+aticsearch.obj,ga_tabu.obj,ga_utility.obj,avltree.obj,compatibility.obj,link&
+edlist.obj,log_util.obj,memory_chunks.obj,memory_util.obj,nn_util.obj,random&
+_util.obj,table_util.obj,timer_util.obj
+ @%append gaul-devel.lk1 
+!ifneq BLANK ""
+ *wlib -q -n -b gaul-devel.imp 
+ @%append gaul-devel.lk1 LIBR gaul-devel.imp
+!endif
+!ifneq BLANK ""
+ @%append gaul-devel.lk1 op resource=
+!endif
+ *wlink name gaul-devel d all SYS nt_dll op m op maxe=25 op q op symf @gaul-&
+devel.lk1
+ wlib -q -n -b gaul-devel.lib +gaul-devel.dll
+
