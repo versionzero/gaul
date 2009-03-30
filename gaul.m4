@@ -3,11 +3,11 @@ dnl gaul/gaul.m4
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
-dnl Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+dnl Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
 dnl All rights reserved.
 dnl
 dnl The latest version of this program should be available at:
-dnl http://www.stewart-adcock.co.uk/
+dnl http://gaul.sourceforge.net/
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
