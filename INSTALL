@@ -1,10 +1,10 @@
 Brief GAUL Installation Instructions
 ====================================
 
-Full (and maybe more up-to-date) instructions are available on the GAUL website.  This file should have just enough detail to help you.
+Full (and maybe more up-to-date) instructions are available on the GAUL website at http://gaul.sourceforge.net.  This file should have just enough detail to help you on Linux and other UNIX-like operating systems.
 
 Dependencies:
-The only non-trivial prerequisite for GAUL is S-Lang.  This may be obtained from http://www.s-lang.org/
+The only non-trivial prerequisite for GAUL is S-Lang. This is optional, but may be obtained from http://www.s-lang.org/
 
 Also helpful, are Perl5 and the GNU maketools.  You probably have these already if you use your computer for anything non-trivial.
 
@@ -14,7 +14,7 @@ Installation from Source
 You should be able to work it out, but for any real dummies out there follow the standard GNU make procedure:
 ./configure ; make
 
-Or if you don't have S-Lang installed:
+Or, if you don't have S-Lang installed:
 ./configure --enable-slang=no ; make
 
 If that doesn't work because you don't have the GNU maketools (or because I made assumptions that are not valid for your native compiler) then we have a problem to sort out.
@@ -53,4 +53,4 @@ rpm -Uvh gaul-devel-[version].[arch].rpm
 
 Of course, this only works on computers using the RPM package management system.
 
-Stewart Adcock, 20 Mar 2002
+Stewart Adcock, 30th March 2009
