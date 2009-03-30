@@ -3,9 +3,9 @@
  **********************************************************************
 
   nn_util - Simple multi-layer Neural Network routines.
-  Copyright ©2001-2003, The Regents of the University of California.
+  Copyright ©2001-2009, The Regents of the University of California.
   All rights reserved.
-  Primary author: "Stewart Adcock" <stewart@linux-domain.com>
+  Primary author: Stewart Adcock, http://saa.dyndns.org/
 
   The latest version of this program should be available at:
   http://www.linux-domain.com/
@@ -101,9 +101,9 @@ typedef struct
 #define NN_DEFAULT_SEED		42
 
 #define NN_DEFAULT_MOMENTUM	0.75
-#define NN_DEFAULT_RATE		0.1
+#define NN_DEFAULT_RATE		0.1f
 #define NN_DEFAULT_GAIN		1.0
-#define NN_DEFAULT_DECAY	0.005
+#define NN_DEFAULT_DECAY	0.005f
 
 #define NN_DEFAULT_MAX_EPOCHS	10000
 #define NN_DEFAULT_TEST_STEP	20
@@ -125,53 +125,55 @@ typedef void	(*NN_training_func)(network_t *network, const int num_epochs);
  * your own training scheme.
  */
 
-FUNCPROTO void	NN_diagnostics(void);
-FUNCPROTO void	NN_display_summary(network_t *network);
-FUNCPROTO network_t	*NN_new(int num_layers, int *neurons);
-FUNCPROTO network_t	*NN_clone(network_t *src);
-FUNCPROTO void	NN_copy(network_t *src, network_t *dest);
-FUNCPROTO void	NN_set_bias(network_t *network, const float bias);
-FUNCPROTO void	NN_set_layer_bias(network_t *network, const int layer, const float bias);
-FUNCPROTO void	NN_set_gain(network_t *network, const float gain);
-FUNCPROTO void	NN_set_rate(network_t *network, const float rate);
-FUNCPROTO void	NN_set_momentum(network_t *network, const float momentum);
-FUNCPROTO void	NN_set_decay(network_t *network, const float decay);
-FUNCPROTO void	NN_write(network_t *network, const char *fname);
-FUNCPROTO network_t	*NN_read_compat(const char *fname);
-FUNCPROTO network_t	*NN_read(const char *fname);
-FUNCPROTO void	NN_destroy(network_t *network);
-FUNCPROTO void	NN_set_all_weights(network_t *network, const float weight);
-FUNCPROTO void	NN_randomize_weights(network_t *network, const float lower, const float upper);
-FUNCPROTO void	NN_randomize_weights_11(network_t *network);
-FUNCPROTO void	NN_randomize_weights_01(network_t *network);
-FUNCPROTO void	NN_input(network_t *network, float *input);
-FUNCPROTO void	NN_output(network_t *network, float *output);
-FUNCPROTO void	NN_save_weights(network_t *network);
-FUNCPROTO void	NN_restore_weights(network_t *network);
-FUNCPROTO void	NN_propagate(network_t *network);
-FUNCPROTO void	NN_output_error(network_t *network, float *target);
-FUNCPROTO void	NN_backpropagate(network_t *network);
-FUNCPROTO void	NN_decay_weights(network_t *network);
-FUNCPROTO void	NN_adjust_weights(network_t *network);
-FUNCPROTO void	NN_adjust_weights_decay(network_t *network);
-FUNCPROTO void	NN_adjust_weights_momentum(network_t *network);
-FUNCPROTO void	NN_simulate(network_t *network, float *input, float *target);
-FUNCPROTO void	NN_simulate_with_output(network_t *network, float *input, float *target, float *output);
-FUNCPROTO void	NN_run(network_t *network, float *input, float *output);
-FUNCPROTO void	NN_train_random(network_t *network, const int num_epochs);
-FUNCPROTO void	NN_train_systematic(network_t *network, const int num_epochs);
-FUNCPROTO void	NN_train_batch_random(network_t *network, const int num_epochs);
-FUNCPROTO void	NN_train_batch_systematic(network_t *network, const int num_epochs);
-FUNCPROTO void	NN_test(network_t *network, float *trainerror, float *testerror);
-FUNCPROTO void	NN_evaluate(network_t *network);
-FUNCPROTO void	NN_predict(network_t *network);
-FUNCPROTO void	NN_define_train_data(int ndata, float **data, float **prop);
-FUNCPROTO void	NN_define_test_data(int ndata, float **data, float **prop);
-FUNCPROTO void	NN_define_eval_data(int ndata, float **data, float **prop);
-FUNCPROTO void	NN_define_predict_data(int ndata, float **data);
-FUNCPROTO int	NN_read_fingerprint_binary_header(FILE *fp);
-FUNCPROTO int	NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data);
-FUNCPROTO void	NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int *dimensions);
+GAULFUNC void	NN_diagnostics(void);
+GAULFUNC void	NN_display_summary(network_t *network);
+GAULFUNC network_t	*NN_new(int num_layers, int *neurons);
+GAULFUNC network_t	*NN_clone(network_t *src);
+GAULFUNC void	NN_copy(network_t *src, network_t *dest);
+GAULFUNC void	NN_set_bias(network_t *network, const float bias);
+GAULFUNC void	NN_set_layer_bias(network_t *network, const int layer, const float bias);
+GAULFUNC void	NN_set_gain(network_t *network, const float gain);
+GAULFUNC void	NN_set_rate(network_t *network, const float rate);
+GAULFUNC void	NN_set_momentum(network_t *network, const float momentum);
+GAULFUNC void	NN_set_decay(network_t *network, const float decay);
+GAULFUNC void	NN_write(network_t *network, const char *fname);
+GAULFUNC network_t	*NN_read_compat(const char *fname);
+GAULFUNC network_t	*NN_read(const char *fname);
+GAULFUNC void	NN_destroy(network_t *network);
+GAULFUNC void	NN_set_all_weights(network_t *network, const float weight);
+GAULFUNC void	NN_randomize_weights(network_t *network, const float lower, const float upper);
+GAULFUNC void	NN_randomize_weights_11(network_t *network);
+GAULFUNC void	NN_randomize_weights_01(network_t *network);
+GAULFUNC void	NN_input(network_t *network, float *input);
+GAULFUNC void	NN_output(network_t *network, float *output);
+GAULFUNC void	NN_save_weights(network_t *network);
+GAULFUNC void	NN_restore_weights(network_t *network);
+GAULFUNC void	NN_propagate(network_t *network);
+GAULFUNC void	NN_output_error(network_t *network, float *target);
+GAULFUNC void	NN_output_error_sum(network_t *network, float *target);
+GAULFUNC void	NN_backpropagate(network_t *network);
+GAULFUNC void	NN_decay_weights(network_t *network);
+GAULFUNC void	NN_adjust_weights(network_t *network);
+GAULFUNC void	NN_adjust_weights_decay(network_t *network);
+GAULFUNC void	NN_adjust_weights_momentum(network_t *network);
+GAULFUNC void	NN_simulate(network_t *network, float *input, float *target);
+GAULFUNC void	NN_simulate_batch(network_t *network, float *input, float *target);
+GAULFUNC void	NN_simulate_with_output(network_t *network, float *input, float *target, float *output);
+GAULFUNC void	NN_run(network_t *network, float *input, float *output);
+GAULFUNC void	NN_train_random(network_t *network, const int num_epochs);
+GAULFUNC void	NN_train_systematic(network_t *network, const int num_epochs);
+GAULFUNC void	NN_train_batch_random(network_t *network, const int num_epochs);
+GAULFUNC void	NN_train_batch_systematic(network_t *network, const int num_epochs);
+GAULFUNC void	NN_test(network_t *network, float *trainerror, float *testerror);
+GAULFUNC void	NN_evaluate(network_t *network);
+GAULFUNC void	NN_predict(network_t *network);
+GAULFUNC void	NN_define_train_data(int ndata, float **data, float **prop);
+GAULFUNC void	NN_define_test_data(int ndata, float **data, float **prop);
+GAULFUNC void	NN_define_eval_data(int ndata, float **data, float **prop);
+GAULFUNC void	NN_define_predict_data(int ndata, float **data);
+GAULFUNC int	NN_read_fingerprint_binary_header(FILE *fp);
+GAULFUNC int	NN_read_data(char *fname, float ***data, char ***labels, int *num_data, int *max_data);
+GAULFUNC void	NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int *num_data, int *dimensions);
 
 #endif /* NN_UTIL_H_INCLUDED */
 

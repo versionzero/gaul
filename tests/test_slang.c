@@ -34,7 +34,7 @@
  */
 #include "gaul.h"
 
-#if HAVE_SLANG == 1
+#ifdef HAVE_SLANG
 
 /*
  * The solution string.
@@ -407,7 +407,7 @@ int main( int argc, char **argv )
   exit(EXIT_SUCCESS);
   }
 
-#else
+#else /* !HAVE_SLANG */
 int main( int argc, char **argv )
   {
 
@@ -415,4 +415,4 @@ int main( int argc, char **argv )
 
   exit(EXIT_SUCCESS);
   }
-#endif	/* HAVE_SLANG == 1 */
+#endif	/* !HAVE_SLANG */

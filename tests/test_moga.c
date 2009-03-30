@@ -3,7 +3,7 @@
  **********************************************************************
 
   test_moga - Test program for GAUL.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2006, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -47,21 +47,21 @@
   updated:	05 Aug 2005
  **********************************************************************/
 
-boolean test_score(population *pop, entity *entity)
+static boolean test_score(population *pop, entity *this_entity)
   {
   double		A, B, C, D;	/* Parameters. */
 
-  A = ((double *)entity->chromosome[0])[0];
-  B = ((double *)entity->chromosome[0])[1];
-  C = ((double *)entity->chromosome[0])[2];
-  D = ((double *)entity->chromosome[0])[3];
+  A = ((double *)this_entity->chromosome[0])[0];
+  B = ((double *)this_entity->chromosome[0])[1];
+  C = ((double *)this_entity->chromosome[0])[2];
+  D = ((double *)this_entity->chromosome[0])[3];
 
-  entity->fitvector[0] = fabs(0.75-A);
-  entity->fitvector[1] = fabs(0.95-B);
-  entity->fitvector[2] = fabs(0.23-C);
-  entity->fitvector[3] = fabs(0.71-D);
+  this_entity->fitvector[0] = fabs(0.75-A);
+  this_entity->fitvector[1] = fabs(0.95-B);
+  this_entity->fitvector[2] = fabs(0.23-C);
+  this_entity->fitvector[3] = fabs(0.71-D);
 
-  entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
+  this_entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
 
   return TRUE;
   }
@@ -75,17 +75,17 @@ boolean test_score(population *pop, entity *entity)
   last updated: 05 Aug 2005
  **********************************************************************/
 
-boolean test_generation_callback(int generation, population *pop)
+static boolean test_generation_callback(int generation, population *pop)
   {
-  entity	*entity = ga_get_entity_from_rank(pop, 0);	/* The best entity. */
+  entity	*this_entity = ga_get_entity_from_rank(pop, 0);	/* The best entity. */
 
   printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f) pop_size %d\n",
             generation,
-            ((double *)entity->chromosome[0])[0],
-            ((double *)entity->chromosome[0])[1],
-            ((double *)entity->chromosome[0])[2],
-            ((double *)entity->chromosome[0])[3],
-            ga_entity_get_fitness(entity),
+            ((double *)this_entity->chromosome[0])[0],
+            ((double *)this_entity->chromosome[0])[1],
+            ((double *)this_entity->chromosome[0])[2],
+            ((double *)this_entity->chromosome[0])[3],
+            ga_entity_get_fitness(this_entity),
             pop->size );
 
   return TRUE;
@@ -101,7 +101,7 @@ boolean test_generation_callback(int generation, population *pop)
   last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean test_seed(population *pop, entity *adam)
+static boolean test_seed(population *pop, entity *adam)
   {
 
 /* Checks. */

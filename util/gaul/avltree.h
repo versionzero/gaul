@@ -3,7 +3,7 @@
  **********************************************************************
 
   avltree - AVL Tree implementation.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -65,29 +65,29 @@ typedef struct AVLTree_t
  * Prototypes.
  */
 
-FUNCPROTO void		avltree_init_openmp(void);
-FUNCPROTO AVLTree		*avltree_new(AVLKeyFunc key_generate_func);
-FUNCPROTO void		avltree_delete(AVLTree *tree);
-FUNCPROTO void		avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func);
-FUNCPROTO boolean		avltree_insert(AVLTree *tree, vpointer data);
-FUNCPROTO vpointer	avltree_remove(AVLTree *tree, vpointer data);
-FUNCPROTO vpointer	avltree_remove_key(AVLTree *tree, AVLKey key);
-FUNCPROTO vpointer	avltree_lookup(AVLTree *tree, vpointer data);
-FUNCPROTO vpointer	avltree_lookup_lowest(AVLTree *tree);
-FUNCPROTO vpointer	avltree_lookup_highest(AVLTree *tree);
-FUNCPROTO vpointer	avltree_lookup_key(AVLTree *tree, AVLKey key);
-FUNCPROTO vpointer	avltree_ordered_search(AVLTree *tree,
+GAULFUNC void		avltree_init_openmp(void);
+GAULFUNC AVLTree		*avltree_new(AVLKeyFunc key_generate_func);
+GAULFUNC void		avltree_delete(AVLTree *tree);
+GAULFUNC void		avltree_destroy(AVLTree *tree, AVLDestructorFunc free_func);
+GAULFUNC boolean		avltree_insert(AVLTree *tree, vpointer data);
+GAULFUNC vpointer	avltree_remove(AVLTree *tree, vpointer data);
+GAULFUNC vpointer	avltree_remove_key(AVLTree *tree, AVLKey key);
+GAULFUNC vpointer	avltree_lookup(AVLTree *tree, vpointer data);
+GAULFUNC vpointer	avltree_lookup_lowest(AVLTree *tree);
+GAULFUNC vpointer	avltree_lookup_highest(AVLTree *tree);
+GAULFUNC vpointer	avltree_lookup_key(AVLTree *tree, AVLKey key);
+GAULFUNC vpointer	avltree_ordered_search(AVLTree *tree,
                          AVLSearchFunc search_func, vpointer userdata);
-FUNCPROTO vpointer	avltree_search(AVLTree *tree,
+GAULFUNC vpointer	avltree_search(AVLTree *tree,
                          AVLMatchFunc search_func, vpointer userdata);
-FUNCPROTO void		avltree_traverse(AVLTree *tree,
+GAULFUNC void		avltree_traverse(AVLTree *tree,
 			 AVLTraverseFunc traverse_func, vpointer userdata);
-FUNCPROTO int		avltree_height(AVLTree *tree);
-FUNCPROTO int		avltree_num_nodes(AVLTree *tree);
-FUNCPROTO void		avltree_diagnostics(void);
+GAULFUNC int		avltree_height(AVLTree *tree);
+GAULFUNC int		avltree_num_nodes(AVLTree *tree);
+GAULFUNC void		avltree_diagnostics(void);
 
 #ifndef AVLTREE_COMPILE_MAIN
-FUNCPROTO boolean		avltree_test(void);
+GAULFUNC boolean		avltree_test(void);
 #endif
 
 #endif /* AVLTREE_H_INCLUDED */

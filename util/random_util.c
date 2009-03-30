@@ -3,7 +3,7 @@
  **********************************************************************
 
   random_util - Pseudo-random number generation routines.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -35,7 +35,7 @@
 		(c) Enables saving and restoring state.
 
 		SLang intrinsic function wrappers are provided if the
-		HAVE_SLANG constant is set to 1.
+		HAVE_SLANG macro is defined
 
 		The algorithm I selected is the Mitchell and Moore
 		variant of the standard additive number generator.
@@ -129,7 +129,7 @@ THREAD_LOCK_DEFINE_STATIC(random_state_lock);
   last updated:	30/12/00
  **********************************************************************/
 
-unsigned int random_rand(void)
+GAULFUNC unsigned int random_rand(void)
   {
   unsigned int val;
 
@@ -161,11 +161,11 @@ unsigned int random_rand(void)
   last updated: 04 May 2004
  **********************************************************************/
 
-void random_seed(const unsigned int seed)
+GAULFUNC void random_seed(const unsigned int seed)
   { 
   int	i; 
 
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
   if (is_initialised == FALSE)
     {
     omp_init_lock(&random_state_lock);
@@ -202,7 +202,7 @@ void random_seed(const unsigned int seed)
   last updated:	28/01/01
  **********************************************************************/
 
-void random_tseed(void)
+GAULFUNC void random_tseed(void)
   { 
   random_seed((unsigned int) (time(NULL)%RANDOM_RAND_MAX));
 
@@ -219,7 +219,7 @@ void random_tseed(void)
   last updated:	16/05/00
 *************************************************************************/
 
-random_state random_get_state(void)
+GAULFUNC random_state random_get_state(void)
   {
   return current_state;
   }
@@ -234,7 +234,7 @@ random_state random_get_state(void)
   last updated:	16/05/00
 *************************************************************************/
 
-void random_set_state(random_state state)
+GAULFUNC void random_set_state(random_state state)
   {
   current_state = state;
 
@@ -251,7 +251,7 @@ void random_set_state(random_state state)
   last updated:	28/01/01
 *************************************************************************/
 
-char *random_get_state_str(void)
+GAULFUNC char *random_get_state_str(void)
   {
   return (char *) &current_state;
   }
@@ -266,7 +266,7 @@ char *random_get_state_str(void)
   last updated:	28/01/01
 *************************************************************************/
 
-unsigned int random_get_state_str_len(void)
+GAULFUNC unsigned int random_get_state_str_len(void)
   {
   return (unsigned int) sizeof(random_state);
   }
@@ -281,7 +281,7 @@ unsigned int random_get_state_str_len(void)
   last updated:	28/01/01
 *************************************************************************/
 
-void random_set_state_str(char *state)
+GAULFUNC void random_set_state_str(char *state)
   {
   /* This causes potential unaligned trap on Alpha CPUs. */
   current_state = *((random_state *)state);
@@ -300,7 +300,7 @@ void random_set_state_str(char *state)
   last updated:	30 May 2002
  **********************************************************************/
 
-void random_init(void)
+GAULFUNC void random_init(void)
   {
   random_seed(1);
 
@@ -320,7 +320,7 @@ void random_init(void)
   last updated:	30/12/00
  **********************************************************************/
 
-boolean random_isinit(void)
+GAULFUNC boolean random_isinit(void)
   {
   return is_initialised;
   }
@@ -338,9 +338,9 @@ boolean random_isinit(void)
   last updated:	16/05/00
  **********************************************************************/
 
-boolean random_boolean(void)
+GAULFUNC boolean random_boolean(void)
   {
-  return (random_rand() <= RANDOM_RAND_MAX/2);
+  return (boolean)(random_rand() <= RANDOM_RAND_MAX/2);
   }
 
 
@@ -352,9 +352,9 @@ boolean random_boolean(void)
   last updated:	16/05/00
  **********************************************************************/
 
-boolean random_boolean_prob(const double prob)
+GAULFUNC boolean random_boolean_prob(const double prob)
   {
-  return (random_rand() <= (unsigned int)(prob*(double)RANDOM_RAND_MAX));
+  return (boolean)(random_rand() <= (unsigned int)(prob*(double)RANDOM_RAND_MAX));
   }
 
 
@@ -366,15 +366,12 @@ boolean random_boolean_prob(const double prob)
   last updated:	05 Jun 2003
  **********************************************************************/
 
-unsigned int random_int(const unsigned int max)
+GAULFUNC unsigned int random_int(const unsigned int max)
   {
 /*
   return (int)((double)random_rand()*max/RANDOM_RAND_MAX);
 */
-  if (max==0)
-    return 0;
-  else
-    return random_rand()%max;
+  return (max==0) ? 0 : random_rand()%max;
   }
 
 
@@ -386,15 +383,12 @@ unsigned int random_int(const unsigned int max)
   last updated:	05 Jun 2003
  **********************************************************************/
 
-int random_int_range(const int min, const int max)
+GAULFUNC int random_int_range(const int min, const int max)
   {
 /*
   return (random_rand()*(max-min)/RANDOM_RAND_MAX + min);
 */
-  if (max-min==0)
-    return max;
-  else
-    return min + (random_rand()%(max-min));
+  return (max-min==0) ? max : min + (random_rand()%(max-min));
   }
 
 
@@ -406,7 +400,7 @@ int random_int_range(const int min, const int max)
   last updated:	16/06/01
  **********************************************************************/
 
-double random_double_full(void)
+GAULFUNC double random_double_full(void)
   {
   return ( ((double)random_rand()/(double)RANDOM_RAND_MAX)*
                 (DBL_MAX-DBL_MIN)+DBL_MIN );
@@ -421,7 +415,7 @@ double random_double_full(void)
   last updated:	22/01/01
  **********************************************************************/
 
-double random_double(const double max)
+GAULFUNC double random_double(const double max)
   {
   return ( max*(((double)random_rand())/(double)RANDOM_RAND_MAX) );
   }
@@ -435,7 +429,7 @@ double random_double(const double max)
   last updated:	07/06/00
  **********************************************************************/
 
-double random_double_range(const double min, const double max)
+GAULFUNC double random_double_range(const double min, const double max)
   {
   return ( (max-min)*(((double)random_rand())/(double)RANDOM_RAND_MAX) + min );
   }
@@ -449,7 +443,7 @@ double random_double_range(const double min, const double max)
   last updated:	21/02/01
  **********************************************************************/
 
-double random_double_1(void)
+GAULFUNC double random_double_1(void)
   {
   return ( 2.0*(((double)random_rand())/(double)RANDOM_RAND_MAX) - 1.0 );
   }
@@ -463,9 +457,9 @@ double random_double_1(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_full(void)
+GAULFUNC float random_float_full(void)
   {
-  return ( ((float)random_rand()/(float)RANDOM_RAND_MAX)*
+  return (float)( (random_rand()/RANDOM_RAND_MAX)*
                 (DBL_MAX-DBL_MIN)+DBL_MIN );
   }
 
@@ -478,7 +472,7 @@ float random_float_full(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float(const float max)
+GAULFUNC float random_float(const float max)
   {
   return ( max*(((float)random_rand())/(float)RANDOM_RAND_MAX) );
   }
@@ -492,7 +486,7 @@ float random_float(const float max)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_range(const float min, const float max)
+GAULFUNC float random_float_range(const float min, const float max)
   {
   return ( (max-min)*(((float)random_rand())/(float)RANDOM_RAND_MAX) + min );
   }
@@ -506,9 +500,9 @@ float random_float_range(const float min, const float max)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_1(void)
+GAULFUNC float random_float_1(void)
   {
-  return ( 2.0*(((float)random_rand())/(float)RANDOM_RAND_MAX) - 1.0 );
+  return 2.0f*((float)random_rand()/RANDOM_RAND_MAX) - 1.0f;
   }
 
 
@@ -521,7 +515,7 @@ float random_float_1(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_unit_uniform(void)
+GAULFUNC float random_float_unit_uniform(void)
   {
   return ( (((float)random_rand())/(float)RANDOM_RAND_MAX) );
   }
@@ -536,7 +530,7 @@ float random_float_unit_uniform(void)
   last updated:	11/01/01
  **********************************************************************/
 
-double random_unit_uniform(void)
+GAULFUNC double random_unit_uniform(void)
   {
   return ( (((double)random_rand())/(double)RANDOM_RAND_MAX) );
   }
@@ -551,7 +545,7 @@ double random_unit_uniform(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_gaussian(const float mean, const float stddev)
+GAULFUNC float random_float_gaussian(const float mean, const float stddev)
   {
   float	q,u,v,x,y;
 
@@ -560,13 +554,13 @@ float random_float_gaussian(const float mean, const float stddev)
  */
   do
     {
-    u = 1.0-random_float_unit_uniform();	/* in range 0.0>u>=1.0 */
-    v = 1.7156 * (0.5 - random_float_unit_uniform());	/* in range 0.8578>v>=0.8578 */
+    u = 1.0f-random_float_unit_uniform();	/* in range 0.0>u>=1.0 */
+    v = 1.7156f * (0.5f - random_float_unit_uniform());	/* in range 0.8578>v>=0.8578 */
 
 /* Evaluate the quadratic form. */
-    x = u - 0.449871;
-    y = fabs(v) + 0.386595;
-    q = x * x + y * (0.19600 * y - 0.25472 * x);
+    x = u - 0.449871f;
+    y = 0.386595f + fabs(v);
+    q = x * x + y * (0.19600f * y - 0.25472f * x);
 
 /*
  * Accept P if inside inner ellipse.
@@ -575,7 +569,7 @@ float random_float_gaussian(const float mean, const float stddev)
     } while ((q >= 0.27597) && ((q > 0.27846) || (v * v > -4.0 * log(u) * u * u)));
 
 /* Return ratio of P's coordinates as the normal deviate. */
-  return (mean + 2.0 * stddev * v / u);	/* I'm not entirely sure why this *2.0 factor is needed! */
+  return (float)(mean + 2.0 * stddev * v / u);	/* I'm not entirely sure why this *2.0 factor is needed! */
   }
 
 
@@ -588,7 +582,7 @@ float random_float_gaussian(const float mean, const float stddev)
   last updated:	07 Jan 2002
  **********************************************************************/
 
-float random_float_unit_gaussian(void)
+GAULFUNC float random_float_unit_gaussian(void)
   {
   float			r, u, v, fac;
   static boolean	set = FALSE;
@@ -602,12 +596,12 @@ float random_float_unit_gaussian(void)
 
   do
     {
-    u = 2.0 * random_float_unit_uniform() - 1.0;
-    v = 2.0 * random_float_unit_uniform() - 1.0;
+    u = 2.0f * random_float_unit_uniform() - 1.0f;
+    v = 2.0f * random_float_unit_uniform() - 1.0f;
     r = u*u + v*v;
     } while (r >= 1.0);
 
-  fac = sqrt(-2.0 * log(r) / r);
+  fac = (float)sqrt(-2.0 * log(r) / r);
   dset = v*fac;
 
   return u*fac;
@@ -639,9 +633,9 @@ float random_float_unit_gaussian(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_cauchy(void)
+GAULFUNC float random_float_cauchy(void)
   {
-  return tan(random_float_range(-PI/2,PI/2));
+  return (float) tan(random_float_range(-PI_OVER_TWO,PI_OVER_TWO));
   }
 
 
@@ -654,9 +648,9 @@ float random_float_cauchy(void)
   last updated:	4 Dec 2001
  **********************************************************************/
 
-float random_float_exponential(void)
+GAULFUNC float random_float_exponential(void)
   {
-  return -log(random_float_unit_uniform());
+  return (float) -log(random_float_unit_uniform());
   }
 
 
@@ -678,7 +672,7 @@ float random_float_exponential(void)
   The algorithm uses the ratio of uniforms method of A.J. Kinderman
   and J.F. Monahan augmented with quadratic bounding curves.
  */
-double random_gaussian(const double mean, const double stddev)
+GAULFUNC double random_gaussian(const double mean, const double stddev)
   {
   double	q,u,v,x,y;
 
@@ -748,7 +742,7 @@ double random_unit_gaussian(void)
   last updated:	07 Jan 2002
  **********************************************************************/
 
-double random_unit_gaussian(void)
+GAULFUNC double random_unit_gaussian(void)
   {
   double		r, u, v, fac;
   static boolean	set = FALSE;
@@ -799,7 +793,7 @@ double random_unit_gaussian(void)
   last updated:	30/04/01
  **********************************************************************/
 
-double random_cauchy(void)
+GAULFUNC double random_cauchy(void)
   {
   return tan(random_double_range(-PI/2,PI/2));
   }
@@ -814,7 +808,7 @@ double random_cauchy(void)
   last updated:	30/04/01
  **********************************************************************/
 
-double random_exponential(void)
+GAULFUNC double random_exponential(void)
   {
   return -log(random_unit_uniform());
   }
@@ -830,7 +824,7 @@ double random_exponential(void)
   last updated:	14 Mar 2002
  **********************************************************************/
 
-void random_int_permutation(const int size, int *iarray, int *oarray)
+GAULFUNC void random_int_permutation(const int size, int *iarray, int *oarray)
   {
   int		i,j=0;		/* Loop variables over arrays. */
   int		pos;		/* Randomly selected index. */
@@ -858,7 +852,7 @@ void random_int_permutation(const int size, int *iarray, int *oarray)
   last updated:	13 Mar 2002
  **********************************************************************/
 
-void random_diagnostics(void)
+GAULFUNC void random_diagnostics(void)
   {
   int	i;	/* Loop over PRNG array. */
 
@@ -870,7 +864,7 @@ void random_diagnostics(void)
   printf("RANDOM_DEBUG:              %d\n", RANDOM_DEBUG);
   printf("RANDOM_RAND_MAX:           %u\n", RANDOM_RAND_MAX);
   printf("RANDOM_NUM_STATE_VALS:     %d\n", RANDOM_NUM_STATE_VALS);
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
     printf("HAVE_SLANG:                TRUE\n");
 #else
     printf("HAVE_SLANG:                FALSE\n");
@@ -911,7 +905,7 @@ void random_diagnostics(void)
 #define NUM_SAMPLES 1000000
 #define NUM_CHISQ 20
 
-boolean random_test(void)
+GAULFUNC boolean random_test(void)
   {
   unsigned int	i, j, k;		/* Loop variables. */
   double	r;			/* Pseudo-random number. */
@@ -1096,7 +1090,7 @@ boolean random_test(void)
 
   FIXME: Problem with unsigned vs. signed ints.
  **********************************************************************/
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
 
 /* These function don't need wrappers:
 void random_tseed(void)

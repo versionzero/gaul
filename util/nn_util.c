@@ -3,9 +3,9 @@
  **********************************************************************
 
   nn_util - Simple multi-layer Neural Network routines.
-  Copyright ©2001-2005, The Regents of the University of California.
+  Copyright ©2001-2009, The Regents of the University of California.
   All rights reserved.
-  Primary author: "Stewart Adcock" <stewart@linux-domain.com>
+  Primary author: Stewart Adcock, http://saa.dyndns.org/
 
   The latest version of this program should be available at:
   http://www.linux-domain.com/
@@ -913,7 +913,7 @@ void NN_propagate(network_t *network)
         {
         sum += network->layer[l+1].weight[i][j] * network->layer[l].output[j];
         }
-      network->layer[l+1].output[i] = 1 / (1 + exp(-network->gain * sum));
+      network->layer[l+1].output[i] = 1.0f / (1.0f + exp(-network->gain * sum));
       }
     }
 
@@ -942,7 +942,7 @@ void NN_output_error(network_t *network, float *target)
     out = network->layer[network->num_layers-1].output[i];
     err = target[i-1]-out;
     network->layer[network->num_layers-1].error[i] = network->gain * out * (1-out) * err;
-    network->error += 0.5 * SQU(err);
+    network->error += 0.5f * SQU(err);
     }
 
 #if NN_DEBUG>2
@@ -974,7 +974,7 @@ void NN_output_error_sum(network_t *network, float *target)
     out = network->layer[network->num_layers-1].output[i];
     err = target[i-1]-out;
     network->layer[network->num_layers-1].error[i] += network->gain * out * (1-out) * err;
-    network->error += 0.5 * SQU(err);
+    network->error += 0.5f * SQU(err);
     }
 
   return;
@@ -1681,7 +1681,7 @@ void NN_read_prop(char *fname, float ***data, char ***labels, int *num_prop, int
     if (nn_nreadline(fp, MAX_LINE_LEN, line_buffer)<=0)
       dief("Error reading file \"%s\".\n", fname);
 
-    strcpy(line_copy, line_buffer);
+    strncpy(line_copy, line_buffer, MAX_LINE_LEN);
     line = line_copy;
 
     if (strncmp((*labels)[*num_prop], line, strlen((*labels)[*num_prop]))!=0)

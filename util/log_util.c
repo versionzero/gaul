@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - general logging services.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -56,7 +56,7 @@ THREAD_LOCK_DEFINE_STATIC(gaul_log_callback_lock);
 THREAD_LOCK_DEFINE_STATIC(gaul_log_global_lock);
 THREAD_LOCK_DEFINE_STATIC(gaul_log_level_lock);
 
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
 static int mpi_get_rank(void)
   {
   int	rank;
@@ -102,7 +102,7 @@ void log_init(	enum log_level_type	level,
 
   if (oldfname) s_free(oldfname);
 
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
   plog(LOG_VERBOSE, "Log started. (parallel with MPI)");
 #else
   plog(LOG_VERBOSE, "Log started.");
@@ -232,7 +232,7 @@ void log_output(	const enum	log_level_type level,
       abort();	/* FIXME: Find more elegant method */
       }
 
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
     fprintf(fh, "%d: %s%s%s%s\n",
              mpi_get_rank(),
              log_date?"":ctime(&t), log_date?"":" - ",
@@ -255,7 +255,7 @@ void log_output(	const enum	log_level_type level,
 /* Write to stdout? */
   if ( !(log_callback || log_filename) )
     {
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
     if (mpi_get_rank() >= 0)
       fprintf(stdout, "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",
@@ -305,7 +305,7 @@ void plog(const enum log_level_type level, const char *format, ...)
     vsnprintf(message, LOG_MAX_LEN, format, ap);
     va_end(ap);
 
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
     if (mpi_get_rank() >= 0)
       printf( "%d: %s%s%s%s\n", mpi_get_rank(),
               log_date?"":ctime(&t), log_date?"":" - ",
@@ -323,7 +323,7 @@ void plog(const enum log_level_type level, const char *format, ...)
 /*
  * SLang intrinsic wrappers.
  */
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
 void log_wrapper(int *level, char *message)
   {
 /*
@@ -351,5 +351,5 @@ void log_wrapper(int *level, char *message)
 
   return;
   }
-#endif	/* HAVE_SLANG==1 */
+#endif	/* HAVE_SLANG */
 

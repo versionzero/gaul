@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinsics - Genetic algorithm routine intrinsics.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -38,7 +38,7 @@
  */
 #include "gaul.h"
 
-#if HAVE_SLANG == 1
+#ifdef HAVE_SLANG
 #include <slang.h>
 #endif
 
@@ -55,7 +55,7 @@ void	ga_slang_crossover(population *pop, entity *father, entity *mother, entity 
 void	ga_slang_mutate(population *pop, entity *father, entity *son);
 void	ga_slang_replace(population *pop, entity *child);
 */
-boolean	ga_intrinsic_sladd(void);
+GAULFUNC boolean	ga_intrinsic_sladd(void);
 
 #endif	/* GA_INTRINSICS_H_INCLUDED */
 

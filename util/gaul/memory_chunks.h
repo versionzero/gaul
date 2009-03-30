@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,10 +43,6 @@
 #define MEMORY_ALIGN_SIZE       MAX(sizeof(void *), sizeof(long))
 #endif
 
-#ifndef MEMORY_PADDING
-#define MEMORY_PADDING	FALSE
-#endif
-
 /*
  * Data types.
  */
@@ -57,35 +53,35 @@ typedef struct MemChunk_t MemChunk;
  * Prototypes.
  */
 
-FUNCPROTO void		mem_chunk_init_openmp(void);
+GAULFUNC void		mem_chunk_init_openmp(void);
 
-FUNCPROTO MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
-FUNCPROTO MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
-FUNCPROTO boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_isempty_real(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_destroy_real(MemChunk *mem_chunk);
-FUNCPROTO void		*mem_chunk_alloc_real(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
-FUNCPROTO void		mem_chunk_clean_real(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_reset_real(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_test_real(void);
-FUNCPROTO boolean		mem_chunk_check_all_bounds_real(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem);
-FUNCPROTO void		mem_chunk_diagnostics_real(void);
+GAULFUNC MemChunk	*mem_chunk_new_real(size_t atom_size, unsigned int num_atoms);
+GAULFUNC MemChunk	*mem_chunk_new_unfreeable_real(size_t atom_size, unsigned int num_atoms);
+GAULFUNC boolean		mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_isempty_real(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_destroy_real(MemChunk *mem_chunk);
+GAULFUNC void		*mem_chunk_alloc_real(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_free_real(MemChunk *mem_chunk, void *mem);
+GAULFUNC void		mem_chunk_clean_real(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_reset_real(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_test_real(void);
+GAULFUNC boolean		mem_chunk_check_all_bounds_real(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_check_bounds_real(MemChunk *mem_chunk, void *mem);
+GAULFUNC void		mem_chunk_diagnostics_real(void);
 
-FUNCPROTO MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
-FUNCPROTO MemChunk	*mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms);
-FUNCPROTO boolean		mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_isempty_mimic(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_destroy_mimic(MemChunk *mem_chunk);
-FUNCPROTO void		*mem_chunk_alloc_mimic(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
-FUNCPROTO void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
-FUNCPROTO void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_test_mimic(void);
-FUNCPROTO boolean		mem_chunk_check_all_bounds_mimic(MemChunk *mem_chunk);
-FUNCPROTO boolean		mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem);
-FUNCPROTO void		mem_chunk_diagnostics_mimic(void);
+GAULFUNC MemChunk	*mem_chunk_new_mimic(size_t atom_size, unsigned int num_atoms);
+GAULFUNC MemChunk	*mem_chunk_new_unfreeable_mimic(size_t atom_size, unsigned int num_atoms);
+GAULFUNC boolean		mem_chunk_has_freeable_atoms_mimic(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_isempty_mimic(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_destroy_mimic(MemChunk *mem_chunk);
+GAULFUNC void		*mem_chunk_alloc_mimic(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_free_mimic(MemChunk *mem_chunk, void *mem);
+GAULFUNC void		mem_chunk_clean_mimic(MemChunk *mem_chunk);
+GAULFUNC void		mem_chunk_reset_mimic(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_test_mimic(void);
+GAULFUNC boolean		mem_chunk_check_all_bounds_mimic(MemChunk *mem_chunk);
+GAULFUNC boolean		mem_chunk_check_bounds_mimic(MemChunk *mem_chunk, void *mem);
+GAULFUNC void		mem_chunk_diagnostics_mimic(void);
 
 /*
  * Exposed API.

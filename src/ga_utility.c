@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_utility - High-level genetic algorithm routines.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,7 +43,7 @@
   last updated:	17 Feb 2005
  **********************************************************************/
 
-void ga_diagnostics(void)
+GAULFUNC void ga_diagnostics(void)
   {
   int	num_pops;	/* Number of populations defined, or -1 for no table. */
 
@@ -65,7 +65,7 @@ void ga_diagnostics(void)
   printf("structure                    sizeof\n");
   printf("population                   %lu\n", (unsigned long) sizeof(population));
   printf("entity                       %lu\n", (unsigned long) sizeof(entity));
-  printf("byte                         %lu\n", (unsigned long) sizeof(byte));
+  printf("gaulbyte                     %lu\n", (unsigned long) sizeof(gaulbyte));
   printf("--- Current variables ----------------------------------------\n");
   num_pops = ga_get_num_populations();
   if (num_pops==-1)
@@ -90,7 +90,7 @@ void ga_diagnostics(void)
   last updated:	06 Apr 2003
  **********************************************************************/
 
-int ga_get_major_version( void )
+GAULFUNC int ga_get_major_version( void )
   {
 
   return GA_MAJOR_VERSION;
@@ -105,7 +105,7 @@ int ga_get_major_version( void )
   last updated:	06 Apr 2003
  **********************************************************************/
 
-int ga_get_minor_version( void )
+GAULFUNC int ga_get_minor_version( void )
   {
 
   return GA_MINOR_VERSION;
@@ -120,7 +120,7 @@ int ga_get_minor_version( void )
   last updated:	06 Apr 2003
  **********************************************************************/
 
-int ga_get_patch_version( void )
+GAULFUNC int ga_get_patch_version( void )
   {
 
   return GA_PATCH_VERSION;
@@ -139,7 +139,7 @@ int ga_get_patch_version( void )
   last updated:	17 Feb 2005
  **********************************************************************/
 
-population *ga_genesis_integer(	const int		population_size,
+GAULFUNC population *ga_genesis_integer(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -238,7 +238,7 @@ population *ga_genesis_integer(	const int		population_size,
 
 #ifndef COMPILE_DEPRECATED_FUNCTIONS
 
-population *ga_genesis(	const int		population_size,
+GAULFUNC population *ga_genesis(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -265,7 +265,7 @@ population *ga_genesis(	const int		population_size,
                              userdata );
   }
 
-population *ga_genesis_int(	const int		population_size,
+GAULFUNC population *ga_genesis_int(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -305,7 +305,7 @@ population *ga_genesis_int(	const int		population_size,
   last updated:	17 Feb 2005
  **********************************************************************/
 
-population *ga_genesis_char(	const int		population_size,
+GAULFUNC population *ga_genesis_char(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -398,7 +398,7 @@ population *ga_genesis_char(	const int		population_size,
   last updated:	17 Feb 2005
  **********************************************************************/
 
-population *ga_genesis_boolean(	const int		population_size,
+GAULFUNC population *ga_genesis_boolean(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -491,7 +491,7 @@ population *ga_genesis_boolean(	const int		population_size,
   last updated:	17 Feb 2005
  **********************************************************************/
 
-population *ga_genesis_double(	const int		population_size,
+GAULFUNC population *ga_genesis_double(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -584,7 +584,7 @@ population *ga_genesis_double(	const int		population_size,
   last updated:	17 Feb 2005
  **********************************************************************/
 
-population *ga_genesis_bitstring(	const int		population_size,
+GAULFUNC population *ga_genesis_bitstring(	const int		population_size,
 			const int		num_chromo,
 			const int		len_chromo,
 			GAgeneration_hook	generation_hook,
@@ -683,7 +683,7 @@ population *ga_genesis_bitstring(	const int		population_size,
 
 #ifndef COMPILE_DEPRECATED_FUNCTIONS
 
-entity *ga_allele_search(	population	*pop,
+GAULFUNC entity *ga_allele_search(	population	*pop,
 				const int	chromosomeid,
 				const int	point,
 				const int 	min_val,
@@ -771,7 +771,7 @@ entity *ga_allele_search(	population	*pop,
   last updated:	17 Feb 2005
  **********************************************************************/
 
-void ga_population_dump(population	*pop)
+GAULFUNC void ga_population_dump(population	*pop)
   {
   printf("Population id %d\n", (int) ga_get_population_id(pop));
   printf("Max size %d Stable size %d Current size %d\n", pop->max_size, pop->stable_size, pop->size);
@@ -793,7 +793,7 @@ void ga_population_dump(population	*pop)
   last updated:	24 Dec 2002
  **********************************************************************/
 
-void ga_entity_dump(population *pop, entity *john)
+GAULFUNC void ga_entity_dump(population *pop, entity *john)
   {
   printf( "Entity id %d rank %d\n",
           ga_get_entity_id(pop, john),

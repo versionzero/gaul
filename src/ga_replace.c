@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_replace - Genetic algorithm replacement operators.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -48,7 +48,7 @@
   last updated: 11 Apr 2002
  **********************************************************************/
 
-void ga_replace_by_fitness(population *pop, entity *child)
+GAULFUNC void ga_replace_by_fitness(population *pop, entity *child)
   {
   int		i, j;		/* Loop over entities. */
   entity	*tmp;		/* For swapping. */

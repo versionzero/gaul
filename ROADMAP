@@ -10,19 +10,18 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1850     |  Move prototypes for all public functions into src/gaul.h
+ 0.1851     |  Move prototypes for all public functions into src/gaul.h
             |  Mersenne twister for PRNG.
             |  Ant colony optimisation?
             |  Particle swarm optimisation?
             |  Use native qsort() function -- need to incorporate a patch that has been provided.
             |  Callback for survival/elitism?
 ------------+--------------------------------------------------------
- 0.1851     |  Boolean chromosome example from Mitchell book.
+ 0.1852     |  Boolean chromosome example from Mitchell book.
             |  More on-line/off-line statistics options.
             |  User data in array, not list.
             |  More test code.
-------------+--------------------------------------------------------
- 0.1852     |  Binary tree chromosome.
+            |  Binary tree chromosome.
             |  Operator functions for the linked-list chromosome.
             |  Linked-list chromosome example.
             |  De Jong - working examples.

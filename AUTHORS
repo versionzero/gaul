@@ -1,11 +1,21 @@
 Primary author/maintainer: "Stewart Adcock" <stewart@linux-domain.com>
 
-Stewart would like to thank the following people:
+Stewart is grateful to all users who have provided comments, compilation reports, bug reports, patches and donations (not necessarily in that order).  While this is not an exhaustive list, he would like to specifically thank the following people:
+
+Prior to release 0.1851:
+Mark Allyn - Feedback regarding OpenWatcom C/C++.
+Pawan Kumar - Patch for bug in ga_population_clone_empty().
+Logan Owen - Patch for bug in ga_dereference_entity_by_id().
+
+Prior to release 0.1850:
+Andrew W. Nosenko - Provided a large set of excellent patches to fix a multitude of mostly minor, but not insignificant, problems.
+Al Cripps - Constructive bug reports with suggested fixes.
 
 Prior to release 0.1849:
 Al Cripps - Suggested fixes and compilation instructions for MS VC++.
-Marie-Pierre Brungard - Patch for building DLL.
+Marie-Pierre Brungard - Patch for building DLLs.
 Johannes Zellner - Constructive bug reports.
+Andrew W. Nosenko - sincos() typo patch.
 
 Prior to release 0.1848:
 Al Cripps - Suggested fix in memory_chunks.c for MS VC++.

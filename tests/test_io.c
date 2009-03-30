@@ -3,7 +3,7 @@
  **********************************************************************
 
   test_io - Test program for GAUL.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2006, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -49,7 +49,7 @@ static char *target_text="When we reflect on this struggle, we may console ourse
   updated:	16/06/01
  **********************************************************************/
 
-static boolean struggle_score(population *pop, entity *entity)
+static boolean struggle_score(population *pop, entity *this_entity)
   {
   int		k;		/* Loop variable over all alleles. */
   double	fitness;	/* Fitness of entity. */
@@ -59,16 +59,16 @@ static boolean struggle_score(population *pop, entity *entity)
   /* Loop over alleles in chromosome. */
   for (k = 0; k < pop->len_chromosomes; k++)
     {
-    if ( ((char *)entity->chromosome[0])[k] == target_text[k])
+    if ( ((char *)this_entity->chromosome[0])[k] == target_text[k])
       fitness+=1.0;
     /*
      * Component to smooth function, which helps a lot in this case:
      * Comment it out if you like.
      */
-    fitness += (127.0-abs((int)((char *)entity->chromosome[0])[k]-target_text[k]))/50.0;
+    fitness += (127.0-abs((int)((char *)this_entity->chromosome[0])[k]-target_text[k]))/50.0;
     }
 
-  ga_entity_set_fitness(entity, fitness);
+  ga_entity_set_fitness(this_entity, fitness);
 
   return TRUE;
   }
@@ -86,7 +86,7 @@ static void write_usage(void)
   {
   
   printf("\n"
-         "saveload ©2002-2004, \"Stewart Adcock\" <stewart@linux-domain.com>\n"
+         "saveload ©2002-2006, \"Stewart Adcock\" <stewart@linux-domain.com>\n"
          "\n");
 
   printf("Usage: saveload [-n INTEGER] [-i FILENAME] -o FILENAME\n"

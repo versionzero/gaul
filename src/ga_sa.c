@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_sa - A simulated annealling algorithm for comparison and search.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -39,7 +39,7 @@
   last updated: 14 Oct 2002
  **********************************************************************/
 
-boolean ga_sa_boltzmann_acceptance( population	*pop,
+GAULFUNC boolean ga_sa_boltzmann_acceptance( population	*pop,
 				entity		*original,
 				entity		*putative )
   {
@@ -58,7 +58,7 @@ boolean ga_sa_boltzmann_acceptance( population	*pop,
   last updated: 14 Oct 2002
  **********************************************************************/
 
-boolean ga_sa_linear_acceptance( population	*pop,
+GAULFUNC boolean ga_sa_linear_acceptance( population	*pop,
 				entity		*original,
 				entity		*putative )
   {
@@ -77,7 +77,7 @@ boolean ga_sa_linear_acceptance( population	*pop,
   last updated: 11 Oct 2002
  **********************************************************************/
 
-void ga_population_set_sa_temperature( population              *pop,
+GAULFUNC void ga_population_set_sa_temperature( population              *pop,
                                       const double            temp )
   {
 
@@ -99,7 +99,7 @@ void ga_population_set_sa_temperature( population              *pop,
   last updated: 11 Oct 2002
  **********************************************************************/
 
-double ga_population_get_sa_temperature( population *pop )
+GAULFUNC double ga_population_get_sa_temperature( population *pop )
   {
 
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -119,7 +119,7 @@ double ga_population_get_sa_temperature( population *pop )
   last updated: 11 Oct 2002
  **********************************************************************/
 
-void ga_population_set_sa_parameters( population              *pop,
+GAULFUNC void ga_population_set_sa_parameters( population              *pop,
                                       GAsa_accept             sa_accept,
                                       const double            initial_temp,
                                       const double            final_temp,
@@ -174,7 +174,7 @@ void ga_population_set_sa_parameters( population              *pop,
   last updated:	18 Feb 2005
  **********************************************************************/
 
-int ga_sa(	population		*pop,
+GAULFUNC int ga_sa(	population		*pop,
 		entity			*initial,
 		const int		max_iterations )
   {

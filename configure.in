@@ -3,7 +3,7 @@ dnl gaul-devel/configure.in
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
-dnl Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
+dnl Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org)
 dnl All rights reserved.
 dnl
 dnl The latest version of this program should be available at:
@@ -28,6 +28,7 @@ dnl
 dnl To do:	Consider use of AC_TRY_CFLAGS().
 dnl		use -axN with icc of P4,Mobile P4
 dnl		use -Wp64 -Wcheck with icc on Itanium
+dnl		Detect var-arg macros.
 dnl
 dnl ***************************************************************
 
@@ -39,7 +40,7 @@ AC_PREREQ(2.57)
 #
 # init autoconf
 #
-AC_INIT(gaul-devel, 0.1849-2, gaul@linux-domain.com)
+AC_INIT(gaul-devel, 0.1851-0, gaul@linux-domain.com)
 
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h util/gaul/gaul_config.h)
@@ -47,8 +48,8 @@ AC_CANONICAL_SYSTEM
 
 PACKAGE="gaul-devel"
 GA_MAJOR_VERSION=0
-GA_MINOR_VERSION=1849
-GA_PATCH_VERSION=3
+GA_MINOR_VERSION=1851
+GA_PATCH_VERSION=0
 GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 
 #
@@ -57,7 +58,7 @@ GA_VERSION=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}-${GA_PATCH_VERSION}
 # >255, so we can't use this:
 #LT_RELEASE=${GA_MAJOR_VERSION}.${GA_MINOR_VERSION}
 #
-GA_LT_MINOR_VERSION=49
+GA_LT_MINOR_VERSION=51
 LT_RELEASE=${GA_MAJOR_VERSION}.${GA_LT_MINOR_VERSION}
 LT_CURRENT=0
 LT_REVISION=${GA_PATCH_VERSION}
@@ -142,8 +143,8 @@ AC_ARG_ENABLE(mpi,
        [  --enable-mpi=[yes/no]           turn on MPI support. [default=no]],,
        enable_mpi=no)
 AC_ARG_ENABLE(slang,
-       [  --enable-slang=[yes/no]         use S-Lang for scripting. [default=yes]],,
-       enable_slang=yes)
+       [  --enable-slang=[yes/no]         use S-Lang for scripting. [default=no]],,
+       enable_slang=no)
 AC_ARG_ENABLE(prof,
        [  --enable-profile=[yes/no]       turn on profiling. [default=no]],,
        enable_prof=no)
@@ -186,14 +187,12 @@ if test "x$enable_pthread" = "xyes"; then
   AC_CHECK_LIB(pthread, pthread_create,
     [LIBS="$LIBS -lpthread"],
     [AC_MSG_ERROR(GAUL requires the pthread library for full functionality.  Install it or configure with '--enable-pthread=no' for reduced version.)])
-  result=1
+  AC_DEFINE([HAVE_PTHREADS], 1, [Whether libpthread is installed.])
 else
   AC_MSG_RESULT(no)
   WILL_USE_PTHREADS="no"
-  result=0
   HAVE_PTHREADS=0
 fi
-AC_DEFINE_UNQUOTED(HAVE_PTHREADS, ${result}, [Whether libpthread is installed.])
 
 #
 # Check for OpenMP
@@ -203,14 +202,12 @@ if test "x$enable_openmp" = "xyes"; then
   AC_MSG_RESULT(yes)
   WILL_USE_OPENMP="yes"
   USE_OPENMP=1
-  result=1
+  AC_DEFINE([USE_OPENMP], 1, [Whether OpenMP should be used.])
 else
   AC_MSG_RESULT(no)
   WILL_USE_OPENMP="no"
-  result=0
   USE_OPENMP=0
 fi
-AC_DEFINE_UNQUOTED(USE_OPENMP, ${result}, [Whether OpenMP should be used.])
 
 # A sanity check.
 if test "x$WILL_USE_PTHREADS" = "xyes" && test "x$WILL_USE_OPENMP" = "xyes"; then
@@ -296,7 +293,11 @@ else
     HAVE_MPI=1
   fi
 fi
-AC_DEFINE_UNQUOTED( HAVE_MPI, ${result}, [Whether to use MPI for parallel code.])
+if test x$HAVE_MPI = x1
+then
+    AC_DEFINE([HAVE_MPI], 1, [Whether to use MPI for parallel code.])
+fi
+
 # Reset CFLAGS and LIBS variables.
 LIBS=$old_LIBS
 CFLAGS=$old_CFLAGS
@@ -314,19 +315,15 @@ fi
 AC_MSG_CHECKING(whether to enable memory access debugging)
 if test "x$enable_memory_debug" = "xyes"; then
   AC_MSG_RESULT(yes - full profiling)
-  result1=1
-  result2=0
   MEMORY_ALLOC_DEBUG=1
   MEMORY_ALLOC_SAFE=0
+  AC_DEFINE([MEMORY_ALLOC_DEBUG], 1, [Whether to use debugging memory allocation routines.])
 else
   AC_MSG_RESULT(no - safe wrappers only)
-  result1=0
-  result2=1
   MEMORY_ALLOC_DEBUG=0
   MEMORY_ALLOC_SAFE=1
+  AC_DEFINE([MEMORY_ALLOC_SAFE], 1, [Whether to use safe memory allocation routines.])
 fi
-AC_DEFINE_UNQUOTED( MEMORY_ALLOC_DEBUG, ${result1}, [Whether to use debugging memory allocation routines.])
-AC_DEFINE_UNQUOTED( MEMORY_ALLOC_SAFE, ${result2}, [Whether to use safe memory allocation routines.])
 
 AC_MSG_CHECKING(whether to enable dumping of statistics)
 if test "x$enable_stats" = "xyes"; then
@@ -360,12 +357,10 @@ AC_DEFINE_UNQUOTED( GA_DEBUG, ${debug}, [Core GAUL debugging level.])
 AC_MSG_CHECKING(whether to pad memory to detect overflows)
 if test "x$enable_padding" = "xyes"; then
   AC_MSG_RESULT(yes)
-  result=1
+  AC_DEFINE([MEMORY_PADDING], 1, [Whether to pad memory.] )
 else
   AC_MSG_RESULT(no)
-  result=0
 fi
-AC_DEFINE_UNQUOTED( MEMORY_PADDING, ${result}, [Whether to pad memory.] )
 
 #
 # Whether we need to cripple GAUL so that it works with windows.
@@ -380,14 +375,18 @@ esac
 if test "x$enable_w32_subset" = "xyes"; then
   AC_MSG_RESULT(yes)
   AC_MSG_WARN([GAUL is crippled when compiled for windows.  Please consider upgrading to a proper operating system.])
-  result=1
   W32_CRIPPLED=1
+  AC_DEFINE([W32_CRIPPLED], 1, [Whether to cripple GAUL so it works on windows.])
 else
   AC_MSG_RESULT(no)
-  result=0
   W32_CRIPPLED=0
 fi
-AC_DEFINE_UNQUOTED(W32_CRIPPLED, ${result}, [Whether to cripple GAUL so it works on windows.])
+
+#
+# Check for libm
+#
+AC_CHECK_LIB([m], [sqrt],
+    [ LIBS="-lm $LIBS" ])
 
 #
 # Check for S-Lang.
@@ -402,14 +401,12 @@ if test "x$enable_slang" = "xyes"; then
   AC_CHECK_LIB(slang, SLang_init_slang,
     [LIBS="$LIBS -lslang"],
     [AC_MSG_ERROR(GAUL requires the S-Lang library for full functionality.  see http://space.mit.edu/pub/davis/slang/  Or configure with '--enable-slang=no' for reduced version.)])
-  result=1
+  AC_DEFINE([HAVE_SLANG], 1, [Whether S-Lang is installed.])
 else
   AC_MSG_RESULT(no)
   WILL_USE_SLANG="no"
-  result=0
   HAVE_SLANG=0
 fi
-AC_DEFINE_UNQUOTED(HAVE_SLANG, ${result}, [Whether S-Lang is installed.])
 
 #
 # Electric Fence has to be last library linked.
@@ -427,10 +424,14 @@ fi
 # compiler, but a slight performance penalty with the Intel C/C++ compiler.
 #
 USE_CHROMO_CHUNKS=0
-AC_DEFINE_UNQUOTED(USE_CHROMO_CHUNKS, ${USE_CHROMO_CHUNKS}, [Whether to use memory chunk handling for chromosomes.])
-GA_NUM_PROCESSES_ENVVAR_STRING="GA_NUM_PROCESSES"
+if test "xUSE_CHROMO_CHUNKS" = x1
+then
+    AC_DEFINE([USE_CHROMO_CHUNKS], 1, [Whether to use memory chunk handling for chromosomes.])
+fi
+
+GA_NUM_PROCESSES_ENVVAR_STRING='"GA_NUM_PROCESSES"'
 AC_DEFINE_UNQUOTED(GA_NUM_PROCESSES_ENVVAR_STRING, ${GA_NUM_PROCESSES_ENVVAR_STRING}, [Environment variable used to request processes.])
-GA_NUM_THREADS_ENVVAR_STRING="GA_NUM_THREADS"
+GA_NUM_THREADS_ENVVAR_STRING='"GA_NUM_THREADS"'
 AC_DEFINE_UNQUOTED(GA_NUM_THREADS_ENVVAR_STRING, ${GA_NUM_THREADS_ENVVAR_STRING}, [Environment variable used to request threads.])
 
 AC_SUBST(GA_MAJOR_VERSION)
@@ -445,19 +446,8 @@ AC_SUBST(MPILIBS)
 
 AC_SUBST(GA_UNAME_STRING)
 AC_SUBST(GA_BUILD_DATE_STRING)
-AC_SUBST(V3_QUICK)
-AC_SUBST(W32_CRIPPLED)
-AC_SUBST(HAVE_SLANG)
-AC_SUBST(HAVE_MPI)
-AC_SUBST(HAVE_PTHREADS)
-AC_SUBST(USE_OPENMP)
-AC_SUBST(USE_CHROMO_CHUNKS)
 
 AC_SUBST(GA_NUM_PROCESSES_ENVVAR_STRING)
-
-AC_SUBST(MEMORY_ALLOC_DEBUG)
-AC_SUBST(MEMORY_ALLOC_SAFE)
-AC_SUBST(MEMORY_CHUNKS_MIMIC)
 
 #
 # Compiler specific switches.
@@ -691,6 +681,7 @@ AC_CHECK_FUNCS(gethostname \
                strchr strcmp strcpy strpbrk strsep \
                strcasecmp strncasecmp \
                strdup strndup )
+AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
 
 #
 # Some dodgy work-arounds.
@@ -710,15 +701,12 @@ if test "x$CC" = "xcc"; then
     AC_DEFINE( HAVE_USLEEP,1,[Whether usleep() is available] )
   elif test "x$target" = "xsparc-sun-solaris2.8"; then
     AC_DEFINE( SUN_FORTE_C, 2.8, [Define if using Sun's Forte C Compiler] )
-    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
   else
     AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
-    AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
   fi
 else
 # Don't recognise compiler as possibly being Sun's Forte C.
   AC_DEFINE( SUN_FORTE_C, 0, [Define if using Sun's Forte C Compiler] )
-  AC_CHECK_FUNCS(bcopy bcmp strlen strncmp strncpy memset usleep)
 fi
 
 #
@@ -863,7 +851,7 @@ AC_OUTPUT_COMMANDS([
 
 _EOF_
 
-    cat $outfile.in >> $tmpfile    
+    cat ${srcdir}/${outfile}.in >> $tmpfile    
 
     echo "/* $outfile.in */" >> $tmpfile
 
@@ -926,118 +914,118 @@ _EOF_
     if test "x$ac_cv_func_memcpy" = "xyes"; then
       echo '#define HAVE_MEMCPY 1' >> $tmpfile
     else
-      echo '#define HAVE_MEMCPY 0' >> $tmpfile
+      echo '/* #undef HAVE_MEMCPY */' >> $tmpfile
     fi
     if test "x$ac_cv_func_min" = "xyes"; then
       echo '#define HAVE_MIN 1' >> $tmpfile
     else
-      echo '#define HAVE_MIN 0' >> $tmpfile
+      echo '/* #undef HAVE_MIN */' >> $tmpfile
     fi
     if test "x$ac_cv_func_max" = "xyes"; then
       echo '#define HAVE_MAX 1' >> $tmpfile
     else
-      echo '#define HAVE_MAX 0' >> $tmpfile
+      echo '/* #undef HAVE_MAX */' >> $tmpfile
     fi
     if test "x$ac_cv_func_sincos" = "xyes"; then
       echo '#define HAVE_SINCOS 1' >> $tmpfile
     else
-      echo '#define HAVE_SINCOS 0' >> $tmpfile
+      echo '/* #undef HAVE_SINCOS */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strdup" = "xyes"; then
       echo '#define HAVE_STRDUP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRDUP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRDUP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strndup" = "xyes"; then
       echo '#define HAVE_STRNDUP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRNDUP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRNDUP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcpy" = "xyes"; then
       echo '#define HAVE_STRCPY 1' >> $tmpfile
     else
-      echo '#define HAVE_STRCPY 0' >> $tmpfile
+      echo '/* #undef HAVE_STRCPY */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncpy" = "xyes"; then
       echo '#define HAVE_STRNCPY 1' >> $tmpfile
     else
-      echo '#define HAVE_STRNCPY 0' >> $tmpfile
+      echo '/* #undef HAVE_STRNCPY */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcmp" = "xyes"; then
       echo '#define HAVE_STRCMP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRCMP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRCMP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncmp" = "xyes"; then
       echo '#define HAVE_STRNCMP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRNCMP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRNCMP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strlen" = "xyes"; then
       echo '#define HAVE_STRLEN 1' >> $tmpfile
     else
-      echo '#define HAVE_STRLEN 0' >> $tmpfile
+      echo '/* #undef HAVE_STRLEN */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strpbrk" = "xyes"; then
       echo '#define HAVE_STRPBRK 1' >> $tmpfile
     else
-      echo '#define HAVE_STRPBRK 0' >> $tmpfile
+      echo '/* #undef HAVE_STRPBRK */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strsep" = "xyes"; then
       echo '#define HAVE_STRSEP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRSEP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRSEP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strcasecmp" = "xyes"; then
       echo '#define HAVE_STRCASECMP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRCASECMP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRCASECMP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_strncasecmp" = "xyes"; then
       echo '#define HAVE_STRNCASECMP 1' >> $tmpfile
     else
-      echo '#define HAVE_STRNCASECMP 0' >> $tmpfile
+      echo '/* #undef HAVE_STRNCASECMP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_usleep" = "xyes"; then
       echo '#define HAVE_USLEEP 1' >> $tmpfile
     else
-      echo '#define HAVE_USLEEP 0' >> $tmpfile
+      echo '/* #undef HAVE_USLEEP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_snooze" = "xyes"; then
       echo '#define HAVE_SNOOZE 1' >> $tmpfile
     else
-      echo '#define HAVE_SNOOZE 0' >> $tmpfile
+      echo '/* #undef HAVE_SNOOZE */' >> $tmpfile
     fi
     if test "x$ac_cv_func_index" = "xyes"; then
       echo '#define HAVE_INDEX 1' >> $tmpfile
     else
-      echo '#define HAVE_INDEX 0' >> $tmpfile
+      echo '/* #undef HAVE_INDEX */' >> $tmpfile
     fi
     if test "x$ac_cv_func_waitpid" = "xyes"; then
       echo '#define HAVE_WAITPID 1' >> $tmpfile
     else
-      echo '#define HAVE_WAITPID 0' >> $tmpfile
+      echo '/* #undef HAVE_WAITPID */' >> $tmpfile
     fi
     if test "x$ac_cv_func_gethostname" = "xyes"; then
       echo '#define HAVE_GETHOSTNAME 1' >> $tmpfile
     else
-      echo '#define HAVE_GETHOSTNAME 0' >> $tmpfile
+      echo '/* #undef HAVE_GETHOSTNAME */' >> $tmpfile
     fi
     if test "x$ac_cv_func_bcmp" = "xyes"; then
       echo '#define HAVE_BCMP 1' >> $tmpfile
     else
-      echo '#define HAVE_BCMP 0' >> $tmpfile
+      echo '/* #undef HAVE_BCMP */' >> $tmpfile
     fi
     if test "x$ac_cv_func_bcopy" = "xyes"; then
       echo '#define HAVE_BCOPY 1' >> $tmpfile
     else
-      echo '#define HAVE_BCOPY 0' >> $tmpfile
+      echo '/* #undef HAVE_BCOPY */' >> $tmpfile
     fi
 
     if test "x$MEMORY_CHUNKS_MIMIC" = "x1"; then
       echo '#define MEMORY_CHUNKS_MIMIC 1' >> $tmpfile
     else
-      echo '#define MEMORY_CHUNKS_MIMIC 0' >> $tmpfile
+      echo '/* #undef MEMORY_CHUNKS_MIMIC */' >> $tmpfile
     fi
 
     cat >> $tmpfile << _EOF_
@@ -1051,7 +1039,49 @@ _EOF_
     if test x$ac_cv_header_limits_h = xyes; then
       echo '#define HAVE_LIMITS_H 1' >> $tmpfile
     else
-      echo '#define HAVE_LIMIT_H 0' >> $tmpfile
+      echo '/* #undef HAVE_LIMITS_H */' >> $tmpfile
+    fi
+
+    echo >> $tmpfile
+    if test x$HAVE_PTHREADS = x1; then
+        echo '#define HAVE_PTHREADS 1' >> $tmpfile
+    else
+        echo '/* #undef HAVE_PTHREADS */' >> $tmpfile
+    fi
+    if test x$USE_OPENMP = x1; then
+        echo '#define USE_OPENMP 1' >> $tmpfile
+    else
+        echo '/* #undef USE_OPENMP */' >> $tmpfile
+    fi
+    if test x$HAVE_MPI = x1; then
+        echo '#define HAVE_MPI 1' >> $tmpfile
+    else
+        echo '/* #undef HAVE_MPI */' >> $tmpfile
+    fi
+    if test "x$MEMORY_ALLOC_DEBUG" = x1; then
+        echo '#define MEMORY_ALLOC_DEBUG 1' >> $tmpfile
+    else
+        echo '/* #undef MEMORY_ALLOC_DEBUG */' >> $tmpfile
+    fi
+    if test "x$MEMORY_ALLOC_SAFE" = x1; then
+        echo '#define MEMORY_ALLOC_SAFE 1' >> $tmpfile
+    else
+        echo '/* #undef MEMORY_ALLOC_SAFE */' >> $tmpfile
+    fi
+    if test "x$W32_CRIPPLED" = x1; then
+        echo '#define W32_CRIPPLED 1' >> $tmpfile
+    else
+        echo '/* #undef W32_CRIPPLED */' >> $tmpfile
+    fi
+    if test "x$HAVE_SLANG" = x1; then
+        echo '#define HAVE_SLANG 1' >> $tmpfile
+    else
+        echo '/* #undef HAVE_SLANG */' >> $tmpfile
+    fi
+    if test "x$USE_CHROMO_CHUNKS" = x1; then
+        echo '#define USE_CHROMO_CHUNKS 1' >> $tmpfile
+    else
+        echo '/* #undef USE_CHROMO_CHUNKS */' >> $tmpfile
     fi
 
     cat >> $tmpfile << _EOF_
@@ -1061,37 +1091,10 @@ _EOF_
  * The probably will be tested in future versions, but
  * for now they are not needed.
  */
-#define HAVE_FDOPEN 1
-#define HAVE_GETPWUID 1
-#define HAVE_SELECT 1
-#define HAVE_ATEXIT 1
-#define HAVE_ON_EXIT 1
-#define HAVE_MEMSCAN 1
-#define HAVE_MEMREV 1
-#define HAVE_MEMCHR 1
-#define HAVE_MEMMEM 1
 #define HAVE_MEMCMP 1
 #define HAVE_STRCHR 1
-#define HAVE_STRRCHR 1
-#define HAVE_STRCAT 1
-#define HAVE_STRCATV 1
-#define HAVE_STRREV 1
-#define HAVE_STRSPN 1
-#define HAVE_STRCSPN 1
-#define HAVE_STRERROR 1
-#define HAVE_STRLCAT 1
-#define HAVE_STRLCPY 1
-#define HAVE_STRSTR 1
-#define HAVE_STRPBRK 1
-#define HAVE_STRSEP 1
-#define HAVE_STRNFILL 1
-#define HAVE_STRSIGNAL 1
-#define HAVE_VSNPRINTF 1
-#define HAVE_SNPRINTF 1
 #define HAVE_STRLEN 1
 #define HAVE_STRNCPY 1
-#define HAVE_STRTOD 1
-#define HAVE_STRTOK 1
 #define HAVE_MEMSET 1
 
 #define HAVE_IPOW 0
@@ -1106,20 +1109,11 @@ _EOF_
 #define GA_BUILD_DATE_STRING "`date +%d/%m/%y`"
 
 #define V3_QUICK ${V3_QUICK}
-#define W32_CRIPPLED ${W32_CRIPPLED}
-#define HAVE_SLANG ${HAVE_SLANG}
-#define HAVE_MPI ${HAVE_MPI}
-#define HAVE_PTHREADS ${HAVE_PTHREADS}
-#define USE_OPENMP ${USE_OPENMP}
 #define GAUL_DETERMINISTIC_OPENMP 1
 #define AVLTREE_KEY_TYPE unsigned long
 #define GA_NUM_PROCESSES_ENVVAR_STRING "${GA_NUM_PROCESSES_ENVVAR_STRING}"
 #define GA_NUM_THREADS_ENVVAR_STRING "${GA_NUM_THREADS_ENVVAR_STRING}"
-#define USE_CHROMO_CHUNKS ${USE_CHROMO_CHUNKS}
 #define USE_OPTIMISED_MEMSET 1
-
-#define MEMORY_ALLOC_SAFE ${MEMORY_ALLOC_SAFE}
-#define MEMORY_ALLOC_DEBUG ${MEMORY_ALLOC_DEBUG}
 
 #endif /* GAUL_CONFIG_H_INCLUDED */
 
@@ -1193,7 +1187,7 @@ MEMORY_ALLOC_DEBUG=$MEMORY_ALLOC_DEBUG
 MEMORY_CHUNKS_MIMIC=$MEMORY_CHUNKS_MIMIC
 ])
 
-AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile debian/Makefile],
+AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile debian/Makefile windows/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h.in]
 	)
 
@@ -1212,6 +1206,7 @@ echo \
   Install path:               ${prefix}
   Use S-Lang:                 ${WILL_USE_SLANG}
   Use MPI:                    ${WILL_USE_MPI}
+  Use OPENMP:                 ${WILL_USE_OPENMP}
   Use pthreads:               ${WILL_USE_PTHREADS}
 
 ************************************************************************"

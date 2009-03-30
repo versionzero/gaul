@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_de - Differential Evolution.
-  Copyright ©2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2005-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -41,14 +41,14 @@
  * Prototypes.
  */
 
-FUNCPROTO void ga_population_set_differentialevolution_parameters( population *pop,
+GAULFUNC void ga_population_set_differentialevolution_parameters( population *pop,
                                                          const ga_de_strategy_type strategy,
                                                          const ga_de_crossover_type crossover,
                                                          const int num_perturbed,
                                                          const double weighting_min,
                                                          const double weighting_max,
                                                          const double crossover_factor );
-FUNCPROTO int ga_differentialevolution(    population              *pop,
+GAULFUNC int ga_differentialevolution(    population              *pop,
 	        const int               max_generations );
 
 #endif	/* GA_DE_H_INCLUDED */

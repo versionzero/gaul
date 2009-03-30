@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_chunks - Efficient bulk memory allocation.
-  Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -59,6 +59,12 @@
 /* MEMORY_ALIGN_SIZE should be set in gaul_config.h */
 
 #define MEMORY_AREA_SIZE 4L
+
+#ifdef MEMORY_PADDING
+#   define IS_MEMORY_PADDING    1
+#else
+#   define IS_MEMORY_PADDING    0
+#endif
 
 typedef void *Key_t;
 
@@ -148,7 +154,7 @@ static node_t		**node_buffers = NULL;
  * less coarse locks might be better.
  */
 THREAD_LOCK_DEFINE_STATIC(node_buffer_lock);
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
 static boolean mem_chunk_openmp_initialised = FALSE;
 #endif
 
@@ -160,7 +166,7 @@ static boolean mem_chunk_openmp_initialised = FALSE;
 void mem_chunk_init_openmp(void)
   {
 
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
   if (mem_chunk_openmp_initialised == FALSE)
     {
     omp_init_lock(&node_buffer_lock);
@@ -651,7 +657,7 @@ static void *ordered_search(tree_t *tree, void *userdata)
 /*
  * Padding functions:
  */
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
 static unsigned char *pad_values="abcdefghijklmnopqr";
 
 #define BUMP_DOWN(X)	( (void *) (((unsigned char *)(X))-MEMORY_ALIGN_SIZE) )
@@ -686,7 +692,7 @@ static int check_pad_high(MemChunk *mem_chunk, void *mem)
                    pad_values,MEMORY_ALIGN_SIZE);
   }
 
-#endif	/* MEMORY_PADDING==TRUE */
+#endif	/* MEMORY_PADDING */
 
 
 boolean mem_chunk_has_freeable_atoms_real(MemChunk *mem_chunk)
@@ -710,7 +716,7 @@ static MemChunk *_mem_chunk_new(size_t atom_size, unsigned int num_atoms)
     atom_size += MEMORY_ALIGN_SIZE - (atom_size % MEMORY_ALIGN_SIZE);
     printf("DEBUG: modified MemChunk atom size.\n");
     }
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
   atom_size += 2*MEMORY_ALIGN_SIZE;
 #endif
 
@@ -739,7 +745,7 @@ boolean mem_chunk_isempty_real(MemChunk *mem_chunk)
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
-  return mem_chunk->num_mem_areas==mem_chunk->num_unused_areas;
+  return (boolean)(mem_chunk->num_mem_areas == mem_chunk->num_unused_areas);
   }
 
 
@@ -869,7 +875,7 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
 
           /* The area is still in use...return the memory
            */
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
   set_pad_low(mem_chunk, mem);
   set_pad_high(mem_chunk, mem);
 /*
@@ -933,7 +939,7 @@ void *mem_chunk_alloc_real(MemChunk *mem_chunk)
   mem_chunk->mem_area->free -= mem_chunk->atom_size;
   mem_chunk->mem_area->used++;
 
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
   set_pad_low(mem_chunk, mem);
   set_pad_high(mem_chunk, mem);
 /*
@@ -956,7 +962,7 @@ void mem_chunk_free_real(MemChunk *mem_chunk, void *mem)
   if (!mem_chunk->mem_tree) die("MemChunk passed has no freeable atoms.");
   if (!mem) die("NULL pointer passed.");
 
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
   mem = BUMP_DOWN(mem);
   if (check_pad_low(mem_chunk, mem)!=0)
     dief("LOW MEMORY_PADDING CORRUPT! (%*s)", MEMORY_ALIGN_SIZE, (unsigned char *)mem);
@@ -1085,7 +1091,7 @@ void mem_chunk_reset_real(MemChunk *mem_chunk)
   }
 
 
-#if MEMORY_PADDING==TRUE
+#ifdef MEMORY_PADDING
 static int memarea_check_bounds(MemChunk *mem_chunk, MemArea *mem_area)
   {
   int		count = 0;
@@ -1170,7 +1176,7 @@ boolean mem_chunk_test_real(void)
     {
     tmem[i] = mem_chunk_alloc(tmem_chunk);
 
-    *tmem[i] = i%254;
+    *tmem[i] = (unsigned char)i%254;
     }
 
   for (i = 0; i < 1000; i++)
@@ -1194,7 +1200,7 @@ boolean mem_chunk_test_real(void)
     {
     tmem[i] = mem_chunk_alloc(tmem_chunk);
 
-    *tmem[i] = i%254;
+    *tmem[i] = (unsigned char)i%254;
     }
 
   for (i = 0; i < 1000; i++)
@@ -1228,7 +1234,7 @@ void mem_chunk_diagnostics_real(void)
   printf("Compilation machine characteristics:\n%s\n", GA_UNAME_STRING);
 
   printf("--------------------------------------------------------------\n");
-  printf("MEMORY_PADDING:    %s\n", MEMORY_PADDING?"TRUE":"FALSE");
+  printf("MEMORY_PADDING:    %s\n", IS_MEMORY_PADDING ? "TRUE" : "FALSE");
   printf("MEMORY_ALIGN_SIZE  %zd\n", MEMORY_ALIGN_SIZE);
   printf("MEMORY_AREA_SIZE   %ld\n", MEMORY_AREA_SIZE);
 
@@ -1256,7 +1262,7 @@ boolean mem_chunk_isempty_mimic(MemChunk *mem_chunk)
 
   if (!mem_chunk) die("Null pointer to mem_chunk passed.");
 
-  return mem_chunk->num_atoms_alloc==0;
+  return (boolean)(mem_chunk->num_atoms_alloc == 0);
   }
 
 

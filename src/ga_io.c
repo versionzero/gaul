@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_io - Disk I/O routines.
-  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -49,18 +49,19 @@
   last updated: 29 May 2002
  **********************************************************************/
 
-#ifndef WIN32
-static void gaul_write_entity_posix(FILE *fp, population *pop, entity *entity)
+#ifndef USE_WINDOWS_H
+static void gaul_write_entity_posix(FILE *fp, population *pop, entity *this_entity)
   {
-  byte		*buffer=NULL;		/* Buffer for genetic data. */
+  gaulbyte		*buffer=NULL;		/* Buffer for genetic data. */
   unsigned int	len, max_len=0;		/* Length of buffer. */
 
-  fwrite(&(entity->fitness), sizeof(double), 1, fp);
-  len = (int) pop->chromosome_to_bytes(pop, entity, &buffer, &max_len);
+  fwrite(&(this_entity->fitness), sizeof(double), 1, fp);
+  len = (int) pop->chromosome_to_bytes(pop, this_entity, &buffer, &max_len);
   fwrite(&len, sizeof(unsigned int), 1, fp);
-  fwrite(buffer, sizeof(byte), len, fp);
+  fwrite(buffer, sizeof(gaulbyte), len, fp);
 
-  if (max_len!=0) s_free(buffer);
+  if (max_len!=0)
+    s_free(buffer);
 
   return;
   }
@@ -77,18 +78,18 @@ static void gaul_write_entity_posix(FILE *fp, population *pop, entity *entity)
   last updated: 29 May 2002
  **********************************************************************/
 
-#ifdef WIN32
+#ifdef USE_WINDOWS_H
 static void gaul_write_entity_win32(HANDLE file,
-                                 population *pop, entity *entity)
+                                 population *pop, entity *this_entity)
   {
-  byte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
+  gaulbyte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
   unsigned int	len, max_len=0;		/* Length of buffer. */
-  byte		*bufptr;		/* Pointer into buffer. */
+  gaulbyte		*bufptr;		/* Pointer into buffer. */
   DWORD		nwrote;			/* Number of bytes written. */
 
-  memcpy(buffer, &(entity->fitness), sizeof(double));
+  memcpy(buffer, &(this_entity->fitness), sizeof(double));
   bufptr = buffer+sizeof(double)+sizeof(int);
-  len = (int) pop->chromosome_to_bytes(pop, entity, &bufptr, &max_len);
+  len = (int) pop->chromosome_to_bytes(pop, this_entity, &bufptr, &max_len);
   memcpy(buffer+sizeof(double), &len, sizeof(int));
 
   if ( WriteFile(file, buffer, len+sizeof(double)+sizeof(int), &nwrote, NULL)==0 )
@@ -109,27 +110,27 @@ static void gaul_write_entity_win32(HANDLE file,
   last updated: 30 May 2002
  **********************************************************************/
 
-#ifndef WIN32
+#ifndef USE_WINDOWS_H
 static entity *gaul_read_entity_posix(FILE *fp, population *pop)
   {
-  byte		*buffer=NULL;	/* Buffer for genetic data. */
+  gaulbyte		*buffer=NULL;	/* Buffer for genetic data. */
   unsigned int	len;		/* Length of buffer. */
-  entity	*entity;	/* New entity read from disk. */
+  entity	*this_entity;	/* New entity read from disk. */
 
-  entity = ga_get_free_entity(pop);
+  this_entity = ga_get_free_entity(pop);
 
-  fread(&(entity->fitness), sizeof(double), 1, fp);
+  fread(&(this_entity->fitness), sizeof(double), 1, fp);
   fread(&len, sizeof(unsigned int), 1, fp);
 
-  if ( !(buffer = s_malloc(sizeof(byte)*len)) )
+  if ( !(buffer = s_malloc(sizeof(gaulbyte)*len)) )
     die("Unable to allocate memory");
 
-  fread(buffer, sizeof(byte), len, fp);
-  pop->chromosome_from_bytes(pop, entity, buffer);
+  fread(buffer, sizeof(gaulbyte), len, fp);
+  pop->chromosome_from_bytes(pop, this_entity, buffer);
 
   s_free(buffer);
 
-  return entity;
+  return this_entity;
   }
 #endif
 
@@ -144,35 +145,62 @@ static entity *gaul_read_entity_posix(FILE *fp, population *pop)
   last updated: 16 Aug 2003
  **********************************************************************/
 
-#ifdef WIN32
+#ifdef USE_WINDOWS_H
 static entity *gaul_read_entity_win32(HANDLE file, population *pop)
   {
-  byte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
+  gaulbyte		buffer[BUFFER_SIZE];	/* Buffer for genetic data. */
   unsigned int	len;		/* Length of buffer. */
-  entity	*entity;	/* New entity read from disk. */
+  entity	*this_entity;	/* New entity read from disk. */
   DWORD		nread;		/* Number of bytes read. */
 
-  entity = ga_get_free_entity(pop);
+  this_entity = ga_get_free_entity(pop);
 
   if (!ReadFile(file, buffer, sizeof(double), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
 
-  memcpy(&(entity->fitness), buffer, sizeof(double));
+  memcpy(&(this_entity->fitness), buffer, sizeof(double));
 
   if (!ReadFile(file, buffer, sizeof(unsigned int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
 
   memcpy(&len, buffer, sizeof(unsigned int));
 
-  if (!ReadFile(file, buffer, len*sizeof(byte), &nread, NULL) || nread < 1)
+  if (!ReadFile(file, buffer, len*sizeof(gaulbyte), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
 
-  pop->chromosome_from_bytes(pop, entity, buffer);
+  pop->chromosome_from_bytes(pop, this_entity, buffer);
 
-  return entity;
+  return this_entity;
   }
 #endif
 
+
+enum GA_POPULATION_HOOK_OFFSET
+  {
+    GA_POPULATION_HOOK_OFFSET_GENERATION_HOOK,
+    GA_POPULATION_HOOK_OFFSET_ITERATION_HOOK,
+    GA_POPULATION_HOOK_OFFSET_DATA_DESTRUCTOR,
+    GA_POPULATION_HOOK_OFFSET_DATA_REF_INCREMENTOR,
+    GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_DESTRUCTOR,
+    GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_COPY,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_CONSTRUCTOR,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_DESTRUCTOR,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_REPLICATE,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_BYTES,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_FROM_BYTES,
+    GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_STRING,
+    GA_POPULATION_HOOK_OFFSET_EVALUATE,
+    GA_POPULATION_HOOK_OFFSET_SEED,
+    GA_POPULATION_HOOK_OFFSET_ADAPT,
+    GA_POPULATION_HOOK_OFFSET_SELECT_ONE,
+    GA_POPULATION_HOOK_OFFSET_SELECT_TWO,
+    GA_POPULATION_HOOK_OFFSET_MUTATE,
+    GA_POPULATION_HOOK_OFFSET_CROSSOVER,
+    GA_POPULATION_HOOK_OFFSET_REPLACE,
+    GA_POPULATION_HOOK_OFFSET_RANK,
+
+    GA_POPULATION_HOOK_COUNT
+  };
 
 /**********************************************************************
   ga_population_write()
@@ -182,18 +210,18 @@ static entity *gaul_read_entity_win32(HANDLE file, population *pop)
 		any of the userdata.
   parameters:
   return:
-  last updated: 24 Feb 2005
+  last updated: 29 Jan 2006
  **********************************************************************/
 
-#ifndef WIN32
-boolean ga_population_write(population *pop, char *fname)
+#ifndef USE_WINDOWS_H
+GAULFUNC boolean ga_population_write(population *pop, char *fname)
   {
-  FILE          *fp;			/* File handle. */
-  int		i;			/* Loop variables. */
-  char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[19];			/* Array of hook indices. */
-  int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
+  FILE          *fp;				/* File handle. */
+  int		i;				/* Loop variables. */
+  char		buffer[BUFFER_SIZE];		/* String buffer. */
+  int		id[GA_POPULATION_HOOK_COUNT];	/* Array of hook indices. */
+  int		count=0;			/* Number of unrecognised hook functions. */
+  char		*format_str="FORMAT: GAUL POPULATION 004";	/* Format tag. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -244,45 +272,38 @@ boolean ga_population_write(population *pop, char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  id[0] = ga_funclookup_ptr_to_id((void *)pop->generation_hook);
-  id[1] = ga_funclookup_ptr_to_id((void *)pop->iteration_hook);
+  id[GA_POPULATION_HOOK_OFFSET_GENERATION_HOOK] = ga_funclookup_ptr_to_id((void *)pop->generation_hook);
+  id[GA_POPULATION_HOOK_OFFSET_ITERATION_HOOK]  = ga_funclookup_ptr_to_id((void *)pop->iteration_hook);
 
-  /*ga_funclookup_ptr_to_id((void *)pop->data_destructor);*/
-  /*ga_funclookup_ptr_to_id((void *)pop->data_ref_incrementor);*/
-  /* GAUL doesn't define any functions for either of these. */
-  if (pop->data_destructor)
-    id[2] = -1;
-  else
-    id[2] = 0;
+  /* GAUL doesn't define any functions for any of these four callbacks: */
+  id[GA_POPULATION_HOOK_OFFSET_DATA_DESTRUCTOR]             = pop->data_destructor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_DATA_REF_INCREMENTOR]        = pop->data_ref_incrementor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_DESTRUCTOR]  = pop->population_data_destructor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_COPY]        = pop->population_data_copy ? -1 : 0;
 
-  if (pop->data_ref_incrementor)
-    id[3] = -1;
-  else
-    id[3] = 0;
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_CONSTRUCTOR]  = ga_funclookup_ptr_to_id((void *)pop->chromosome_constructor);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_DESTRUCTOR]   = ga_funclookup_ptr_to_id((void *)pop->chromosome_destructor);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_REPLICATE]    = ga_funclookup_ptr_to_id((void *)pop->chromosome_replicate);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_BYTES]     = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_bytes);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_FROM_BYTES]   = ga_funclookup_ptr_to_id((void *)pop->chromosome_from_bytes);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_STRING]    = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_string);
 
-  id[4] = ga_funclookup_ptr_to_id((void *)pop->chromosome_constructor);
-  id[5] = ga_funclookup_ptr_to_id((void *)pop->chromosome_destructor);
-  id[6] = ga_funclookup_ptr_to_id((void *)pop->chromosome_replicate);
-  id[7] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_bytes);
-  id[8] = ga_funclookup_ptr_to_id((void *)pop->chromosome_from_bytes);
-  id[9] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_string);
+  id[GA_POPULATION_HOOK_OFFSET_EVALUATE]    = ga_funclookup_ptr_to_id((void *)pop->evaluate);
+  id[GA_POPULATION_HOOK_OFFSET_SEED]        = ga_funclookup_ptr_to_id((void *)pop->seed);
+  id[GA_POPULATION_HOOK_OFFSET_ADAPT]       = ga_funclookup_ptr_to_id((void *)pop->adapt);
+  id[GA_POPULATION_HOOK_OFFSET_SELECT_ONE]  = ga_funclookup_ptr_to_id((void *)pop->select_one);
+  id[GA_POPULATION_HOOK_OFFSET_SELECT_TWO]  = ga_funclookup_ptr_to_id((void *)pop->select_two);
+  id[GA_POPULATION_HOOK_OFFSET_MUTATE]      = ga_funclookup_ptr_to_id((void *)pop->mutate);
+  id[GA_POPULATION_HOOK_OFFSET_CROSSOVER]   = ga_funclookup_ptr_to_id((void *)pop->crossover);
+  id[GA_POPULATION_HOOK_OFFSET_REPLACE]     = ga_funclookup_ptr_to_id((void *)pop->replace);
+  id[GA_POPULATION_HOOK_OFFSET_RANK]        = ga_funclookup_ptr_to_id((void *)pop->rank);
 
-  id[10] = ga_funclookup_ptr_to_id((void *)pop->evaluate);
-  id[11] = ga_funclookup_ptr_to_id((void *)pop->seed);
-  id[12] = ga_funclookup_ptr_to_id((void *)pop->adapt);
-  id[13] = ga_funclookup_ptr_to_id((void *)pop->select_one);
-  id[14] = ga_funclookup_ptr_to_id((void *)pop->select_two);
-  id[15] = ga_funclookup_ptr_to_id((void *)pop->mutate);
-  id[16] = ga_funclookup_ptr_to_id((void *)pop->crossover);
-  id[17] = ga_funclookup_ptr_to_id((void *)pop->replace);
-  id[18] = ga_funclookup_ptr_to_id((void *)pop->rank);
-
-  fwrite(id, sizeof(int), 19, fp);
+  fwrite(id, sizeof(int), GA_POPULATION_HOOK_COUNT, fp);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<19; i++)
+  for (i=0; i < GA_POPULATION_HOOK_COUNT; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -307,17 +328,17 @@ boolean ga_population_write(population *pop, char *fname)
   fclose(fp);
 
   return TRUE;
-  }
+}
 #else
 
-boolean ga_population_write(population *pop, char *fname)
+GAULFUNC boolean ga_population_write(population *pop, char *fname)
   {
   HANDLE        file;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[19];			/* Array of hook indices. */
+  int		id[GA_POPULATION_HOOK_COUNT];   /* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 004";	/* Format tag. */
   DWORD		nwrote;			/* Number of bytes written. */
 
 /* Checks. */
@@ -388,46 +409,39 @@ boolean ga_population_write(population *pop, char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  id[0] = ga_funclookup_ptr_to_id((void *)pop->generation_hook);
-  id[1] = ga_funclookup_ptr_to_id((void *)pop->iteration_hook);
+  id[GA_POPULATION_HOOK_OFFSET_GENERATION_HOOK] = ga_funclookup_ptr_to_id((void *)pop->generation_hook);
+  id[GA_POPULATION_HOOK_OFFSET_ITERATION_HOOK]  = ga_funclookup_ptr_to_id((void *)pop->iteration_hook);
 
-  /*ga_funclookup_ptr_to_id((void *)pop->data_destructor);*/
-  /*ga_funclookup_ptr_to_id((void *)pop->data_ref_incrementor);*/
-  /* GAUL doesn't define any functions for either of these. */
-  if (pop->data_destructor)
-    id[2] = -1;
-  else
-    id[2] = 0;
+  /* GAUL doesn't define any functions for any of these four callbacks: */
+  id[GA_POPULATION_HOOK_OFFSET_DATA_DESTRUCTOR]             = pop->data_destructor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_DATA_REF_INCREMENTOR]        = pop->data_ref_incrementor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_DESTRUCTOR]  = pop->population_data_destructor ? -1 : 0;
+  id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_COPY]        = pop->population_data_copy ? -1 : 0;
 
-  if (pop->data_ref_incrementor)
-    id[3] = -1;
-  else
-    id[3] = 0;
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_CONSTRUCTOR]  = ga_funclookup_ptr_to_id((void *)pop->chromosome_constructor);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_DESTRUCTOR]   = ga_funclookup_ptr_to_id((void *)pop->chromosome_destructor);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_REPLICATE]    = ga_funclookup_ptr_to_id((void *)pop->chromosome_replicate);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_BYTES]     = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_bytes);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_FROM_BYTES]   = ga_funclookup_ptr_to_id((void *)pop->chromosome_from_bytes);
+  id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_STRING]    = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_string);
 
-  id[4] = ga_funclookup_ptr_to_id((void *)pop->chromosome_constructor);
-  id[5] = ga_funclookup_ptr_to_id((void *)pop->chromosome_destructor);
-  id[6] = ga_funclookup_ptr_to_id((void *)pop->chromosome_replicate);
-  id[7] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_bytes);
-  id[8] = ga_funclookup_ptr_to_id((void *)pop->chromosome_from_bytes);
-  id[9] = ga_funclookup_ptr_to_id((void *)pop->chromosome_to_string);
+  id[GA_POPULATION_HOOK_OFFSET_EVALUATE]    = ga_funclookup_ptr_to_id((void *)pop->evaluate);
+  id[GA_POPULATION_HOOK_OFFSET_SEED]        = ga_funclookup_ptr_to_id((void *)pop->seed);
+  id[GA_POPULATION_HOOK_OFFSET_ADAPT]       = ga_funclookup_ptr_to_id((void *)pop->adapt);
+  id[GA_POPULATION_HOOK_OFFSET_SELECT_ONE]  = ga_funclookup_ptr_to_id((void *)pop->select_one);
+  id[GA_POPULATION_HOOK_OFFSET_SELECT_TWO]  = ga_funclookup_ptr_to_id((void *)pop->select_two);
+  id[GA_POPULATION_HOOK_OFFSET_MUTATE]      = ga_funclookup_ptr_to_id((void *)pop->mutate);
+  id[GA_POPULATION_HOOK_OFFSET_CROSSOVER]   = ga_funclookup_ptr_to_id((void *)pop->crossover);
+  id[GA_POPULATION_HOOK_OFFSET_REPLACE]     = ga_funclookup_ptr_to_id((void *)pop->replace);
+  id[GA_POPULATION_HOOK_OFFSET_RANK]        = ga_funclookup_ptr_to_id((void *)pop->rank);
 
-  id[10] = ga_funclookup_ptr_to_id((void *)pop->evaluate);
-  id[11] = ga_funclookup_ptr_to_id((void *)pop->seed);
-  id[12] = ga_funclookup_ptr_to_id((void *)pop->adapt);
-  id[13] = ga_funclookup_ptr_to_id((void *)pop->select_one);
-  id[14] = ga_funclookup_ptr_to_id((void *)pop->select_two);
-  id[15] = ga_funclookup_ptr_to_id((void *)pop->mutate);
-  id[16] = ga_funclookup_ptr_to_id((void *)pop->crossover);
-  id[17] = ga_funclookup_ptr_to_id((void *)pop->replace);
-  id[18] = ga_funclookup_ptr_to_id((void *)pop->rank);
-
-  if ( WriteFile(file, id, 19*sizeof(int), &nwrote, NULL)==0 )
+  if ( WriteFile(file, id, GA_POPULATION_HOOK_COUNT * sizeof(int), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<19; i++)
+  for (i=0; i < GA_POPULATION_HOOK_COUNT; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -468,18 +482,18 @@ boolean ga_population_write(population *pop, char *fname)
   last updated: 24 Feb 2005
  **********************************************************************/
 
-#ifndef WIN32
+#ifndef USE_WINDOWS_H
 
-population *ga_population_read(char *fname)
+GAULFUNC population *ga_population_read(char *fname)
   {
-  population	*pop=NULL;		/* New population structure. */
-  FILE          *fp;			/* File handle. */
-  int		i;			/* Loop variables. */
-  char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[19];			/* Array of hook indices. */
-  int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
-  char		format_str_in[32]="";	/* Input format tag. (Empty initialiser to avoid valgrind warning...) */
+  population	*pop=NULL;			/* New population structure. */
+  FILE          *fp;				/* File handle. */
+  int		i;				/* Loop variables. */
+  char		buffer[BUFFER_SIZE];		/* String buffer. */
+  int		id[GA_POPULATION_HOOK_COUNT];			/* Array of hook indices. */
+  int		count=0;			/* Number of unrecognised hook functions. */
+  char		*format_str="FORMAT: GAUL POPULATION 004";	/* Format tag. */
+  char		format_str_in[32]="";		/* Input format tag. (Empty initialiser to avoid valgrind warning...) */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
 
 /* Checks. */
@@ -543,35 +557,38 @@ population *ga_population_read(char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  fread(id, sizeof(int), 19, fp);
+  fread(id, sizeof(int), GA_POPULATION_HOOK_COUNT, fp);
 
-  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
-  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
+  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_GENERATION_HOOK]);
+  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_ITERATION_HOOK]);
 
-  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[2]);
-  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[3]);
+  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_DATA_DESTRUCTOR]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_DATA_REF_INCREMENTOR]);
 
-  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[4]);
-  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[5]);
-  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[6]);
-  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[7]);
-  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[8]);
-  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[9]);
+  pop->population_data_destructor = (GAdata_destructor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_DESTRUCTOR]);
+  pop->population_data_copy   = (GAdata_copy)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_COPY]);
 
-  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[10]);
-  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[11]);
-  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[12]);
-  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[13]);
-  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[14]);
-  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
-  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
-  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
-  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[18]);
+  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_CONSTRUCTOR]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_DESTRUCTOR]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_REPLICATE]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_BYTES]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_FROM_BYTES]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_STRING]);
+
+  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_EVALUATE]);
+  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SEED]);
+  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_ADAPT]);
+  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SELECT_ONE]);
+  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SELECT_TWO]);
+  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_MUTATE]);
+  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CROSSOVER]);
+  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_REPLACE]);
+  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_RANK]);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<19; i++)
+  for (i=0; i < GA_POPULATION_HOOK_COUNT; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -600,19 +617,19 @@ population *ga_population_read(char *fname)
   plog(LOG_DEBUG, "Have read %d entities into population.", pop->size);
 
   return pop;
-  }
+}
 
 #else
 
-population *ga_population_read(char *fname)
+GAULFUNC population *ga_population_read(char *fname)
   {
   population	*pop=NULL;		/* New population structure. */
   HANDLE        file;			/* File handle. */
   int		i;			/* Loop variables. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
-  int		id[19];			/* Array of hook indices. */
+  int		id[GA_POPULATION_HOOK_COUNT];   /* Array of hook indices. */
   int		count=0;		/* Number of unrecognised hook functions. */
-  char		*format_str="FORMAT: GAUL POPULATION 003";	/* Format tag. */
+  char		*format_str="FORMAT: GAUL POPULATION 004";	/* Format tag. */
   int		size, stable_size, num_chromosomes, len_chromosomes;	/* Input data. */
   DWORD		nread;			/* Number of bytes read. */
 
@@ -713,37 +730,40 @@ population *ga_population_read(char *fname)
  * id = 0  - NULL function.
  * id > 0  - GAUL defined function.
  */
-  if (!ReadFile(file, buffer, 19*sizeof(int), &nread, NULL) || nread < 1)
+  if (!ReadFile(file, buffer, GA_POPULATION_HOOK_COUNT * sizeof(int), &nread, NULL) || nread < 1)
     dief("Unable to read data.  Error %d\n", GetLastError());
-  memcpy(&id, buffer, 19*sizeof(int));
+  memcpy(&id, buffer, GA_POPULATION_HOOK_COUNT * sizeof(int));
 
-  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[0]);
-  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[1]);
+  pop->generation_hook        = (GAgeneration_hook)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_GENERATION_HOOK]);
+  pop->iteration_hook         = (GAiteration_hook)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_ITERATION_HOOK]);
 
-  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[2]);
-  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[3]);
+  pop->data_destructor        = (GAdata_destructor)      ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_DATA_DESTRUCTOR]);
+  pop->data_ref_incrementor   = (GAdata_ref_incrementor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_DATA_REF_INCREMENTOR]);
 
-  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[4]);
-  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[5]);
-  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[6]);
-  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[7]);
-  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[8]);
-  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[9]);
+  pop->population_data_destructor = (GAdata_destructor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_DESTRUCTOR]);
+  pop->population_data_copy   = (GAdata_copy)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_POPULATION_DATA_COPY]);
 
-  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[10]);
-  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[11]);
-  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[12]);
-  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[13]);
-  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[14]);
-  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[15]);
-  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[16]);
-  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[17]);
-  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[18]);
+  pop->chromosome_constructor = (GAchromosome_constructor) ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_CONSTRUCTOR]);
+  pop->chromosome_destructor  = (GAchromosome_destructor)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_DESTRUCTOR]);
+  pop->chromosome_replicate   = (GAchromosome_replicate)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_REPLICATE]);
+  pop->chromosome_to_bytes    = (GAchromosome_to_bytes)    ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_BYTES]);
+  pop->chromosome_from_bytes  = (GAchromosome_from_bytes)  ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_FROM_BYTES]);
+  pop->chromosome_to_string   = (GAchromosome_to_string)   ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CHROMOSOME_TO_STRING]);
+
+  pop->evaluate               = (GAevaluate)       ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_EVALUATE]);
+  pop->seed                   = (GAseed)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SEED]);
+  pop->adapt                  = (GAadapt)          ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_ADAPT]);
+  pop->select_one             = (GAselect_one)     ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SELECT_ONE]);
+  pop->select_two             = (GAselect_two)     ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_SELECT_TWO]);
+  pop->mutate                 = (GAmutate)         ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_MUTATE]);
+  pop->crossover              = (GAcrossover)      ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_CROSSOVER]);
+  pop->replace                = (GAreplace)        ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_REPLACE]);
+  pop->rank                   = (GArank)           ga_funclookup_id_to_ptr(id[GA_POPULATION_HOOK_OFFSET_RANK]);
 
 /*
  * Warn user of any unhandled data.
  */
-  for (i=0; i<19; i++)
+  for (i=0; i < GA_POPULATION_HOOK_COUNT; i++)
     if (id[i] == -1) count++;
 
   if (count>0)
@@ -782,14 +802,14 @@ population *ga_population_read(char *fname)
 		Note: Currently does not (and probably can not) store
 		any of the userdata.
   parameters:	population *pop
-		entity *entity
+		entity *this_entity
 		char *fname
   return:	TRUE
   last updated: 07 Nov 2002
  **********************************************************************/
 
-#ifndef WIN32
-boolean ga_entity_write(population *pop, entity *entity, char *fname)
+#ifndef USE_WINDOWS_H
+GAULFUNC boolean ga_entity_write(population *pop, entity *this_entity, char *fname)
   {
   int		i;			/* Loop variable. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
@@ -798,7 +818,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
-  if ( !entity ) die("Null pointer to entity structure passed.");
+  if ( !this_entity ) die("Null pointer to entity structure passed.");
   if ( !fname ) die("Null pointer to filename passed.");
 
 /*
@@ -815,7 +835,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
   snprintf(buffer, 64, "%s %s", GA_VERSION_STRING, GA_BUILD_DATE_STRING);
   fwrite(buffer, sizeof(char), 64, fp);
 
-  gaul_write_entity_posix(fp, pop, entity);
+  gaul_write_entity_posix(fp, pop, this_entity);
 
   fwrite("END", sizeof(char), 4, fp); 
 
@@ -825,7 +845,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
   }
 #else
 
-boolean ga_entity_write(population *pop, entity *entity, char *fname)
+GAULFUNC boolean ga_entity_write(population *pop, entity *this_entity, char *fname)
   {
   int		i;			/* Loop variable. */
   char		buffer[BUFFER_SIZE];	/* String buffer. */
@@ -835,7 +855,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
-  if ( !entity ) die("Null pointer to entity structure passed.");
+  if ( !this_entity ) die("Null pointer to entity structure passed.");
   if ( !fname ) die("Null pointer to filename passed.");
 
 /*
@@ -857,7 +877,7 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
   if ( WriteFile(file, format_str, 64*sizeof(char), &nwrote, NULL)==0 )
     dief("Error writing %d\n", GetLastError());
 
-  gaul_write_entity_win32(file, pop, entity);
+  gaul_write_entity_win32(file, pop, this_entity);
 
   strncpy(buffer, "END\0", 4); 
   if ( WriteFile(file, format_str, 4*sizeof(char), &nwrote, NULL)==0 )
@@ -876,24 +896,24 @@ boolean ga_entity_write(population *pop, entity *entity, char *fname)
 		Note: Currently does not (and probably can not) store
 		any of the userdata.
   parameters:	population *pop
-		entity *entity
+		entity *this_entity
 		char *fname
   return:	TRUE
   last updated: 30 May 2002
  **********************************************************************/
 
-#ifndef WIN32
+#ifndef USE_WINDOWS_H
 /*
  * UNIX/POSIX version:
  */
 
-entity *ga_entity_read(population *pop, char *fname)
+GAULFUNC entity *ga_entity_read(population *pop, char *fname)
   {
   char		buffer[BUFFER_SIZE];	/* String buffer. */
   char		*format_str="FORMAT: GAUL ENTITY 001";	/* Format tag. */
   char		format_str_in[32];	/* Input format tag. */
   FILE		*fp;			/* Filehandle. */
-  entity	*entity;		/* Input entity. */
+  entity	*this_entity;		/* Input entity. */
 
 /* Checks. */
   if ( !pop ) die("Null pointer to population structure passed.");
@@ -912,14 +932,14 @@ entity *ga_entity_read(population *pop, char *fname)
   if (strcmp(format_str, format_str_in)!=0) die("Incorrect format for entity file.");
   fread(buffer, sizeof(char), 64, fp);	/* Ignored. */
 
-  entity = gaul_read_entity_posix(fp, pop);
+  this_entity = gaul_read_entity_posix(fp, pop);
 
   fread(buffer, sizeof(char), 4, fp); 
   if (strcmp("END", buffer)!=0) die("Corrupt population file?");
 
   fclose(fp);
 
-  return entity;
+  return this_entity;
   }
 
 #else
@@ -927,13 +947,13 @@ entity *ga_entity_read(population *pop, char *fname)
  * MS Windows version:
  */
 
-entity *ga_entity_read(population *pop, char *fname)
+GAULFUNC entity *ga_entity_read(population *pop, char *fname)
   {
   char		buffer[BUFFER_SIZE];	/* String buffer. */
   char		*format_str="FORMAT: GAUL ENTITY 001";	/* Format tag. */
   char		format_str_in[32];	/* Input format tag. */
   HANDLE	file;			/* Filehandle. */
-  entity	*entity;		/* Input entity. */
+  entity	*this_entity;		/* Input entity. */
   DWORD		nread;			/* Number of bytes read. */
 
 /* Checks. */
@@ -960,7 +980,7 @@ entity *ga_entity_read(population *pop, char *fname)
 
   ReadFile(file, buffer, 64*sizeof(char), &nread, NULL);	/* Ignored. */
 
-  entity = gaul_read_entity_win32(file, pop);
+  this_entity = gaul_read_entity_win32(file, pop);
 
   if (!ReadFile(file, buffer, 4, &nread, NULL) && nread < 1)
     dief("Unable to open entity file \"%s\" for input due to error %d.",
@@ -970,7 +990,7 @@ entity *ga_entity_read(population *pop, char *fname)
 
   CloseHandle(file);
 
-  return entity;
+  return this_entity;
   }
 #endif
 

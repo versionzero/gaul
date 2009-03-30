@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_randomsearch - Random search algorithm for comparison and search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -40,7 +40,7 @@
 /*
  * Prototypes.
  */
-FUNCPROTO int ga_random_search(population *pop, entity *initial, const int max_iterations);
+GAULFUNC int ga_random_search(population *pop, entity *initial, const int max_iterations);
 
 #endif	/* GA_RANDOMSEARCH_H_INCLUDED */
 

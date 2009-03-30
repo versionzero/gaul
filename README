@@ -1,6 +1,6 @@
 GAUL: The Genetic Algorithm Utility Library
 ===========================================
-Copyright © 2000-2004 "Stewart A. Adcock" <stewart@linux-domain.com>
+Copyright © 2000-2009 "Stewart A. Adcock" <gaul@linux-domain.com>
 All rights reserved.
 
 This is the "gaul-devel" package, which currently provides the
@@ -12,6 +12,7 @@ Further Information
 Homepage:              http://gaul.souceforge.net/
 Documentation:         http://gaul.souceforge.net/documentation.html
 Development homepage:  http://souceforge.net/projects/gaul/
+Further information:   http://saa.dyndns.org/stewart/Software/Gaul/
 
 All existing documentation, including a reference guide, on-line
 tutorial and a FAQ, is available at the website.  Note that reference
@@ -27,8 +28,7 @@ programming library designed to aid in the development of applications
 that require the use of genetic algorithms. It provides data structures
 and functions for handling and manipulation of the data required for a
 genetic algorithm. Additional stochastic algorithms are provided for
-comparison to the genetic algorithms. Much of the functionality is also
-available through a simple S-Lang interface.
+comparison to the genetic algorithms.
 
 GAUL is OSI Certified Open Source Software.
 
@@ -52,12 +52,12 @@ Current features include:
      o Steepest Ascents.
      o Deterministic Crowding.
  * Trivial to extend using external code via the built-in code hooks.
- * May be driven by, or extended by, simple yet powerful S-Lang scripts.
  * Support for multiprocessor calculations on various architectures:
      o MPI
      o OpenMP 2.0
      o pthreads
      o forked-process model
+ * May be driven by, or extended by, simple yet powerful scripts, in a variety of languages.
  * Written using highly portable C code.
 
 The current primary aims for the GAUL development project are to produce
@@ -98,5 +98,5 @@ miniature GAUL logo to your web page:
 
 The 'gaul_button.png' graphic may be downloaded from the GAUL web page.
 
-Stewart Adcock, 17 Jun 2004.
+Stewart Adcock, 30th March 2009.
 

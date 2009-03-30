@@ -3,7 +3,7 @@
  **********************************************************************
 
   diagnostics - Generate some diagnostic output for GAUL.
-  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -30,7 +30,9 @@
 		debugging and porting.
 
  **********************************************************************/
-
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 /*
  * Includes
  */
@@ -39,98 +41,174 @@
 /*
  * Ensure that any that isn't defined yet gets set to '0'.
  */
-#if !defined(HAVE_STRINGS_H)
-# define HAVE_STRINGS_H	0
+#ifdef HAVE_STRINGS_H
+#   define IS_HAVE_STRINGS_H     1
+#else
+#   define IS_HAVE_STRINGS_H     0
 #endif
-#if !defined(HAVE_STRING_H)
-# define HAVE_STRING_H	0
+#ifdef HAVE_STRING_H
+#   define IS_HAVE_STRING_H     1
+#else
+#   define IS_HAVE_STRING_H     0
 #endif
-#if !defined(HAVE_STDBOOL_H)
-# define HAVE_STDBOOL_H	0
+#ifdef HAVE_STDBOOL_H
+#   define IS_HAVE_STDBOOL_H    1
+#else
+#   define IS_HAVE_STDBOOL_H    0
 #endif
-#if !defined(HAVE_STDINT_H)
-# define HAVE_STDINT_H	0
+#ifdef HAVE_STDINT_H
+#   define IS_HAVE_STDINT_H     1
+#else
+#   define IS_HAVE_STDINT_H     0
 #endif
-#if !defined(HAVE_STDLIB_H)
-# define HAVE_STDLIB_H	0
+#ifdef HAVE_STDLIB_H
+#   define IS_HAVE_STDLIB_H     1
+#else
+#   define IS_HAVE_STDLIB_H     0
 #endif
-#if !defined(HAVE_BCMP)
-# define HAVE_BCMP	0
+
+#ifdef HAVE_BCMP
+#   define IS_HAVE_BCMP 1
+#else
+#   define IS_HAVE_BCMP 0
 #endif
-#if !defined(HAVE_BCOPY)
-# define HAVE_BCOPY	0
+#ifdef HAVE_BCOPY
+#   define IS_HAVE_BCOPY        1
+#else
+#   define IS_HAVE_BCOPY        0
 #endif
-#if !defined(HAVE_GETHOSTNAME)
-# define HAVE_GETHOSTNAME	0
+#ifdef HAVE_GETHOSTNAME
+#   define IS_HAVE_GETHOSTNAME  1
+#else
+#   define IS_HAVE_GETHOSTNAME  0
 #endif
-#if !defined(HAVE_INDEX)
-# define HAVE_INDEX	0
+#ifdef HAVE_INDEX
+#   define IS_HAVE_INDEX        1
+#else
+#   define IS_HAVE_INDEX        0
 #endif
-#if !defined(HAVE_MEMCPY)
-# define HAVE_MEMCPY	0
+#ifdef HAVE_MAX
+#   define IS_HAVE_MAX  1
+#else
+#   define IS_HAVE_MAX  0
 #endif
-#if !defined(HAVE_SINCOS)
-# define HAVE_SINCOS	0
+#ifdef HAVE_MEMCPY
+#   define IS_HAVE_MEMCPY       1
+#else
+#   define IS_HAVE_MEMCPY       0
 #endif
-#if !defined(HAVE_SNOOZE)
-# define HAVE_SNOOZE	0
+#ifdef HAVE_MIN
+#   define IS_HAVE_MIN  1
+#else
+#   define IS_HAVE_MIN  0
 #endif
-#if !defined(HAVE_STRCASECMP)
-# define HAVE_STRCASECMP	0
+#ifdef HAVE_SINCOS
+#   define IS_HAVE_SINCOS       1
+#else
+#   define IS_HAVE_SINCOS       0
 #endif
-#if !defined(HAVE_STRCMP)
-# define HAVE_STRCMP	0
+#ifdef HAVE_SNOOZE
+#   define IS_HAVE_SNOOZE       1
+#else
+#   define IS_HAVE_SNOOZE       0
 #endif
-#if !defined(HAVE_STRCPY)
-# define HAVE_STRCPY	0
+#ifdef HAVE_STRCASECMP
+#   define IS_HAVE_STRCASECMP   1
+#else
+#   define IS_HAVE_STRCASECMP   0
 #endif
-#if !defined(HAVE_STRDUP)
-# define HAVE_STRDUP	0
+#ifdef HAVE_STRCMP
+#   define IS_HAVE_STRCMP       1
+#else
+#   define IS_HAVE_STRCMP       0
 #endif
-#if !defined(HAVE_STRLEN)
-# define HAVE_STRLEN	0
+#ifdef HAVE_STRCPY
+#   define IS_HAVE_STRCPY       1
+#else
+#   define IS_HAVE_STRCPY       0
 #endif
-#if !defined(HAVE_STRNCASECMP)
-# define HAVE_STRNCASECMP	0
+#ifdef HAVE_STRDUP
+#   define IS_HAVE_STRDUP       1
+#else
+#   define IS_HAVE_STRDUP       0
 #endif
-#if !defined(HAVE_STRNCMP)
-# define HAVE_STRNCMP	0
+#ifdef HAVE_STRLEN
+#   define IS_HAVE_STRLEN       1
+#else
+#   define IS_HAVE_STRLEN       0
 #endif
-#if !defined(HAVE_STRNCPY)
-# define HAVE_STRNCPY	0
+#ifdef HAVE_STRNCASECMP
+#   define IS_HAVE_STRNCASECMP  1
+#else
+#   define IS_HAVE_STRNCASECMP  0
 #endif
-#if !defined(HAVE_STRNDUP)
-# define HAVE_STRNDUP	0
+#ifdef HAVE_STRNCMP
+#   define IS_HAVE_STRNCMP      1
+#else
+#   define IS_HAVE_STRNCMP      0
 #endif
-#if !defined(HAVE_STRPBRK)
-# define HAVE_STRPBRK	0
+#ifdef HAVE_STRNCPY
+#   define IS_HAVE_STRNCPY      1
+#else
+#   define IS_HAVE_STRNCPY      0
 #endif
-#if !defined(HAVE_STRSEP)
-# define HAVE_STRSEP	0
+#ifdef HAVE_STRNDUP
+#   define IS_HAVE_STRNDUP      1
+#else
+#   define IS_HAVE_STRNDUP      0
 #endif
-#if !defined(HAVE_USLEEP)
-# define HAVE_USLEEP	0
+#ifdef HAVE_STRPBRK
+#   define IS_HAVE_STRPBRK      1
+#else
+#   define IS_HAVE_STRPBRK      0
 #endif
-#if !defined(HAVE_WAITPID)
-# define HAVE_WAITPID	0
+#ifdef HAVE_STRSEP
+#   define IS_HAVE_STRSEP       1
+#else
+#   define IS_HAVE_STRSEP       0
 #endif
-#if !defined(HAVE__BOOL)
-# define HAVE__BOOL	0
+#ifdef HAVE_USLEEP
+#   define IS_HAVE_USLEEP       1
+#else
+#   define IS_HAVE_USLEEP       0
 #endif
-#if !defined(HAVE_MPI)
-# define HAVE_MPI	0
+#ifdef HAVE_WAITPID
+#   define IS_HAVE_WAITPID      1
+#else
+#   define IS_HAVE_WAITPID      0
 #endif
-#if !defined(HAVE_PTHREADS)
-# define HAVE_PTHREADS	0
+
+#ifdef HAVE__BOOL
+#   define IS_HAVE__BOOL        1
+#else
+#   define IS_HAVE__BOOL        0
 #endif
-#if !defined(HAVE_SLANG)
-# define HAVE_SLANG	0
+
+#ifdef HAVE_MPI
+#   define IS_HAVE_MPI  1
+#else
+#   define IS_HAVE_MPI  0
 #endif
-#if !defined(W32_CRIPPLED)
-# define W32_CRIPPLED	0
+#ifdef HAVE_PTHREADS
+#   define IS_HAVE_PTHREADS 1
+#else
+#   define IS_HAVE_PTHREADS 0
 #endif
-#if !defined(USE_CHROMO_CHUNKS)
-# define USE_CHROMO_CHUNKS	0
+#ifdef HAVE_SLANG
+#   define IS_HAVE_SLANG    1
+#else
+#   define IS_HAVE_SLANG    0
+#endif
+
+#ifdef W32_CRIPPLED
+#   define IS_W32_CRIPPLED  1
+#else
+#   define IS_W32_CRIPPLED  0
+#endif
+#ifdef USE_CHROMO_CHUNKS
+#   define IS_USE_CHROMO_CHUNKS 1
+#else
+#   define IS_USE_CHROMO_CHUNKS 0
 #endif
 
 /**********************************************************************
@@ -148,10 +226,10 @@ int main(int argc, char **argv)
  * What machine type is this?
  */
   printf("Execution machine characteristics:\n");
-#if W32_CRIPPLED != 1
+#ifndef W32_CRIPPLED
   system("uname -a");
 #else
-  printf("Native MS Windows support.");
+  printf("Native MS Windows support.\n");
 #endif
 
 /*
@@ -176,39 +254,39 @@ int main(int argc, char **argv)
   printf("GA_DEFAULT_NUM_THREADS:         %d\n", GA_DEFAULT_NUM_THREADS);
   printf("GA_NUM_PROCESSES_ENVVAR_STRING: %s\n", GA_NUM_PROCESSES_ENVVAR_STRING);
   printf("GA_NUM_THREADS_ENVVAR_STRING:   %s\n", GA_NUM_THREADS_ENVVAR_STRING);
-  printf("HAVE_STDBOOL_H:                 %s\n", HAVE_STDBOOL_H?"true":"false");
-  printf("HAVE_STDINT_H:                  %s\n", HAVE_STDINT_H?"true":"false");
-  printf("HAVE_STDLIB_H:                  %s\n", HAVE_STDLIB_H?"true":"false");
-  printf("HAVE_STRINGS_H:                 %s\n", HAVE_STRINGS_H?"true":"false");
-  printf("HAVE_STRING_H:                  %s\n", HAVE_STRING_H?"true":"false");
-  printf("HAVE_BCMP:                      %s\n", HAVE_BCMP?"true":"false");
-  printf("HAVE_BCOPY:                     %s\n", HAVE_BCOPY?"true":"false");
-  printf("HAVE_GETHOSTNAME:               %s\n", HAVE_GETHOSTNAME?"true":"false");
-  printf("HAVE_INDEX:                     %s\n", HAVE_INDEX?"true":"false");
-  printf("HAVE_MAX:                       %s\n", HAVE_MAX?"true":"false");
-  printf("HAVE_MEMCPY:                    %s\n", HAVE_MEMCPY?"true":"false");
-  printf("HAVE_MIN:                       %s\n", HAVE_MIN?"true":"false");
-  printf("HAVE_SINCOS:                    %s\n", HAVE_SINCOS?"true":"false");
-  printf("HAVE_SNOOZE:                    %s\n", HAVE_SNOOZE?"true":"false");
-  printf("HAVE_STRCASECMP:                %s\n", HAVE_STRCASECMP?"true":"false");
-  printf("HAVE_STRCMP:                    %s\n", HAVE_STRCMP?"true":"false");
-  printf("HAVE_STRCPY:                    %s\n", HAVE_STRCPY?"true":"false");
-  printf("HAVE_STRDUP:                    %s\n", HAVE_STRDUP?"true":"false");
-  printf("HAVE_STRLEN:                    %s\n", HAVE_STRLEN?"true":"false");
-  printf("HAVE_STRNCASECMP:               %s\n", HAVE_STRNCASECMP?"true":"false");
-  printf("HAVE_STRNCMP:                   %s\n", HAVE_STRNCMP?"true":"false");
-  printf("HAVE_STRNCPY:                   %s\n", HAVE_STRNCPY?"true":"false");
-  printf("HAVE_STRNDUP:                   %s\n", HAVE_STRNDUP?"true":"false");
-  printf("HAVE_STRPBRK:                   %s\n", HAVE_STRPBRK?"true":"false");
-  printf("HAVE_STRSEP:                    %s\n", HAVE_STRSEP?"true":"false");
-  printf("HAVE_USLEEP:                    %s\n", HAVE_USLEEP?"true":"false");
-  printf("HAVE_WAITPID:                   %s\n", HAVE_WAITPID?"true":"false");
-  printf("HAVE__BOOL:                     %s\n", HAVE__BOOL?"true":"false");
-  printf("HAVE_MPI:                       %s\n", HAVE_MPI?"true":"false");
-  printf("HAVE_PTHREADS:                  %s\n", HAVE_PTHREADS?"true":"false");
-  printf("HAVE_SLANG:                     %s\n", HAVE_SLANG?"true":"false");
-  printf("W32_CRIPPLED:                   %s\n", W32_CRIPPLED?"true":"false");
-  printf("USE_CHROMO_CHUNKS:              %s\n", USE_CHROMO_CHUNKS?"true":"false");
+  printf("HAVE_STDBOOL_H:                 %s\n", IS_HAVE_STDBOOL_H?"true":"false");
+  printf("HAVE_STDINT_H:                  %s\n", IS_HAVE_STDINT_H?"true":"false");
+  printf("HAVE_STDLIB_H:                  %s\n", IS_HAVE_STDLIB_H?"true":"false");
+  printf("HAVE_STRINGS_H:                 %s\n", IS_HAVE_STRINGS_H?"true":"false");
+  printf("HAVE_STRING_H:                  %s\n", IS_HAVE_STRING_H?"true":"false");
+  printf("HAVE_BCMP:                      %s\n", IS_HAVE_BCMP?"true":"false");
+  printf("HAVE_BCOPY:                     %s\n", IS_HAVE_BCOPY?"true":"false");
+  printf("HAVE_GETHOSTNAME:               %s\n", IS_HAVE_GETHOSTNAME?"true":"false");
+  printf("HAVE_INDEX:                     %s\n", IS_HAVE_INDEX?"true":"false");
+  printf("HAVE_MAX:                       %s\n", IS_HAVE_MAX?"true":"false");
+  printf("HAVE_MEMCPY:                    %s\n", IS_HAVE_MEMCPY?"true":"false");
+  printf("HAVE_MIN:                       %s\n", IS_HAVE_MIN?"true":"false");
+  printf("HAVE_SINCOS:                    %s\n", IS_HAVE_SINCOS?"true":"false");
+  printf("HAVE_SNOOZE:                    %s\n", IS_HAVE_SNOOZE?"true":"false");
+  printf("HAVE_STRCASECMP:                %s\n", IS_HAVE_STRCASECMP?"true":"false");
+  printf("HAVE_STRCMP:                    %s\n", IS_HAVE_STRCMP?"true":"false");
+  printf("HAVE_STRCPY:                    %s\n", IS_HAVE_STRCPY?"true":"false");
+  printf("HAVE_STRDUP:                    %s\n", IS_HAVE_STRDUP?"true":"false");
+  printf("HAVE_STRLEN:                    %s\n", IS_HAVE_STRLEN?"true":"false");
+  printf("HAVE_STRNCASECMP:               %s\n", IS_HAVE_STRNCASECMP?"true":"false");
+  printf("HAVE_STRNCMP:                   %s\n", IS_HAVE_STRNCMP?"true":"false");
+  printf("HAVE_STRNCPY:                   %s\n", IS_HAVE_STRNCPY?"true":"false");
+  printf("HAVE_STRNDUP:                   %s\n", IS_HAVE_STRNDUP?"true":"false");
+  printf("HAVE_STRPBRK:                   %s\n", IS_HAVE_STRPBRK?"true":"false");
+  printf("HAVE_STRSEP:                    %s\n", IS_HAVE_STRSEP?"true":"false");
+  printf("HAVE_USLEEP:                    %s\n", IS_HAVE_USLEEP?"true":"false");
+  printf("HAVE_WAITPID:                   %s\n", IS_HAVE_WAITPID?"true":"false");
+  printf("HAVE__BOOL:                     %s\n", IS_HAVE__BOOL?"true":"false");
+  printf("HAVE_MPI:                       %s\n", IS_HAVE_MPI?"true":"false");
+  printf("HAVE_PTHREADS:                  %s\n", IS_HAVE_PTHREADS?"true":"false");
+  printf("HAVE_SLANG:                     %s\n", IS_HAVE_SLANG?"true":"false");
+  printf("W32_CRIPPLED:                   %s\n", IS_W32_CRIPPLED?"true":"false");
+  printf("USE_CHROMO_CHUNKS:              %s\n", IS_USE_CHROMO_CHUNKS?"true":"false");
 
   exit(EXIT_SUCCESS);
   }

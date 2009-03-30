@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -62,70 +62,72 @@ typedef struct SLList_t
  * Function prototypes.
  */
 
-FUNCPROTO void	linkedlist_init_openmp(void);
-FUNCPROTO SLList	*slink_new(void);
-FUNCPROTO void	slink_free_all(SLList *list);
-FUNCPROTO void	slink_free(SLList *list);
-FUNCPROTO SLList	*slink_append(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_prepend(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_insert_next(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_insert_index(SLList *list, vpointer data, int index);
-FUNCPROTO SLList	*slink_delete_data(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_delete_all_data(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_delete_link(SLList *list, SLList *link);
-FUNCPROTO SLList	*slink_clone(SLList *list);
-FUNCPROTO SLList	*slink_reverse(SLList *list);
-FUNCPROTO SLList	*slink_nth(SLList *list, const int index);
-FUNCPROTO vpointer	slink_nth_data(SLList *list, const int index);
-FUNCPROTO SLList	*slink_find(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
-FUNCPROTO int	slink_index_link(SLList *list, SLList *link);
-FUNCPROTO int	slink_index_data(SLList *list, vpointer data);
-FUNCPROTO SLList	*slink_last(SLList *list);
-FUNCPROTO int	slink_size(SLList *list);
-FUNCPROTO boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
-FUNCPROTO SLList	*slink_sort_merge (SLList      *l1, 
+GAULFUNC void	linkedlist_init_openmp(void);
+GAULFUNC SLList	*slink_new(void);
+GAULFUNC void	slink_free_all(SLList *list);
+GAULFUNC void	slink_free(SLList *list);
+GAULFUNC SLList	*slink_append(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_prepend(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_insert_next(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_insert_index(SLList *list, vpointer data, int id);
+GAULFUNC SLList	*slink_delete_data(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_delete_all_data(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_delete_link(SLList *list, SLList *link);
+GAULFUNC SLList	*slink_clone(SLList *list);
+GAULFUNC SLList	*slink_reverse(SLList *list);
+GAULFUNC SLList	*slink_nth(SLList *list, const int id);
+GAULFUNC vpointer	slink_nth_data(SLList *list, const int id);
+GAULFUNC SLList	*slink_find(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_find_custom(SLList *list, vpointer data, LLCompareFunc func);
+GAULFUNC int	slink_index_link(SLList *list, SLList *link);
+GAULFUNC int	slink_index_data(SLList *list, vpointer data);
+GAULFUNC SLList	*slink_last(SLList *list);
+GAULFUNC int	slink_size(SLList *list);
+GAULFUNC boolean	slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata);
+GAULFUNC SLList *slink_insert_sorted(SLList *list, vpointer data, LLCompareFunc func);
+GAULFUNC SLList	*slink_sort_merge (SLList      *l1, 
 		     SLList      *l2,
 		     LLCompareFunc compare_func);
-FUNCPROTO SLList	*slink_sort(SLList       *list,
+GAULFUNC SLList	*slink_sort(SLList       *list,
 	      LLCompareFunc compare_func);
-FUNCPROTO DLList	*dlink_new(void);
-FUNCPROTO void	dlink_free_all(DLList *list);
-FUNCPROTO void	dlink_free(DLList *list);
-FUNCPROTO DLList	*dlink_append(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_prepend(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_insert_next(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_insert_prev(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_insert_index(DLList	*list,
+GAULFUNC DLList	*dlink_new(void);
+GAULFUNC void	dlink_free_all(DLList *list);
+GAULFUNC void	dlink_free(DLList *list);
+GAULFUNC DLList	*dlink_append(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_prepend(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_insert_next(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_insert_prev(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_insert_index(DLList	*list,
 	       vpointer	 data,
 	       int	 index);
-FUNCPROTO DLList	*dlink_delete_all_data(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_delete_data(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_delete_link(DLList *list, DLList *link);
-FUNCPROTO DLList	*dlink_clone(DLList *list);
-FUNCPROTO DLList	*dlink_reverse(DLList *list);
-FUNCPROTO DLList	*dlink_nth(DLList *list, const int index);
-FUNCPROTO DLList	*dlink_pth(DLList *list, const int index);
-FUNCPROTO vpointer	dlink_nth_data(DLList *list, const int index);
-FUNCPROTO vpointer	dlink_pth_data(DLList *list, const int index);
-FUNCPROTO DLList	*dlink_find(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func);
-FUNCPROTO int	dlink_index_link(DLList *list, DLList *link);
-FUNCPROTO int	dlink_index_data(DLList *list, vpointer data);
-FUNCPROTO DLList	*dlink_last(DLList *list);
-FUNCPROTO DLList	*dlink_first(DLList *list);
-FUNCPROTO int	dlink_size(DLList *list);
-FUNCPROTO boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
-FUNCPROTO boolean	dlink_foreach_reverse(DLList *list,
+GAULFUNC DLList	*dlink_delete_all_data(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_delete_data(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_delete_link(DLList *list, DLList *link);
+GAULFUNC DLList	*dlink_clone(DLList *list);
+GAULFUNC DLList	*dlink_reverse(DLList *list);
+GAULFUNC DLList	*dlink_nth(DLList *list, const int id);
+GAULFUNC DLList	*dlink_pth(DLList *list, const int id);
+GAULFUNC vpointer	dlink_nth_data(DLList *list, const int id);
+GAULFUNC vpointer	dlink_pth_data(DLList *list, const int id);
+GAULFUNC DLList	*dlink_find(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func);
+GAULFUNC int	dlink_index_link(DLList *list, DLList *link);
+GAULFUNC int	dlink_index_data(DLList *list, vpointer data);
+GAULFUNC DLList	*dlink_last(DLList *list);
+GAULFUNC DLList	*dlink_first(DLList *list);
+GAULFUNC int	dlink_size(DLList *list);
+GAULFUNC boolean	dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata);
+GAULFUNC boolean	dlink_foreach_reverse(DLList *list,
                        LLForeachFunc func, vpointer userdata);
-FUNCPROTO DLList	*dlink_sort_merge(DLList       *l1, 
+GAULFUNC DLList *dlink_insert_sorted(DLList *list, vpointer data, LLCompareFunc func);
+GAULFUNC DLList	*dlink_sort_merge(DLList       *l1, 
 		   DLList       *l2,
 		   LLCompareFunc compare_func);
-FUNCPROTO DLList	*dlink_sort(DLList       *list,
+GAULFUNC DLList	*dlink_sort(DLList       *list,
 	     LLCompareFunc compare_func);
-FUNCPROTO void linkedlist_diagnostics(void);
+GAULFUNC void linkedlist_diagnostics(void);
 #ifndef LINKEDLIST_COMPILE_MAIN
-FUNCPROTO boolean linkedlist_test(void);
+GAULFUNC boolean linkedlist_test(void);
 #endif
 
 #define slink_insert_prev(X,Y)	slink_prepend((X), (Y));

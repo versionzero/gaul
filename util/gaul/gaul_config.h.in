@@ -6,7 +6,7 @@
 ########################################################################
 ##
 ## GAUL - Genetic Algorithm Utility Library
-## Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+## Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org)
 ## All rights reserved.
 ##
 ## The latest version of this program should be available at:
@@ -42,12 +42,11 @@
 
 #ifdef WIN32
 #  ifdef BUILDING_DLL
-#    define FUNCPROTO __declspec (dllexport)
+#    define GAULFUNC __declspec (dllexport)
 #  else
-#    define FUNCPROTO __declspec (dllimport)
+#    define GAULFUNC __declspec (dllimport)
 #  endif
 #else
-#  define FUNCPROTO
+#  define GAULFUNC
 #endif
-
 

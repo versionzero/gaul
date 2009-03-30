@@ -3,7 +3,7 @@
  **********************************************************************
 
   table_util - Data table routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -67,22 +67,22 @@ typedef struct TableStruct_t
 /*
  * Prototypes.
  */
-FUNCPROTO TableStruct	*table_new(void);
-FUNCPROTO void		table_destroy(TableStruct *table);
-FUNCPROTO boolean		table_set_size(TableStruct *table, unsigned int size);
-FUNCPROTO vpointer	table_remove_index(TableStruct *table, unsigned int index);
-FUNCPROTO unsigned int	table_remove_data(TableStruct *table, vpointer data);
-FUNCPROTO unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
-FUNCPROTO vpointer	table_get_data(TableStruct *table, unsigned int index);
-FUNCPROTO vpointer	*table_get_data_all(TableStruct *table);
-FUNCPROTO unsigned int	*table_get_index_all(TableStruct *table);
-FUNCPROTO unsigned int	table_lookup_index(TableStruct *table, vpointer data);
-FUNCPROTO unsigned int	table_add(TableStruct *table, vpointer data);
-FUNCPROTO unsigned int	table_count_items(TableStruct *table);
-FUNCPROTO void		table_diagnostics(void);
+GAULFUNC TableStruct	*table_new(void);
+GAULFUNC void		table_destroy(TableStruct *table);
+GAULFUNC boolean		table_set_size(TableStruct *table, unsigned int size);
+GAULFUNC vpointer	table_remove_index(TableStruct *table, unsigned int index);
+GAULFUNC unsigned int	table_remove_data(TableStruct *table, vpointer data);
+GAULFUNC unsigned int	table_remove_data_all(TableStruct *table, vpointer data);
+GAULFUNC vpointer	table_get_data(TableStruct *table, unsigned int index);
+GAULFUNC vpointer	*table_get_data_all(TableStruct *table);
+GAULFUNC unsigned int	*table_get_index_all(TableStruct *table);
+GAULFUNC unsigned int	table_lookup_index(TableStruct *table, vpointer data);
+GAULFUNC unsigned int	table_add(TableStruct *table, vpointer data);
+GAULFUNC unsigned int	table_count_items(TableStruct *table);
+GAULFUNC void		table_diagnostics(void);
 
 #ifndef TABLE_COMPILE_MAIN
-FUNCPROTO boolean	table_test(void);
+GAULFUNC boolean	table_test(void);
 #endif
 
 #endif /* TABLE_UTIL_H_INCLUDED */

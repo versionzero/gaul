@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_systematicsearch - Systematic algorithm for comparison and search.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -40,7 +40,7 @@
   last updated: 08 Nov 2002
  **********************************************************************/
 
-void ga_population_set_search_parameters( population              *pop,
+GAULFUNC void ga_population_set_search_parameters( population              *pop,
                                         GAscan_chromosome	scan_chromosome)
   {
 
@@ -74,7 +74,7 @@ void ga_population_set_search_parameters( population              *pop,
   last updated:	18 Feb 2005
  **********************************************************************/
 
-int ga_search(	population		*pop,
+GAULFUNC int ga_search(	population		*pop,
 		entity			*best)
   {
   int		iteration=0;		/* Current iteration number. */

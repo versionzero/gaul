@@ -1,8 +1,8 @@
 Name:		gaul-devel-noslang
 Summary:	Genetic Algorithm Utility Library
-Version:	0.1849
-Release:	3
-License:	Copyright (c) 2000-2005, Stewart Adcock.  Licensed under terms of the GNU GPL.
+Version:	0.1851
+Release:	0
+License:	Copyright (c) 2000-2009, Stewart Adcock.  Licensed under terms of the GNU GPL.
 Vendor:		Stewart Adcock
 Packager:	"Stewart Adcock" <gaul@linux-domain.com>
 Group:		Scientific/Engineering
@@ -16,7 +16,7 @@ BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroo
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2001-2005, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2001-2009, Stewart Adcock <stewart@linux-domain.com>
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -39,7 +39,7 @@ BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroo
 ########################################################################
 
 %description
-The Genetic Algorithm Utility Library (GAUL) is a flexible open source programming library providing evolutionary algorithms.  Steady-state, generational and island model genetic algorithms are supported, using Darwinian, Lamarckian or Baldwinian evolution.  Other evolutionary algorithms, such as differential evolution and deterministic crowding, are fully supported.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are also provided for comparison and local search purposes, including simplex method, hill climbing, simulated annealling and steepest ascent.  Includes support for multiprocessor and distributed systems.  Much of the functionality is accessible through a simple S-Lang interface.
+The Genetic Algorithm Utility Library (GAUL) is a flexible open source programming library providing evolutionary algorithms.  Steady-state, generational and island model genetic algorithms are supported, using Darwinian, Lamarckian or Baldwinian evolution.  Other evolutionary algorithms, such as differential evolution and deterministic crowding, are fully supported.  Standard mutation, crossover and selection operators are provided, while code hooks additionally allow custom operators.  Several non-evolutionary search heuristics are also provided for comparison and local search purposes, including simplex method, hill climbing, simulated annealling and steepest ascent.  Includes support for multiprocessor and distributed systems.
 
 %prep
 %setup -n gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}

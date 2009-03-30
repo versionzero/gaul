@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_seed - Genetic algorithm genome initialisation operators.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -45,7 +45,7 @@
   last updated: 15/05/01
  **********************************************************************/
 
-boolean ga_seed_boolean_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_boolean_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -77,7 +77,7 @@ boolean ga_seed_boolean_random(population *pop, entity *adam)
   last updated: 30 Jun 2003
  **********************************************************************/
 
-boolean ga_seed_boolean_zero(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_boolean_zero(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -109,7 +109,7 @@ boolean ga_seed_boolean_zero(population *pop, entity *adam)
   last updated: 15/05/01
  **********************************************************************/
 
-boolean ga_seed_integer_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_integer_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -142,7 +142,7 @@ boolean ga_seed_integer_random(population *pop, entity *adam)
   last updated: 15/05/01
  **********************************************************************/
 
-boolean ga_seed_integer_zero(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_integer_zero(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -174,7 +174,7 @@ boolean ga_seed_integer_zero(population *pop, entity *adam)
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_seed_char_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_char_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -189,7 +189,7 @@ boolean ga_seed_char_random(population *pop, entity *adam)
     for (point=0; point<pop->len_chromosomes; point++)
       {
       ((char *)adam->chromosome[chromo])[point]
-            = random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
+            = (char)random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
       }
     }
 
@@ -208,7 +208,7 @@ boolean ga_seed_char_random(population *pop, entity *adam)
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_seed_double_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_double_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -242,7 +242,7 @@ boolean ga_seed_double_random(population *pop, entity *adam)
   last updated: 02 Jul 2003
  **********************************************************************/
 
-boolean ga_seed_double_random_unit_gaussian(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_double_random_unit_gaussian(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -272,7 +272,7 @@ boolean ga_seed_double_random_unit_gaussian(population *pop, entity *adam)
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_seed_double_zero(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_double_zero(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -301,7 +301,7 @@ boolean ga_seed_double_zero(population *pop, entity *adam)
   return: last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_seed_printable_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_printable_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -316,7 +316,7 @@ boolean ga_seed_printable_random(population *pop, entity *adam)
     for (point=0; point<pop->len_chromosomes; point++)
       {
       ((char *)adam->chromosome[chromo])[point]
-            = random_int('~'-' ')+' ';
+            = (char)random_int('~'-' ')+' ';
       }
     }
 
@@ -333,7 +333,7 @@ boolean ga_seed_printable_random(population *pop, entity *adam)
   last updated: 30/06/01
  **********************************************************************/
 
-boolean ga_seed_bitstring_random(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_bitstring_random(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */
@@ -364,7 +364,7 @@ boolean ga_seed_bitstring_random(population *pop, entity *adam)
   last updated: 10 Aug 2004
  **********************************************************************/
 
-boolean ga_seed_bitstring_zero(population *pop, entity *adam)
+GAULFUNC boolean ga_seed_bitstring_zero(population *pop, entity *adam)
   {
   int		chromo;		/* Index of chromosome to seed */
   int		point;		/* Index of allele to seed */

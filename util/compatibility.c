@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -73,8 +73,8 @@ double dpow(double n, int e)
 #endif	/* HAVE_DPOW */
 
 
-#if HAVE_MEMCPY != 1
-#if HAVE_BCOPY != 1
+#if !defined(HAVE_MEMCPY)
+#if !defined(HAVE_BCOPY)
 /*
  * Copy LEN characters from SRC to DEST
  * 
@@ -109,12 +109,12 @@ void memcpy(char *dest, const char *src, size_t len)
 
   return;
   }
-#endif /* HAVE_BCOPY */
-#endif /* HAVE_MEMCPY */
+#endif /* !HAVE_BCOPY */
+#endif /* !HAVE_MEMCPY */
 
 
-#if HAVE_STRCHR != 1
-#if HAVE_INDEX != 1
+#if !defined(HAVE_STRCHR)
+#if !defined(HAVE_INDEX)
 /*
  * Find C in STR by searching through the string
  */
@@ -133,11 +133,11 @@ char *strchr(const char *str, int c)
 
   return NULL;
   }
-#endif /* HAVE_INDEX */
-#endif /* HAVE_STRCHR */
+#endif /* !HAVE_INDEX */
+#endif /* !HAVE_STRCHR */
 
 
-#if HAVE_STRLEN  != 1
+#if !defined(HAVE_STRLEN)
 /*
  * Return the length in characters of STR
  */
@@ -153,10 +153,10 @@ size_t strlen(const char *str)
   
   return len;
   }
-#endif /* HAVE_STRLEN */
+#endif /* !HAVE_STRLEN */
 
 
-#if HAVE_STRCMP != 1
+#if !defined(HAVE_STRCMP)
 /*
  * Compare str1 and str2.
  *
@@ -174,10 +174,10 @@ int strcmp(const char *str1, const char *str2)
 
   return *str1 - *str2;
   }
-#endif /* HAVE_STRCMP */
+#endif /* !HAVE_STRCMP */
 
 
-#if HAVE_STRNCMP != 1
+#if !defined(HAVE_STRNCMP)
 /*
  * Compare at most len characters of str1 and str2.
  *
@@ -199,10 +199,10 @@ int strncmp(const char *str1, const char *str2, size_t len)
   
   return 0;
   }
-#endif /* HAVE_STRNCMP */
+#endif /* !HAVE_STRNCMP */
 
 
-#if HAVE_STRCPY != 1
+#if !defined(HAVE_STRCPY)
 /*
  * Copies str2 to str1.
  *
@@ -224,10 +224,10 @@ char *strcpy(char *str1, const char *str2)
   
   return str1;
   }
-#endif /* HAVE_STRCPY */
+#endif /* !HAVE_STRCPY */
 
 
-#if HAVE_STRNCPY != 1
+#if !defined(HAVE_STRNCPY)
 /*
  * Copy str2 to str1 until len characters copied, or a null
  * character is found in str2.
@@ -254,10 +254,10 @@ char	*strncpy(char *str1, const char *str2, size_t len)
   
   return str1;
   }
-#endif /* HAVE_STRNCPY */
+#endif /* !HAVE_STRNCPY */
 
 
-#if HAVE_STRPBRK != 1
+#if !defined(HAVE_STRPBRK)
 /*
  * Locate the first occurrence in the string s of any of the characters in the string accept.
  */
@@ -276,10 +276,10 @@ char *strpbrk(const char *s, const char *accept)
      
   return NULL;
   }
-#endif /* HAVE_STRPBRK */
+#endif /* !HAVE_STRPBRK */
 
 
-#if HAVE_STRSEP != 1
+#if !defined(HAVE_STRSEP)
 /*
  * If *str is NULL, return NULL.  Otherwise, this find the first token
  * in the string *str, where tokens are delimited by symbols in the
@@ -305,10 +305,10 @@ char *strsep(char **str, const char *delim)
 
   return s;
   }
-#endif /* HAVE_STRSEP */
+#endif /* !HAVE_STRSEP */
 
 
-#if HAVE_STRCASECMP != 1
+#if !defined(HAVE_STRCASECMP)
 /*
  * Compare strings like strncmp(), but ignoring case.
  */
@@ -325,10 +325,10 @@ int strcasecmp(const char *str0, const char *str1)
 
   return tolower(*str0)-tolower(*str1);
   }
-#endif /* HAVE_STRCASECMP */
+#endif /* !HAVE_STRCASECMP */
 
 
-#if HAVE_STRNCASECMP != 1
+#if !defined(HAVE_STRNCASECMP)
 /*
  * Compare strings like strncmp(), but ignoring case.
  * ie, only compares first n chars.
@@ -344,10 +344,10 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 
   return (i==n) ? 0 : (tolower(*str0)-tolower(*str1));
   }
-#endif /* HAVE_STRNCASECMP */
+#endif /* !HAVE_STRNCASECMP */
 
 
-#if HAVE_USLEEP != 1
+#if !defined(HAVE_USLEEP)
 /*
  * Sleep for a specified number of microseconds.
  * -- Should replace with the POSIX standard's nanosleep().
@@ -355,7 +355,7 @@ int strncasecmp(const char *str0, const char *str1, size_t n)
 
 void usleep(unsigned long usec)
   {
-#if W32_CRIPPLED == 1
+#ifdef W32_CRIPPLED
 # if USE_WINDOWS_H == 1
   Sleep(usec/1000);		/* Windows sleep is in milliseconds. */
 #else
@@ -363,19 +363,19 @@ void usleep(unsigned long usec)
   for (i=0; i<usec*10; i++);	/* A completely dodgy kludge.  Just introduces an arbitrary length delay. */
 # endif
 #else
-  #if HAVE_SNOOZE == 1		/* i.e. BeOS, AtheOS, Syllable. */
+# if defined(HAVE_SNOOZE)		/* i.e. BeOS, AtheOS, Syllable. */
   snooze(usec/1000);		/* BeOS sleep is in milliseconds. */
-  #else
+# else
   struct timeval tv;
   tv.tv_sec=0;
   tv.tv_usec=usec;
   select(0, NULL, NULL, NULL, &tv);
-  #endif
+# endif
 #endif
 
   return;
   }
-#endif /* HAVE_USLEEP */
+#endif /* !HAVE_USLEEP */
 
 
 #if HAVE_MEMSET != 1
@@ -438,9 +438,9 @@ void *memset(void *dst0, int c0, size_t bytes)
     dst = dst0;
 
     /* if not enough words for a reasonable speedup, just fill bytes */
-    if (bytes < 3 * word_size) {
+    if (bytes < (size_t) 3 * word_size) {
         while (bytes != 0) {
-            *dst++ = c0;
+            *dst++ = (unsigned char) c0;
             --bytes;
         }
         return dst0;
@@ -458,11 +458,11 @@ void *memset(void *dst0, int c0, size_t bytes)
     }
 
     /* align destination by filling in bytes */
-    if ((t = (long)dst & word_mask) != 0) {
+    if ((t = (size_t)dst & word_mask) != 0) {
         t = word_size - t;
         bytes -= t;
         do {
-            *dst++ = c0;
+            *dst++ = (unsigned char) c0;
         } while (--t != 0);
     }
 
@@ -477,7 +477,7 @@ void *memset(void *dst0, int c0, size_t bytes)
     t = bytes & word_mask;
     if (t != 0) {
         do {
-            *dst++ = c0;
+            *dst++ = (unsigned char) c0;
         } while (--t != 0);
     }
 
@@ -487,8 +487,8 @@ void *memset(void *dst0, int c0, size_t bytes)
 #endif /* HAVE_MEMSET */
 
 
-#if HAVE_MEMCMP != 1
-#if HAVE_BCMP != 1
+#if !defined(HAVE_MEMCMP)
+#if !defined(HAVE_BCMP)
 /*
  * Some systems, such as SunOS do have BCMP instead.
  * In which case this is defined as a macro in the header.
@@ -502,11 +502,11 @@ int memcmp(const void *src1, const void *src2, size_t n)
 
   return 0;
   }
-#endif /* HAVE_BCMP */
-#endif /* HAVE_MEMCMP */
+#endif /* !HAVE_BCMP */
+#endif /* !HAVE_MEMCMP */
 
 
-#if HAVE_STRDUP != 1
+#if !defined(HAVE_STRDUP)
 char *strdup(const char *str)
   {
   char *new_str;
@@ -518,10 +518,10 @@ char *strdup(const char *str)
 
   return new_str;
   }
-#endif /* HAVE_STRDUP */
+#endif /* !HAVE_STRDUP */
 
 
-#if HAVE_STRNDUP != 1
+#if !defined(HAVE_STRNDUP)
 char *strndup(const char *str, size_t n)
   {
   char *new_str=NULL;
@@ -535,7 +535,7 @@ char *strndup(const char *str, size_t n)
 
   return new_str;
   }
-#endif /* HAVE_STRNDUP */
+#endif /* !HAVE_STRNDUP */
 
 
 #if HAVE_DIEF != 1
@@ -558,7 +558,7 @@ void dief(const char *format, ...)
 #endif /* HAVE_DIEF */
 
 
-#if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )
+#if !defined(HAVE_WAITPID) && !defined(W32_CRIPPLED)
 pid_t waitpid(pid_t pid, int *pstatus, int options)
   {
   pid_t result;
@@ -570,10 +570,10 @@ pid_t waitpid(pid_t pid, int *pstatus, int options)
 
   return result;
   }
-#endif /* HAVE_WAITPID */
+#endif /* !HAVE_WAITPID */
 
 
-#if HAVE_MIN != 1
+#if !defined(HAVE_MIN)
 int min( int a, int b )
   {
   return a <= b ? a : b;
@@ -581,7 +581,7 @@ int min( int a, int b )
 #endif
 
 
-#if HAVE_MAX != 1
+#if !defined(HAVE_MAX)
 int max( int a, int b )
   {
   return a >= b ? a : b;
@@ -589,14 +589,14 @@ int max( int a, int b )
 #endif
 
 
-#if HAVE_SINCOS != 1
+#if !defined(HAVE_SINCOS)
 /*
  * This is an undocumented GNU extension, which is actually fairly useful.
  */
 void sincos( double radians, double *s, double *c )
   {
 
-#if __i368__
+#ifdef __i386__
   __asm__ ("fsincos" : "=t" (*c), "=u" (*s) : "0" (radians));
 #else
   *s = sin(radians);
@@ -607,10 +607,10 @@ void sincos( double radians, double *s, double *c )
 
   return;
   }
-#endif /* HAVE_SINCOS */
+#endif /* !HAVE_SINCOS */
 
 
-#if HAVE_GETHOSTNAME != 1
+#if !defined(HAVE_GETHOSTNAME)
 /*
  * gethostname() - get host name
 
@@ -632,7 +632,7 @@ void sincos( double radians, double *s, double *c )
               uses ENAMETOOLONG.)
 
    SUSv2 guarantees that host names are limited to 255 bytes.  POSIX
-   1003.1-2001 guarantees that host names (not including the terminating
+   1003.1-2006 guarantees that host names (not including the terminating
    NUL) are limited to HOST_NAME_MAX bytes.
 
  */
@@ -644,5 +644,5 @@ int gethostname(char *name, size_t len)
 
   return TRUE;
   }
-#endif /* HAVE_GETHOSTNAME */
+#endif /* !HAVE_GETHOSTNAME */
 

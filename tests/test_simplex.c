@@ -3,7 +3,7 @@
  **********************************************************************
 
   test_simplex - Test program for GAUL.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2006, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -42,16 +42,16 @@
   last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean test_to_double(population *pop, entity *entity, double *array)
+static boolean test_to_double(population *pop, entity *this_entity, double *array)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
-  if (!entity) die("Null pointer to entity structure passed.");
+  if (!this_entity) die("Null pointer to entity structure passed.");
 
-  array[0] = ((double *)entity->chromosome[0])[0];
-  array[1] = ((double *)entity->chromosome[0])[1];
-  array[2] = ((double *)entity->chromosome[0])[2];
-  array[3] = ((double *)entity->chromosome[0])[3];
+  array[0] = ((double *)this_entity->chromosome[0])[0];
+  array[1] = ((double *)this_entity->chromosome[0])[1];
+  array[2] = ((double *)this_entity->chromosome[0])[2];
+  array[3] = ((double *)this_entity->chromosome[0])[3];
 
   return TRUE;
   }
@@ -65,18 +65,18 @@ boolean test_to_double(population *pop, entity *entity, double *array)
   last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean test_from_double(population *pop, entity *entity, double *array)
+static boolean test_from_double(population *pop, entity *this_entity, double *array)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
-  if (!entity) die("Null pointer to entity structure passed.");
+  if (!this_entity) die("Null pointer to entity structure passed.");
 
-  if (!entity->chromosome) die("Entity has no chromsomes.");
+  if (!this_entity->chromosome) die("Entity has no chromsomes.");
 
-  ((double *)entity->chromosome[0])[0] = array[0];
-  ((double *)entity->chromosome[0])[1] = array[1];
-  ((double *)entity->chromosome[0])[2] = array[2];
-  ((double *)entity->chromosome[0])[3] = array[3];
+  ((double *)this_entity->chromosome[0])[0] = array[0];
+  ((double *)this_entity->chromosome[0])[1] = array[1];
+  ((double *)this_entity->chromosome[0])[2] = array[2];
+  ((double *)this_entity->chromosome[0])[3] = array[3];
 
   return TRUE;
   }
@@ -90,16 +90,16 @@ boolean test_from_double(population *pop, entity *entity, double *array)
   updated:	25 Nov 2002
  **********************************************************************/
 
-boolean test_score(population *pop, entity *entity)
+static boolean test_score(population *pop, entity *this_entity)
   {
   double		A, B, C, D;	/* Parameters. */
 
-  A = ((double *)entity->chromosome[0])[0];
-  B = ((double *)entity->chromosome[0])[1];
-  C = ((double *)entity->chromosome[0])[2];
-  D = ((double *)entity->chromosome[0])[3];
+  A = ((double *)this_entity->chromosome[0])[0];
+  B = ((double *)this_entity->chromosome[0])[1];
+  C = ((double *)this_entity->chromosome[0])[2];
+  D = ((double *)this_entity->chromosome[0])[3];
 
-  entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
+  this_entity->fitness = -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D));
 
   return TRUE;
   }
@@ -113,7 +113,7 @@ boolean test_score(population *pop, entity *entity)
   updated:	25 Nov 2002
  **********************************************************************/
 
-boolean test_iteration_callback(int iteration, entity *solution)
+static boolean test_iteration_callback(int iteration, entity *solution)
   {
 
   printf( "%d: A = %f B = %f C = %f D = %f (fitness = %f)\n",
@@ -137,7 +137,7 @@ boolean test_iteration_callback(int iteration, entity *solution)
   last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean test_seed(population *pop, entity *adam)
+static boolean test_seed(population *pop, entity *adam)
   {
 
 /* Checks. */

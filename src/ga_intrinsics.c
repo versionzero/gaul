@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_intrinics - Genetic algorithm routine intrinsics.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -44,7 +44,7 @@
 
 #include "gaul/ga_intrinsics.h"
 
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
 
 /**********************************************************************
   ga_population_new_slang()
@@ -358,7 +358,7 @@ static int ga_entity_migrate_slang(int *srcpop_id, int *destpop_id, int *jacques
   last updated: 18/10/00
  **********************************************************************/
 
-boolean ga_singlepoint_crossover_chromosome(int *father, int *mother, int *son, int *daughter)
+GAULFUNC boolean ga_singlepoint_crossover_chromosome(int *father, int *mother, int *son, int *daughter)
   {
   }
 
@@ -372,7 +372,7 @@ boolean ga_singlepoint_crossover_chromosome(int *father, int *mother, int *son, 
   last updated: 14/02/01
  **********************************************************************/
 
-int ga_crossover_chromosome_singlepoints_slang(int *pop_id,
+GAULFUNC void ga_crossover_chromosome_singlepoints_slang(int *pop_id,
                      int *father, int *mother, int *son, int *daughter)
   {
   population	*pop;			/* Active population structure. */
@@ -888,7 +888,7 @@ static int ga_allele_search_slang(	int	*pop_id,
   last updated:	18 Mar 2002
  **********************************************************************/
 
-int ga_metropolis_slang(	int	*pop_id,
+GAULFUNC void ga_metropolis_slang(	int	*pop_id,
 				int	*entity_id,
 				int	*num_iterations,
 				int 	*temperature)
@@ -1331,15 +1331,15 @@ static void ga_slang_replace(population *pop, entity *child)
   last updated:	18 Mar 2003
  **********************************************************************/
 
-#if HAVE_SLANG==0
-boolean ga_intrinsic_sladd(void)
+#ifndef HAVE_SLANG
+GAULFUNC boolean ga_intrinsic_sladd(void)
   {
   plog(LOG_WARNING, "No S-Lang support compiled into GAUL.");
   return TRUE;
   }
 #else
 
-boolean ga_intrinsic_sladd(void)
+GAULFUNC boolean ga_intrinsic_sladd(void)
   {
   static double	fitnessmin=GA_MIN_FITNESS;      /* Minimum fitness. */
   static int	schemes[7]={GA_SCHEME_DARWIN,

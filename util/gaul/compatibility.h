@@ -3,7 +3,7 @@
  **********************************************************************
 
   compatibility - Compatibility/Portability stuff.
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -80,113 +80,113 @@
  */
 
 #if HAVE_IPOW != 1
-FUNCPROTO int ipow(int n, int e);
+GAULFUNC int ipow(int n, int e);
 #endif
 
 #if HAVE_DPOW != 1
-FUNCPROTO double dpow(double n, int e);
+GAULFUNC double dpow(double n, int e);
 #endif
 
-#if HAVE_STRCHR != 1
-# if HAVE_INDEX == 1
+#if !defined(HAVE_STRCHR)
+# if defined(HAVE_INDEX)
 #  define strchr index
 # else
-FUNCPROTO char *strchr(const char *str, int c);
+GAULFUNC char *strchr(const char *str, int c);
 # endif
 #endif
 
-#if HAVE_STRLEN != 1
-FUNCPROTO size_t strlen(const char *str);
+#if !defined(HAVE_STRLEN)
+GAULFUNC size_t strlen(const char *str);
 #endif
 
-#if HAVE_STRCMP != 1
-FUNCPROTO int strcmp(const char *str1, const char *str2);
+#if !defined(HAVE_STRCMP)
+GAULFUNC int strcmp(const char *str1, const char *str2);
 #endif
 
-#if HAVE_STRNCMP != 1
-FUNCPROTO int strncmp(const char *str1, const char *str2, size_t len);
+#if !defined(HAVE_STRNCMP)
+GAULFUNC int strncmp(const char *str1, const char *str2, size_t len);
 #endif
 
-#if HAVE_STRCPY != 1
-FUNCPROTO char *strcpy(char *str1, const char *str2);
+#if !defined(HAVE_STRCPY)
+GAULFUNC char *strcpy(char *str1, const char *str2);
 #endif
 
-#if HAVE_STRNCPY != 1
-FUNCPROTO char *strncpy(char *str1, const char *str2, size_t len);
+#if !defined(HAVE_STRNCPY)
+GAULFUNC char *strncpy(char *str1, const char *str2, size_t len);
 #endif
 
-#if HAVE_STRPBRK != 1
-FUNCPROTO char *strpbrk(const char *s, const char *accept);
+#if !defined(HAVE_STRPBRK)
+GAULFUNC char *strpbrk(const char *s, const char *accept);
 #endif
 
-#if HAVE_STRSEP != 1
-FUNCPROTO char *strsep(char **str, const char *delim);
+#if !defined(HAVE_STRSEP)
+GAULFUNC char *strsep(char **str, const char *delim);
 #endif
 
-#if HAVE_STRCASECMP != 1
-FUNCPROTO int strcasecmp(const char *str0, const char *str1);
+#if !defined(HAVE_STRCASECMP)
+GAULFUNC int strcasecmp(const char *str0, const char *str1);
 #endif
 
-#if HAVE_STRNCASECMP != 1
-FUNCPROTO int strncasecmp(const char *str0, const char *str1, size_t n);
+#if !defined(HAVE_STRNCASECMP)
+GAULFUNC int strncasecmp(const char *str0, const char *str1, size_t n);
 #endif
 
-#if HAVE_USLEEP != 1
-FUNCPROTO void usleep(unsigned long usec);
+#if !defined(HAVE_USLEEP)
+GAULFUNC void usleep(unsigned long usec);
 #endif
 
-#if HAVE_MEMCPY != 1
+#if !defined(HAVE_MEMCPY)
 /* Some systems, such as SunOS do have BCOPY instead. */
-# if HAVE_BCOPY == 1
+# if defined(HAVE_BCOPY)
 #  define memcpy(A, B, C) bcopy((B), (A), (C))
 # else
-FUNCPROTO void memcpy(char *dest, const char *src, size_t len);
+GAULFUNC void memcpy(char *dest, const char *src, size_t len);
 # endif
 #endif
 
-#if HAVE_MEMCMP != 1
+#if !defined(HAVE_MEMCMP)
 /* Some systems, such as SunOS do have BCMP instead. */
-# if HAVE_BCMP == 1
+# if defined(HAVE_BCMP)
 #  define memcmp(A, B, C) bcmp((B), (A), (C))
 # else
-FUNCPROTO int memcmp(const void *src1, const void *src2, size_t n);
+GAULFUNC int memcmp(const void *src1, const void *src2, size_t n);
 # endif
 #endif
 
-#if HAVE_STRDUP != 1
-FUNCPROTO char *strdup(const char *str);
+#if !defined(HAVE_STRDUP)
+GAULFUNC char *strdup(const char *str);
 #endif
 
-#if HAVE_STRNDUP != 1
-FUNCPROTO char *strndup(const char *str, size_t n);
+#if !defined(HAVE_STRNDUP)
+GAULFUNC char *strndup(const char *str, size_t n);
 #endif
 
 #if HAVE_DIEF != 1
 /*
  * HAVE_DIEF is set in "SAA_header.h", not "config.h"
  */
-FUNCPROTO void dief(const char *format, ...);
+GAULFUNC void dief(const char *format, ...);
 #endif
 
-#if HAVE_WAITPID != 1 && !defined( W32_CRIPPLED )
+#if !defined(HAVE_WAITPID) && !defined( W32_CRIPPLED )
 /* FIXME: Need to add a Windows compatible version of this function. */
-FUNCPROTO pid_t waitpid(pid_t pid, int *pstatus, int options);
+GAULFUNC pid_t waitpid(pid_t pid, int *pstatus, int options);
 #endif
 
-#if HAVE_MIN != 1
-FUNCPROTO int min(int a, int b);
+#if !defined(HAVE_MIN)
+GAULFUNC int min(int a, int b);
 #endif
 
-#if HAVE_MAX != 1
-FUNCPROTO int max(int a, int b);
+#if !defined(HAVE_MAX)
+GAULFUNC int max(int a, int b);
 #endif
 
-#if HAVE_SINCOS != 1
-FUNCPROTO void sincos( double radians, double *s, double *c );
+#if !defined(HAVE_SINCOS)
+GAULFUNC void sincos( double radians, double *s, double *c );
 #endif
 
-#if HAVE_GETHOSTNAME != 1
-FUNCPROTO int gethostname(char *name, size_t len);
+#if !defined(HAVE_GETHOSTNAME)
+GAULFUNC int gethostname(char *name, size_t len);
 #endif
 
 #endif /* COMPATIBILITY_H_INCLUDED */

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_compare - Entity comparison routines.
-  Copyright ©2003-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -45,7 +45,7 @@
   last updated:	21 May 2003
  **********************************************************************/
 
-double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;		/* Loop variable over all chromosomes, alleles. */
   int		dist=0;		/* Genomic distance. */
@@ -81,7 +81,7 @@ double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;			/* Loop variable over all chromosomes, alleles. */
   double	sqdistsum=0.0;		/* Genomic distance. */
@@ -117,7 +117,7 @@ double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;		/* Loop variable over all chromosomes, alleles. */
   int		dist=0;		/* Genomic distance. */
@@ -153,7 +153,7 @@ double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;			/* Loop variable over all chromosomes, alleles. */
   double	sqdistsum=0.0;		/* Genomic distance. */
@@ -189,7 +189,7 @@ double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;		/* Loop variable over all chromosomes, alleles. */
   double	dist=0.0;	/* Genomic distance. */
@@ -225,7 +225,7 @@ double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;			/* Loop variable over all chromosomes, alleles. */
   double	sqdistsum=0.0;		/* Genomic distance. */
@@ -261,7 +261,7 @@ double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;		/* Loop variable over all chromosomes, alleles. */
   int		dist=0;		/* Genomic distance. */
@@ -297,7 +297,7 @@ double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta)
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;			/* Loop variable over all chromosomes, alleles. */
   double	sqdistsum=0.0;		/* Genomic distance. */
@@ -333,19 +333,19 @@ double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;		/* Loop variable over all chromosomes, alleles. */
   int		dist=0;		/* Genomic distance. */
-  byte		*a, *b;		/* Pointers to chromosomes. */
+  gaulbyte		*a, *b;		/* Pointers to chromosomes. */
 
   /* Checks */
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    a = (byte *)(alpha->chromosome[i]);
-    b = (byte *)(beta->chromosome[i]);
+    a = (gaulbyte *)(alpha->chromosome[i]);
+    b = (gaulbyte *)(beta->chromosome[i]);
 
     for (j=0; j<pop->len_chromosomes; j++)
       {
@@ -369,19 +369,19 @@ double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta
   last updated:	25 Aug 2004
  **********************************************************************/
 
-double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta)
+GAULFUNC double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta)
   {
   int		i,j;			/* Loop variable over all chromosomes, alleles. */
   double	sqdistsum=0.0;		/* Genomic distance. */
-  byte		*a, *b;			/* Pointers to chromosomes. */
+  gaulbyte		*a, *b;			/* Pointers to chromosomes. */
 
   /* Checks */
   if (!alpha || !beta) die("Null pointer to entity structure passed");
 
   for (i=0; i<pop->num_chromosomes; i++)
     {
-    a = (byte *)(alpha->chromosome[i]);
-    b = (byte *)(beta->chromosome[i]);
+    a = (gaulbyte *)(alpha->chromosome[i]);
+    b = (gaulbyte *)(beta->chromosome[i]);
 
     for (j=0; j<pop->len_chromosomes; j++)
       {

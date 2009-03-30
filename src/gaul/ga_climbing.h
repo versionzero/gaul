@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_climbing - Hill climbing algorithms for comparison and search.
-  Copyright ©2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -40,9 +40,9 @@
 /*
  * Prototypes.
  */
-FUNCPROTO void ga_population_set_hillclimbing_parameters(population *pop, GAmutate_allele mutate_allele);
-FUNCPROTO int ga_next_ascent_hillclimbing(population *pop, entity *initial, const int max_iterations);
-FUNCPROTO int ga_random_ascent_hillclimbing(population *pop, entity *initial, const int max_iterations);
+GAULFUNC void ga_population_set_hillclimbing_parameters(population *pop, GAmutate_allele mutate_allele);
+GAULFUNC int ga_next_ascent_hillclimbing(population *pop, entity *initial, const int max_iterations);
+GAULFUNC int ga_random_ascent_hillclimbing(population *pop, entity *initial, const int max_iterations);
 
 #endif	/* GA_CLIMBING_H_INCLUDED */
 

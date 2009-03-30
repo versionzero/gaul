@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul_config_win.h - GAUL configuration settings for windows.
-  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -39,18 +39,18 @@
  **********************************************************************/
 
 #ifdef BUILDING_DLL
-#  define FUNCPROTO __declspec (dllexport)
+#  define GAULFUNC __declspec (dllexport)
 #else
-#  define FUNCPROTO __declspec (dllimport)
+#  define GAULFUNC __declspec (dllimport)
 #endif
 
 #  if defined __CYGWIN32__ && !defined __CYGWIN__
 #    define __CYGWIN__ __CYGWIN32__
 #  endif
 
-#define USE_WINDOWS_H 1
+/*#define USE_WINDOWS_H 1*/
 
-#include <sys/time.h>
+/*#include <sys/time.h>*/
 #include <sys/types.h>
 #include <limits.h>
 #include <string.h>
@@ -91,17 +91,21 @@ extern int errno;
  * These need to be modified for each release:
  */
 #define GA_MAJOR_VERSION 0
-#define GA_MINOR_VERSION 1848
-#define GA_PATCH_VERSION 3
-#define GA_VERSION_STRING "0.1848-3"
+#define GA_MINOR_VERSION 1850
+#define GA_PATCH_VERSION 0
+#define GA_VERSION_STRING "0.1850-0"
 #define GA_UNAME_STRING "<Unknown windows machine>"
-#define GA_BUILD_DATE_STRING "14/04/05"
+#define GA_BUILD_DATE_STRING "29/06/06"
 
 /*
  * Functions available on this platform:
  */
 
+#define HAVE_MIN	1
+#define HAVE_MAX	1
+#define HAVE_MEMCMP	1
 #define HAVE_MEMCPY	1
+#define HAVE_MEMSET 1
 #define HAVE_SINCOS	1
 #define HAVE_STRDUP	1
 #define HAVE_STRNDUP	1
@@ -126,9 +130,6 @@ extern int errno;
  */
 #define HAVE_IPOW	0
 #define HAVE_DPOW	0
-#define HAVE_BCOPY	0
-#define HAVE_BCMP	0
-#define HAVE_SNOOZE	0
 
 /*
  * These are defined if windows.h is included:
@@ -137,10 +138,6 @@ extern int errno;
 #define HAVE_MIN	1
 #define HAVE_MAX	1
 #define HAVE_GETHOSTNAME	1
-#else
-#define HAVE_MIN	0
-#define HAVE_MAX	0
-#define HAVE_GETHOSTNAME	0
 #endif
 
 /*
@@ -152,20 +149,14 @@ extern int errno;
 #define AVLTREE_KEY_TYPE void *
 #define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 #define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
-#define USE_CHROMO_CHUNKS 0
 #define USE_OPTIMISED_MEMSET 1
 
 #define MEMORY_ALLOC_SAFE 1
-#define MEMORY_ALLOC_DEBUG 0
 
 /*
  * These might need to be changed:
  */
 
-#define HAVE_SLANG 0
-#define HAVE_MPI 0
-#define HAVE_PTHREADS 0
-#define USE_OPENMP 0
 #define GAUL_DETERMINISTIC_OPENMP 1
 
 #endif /* GAUL_CONFIG_WIN_H_INCLUDED */

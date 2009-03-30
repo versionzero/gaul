@@ -4,7 +4,7 @@
 #######################################################################
 #
 # GAUL - Genetic Algorithm Utility library.
-# Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -29,8 +29,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-# Kludge:
-INCLUDES = -I../util/ -I../../util/
+AM_CPPFLAGS = -I$(top_srcdir)/util -I$(top_builddir)/util
 
 lib_LTLIBRARIES = libgaul.la
 

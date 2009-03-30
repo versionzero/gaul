@@ -3,7 +3,7 @@
  **********************************************************************
 
   log_util - MT safe, MP aware, general logging functions.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -41,7 +41,7 @@
 
 #include "gaul/memory_util.h"
 
-#if HAVE_MPI == 1
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
@@ -68,39 +68,22 @@ enum log_level_type {
  * Function prototypes
  */
 /* Function definition for custom output function: */
-FUNCPROTO typedef void	(*log_func)(const enum log_level_type level,
+GAULFUNC typedef void	(*log_func)(const enum log_level_type level,
                           const char *func_name,
                           const char *file_name,
                           const int line_num,
                           const char *message);
 
-FUNCPROTO void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
-FUNCPROTO void	log_set_level(enum log_level_type level);
-FUNCPROTO void	log_set_file(const char *fname);
-/*#if defined(__GNUC__) || defined(__INTEL_COMPILER)*/
-#if defined(__GNUC__)
-#  if defined(WIN32)
-FUNCPROTO inline enum log_level_type	log_get_level(void);
-#  else
-FUNCPROTO extern	inline enum log_level_type	log_get_level(void);
-#  endif
-#else
-/*
- * The intel compiler will inline this anyway, depending upon IPO options.
- * Other compiler probably won't.
- */
-#  if defined(WIN32)
-FUNCPROTO enum log_level_type	log_get_level(void);
-#  else
-FUNCPROTO extern	enum log_level_type	log_get_level(void);
-#  endif
-#endif
+GAULFUNC void	log_init(enum log_level_type level, char *fname, log_func func, boolean date);
+GAULFUNC void	log_set_level(enum log_level_type level);
+GAULFUNC void	log_set_file(const char *fname);
+GAULFUNC enum log_level_type	log_get_level(void);
 
 /*
  * This is the actual logging function, but isn't intended to be used
  * directly.
  */
-FUNCPROTO void	log_output( const enum log_level_type level,
+GAULFUNC void	log_output( const enum log_level_type level,
                           const char *func_name,
                           const char *file_name,
                           const int line_num,
@@ -121,14 +104,14 @@ FUNCPROTO void	log_output( const enum log_level_type level,
 	                   __FILE__, __LINE__,		\
 	                   ##__VA_ARGS__); }
 #else
-FUNCPROTO void plog( const enum log_level_type level, const char *format, ... );
+GAULFUNC void plog( const enum log_level_type level, const char *format, ... );
 #endif
 
 /*
  * SLang intrinsic function with equivalent functionality.
  */
-#if HAVE_SLANG==1
-FUNCPROTO void	log_wrapper(int *level, char *message);
+#ifdef HAVE_SLANG
+GAULFUNC void	log_wrapper(int *level, char *message);
 #endif
 
 #endif /* LOG_UTIL_H_INCLUDED */

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_similarity - Genetic algorithm genome comparison routines.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -48,22 +48,37 @@ double	ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
 /*
  * Prototypes.
  */
-FUNCPROTO double	ga_similarity_bitstring_tanimoto(const population *pop,
+GAULFUNC double	ga_similarity_bitstring_tanimoto(const population *pop,
                                   const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_bitstring_dice(const population *pop,
+GAULFUNC double	ga_similarity_bitstring_dice(const population *pop,
                                   const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_bitstring_hamming(const population *pop,
+GAULFUNC double	ga_similarity_bitstring_hamming(const population *pop,
                                   const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_bitstring_euclidean(const population *pop,
+GAULFUNC double	ga_similarity_bitstring_euclidean(const population *pop,
                                   const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_bitstring_cosine(const population *pop,
+GAULFUNC double	ga_similarity_bitstring_cosine(const population *pop,
                                   const entity *alpha, const entity *beta);
 
-FUNCPROTO double	ga_similarity_double_tanimoto(const population *pop,
+GAULFUNC int ga_similarity_bitstring_count_1_alleles( const population *pop,
+                                      const entity *alpha, const int chromosomeid );
+GAULFUNC int ga_similarity_bitstring_count_match_alleles( const population *pop,
+                                      const entity *alpha, const entity *beta,
+                                      const int chromosomeid );
+GAULFUNC int ga_similarity_bitstring_count_and_alleles( const population *pop,
+                                      const entity *alpha, const entity *beta,
+                                      const int chromosomeid );
+GAULFUNC int ga_similarity_integer_count_match_alleles( const population *pop,
+                                      const entity *alpha, const entity *beta,
+                                      const int chromosomeid );
+
+GAULFUNC double	ga_similarity_double_tanimoto(const population *pop,
                                   const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_double_dice(const population *pop,
+GAULFUNC double	ga_similarity_double_dice(const population *pop,
                                       const entity *alpha, const entity *beta);
-FUNCPROTO double	ga_similarity_double_cosine(const population *pop,
+GAULFUNC double	ga_similarity_double_cosine(const population *pop,
                                       const entity *alpha, const entity *beta);
+GAULFUNC int ga_similarity_double_count_match_alleles( const population *pop,
+                                      const entity *alpha, const entity *beta,
+                                      const int chromosomeid );
 
 #endif	/* GA_SIMILARITY_H_INCLUDED */

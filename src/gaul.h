@@ -3,7 +3,7 @@
  **********************************************************************
 
   gaul - Genetic Algorithm Utility Library.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -130,12 +130,15 @@ typedef boolean (*GAgeneration_hook)(const int generation, population *pop);
 typedef boolean (*GAiteration_hook)(const int iteration, entity *entity);
 
 /*
- * Phenome (A general purpose data cache) handling.
+ * Phenome (A general purpose per-entity and per-population data cache) handling.
  */
 /* GAdata_destructor is used to deallocate phenomic data. */
+/* GAdata_destructor is also used to deallocate population-wide data. */
 typedef void    (*GAdata_destructor)(vpointer data);
 /* GAdata_ref_incrementor is used for reference counting of phenomic data. */
 typedef void    (*GAdata_ref_incrementor)(vpointer data);
+/* GAdata_copy is used for copying of population-wide data. */
+typedef vpointer (*GAdata_copy)(vpointer data);
 
 /*
  * Genome handling.
@@ -148,10 +151,10 @@ typedef void    (*GAchromosome_destructor)(population *pop, entity *entity);
 typedef void    (*GAchromosome_replicate)(const population *pop, entity *parent, entity *child, const int chromosomeid);
 /* GAchromosome_to_bytes is used to pack genomic data into a
  * contiguous block of memory. */
-typedef unsigned int    (*GAchromosome_to_bytes)(const population *pop, entity *joe, byte **bytes, unsigned int *max_bytes);
+typedef unsigned int    (*GAchromosome_to_bytes)(const population *pop, entity *joe, gaulbyte **bytes, unsigned int *max_bytes);
 /* GAchromosome_from_bytes is used to unpack genomic data from a
  * contiguous block of memory. */
-typedef void    (*GAchromosome_from_bytes)(const population *pop, entity *joe, byte *bytes);
+typedef void    (*GAchromosome_from_bytes)(const population *pop, entity *joe, gaulbyte *bytes);
 /* GAchromosome_to_string is used to generate a human readable
  * representation of genomic data. */
 typedef char    *(*GAchromosome_to_string)(const population *pop, const entity *joe, char *text, size_t *textlen);
@@ -212,192 +215,197 @@ typedef double	(*GAcompare)(population *pop, entity *alpha, entity *beta);
  * Functions located in ga_core.c:
  * (Basic entity and population handling)
  */
-FUNCPROTO population *ga_population_new(	const int stable_size,
+GAULFUNC population *ga_population_new(	const int stable_size,
 				const int num_chromosome,
 				const int len_chromosome);
-FUNCPROTO population *ga_population_clone_empty( population *pop );
-FUNCPROTO population *ga_population_clone( population *pop );
-FUNCPROTO int	ga_get_num_populations(void);
-FUNCPROTO population *ga_get_population_from_id(unsigned int id);
-FUNCPROTO unsigned int ga_get_population_id(population *pop);
-FUNCPROTO unsigned int *ga_get_all_population_ids(void);
-FUNCPROTO population **ga_get_all_populations(void);
-FUNCPROTO boolean	ga_entity_seed(population *pop, entity *e);
-FUNCPROTO boolean ga_population_seed(population *pop);
-FUNCPROTO double	ga_entity_evaluate(population *pop, entity *entity);
-FUNCPROTO boolean	ga_population_score_and_sort(population *pop);
-FUNCPROTO boolean	ga_population_sort(population *pop);
-FUNCPROTO int ga_get_entity_rank(population *pop, entity *e);
-FUNCPROTO int ga_get_entity_id(population *pop, entity *e);
-FUNCPROTO entity *ga_get_entity_from_id(population *pop, const unsigned int id);
-FUNCPROTO entity *ga_get_entity_from_rank(population *pop, const unsigned int rank);
-FUNCPROTO int	ga_get_entity_rank_from_id(population *pop, int id);
-FUNCPROTO int	ga_get_entity_id_from_rank(population *pop, int rank);
-FUNCPROTO boolean	ga_entity_dereference_by_rank(population *pop, int rank);
-FUNCPROTO boolean ga_entity_dereference(population *p, entity *dying);
-FUNCPROTO boolean ga_entity_dereference_by_id(population *pop, int id);
-FUNCPROTO void ga_entity_clear_data(population *p, entity *entity, const int chromosome);
-FUNCPROTO void ga_entity_blank(population *p, entity *entity);
-FUNCPROTO entity *ga_get_free_entity(population *pop);
-FUNCPROTO boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chromosome);
-FUNCPROTO boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *src);
-FUNCPROTO boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, int chromo);
-FUNCPROTO boolean ga_entity_copy(population *pop, entity *dest, entity *src);
-FUNCPROTO entity	*ga_entity_clone(population *pop, entity *parent);
+GAULFUNC population *ga_population_clone_empty( population *pop );
+GAULFUNC population *ga_population_clone( population *pop );
+GAULFUNC int	ga_get_num_populations(void);
+GAULFUNC population *ga_get_population_from_id(unsigned int id);
+GAULFUNC unsigned int ga_get_population_id(population *pop);
+GAULFUNC unsigned int *ga_get_all_population_ids(void);
+GAULFUNC population **ga_get_all_populations(void);
+GAULFUNC boolean	ga_entity_seed(population *pop, entity *e);
+GAULFUNC boolean ga_population_seed(population *pop);
+GAULFUNC double	ga_entity_evaluate(population *pop, entity *entity);
+GAULFUNC boolean	ga_population_score_and_sort(population *pop);
+GAULFUNC boolean	ga_population_sort(population *pop);
+GAULFUNC int ga_get_entity_rank(population *pop, entity *e);
+GAULFUNC int ga_get_entity_id(population *pop, entity *e);
+GAULFUNC entity *ga_get_entity_from_id(population *pop, const unsigned int id);
+GAULFUNC entity *ga_get_entity_from_rank(population *pop, const unsigned int rank);
+GAULFUNC int	ga_get_entity_rank_from_id(population *pop, int id);
+GAULFUNC int	ga_get_entity_id_from_rank(population *pop, int rank);
+GAULFUNC boolean	ga_entity_dereference_by_rank(population *pop, int rank);
+GAULFUNC boolean ga_entity_dereference(population *p, entity *dying);
+GAULFUNC boolean ga_entity_dereference_by_id(population *pop, int id);
+GAULFUNC void ga_entity_clear_data(population *p, entity *entity, const int chromosome);
+GAULFUNC void ga_entity_blank(population *p, entity *entity);
+GAULFUNC entity *ga_get_free_entity(population *pop);
+GAULFUNC boolean ga_copy_data(population *pop, entity *dest, entity *src, const int chromosome);
+GAULFUNC boolean ga_entity_copy_all_chromosomes(population *pop, entity *dest, entity *src);
+GAULFUNC boolean ga_entity_copy_chromosome(population *pop, entity *dest, entity *src, int chromo);
+GAULFUNC boolean ga_entity_copy(population *pop, entity *dest, entity *src);
+GAULFUNC entity	*ga_entity_clone(population *pop, entity *parent);
 
-FUNCPROTO void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask );
-FUNCPROTO void ga_population_send_every( population *pop, int dest_node );
-FUNCPROTO void ga_population_append_receive( population *pop, int src_node );
-FUNCPROTO population *ga_population_new_receive( int src_node );
-FUNCPROTO population *ga_population_receive( int src_node );
-FUNCPROTO void ga_population_send( population *pop, int dest_node );
-FUNCPROTO void ga_population_send_all( population *pop, int dest_node );
+GAULFUNC void ga_population_send_by_mask( population *pop, int dest_node, int num_to_send, boolean *send_mask );
+GAULFUNC void ga_population_send_every( population *pop, int dest_node );
+GAULFUNC void ga_population_append_receive( population *pop, int src_node );
+GAULFUNC population *ga_population_new_receive( int src_node );
+GAULFUNC population *ga_population_receive( int src_node );
+GAULFUNC void ga_population_send( population *pop, int dest_node );
+GAULFUNC void ga_population_send_all( population *pop, int dest_node );
 
-FUNCPROTO entity	*ga_optimise_entity(population *pop, entity *unopt);
-FUNCPROTO void	ga_population_set_parameters(  population            *pop,
+GAULFUNC entity	*ga_optimise_entity(population *pop, entity *unopt);
+GAULFUNC void	ga_population_set_parameters(  population            *pop,
 		                       const ga_scheme_type  scheme,
 		                       const ga_elitism_type elitism,
 		                       const double          crossover,
 		                       const double          mutation,
 		                       const double          migration);
-FUNCPROTO void	ga_population_set_scheme(      population            *pop,
+GAULFUNC void	ga_population_set_scheme(      population            *pop,
 		                       const ga_scheme_type  scheme);
-FUNCPROTO void	ga_population_set_elitism(     population            *pop,
+GAULFUNC void	ga_population_set_elitism(     population            *pop,
 		                       const ga_elitism_type elitism);
-FUNCPROTO void	ga_population_set_crossover(   population            *pop,
+GAULFUNC void	ga_population_set_crossover(   population            *pop,
 		                       const double          crossover);
-FUNCPROTO void	ga_population_set_mutation(    population            *pop,
+GAULFUNC void	ga_population_set_mutation(    population            *pop,
 		                       const double          mutation);
-FUNCPROTO void	ga_population_set_migration(   population            *pop,
+GAULFUNC void	ga_population_set_migration(   population            *pop,
 		                       const double          migration);
-FUNCPROTO void	ga_population_set_allele_mutation_prob(   population            *pop,
+GAULFUNC void	ga_population_set_allele_mutation_prob(   population            *pop,
 		                       const double          prob);
-FUNCPROTO void	ga_population_set_allele_min_integer(   population            *pop,
+GAULFUNC void	ga_population_set_allele_min_integer(   population            *pop,
 		                       const int          value);
-FUNCPROTO void	ga_population_set_allele_max_integer(   population            *pop,
+GAULFUNC void	ga_population_set_allele_max_integer(   population            *pop,
 		                       const int          value);
-FUNCPROTO void	ga_population_set_allele_min_double(   population            *pop,
+GAULFUNC void	ga_population_set_allele_min_double(   population            *pop,
 		                       const double          value);
-FUNCPROTO void	ga_population_set_allele_max_double(   population            *pop,
+GAULFUNC void	ga_population_set_allele_max_double(   population            *pop,
 		                       const double          value);
-FUNCPROTO double ga_population_get_crossover(population       *pop);
-FUNCPROTO double ga_population_get_mutation(population       *pop);
-FUNCPROTO double ga_population_get_migration(population       *pop);
-FUNCPROTO double ga_population_get_allele_mutation_prob(population       *pop);
-FUNCPROTO int ga_population_get_allele_min_integer(population       *pop);
-FUNCPROTO int ga_population_get_allele_max_integer(population       *pop);
-FUNCPROTO double ga_population_get_allele_min_double(population       *pop);
-FUNCPROTO double ga_population_get_allele_max_double(population       *pop);
-FUNCPROTO ga_scheme_type ga_population_get_scheme(population       *pop);
-FUNCPROTO ga_elitism_type ga_population_get_elitism(population       *pop);
-FUNCPROTO population *ga_transcend(unsigned int id);
-FUNCPROTO unsigned int ga_resurect(population *pop);
-FUNCPROTO boolean ga_extinction(population *extinct);
-FUNCPROTO boolean ga_genocide(population *pop, int target_size);
-FUNCPROTO boolean ga_genocide_by_fitness(population *pop, double target_fitness);
-FUNCPROTO boolean ga_population_set_data(population *pop, vpointer data);
-FUNCPROTO vpointer ga_population_get_data(population *pop);
-FUNCPROTO boolean ga_entity_set_data(population *pop, entity *e, SLList *data);
-FUNCPROTO SLList	*ga_entity_get_data(population *pop, entity *e);
-FUNCPROTO int	ga_population_get_generation(population *pop);
+GAULFUNC double ga_population_get_crossover(population       *pop);
+GAULFUNC double ga_population_get_mutation(population       *pop);
+GAULFUNC double ga_population_get_migration(population       *pop);
+GAULFUNC double ga_population_get_allele_mutation_prob(population       *pop);
+GAULFUNC int ga_population_get_allele_min_integer(population       *pop);
+GAULFUNC int ga_population_get_allele_max_integer(population       *pop);
+GAULFUNC double ga_population_get_allele_min_double(population       *pop);
+GAULFUNC double ga_population_get_allele_max_double(population       *pop);
+GAULFUNC ga_scheme_type ga_population_get_scheme(population       *pop);
+GAULFUNC ga_elitism_type ga_population_get_elitism(population       *pop);
+GAULFUNC population *ga_transcend(unsigned int id);
+GAULFUNC unsigned int ga_resurect(population *pop);
+GAULFUNC boolean ga_extinction(population *extinct);
+GAULFUNC boolean ga_genocide(population *pop, int target_size);
+GAULFUNC boolean ga_genocide_by_fitness(population *pop, double target_fitness);
+GAULFUNC boolean ga_population_set_data(population *pop, vpointer data);
+GAULFUNC boolean ga_population_set_data_managed(population *pop,
+                                              vpointer data,
+                                              GAdata_destructor population_data_destructor,
+                                              GAdata_copy population_data_copy);
+GAULFUNC vpointer ga_population_get_data(population *pop);
+GAULFUNC boolean ga_entity_set_data(population *pop, entity *e, SLList *data);
+GAULFUNC SLList	*ga_entity_get_data(population *pop, entity *e);
+GAULFUNC int	ga_population_get_generation(population *pop);
+GAULFUNC int	ga_population_get_island(population *pop);
 
-FUNCPROTO double	ga_entity_get_fitness(entity *e);
-FUNCPROTO boolean	ga_entity_set_fitness(entity *e, double fitness);
-FUNCPROTO int ga_population_get_fitness_dimensions(population *pop);
-FUNCPROTO boolean ga_population_set_fitness_dimensions(population *pop, int num);
-FUNCPROTO int	ga_population_get_stablesize(population *pop);
-FUNCPROTO int	ga_population_get_size(population *pop);
-FUNCPROTO int	ga_population_get_maxsize(population *pop);
-FUNCPROTO boolean	ga_population_set_stablesize(population *pop, int stable_size);
+GAULFUNC double	ga_entity_get_fitness(entity *e);
+GAULFUNC boolean	ga_entity_set_fitness(entity *e, double fitness);
+GAULFUNC int ga_population_get_fitness_dimensions(population *pop);
+GAULFUNC boolean ga_population_set_fitness_dimensions(population *pop, int num);
+GAULFUNC int	ga_population_get_stablesize(population *pop);
+GAULFUNC int	ga_population_get_size(population *pop);
+GAULFUNC int	ga_population_get_maxsize(population *pop);
+GAULFUNC boolean	ga_population_set_stablesize(population *pop, int stable_size);
 
-FUNCPROTO int	ga_funclookup_ptr_to_id(void *func);
-FUNCPROTO int	ga_funclookup_label_to_id(char *funcname);
-FUNCPROTO void	*ga_funclookup_label_to_ptr(char *funcname);
-FUNCPROTO void	*ga_funclookup_id_to_ptr(int id);
-FUNCPROTO char	*ga_funclookup_id_to_label(int id);
-FUNCPROTO void	ga_init_openmp( void );
+GAULFUNC int	ga_funclookup_ptr_to_id(void *func);
+GAULFUNC int	ga_funclookup_label_to_id(char *funcname);
+GAULFUNC void	*ga_funclookup_label_to_ptr(char *funcname);
+GAULFUNC void	*ga_funclookup_id_to_ptr(int id);
+GAULFUNC char	*ga_funclookup_id_to_label(int id);
+GAULFUNC void	ga_init_openmp( void );
 
 /*
  * Functions located in ga_io.c:
  * (Disk I/O)
  */
-FUNCPROTO boolean ga_population_write(population *pop, char *fname);
-FUNCPROTO population *ga_population_read(char *fname);
-FUNCPROTO boolean ga_entity_write(population *pop, entity *entity, char *fname);
-FUNCPROTO entity *ga_entity_read(population *pop, char *fname);
+GAULFUNC boolean ga_population_write(population *pop, char *fname);
+GAULFUNC population *ga_population_read(char *fname);
+GAULFUNC boolean ga_entity_write(population *pop, entity *entity, char *fname);
+GAULFUNC entity *ga_entity_read(population *pop, char *fname);
 
 /*
  * Functions located in ga_select.c:
  * (Selection operators)
  */
-FUNCPROTO boolean ga_select_one_random(population *pop, entity **mother);
-FUNCPROTO boolean ga_select_two_random(population *pop, entity **mother, entity **father);
-FUNCPROTO boolean ga_select_one_every(population *pop, entity **mother);
-FUNCPROTO boolean ga_select_two_every(population *pop, entity **mother, entity **father);
-FUNCPROTO boolean	ga_select_one_randomrank(population *pop, entity **mother);
-FUNCPROTO boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father);
-FUNCPROTO boolean ga_select_one_bestof2(population *pop, entity **mother);
-FUNCPROTO boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father);
-FUNCPROTO boolean ga_select_one_bestof3(population *pop, entity **mother);
-FUNCPROTO boolean ga_select_two_bestof3(population *pop, entity **mother, entity **father);
-FUNCPROTO boolean	ga_select_one_roulette( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_roulette( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_roulette_rebased( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean	ga_select_one_sus( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_sus( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean	ga_select_one_sussq( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_sussq( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean	ga_select_one_aggressive( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_aggressive( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean	ga_select_one_best( population *pop, entity **mother );
-FUNCPROTO boolean	ga_select_two_best( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean ga_select_one_linearrank( population *pop, entity **mother );
-FUNCPROTO boolean ga_select_two_linearrank( population *pop, entity **mother, entity **father );
-FUNCPROTO boolean ga_select_one_roundrobin( population *pop, entity **mother );
+GAULFUNC boolean ga_select_one_random(population *pop, entity **mother);
+GAULFUNC boolean ga_select_two_random(population *pop, entity **mother, entity **father);
+GAULFUNC boolean ga_select_one_every(population *pop, entity **mother);
+GAULFUNC boolean ga_select_two_every(population *pop, entity **mother, entity **father);
+GAULFUNC boolean	ga_select_one_randomrank(population *pop, entity **mother);
+GAULFUNC boolean ga_select_two_randomrank(population *pop, entity **mother, entity **father);
+GAULFUNC boolean ga_select_one_bestof2(population *pop, entity **mother);
+GAULFUNC boolean ga_select_two_bestof2(population *pop, entity **mother, entity **father);
+GAULFUNC boolean ga_select_one_bestof3(population *pop, entity **mother);
+GAULFUNC boolean ga_select_two_bestof3(population *pop, entity **mother, entity **father);
+GAULFUNC boolean	ga_select_one_roulette( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_roulette( population *pop, entity **mother, entity **father );
+GAULFUNC boolean	ga_select_one_roulette_rebased( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_roulette_rebased( population *pop, entity **mother, entity **father );
+GAULFUNC boolean	ga_select_one_sus( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_sus( population *pop, entity **mother, entity **father );
+GAULFUNC boolean	ga_select_one_sussq( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_sussq( population *pop, entity **mother, entity **father );
+GAULFUNC boolean	ga_select_one_aggressive( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_aggressive( population *pop, entity **mother, entity **father );
+GAULFUNC boolean	ga_select_one_best( population *pop, entity **mother );
+GAULFUNC boolean	ga_select_two_best( population *pop, entity **mother, entity **father );
+GAULFUNC boolean ga_select_one_linearrank( population *pop, entity **mother );
+GAULFUNC boolean ga_select_two_linearrank( population *pop, entity **mother, entity **father );
+GAULFUNC boolean ga_select_one_roundrobin( population *pop, entity **mother );
 
 /*
  * Functions located in ga_crossover.c:
  * (Crossover operators)
  */
-FUNCPROTO void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_integer_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_integer_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_integer_allele_mixing( population *pop,
+GAULFUNC void	ga_crossover_integer_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_integer_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_integer_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_integer_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_integer_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                   entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_boolean_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_boolean_allele_mixing( population *pop,
+GAULFUNC void	ga_crossover_boolean_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_boolean_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_boolean_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_boolean_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                   entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_char_singlepoints( population *pop,
+GAULFUNC void	ga_crossover_char_singlepoints( population *pop,
                                      entity *father, entity *mother,
                                           entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_char_doublepoints( population *pop,
+GAULFUNC void	ga_crossover_char_doublepoints( population *pop,
                                     entity *father, entity *mother,
                                     entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_char_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_char_allele_mixing( population *pop,
+GAULFUNC void	ga_crossover_char_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_char_allele_mixing( population *pop,
 	                                 entity *father, entity *mother,
                                   entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_double_singlepoints( population *pop,
+GAULFUNC void	ga_crossover_double_singlepoints( population *pop,
                                        entity *father, entity *mother,
                                        entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_double_doublepoints( population *pop,
+GAULFUNC void	ga_crossover_double_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                        entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_double_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_double_allele_mixing( population *pop,
+GAULFUNC void	ga_crossover_double_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_double_mean(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_double_allele_mixing( population *pop,
                                 entity *father, entity *mother,
                                  entity *son, entity *daughter );
-FUNCPROTO void	ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_bitstring_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
-FUNCPROTO void	ga_crossover_bitstring_allele_mixing( population *pop,
+GAULFUNC void	ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_bitstring_doublepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter);
+GAULFUNC void	ga_crossover_bitstring_allele_mixing( population *pop,
                                 entity *father, entity *mother,
                                 entity *son, entity *daughter );
 
@@ -405,61 +413,61 @@ FUNCPROTO void	ga_crossover_bitstring_allele_mixing( population *pop,
  * Functions located in ga_mutate.c:
  * (Mutation operators)
  */
-FUNCPROTO void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_integer_singlepoint_randomize(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_integer_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_integer_allpoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_char_singlepoint_drift(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_char_singlepoint_randomize(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_char_allpoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_printable_allpoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_printable_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_bitstring_singlepoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_double_singlepoint_drift( population *pop,
+GAULFUNC void	ga_mutate_integer_singlepoint_drift(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_integer_singlepoint_randomize(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_integer_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_integer_allpoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_char_singlepoint_drift(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_char_singlepoint_randomize(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_char_allpoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_char_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_printable_singlepoint_drift(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_printable_singlepoint_randomize(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_printable_allpoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_printable_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_bitstring_singlepoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_double_singlepoint_drift( population *pop,
                                           entity *father, entity *son );
-FUNCPROTO void	ga_mutate_double_singlepoint_randomize( population *pop,
+GAULFUNC void	ga_mutate_double_singlepoint_randomize( population *pop,
                                               entity *father, entity *son );
-FUNCPROTO void	ga_mutate_double_multipoint(population *pop, entity *father, entity *son);
-FUNCPROTO void	ga_mutate_double_allpoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_double_multipoint(population *pop, entity *father, entity *son);
+GAULFUNC void	ga_mutate_double_allpoint(population *pop, entity *father, entity *son);
 
 /*
  * Functions located in ga_seed.c:
  * (Genesis operators)
  */
-FUNCPROTO boolean	ga_seed_boolean_random(population *pop, entity *adam);
-FUNCPROTO boolean ga_seed_boolean_zero(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_integer_random(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_integer_zero(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_double_random(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_double_zero(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_double_random_unit_gaussian(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_char_random(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_printable_random(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_bitstring_random(population *pop, entity *adam);
-FUNCPROTO boolean	ga_seed_bitstring_zero(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_boolean_random(population *pop, entity *adam);
+GAULFUNC boolean ga_seed_boolean_zero(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_integer_random(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_integer_zero(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_double_random(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_double_zero(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_double_random_unit_gaussian(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_char_random(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_printable_random(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_bitstring_random(population *pop, entity *adam);
+GAULFUNC boolean	ga_seed_bitstring_zero(population *pop, entity *adam);
 
 /*
  * Functions located in ga_replace.c:
  * (Replacement operators)
  */
-FUNCPROTO void	ga_replace_by_fitness(population *pop, entity *child);
+GAULFUNC void	ga_replace_by_fitness(population *pop, entity *child);
 
 /*
  * Functions located in ga_utility.c:
  * (Miscellaneous support functions)
  */
-FUNCPROTO void    ga_diagnostics( void ); 
-FUNCPROTO int	ga_get_major_version( void );
-FUNCPROTO int	ga_get_minor_version( void );
-FUNCPROTO int	ga_get_patch_version( void );
+GAULFUNC void    ga_diagnostics( void ); 
+GAULFUNC int	ga_get_major_version( void );
+GAULFUNC int	ga_get_minor_version( void );
+GAULFUNC int	ga_get_patch_version( void );
 /* ga_genesis() is deprecated! Use ga_genesis_integer() instead. */
-FUNCPROTO population *ga_genesis( const int               population_size,
+GAULFUNC population *ga_genesis( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -476,7 +484,7 @@ FUNCPROTO population *ga_genesis( const int               population_size,
                         GAreplace               replace,
 			vpointer		userdata );
 /* ga_genesis_int() is deprecated! Use ga_genesis_integer() instead. */
-FUNCPROTO population *ga_genesis_int( const int           population_size,
+GAULFUNC population *ga_genesis_int( const int           population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -492,7 +500,7 @@ FUNCPROTO population *ga_genesis_int( const int           population_size,
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO population *ga_genesis_integer( const int           population_size,
+GAULFUNC population *ga_genesis_integer( const int           population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -508,7 +516,7 @@ FUNCPROTO population *ga_genesis_integer( const int           population_size,
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO population *ga_genesis_boolean( const int               population_size,
+GAULFUNC population *ga_genesis_boolean( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -524,7 +532,7 @@ FUNCPROTO population *ga_genesis_boolean( const int               population_siz
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO population *ga_genesis_char( const int               population_size,
+GAULFUNC population *ga_genesis_char( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -540,7 +548,7 @@ FUNCPROTO population *ga_genesis_char( const int               population_size,
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO population *ga_genesis_double( const int               population_size,
+GAULFUNC population *ga_genesis_double( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -556,7 +564,7 @@ FUNCPROTO population *ga_genesis_double( const int               population_size
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO population *ga_genesis_bitstring( const int               population_size,
+GAULFUNC population *ga_genesis_bitstring( const int               population_size,
                         const int               num_chromo,
                         const int               len_chromo,
                         GAgeneration_hook       generation_hook,
@@ -572,24 +580,24 @@ FUNCPROTO population *ga_genesis_bitstring( const int               population_s
                         GAcrossover             crossover,
                         GAreplace               replace,
 			vpointer		userdata );
-FUNCPROTO entity  *ga_allele_search(      population      *pop,
+GAULFUNC entity  *ga_allele_search(      population      *pop,
                                 const int       chromosomeid,
                                 const int       point,
                                 const int       min_val, 
                                 const int       max_val, 
                                 entity          *initial );
-FUNCPROTO void ga_population_dump(population *pop);
-FUNCPROTO void ga_entity_dump(population *pop, entity *john);
+GAULFUNC void ga_population_dump(population *pop);
+GAULFUNC void ga_entity_dump(population *pop, entity *john);
 
 /*
  * Functions located in ga_stats.c:
  * (Statistics functions)
  */
-FUNCPROTO boolean ga_fitness_mean( population *pop, double *average );
-FUNCPROTO boolean ga_fitness_mean_stddev( population *pop,
+GAULFUNC boolean ga_fitness_mean( population *pop, double *average );
+GAULFUNC boolean ga_fitness_mean_stddev( population *pop,
                              double *average, double *stddev );
-FUNCPROTO boolean ga_fitness_stats( population *pop,
-                          double *max, double *min,
+GAULFUNC boolean ga_fitness_stats( population *pop,
+                          double *maximum, double *minimum,
                           double *mean, double *median,
                           double *variance, double *stddev,
                           double *kurtosis, double *skew );
@@ -598,22 +606,22 @@ FUNCPROTO boolean ga_fitness_stats( population *pop,
  * Functions located in ga_compare.c:
  * (Entity comparison functions)
  */
-FUNCPROTO double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta);
-FUNCPROTO double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_char_hamming(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_char_euclidean(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_integer_hamming(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_integer_euclidean(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_double_hamming(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_double_euclidean(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_boolean_hamming(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_boolean_euclidean(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_bitstring_hamming(population *pop, entity *alpha, entity *beta);
+GAULFUNC double ga_compare_bitstring_euclidean(population *pop, entity *alpha, entity *beta);
 
 /*
  * Functions located in ga_rank.c:
  * (Entity comparison functions)
  */
-FUNCPROTO int ga_rank_fitness(population *alphapop, entity *alpha, population *betapop, entity *beta);
+GAULFUNC int ga_rank_fitness(population *alphapop, entity *alpha, population *betapop, entity *beta);
 
 /**********************************************************************
  * Include remainder of this library's headers.
@@ -623,7 +631,7 @@ FUNCPROTO int ga_rank_fitness(population *alphapop, entity *alpha, population *b
 
 #include "gaul/ga_core.h"		/* Private aspects of GAUL. */
 
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
 #include "gaul/ga_intrinsics.h"         /* GAUL's S-Lang interface. */
 #endif
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_rank - Entity comparison routines.
-  Copyright ©2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2005-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -49,7 +49,7 @@
   last updated:	24 Feb 2005
  **********************************************************************/
 
-int ga_rank_fitness(	population *alphapop, entity *alpha,
+GAULFUNC int ga_rank_fitness(	population *alphapop, entity *alpha,
 			population *betapop, entity *beta )
   {
 

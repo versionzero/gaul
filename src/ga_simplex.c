@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_simplex - A simplex search algorithm for comparison and local search.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -62,7 +62,7 @@
   last updated: 29 Mar 2004
  **********************************************************************/
 
-void ga_population_set_simplex_parameters( population		*pop,
+GAULFUNC void ga_population_set_simplex_parameters( population		*pop,
 					const int		dimensions,
 					const double		step,
                                         const GAto_double	to_double,
@@ -104,7 +104,7 @@ void ga_population_set_simplex_parameters( population		*pop,
 		are performed using the standard and evaluation
 		callback mechanism.
 		The passed entity will have its data overwritten.  The
-		remainder of the population will be let untouched.
+		remainder of the population will be left untouched.
 		Note that it is safe to pass a NULL initial structure,
 		in which case a random starting structure will be
 		generated, however the final solution will not be
@@ -114,7 +114,7 @@ void ga_population_set_simplex_parameters( population		*pop,
   last updated:	18 Feb 2005
  **********************************************************************/
 
-int ga_simplex(	population		*pop,
+GAULFUNC int ga_simplex(	population		*pop,
 		entity			*initial,
 		const int		max_iterations )
   {
@@ -572,7 +572,7 @@ int ga_simplex(	population		*pop,
 		are performed using the standard and evaluation
 		callback mechanism.
 		The passed entity will have its data overwritten.  The
-		remainder of the population will be let untouched.
+		remainder of the population will be left untouched.
 		Note that it is safe to pass a NULL initial structure,
 		in which case a random starting structure will be
 		generated, however the final solution will not be
@@ -585,7 +585,7 @@ int ga_simplex(	population		*pop,
   last updated:	13 Apr 2005
  **********************************************************************/
 
-int ga_simplex_double(	population		*pop,
+GAULFUNC int ga_simplex_double(	population		*pop,
 		entity			*initial,
 		const int		max_iterations )
   {
@@ -983,7 +983,11 @@ int ga_simplex_double(	population		*pop,
     ga_entity_dereference(pop, putative[i]);
     }
 
+  /*
+   * Clean-up.
+   */
   s_free(putative);
+  s_free(average);
 
   return iteration;
   }

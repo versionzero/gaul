@@ -3,7 +3,7 @@
  **********************************************************************
 
   timer_util - Useful timer routines with S-Lang intrinsics.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -54,18 +54,18 @@ typedef struct
 /*
  * Prototypes.
  */
-FUNCPROTO void	timer_diagnostics(void);
-FUNCPROTO void	timer_start(chrono_t *t);
-FUNCPROTO double	timer_check(chrono_t *t);
+GAULFUNC void	timer_diagnostics(void);
+GAULFUNC void	timer_start(chrono_t *t);
+GAULFUNC double	timer_check(chrono_t *t);
 
 /*
  * SLang intrinsic function with equivalent functionality.
  */
-#if HAVE_SLANG==1
-FUNCPROTO int	timer_new_slang(void);
-FUNCPROTO void	timer_free_slang(int *t_handle);
-FUNCPROTO void	timer_start_slang(int *t_handle);
-FUNCPROTO double	timer_check_slang(int *t_handle);
+#ifdef HAVE_SLANG
+GAULFUNC int	timer_new_slang(void);
+GAULFUNC void	timer_free_slang(int *t_handle);
+GAULFUNC void	timer_start_slang(int *t_handle);
+GAULFUNC double	timer_check_slang(int *t_handle);
 #endif
 
 #endif /* TIMER_UTIL_H_INCLUDED */

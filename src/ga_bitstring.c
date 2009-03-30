@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_bitstring - GAUL's low-level bitstring routines.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -44,15 +44,15 @@
   ga_bit_new()
   synopsis:	Create a new bitstring.
   parameters:	int	length	Number of bits.
-  return:	byte	*ptr	Newly allocated bitstring.
+  return:	gaulbyte	*ptr	Newly allocated bitstring.
   last updated:	30/06/01
  **********************************************************************/
 
-byte *ga_bit_new( int length )
+GAULFUNC gaulbyte *ga_bit_new( int length )
   {
-  byte *ptr;
+  gaulbyte *ptr;
 
-  if ( !(ptr = (byte *) s_malloc( ga_bit_sizeof( length ) )) )
+  if ( !(ptr = (gaulbyte *) s_malloc( ga_bit_sizeof( length ) )) )
     die("Unable to allocate bitstring.");
 
   return ptr;
@@ -62,12 +62,12 @@ byte *ga_bit_new( int length )
 /**********************************************************************
   ga_bit_free()
   synopsis:	Deallocates a bitstring.
-  parameters:	byte	*bstr	Bitstring to deallocate.
+  parameters:	gaulbyte	*bstr	Bitstring to deallocate.
   return:	none
   last updated:	30/06/01
  **********************************************************************/
 
-void ga_bit_free( byte *bstr )
+GAULFUNC void ga_bit_free( gaulbyte *bstr )
   {
   s_free( bstr );
 
@@ -78,13 +78,13 @@ void ga_bit_free( byte *bstr )
 /**********************************************************************
   ga_bit_set()
   synopsis:	Sets a single bit in a bitstring.
-  parameters:	byte	*bstr	Bitstring.
+  parameters:	gaulbyte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
   last updated:	30/06/01
  **********************************************************************/
 
-void ga_bit_set( byte *bstr, int n )
+GAULFUNC void ga_bit_set( gaulbyte *bstr, int n )
   {
   bstr[n/BYTEBITS] |= 1 << ( n%BYTEBITS );
 
@@ -95,13 +95,13 @@ void ga_bit_set( byte *bstr, int n )
 /**********************************************************************
   ga_bit_clear()
   synopsis:	Unsets a single bit in a bitstring.
-  parameters:	byte	*bstr	Bitstring.
+  parameters:	gaulbyte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
   last updated:	07 Sep 2003
  **********************************************************************/
 
-void ga_bit_clear( byte *bstr, int n )
+GAULFUNC void ga_bit_clear( gaulbyte *bstr, int n )
   {
   bstr[n/BYTEBITS] &= ~(1 << ( n%BYTEBITS ));
 
@@ -112,13 +112,13 @@ void ga_bit_clear( byte *bstr, int n )
 /**********************************************************************
   ga_bit_invert()
   synopsis:	Toggles a single bit in a bitstring.
-  parameters:	byte	*bstr	Bitstring.
+  parameters:	gaulbyte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
   last updated:	07 Sep 2003
  **********************************************************************/
 
-void ga_bit_invert( byte *bstr, int n )
+GAULFUNC void ga_bit_invert( gaulbyte *bstr, int n )
   {
   bstr[n/BYTEBITS] ^= 1 << (n % BYTEBITS);
 
@@ -129,13 +129,13 @@ void ga_bit_invert( byte *bstr, int n )
 /**********************************************************************
   ga_bit_get()
   synopsis:	Returns the state of a single bit in a bitstring.
-  parameters:	byte	*bstr	Bitstring.
+  parameters:	gaulbyte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	boolean	val	The bit's state.
   last updated:	30/06/01
  **********************************************************************/
 
-boolean ga_bit_get( byte *bstr, int n )
+GAULFUNC boolean ga_bit_get( gaulbyte *bstr, int n )
   {
   return (boolean) ( (bstr[n/BYTEBITS] & (1 << (n % BYTEBITS))) != 0 );
   }
@@ -144,13 +144,13 @@ boolean ga_bit_get( byte *bstr, int n )
 /**********************************************************************
   ga_bit_randomize()
   synopsis:	Randomly sets the state of a single bit in a bitstring.
-  parameters:	byte	*bstr	Bitstring.
+  parameters:	gaulbyte	*bstr	Bitstring.
 		int	n	Bit index.
   return:	none
   last updated:	30/06/01
  **********************************************************************/
 
-void ga_bit_randomize( byte *bstr, int n )
+GAULFUNC void ga_bit_randomize( gaulbyte *bstr, int n )
   {
   if ( random_boolean() )
     ga_bit_set( bstr, n );
@@ -168,8 +168,8 @@ void ga_bit_randomize( byte *bstr, int n )
 		of bits are safely handled.
  
 		FIXME: Should use memcpy, when appropriate.
-  parameters:	byte	*dest	Destination bitstring.
-		byte	*src	Source bitstring
+  parameters:	gaulbyte	*dest	Destination bitstring.
+		gaulbyte	*src	Source bitstring
 		int	ndest	Initial bit index of destination bits.
 		int	nsrc	Initial bit index of source bits.
 		int	length	Number of bits to copy.
@@ -177,7 +177,7 @@ void ga_bit_randomize( byte *bstr, int n )
   last updated:	29 Jun 2003
  **********************************************************************/
 
-void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length )
+GAULFUNC void ga_bit_copy( gaulbyte *dest, gaulbyte *src, int ndest, int nsrc, int length )
   {
   int i;
 
@@ -215,24 +215,24 @@ void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length )
   last updated:	30/06/01
  **********************************************************************/
 
-size_t ga_bit_sizeof( int length )
+GAULFUNC size_t ga_bit_sizeof( int length )
   {
-/* Note that sizeof(byte) should always be 1. */
-  return sizeof(byte) * (length+BYTEBITS-1) / BYTEBITS;
+/* Note that sizeof(gaulbyte) should always be 1. */
+  return sizeof(gaulbyte) * (length+BYTEBITS-1) / BYTEBITS;
   }
 
 
 /**********************************************************************
   ga_bit_clone()
   synopsis:	Copies a complete bitstring.
-  parameters:	byte	*dest	Destination bitstring.
-		byte	*src	Source bitstring
+  parameters:	gaulbyte	*dest	Destination bitstring.
+		gaulbyte	*src	Source bitstring
 		int	length	Number of bits in bitstrings.
   return:	none
   last updated:	30/06/01
  **********************************************************************/
 
-byte *ga_bit_clone( byte *dest, byte *src, int length )
+GAULFUNC gaulbyte *ga_bit_clone( gaulbyte *dest, gaulbyte *src, int length )
   {
   if (!dest) dest=ga_bit_new( length );
 
@@ -251,7 +251,7 @@ byte *ga_bit_clone( byte *dest, byte *src, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length )
+GAULFUNC unsigned int ga_bit_decode_binary_uint( gaulbyte *bstr, int n, int length )
   {
   int		i;
   unsigned int	value=0;	/* Decoded value. */
@@ -275,7 +275,7 @@ unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value )
+GAULFUNC void ga_bit_encode_binary_uint( gaulbyte *bstr, int n, int length, unsigned int value )
   {
   int i;
 
@@ -303,10 +303,10 @@ void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int valu
   last updated: 08 Jan 2003
  **********************************************************************/
 
-int ga_bit_decode_binary_int( byte *bstr, int n, int length )
+GAULFUNC int ga_bit_decode_binary_int( gaulbyte *bstr, int n, int length )
   {
   if ( ga_bit_get( bstr, n ) )
-    return (int) -ga_bit_decode_binary_uint( bstr, n+1, length-1 );
+    return - (int) ga_bit_decode_binary_uint( bstr, n+1, length-1 );
   else
     return (int) ga_bit_decode_binary_uint( bstr, n+1, length-1 );
   }
@@ -321,7 +321,7 @@ int ga_bit_decode_binary_int( byte *bstr, int n, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value )
+GAULFUNC void ga_bit_encode_binary_int( gaulbyte *bstr, int n, int length, int value )
   {
   if ( value < 0 )
     {
@@ -348,7 +348,7 @@ void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-static void gray_to_binary( byte *gray_bstr, int n, byte *int_bstr, int length )
+static void gray_to_binary( gaulbyte *gray_bstr, int n, gaulbyte *int_bstr, int length )
   {
   boolean	bit;
   int		i;
@@ -385,7 +385,7 @@ static void gray_to_binary( byte *gray_bstr, int n, byte *int_bstr, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-static void binary_to_gray( byte *gray_bstr, int n, byte *int_bstr, int length )
+static void binary_to_gray( gaulbyte *gray_bstr, int n, gaulbyte *int_bstr, int length )
   {
   boolean	bit;
   int		i;
@@ -430,12 +430,12 @@ static void binary_to_gray( byte *gray_bstr, int n, byte *int_bstr, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-int ga_bit_decode_gray_int( byte *bstr, int n, int length )
+GAULFUNC int ga_bit_decode_gray_int( gaulbyte *bstr, int n, int length )
   {
-  byte		*int_bstr;
+  gaulbyte		*int_bstr;
   int		val;
 
-  if ( !(int_bstr = (byte *) s_malloc( ga_bit_sizeof( length ) )) )
+  if ( !(int_bstr = (gaulbyte *) s_malloc( ga_bit_sizeof( length ) )) )
     die("Unable to allocate bitstring.");
 
   gray_to_binary( bstr, n, int_bstr, length );
@@ -457,12 +457,12 @@ int ga_bit_decode_gray_int( byte *bstr, int n, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length )
+GAULFUNC unsigned int ga_bit_decode_gray_uint( gaulbyte *bstr, int n, int length )
   {
-  byte		*int_bstr;
+  gaulbyte		*int_bstr;
   unsigned int	val;
 
-  if ( !(int_bstr = (byte *) s_malloc( ga_bit_sizeof( length ) )) )
+  if ( !(int_bstr = (gaulbyte *) s_malloc( ga_bit_sizeof( length ) )) )
     die("Unable to allocate bitstring.");
 
   gray_to_binary( bstr, n, int_bstr, length );
@@ -484,11 +484,11 @@ unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value )
+GAULFUNC void ga_bit_encode_gray_uint( gaulbyte *bstr, int n, int length, unsigned int value )
   {
-  byte	*int_bstr;
+  gaulbyte	*int_bstr;
 
-  if ( !(int_bstr = (byte *) s_malloc( ga_bit_sizeof( length ) )) )
+  if ( !(int_bstr = (gaulbyte *) s_malloc( ga_bit_sizeof( length ) )) )
     die("Unable to allocate bitstring.");
 
   ga_bit_encode_binary_uint( int_bstr, 0, length, value );
@@ -509,11 +509,11 @@ void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value 
   last updated: 08 Jan 2003
  **********************************************************************/
 
-void ga_bit_encode_gray_int( byte *bstr, int n, int length, int value )
+GAULFUNC void ga_bit_encode_gray_int( gaulbyte *bstr, int n, int length, int value )
   {
-  byte	*int_bstr;
+  gaulbyte	*int_bstr;
 
-  if ( !(int_bstr = (byte *) s_malloc( ga_bit_sizeof( length ) )) )
+  if ( !(int_bstr = (gaulbyte *) s_malloc( ga_bit_sizeof( length ) )) )
     die("Unable to allocate bitstring.");
 
   ga_bit_encode_binary_int( int_bstr, 0, length, value );
@@ -534,7 +534,7 @@ void ga_bit_encode_gray_int( byte *bstr, int n, int length, int value )
   last updated: 08 Jan 2003
  **********************************************************************/
 
-double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent )
+GAULFUNC double ga_bit_decode_binary_real( gaulbyte *bstr, int n, int mantissa, int exponent )
   {
   double	value;
   int		int_mantissa, int_exponent;
@@ -558,7 +558,7 @@ double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent 
   last updated: 08 Jan 2003
  **********************************************************************/
 
-void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value )
+GAULFUNC void ga_bit_encode_binary_real( gaulbyte *bstr, int n, int mantissa, int exponent, double value )
   {
   int int_mantissa, int_exponent;
 
@@ -579,7 +579,7 @@ void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, d
   last updated: 25 Jul 2003
  **********************************************************************/
 
-double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
+GAULFUNC double ga_bit_decode_gray_real( gaulbyte *bstr, int n, int mantissa, int exponent )
   {
   double	value;
   int		int_mantissa, int_exponent;
@@ -603,7 +603,7 @@ double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent )
   last updated: 25 Jul 2003
  **********************************************************************/
 
-void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, double value )
+GAULFUNC void ga_bit_encode_gray_real( gaulbyte *bstr, int n, int mantissa, int exponent, double value )
   {
   int int_mantissa, int_exponent;
 
@@ -624,14 +624,14 @@ void ga_bit_encode_gray_real( byte *bstr, int n, int mantissa, int exponent, dou
   last updated: 06 Oct 2004
  **********************************************************************/
 
-boolean ga_bit_test( void )
+GAULFUNC boolean ga_bit_test( void )
   {
   int		i;			/* Loop variable. */
   double	origval, newval;	/* Value before and after encoding+decoding. */
   int		origint, newint;	/* Value before and after encoding+decoding. */
-  byte		*bstr;
+  gaulbyte		*bstr;
 
-  if ( !(bstr = (byte *) s_malloc( ga_bit_sizeof( 128 ) )) )
+  if ( !(bstr = (gaulbyte *) s_malloc( ga_bit_sizeof( 128 ) )) )
     die("Unable to allocate bitstring.");
 
   printf("Binary encoding of integers:\n");
@@ -684,5 +684,4 @@ boolean ga_bit_test( void )
 
   return TRUE;
   }
-
 

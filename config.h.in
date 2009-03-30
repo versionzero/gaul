@@ -42,10 +42,10 @@
 /* Whether to dump certian statistics. */
 #undef GA_WRITE_STATS
 
-/* Define to 1 if you have the `bcmp' function. */
+/* Whether bcmp() is available */
 #undef HAVE_BCMP
 
-/* Define to 1 if you have the `bcopy' function. */
+/* Whether bcopy() is available */
 #undef HAVE_BCOPY
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
@@ -84,7 +84,7 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if you have the `memset' function. */
+/* Whether memset() is available */
 #undef HAVE_MEMSET
 
 /* Define to 1 if you have the `min' function. */
@@ -138,16 +138,16 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define to 1 if you have the `strlen' function. */
+/* Whether strlen() is available */
 #undef HAVE_STRLEN
 
 /* Define to 1 if you have the `strncasecmp' function. */
 #undef HAVE_STRNCASECMP
 
-/* Define to 1 if you have the `strncmp' function. */
+/* Whether strncmp() is available */
 #undef HAVE_STRNCMP
 
-/* Define to 1 if you have the `strncpy' function. */
+/* Whether strncpy() is available */
 #undef HAVE_STRNCPY
 
 /* Define to 1 if you have the `strndup' function. */
@@ -180,7 +180,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if you have the `usleep' function. */
+/* Whether usleep() is available */
 #undef HAVE_USLEEP
 
 /* Define to 1 if you have the `waitpid' function. */

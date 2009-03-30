@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_core - Genetic algorithm routines.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -343,8 +343,11 @@ struct population_t
   GAgeneration_hook		generation_hook;
   GAiteration_hook		iteration_hook;
 
-  GAdata_destructor		data_destructor;
-  GAdata_ref_incrementor	data_ref_incrementor;
+  GAdata_destructor		data_destructor;        /* entity.data destructor */
+  GAdata_ref_incrementor	data_ref_incrementor;   /* entity.data reference counter incrementor */
+
+  GAdata_destructor		population_data_destructor;
+  GAdata_copy			population_data_copy;
 
   GAchromosome_constructor	chromosome_constructor;
   GAchromosome_destructor	chromosome_destructor;
@@ -366,7 +369,7 @@ struct population_t
 /*
  * Memory handling.
  */
-#if USE_CHROMO_CHUNKS == 1
+#ifdef USE_CHROMO_CHUNKS
   MemChunk			*chromoarray_chunk;
   MemChunk			*chromo_chunk;
 #endif
@@ -375,7 +378,7 @@ struct population_t
  * Execution locks.
  */
   THREAD_LOCK_DECLARE(lock);
-#if USE_CHROMO_CHUNKS == 1
+#ifdef USE_CHROMO_CHUNKS
   THREAD_LOCK_DECLARE(chromo_chunk_lock);
 #endif
   };

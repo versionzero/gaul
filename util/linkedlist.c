@@ -3,7 +3,7 @@
  **********************************************************************
 
   linkedlist - Linked list implementation (singly- and doubly- linked).
-  Copyright ©2000-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -59,7 +59,7 @@ THREAD_LOCK_DEFINE_STATIC(dlist_chunk_lock);
 static MemChunk *slist_chunk = NULL;
 static MemChunk *dlist_chunk = NULL;
 
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
 static boolean linkedlist_openmp_initialised = FALSE;
 #endif
 
@@ -68,10 +68,10 @@ static boolean linkedlist_openmp_initialised = FALSE;
  * code is to be used.  Can be safely called when OpenMP code is not
  * being used, and can be safely called more than once.
  */
-void linkedlist_init_openmp(void)
+GAULFUNC void linkedlist_init_openmp(void)
   {
 
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
   if (linkedlist_openmp_initialised == FALSE)
     {
     omp_init_lock(&slist_chunk_lock);
@@ -84,7 +84,7 @@ void linkedlist_init_openmp(void)
   }
 
 
-SLList *slink_new(void)
+GAULFUNC SLList *slink_new(void)
   {
   SLList *element;
 
@@ -102,7 +102,7 @@ SLList *slink_new(void)
   }
 
 
-void slink_free_all(SLList *list)
+GAULFUNC void slink_free_all(SLList *list)
   {
   SLList	*element;
 
@@ -125,7 +125,7 @@ void slink_free_all(SLList *list)
   }
 
 
-void slink_free(SLList *list)
+GAULFUNC void slink_free(SLList *list)
   {
   if (!list) return;
 
@@ -143,7 +143,7 @@ void slink_free(SLList *list)
   }
 
 
-SLList *slink_append(SLList *list, vpointer data)
+GAULFUNC SLList *slink_append(SLList *list, vpointer data)
   {
   SLList *new_element;
   SLList *last;
@@ -160,7 +160,7 @@ SLList *slink_append(SLList *list, vpointer data)
   }
 
 
-SLList *slink_prepend(SLList *list, vpointer data)
+GAULFUNC SLList *slink_prepend(SLList *list, vpointer data)
   {
   SLList *new_element;
 
@@ -172,7 +172,7 @@ SLList *slink_prepend(SLList *list, vpointer data)
   }
 
 
-SLList *slink_insert_next(SLList *list, vpointer data)
+GAULFUNC SLList *slink_insert_next(SLList *list, vpointer data)
   {
   SLList *new_element;
   SLList *next;
@@ -190,7 +190,7 @@ SLList *slink_insert_next(SLList *list, vpointer data)
   }
 
 
-SLList *slink_insert_index(SLList *list, vpointer data, int index)
+GAULFUNC SLList *slink_insert_index(SLList *list, vpointer data, int id)
   {
   SLList *prev_list;
   SLList *this_list;
@@ -204,7 +204,7 @@ SLList *slink_insert_index(SLList *list, vpointer data, int index)
   prev_list = NULL;
   this_list = list;
 
-  while ((index-- > 0) && this_list)
+  while ((id-- > 0) && this_list)
     {
     prev_list = this_list;
     this_list = this_list->next;
@@ -223,7 +223,7 @@ SLList *slink_insert_index(SLList *list, vpointer data, int index)
   }
 
 
-SLList *slink_delete_data(SLList *list, vpointer data)
+GAULFUNC SLList *slink_delete_data(SLList *list, vpointer data)
   {
   SLList *tmp = list;
   SLList *prev = NULL;
@@ -248,7 +248,7 @@ SLList *slink_delete_data(SLList *list, vpointer data)
   }
 
 
-SLList *slink_delete_all_data(SLList *list, vpointer data)
+GAULFUNC SLList *slink_delete_all_data(SLList *list, vpointer data)
   {
   SLList *tmp = list;
   SLList *prev = NULL;
@@ -273,14 +273,14 @@ SLList *slink_delete_all_data(SLList *list, vpointer data)
   }
 
 
-SLList *slink_delete_link(SLList *list, SLList *link)
+GAULFUNC SLList *slink_delete_link(SLList *list, SLList *llink)
   {
   SLList *tmp = list;
   SLList *prev = NULL;
 
   while (tmp)
     {
-    if (tmp == link)
+    if (tmp == llink)
       {
       if (prev) prev->next = tmp->next;
       if (list == tmp) list = list->next;
@@ -298,7 +298,7 @@ SLList *slink_delete_link(SLList *list, SLList *link)
   }
 
 
-SLList *slink_clone(SLList *list)
+GAULFUNC SLList *slink_clone(SLList *list)
   {
   SLList *new_element = NULL;
   SLList *last;
@@ -321,7 +321,7 @@ SLList *slink_clone(SLList *list)
   }
 
 
-SLList *slink_reverse(SLList *list)
+GAULFUNC SLList *slink_reverse(SLList *list)
   {
   SLList *element;
   SLList *prev = NULL;
@@ -340,9 +340,9 @@ SLList *slink_reverse(SLList *list)
   }
 
 
-SLList *slink_nth(SLList *list, const int index)
+GAULFUNC SLList *slink_nth(SLList *list, const int id)
   {
-  int	i=index;
+  int	i=id;
 
   while (i > 0 && list)
     {
@@ -354,15 +354,15 @@ SLList *slink_nth(SLList *list, const int index)
   }
 
 
-vpointer slink_nth_data(SLList *list, const int index)
+GAULFUNC vpointer slink_nth_data(SLList *list, const int id)
   {
-  list = slink_nth(list, index);
+  list = slink_nth(list, id);
 
   return list?list->data:NULL;
   }
 
 
-SLList *slink_find(SLList *list, vpointer data)
+GAULFUNC SLList *slink_find(SLList *list, vpointer data)
   {
   while (list && list->data != data) list = list->next;
 
@@ -370,7 +370,7 @@ SLList *slink_find(SLList *list, vpointer data)
   }
 
 
-SLList *slink_find_custom(SLList *list, vpointer data, LLCompareFunc func)
+GAULFUNC SLList *slink_find_custom(SLList *list, vpointer data, LLCompareFunc func)
   {
   if (!func) die("Null pointer to LLCompareFunc passed.");
 
@@ -381,13 +381,13 @@ SLList *slink_find_custom(SLList *list, vpointer data, LLCompareFunc func)
   }
 
 
-int slink_index_link(SLList *list, SLList *link)
+GAULFUNC int slink_index_link(SLList *list, SLList *llink)
   {
   int i=0;
 
   while (list)
     {
-    if (list == link) return i;
+    if (list == llink) return i;
     i++;
     list = list->next;
     }
@@ -396,7 +396,7 @@ int slink_index_link(SLList *list, SLList *link)
   }
 
 
-int slink_index_data(SLList *list, vpointer data)
+GAULFUNC int slink_index_data(SLList *list, vpointer data)
   {
   int i=0;
 
@@ -411,7 +411,7 @@ int slink_index_data(SLList *list, vpointer data)
   }
 
 
-SLList *slink_last(SLList *list)
+GAULFUNC SLList *slink_last(SLList *list)
   {
   if (!list) return NULL;
 
@@ -421,7 +421,7 @@ SLList *slink_last(SLList *list)
   }
 
 
-int slink_size(SLList *list)
+GAULFUNC int slink_size(SLList *list)
   {
   int	size=0;
 
@@ -435,7 +435,7 @@ int slink_size(SLList *list)
   }
 
 
-boolean slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata)
+GAULFUNC boolean slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata)
   {
 
   if (!func) die("Null pointer to LLForeachFunc passed.");
@@ -450,7 +450,7 @@ boolean slink_foreach(SLList *list, LLForeachFunc func, vpointer userdata)
   }
 
 
-SLList *slink_insert_sorted(SLList *list, vpointer data, LLCompareFunc func)
+GAULFUNC SLList *slink_insert_sorted(SLList *list, vpointer data, LLCompareFunc func)
   {
   SLList *prev_list;
   SLList *this_list;
@@ -485,7 +485,7 @@ SLList *slink_insert_sorted(SLList *list, vpointer data, LLCompareFunc func)
   }
 
 
-DLList *dlink_new(void)
+GAULFUNC DLList *dlink_new(void)
   {
   DLList *element;
 
@@ -504,7 +504,7 @@ DLList *dlink_new(void)
   }
 
 
-void dlink_free_all(DLList *list)
+GAULFUNC void dlink_free_all(DLList *list)
   {
   DLList        *list2;
   DLList        *element;
@@ -539,7 +539,7 @@ void dlink_free_all(DLList *list)
   }
 
 
-void dlink_free(DLList *list)
+GAULFUNC void dlink_free(DLList *list)
   {
   if (!list) return;
   
@@ -557,7 +557,7 @@ void dlink_free(DLList *list)
   }
 
 
-DLList *dlink_append(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_append(DLList *list, vpointer data)
   {
   DLList *new_element;
   DLList *last;
@@ -575,7 +575,7 @@ DLList *dlink_append(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_prepend(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_prepend(DLList *list, vpointer data)
   {
   DLList *new_element;
   
@@ -597,7 +597,7 @@ DLList *dlink_prepend(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_insert_next(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_insert_next(DLList *list, vpointer data)
   {
   DLList *new_element;
   DLList *next;
@@ -620,7 +620,7 @@ DLList *dlink_insert_next(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_insert_prev(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_insert_prev(DLList *list, vpointer data)
   {
   DLList *new_element;
   DLList *prev;
@@ -643,22 +643,22 @@ DLList *dlink_insert_prev(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_insert_index(DLList *list, vpointer data, int index)
+GAULFUNC DLList *dlink_insert_index(DLList *list, vpointer data, int id)
   {
   DLList *new_element;
   DLList *this_list;
   
-  if (index < 0)
+  if (id < 0)
     {
 /* FIXME: Prehaps I should insert from end of list instead? */
     return dlink_append(list, data);
     }
-  else if (index == 0)
+  else if (id == 0)
     {
     return dlink_prepend(list, data);
     }
   
-  this_list = dlink_nth(list, index);
+  this_list = dlink_nth(list, id);
   if (!this_list)
     return dlink_append(list, data);
   
@@ -680,7 +680,7 @@ DLList *dlink_insert_index(DLList *list, vpointer data, int index)
   }
 
 
-DLList *dlink_delete_all_data(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_delete_all_data(DLList *list, vpointer data)
   {            
   DLList *tmp=list;
  
@@ -703,7 +703,7 @@ DLList *dlink_delete_all_data(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_delete_data(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_delete_data(DLList *list, vpointer data)
   {
   DLList *tmp=list;
   
@@ -728,23 +728,23 @@ DLList *dlink_delete_data(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_delete_link(DLList *list, DLList *link)
+GAULFUNC DLList *dlink_delete_link(DLList *list, DLList *llink)
   {
-  if (!link) return NULL;
+  if (!llink) return NULL;
 
-  if (link->prev) link->prev->next = link->next;
-  if (link->next) link->next->prev = link->prev;
+  if (llink->prev) llink->prev->next = llink->next;
+  if (llink->next) llink->next->prev = llink->prev;
       
-  if (link == list) list = list->next;
+  if (llink == list) list = list->next;
       
-  link->prev = NULL;
-  link->next = NULL;
+  llink->prev = NULL;
+  llink->next = NULL;
   
   return list;
   }
 
 
-DLList *dlink_clone(DLList *list)
+GAULFUNC DLList *dlink_clone(DLList *list)
   {
   DLList *new_element = NULL;
   DLList *last;
@@ -768,7 +768,7 @@ DLList *dlink_clone(DLList *list)
   }
 
 
-DLList *dlink_reverse(DLList *list)
+GAULFUNC DLList *dlink_reverse(DLList *list)
   {
   DLList *last=NULL;
   
@@ -784,9 +784,9 @@ DLList *dlink_reverse(DLList *list)
   }
 
 
-DLList *dlink_nth(DLList *list, const int index)
+GAULFUNC DLList *dlink_nth(DLList *list, const int id)
   {  
-  int	i=index;
+  int	i=id;
 
   while (i > 0 && list)
     {
@@ -798,9 +798,9 @@ DLList *dlink_nth(DLList *list, const int index)
   }
 
 
-DLList *dlink_pth(DLList *list, const int index)
+GAULFUNC DLList *dlink_pth(DLList *list, const int id)
   {
-  int	i=index;
+  int	i=id;
 
   while (i > 0 && list)
     {
@@ -812,23 +812,23 @@ DLList *dlink_pth(DLList *list, const int index)
   }
 
 
-vpointer dlink_nth_data(DLList *list, const int index)
+GAULFUNC vpointer dlink_nth_data(DLList *list, const int id)
   {
-  list = dlink_nth(list, index);
+  list = dlink_nth(list, id);
   
   return list?list->data:NULL;
   }
 
 
-vpointer dlink_pth_data(DLList *list, const int index)
+GAULFUNC vpointer dlink_pth_data(DLList *list, const int id)
   {
-  list = dlink_pth(list, index);
+  list = dlink_pth(list, id);
   
   return list?list->data:NULL;
   }
 
 
-DLList *dlink_find(DLList *list, vpointer data)
+GAULFUNC DLList *dlink_find(DLList *list, vpointer data)
   {
   while (list && list->data != data)
     list = list->next;
@@ -837,7 +837,7 @@ DLList *dlink_find(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func)
+GAULFUNC DLList *dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func)
   {
   if (!func) die("Null pointer to LLCompareFunc passed.");
 
@@ -848,13 +848,13 @@ DLList *dlink_find_custom(DLList *list, vpointer data, LLCompareFunc func)
   }
 
 
-int dlink_index_link(DLList *list, DLList *link)
+GAULFUNC int dlink_index_link(DLList *list, DLList *llink)
   {
   int i=0;
 
   while (list)
     {
-    if (list == link) return i;
+    if (list == llink) return i;
     i++;
     list = list->next;
     }
@@ -863,7 +863,7 @@ int dlink_index_link(DLList *list, DLList *link)
   }
 
 
-int dlink_index_data(DLList *list, vpointer data)
+GAULFUNC int dlink_index_data(DLList *list, vpointer data)
   {
   int i=0;
 
@@ -878,7 +878,7 @@ int dlink_index_data(DLList *list, vpointer data)
   }
 
 
-DLList *dlink_last(DLList *list)
+GAULFUNC DLList *dlink_last(DLList *list)
   {
   if (!list) return NULL;
 
@@ -889,7 +889,7 @@ DLList *dlink_last(DLList *list)
   }
 
 
-DLList *dlink_first(DLList *list)
+GAULFUNC DLList *dlink_first(DLList *list)
   {
   if (!list) return NULL;
 
@@ -899,7 +899,7 @@ DLList *dlink_first(DLList *list)
   }
 
 
-int dlink_size(DLList *list)
+GAULFUNC int dlink_size(DLList *list)
   {
   int	size=0;
   
@@ -913,7 +913,7 @@ int dlink_size(DLList *list)
   }
 
 
-boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
+GAULFUNC boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
   {
 
   if (!func) die("Null pointer to LLForeachFunc passed.");
@@ -928,7 +928,7 @@ boolean dlink_foreach(DLList *list, LLForeachFunc func, vpointer userdata)
   }
 
 
-boolean dlink_foreach_reverse(DLList *list, LLForeachFunc func, vpointer userdata)
+GAULFUNC boolean dlink_foreach_reverse(DLList *list, LLForeachFunc func, vpointer userdata)
   {
 
   if (!func) die("Null pointer to LLForeachFunc passed.");
@@ -943,7 +943,7 @@ boolean dlink_foreach_reverse(DLList *list, LLForeachFunc func, vpointer userdat
   }
 
 
-DLList *dlink_insert_sorted(DLList *list, vpointer data, LLCompareFunc func)
+GAULFUNC DLList *dlink_insert_sorted(DLList *list, vpointer data, LLCompareFunc func)
   {
   DLList *this_list;
   DLList *prev_list;
@@ -984,7 +984,7 @@ DLList *dlink_insert_sorted(DLList *list, vpointer data, LLCompareFunc func)
  * Testing:
  */
 
-void linkedlist_diagnostics(void)
+GAULFUNC void linkedlist_diagnostics(void)
   {
   printf("=== Linked list diagnostics ==================================\n");
   printf("Version:                   %s\n", GA_VERSION_STRING);
@@ -1033,7 +1033,7 @@ static int test_list_compare_two(constvpointer a, constvpointer b)
 #ifdef LINKEDLIST_COMPILE_MAIN
 int main(int argc, char **argv)
 #else
-boolean linkedlist_test(void)
+GAULFUNC boolean linkedlist_test(void)
 #endif
 
 #ifdef LINKEDLIST_EMULATE_GLIST

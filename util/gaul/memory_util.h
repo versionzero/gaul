@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -57,7 +57,7 @@
 
 /* Take advantage of the GNU malloc checking features. */
 #ifdef __GNUC__
-#if MEMORY_ALLOC_DEBUG==1
+#ifdef MEMORY_ALLOC_DEBUG
 #define	MALLOC_CHECK_	2
 #endif
 #endif
@@ -67,14 +67,7 @@
  */
 #ifndef MEMORY_ALLOC_DEBUG
 # ifndef MEMORY_ALLOC_SAFE
-#  define MEMORY_ALLOC_DEBUG	0
 #  define MEMORY_ALLOC_SAFE	1
-# else
-#  define MEMORY_ALLOC_DEBUG	(0==MEMORY_ALLOC_SAFE)
-# endif
-#else
-# ifndef MEMORY_ALLOC_SAFE
-#  define MEMORY_ALLOC_SAFE	(0==MEMORY_ALLOC_DEBUG)
 # endif
 #endif
 
@@ -97,7 +90,7 @@ typedef enum memory_alloc_type_t
  * if both are defined, "MEMORY_ALLOC_DEBUG" over-rides.
  * if neither is defined, standard system functions will be used directly.
  */
-#if MEMORY_ALLOC_DEBUG==1
+#ifdef MEMORY_ALLOC_DEBUG
 /* Use replacement functions with extensive checking, tracing and profiling. */
 
 #define s_malloc(X)	s_alloc_debug(		MEMORY_MALLOC,		\
@@ -142,8 +135,8 @@ typedef enum memory_alloc_type_t
                                                 __FILE__,               \
                                                 __LINE__)
 
-#else /* MEMORY_ALLOC_DEBUG */
-#if MEMORY_ALLOC_SAFE==1
+#else /* !MEMORY_ALLOC_DEBUG */
+#ifdef MEMORY_ALLOC_SAFE
 /* Use simple wrappers around system calls. */
 
 #define s_malloc(X)		s_malloc_safe((X),			\
@@ -161,7 +154,7 @@ typedef enum memory_alloc_type_t
 #define s_free(X)		s_free_safe((X),			\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
 
-#else /* MEMORY_ALLOC_SAFE */
+#else /* !MEMORY_ALLOC_SAFE */
 /* Use standard system calls with no wrappers. */
 
 #define s_malloc(X)		malloc((X))
@@ -174,29 +167,33 @@ typedef enum memory_alloc_type_t
 				__PRETTY_FUNCTION__, __FILE__, __LINE__)
 #define s_free(X)		free((X))
 
-#endif /* MEMORY_ALLOC_SAFE */
-#endif /* MEMORY_ALLOC_DEBUG */
+#endif /* !MEMORY_ALLOC_SAFE */
+#endif /* !MEMORY_ALLOC_DEBUG */
 
 /*
  * Prototypes
  */
-FUNCPROTO void	memory_init_openmp(void);
+GAULFUNC void	memory_init_openmp(void);
 
-FUNCPROTO void	memory_open_log(const char *fname);
-FUNCPROTO void	memory_write_log(const char *text);
+GAULFUNC void	memory_open_log(const char *fname);
+GAULFUNC void	memory_write_log(const char *text);
+GAULFUNC void	memory_fwrite_log(const char *format, ...);
 
-FUNCPROTO void	memory_display_status(void);
-FUNCPROTO void	memory_display_table(void);
+GAULFUNC void	memory_display_status(void);
+GAULFUNC void	memory_display_table(void);
 
-FUNCPROTO int	memory_total(void);
-FUNCPROTO void	memory_print_alloc_to(void *pnt);
-FUNCPROTO int	memory_alloc_to(void *pnt);
-FUNCPROTO void	memory_set_pnt_label(void *pnt, char *label);
-FUNCPROTO int	memory_check_all_bounds(void);
-FUNCPROTO int	memory_check_bounds(void *pnt);
-FUNCPROTO void	memory_set_strict(int i);
-FUNCPROTO boolean	memory_set_bounds(int i);
-FUNCPROTO void	memory_set_verbose(int i);
+GAULFUNC int	memory_total(void);
+GAULFUNC void	memory_print_alloc_to(void *pnt);
+GAULFUNC int	memory_alloc_to(void *pnt);
+GAULFUNC int	memory_used_mptr(void *mptr);
+GAULFUNC void	memory_set_mptr_label(void *mptr, char *label);
+GAULFUNC void	memory_set_pnt_label(void *pnt, char *label);
+GAULFUNC int	memory_check_all_bounds(void);
+GAULFUNC int	memory_check_bounds(void *pnt);
+GAULFUNC void	memory_set_padding(int i);
+GAULFUNC void	memory_set_strict(int i);
+GAULFUNC boolean	memory_set_bounds(int i);
+GAULFUNC void	memory_set_verbose(int i);
 
 /*
  * Prototypes for [unrecommended] direct access to functions.
@@ -206,19 +203,19 @@ FUNCPROTO void	memory_set_verbose(int i);
  * Actual Malloc/Calloc/Realloc/Strdup/Free replacements.
  * Debug versions.
  */
-FUNCPROTO void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, const char*, const char*, const int, const char*);
-FUNCPROTO void	*s_free_debug(void*, const char*, const char*, const int);
+GAULFUNC void	*s_alloc_debug(memory_alloc_type, size_t, int, void*, const char*, const char*, const int, const char*);
+GAULFUNC void	*s_free_debug(void*, const char*, const char*, const int);
 
 /*
  * System Malloc/Calloc/Realloc/Strdup/Free calls with wrappers.
  * Safe versions.
  */
-FUNCPROTO void	*s_malloc_safe(size_t, const char*, const char*, const int);
-FUNCPROTO void	*s_calloc_safe(size_t, size_t, const char*, const char*, const int);
-FUNCPROTO void	*s_realloc_safe(void*, size_t, const char*, const char*, const int);
-FUNCPROTO char	*s_strdup_safe(const char*, const char*, const char*, const int);
-FUNCPROTO char	*s_strndup_safe(const char*, size_t, const char*, const char*, const int);
-FUNCPROTO void	s_free_safe(void*, const char*, const char*, const int);
+GAULFUNC void	*s_malloc_safe(size_t, const char*, const char*, const int);
+GAULFUNC void	*s_calloc_safe(size_t, size_t, const char*, const char*, const int);
+GAULFUNC void	*s_realloc_safe(void*, size_t, const char*, const char*, const int);
+GAULFUNC char	*s_strdup_safe(const char*, const char*, const char*, const int);
+GAULFUNC char	*s_strndup_safe(const char*, size_t, const char*, const char*, const int);
+GAULFUNC void	s_free_safe(void*, const char*, const char*, const int);
 
 #endif
 

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_optim - Gene-based optimisation routines.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -38,7 +38,7 @@
  */
 #include "gaul.h"
 
-#if HAVE_MPI==1
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
@@ -50,34 +50,34 @@ typedef void    (*GAspecificmutate)(int chromo, int point, int *data);
 /*
  * Prototypes
  */
-FUNCPROTO void	 ga_attach_mpi_slave( population *pop );
-FUNCPROTO void	 ga_detach_mpi_slaves(void);
+GAULFUNC void	 ga_attach_mpi_slave( population *pop );
+GAULFUNC void	 ga_detach_mpi_slaves(void);
 
-FUNCPROTO int	ga_evolution(	population		*pop,
+GAULFUNC int	ga_evolution(	population		*pop,
 			const int		max_generations );
-FUNCPROTO int	ga_evolution_mp(	population		*pop,
+GAULFUNC int	ga_evolution_mp(	population		*pop,
 			const int		max_generations );
-FUNCPROTO int	ga_evolution_mpi(	population		*pop,
+GAULFUNC int	ga_evolution_mpi(	population		*pop,
 			const int		max_generations );
-FUNCPROTO int	ga_evolution_forked(	population		*pop,
+GAULFUNC int	ga_evolution_forked(	population		*pop,
 			const int		max_generations );
-FUNCPROTO int	ga_evolution_threaded(	population		*pop,
+GAULFUNC int	ga_evolution_threaded(	population		*pop,
 			const int		max_generations );
-FUNCPROTO int	ga_evolution_steady_state(	population		*pop,
+GAULFUNC int	ga_evolution_steady_state(	population		*pop,
 			const int		max_iterations );
-FUNCPROTO int	ga_evolution_archipelago( const int num_pops,
+GAULFUNC int	ga_evolution_archipelago( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-FUNCPROTO int	ga_evolution_archipelago_forked( const int num_pops,
+GAULFUNC int	ga_evolution_archipelago_forked( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-FUNCPROTO int	ga_evolution_archipelago_threaded( const int num_pops,
+GAULFUNC int	ga_evolution_archipelago_threaded( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-FUNCPROTO int	ga_evolution_archipelago_mp( const int num_pops,
+GAULFUNC int	ga_evolution_archipelago_mp( const int num_pops,
                         population              **pops,
                         const int               max_generations );
-FUNCPROTO int	ga_evolution_archipelago_mpi( const int num_pops,
+GAULFUNC int	ga_evolution_archipelago_mpi( const int num_pops,
                         population              **pops,
                         const int               max_generations );
 

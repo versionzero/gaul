@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_mutate - Genetic algorithm mutation operators.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,7 +43,7 @@
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_integer_singlepoint_drift( population *pop,
+GAULFUNC void ga_mutate_integer_singlepoint_drift( population *pop,
                                           entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -97,7 +97,7 @@ void ga_mutate_integer_singlepoint_drift( population *pop,
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_integer_singlepoint_randomize( population *pop,
+GAULFUNC void ga_mutate_integer_singlepoint_randomize( population *pop,
                                               entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -140,7 +140,7 @@ void ga_mutate_integer_singlepoint_randomize( population *pop,
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -189,7 +189,7 @@ void ga_mutate_integer_multipoint(population *pop, entity *father, entity *son)
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -249,7 +249,7 @@ void ga_mutate_integer_allpoint(population *pop, entity *father, entity *son)
   last updated: 31/05/01
  **********************************************************************/
 
-void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -290,7 +290,7 @@ void ga_mutate_boolean_singlepoint(population *pop, entity *father, entity *son)
   last updated: 16 Feb 2005
  **********************************************************************/
 
-void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -332,7 +332,7 @@ void ga_mutate_boolean_multipoint(population *pop, entity *father, entity *son)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_mutate_char_singlepoint_drift( population *pop,
+GAULFUNC void ga_mutate_char_singlepoint_drift( population *pop,
                                        entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -366,7 +366,7 @@ void ga_mutate_char_singlepoint_drift( population *pop,
 /*
  * Mutate by tweaking a single allele.
  */
-  ((char *)son->chromosome[chromo])[point] += dir;
+  ((char *)son->chromosome[chromo])[point] += (char)dir;
 
 /* Don't need these because char's **should** wrap safely.
   if (((char *)son->chromosome[chromo])[point]>CHAR_MAX)
@@ -389,7 +389,7 @@ void ga_mutate_char_singlepoint_drift( population *pop,
   last updated: 03 Jun 2002
  **********************************************************************/
 
-void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -444,7 +444,7 @@ void ga_mutate_char_allpoint(population *pop, entity *father, entity *son)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_mutate_char_singlepoint_randomize( population *pop,
+GAULFUNC void ga_mutate_char_singlepoint_randomize( population *pop,
                                            entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -472,7 +472,7 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
       }
     }
 
-  ((char *)son->chromosome[chromo])[point] = (int) random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
+  ((char *)son->chromosome[chromo])[point] = (char) random_int(CHAR_MAX-CHAR_MIN)+CHAR_MIN;
 
   return;
   }
@@ -487,7 +487,7 @@ void ga_mutate_char_singlepoint_randomize( population *pop,
   last updated: 16 Feb 2005
  **********************************************************************/
 
-void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -512,7 +512,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
       {
       if (random_boolean_prob(pop->allele_mutation_prob))
         {
-        ((char *)son->chromosome[chromo])[point] += dir;
+        ((char *)son->chromosome[chromo])[point] += (char)dir;
 
 /* Don't need these because char's **should** wrap safely.
         if (((char *)son->chromosome[chromo])[point]>CHAR_MAX)
@@ -537,7 +537,7 @@ void ga_mutate_char_multipoint(population *pop, entity *father, entity *son)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_mutate_printable_singlepoint_drift( population *pop,
+GAULFUNC void ga_mutate_printable_singlepoint_drift( population *pop,
                                        entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -571,7 +571,7 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
 /*
  * Mutate by tweaking a single allele.
  */
-  ((char *)son->chromosome[chromo])[point] += dir;
+  ((char *)son->chromosome[chromo])[point] += (char)dir;
 
   if (((char *)son->chromosome[chromo])[point]>'~')
     ((char *)son->chromosome[chromo])[point]=' ';
@@ -591,7 +591,7 @@ void ga_mutate_printable_singlepoint_drift( population *pop,
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_mutate_printable_singlepoint_randomize( population *pop,
+GAULFUNC void ga_mutate_printable_singlepoint_randomize( population *pop,
                                            entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -619,7 +619,7 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
       }
     }
 
-  ((char *)son->chromosome[chromo])[point] = (int) random_int('~'-' ')+' ';
+  ((char *)son->chromosome[chromo])[point] = (char) random_int('~'-' ')+' ';
 
   return;
   }
@@ -634,7 +634,7 @@ void ga_mutate_printable_singlepoint_randomize( population *pop,
   last updated: 16 Feb 2005
  **********************************************************************/
 
-void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -659,7 +659,7 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
       {
       if (random_boolean_prob(pop->allele_mutation_prob))
         {
-        ((char *)son->chromosome[chromo])[point] += dir;
+        ((char *)son->chromosome[chromo])[point] += (char)dir;
 
         if (((char *)son->chromosome[chromo])[point]>'~')
           ((char *)son->chromosome[chromo])[point]=' ';
@@ -683,7 +683,7 @@ void ga_mutate_printable_multipoint(population *pop, entity *father, entity *son
   last updated: 10 Sep 2003
  **********************************************************************/
 
-void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -743,7 +743,7 @@ void ga_mutate_printable_allpoint(population *pop, entity *father, entity *son)
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_mutate_bitstring_singlepoint( population *pop,
+GAULFUNC void ga_mutate_bitstring_singlepoint( population *pop,
                                     entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -787,7 +787,7 @@ void ga_mutate_bitstring_singlepoint( population *pop,
   last updated: 16 Feb 2005
  **********************************************************************/
 
-void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -829,7 +829,7 @@ void ga_mutate_bitstring_multipoint(population *pop, entity *father, entity *son
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_double_singlepoint_drift( population *pop,
+GAULFUNC void ga_mutate_double_singlepoint_drift( population *pop,
                                           entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -883,7 +883,7 @@ void ga_mutate_double_singlepoint_drift( population *pop,
   last updated: 19 Apr 2002
  **********************************************************************/
 
-void ga_mutate_double_singlepoint_randomize( population *pop,
+GAULFUNC void ga_mutate_double_singlepoint_randomize( population *pop,
                                               entity *father, entity *son )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -927,7 +927,7 @@ void ga_mutate_double_singlepoint_randomize( population *pop,
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */
@@ -975,7 +975,7 @@ void ga_mutate_double_multipoint(population *pop, entity *father, entity *son)
   last updated: 17 Feb 2005
  **********************************************************************/
 
-void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
+GAULFUNC void ga_mutate_double_allpoint(population *pop, entity *father, entity *son)
   {
   int		i;		/* Loop variable over all chromosomes */
   int		chromo;		/* Index of chromosome to mutate */

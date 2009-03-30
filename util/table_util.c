@@ -3,7 +3,7 @@
  **********************************************************************
 
   table_util - Data table routines.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -131,24 +131,23 @@ boolean table_set_size(TableStruct *table, unsigned int size)
 
 
 /* Returns data removed, NULL otherwise. */
-vpointer table_remove_index(TableStruct *table, unsigned int index)
+vpointer table_remove_index(TableStruct *table, unsigned int id)
   {
   vpointer data;
 
   if (!table) die("NULL pointer to TableStruct passed.");
 
-/* if (index < 0 || index >= table->next) die("Invalid index passed."); */
-  if (index >= table->next) die("Invalid index passed.");
+  if (id >= table->next) die("Invalid index passed.");
 
-  data = table->data[index];
+  data = table->data[id];
 
 /* Is this index used?  Do nothing if not. */
   if (data)
     {
     /* Add index to unused list. */
-    table->unused[table->numfree]=index;
+    table->unused[table->numfree]=id;
     table->numfree++;
-    table->data[index] = NULL;
+    table->data[id] = NULL;
     }
   else
     {
@@ -162,22 +161,22 @@ vpointer table_remove_index(TableStruct *table, unsigned int index)
 /* Returns index of data removed, TABLE_ERROR_INDEX otherwise. */
 unsigned int table_remove_data(TableStruct *table, vpointer data)
   {
-  unsigned int	index=0;
+  unsigned int	id=0;	/* Index */
 
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL pointer to user data passed.");
 
-  while ( index < table->next)
+  while ( id < table->next)
     {
-    if ( table->data[index] == data )
+    if ( table->data[id] == data )
       { /* Data found in table */
       /* Add index to unused list. */
-      table->unused[table->numfree]=index;
+      table->unused[table->numfree]=id;
       table->numfree++;
-      table->data[index] = NULL;
-      return index;
+      table->data[id] = NULL;
+      return id;
       }
-    index++;
+    id++;
     }
 
   printf("WARNING: Trying to remove unused item.\n");
@@ -189,45 +188,44 @@ unsigned int table_remove_data(TableStruct *table, vpointer data)
 /* Count of items removed, TABLE_ERROR_INDEX otherwise. */
 unsigned int table_remove_data_all(TableStruct *table, vpointer data)
   {
-  unsigned int	index=0;
+  unsigned int	id=0;	/* Index */
   unsigned int	count=0;
 
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL pointer to user data passed.");
 
-  while ( index < table->next)
+  while ( id < table->next)
     {
-    if ( table->data[index] == data )
+    if ( table->data[id] == data )
       { /* Data found in table */
       /* Add index to unused list. */
-      table->unused[table->numfree]=index;
+      table->unused[table->numfree]=id;
       table->numfree++;
-      table->data[index] = NULL;
+      table->data[id] = NULL;
       count++;
       }
-    index++;
+    id++;
     }
 
   return count;
   }
 
 
-vpointer table_get_data(TableStruct *table, unsigned int index)
+vpointer table_get_data(TableStruct *table, unsigned int id)
   {
 
   if (!table) die("NULL pointer to TableStruct passed.");
 
-/*  if (index < 0 || index >= table->next) dief("Invalid index (%d) passed.", index);*/
-  if (index >= table->next) dief("Invalid index (%d) passed.", index);
+  if (id >= table->next) dief("Invalid index (%d) passed.", id);
 
-  return table->data[index];
+  return table->data[id];
   }
 
 
 /* Return array of all stored pointers.  Caller must deallocate the array. */
 vpointer *table_get_data_all(TableStruct *table)
   {
-  unsigned int  index=0;
+  unsigned int  id=0;	/* Index */
   unsigned int	count=0;
   vpointer      *data;		/* Array of data to return. */
 
@@ -236,11 +234,11 @@ vpointer *table_get_data_all(TableStruct *table)
   if ( !(data = (vpointer*) s_malloc(sizeof(vpointer)*(table->size-table->numfree))) )
     die("Unable to allocate memory");
 
-  while ( index < table->next)
+  while ( id < table->next)
     {
-    if (table->data[index] != NULL)
-      data[count++] = table->data[index];
-    index++;
+    if (table->data[id] != NULL)
+      data[count++] = table->data[id];
+    id++;
     }
 
   return data;
@@ -250,7 +248,7 @@ vpointer *table_get_data_all(TableStruct *table)
 /* Return array of all used indices.  Caller must deallocate the array. */
 unsigned int *table_get_index_all(TableStruct *table)
   {
-  unsigned int  index=0;
+  unsigned int  id=0;	/* Index */
   unsigned int	count=0;
   unsigned int  *data;		/* Array of indices to return. */
 
@@ -259,11 +257,11 @@ unsigned int *table_get_index_all(TableStruct *table)
   if ( !(data = (unsigned int*) s_malloc(sizeof(vpointer)*(table->size-table->numfree))) )
     die("Unable to allocate memory");
 
-  while ( index < table->next)
+  while ( id < table->next)
     {
-    if (table->data[index] != NULL)
-      data[count++] = index;
-    index++;
+    if (table->data[id] != NULL)
+      data[count++] = id;
+    id++;
     }
 
   return data;
@@ -273,15 +271,16 @@ unsigned int *table_get_index_all(TableStruct *table)
 /* Returns the index for given data, or TABLE_ERROR_INDEX on failure. */
 unsigned int table_lookup_index(TableStruct *table, vpointer data)
   {
-  unsigned int	index=0;
+  unsigned int	id=0;	/* Index */
 
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL vpointer data passed.");
 
-  while ( index < table->next )
+  while ( id < table->next )
     {
-    if (table->data[index] == data) return index;
-    index++;
+    if (table->data[id] == data)
+      return id;
+    id++;
     }
 
   return TABLE_ERROR_INDEX;
@@ -290,7 +289,7 @@ unsigned int table_lookup_index(TableStruct *table, vpointer data)
 
 unsigned int table_add(TableStruct *table, vpointer data)
   {
-  unsigned int	index;
+  unsigned int	id;
 
   if (!table) die("NULL pointer to TableStruct passed.");
   if (!data) die("NULL vpointer data passed.");
@@ -303,12 +302,12 @@ unsigned int table_add(TableStruct *table, vpointer data)
     }
 
 /* Must append to end of array. */
-  index = table->next;
+  id = table->next;
   table->next++;
   table_ensure_size(table, table->next);
-  table->data[index] = data;
+  table->data[id] = data;
 
-  return index;
+  return id;
   }
 
 
@@ -357,8 +356,8 @@ boolean table_test(void)
   table_set_size(table, 200);
 
 /*
-vpointer table_remove_index(TableStruct *table, unsigned int index);
-vpointer table_get_data(TableStruct *table, unsigned int index);
+vpointer table_remove_index(TableStruct *table, unsigned int id);
+vpointer table_get_data(TableStruct *table, unsigned int id);
 unsigned int table_add(TableStruct *table, vpointer data);
 */
 

@@ -1,12 +1,25 @@
+Changes since release 0.1850:
+- Ported to OpenWatcom C/C++ compiler; OpenWatcom build files included in distribution.
+- Updated dates in copyright messages.
+- Fixed bug in ga_dereference_entity_by_id() -- patch provided by Logan Owen.
+- Fixed bug in ga_select_two_roulette() and ga_select_two_roulette_rebased() -- using mutation ratio, not crossover ratio.
+- Fixed bug in ga_population_clone_empty() -- patch provided by Pawan Kumar.
+
 Changes since release 0.1849:
 - Differential evolution parameters copied along with populations.
 - Checks added around all memory allocations.
 - Support for vector fitnesses added.
 - Multi-objective GA varients added.
 - S-lang intrinsic ga_entity_set_fitness() added.
+- HAVE_* and USE_* constants behave according to usual autotool standards -- patches provided by Andrew W. Nosenko.
+- GA_NUM_*_ENVVAR_STRING environment variables now consistent -- patch provided by Andrew W. Nosenko.
+- Numerous bug-fixes and compiler warning fixes -- patches and suggested fixes provided by Andrew W. Nosenko and Al Cripps.
+- S-Lang interpreter not used by default.
+- Added ga_population_set_data_managed() for easier management of population-wide data storage -- based on patch by Andrew W. Nosenko.
+- Ported to MS Visual Studio; Windows build files added to distribution.
 
 Changes since release 0.1848:
-- Changes required for compilation with MS VC++ - thanks to Al Cripps.
+- Changes required for compilation with MS VC++ -- thanks to Al Cripps.
 - Added support for user defined ranking callback.
 - Added differential evolution algorithm and associated examples.
 - Added ga_population_get_island() function.

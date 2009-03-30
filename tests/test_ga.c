@@ -3,7 +3,7 @@
  **********************************************************************
 
   test_ga - Test program for GAUL.
-  Copyright ©2002-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2006, Stewart Adcock <stewart@linux-domain.com>
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -43,16 +43,16 @@
   updated:	25 Nov 2002
  **********************************************************************/
 
-boolean test_score(population *pop, entity *entity)
+static boolean test_score(population *pop, entity *this_entity)
   {
   double		A, B, C, D;	/* Parameters. */
 
-  A = ((double *)entity->chromosome[0])[0];
-  B = ((double *)entity->chromosome[0])[1];
-  C = ((double *)entity->chromosome[0])[2];
-  D = ((double *)entity->chromosome[0])[3];
+  A = ((double *)this_entity->chromosome[0])[0];
+  B = ((double *)this_entity->chromosome[0])[1];
+  C = ((double *)this_entity->chromosome[0])[2];
+  D = ((double *)this_entity->chromosome[0])[3];
 
-  ga_entity_set_fitness(entity, -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D)));
+  ga_entity_set_fitness(this_entity, -(fabs(0.75-A)+SQU(0.95-B)+fabs(CUBE(0.23-C))+FOURTH_POW(0.71-D)));
 
   return TRUE;
   }
@@ -66,7 +66,7 @@ boolean test_score(population *pop, entity *entity)
   updated:	25 Nov 2002
  **********************************************************************/
 
-boolean test_generation_callback(int generation, population *pop)
+static boolean test_generation_callback(int generation, population *pop)
   {
   entity		*best;		/* Fittest entity. */
 
@@ -93,7 +93,7 @@ boolean test_generation_callback(int generation, population *pop)
   last updated: 25 Nov 2002
  **********************************************************************/
 
-boolean test_seed(population *pop, entity *adam)
+static boolean test_seed(population *pop, entity *adam)
   {
 
 /* Checks. */

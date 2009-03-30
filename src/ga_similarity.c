@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_similarity - Genetic algorithm genome/chromosome comparison routines.
-  Copyright ©2001-2004, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -71,7 +71,7 @@
  **********************************************************************/
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
-boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
+GAULFUNC boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
   {
   int		i;		/* Loop variable over all chromosomes. */
 
@@ -107,7 +107,7 @@ boolean ga_compare_genome(population *pop, entity *alpha, entity *beta)
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
 
-int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
+GAULFUNC void ga_count_match_alleles(const int length, const int *alpha, const int *beta)
   {
   int		i;		/* Loop variable over all alleles. */
   int		count=0;	/* Number of matching alleles. */
@@ -137,7 +137,7 @@ int ga_count_match_alleles(const int length, const int *alpha, const int *beta)
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
 
-double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta)
+GAULFUNC void ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta)
   {
   int		i;			/* Loop over chromosomes. */
   int		match=0;		/* Count of matching alleles. */
@@ -179,7 +179,7 @@ double ga_genome_hamming_similarity(population *pop, entity *alpha, entity *beta
 
 #ifdef COMPILE_DEPRECATED_FUNCTIONS
 
-double ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *beta)
+GAULFUNC void ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *beta)
   {
   return sqrt(ga_genome_hamming_similarity(pop, alpha, beta));
   }
@@ -196,12 +196,12 @@ double ga_genome_euclidian_similarity(population *pop, entity *alpha, entity *be
   last updated:	16 May 2002
  **********************************************************************/
 
-int ga_similarity_bitstring_count_1_alleles( const population *pop,
+GAULFUNC int ga_similarity_bitstring_count_1_alleles( const population *pop,
                                       const entity *alpha, const int chromosomeid )
   {
   int		i;		/* Loop variable over all alleles. */
   int		count=0;	/* Number of matching alleles. */
-  byte		*a;		/* Comparison bitstring. */
+  gaulbyte		*a;		/* Comparison bitstring. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
@@ -209,7 +209,7 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes)
     die("Invalid chromosome index passed");
 
-  a = (byte*)(alpha->chromosome[chromosomeid]);
+  a = (gaulbyte*)(alpha->chromosome[chromosomeid]);
 
   for ( i=0; i<pop->len_chromosomes; i++ )
     {
@@ -231,21 +231,21 @@ int ga_similarity_bitstring_count_1_alleles( const population *pop,
   last updated:	14 May 2002
  **********************************************************************/
 
-int ga_similarity_bitstring_count_match_alleles( const population *pop,
+GAULFUNC int ga_similarity_bitstring_count_match_alleles( const population *pop,
                                       const entity *alpha, const entity *beta,
                                       const int chromosomeid )
   {
   int		i;		/* Loop variable over all alleles. */
   int		count=0;	/* Number of matching alleles. */
-  byte		*a, *b;		/* Comparison bitstrings. */
+  gaulbyte		*a, *b;		/* Comparison bitstrings. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
   if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
-  a = (byte*)(alpha->chromosome[chromosomeid]);
-  b = (byte*)(beta->chromosome[chromosomeid]);
+  a = (gaulbyte*)(alpha->chromosome[chromosomeid]);
+  b = (gaulbyte*)(beta->chromosome[chromosomeid]);
 
   for ( i=0; i<pop->len_chromosomes; i++ )
     {
@@ -269,21 +269,21 @@ int ga_similarity_bitstring_count_match_alleles( const population *pop,
   last updated:	14 May 2002
  **********************************************************************/
 
-int ga_similarity_bitstring_count_and_alleles( const population *pop,
+GAULFUNC int ga_similarity_bitstring_count_and_alleles( const population *pop,
                                       const entity *alpha, const entity *beta,
                                       const int chromosomeid )
   {
   int		i;		/* Loop variable over all alleles. */
   int		count=0;	/* Number of matching alleles. */
-  byte		*a, *b;		/* Comparison bitstrings. */
+  gaulbyte		*a, *b;		/* Comparison bitstrings. */
 
   /* Checks. */
   if (!pop) die("Null pointer to population structure passed");
   if (!alpha || !beta) die("Null pointer to entity structure passed");
   if (chromosomeid<0 || chromosomeid>=pop->num_chromosomes) die("Invalid chromosome index passed");
 
-  a = (byte*)(alpha->chromosome[chromosomeid]);
-  b = (byte*)(beta->chromosome[chromosomeid]);
+  a = (gaulbyte*)(alpha->chromosome[chromosomeid]);
+  b = (gaulbyte*)(beta->chromosome[chromosomeid]);
 
   for ( i=0; i<pop->len_chromosomes; i++ )
     {
@@ -305,7 +305,7 @@ int ga_similarity_bitstring_count_and_alleles( const population *pop,
   last updated:	14 May 2002
  **********************************************************************/
 
-int ga_similarity_integer_count_match_alleles( const population *pop,
+GAULFUNC int ga_similarity_integer_count_match_alleles( const population *pop,
                                       const entity *alpha, const entity *beta,
                                       const int chromosomeid )
   {
@@ -338,7 +338,7 @@ int ga_similarity_integer_count_match_alleles( const population *pop,
   last updated:	16 May 2002
  **********************************************************************/
 
-double ga_similarity_bitstring_tanimoto(const population *pop,
+GAULFUNC double ga_similarity_bitstring_tanimoto(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i;              /* Loop variable over all chromosomes. */
@@ -370,7 +370,7 @@ double ga_similarity_bitstring_tanimoto(const population *pop,
   last updated:	16 May 2002
  **********************************************************************/
 
-double ga_similarity_bitstring_dice(const population *pop,
+GAULFUNC double ga_similarity_bitstring_dice(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i;              /* Loop variable over all chromosomes. */
@@ -402,7 +402,7 @@ double ga_similarity_bitstring_dice(const population *pop,
   last updated:	16 May 2002
  **********************************************************************/
 
-double ga_similarity_bitstring_euclidean(const population *pop,
+GAULFUNC double ga_similarity_bitstring_euclidean(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i;              /* Loop variable over all chromosomes. */
@@ -434,7 +434,7 @@ double ga_similarity_bitstring_euclidean(const population *pop,
   last updated:	16 May 2002
  **********************************************************************/
 
-double ga_similarity_bitstring_hamming(const population *pop,
+GAULFUNC double ga_similarity_bitstring_hamming(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i;              /* Loop variable over all chromosomes. */
@@ -466,7 +466,7 @@ double ga_similarity_bitstring_hamming(const population *pop,
   last updated:	16 May 2002
  **********************************************************************/
 
-double ga_similarity_bitstring_cosine(const population *pop,
+GAULFUNC double ga_similarity_bitstring_cosine(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i;              /* Loop variable over all chromosomes. */
@@ -503,7 +503,7 @@ double ga_similarity_bitstring_cosine(const population *pop,
   last updated:	23 May 2002
  **********************************************************************/
 
-int ga_similarity_double_count_match_alleles( const population *pop,
+GAULFUNC int ga_similarity_double_count_match_alleles( const population *pop,
                                       const entity *alpha, const entity *beta,
                                       const int chromosomeid )
   {
@@ -539,7 +539,7 @@ int ga_similarity_double_count_match_alleles( const population *pop,
   last updated:	01 Apr 2004
  **********************************************************************/
 
-double ga_similarity_double_tanimoto(const population *pop,
+GAULFUNC double ga_similarity_double_tanimoto(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
@@ -578,7 +578,7 @@ double ga_similarity_double_tanimoto(const population *pop,
   last updated:	01 Apr 2004
  **********************************************************************/
 
-double ga_similarity_double_dice(const population *pop,
+GAULFUNC double ga_similarity_double_dice(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
@@ -617,7 +617,7 @@ double ga_similarity_double_dice(const population *pop,
   last updated:	01 Apr 2004
  **********************************************************************/
 
-double ga_similarity_double_cosine(const population *pop,
+GAULFUNC double ga_similarity_double_cosine(const population *pop,
                                       const entity *alpha, const entity *beta)
   {
   int           i, j;			/* Loop variable over all chromosomes, alleles. */
@@ -643,5 +643,4 @@ double ga_similarity_double_cosine(const population *pop,
 
   return ab/sqrt(aa+bb);
   }
-
 

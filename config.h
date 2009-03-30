@@ -5,7 +5,7 @@
 #define DEBUG 0
 
 /* Record date of compilation. */
-#define GA_BUILD_DATE_STRING "07/08/05"
+#define GA_BUILD_DATE_STRING "05/10/06"
 
 /* Core GAUL debugging level. */
 #define GA_DEBUG 0
@@ -17,36 +17,36 @@
 #define GA_DEFAULT_NUM_THREADS 4
 
 /* Minor version number for libtool. */
-#define GA_LT_MINOR_VERSION 49
+#define GA_LT_MINOR_VERSION 50
 
 /* Major version number. */
 #define GA_MAJOR_VERSION 0
 
 /* Minor version number. */
-#define GA_MINOR_VERSION 1849
+#define GA_MINOR_VERSION 1850
 
 /* Environment variable used to request processes. */
-#define GA_NUM_PROCESSES_ENVVAR_STRING GA_NUM_PROCESSES
+#define GA_NUM_PROCESSES_ENVVAR_STRING "GA_NUM_PROCESSES"
 
 /* Environment variable used to request threads. */
-#define GA_NUM_THREADS_ENVVAR_STRING GA_NUM_THREADS
+#define GA_NUM_THREADS_ENVVAR_STRING "GA_NUM_THREADS"
 
 /* Patch level. */
-#define GA_PATCH_VERSION 3
+#define GA_PATCH_VERSION 0
 
 /* Record compilation platform information. */
-#define GA_UNAME_STRING "Linux whitebox64.linux-domain.com 2.6.12-1.1398_FC4 #1 Fri Jul 15 00:51:38 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux"
+#define GA_UNAME_STRING "Linux localhost.localdomain 2.6.14-1.1696_FC5 #1 SMP Sat Nov 19 19:00:28 EST 2005 x86_64 x86_64 x86_64 GNU/Linux"
 
 /* Version string. */
-#define GA_VERSION_STRING "0.1849-3"
+#define GA_VERSION_STRING "0.1850-0"
 
 /* Whether to dump certian statistics. */
 #define GA_WRITE_STATS 0
 
-/* Define to 1 if you have the `bcmp' function. */
+/* Whether bcmp() is available */
 #define HAVE_BCMP 1
 
-/* Define to 1 if you have the `bcopy' function. */
+/* Whether bcopy() is available */
 #define HAVE_BCOPY 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
@@ -85,14 +85,14 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
-/* Define to 1 if you have the `memset' function. */
+/* Whether memset() is available */
 #define HAVE_MEMSET 1
 
 /* Define to 1 if you have the `min' function. */
 /* #undef HAVE_MIN */
 
 /* Whether to use MPI for parallel code. */
-#define HAVE_MPI 0
+/* #undef HAVE_MPI */
 
 /* Whether libpthread is installed. */
 #define HAVE_PTHREADS 1
@@ -104,7 +104,7 @@
 #define HAVE_SINCOS 1
 
 /* Whether S-Lang is installed. */
-#define HAVE_SLANG 1
+/* #undef HAVE_SLANG */
 
 /* Define to 1 if you have the `snooze' function. */
 /* #undef HAVE_SNOOZE */
@@ -139,16 +139,16 @@
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
-/* Define to 1 if you have the `strlen' function. */
+/* Whether strlen() is available */
 #define HAVE_STRLEN 1
 
 /* Define to 1 if you have the `strncasecmp' function. */
 #define HAVE_STRNCASECMP 1
 
-/* Define to 1 if you have the `strncmp' function. */
+/* Whether strncmp() is available */
 #define HAVE_STRNCMP 1
 
-/* Define to 1 if you have the `strncpy' function. */
+/* Whether strncpy() is available */
 #define HAVE_STRNCPY 1
 
 /* Define to 1 if you have the `strndup' function. */
@@ -181,7 +181,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
-/* Define to 1 if you have the `usleep' function. */
+/* Whether usleep() is available */
 #define HAVE_USLEEP 1
 
 /* Define to 1 if you have the `waitpid' function. */
@@ -194,7 +194,7 @@
 #define MEMORY_ALIGN_SIZE 8
 
 /* Whether to use debugging memory allocation routines. */
-#define MEMORY_ALLOC_DEBUG 0
+/* #undef MEMORY_ALLOC_DEBUG */
 
 /* Whether to use safe memory allocation routines. */
 #define MEMORY_ALLOC_SAFE 1
@@ -203,7 +203,7 @@
 /* #undef MEMORY_CHUNKS_MIMIC */
 
 /* Whether to pad memory. */
-#define MEMORY_PADDING 0
+/* #undef MEMORY_PADDING */
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "gaul@linux-domain.com"
@@ -212,13 +212,13 @@
 #define PACKAGE_NAME "gaul-devel"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gaul-devel 0.1849-2"
+#define PACKAGE_STRING "gaul-devel 0.1850-0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gaul-devel"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.1849-2"
+#define PACKAGE_VERSION "0.1850-0"
 
 /* The size of a `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1
@@ -248,13 +248,13 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Whether to use memory chunk handling for chromosomes. */
-#define USE_CHROMO_CHUNKS 0
+/* #undef USE_CHROMO_CHUNKS */
 
 /* Whether OpenMP should be used. */
-#define USE_OPENMP 0
+/* #undef USE_OPENMP */
 
 /* Whether to cripple GAUL so it works on windows. */
-#define W32_CRIPPLED 0
+/* #undef W32_CRIPPLED */
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

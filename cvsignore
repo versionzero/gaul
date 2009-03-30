@@ -8,6 +8,12 @@ undep.sh
 */.libs
 .deps
 */.deps
+*.orig
+*/*.orig
+*/*/*.orig
+*.rej
+*/*.rej
+*/*/*.rej
 examples/diagnostics
 examples/pingpong
 examples/pingpong_sa
@@ -31,6 +37,7 @@ gmon.out
 *.dat
 *.log
 *.gz
+*.tgz
 cvs2cl.pl
 *.o
 *.lo

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_bitstring - GAUL's low-level bitstring routines.
-  Copyright ©2001-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -48,34 +48,35 @@
 /*
  * Prototypes.
  */
-FUNCPROTO byte *ga_bit_new( int length );
-FUNCPROTO void ga_bit_free( byte *bstr );
-FUNCPROTO void ga_bit_set( byte *bstr, int n );
-FUNCPROTO void ga_bit_clear( byte *bstr, int n );
-FUNCPROTO void ga_bit_invert( byte *bstr, int n );
-FUNCPROTO boolean ga_bit_get( byte *bstr, int n );
-FUNCPROTO void ga_bit_randomize( byte *bstr, int n );
-FUNCPROTO void ga_bit_copy( byte *dest, byte *src, int ndest, int nsrc, int length );
-FUNCPROTO size_t ga_bit_sizeof( int length );
-FUNCPROTO byte *ga_bit_clone( byte *dest, byte *src, int length );
+GAULFUNC gaulbyte *ga_bit_new( int length );
+GAULFUNC void ga_bit_free( gaulbyte *bstr );
+GAULFUNC void ga_bit_set( gaulbyte *bstr, int n );
+GAULFUNC void ga_bit_clear( gaulbyte *bstr, int n );
+GAULFUNC void ga_bit_invert( gaulbyte *bstr, int n );
+GAULFUNC boolean ga_bit_get( gaulbyte *bstr, int n );
+GAULFUNC void ga_bit_randomize( gaulbyte *bstr, int n );
+GAULFUNC void ga_bit_copy( gaulbyte *dest, gaulbyte *src, int ndest, int nsrc, int length );
+GAULFUNC size_t ga_bit_sizeof( int length );
+GAULFUNC gaulbyte *ga_bit_clone( gaulbyte *dest, gaulbyte *src, int length );
 
 /* Integer conversion. */
-FUNCPROTO unsigned int ga_bit_decode_binary_uint( byte *bstr, int n, int length );
-FUNCPROTO void ga_bit_encode_binary_uint( byte *bstr, int n, int length, unsigned int value );
-FUNCPROTO int ga_bit_decode_binary_int( byte *bstr, int n, int length );
-FUNCPROTO void ga_bit_encode_binary_int( byte *bstr, int n, int length, int value );
-FUNCPROTO int ga_bit_decode_gray_int( byte *bstr, int n, int length );
-FUNCPROTO unsigned int ga_bit_decode_gray_uint( byte *bstr, int n, int length );
-FUNCPROTO void ga_bit_encode_gray_uint( byte *bstr, int n, int length, unsigned int value );
+GAULFUNC unsigned int ga_bit_decode_binary_uint( gaulbyte *bstr, int n, int length );
+GAULFUNC void ga_bit_encode_binary_uint( gaulbyte *bstr, int n, int length, unsigned int value );
+GAULFUNC int ga_bit_decode_binary_int( gaulbyte *bstr, int n, int length );
+GAULFUNC void ga_bit_encode_binary_int( gaulbyte *bstr, int n, int length, int value );
+GAULFUNC int ga_bit_decode_gray_int( gaulbyte *bstr, int n, int length );
+GAULFUNC void ga_bit_encode_gray_int( gaulbyte *bstr, int n, int length, int value );
+GAULFUNC unsigned int ga_bit_decode_gray_uint( gaulbyte *bstr, int n, int length );
+GAULFUNC void ga_bit_encode_gray_uint( gaulbyte *bstr, int n, int length, unsigned int value );
 
 /* Real conversion. */
-FUNCPROTO double ga_bit_decode_binary_real( byte *bstr, int n, int mantissa, int exponent );
-FUNCPROTO void ga_bit_encode_binary_real( byte *bstr, int n, int mantissa, int exponent, double value );
-FUNCPROTO double ga_bit_decode_gray_real( byte *bstr, int n, int mantissa, int exponent );
-FUNCPROTO void ga_bit_encode_grayy_real( byte *bstr, int n, int mantissa, int exponent, double value );
+GAULFUNC double ga_bit_decode_binary_real( gaulbyte *bstr, int n, int mantissa, int exponent );
+GAULFUNC void ga_bit_encode_binary_real( gaulbyte *bstr, int n, int mantissa, int exponent, double value );
+GAULFUNC double ga_bit_decode_gray_real( gaulbyte *bstr, int n, int mantissa, int exponent );
+GAULFUNC void ga_bit_encode_gray_real( gaulbyte *bstr, int n, int mantissa, int exponent, double value );
 
 /* Test. */
-FUNCPROTO boolean ga_bit_test( void );
+GAULFUNC boolean ga_bit_test( void );
 
 #endif	/* GA_BITSTRING_H_INCLUDED */
 

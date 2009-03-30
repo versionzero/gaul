@@ -14,6 +14,7 @@
 *.rej
 *.sav
 *.tmp
+*.tgz
 *.gz
 .deps
 .libs
@@ -33,7 +34,6 @@ Makefile
 Makefile.in
 stamp-h
 stamp-h.in
-cat-id-tbl.c
 stamp-cat-id
 wildfire
 pingpong
@@ -51,4 +51,4 @@ nnevolve
 gmon.out
 config.log
 config.cache
-
+ltmain.sh

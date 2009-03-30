@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_deterministiccrowding - Deterministic crowding.
-  Copyright ©2003-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2003-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -41,7 +41,7 @@
   last updated: 20 May 2003
  **********************************************************************/
 
-void ga_population_set_deterministiccrowding_parameters( population		*pop,
+GAULFUNC void ga_population_set_deterministiccrowding_parameters( population		*pop,
                                                          const GAcompare	compare )
   {
 
@@ -83,13 +83,13 @@ void ga_population_set_deterministiccrowding_parameters( population		*pop,
   last updated:	18 Feb 2005
  **********************************************************************/
 
-int ga_deterministiccrowding(	population		*pop,
+GAULFUNC int ga_deterministiccrowding(	population		*pop,
 				const int		max_generations )
   {
   int		generation=0;		/* Current generation number. */
   int		*permutation, *ordered;	/* Arrays of entities. */
   entity	*mother, *father;	/* Current entities. */
-  entity	*son, *daughter, *entity;	/* Current entities. */
+  entity	*son, *daughter, *this_entity;	/* Current entities. */
   int		i;			/* Loop variable over entities. */
   double	dist1, dist2;		/* Genetic or phenomic distances. */
   int		rank;			/* Rank of entity in population. */
@@ -190,10 +190,10 @@ int ga_deterministiccrowding(	population		*pop,
              ga_get_entity_id(pop, daughter),
              ga_get_entity_rank(pop, daughter) );
 
-        entity = ga_get_free_entity(pop);
-        pop->mutate(pop, daughter, entity);
+        this_entity = ga_get_free_entity(pop);
+        pop->mutate(pop, daughter, this_entity);
         ga_entity_dereference(pop, daughter);
-        daughter = entity;
+        daughter = this_entity;
         }
 
       if (random_boolean_prob(pop->mutation_ratio))
@@ -202,10 +202,10 @@ int ga_deterministiccrowding(	population		*pop,
              ga_get_entity_id(pop, son),
              ga_get_entity_rank(pop, son) );
 
-        entity = ga_get_free_entity(pop);
-        pop->mutate(pop, son, entity);
+        this_entity = ga_get_free_entity(pop);
+        pop->mutate(pop, son, this_entity);
         ga_entity_dereference(pop, son);
-        son = entity;
+        son = this_entity;
         }
 
 /*
@@ -229,18 +229,18 @@ int ga_deterministiccrowding(	population		*pop,
         rank = ga_get_entity_rank(pop, daughter);
         if (daughter->fitness < mother->fitness)
           {
-          entity = pop->entity_iarray[i];
+          this_entity = pop->entity_iarray[i];
           pop->entity_iarray[i] = pop->entity_iarray[rank];
-          pop->entity_iarray[rank] = entity;
+          pop->entity_iarray[rank] = this_entity;
           }
         ga_entity_dereference_by_rank(pop, rank);
 
         rank = ga_get_entity_rank(pop, son);
         if (son->fitness < father->fitness)
           {
-          entity = pop->entity_iarray[permutation[i]];
+          this_entity = pop->entity_iarray[permutation[i]];
           pop->entity_iarray[permutation[i]] = pop->entity_iarray[rank];
-          pop->entity_iarray[rank] = entity;
+          pop->entity_iarray[rank] = this_entity;
           }
         ga_entity_dereference_by_rank(pop, rank);
         }
@@ -249,18 +249,18 @@ int ga_deterministiccrowding(	population		*pop,
         rank = ga_get_entity_rank(pop, son);
         if (son->fitness < mother->fitness)
           {
-          entity = pop->entity_iarray[i];
+          this_entity = pop->entity_iarray[i];
           pop->entity_iarray[i] = pop->entity_iarray[rank];
-          pop->entity_iarray[rank] = entity;
+          pop->entity_iarray[rank] = this_entity;
           }
         ga_entity_dereference_by_rank(pop, rank);
 
         rank = ga_get_entity_rank(pop, daughter);
         if (daughter->fitness < father->fitness)
           {
-          entity = pop->entity_iarray[permutation[i]];
+          this_entity = pop->entity_iarray[permutation[i]];
           pop->entity_iarray[permutation[i]] = pop->entity_iarray[rank];
-          pop->entity_iarray[rank] = entity;
+          pop->entity_iarray[rank] = this_entity;
           }
         ga_entity_dereference_by_rank(pop, rank);
         }
@@ -281,6 +281,12 @@ int ga_deterministiccrowding(	population		*pop,
  * Ensure final ordering of population is correct.
  */
   sort_population(pop);
+
+/*
+ * Clean-up.
+ */
+  s_free(permutation);
+  s_free(ordered);
 
   return generation;
   }

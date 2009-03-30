@@ -3,7 +3,7 @@
  **********************************************************************
 
   timer_util - Useful timer routines with S-Lang intrinsics.
-  Copyright ©2002-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2002-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -45,7 +45,7 @@
   last updated:	13 Mar 2002
  **********************************************************************/
 
-void timer_diagnostics(void)
+GAULFUNC void timer_diagnostics(void)
   {
   printf("=== Timer diagnostics ========================================\n");
   printf("Version:                   %s\n", GA_VERSION_STRING);
@@ -69,7 +69,7 @@ void timer_diagnostics(void)
   last updated:	06 Feb 2002
  **********************************************************************/
 
-void timer_start(chrono_t *t)
+GAULFUNC void timer_start(chrono_t *t)
   {
   t->begin_clock = t->save_clock = clock();
   t->begin_time = t->save_time = time(NULL);
@@ -88,18 +88,18 @@ void timer_start(chrono_t *t)
   last updated:	06 Jun 2003
  **********************************************************************/
 
-double timer_check(chrono_t *t)
+GAULFUNC double timer_check(chrono_t *t)
   {
   double        user_time, real_time;
-  clock_t	cclock = clock();
-  time_t	ctime = time(NULL);
+  clock_t	curclock = clock();
+  time_t	curtime = time(NULL);
 
-  plog(LOG_NORMAL, "Timer checked: %d", cclock);
+  plog(LOG_NORMAL, "Timer checked: %d", curclock);
 
-  user_time = (cclock - t->save_clock) / (double) CLOCKS_PER_SEC;
-  real_time = difftime(ctime, t->save_time);
-  t->save_clock = ctime;
-  t->save_time = cclock;
+  user_time = (curclock - t->save_clock) / (double) CLOCKS_PER_SEC;
+  real_time = difftime(curtime, t->save_time);
+  t->save_clock = curclock;
+  t->save_time = curtime;
 
   plog(LOG_NORMAL, "User time: %f seconds.", user_time);
   plog(LOG_NORMAL, "Real time: %f seconds.", real_time);
@@ -114,7 +114,7 @@ double timer_check(chrono_t *t)
   posterior, so we use a 
  **********************************************************************/
 
-#if HAVE_SLANG==1
+#ifdef HAVE_SLANG
 
 THREAD_LOCK_DEFINE_STATIC(chrono_table_lock);
 static TableStruct *chrono_table=NULL;        /* Table of timer handles. */
@@ -201,5 +201,5 @@ double timer_check_slang(int *t_handle)
   return timer_check(t);
   }
 
-#endif	/* HAVE_SLANG==1 */
+#endif	/* HAVE_SLANG */
 

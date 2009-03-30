@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_chromo - Genetic algorithm chromosome handling routines.
-  Copyright ©2000-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -60,7 +60,7 @@
   last updated: 05 Oct 2004
  **********************************************************************/
 
-boolean ga_chromosome_integer_allocate( population *pop,
+GAULFUNC boolean ga_chromosome_integer_allocate( population *pop,
                                         entity *embryo )
   {
   int		i;		/* Loop variable over all chromosomes */
@@ -71,7 +71,7 @@ boolean ga_chromosome_integer_allocate( population *pop,
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-#if USE_CHROMO_CHUNKS == 1
+#ifdef USE_CHROMO_CHUNKS
   THREAD_LOCK(pop->chromo_chunk_lock);
   if (!pop->chromo_chunk)
     {
@@ -106,7 +106,7 @@ boolean ga_chromosome_integer_allocate( population *pop,
   last updated: 05 Oct 2004
  **********************************************************************/
 
-void ga_chromosome_integer_deallocate( population *pop,
+GAULFUNC void ga_chromosome_integer_deallocate( population *pop,
                                        entity *corpse )
   {
 
@@ -116,7 +116,7 @@ void ga_chromosome_integer_deallocate( population *pop,
   if (corpse->chromosome==NULL)
     die("This entity already contains no chromosomes.");
 
-#if USE_CHROMO_CHUNKS == 1
+#ifdef USE_CHROMO_CHUNKS
   THREAD_LOCK(pop->chromo_chunk_lock);
   mem_chunk_free(pop->chromo_chunk, corpse->chromosome[0]);
   mem_chunk_free(pop->chromoarray_chunk, corpse->chromosome);
@@ -147,7 +147,7 @@ void ga_chromosome_integer_deallocate( population *pop,
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_integer_replicate( const population *pop,
+GAULFUNC void ga_chromosome_integer_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -173,8 +173,8 @@ void ga_chromosome_integer_replicate( const population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
-                                     byte **bytes, unsigned int *max_bytes)
+GAULFUNC unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
+                                     gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
 
@@ -185,14 +185,14 @@ unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
 
   if (!joe->chromosome)
     {
-    *bytes = (byte *)"\0";
+    *bytes = (gaulbyte *)"\0";
     return 0;
     }
 
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(int);
 
-  *bytes = (byte *)joe->chromosome[0];
+  *bytes = (gaulbyte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -207,7 +207,7 @@ unsigned int ga_chromosome_integer_to_bytes(const population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_integer_from_bytes(const population *pop, entity *joe, byte *bytes)
+GAULFUNC void ga_chromosome_integer_from_bytes(const population *pop, entity *joe, gaulbyte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -233,7 +233,7 @@ void ga_chromosome_integer_from_bytes(const population *pop, entity *joe, byte *
   last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_integer_to_string(
+GAULFUNC char *ga_chromosome_integer_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
@@ -245,7 +245,7 @@ char *ga_chromosome_integer_to_string(
   if (!joe) die("Null pointer to entity structure passed.");
 
 /* Ensure that a reasonable amount of memory is allocated. */
-  if (!text || *textlen < 8 * pop->len_chromosomes * pop->num_chromosomes)
+  if (!text || (int) *textlen < 8 * pop->len_chromosomes * pop->num_chromosomes)
     {
     *textlen = 8 * pop->len_chromosomes * pop->num_chromosomes;
     text = s_realloc(text, sizeof(char) * *textlen);
@@ -264,7 +264,7 @@ char *ga_chromosome_integer_to_string(
       {
       if (*textlen-k<8)
         {
-        *textlen *= 2;   /* FIXME: This isn't intelligent. */
+        *textlen *= 2;   /* Double allocation. */
         text = s_realloc(text, sizeof(char) * *textlen);
         }
 
@@ -273,7 +273,7 @@ char *ga_chromosome_integer_to_string(
 
       if (l == -1)
         {	/* Truncation occured. */
-	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+	*textlen *= 2;	/* Double allocation. */
         text = s_realloc(text, sizeof(char) * *textlen);
         l = snprintf(&(text[k]), *textlen-k, "%d ",
                        ((int *)joe->chromosome[i])[j]);
@@ -301,7 +301,7 @@ char *ga_chromosome_integer_to_string(
   last updated: 13/06/01
  **********************************************************************/
 
-boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
+GAULFUNC boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -333,7 +333,7 @@ boolean ga_chromosome_boolean_allocate(population *pop, entity *embryo)
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
+GAULFUNC void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -358,7 +358,7 @@ void ga_chromosome_boolean_deallocate(population *pop, entity *corpse)
   last updated: 19 Mar 2002
  **********************************************************************/
 
-void ga_chromosome_boolean_replicate( const population *pop,
+GAULFUNC void ga_chromosome_boolean_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -385,8 +385,8 @@ void ga_chromosome_boolean_replicate( const population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
-                                    byte **bytes, unsigned int *max_bytes)
+GAULFUNC unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
+                                    gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
 
@@ -397,14 +397,14 @@ unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
 
   if (!joe->chromosome)
     {
-    *bytes = (byte *)"\0";
+    *bytes = (gaulbyte *)"\0";
     return 0;
     }
 
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(boolean);
 
-  *bytes = (byte *)joe->chromosome[0];
+  *bytes = (gaulbyte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -419,7 +419,7 @@ unsigned int ga_chromosome_boolean_to_bytes(const population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_boolean_from_bytes(const population *pop, entity *joe, byte *bytes)
+GAULFUNC void ga_chromosome_boolean_from_bytes(const population *pop, entity *joe, gaulbyte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -442,7 +442,7 @@ void ga_chromosome_boolean_from_bytes(const population *pop, entity *joe, byte *
   last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_boolean_to_string(
+GAULFUNC char *ga_chromosome_boolean_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
@@ -452,7 +452,7 @@ char *ga_chromosome_boolean_to_string(
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (!text || *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if (!text || (int) *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
     *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * *textlen);
@@ -487,7 +487,7 @@ char *ga_chromosome_boolean_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
+GAULFUNC boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -519,7 +519,7 @@ boolean ga_chromosome_double_allocate(population *pop, entity *embryo)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_deallocate(population *pop, entity *corpse)
+GAULFUNC void ga_chromosome_double_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -544,7 +544,7 @@ void ga_chromosome_double_deallocate(population *pop, entity *corpse)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_double_replicate( const population *pop,
+GAULFUNC void ga_chromosome_double_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -571,8 +571,8 @@ void ga_chromosome_double_replicate( const population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
-                                    byte **bytes, unsigned int *max_bytes)
+GAULFUNC unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
+                                    gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
 
@@ -583,14 +583,14 @@ unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
 
   if (!joe->chromosome)
     {
-    *bytes = (byte *)"\0";
+    *bytes = (gaulbyte *)"\0";
     return 0;
     }
 
   num_bytes = pop->len_chromosomes * pop->num_chromosomes *
               sizeof(double);
 
-  *bytes = (byte *)joe->chromosome[0];
+  *bytes = (gaulbyte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -605,7 +605,7 @@ unsigned int ga_chromosome_double_to_bytes(const population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_double_from_bytes(const population *pop, entity *joe, byte *bytes)
+GAULFUNC void ga_chromosome_double_from_bytes(const population *pop, entity *joe, gaulbyte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -628,7 +628,7 @@ void ga_chromosome_double_from_bytes(const population *pop, entity *joe, byte *b
   last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_double_to_string(
+GAULFUNC char *ga_chromosome_double_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
@@ -639,7 +639,7 @@ char *ga_chromosome_double_to_string(
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (!text || *textlen < 10 * pop->len_chromosomes * pop->num_chromosomes)
+  if (!text || (int) *textlen < 10 * pop->len_chromosomes * pop->num_chromosomes)
     {
     *textlen = 10 * pop->len_chromosomes * pop->num_chromosomes;
     text = s_realloc(text, sizeof(char) * *textlen);
@@ -657,7 +657,7 @@ char *ga_chromosome_double_to_string(
       {
       if (*textlen-k<8)
         {
-	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+	*textlen *= 2;	/* Double allocation. */
         text = s_realloc(text, sizeof(char) * *textlen);
         }
 
@@ -666,7 +666,7 @@ char *ga_chromosome_double_to_string(
 
       if (l == -1)
         {	/* Truncation occured. */
-	*textlen *= 2;	/* FIXME: This isn't intelligent. */
+	*textlen *= 2;	/* Double allocation. */
         text = s_realloc(text, sizeof(char) * *textlen);
         l = snprintf(&(text[k]), *textlen-k, "%f ",
                        ((double *)joe->chromosome[i])[j]);
@@ -693,7 +693,7 @@ char *ga_chromosome_double_to_string(
   last updated: 16/06/01
  **********************************************************************/
 
-boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
+GAULFUNC boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -725,7 +725,7 @@ boolean ga_chromosome_char_allocate(population *pop, entity *embryo)
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_chromosome_char_deallocate(population *pop, entity *corpse)
+GAULFUNC void ga_chromosome_char_deallocate(population *pop, entity *corpse)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -752,7 +752,7 @@ void ga_chromosome_char_deallocate(population *pop, entity *corpse)
   last updated: 19 Mar 2002
  **********************************************************************/
 
-void ga_chromosome_char_replicate( const population *pop,
+GAULFUNC void ga_chromosome_char_replicate( const population *pop,
                                    entity *parent, entity *child,
                                    const int chromosomeid )
   {
@@ -777,8 +777,8 @@ void ga_chromosome_char_replicate( const population *pop,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
-                                    byte **bytes, unsigned int *max_bytes)
+GAULFUNC unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
+                                    gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
 
@@ -789,13 +789,13 @@ unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
 
   if (!joe->chromosome)
     {
-    *bytes = (byte *)"\0";
+    *bytes = (gaulbyte *)"\0";
     return 0;
     }
 
   num_bytes = pop->len_chromosomes * pop->num_chromosomes * sizeof(char);
 
-  *bytes = (byte *)joe->chromosome[0];
+  *bytes = (gaulbyte *)joe->chromosome[0];
 
   return num_bytes;
   }
@@ -810,7 +810,7 @@ unsigned int ga_chromosome_char_to_bytes(const population *pop, entity *joe,
   last updated: 1 Feb 2002
  **********************************************************************/
 
-void ga_chromosome_char_from_bytes(const population *pop, entity *joe, byte *bytes)
+GAULFUNC void ga_chromosome_char_from_bytes(const population *pop, entity *joe, gaulbyte *bytes)
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -833,7 +833,7 @@ void ga_chromosome_char_from_bytes(const population *pop, entity *joe, byte *byt
   last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_char_to_string(
+GAULFUNC char *ga_chromosome_char_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
@@ -843,7 +843,7 @@ char *ga_chromosome_char_to_string(
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (*textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if ( (int) *textlen < pop->len_chromosomes * pop->num_chromosomes + 1 )
     {
     *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * *textlen);
@@ -877,7 +877,7 @@ char *ga_chromosome_char_to_string(
   last updated: 30/06/01
  **********************************************************************/
 
-boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
+GAULFUNC boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -887,7 +887,7 @@ boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   if (embryo->chromosome!=NULL)
     die("This entity already contains chromosomes.");
 
-  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(byte *))) )
+  if ( !(embryo->chromosome = s_malloc(pop->num_chromosomes*sizeof(gaulbyte *))) )
     die("Unable to allocate memory");
 
   for (i=0; i<pop->num_chromosomes; i++)
@@ -905,7 +905,7 @@ boolean ga_chromosome_bitstring_allocate(population *pop, entity *embryo)
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
+GAULFUNC void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -933,7 +933,7 @@ void ga_chromosome_bitstring_deallocate(population *pop, entity *corpse)
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_replicate( const population *pop,
+GAULFUNC void ga_chromosome_bitstring_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -958,9 +958,9 @@ void ga_chromosome_bitstring_replicate( const population *pop,
   last updated: 30/06/01
  **********************************************************************/
 
-unsigned int ga_chromosome_bitstring_to_bytes(const population *pop,
+GAULFUNC unsigned int ga_chromosome_bitstring_to_bytes(const population *pop,
                                     entity *joe,
-                                     byte **bytes, unsigned int *max_bytes)
+                                     gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes;	/* Actual size of genes. */
   int		i;		/* Loop variable over all chromosomes */
@@ -968,18 +968,18 @@ unsigned int ga_chromosome_bitstring_to_bytes(const population *pop,
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  num_bytes = ga_bit_sizeof(pop->len_chromosomes) * pop->num_chromosomes;
+  num_bytes = (int) ga_bit_sizeof(pop->len_chromosomes) * pop->num_chromosomes;
 
-  if (num_bytes>*max_bytes)
+  if (num_bytes>(int)*max_bytes)
     {
     *max_bytes = num_bytes;
-    *bytes = s_realloc(*bytes, *max_bytes*sizeof(byte));
-    /* sizeof(byte) should always be 1 */
+    *bytes = s_realloc(*bytes, *max_bytes*sizeof(gaulbyte));
+    /* sizeof(gaulbyte) should always be 1 */
     }
 
   if (!joe->chromosome)
     {
-    *bytes = (byte *)0;
+    *bytes = (gaulbyte *)0;
     return 0;
     }
 
@@ -1003,9 +1003,9 @@ unsigned int ga_chromosome_bitstring_to_bytes(const population *pop,
   last updated: 13/06/01
  **********************************************************************/
 
-void ga_chromosome_bitstring_from_bytes( const population *pop,
+GAULFUNC void ga_chromosome_bitstring_from_bytes( const population *pop,
                                          entity *joe,
-                                         byte *bytes )
+                                         gaulbyte *bytes )
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -1033,7 +1033,7 @@ void ga_chromosome_bitstring_from_bytes( const population *pop,
   last updated: 19 Aug 2002
  **********************************************************************/
 
-char *ga_chromosome_bitstring_to_string(
+GAULFUNC char *ga_chromosome_bitstring_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {
@@ -1043,7 +1043,7 @@ char *ga_chromosome_bitstring_to_string(
   if (!pop) die("Null pointer to population structure passed.");
   if (!joe) die("Null pointer to entity structure passed.");
 
-  if (!text || *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
+  if (!text || (int) *textlen < pop->len_chromosomes * pop->num_chromosomes + 1)
     {
     *textlen = pop->len_chromosomes * pop->num_chromosomes + 1;
     text = s_realloc(text, sizeof(char) * *textlen);
@@ -1078,7 +1078,7 @@ char *ga_chromosome_bitstring_to_string(
   last updated: 05 Oct 2004
  **********************************************************************/
 
-boolean ga_chromosome_list_allocate(population *pop, entity *embryo)
+GAULFUNC boolean ga_chromosome_list_allocate(population *pop, entity *embryo)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -1106,7 +1106,7 @@ boolean ga_chromosome_list_allocate(population *pop, entity *embryo)
   last updated: 05 Oct 2004
  **********************************************************************/
 
-void ga_chromosome_list_deallocate(population *pop, entity *corpse)
+GAULFUNC void ga_chromosome_list_deallocate(population *pop, entity *corpse)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -1135,7 +1135,7 @@ void ga_chromosome_list_deallocate(population *pop, entity *corpse)
   last updated: 05 Oct 2004
  **********************************************************************/
 
-void ga_chromosome_list_replicate( const population *pop,
+GAULFUNC void ga_chromosome_list_replicate( const population *pop,
                                       entity *parent, entity *child,
                                       const int chromosomeid )
   {
@@ -1162,9 +1162,9 @@ void ga_chromosome_list_replicate( const population *pop,
   last updated: 05 Oct 2004
  **********************************************************************/
 
-unsigned int ga_chromosome_list_to_bytes(const population *pop,
+GAULFUNC unsigned int ga_chromosome_list_to_bytes(const population *pop,
                                     entity *joe,
-                                     byte **bytes, unsigned int *max_bytes)
+                                     gaulbyte **bytes, unsigned int *max_bytes)
   {
   int		num_bytes=0;	/* Actual size of genes. */
 
@@ -1193,9 +1193,9 @@ unsigned int ga_chromosome_list_to_bytes(const population *pop,
   last updated: 05 Oct 2004
  **********************************************************************/
 
-void ga_chromosome_list_from_bytes( const population *pop,
+GAULFUNC void ga_chromosome_list_from_bytes( const population *pop,
                                          entity *joe,
-                                         byte *bytes )
+                                         gaulbyte *bytes )
   {
 
   if (!pop) die("Null pointer to population structure passed.");
@@ -1223,7 +1223,7 @@ void ga_chromosome_list_from_bytes( const population *pop,
   last updated: 05 Oct 2004
  **********************************************************************/
 
-char *ga_chromosome_list_to_string(
+GAULFUNC char *ga_chromosome_list_to_string(
                               const population *pop, const entity *joe,
                               char *text, size_t *textlen)
   {

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_stats - Statistics routines.
-  Copyright ©2000-2002, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -42,7 +42,7 @@
   last updated: 07 Jul 2004
  **********************************************************************/
 
-boolean ga_fitness_mean( population *pop, double *mean )
+GAULFUNC boolean ga_fitness_mean( population *pop, double *mean )
   {
   int           i;           /* Loop over all entities. */
   double        sum=0.0;     /* Sum of fitnesses. */
@@ -73,7 +73,7 @@ boolean ga_fitness_mean( population *pop, double *mean )
   last updated: 07 Jul 2004
  **********************************************************************/
 
-boolean ga_fitness_mean_stddev( population *pop,
+GAULFUNC boolean ga_fitness_mean_stddev( population *pop,
                              double *mean, double *stddev )
   {
   int           i;                      /* Loop over all entities. */
@@ -117,8 +117,8 @@ boolean ga_fitness_mean_stddev( population *pop,
   last updated: 17 Jul 2004
  **********************************************************************/
 
-boolean ga_fitness_stats( population *pop,
-                          double *max, double *min,
+GAULFUNC boolean ga_fitness_stats( population *pop,
+                          double *maximum, double *minimum,
                           double *mean, double *median,
                           double *variance, double *stddev,
                           double *kurtosis, double *skew )
@@ -129,12 +129,12 @@ boolean ga_fitness_stats( population *pop,
 
   if (!pop) die("Null pointer to population structure passed.");
   if (pop->size < 1) die("Pointer to empty population structure passed.");
-  if (!max || !min || !mean || !variance || !stddev || !kurtosis || !skew)
+  if (!maximum || !minimum || !mean || !variance || !stddev || !kurtosis || !skew)
     die("Null pointer to double passed.");
 
-  *min = pop->entity_iarray[0]->fitness;
-  *max = pop->entity_iarray[pop->size-1]->fitness;
-  *median = *min + (*max - *min)/2;
+  *minimum = pop->entity_iarray[0]->fitness;
+  *maximum = pop->entity_iarray[pop->size-1]->fitness;
+  *median = *minimum + (*maximum - *minimum)/2;
 
   for (i=0; i<pop->size; i++)
     {

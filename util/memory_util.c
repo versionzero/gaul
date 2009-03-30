@@ -3,7 +3,7 @@
  **********************************************************************
 
   memory_util - Usage control wrapper around standard malloc() etc.
-  Copyright ©1999-2005, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©1999-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -125,7 +125,7 @@ typedef struct mem_record_t
 
 THREAD_LOCK_DEFINE_STATIC(memory_mem_record_chunk);
 THREAD_LOCK_DEFINE_STATIC(memory_memtree);
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
 static boolean memory_openmp_initialised = FALSE;
 #endif
 
@@ -161,7 +161,7 @@ static int	node_count=0;		/* counting tree nodes for debugging. */
 void memory_init_openmp(void)
   {
 
-#if USE_OPENMP == 1
+#ifdef USE_OPENMP
   if (memory_openmp_initialised == FALSE)
     {
     omp_init_lock(&memory_mem_record_chunk);
@@ -721,7 +721,7 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
       case (MEMORY_STRNDUP):
         /* ...and strndup. */
         len = strlen(mptr);
-        if (memsize > len) memsize=len;
+        if (memsize > (size_t)len) memsize=(size_t)len;
         if ( !(mtemp=malloc(memsize+size_low+size_high)) )
           {
           dief("Strdup of %lu bytes failed at func=%s file=%s line=%d\n",
@@ -755,12 +755,12 @@ printf("Realloc mptr = %p j = %p j->mptr = %p\n", mptr, j, j->mptr);
     j->pad_hs=size_high;
     if(size_high)
       {
-      for (k=0; k<size_high; k++) j->pad_high[k]=rand_high;
+      for (k=0; size_high>=(size_t)k; k++) j->pad_high[k]=rand_high;
       pad_mptr_high(j);
       }
     if(size_low)
       {
-      for (k=0; k<size_low; k++) j->pad_low[k]=rand_low;
+      for (k=0; size_low>=(size_t)k; k++) j->pad_low[k]=rand_low;
       pad_mptr_low(j);
       }
 
@@ -855,12 +855,12 @@ printf("REPLACING j->mptr %p with mtemp %p j %p\n", j->mptr, mtemp, j);
       j->pad_hs=size_high;
       if (size_high)
         {
-        for (k=0; k<size_high; k++) j->pad_high[k]=rand_high;
+        for (k=0; size_high>=(size_t)k; k++) j->pad_high[k]=rand_high;
         pad_mptr_high(j);
         }
       if (size_low)
         {
-        for (k=0; k<size_low; k++) j->pad_low[k]=rand_low;
+        for (k=0; size_low>=(size_t)k; k++) j->pad_low[k]=rand_low;
         pad_mptr_low(j);
         }
 
@@ -880,12 +880,12 @@ printf("INSERT (2) mtemp = %p j = %p j->mptr = %p\n", mtemp, j, j->mptr);
 
       if(j->pad_hs)
         { 
-        for (k=0; k<size_high; k++) j->pad_high[k]=rand_high;
+        for (k=0; size_high>=(size_t)k; k++) j->pad_high[k]=rand_high;
         pad_mptr_high(j);
         }
       if (j->pad_ls)
         {
-        for (k=0; k<size_low; k++) j->pad_low[k]=rand_low;
+        for (k=0; size_low>=(size_t)k; k++) j->pad_low[k]=rand_low;
         pad_mptr_low(j);
         }
       }

@@ -3,7 +3,7 @@
  **********************************************************************
 
   ga_crossover - Genetic algorithm crossover operators.
-  Copyright ©2000-2003, Stewart Adcock <stewart@linux-domain.com>
+  Copyright ©2000-2009, Stewart Adcock (http://saa.dyndns.org/)
   All rights reserved.
 
   The latest version of this program should be available at:
@@ -122,7 +122,7 @@ static void ga_doublepoint_crossover_integer_chromosome(population *pop,
   last updated: 12/05/00
  **********************************************************************/
 
-void ga_crossover_integer_singlepoints( population *pop,
+GAULFUNC void ga_crossover_integer_singlepoints( population *pop,
                               entity *father, entity *mother,
                               entity *son, entity *daughter )
   {
@@ -154,7 +154,7 @@ void ga_crossover_integer_singlepoints( population *pop,
   last updated: 31/05/00
  **********************************************************************/
 
-void ga_crossover_integer_doublepoints( population *pop,
+GAULFUNC void ga_crossover_integer_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
@@ -187,7 +187,7 @@ void ga_crossover_integer_doublepoints( population *pop,
   last updated: 27/04/00
  **********************************************************************/
 
-void ga_crossover_integer_mixing( population *pop,
+GAULFUNC void ga_crossover_integer_mixing( population *pop,
                                   entity *father, entity *mother,
                                   entity *son, entity *daughter)
   {
@@ -230,7 +230,7 @@ void ga_crossover_integer_mixing( population *pop,
   last updated: 18 Jun 2004
  **********************************************************************/
 
-void ga_crossover_integer_mean( population *pop,
+GAULFUNC void ga_crossover_integer_mean( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -274,7 +274,7 @@ void ga_crossover_integer_mean( population *pop,
   last updated: 30/04/00
  **********************************************************************/
 
-void ga_crossover_integer_allele_mixing( population *pop,
+GAULFUNC void ga_crossover_integer_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -391,7 +391,7 @@ static void ga_doublepoint_crossover_boolean_chromosome(population *pop,
   last updated: 29 Jun 2003
  **********************************************************************/
 
-void ga_crossover_boolean_singlepoints( population *pop,
+GAULFUNC void ga_crossover_boolean_singlepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
@@ -423,7 +423,7 @@ void ga_crossover_boolean_singlepoints( population *pop,
   last updated: 29 Jun 2003
  **********************************************************************/
 
-void ga_crossover_boolean_doublepoints( population *pop,
+GAULFUNC void ga_crossover_boolean_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
@@ -456,7 +456,7 @@ void ga_crossover_boolean_doublepoints( population *pop,
   last updated: 27/04/00
  **********************************************************************/
 
-void ga_crossover_boolean_mixing( population *pop,
+GAULFUNC void ga_crossover_boolean_mixing( population *pop,
                                   entity *father, entity *mother,
                                   entity *son, entity *daughter )
   {
@@ -499,7 +499,7 @@ void ga_crossover_boolean_mixing( population *pop,
   last updated: 30/04/00
  **********************************************************************/
 
-void ga_crossover_boolean_allele_mixing( population *pop,
+GAULFUNC void ga_crossover_boolean_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -540,7 +540,7 @@ void ga_crossover_boolean_allele_mixing( population *pop,
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_crossover_char_mixing( population *pop,
+GAULFUNC void ga_crossover_char_mixing( population *pop,
                                entity *father, entity *mother,
                                entity *son, entity *daughter )
   {
@@ -587,7 +587,7 @@ void ga_crossover_char_mixing( population *pop,
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_crossover_char_allele_mixing( population *pop,
+GAULFUNC void ga_crossover_char_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -628,7 +628,7 @@ void ga_crossover_char_allele_mixing( population *pop,
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_crossover_double_mixing( population *pop,
+GAULFUNC void ga_crossover_double_mixing( population *pop,
                                entity *father, entity *mother,
                                entity *son, entity *daughter )
   {
@@ -676,7 +676,7 @@ void ga_crossover_double_mixing( population *pop,
   last updated: 18 Jun 2004
  **********************************************************************/
 
-void ga_crossover_double_mean( population *pop,
+GAULFUNC void ga_crossover_double_mean( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -710,7 +710,7 @@ void ga_crossover_double_mean( population *pop,
   last updated: 16/06/01
  **********************************************************************/
 
-void ga_crossover_double_allele_mixing( population *pop,
+GAULFUNC void ga_crossover_double_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -750,7 +750,7 @@ void ga_crossover_double_allele_mixing( population *pop,
   last updated: 16/07/01
  **********************************************************************/
 
-void ga_crossover_char_singlepoints( population *pop,
+GAULFUNC void ga_crossover_char_singlepoints( population *pop,
                                      entity *father, entity *mother,
                                      entity *son, entity *daughter )
   {
@@ -792,7 +792,7 @@ void ga_crossover_char_singlepoints( population *pop,
   last updated: 16/07/01
  **********************************************************************/
 
-void ga_crossover_char_doublepoints( population *pop,
+GAULFUNC void ga_crossover_char_doublepoints( population *pop,
                                      entity *father, entity *mother,
                                      entity *son, entity *daughter )
   {
@@ -853,7 +853,7 @@ void ga_crossover_char_doublepoints( population *pop,
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+GAULFUNC void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
   {
   int		i;		/* Loop variable over all chromosomes. */
   int		location;	/* Point of crossover. */
@@ -893,7 +893,7 @@ void ga_crossover_bitstring_singlepoints(population *pop, entity *father, entity
   last updated:	23 Jun 2003
  **********************************************************************/
 
-void ga_crossover_bitstring_doublepoints( population *pop,
+GAULFUNC void ga_crossover_bitstring_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
@@ -951,7 +951,7 @@ void ga_crossover_bitstring_doublepoints( population *pop,
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+GAULFUNC void ga_crossover_bitstring_mixing(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
   {
   int		i;		/* Loop variable over all chromosomes */
 
@@ -992,7 +992,7 @@ void ga_crossover_bitstring_mixing(population *pop, entity *father, entity *moth
   last updated: 30/06/01
  **********************************************************************/
 
-void ga_crossover_bitstring_allele_mixing( population *pop,
+GAULFUNC void ga_crossover_bitstring_allele_mixing( population *pop,
                                  entity *father, entity *mother,
                                  entity *son, entity *daughter )
   {
@@ -1123,7 +1123,7 @@ static void ga_doublepoint_crossover_double_chromosome(population *pop,
   last updated: 07 Nov 2002
  **********************************************************************/
 
-void ga_crossover_double_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
+GAULFUNC void ga_crossover_double_singlepoints(population *pop, entity *father, entity *mother, entity *son, entity *daughter)
   {
   int		i;	/* Loop variable over all chromosomes */
 
@@ -1153,7 +1153,7 @@ void ga_crossover_double_singlepoints(population *pop, entity *father, entity *m
   last updated: 07 Nov 2002
  **********************************************************************/
 
-void ga_crossover_double_doublepoints( population *pop,
+GAULFUNC void ga_crossover_double_doublepoints( population *pop,
                                         entity *father, entity *mother,
                                         entity *son, entity *daughter )
   {
