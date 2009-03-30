@@ -10,14 +10,15 @@ These milestone requirements are subject to change ;)
 
  Milestone  |  Required Additions (besides bug fixes)
 ------------+--------------------------------------------------------
- 0.1851     |  Move prototypes for all public functions into src/gaul.h
-            |  Mersenne twister for PRNG.
+ 0.1851     |  System rand() for PRNG.
+------------+--------------------------------------------------------
+ 0.1852     |  Move prototypes for all public functions into src/gaul.h
             |  Ant colony optimisation?
             |  Particle swarm optimisation?
             |  Use native qsort() function -- need to incorporate a patch that has been provided.
             |  Callback for survival/elitism?
 ------------+--------------------------------------------------------
- 0.1852     |  Boolean chromosome example from Mitchell book.
+ 0.1853     |  Boolean chromosome example from Mitchell book.
             |  More on-line/off-line statistics options.
             |  User data in array, not list.
             |  More test code.
@@ -29,21 +30,19 @@ These milestone requirements are subject to change ;)
             |  Replacement operators documentation
             |  Rewritten convergence testing functions.
 ------------+--------------------------------------------------------
- 0.1853     |  Cellular GAs?
+ 0.1854     |  Cellular GAs?
             |  Parallel search heuristics (i.e., Parallel Tabu-search etc.)
             |  Genetic programming example.
             |  ES examples.
 ------------+--------------------------------------------------------
- 0.1854     |  Tidy and rationalise S-Lang interface, and provide examples.
+ 0.1855     |  Tidy and rationalise S-Lang interface, and provide examples.
             |  Checkpoint files.
-------------+--------------------------------------------------------
- 0.1855     |  Remove feature "FIXME's"
-            |  Remove optimisation "FIXME's"
-            |  Remove all bugs ;-)
+            |  Further support for alternative language bindings/wrappers.
 ------------+--------------------------------------------------------
  0.1856     |  Offer Windows DLLs with installer.
             |  Complete reference documentation.
             |  Complete tutorial articles.
+            |  Remove all bugs ;-)
 ------------+--------------------------------------------------------
 
 Additional features needed for version 1.0:
@@ -70,5 +69,5 @@ Features to be added if enough interest is demonstrated:
 * Replica-exchange SA search.
 * EDAs.
 
-Stewart Adcock, 14 Apr 2005.
+Stewart Adcock, 30th March 2009.
 
