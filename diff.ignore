@@ -18,6 +18,7 @@
 *.tmp
 *.tgz
 *.gz
+*.Plo
 .deps
 .libs
 core
