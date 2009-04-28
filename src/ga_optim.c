@@ -506,7 +506,7 @@ static void gaul_migration(const int num_pops, population **pops)
  * FIXME: It would be more efficient to insert the immigrants correctly.
  */
 #pragma omp parallel for \
-   shared(pops,num_pops) private(current_island) \
+   shared(pops) private(current_island) \
    schedule(static)
   for(current_island=0; current_island<num_pops; current_island++)
     {
@@ -1171,6 +1171,7 @@ static void gaul_adapt_and_evaluate(population *pop)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
         pop->entity_iarray[i]->fitness=adult->fitness;
+#pragma omp master
         ga_entity_dereference(pop, adult);
         }
       }
@@ -1184,6 +1185,7 @@ static void gaul_adapt_and_evaluate(population *pop)
         adult = pop->adapt(pop, pop->entity_iarray[i]);
         adultrank = ga_get_entity_rank(pop, adult);
         gaul_entity_swap_rank(pop, i, adultrank);
+#pragma omp master
         ga_entity_dereference_by_rank(pop, adultrank);
         }
       }
@@ -1197,6 +1199,7 @@ static void gaul_adapt_and_evaluate(population *pop)
         {
         adult = pop->adapt(pop, pop->entity_iarray[i]);
         pop->entity_iarray[i]->fitness=adult->fitness;
+#pragma omp master
         ga_entity_dereference(pop, adult);
         }
       }
@@ -1210,6 +1213,7 @@ static void gaul_adapt_and_evaluate(population *pop)
         adult = pop->adapt(pop, pop->entity_iarray[i]);
         adultrank = ga_get_entity_rank(pop, adult);
         gaul_entity_swap_rank(pop, i, adultrank);
+#pragma omp master
         ga_entity_dereference_by_rank(pop, adultrank);
         }
       }
