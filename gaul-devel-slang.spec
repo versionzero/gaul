@@ -1,4 +1,4 @@
-Name:		gaul-devel-noslang
+Name:		gaul-devel
 Summary:	Genetic Algorithm Utility Library
 Version:	0.1851
 Release:	0
@@ -8,15 +8,15 @@ Packager:	"Stewart Adcock" <gaul@linux-domain.com>
 Group:		Scientific/Engineering
 Source:		gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}.tar.gz
 URL:		http://gaul.sourceforge.net/
+Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroot
-#Requires:	none
 
 ########################################################################
-# gaul-devel/gaul-devel-noslang.spec
+# gaul-devel/gaul-devel.spec
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2001-2009, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -45,7 +45,7 @@ The Genetic Algorithm Utility Library (GAUL) is a flexible open source programmi
 %setup -n gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}
 
 %build
-./configure --enable-slang=no --prefix=%{_prefix} --libdir=%{_libdir}
+./configure --enable-slang=yes --prefix=%{_prefix} --libdir=%{_libdir}
 make
 
 %install
@@ -63,6 +63,14 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
+* Tue Apr 28 2009 Stewart Adcock <stewart@linux-domain.com>
+- 0.1851-0
+- No S-Lang support by default.
+
+* Wed Jun 30 2004 Stewart Adcock <stewart@linux-domain.com>
+- 0.1847-1
+- Fixes for successful build for AMD64 machines.
+
 * Wed May 28 2003 Stewart Adcock <stewart@linux-domain.com>
 - 0.1843-3
 - Tidied, removed dodgy prefix stuff.
