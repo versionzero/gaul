@@ -8,15 +8,15 @@ Packager:	"Stewart Adcock" <gaul@linux-domain.com>
 Group:		Scientific/Engineering
 Source:		gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}.tar.gz
 URL:		http://gaul.sourceforge.net/
-Requires:	slang-devel
 BuildRoot:	%{_tmppath}/gaul-devel-%{PACKAGE_VERSION}-%{PACKAGE_RELEASE}-buildroot
+#Requires:	none
 
 ########################################################################
-# gaul-devel/gaul-devel.spec
+# gaul-devel/gaul-devel-noslang.spec
 ########################################################################
 #
 # GAUL - Genetic Algorithm Utility Library
-# Copyright ©2001-2009, Stewart Adcock <stewart@linux-domain.com>
+# Copyright ©2001-2009, Stewart Adcock (http://sa.dyndns.org/)
 # All rights reserved.
 #
 # The latest version of this program should be available at:
@@ -63,9 +63,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc AUTHORS COPYING ChangeLog NEWS README
 
 %changelog
-* Wed Jun 30 2004 Stewart Adcock <stewart@linux-domain.com>
-- 0.1847-1
-- Fixes for successful build for AMD64 machines.
+* Tue Apr 28 2009 Stewart Adcock <stewart@linux-domain.com>
+- 0.1851-0
+- No S-Slang support by default.
 
 * Wed May 28 2003 Stewart Adcock <stewart@linux-domain.com>
 - 0.1843-3

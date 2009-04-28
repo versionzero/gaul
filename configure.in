@@ -3,7 +3,7 @@ dnl gaul-devel/configure.in
 dnl ***************************************************************
 dnl
 dnl GAUL - Genetic Algorithm Utility Library.
-dnl Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org)
+dnl Copyright ©2001-2009, Stewart Adcock (http://saa.dyndns.org/)
 dnl All rights reserved.
 dnl
 dnl The latest version of this program should be available at:
@@ -1187,7 +1187,7 @@ MEMORY_ALLOC_DEBUG=$MEMORY_ALLOC_DEBUG
 MEMORY_CHUNKS_MIMIC=$MEMORY_CHUNKS_MIMIC
 ])
 
-AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile debian/Makefile windows/Makefile],
+AC_OUTPUT([Makefile util/Makefile src/Makefile tests/Makefile debian/Makefile windows/Makefile examples/Makefile],
 	[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h.in]
 	)
 
