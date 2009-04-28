@@ -5,6 +5,7 @@ Changes since release 0.1850:
 - Fixed bug in ga_select_two_roulette() and ga_select_two_roulette_rebased() -- using mutation ratio, not crossover ratio.
 - Fixed bug in ga_population_clone_empty() -- patch provided by Pawan Kumar.
 - Merged examples from gaul-examples back into gaul-devel.
+- Fix OpenMP problem - patch provided by Nicolas Gravillon.
 
 Changes since release 0.1849:
 - Differential evolution parameters copied along with populations.
