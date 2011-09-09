@@ -33,9 +33,9 @@ dnl
 dnl ***************************************************************
 
 #
-# We require autoconf 2.57 or above
+# We require autoconf 2.61 or above
 #
-AC_PREREQ(2.57)
+AC_PREREQ(2.61)
 
 #
 # init autoconf
@@ -83,8 +83,34 @@ AC_DEFINE_UNQUOTED(GA_VERSION_STRING, "${GA_VERSION}", [Version string.])
 AM_INIT_AUTOMAKE($PACKAGE, $GA_VERSION, gaul@linux-domain.com)
 
 # Checks for programs.
+AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CPP
 AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([fcntl.h float.h limits.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h values.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+# Checks for library functions.
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([floor gethostname memset pow select sqrt strcasecmp strchr strdup strncasecmp strndup strpbrk])
 
 # Initialize libtool.
 AC_LIBTOOL_WIN32_DLL
@@ -93,21 +119,6 @@ AC_PROG_LIBTOOL
 # Initialize maintainer mode
 #AM_MAINTAINER_MODE
 
-#
-# figure debugging default, prior to $ac_help setup
-#
-
-#
-#AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)
-#if test `expr $MINOR_VERSION \% 2` = 1 ; then
-#	debug_default=yes
-#else
-#	debug_default=partial
-#fi
-#AC_DIVERT_POP()
-#
-dnl Debugging default.
-debug_default=no
 
 #
 # declare --enable-* args and collect ac_help strings
@@ -119,8 +130,8 @@ AC_ARG_ENABLE(ccoptim,
        [  --enable-ccoptim=[yes/no]             compile with guessed compiler optimisation flags. [default=yes]],,
        enable_ccoptim=yes)
 AC_ARG_ENABLE(debug,
-       [  --enable-debug=[no/minimum/yes] turn on debugging. [default=$debug_default]],,
-       enable_debug=$debug_default)
+       [  --enable-debug=[no/minimum/yes] turn on debugging. [default=no]],,
+       enable_debug=no)
 AC_ARG_ENABLE(memory_debug,
        [  --enable-memory-debug=[yes/no]  turn on memory access debugging. [default=no]],,
        enable_memory_debug=no)
@@ -728,7 +739,7 @@ if test "x$enable_ccoptim" = "xyes"; then
         gcc)
           case " $CFLAGS " in
             *[\ \	]-mcpu=*) ;;
-            *) CFLAGS="$CFLAGS -mcpu=pentium" ;;
+            *) CFLAGS="$CFLAGS -mtune=native" ;;
           esac
           ;;
       esac
@@ -746,7 +757,7 @@ if test "x$enable_ccoptim" = "xyes"; then
         gcc)
           case " $CFLAGS " in
             *[\ \	]-mcpu=*) ;;
-            *) CFLAGS="$CFLAGS -mcpu=pentiumpro" ;;
+            *) CFLAGS="$CFLAGS -mtune=pentiumpro" ;;
           esac
           ;;
       esac
