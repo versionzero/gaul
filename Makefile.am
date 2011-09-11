@@ -30,7 +30,7 @@
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = util src tests debian examples windows watcom .
+SUBDIRS = util src tests debian windows .
 
 # Configuration process should create gaul.spec from a gaul.spec.in file.
 EXTRA_DIST = gaul-devel.spec gaul-devel-noslang.spec autogen.sh
