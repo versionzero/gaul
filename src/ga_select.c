@@ -282,7 +282,7 @@ GAULFUNC boolean ga_select_one_randomrank(population *pop, entity **mother)
 
   *mother = NULL;
 
-  if ( pop->orig_size < pop->select_state )
+  if ( pop->orig_size <= pop->select_state )
     {
     return TRUE;
     }
@@ -316,7 +316,7 @@ GAULFUNC boolean ga_select_two_randomrank(population *pop, entity **mother, enti
   *mother = NULL;
   *father = NULL;
 
-  if ( pop->orig_size < pop->select_state )
+  if ( pop->orig_size <= pop->select_state )
     {
     return TRUE;
     }
